@@ -24,7 +24,7 @@ namespace RazzleServer.Handlers
                 account.Character = chr;
                 if (!migration.ToCashShop)
                 {
-                    var map = ServerManager.ChannelServers[client.Channel].GetMap(chr.MapID);
+                    var map = ServerManager.GetChannelServer(client.Channel).GetMap(chr.MapID);
                     if (map != null)
                     {
                         chr.Map = map;

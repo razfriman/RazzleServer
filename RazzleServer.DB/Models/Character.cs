@@ -1,4 +1,4 @@
-namespace RazzleServer.DB
+namespace RazzleServer.DB.Models
 {
     public class Character
     {

@@ -1,5 +1,5 @@
 using RazzleServer.Data;
-using RazzleServer.DB;
+using RazzleServer.DB.Models;
 using RazzleServer.Server;
 using System;
 using System.Collections.Generic;

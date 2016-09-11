@@ -25,9 +25,6 @@ namespace RazzleServer.Handlers
             }
         }
 
-        //movement
-        //29 00 01 4C 64 68 2A 81 00 7A 00 04 00 81 00 7A 00 00 00 00 00 01 00 05 1E 00 00 6C 00 7A 00 83 FF 00 00 01 00 03 D2 00 00 62 00 7A 00 FB FF 00 00 01 00 05 96 00 00 63 00 7A 00 00 00 00 00 01 00 05 78 00 11 80 88 88 88 00 00 00 20 02 62 00 7A 00 81 00 7A 00
-
         public static PacketWriter ChannelIpPacket(ushort port, int characterId)
         {
             var pw = new PacketWriter(SMSGHeader.SERVER_IP);

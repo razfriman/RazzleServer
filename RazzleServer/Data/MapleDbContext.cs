@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using RazzleServer.DB;
+using RazzleServer.DB.Models;
 using RazzleServer.Server;
 
 namespace RazzleServer.Data

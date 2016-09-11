@@ -1,11 +1,10 @@
 using RazzleServer.Data;
-using RazzleServer.DB;
+using RazzleServer.DB.Models;
 using RazzleServer.Map;
 using RazzleServer.Packet;
 using RazzleServer.Server;
 using RazzleServer.Util;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace RazzleServer.Player
@@ -86,8 +85,8 @@ namespace RazzleServer.Player
 
         public void ChangeMap(int mapId, string toPortal = "")
         {
-            //MapleMap map = Program.GetChannelServer(Client.Channel).GetMap(mapId);
-            //ChangeMap(map, toPortal);
+            var map = ServerManager.GetChannelServer(Client.Channel).GetMap(mapId);
+            ChangeMap(map, toPortal);
         }
 
         public void ChangeMap(MapleMap toMap, string toPortal = "", bool fromSpecialPortal = false)
