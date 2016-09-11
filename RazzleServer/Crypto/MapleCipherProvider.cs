@@ -2,6 +2,7 @@
 using System.Linq;
 using RazzleServer.Packet;
 using RazzleServer.Server;
+using NLog;
 
 namespace RazzleServer.Crypto
 {
@@ -45,6 +46,9 @@ namespace RazzleServer.Crypto
         /// General locker for adding data
         /// </summary>
         private object AddLocker = new object();
+
+        private static Logger Log = LogManager.GetCurrentClassLogger();
+
 
         /// <summary>
         /// Creates a new instance of <see cref="CipherHelper"/>
@@ -195,8 +199,8 @@ namespace RazzleServer.Crypto
                 PacketReader pr = new PacketReader(data);
                 var version = pr.ReadShort();
                 var subVersion = pr.ReadMapleString();
-                
-                Console.WriteLine($"Server version {version} - {subVersion}");
+
+                Log.Info($"Server Version {version} - {subVersion}");
                 
                 uint siv = pr.ReadUInt();
                 uint riv = pr.ReadUInt();

@@ -201,27 +201,28 @@ namespace RazzleServer.Util
             return r.Next(min, max + 1);
         }
 
-        // /// <summary>
-        // /// Creates a SHA1 string
-        // /// </summary>
-        // /// <param name="value">Value to be hashed</param>
-        // /// <returns>The SHA1 equivelant of value</returns>
-        // public static string GetSha1(string value)
-        // {
-        //     byte[] data = Encoding.ASCII.GetBytes(value);
-        //     byte[] hashData;
-        //     using (SHA1 sha = new SHA1Managed())
-        //     {
-        //         hashData = sha.ComputeHash(data);
-        //     }
+        /// <summary>
+        /// Creates a SHA1 string
+        /// </summary>
+        /// <param name="value">Value to be hashed</param>
+        /// <returns>The SHA1 equivelant of value</returns>
+        public static string GetSha1(string value)
+        {
+            byte[] data = Encoding.ASCII.GetBytes(value);
+            byte[] hashData;
+            
+            using (var sha = SHA1.Create())
+            {
+                hashData = sha.ComputeHash(data);
+            }
 
-        //     StringBuilder hash = new StringBuilder();
+            StringBuilder hash = new StringBuilder();
 
-        //     foreach (byte b in hashData)
-        //         hash.Append(b.ToString("X2"));
+            foreach (byte b in hashData)
+                hash.Append(b.ToString("X2"));
 
-        //     return hash.ToString();
-        // }
+            return hash.ToString();
+        }
 
         /// <summary>
         /// Creates a HMACSHA512 string

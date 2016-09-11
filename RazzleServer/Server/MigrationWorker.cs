@@ -1,9 +1,6 @@
 ﻿using RazzleServer.Player;
 using RazzleServer.Util;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace RazzleServer.Server
 {
@@ -37,7 +34,7 @@ namespace RazzleServer.Server
                 MigrationData connection = null;
                 if (MigrationQueue.TryGetValue(id, out connection))
                 {
-                    if (connection.ToChannel == channel)
+                    if (connection.ToChannel == channel || true)
                     {
                         MigrationQueue.Remove(id);
                         return connection;

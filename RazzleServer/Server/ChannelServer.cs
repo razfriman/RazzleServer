@@ -5,53 +5,17 @@ using RazzleServer.Packet;
 using RazzleServer.Player;
 using RazzleServer.Util;
 using RazzleServer.Map;
+using NLog;
 
 namespace RazzleServer.Server
 {
     public class ChannelServer : MapleServer
     {
+        private static Logger Log = LogManager.GetCurrentClassLogger();
+
         public ChannelServer(ushort port) {
-            byte[] loginIp = new byte[] { 0, 0, 0, 0 };
-            OnClientConnected += MapleClientConnect;
-            Start(new IPAddress(loginIp), port);
-        }
-
-        private bool AllowConnection(string address)
-        {
-            return true;
-        }
-
-        private void MapleClientConnect(Socket socket)
-        {            
-            string ip = ((IPEndPoint)socket.RemoteEndPoint).Address.ToString();
-            if (!AllowConnection(ip))
-            {
-                socket.Shutdown(SocketShutdown.Both);
-                System.Console.WriteLine("Rejected Client");
-                return;
-            }
-
-            System.Console.WriteLine("Client Connected");
-
-            MapleClient Client = new MapleClient(socket, this);
-            try
-            {
-                Client.SendHandshake();
-                Clients.Add(ip + Functions.Random(), Client);
-                System.Console.WriteLine("Client: " + Clients.Count);
-            }
-            catch (Exception e)
-            {
-                System.Console.WriteLine("Disconnect " + e.Message);
-                Client.Disconnect(e.ToString());
-            }
-        }
-
-        public override void ShutDown() {
-            foreach(var client in Clients.Values) {
-                client.Disconnect("Channel Server is shutting down");
-            }
-            base.ShutDown();
+            byte[] channelIp = new byte[] { 0, 0, 0, 0 };
+            Start(new IPAddress(channelIp), port);
         }
 
         public void BroadCastPacket(PacketWriter pw)

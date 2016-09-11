@@ -1,4 +1,5 @@
-﻿using RazzleServer.Packet;
+﻿using NLog;
+using RazzleServer.Packet;
 using RazzleServer.Player;
 
 namespace RazzleServer.Handlers
@@ -6,10 +7,12 @@ namespace RazzleServer.Handlers
     [PacketHandler(CMSGHeader.CLIENT_START)]
     public class ClientStartHandler : APacketHandler
     {
+        private static Logger Log = LogManager.GetCurrentClassLogger();
+
         public override void HandlePacket(PacketReader packet, MapleClient client)
         {
             var message = packet.ReadMapleString();
-            System.Console.WriteLine($"Client Start Message: {message}");
+            Log.Info($"Client Start Message: {message}");
         }
     }
 }

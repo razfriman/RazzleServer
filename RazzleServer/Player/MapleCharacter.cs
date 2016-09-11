@@ -70,6 +70,11 @@ namespace RazzleServer.Player
             //     BuddyList.NotifyChannelChangeToBuddies(Id, AccountId, Name, Client.Channel, Client, true);
         }
 
+        internal void RemoveCooldown(int skillId)
+        {
+            throw new NotImplementedException();
+        }
+
         public void LoggedOut()
         {
             //Guild?.UpdateGuildData();
@@ -102,6 +107,11 @@ namespace RazzleServer.Player
             this.ActionState = ActionState.ENABLED;
         }
 
+        internal void CancelBuff(int skillId)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Revive(bool returnToCity = false, bool loseExp = true, bool restoreHpToFull = false)
         {
             if (loseExp)
@@ -121,6 +131,11 @@ namespace RazzleServer.Player
                 EnableActions();
             }
             //returnToCity ? ChangeMap(Map.ReturnMap) : EnableActions();
+        }
+
+        internal void RemoveSummon(int summonSkillId)
+        {
+            throw new NotImplementedException();
         }
 
         public void FakeRelog()

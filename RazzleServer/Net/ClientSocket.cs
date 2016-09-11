@@ -6,7 +6,7 @@ using RazzleServer.Packet;
 using RazzleServer.Player;
 using RazzleServer.Server;
 using RazzleServer.Util;
-
+using NLog;
 namespace RazzleServer.Net
 {
     public class ClientSocket : IDisposable
@@ -18,6 +18,9 @@ namespace RazzleServer.Net
         private readonly object _disposeSync;
         private readonly MapleClient _client;
         private bool disposed;
+
+        private static Logger Log = LogManager.GetCurrentClassLogger();
+
 
         public MapleCipherProvider Crypto { get; private set; }
 
@@ -89,7 +92,6 @@ namespace RazzleServer.Net
 
                 if (size == 0 || e.SocketError != SocketError.Success)
                 {
-                    Console.WriteLine("Client Disconnected.");
                     Disconnect();
                 }
                 else
@@ -126,9 +128,6 @@ namespace RazzleServer.Net
             if (!disposed)
             {
                 var buffer = data.ToArray();
-
-                Console.WriteLine($"Sending: {Functions.ByteArrayToStr(data.ToArray())}");
-
                 Crypto.Encrypt(ref buffer, true);
                 SendRawPacket(buffer);
             }
@@ -136,6 +135,7 @@ namespace RazzleServer.Net
 
         public void Disconnect()
         {
+            Log.Info("Client Disconnected");
             _client.Disconnected();
             Dispose();
         }

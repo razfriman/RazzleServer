@@ -1,24 +1,24 @@
-﻿using System.Collections.Generic;
-using RazzleServer.Player;
+﻿using RazzleServer.Player;
 using RazzleServer.Server;
 using RazzleServer.Data;
-using System;
 using System.Linq;
+using NLog;
+using System.Threading;
 
 namespace RazzleServer
 {
     public class Program
     {
+        private static Logger Log = LogManager.GetCurrentClassLogger();
+
         public static void Main(string[] args)
         {
             MapleClient.RegisterPacketHandlers();
 
-            Console.WriteLine("Initializing Database");
+            Log.Info("Initializing Database");
             using (var context = new MapleDbContext())
             {
-                var acc = MapleAccount.GetAccountFromDatabase("admin");
                 var accounts = context.Accounts.ToArray();
-                Console.WriteLine($"Accounts: {context.Accounts.Count()}");
             }
 
             ServerManager.LoginServer = new LoginServer();
@@ -29,10 +29,7 @@ namespace RazzleServer
                 ServerManager.ChannelServers[i] = channelServer;
             }
 
-            while (true)
-            {
-                System.Threading.Thread.Sleep(10);
-            }
+            Thread.Sleep(Timeout.Infinite);
         }
     }
 }

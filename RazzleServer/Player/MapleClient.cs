@@ -6,6 +6,7 @@ using RazzleServer.Packet;
 using RazzleServer.Server;
 using RazzleServer.Net;
 using RazzleServer.Util;
+using NLog;
 
 namespace RazzleServer.Player
 {
@@ -23,13 +24,16 @@ namespace RazzleServer.Player
         public MapleServer Server{get;set;}
         public string Key {get;set;}
 
+        private static Logger Log = LogManager.GetCurrentClassLogger();
+
+
         public MapleClient(Socket session, MapleServer server)
         {
             Socket = new ClientSocket(this, session);
             Server = server;
             Host = Socket.Host;
             Port = Socket.Port;
-            Channel = 1;
+            Channel = 0;
             Connected = true;
         }
 
@@ -54,12 +58,12 @@ namespace RazzleServer.Player
                 }
             }
 
-            System.Console.WriteLine($"Added handlers for {PacketHandlers.Count} Headers");
+            Log.Info($"Registered {PacketHandlers.Count} packet handlers");
         }
 
         internal void RecvPacket(PacketReader packet)
         {
-            Console.WriteLine($"Receiving: {Functions.ByteArrayToStr(packet.ToArray())}");
+            Log.Debug($"Receiving: {Functions.ByteArrayToStr(packet.ToArray())}");
 
             try
             {
@@ -71,20 +75,20 @@ namespace RazzleServer.Player
                             handler.HandlePacket(packet, this);
                         }
                     } else {
-                        Console.WriteLine($"Unhandled Packet {header.ToString()} : {Functions.ByteArrayToString(packet.ToArray())}");
+                        Log.Warn($"Unhandled Packet [{header.ToString()}] - {Functions.ByteArrayToStr(packet.ToArray())}");
                     }
 
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Packet Processing Error: {e.Message}");
+                Log.Error(e, "Packet Processing Error");
             }
         }
 
         public void Disconnect(string reason, params object[] values)
         {
-            Console.WriteLine("Disconnected client with reason: " + string.Format(reason, values));
+            Log.Info($"Disconnected client with reason: {string.Format(reason, values)}");
 
             if (Socket != null) {
                 Socket.Disconnect();
@@ -106,7 +110,7 @@ namespace RazzleServer.Player
         {
             if (ServerConfig.Instance.PrintPackets)
             {
-                Console.WriteLine($"Sending: {Functions.ByteArrayToStr(packet.ToArray())}");
+                Log.Debug($"Sending: {Functions.ByteArrayToStr(packet.ToArray())}");
             }
 
             if (Socket == null) return;
