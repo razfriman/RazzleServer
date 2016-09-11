@@ -146,7 +146,7 @@ namespace RazzleServer.Packet
         MONSTER_CARNIVAL = 0xD0FF,
         PARTY_SEARCH_REGISTER = 0xD2FF,
         PARTY_SEARCH_START = 0xD4FF,
-        MAPLETV = 0x222FF,
+        MAPLETV = 0x22FF,
 
         PLAYER_UPDATE = 0xD5FF,
         TOUCHING_CS = 0xE4,
