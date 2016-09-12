@@ -1,0 +1,22 @@
+{
+  "ExpRate": 1,
+  "MesoRate": 1,
+  "DropRate": 1,
+  "QuestExpRate": 1,
+  "LoginPort": 8484,
+  "ChannelStartPort": 8585,
+  "Channels": 1,
+  "WorldName": "Scania",
+  "WorldFlag": 2,
+  "EventMessage": "Welcome to RazzleMS",
+  "DefaultMapID": 100000000,
+  "DatabaseName": "MapleServer.db",
+  "Version": 83,
+  "SubVersion": 1,
+  "ServerType": 8,
+  "AESKey": 5923094546581162003,
+  "PingTimeout": 30,
+  "PrintPackets": true,
+  "IsLocalHost": true,
+  "LoginCreatesNewAccount": true
+}

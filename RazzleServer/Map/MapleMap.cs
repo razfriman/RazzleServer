@@ -3,17 +3,46 @@ using RazzleServer.Player;
 using System.Linq;
 using RazzleServer.Util;
 using RazzleServer.Packet;
+using System;
+using RazzleServer.Map.Monster;
+using RazzleServer.Data.WZ;
+using RazzleServer.Server;
+using NLog;
 
 namespace RazzleServer.Map
 {
     public class MapleMap
     {
         public int MapID { get; set; }
-        private AutoIncrement ObjectIdCounter = new AutoIncrement();
 
-        public MapleMap ReturnMap { get; set; }
+        private int MaxMonsters;
+        private AutoIncrement ObjectIDCounter = new AutoIncrement();
 
         private Dictionary<int, MapleCharacter> Characters = new Dictionary<int, MapleCharacter>();
+        private List<WzMap.MobSpawn> MobSpawnPoints = new List<WzMap.MobSpawn>();
+
+        private Dictionary<string, WzMap.Portal> Portals = new Dictionary<string, WzMap.Portal>();
+
+        private Dictionary<int, WzMap.Reactor> Reactors = new Dictionary<int, WzMap.Reactor>();
+        private Dictionary<int, int> DespawnedReactors = new Dictionary<int, int>();
+
+        private Dictionary<int, WzMap.Npc> Npcs = new Dictionary<int, WzMap.Npc>();
+        private Dictionary<int, MapleMonster> Mobs = new Dictionary<int, MapleMonster>();
+        private Dictionary<int, MapleSummon> Summons = new Dictionary<int, MapleSummon>();
+        //private Dictionary<int, MapleMapItem> MapItems = new Dictionary<int, MapleMapItem>();
+        private Dictionary<int, StaticMapObject> StaticObjects = new Dictionary<int, StaticMapObject>(); //Magic door, Mists, etc
+
+        private DateTime LastMobRespawnSpawn;
+        private DateTime LastReactorRespawnSpawn;
+
+        private object ReactorLock = new object();
+
+        private WzMap WzInfo;
+
+        public int ReturnMap => WzInfo.ReturnMap;
+
+        private static Logger Log = LogManager.GetCurrentClassLogger();
+
 
         public int CharacterCount
         {
@@ -25,6 +54,9 @@ namespace RazzleServer.Map
                 }
             }
         }
+
+        public bool MysticDoorLimit { get; internal set; }
+
         public void AddCharacter(MapleCharacter character)
         {
             lock (Characters)
@@ -71,6 +103,106 @@ namespace RazzleServer.Map
             //     }
             // }
         }
+
+        #region Portals
+        public WzMap.Portal GetDefaultSpawnPortal()
+        {
+            var spawnPortals = Portals.Values.Where(p => p.Type == WzMap.PortalType.Startpoint).OrderBy(p => p.ID);
+            if (spawnPortals.Any())
+            {
+                return spawnPortals.FirstOrDefault();
+            }
+            return null;
+        }
+
+        public WzMap.Portal GetPortal(string name)
+        {
+            WzMap.Portal ret;
+            if (Portals.TryGetValue(name, out ret))
+            {
+                return ret;
+            }
+            return null;
+        }
+
+        public WzMap.Portal GetClosestSpawnPoint(Point position)
+        {
+            var validSpawns = Portals.Where(p => p.Value.Type == WzMap.PortalType.Startpoint);
+            if (validSpawns.Any())
+            {
+                var portalsOrderedByDistance = validSpawns.OrderBy(p => p.Value.Position.DistanceTo(position));
+                return portalsOrderedByDistance.First().Value;
+            }
+            return null;
+        }
+
+        public WzMap.Portal TownPortal
+        {
+            get
+            {
+                return WzInfo.Portals.Values.Where(portal => portal.Type == WzMap.PortalType.TownportalPoint).FirstOrDefault();
+            }
+        }
+
+        /// <summary>  
+        /// Gets the nearest spawnpoint near the given Point
+        /// </summary>
+        /// <param name="position">Point which the spawnpoint should be closest to</param>
+        /// <returns>A byte representing the spawnpoint's portal ID</returns>
+        public byte GetClosestSpawnPointId(Point position)
+        {
+            WzMap.Portal portal = GetClosestSpawnPoint(position);
+            return portal != null ? portal.ID : (byte)0;
+        }
+
+        /// <summary>
+        /// Gets this MapleMap's Portal that has the given Id
+        /// </summary>
+        /// <param name="Id">The Id of the requested Portal</param>
+        /// <returns>Returns a WzMap.Portal object</returns>
+        public WzMap.Portal GetStartpoint(byte Id)
+        {
+            return Portals.SingleOrDefault(x => x.Value.Type == WzMap.PortalType.Startpoint && x.Value.ID == Id).Value;
+        }
+
+        /// <summary>
+        /// Makes a character warp to the map linked to a portal
+        /// </summary>
+        /// <param name="c">The character's MapleClient</param>
+        /// <param name="portalName">The name of the portal that the character is entering</param>
+        public void EnterPortal(MapleClient c, string portalName)
+        {
+            WzMap.Portal portal = GetPortal(portalName);
+            if (portal != null)
+            {
+                MapleMap toMap = ServerManager.GetChannelServer(c.Channel).GetMap(portal.ToMap);
+                if (toMap != null)
+                {
+                    c.Account.Character.ChangeMap(toMap, portal.ToName);
+                }
+            }
+        }
+        /// <summary>
+        /// Makes a character warp to the map linked to a scripted portal
+        /// </summary>
+        /// <param name="c">The character's MapleClient</param>
+        /// <param name="portalName">The name of the portal that the character is entering</param>
+        public void EnterPortalSpecial(MapleClient c, string portalName)
+        {
+            //not finished or done by any means
+            WzMap.Portal portal = GetPortal(portalName);
+            if (portal != null && !string.IsNullOrEmpty(portal.Script))
+            {
+                // TODO - PORTAL ENGINE
+                //PortalEngine.EnterScriptedPortal(portal, c.Account.Character);
+            }
+            else
+            {
+                Log.Error($"Unable to enter portal [{portalName}] in map [{c.Account.Character.MapID}]");
+                c.Account.Character.SendBlueMessage($"[{portalName}] in map [{c.Account.Character.MapID}] is not scripted yet");
+            }
+        }
+        #endregion
 
         /// <summary>
         /// Broadcasts a Packet to every MapleCharacter on the map
@@ -134,15 +266,56 @@ namespace RazzleServer.Map
             }
         }
 
-        public MapleMapPortal GetDefaultSpawnPortal()
+        public MapleCharacter GetCharacter(int characterId)
         {
-            return null;
+            lock (Characters)
+            {
+                MapleCharacter chr;
+                if (Characters.TryGetValue(characterId, out chr))
+                    return chr;
+                return null;
+            }
         }
 
-        public MapleMapPortal GetPortal(string portalName)
+        public List<MapleCharacter> GetCharacters()
         {
-            return null;
+            lock (Characters)
+                return Characters.Values.ToList();
         }
 
+        internal List<MapleCharacter> GetCharactersInRange(BoundingBox boundingBox, List<MapleCharacter> partyMembersOnSameMap)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal List<MapleCharacter> GetCharactersInRange(BoundingBox boundingBox)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal List<MapleMonster> GetMobsInRange(BoundingBox boundingBox)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void SpawnMist(int skillId, byte level, MapleCharacter source, BoundingBox boundingBox, Point sourcePos, int v1, bool v2)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal Point GetDropPositionBelow(Point position1, Point position2)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void SpawnStaticObject(MysticDoor sourceDoor)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal int GetNewObjectID()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

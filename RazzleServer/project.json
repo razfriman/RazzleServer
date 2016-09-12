@@ -26,7 +26,8 @@
           "version": "1.0.0"
         },
         "System.Net.Sockets": "4.1.0",
-        "NLog.Extensions.Logging": "1.0.0-*"
+        "NLog.Extensions.Logging": "1.0.0-*",
+        "Newtonsoft.Json": "9.0.1"
       }
     }
   }

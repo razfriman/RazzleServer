@@ -111,8 +111,8 @@ namespace RazzleServer.Packet
         CHANGE_KEYMAP = 0x87,
         RING_ACTION = 0x87FF,
 
-        OPEN_FAMILY = 0x90FF,
-        ADD_FAMILY = 0x91FF,
+        ADD_FAMILY = 0x91,
+        OPEN_FAMILY = 0x92,
         ACCEPT_FAMILY = 0x94FF,
         USE_FAMILY = 0x95FF,
         ALLIANCE_OPERATION = 0x96FF,

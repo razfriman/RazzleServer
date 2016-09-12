@@ -32,8 +32,7 @@ namespace RazzleServer.Handlers
                         client.Account.Character.LoggedIn();
 
                         //chr.Stats.Recalculate(chr);
-                        //chr.Position = map.GetStartpoint(0).Position;
-                        chr.Position = new Point(0, 0);
+                        chr.Position = map.GetStartpoint(0).Position;
 
                         map.AddCharacter(chr);
                     }

@@ -27,6 +27,4 @@ namespace RazzleServer.Data
             optionsBuilder.UseSqlite($"Filename=./{ServerConfig.Instance.DatabaseName}");
         }
     }
-
-
 }

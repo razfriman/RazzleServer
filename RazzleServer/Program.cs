@@ -13,6 +13,8 @@ namespace RazzleServer
 
         public static void Main(string[] args)
         {
+            ServerConfig.LoadFromFile("ServerConfig.json");
+
             MapleClient.RegisterPacketHandlers();
 
             Log.Info("Initializing Database");

@@ -1,3 +1,8 @@
+using Newtonsoft.Json;
+using NLog;
+using System;
+using System.IO;
+
 namespace RazzleServer.Server
 {
     public class ServerConfig
@@ -12,18 +17,35 @@ namespace RazzleServer.Server
         public string WorldName{get;set;} = "Scania";
         public byte WorldFlag {get;set;} = 2;
         public string EventMessage {get;set; } = "Raz's Event";
-        public int DefaultMapID{get;set;} = 140090000;
+        public int DefaultMapID{get;set;} = 100000000;
         public string DatabaseName { get; set; } = "MapleServer.db";
         public ushort Version { get; set; } = 83;
         public byte SubVersion { get; set; } = 1;
         public byte ServerType { get; set; } = 8;
-        public long CipherKey { get; set; } = 0x00001;
         public int PingTimeout { get; set; } = 30;
         public bool PrintPackets { get; set; } = true;
         public bool IsLocalHost { get; set; } = true;
         public ulong AESKey { get; set; } = 0x52330F1BB4060813;
         public bool LoginCreatesNewAccount { get; set; } = true;
 
+        private static Logger Log = LogManager.GetCurrentClassLogger();
+
+
+        public static void LoadFromFile(string path)
+        {
+            try
+            {
+                if (File.Exists(path))
+                {
+                    string contents = File.ReadAllText(path);
+                    _instance = JsonConvert.DeserializeObject<ServerConfig>(contents);
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, "Error deserializing ServerConfig");
+            }
+        }
 
         private static ServerConfig _instance = null;
         public static ServerConfig Instance

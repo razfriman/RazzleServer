@@ -11,5 +11,10 @@ namespace RazzleServer.Handlers
         {
             client.LastPong = DateTime.Now;
         }
+
+        public static PacketWriter PingPacket()
+        {
+            return new PacketWriter(SMSGHeader.PING);
+        }
     }
 }

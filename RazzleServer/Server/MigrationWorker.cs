@@ -34,7 +34,7 @@ namespace RazzleServer.Server
                 MigrationData connection = null;
                 if (MigrationQueue.TryGetValue(id, out connection))
                 {
-                    if (connection.ToChannel == channel || true)
+                    if (connection.ToChannel == channel)
                     {
                         MigrationQueue.Remove(id);
                         return connection;

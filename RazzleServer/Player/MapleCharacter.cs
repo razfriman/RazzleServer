@@ -1,10 +1,15 @@
+using RazzleServer.Constants;
 using RazzleServer.Data;
 using RazzleServer.DB.Models;
+using RazzleServer.Inventory;
 using RazzleServer.Map;
+using RazzleServer.Movement;
 using RazzleServer.Packet;
+using RazzleServer.Party;
 using RazzleServer.Server;
 using RazzleServer.Util;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace RazzleServer.Player
@@ -15,12 +20,60 @@ namespace RazzleServer.Player
         public Point Position { get; set; }
         public byte Stance { get; set; }
         public short Foothold { get; set; }
-        public MapleMap Map { get; set; }
-        public ActionState ActionState { get; set; }
+        public BuffedCharacterStats Stats { get; }
+        public Dictionary<InviteType, Invite> Invites = new Dictionary<InviteType, Invite>();
         public bool Hidden { get; set; }
+        public SkillMacro[] SkillMacros { get; } = new SkillMacro[5];
+        public MapleBuddyList BuddyList { get; set; }
 
-        private static readonly object CharacterDatabaseLock = new object();
+        internal void RemoveDoor(int skillId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Dictionary<uint, Tuple<byte, int>> Keybinds { get; private set; }
+        public int[] QuickSlotKeys { get; private set; }
+
+        internal void GainExp(int data, bool v1, bool v2)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<MapleMovementFragment> LastMove { get; set; }
+        public ReactorActionState ReactorActionState { get; set; }
+        public MapleMap Map { get; set; }
+        public MapleInventory Inventory { get; private set; }
+        public MapleGuild Guild { get; set; }
+        public MapleTrade Trade { get; set; }
+        public MapleParty Party { get; set; }
+        public MapleMessengerRoom ChatRoom { get; set; }
+        public DateTime LastAttackTime { get; set; }
+
+        internal void AddFame(int data)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ActionState ActionState { get; private set; } = ActionState.DISABLED;
+
+        private bool _keybindsChanged;
+        private bool _quickSlotKeyBindsChanged;
+        private readonly List<SpecialPortal> Doors = new List<SpecialPortal>();
+        private Dictionary<int, Skill> Skills = new Dictionary<int, Skill>();
+        private readonly Dictionary<int, Cooldown> Cooldowns = new Dictionary<int, Cooldown>();
+        private readonly Dictionary<int, Buff> Buffs = new Dictionary<int, Buff>();
+        private readonly Dictionary<int, MapleSummon> Summons = new Dictionary<int, MapleSummon>();
+        private readonly Dictionary<int, MapleQuest> StartedQuests = new Dictionary<int, MapleQuest>();
+        private readonly Dictionary<int, uint> CompletedQuests = new Dictionary<int, uint>();
+        private readonly Dictionary<string, string> CustomQuestData = new Dictionary<string, string>();
+
+        internal void AddTraitExp(int data, MapleCharacterStat charisma)
+        {
+            throw new NotImplementedException();
+        }
+
         private readonly object HpLock = new object();
+        private static readonly object CharacterDatabaseLock = new object();
 
         public MapleCharacter()
         {
@@ -53,20 +106,34 @@ namespace RazzleServer.Player
             return newCharacter;
         }
 
+        internal bool HasCompletedQuest(int key)
+        {
+            throw new NotImplementedException();
+        }
+
         public void LoggedIn()
         {
-            //     Client.SendPacket(ShowTitles());
-            //     Client.SendPacket(ShowKeybindLayout(Keybinds));
-            //     Client.SendPacket(ShowQuickSlotKeys(QuickSlotKeys));
-            //     Client.SendPacket(SkillMacro.Packets.ShowSkillMacros(SkillMacros));
+                // Client.SendPacket(ShowKeybindLayout(Keybinds));
+                // Client.SendPacket(ShowQuickSlotKeys(QuickSlotKeys));
+                //Client.SendPacket(SkillMacro.Packets.ShowSkillMacros(SkillMacros));
 
-            //     Guild = MapleGuild.FindGuild(GuildId);
-            //     Guild?.UpdateGuildData();
+                 //Guild = MapleGuild.FindGuild(GuildId);
+                 //Guild?.UpdateGuildData();
 
-            //     Party = MapleParty.FindParty(Id);
-            //     Party?.UpdateParty();
+                 Party = MapleParty.FindParty(ID);
+                 Party?.UpdateParty();
 
-            //     BuddyList.NotifyChannelChangeToBuddies(Id, AccountId, Name, Client.Channel, Client, true);
+                 //BuddyList.NotifyChannelChangeToBuddies(Id, AccountId, Name, Client.Channel, Client, true);
+        }
+
+        internal bool HasSkillOnCooldown(int skillId)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal int GetSkillLevel(int skillId)
+        {
+            throw new NotImplementedException();
         }
 
         internal void RemoveCooldown(int skillId)
@@ -77,16 +144,25 @@ namespace RazzleServer.Player
         public void LoggedOut()
         {
             //Guild?.UpdateGuildData();
-            //Party?.CacheCharacterInfo(this);
-            //Party?.UpdateParty();
+            Party?.CacheCharacterInfo(this);
+            Party?.UpdateParty();
             //BuddyList.NotifyChannelChangeToBuddies(ID, AccountID, Name, -1);
         }
 
+        internal bool HasBuff(int sHADOW_PARTNER)
+        {
+            throw new NotImplementedException();
+        }
 
         public void ChangeMap(int mapId, string toPortal = "")
         {
             var map = ServerManager.GetChannelServer(Client.Channel).GetMap(mapId);
             ChangeMap(map, toPortal);
+        }
+
+        internal void AddMP(int v)
+        {
+            throw new NotImplementedException();
         }
 
         public void ChangeMap(MapleMap toMap, string toPortal = "", bool fromSpecialPortal = false)
@@ -103,7 +179,12 @@ namespace RazzleServer.Player
             Position = portal.Position;
             EnterMap(Client, toMap.MapID, portal.ID, fromSpecialPortal);
             toMap.AddCharacter(this);
-            this.ActionState = ActionState.ENABLED;
+            ActionState = ActionState.ENABLED;
+        }
+
+        internal void AddHP(int v)
+        {
+            throw new NotImplementedException();
         }
 
         internal void CancelBuff(int skillId)
@@ -132,7 +213,7 @@ namespace RazzleServer.Player
             //returnToCity ? ChangeMap(Map.ReturnMap) : EnableActions();
         }
 
-        internal void RemoveSummon(int summonSkillId)
+        internal bool RemoveSummon(int summonSkillId)
         {
             throw new NotImplementedException();
         }
@@ -145,6 +226,15 @@ namespace RazzleServer.Player
             currentMap.AddCharacter(this);
         }
 
+        internal MapleSummon GetSummon(int eVIL_EYE)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal Buff GetBuff(int eVIL_EYE)
+        {
+            throw new NotImplementedException();
+        }
 
         public void Release(bool hasMigration = true)
         {
@@ -167,6 +257,11 @@ namespace RazzleServer.Player
             //         summon.Dispose();
             // }
             Client = null;
+        }
+
+        internal void GiveBuff(Buff newBuff)
+        {
+            throw new NotImplementedException();
         }
 
         public void SendMessage(string message, byte type = 0)
@@ -307,6 +402,21 @@ namespace RazzleServer.Player
             return ID;
         }
 
+        internal void AddDoor(MysticDoor sourceDoor)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void CancelDoor(int mYSTIC_DOOR)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void AddCooldown(int skillId, uint v)
+        {
+            throw new NotImplementedException();
+        }
+
         public static MapleCharacter LoadFromDatabase(int characterId, bool characterScreen, MapleClient c = null)
         {
             lock (CharacterDatabaseLock)
@@ -441,6 +551,11 @@ namespace RazzleServer.Player
                     return chr;
                 }
             }
+        }
+
+        internal void AddSummon(MapleSummon summon)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -859,7 +974,7 @@ namespace RazzleServer.Player
             PacketWriter pw = new PacketWriter();
             pw.WriteHeader(SMSGHeader.SHOW_STATUS_INFO);
             pw.WriteByte(0x11);
-            pw.WriteLong(stat.Value);
+            pw.WriteLong((long)stat);
             pw.WriteInt(amount);
             return pw;
         }
@@ -1096,6 +1211,15 @@ namespace RazzleServer.Player
             {
                 pw.WriteInt(Functions.Random());
             }
+
+            AddCharacterInfo(chr, pw);
+
+            pw.WriteLong(MapleFormatHelper.GetMapleTimeStamp(DateTime.UtcNow)); //current time
+            c.SendPacket(pw);
+        }
+
+        private static void AddCharacterInfo(MapleCharacter chr, PacketWriter pw)
+        {
             pw.WriteLong(-1);
             pw.WriteByte(0);
 
@@ -1109,22 +1233,35 @@ namespace RazzleServer.Player
                 pw.WriteMapleString(linkedName);
             }
 
-            pw.WriteUInt((uint)chr.Mesos);
+            pw.WriteInt((int)chr.Mesos);
             AddInventoryInfo(pw, chr);
             AddSkillInfo(pw, chr);
             AddQuestInfo(pw, chr);
-            pw.WriteLong(0); // rings
+            pw.WriteShort(0);
+            AddRingInfo(pw);
+            AddTeleportRockInfo(pw);
+            AddMonsterBookInfo(pw, chr);
+            pw.WriteShort(0);
+            pw.WriteInt(0);
+        }
+
+        private static void AddTeleportRockInfo(PacketWriter pw)
+        {
             for (int x = 0; x < 15; x++)
             {
+                // 5 - TELEPORT ROCK
+                // 10 - VIP TELEPORT ROCK
                 // CHAR INFO MAGIC
                 pw.WriteBytes(new byte[] { 0xFF, 0xC9, 0x9A, 0x3B });
             }
-            AddMonsterBookInfo(pw, chr);
-            pw.WriteShort(0);
-            pw.WriteShort(0);
-            pw.WriteShort(0);
-            pw.WriteLong(MapleFormatHelper.GetMapleTimeStamp(DateTime.UtcNow)); //current time
-            c.SendPacket(pw);
+        }
+
+        private static void AddRingInfo(PacketWriter pw)
+        {
+            pw.WriteShort(0); // crush rings
+            pw.WriteShort(0); // friendship rings
+            pw.WriteShort(0); // marriage rings
+
         }
 
         private static void AddQuestInfo(PacketWriter pw, MapleCharacter chr)
@@ -1586,6 +1723,76 @@ namespace RazzleServer.Player
 
         public bool IsAdmin => Client.Account.AccountType == 3;
 
+        public int CurrentLevelSkillBook
+        {
+            get
+            {
+                if (Job >= 2210 && Job <= 2218)
+                    return Job - 2209;
+
+                if (Level <= 30)
+                    return 0;
+                if (Level <= 60)
+                    return 1;
+                if (Level <= 100)
+                    return 2;
+                if (Level > 100)
+                    return 3;
+                return 0;
+            }
+        }
+       
+        public bool IsBeginnerJob => JobConstants.IsBeginnerJob(Job);
+        public bool IsExplorer => Job < 600;
+        public bool IsWarrior { get { return Job / 100 == 1; } }
+        public bool IsFighter { get { return Job / 10 == 11; } }
+        public bool IsPage { get { return Job / 10 == 12; } }
+        public bool IsSpearman { get { return Job / 10 == 13; } }
+        public bool IsMagician { get { return Job / 100 == 2; } }
+        public bool IsFirePoisonMage { get { return Job / 10 == 21; } }
+        public bool IsIceLightningMage { get { return Job / 10 == 22; } }
+        public bool IsCleric { get { return Job / 10 == 23; } }
+        public bool IsArcher { get { return Job / 100 == 3; } }
+        public bool IsHunter { get { return Job / 10 == 31; } }
+        public bool IsCrossbowman { get { return Job / 10 == 32; } }
+        public bool IsThief { get { return Job / 100 == 4; } }
+        public bool IsAssassin { get { return Job / 10 == 41; } }
+        public bool IsBandit { get { return Job / 10 == 42; } }
+        public bool IsPirate { get { return Job / 100 == 5; } }
+        public bool IsBrawler { get { return Job / 10 == 51; } }
+        public bool IsGunslinger { get { return Job / 10 == 52; } }
+        public bool IsJett { get { return Job == 508 || Job / 10 == 57; } }
+        public bool IsGameMasterJob { get { return Job / 100 == 9; } }
+        public bool IsSuperGameMasterJob { get { return Job == 910; } }
+        public bool IsCygnus { get { return Job / 1000 == 1; } }
+        public bool IsDawnWarrior { get { return Job / 10 == 11; } }
+        public bool IsBlazeWizard { get { return Job / 10 == 12; } }
+        public bool IsWindArcher { get { return Job / 10 == 13; } }
+        public bool IsNightWalker { get { return Job / 10 == 14; } }
+        public bool IsThunderBreaker { get { return Job / 10 == 15; } }
+        public bool IsHero { get { return Job / 1000 == 2; } }
+        public bool IsEvan { get { return Job == 2001 || Job / 100 == 22; } }
+        public bool IsMercedes { get { return Job == 2002 || Job / 100 == 23; } }
+        public bool IsPhantom { get { return Job == 2003 || Job / 100 == 24; } }
+        public bool IsResistance { get { return Job / 1000 == 3; } }
+        public bool IsDemon { get { return Job == 3001 || Job / 100 == 31; } }
+        public bool IsDemonSlayer { get { return Job == 3100 || Job / 10 == 311; } }
+        public bool IsDemonAvenger { get { return Job == 3101 || Job / 10 == 312; } }
+        public bool IsBattleMage { get { return Job / 100 == 32; } }
+        public bool IsWildHunter { get { return Job / 100 == 33; } }
+        public bool IsMechanic { get { return Job / 100 == 35; } }
+        public bool IsXenon { get { return Job == 3002 || Job / 100 == 36; } }
+        public bool IsSengoku { get { return Job / 1000 == 4; } }
+        public bool IsHayato { get { return Job == 4001 || Job / 100 == 41; } }
+        public bool IsKanna { get { return Job == 4002 || Job / 100 == 42; } }
+        public bool IsMihile { get { return Job == 5000 || Job / 100 == 51; } }
+        public bool IsNova { get { return Job / 1000 == 6; } }
+        public bool IsKaiser { get { return Job == 6000 || Job / 100 == 61; } }
+        public bool IsAngelicBuster { get { return Job == 6001 || Job / 100 == 65; } }
+        public bool IsZero { get { return Job == 10000 || Job / 100 == 101; } }
+        public bool IsBeastTamer { get { return Job == 11000 || Job / 100 == 112; } }
+
+        public int CompletedQuestCount { get; internal set; }
         #endregion
     }
 }

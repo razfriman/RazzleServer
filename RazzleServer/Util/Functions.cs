@@ -8,7 +8,7 @@ namespace RazzleServer.Util
 {
     public static class Functions
     {
-    
+
         /// <summary>
         /// Checks whether a string contains only alpha numerical characters
         /// </summary>
@@ -210,7 +210,7 @@ namespace RazzleServer.Util
         {
             byte[] data = Encoding.ASCII.GetBytes(value);
             byte[] hashData;
-            
+
             using (var sha = SHA1.Create())
             {
                 hashData = sha.ComputeHash(data);
