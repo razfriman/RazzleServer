@@ -11,11 +11,26 @@ using RazzleServer.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace RazzleServer.Player
 {
     public class MapleCharacter : Character
     {
+        private bool _keybindsChanged;
+        private bool _quickSlotKeyBindsChanged;
+        private readonly List<SpecialPortal> _doors = new List<SpecialPortal>();
+        private Dictionary<int, Skill> _skills = new Dictionary<int, Skill>();
+        private readonly Dictionary<int, Cooldown> _cooldowns = new Dictionary<int, Cooldown>();
+        private readonly Dictionary<int, Buff> _buffs = new Dictionary<int, Buff>();
+        private readonly Dictionary<int, MapleSummon> _summons = new Dictionary<int, MapleSummon>();
+        private readonly Dictionary<int, MapleQuest> _startedQuests = new Dictionary<int, MapleQuest>();
+        private readonly Dictionary<int, uint> _completedQuests = new Dictionary<int, uint>();
+        private readonly Dictionary<string, string> _customQuestData = new Dictionary<string, string>();
+
+        private readonly object _hpLock = new object();
+        private static readonly object _characterDatabaseLock = new object();
+
         public MapleClient Client { get; private set; }
         public Point Position { get; set; }
         public byte Stance { get; set; }
@@ -25,20 +40,8 @@ namespace RazzleServer.Player
         public bool Hidden { get; set; }
         public SkillMacro[] SkillMacros { get; } = new SkillMacro[5];
         public MapleBuddyList BuddyList { get; set; }
-
-        internal void RemoveDoor(int skillId)
-        {
-            throw new NotImplementedException();
-        }
-
         public Dictionary<uint, Tuple<byte, int>> Keybinds { get; private set; }
         public int[] QuickSlotKeys { get; private set; }
-
-        internal void GainExp(int data, bool v1, bool v2)
-        {
-            throw new NotImplementedException();
-        }
-
         public List<MapleMovementFragment> LastMove { get; set; }
         public ReactorActionState ReactorActionState { get; set; }
         public MapleMap Map { get; set; }
@@ -48,36 +51,9 @@ namespace RazzleServer.Player
         public MapleParty Party { get; set; }
         public MapleMessengerRoom ChatRoom { get; set; }
         public DateTime LastAttackTime { get; set; }
-
-        internal void AddFame(int data)
-        {
-            throw new NotImplementedException();
-        }
-
         public ActionState ActionState { get; private set; } = ActionState.DISABLED;
+        public Dictionary<uint, Tuple<byte, int>> _keybinds { get; private set; }
 
-        private bool _keybindsChanged;
-        private bool _quickSlotKeyBindsChanged;
-        private readonly List<SpecialPortal> Doors = new List<SpecialPortal>();
-        private Dictionary<int, Skill> Skills = new Dictionary<int, Skill>();
-        private readonly Dictionary<int, Cooldown> Cooldowns = new Dictionary<int, Cooldown>();
-        private readonly Dictionary<int, Buff> Buffs = new Dictionary<int, Buff>();
-        private readonly Dictionary<int, MapleSummon> Summons = new Dictionary<int, MapleSummon>();
-        private readonly Dictionary<int, MapleQuest> StartedQuests = new Dictionary<int, MapleQuest>();
-        private readonly Dictionary<int, uint> CompletedQuests = new Dictionary<int, uint>();
-        private readonly Dictionary<string, string> CustomQuestData = new Dictionary<string, string>();
-
-        internal void AddTraitExp(int data, MapleCharacterStat charisma)
-        {
-            throw new NotImplementedException();
-        }
-
-        private readonly object HpLock = new object();
-        private static readonly object CharacterDatabaseLock = new object();
-
-        public MapleCharacter()
-        {
-        }
 
         public static MapleCharacter GetDefaultCharacter(MapleClient client)
         {
@@ -106,63 +82,33 @@ namespace RazzleServer.Player
             return newCharacter;
         }
 
-        internal bool HasCompletedQuest(int key)
-        {
-            throw new NotImplementedException();
-        }
-
         public void LoggedIn()
         {
-                // Client.SendPacket(ShowKeybindLayout(Keybinds));
-                // Client.SendPacket(ShowQuickSlotKeys(QuickSlotKeys));
-                //Client.SendPacket(SkillMacro.Packets.ShowSkillMacros(SkillMacros));
+                Client.SendPacket(ShowKeybindLayout(_keybinds));
+                Client.SendPacket(ShowQuickSlotKeys(QuickSlotKeys));
+                Client.SendPacket(SkillMacro.ShowSkillMacros(SkillMacros));
 
-                 //Guild = MapleGuild.FindGuild(GuildId);
-                 //Guild?.UpdateGuildData();
+                 Guild = MapleGuild.FindGuild(GuildID);
+                 Guild?.UpdateGuildData();
 
                  Party = MapleParty.FindParty(ID);
                  Party?.UpdateParty();
 
-                 //BuddyList.NotifyChannelChangeToBuddies(Id, AccountId, Name, Client.Channel, Client, true);
-        }
-
-        internal bool HasSkillOnCooldown(int skillId)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal int GetSkillLevel(int skillId)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal void RemoveCooldown(int skillId)
-        {
-            throw new NotImplementedException();
+                 BuddyList.NotifyChannelChangeToBuddies(Id, AccountId, Name, Client.Channel, Client, true);
         }
 
         public void LoggedOut()
         {
-            //Guild?.UpdateGuildData();
+            Guild?.UpdateGuildData();
             Party?.CacheCharacterInfo(this);
             Party?.UpdateParty();
-            //BuddyList.NotifyChannelChangeToBuddies(ID, AccountID, Name, -1);
-        }
-
-        internal bool HasBuff(int sHADOW_PARTNER)
-        {
-            throw new NotImplementedException();
+            BuddyList.NotifyChannelChangeToBuddies(ID, AccountID, Name, -1);
         }
 
         public void ChangeMap(int mapId, string toPortal = "")
         {
             var map = ServerManager.GetChannelServer(Client.Channel).GetMap(mapId);
             ChangeMap(map, toPortal);
-        }
-
-        internal void AddMP(int v)
-        {
-            throw new NotImplementedException();
         }
 
         public void ChangeMap(MapleMap toMap, string toPortal = "", bool fromSpecialPortal = false)
@@ -182,25 +128,15 @@ namespace RazzleServer.Player
             ActionState = ActionState.ENABLED;
         }
 
-        internal void AddHP(int v)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal void CancelBuff(int skillId)
-        {
-            throw new NotImplementedException();
-        }
-
         public void Revive(bool returnToCity = false, bool loseExp = true, bool restoreHpToFull = false)
         {
             if (loseExp)
             {
-                //DoDeathExpLosePenalty();
+                DoDeathExpLosePenalty();
             }
 
             HP = 49;
-            //AddHP(restoreHpToFull ? Stats.MaxHp : 1);
+            AddHP(restoreHpToFull ? Stats.MaxHp : 1);
 
             if (returnToCity)
             {
@@ -210,12 +146,6 @@ namespace RazzleServer.Player
             {
                 EnableActions();
             }
-            //returnToCity ? ChangeMap(Map.ReturnMap) : EnableActions();
-        }
-
-        internal bool RemoveSummon(int summonSkillId)
-        {
-            throw new NotImplementedException();
         }
 
         public void FakeRelog()
@@ -226,42 +156,27 @@ namespace RazzleServer.Player
             currentMap.AddCharacter(this);
         }
 
-        internal MapleSummon GetSummon(int eVIL_EYE)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal Buff GetBuff(int eVIL_EYE)
-        {
-            throw new NotImplementedException();
-        }
-
         public void Release(bool hasMigration = true)
         {
-            //Inventory?.Release();
+            Inventory?.Release();
             if (Map != null)
             {
                 Map.RemoveCharacter(ID);
                 Map = null;
             }
-            // if (ChatRoom != null)
-            // {
-            //     ChatRoom.RemovePlayer(Id);
-            //     ChatRoom = null;
-            // }
-            // if (!hasMigration)
-            // {
-            //     foreach (Buff buff in Buffs.Values.ToList())
-            //         buff.CancelRemoveBuffSchedule();
-            //     foreach (MapleSummon summon in Summons.Values.ToList())
-            //         summon.Dispose();
-            // }
+            if (ChatRoom != null)
+            {
+                ChatRoom.RemovePlayer(ID);
+                ChatRoom = null;
+            }
+            if (!hasMigration)
+            {
+                foreach (Buff buff in _buffs.Values.ToList())
+                    buff.CancelRemoveBuffSchedule();
+                foreach (MapleSummon summon in _summons.Values.ToList())
+                    summon.Dispose();
+            }
             Client = null;
-        }
-
-        internal void GiveBuff(Buff newBuff)
-        {
-            throw new NotImplementedException();
         }
 
         public void SendMessage(string message, byte type = 0)
@@ -283,7 +198,6 @@ namespace RazzleServer.Player
         {
             Client.SendPacket(SystemMessage(message, 0x0B));
         }
-
 
         public static bool CharacterExists(string name)
         {
@@ -362,64 +276,74 @@ namespace RazzleServer.Player
                 ID = InsertChar.ID;
 
                 #region Keybinds
-                // foreach (var kvp in Keybinds)
-                // {
-                //     KeyMap insertKeyMap = new KeyMap();
+                foreach (var kvp in Keybinds)
+                {
+                    KeyMap insertKeyMap = new KeyMap();
 
-                //     insertKeyMap.CharacterId = ID;
-                //     insertKeyMap.Key = (byte)kvp.Key; //Posible overflow?
-                //     insertKeyMap.Type = kvp.Value.Left;
-                //     insertKeyMap.Action = kvp.Value.Right;
+                    insertKeyMap.CharacterID = ID;
+                    insertKeyMap.Key = (byte)kvp.Key; //Posible overflow?
+                    insertKeyMap.Type = kvp.Value.Item1;
+                    insertKeyMap.Action = kvp.Value.Item2;
 
-                //     context.KeyMaps.Add(insertKeyMap);
-                // }
-                // for (int i = 0; i < QuickSlotKeys.Length; i++)
-                // {
-                //     QuickSlotKeyMap dbQuickSlotKeyMap = new QuickSlotKeyMap();
-                //     dbQuickSlotKeyMap.CharacterId = InsertChar.ID;
-                //     dbQuickSlotKeyMap.Key = QuickSlotKeys[i];
-                //     dbQuickSlotKeyMap.Index = (byte)i;
-                //     context.QuickSlotKeyMaps.Add(dbQuickSlotKeyMap);
-                // }
+                    context.KeyMaps.Add(insertKeyMap);
+                }
+                for (int i = 0; i < QuickSlotKeys.Length; i++)
+                {
+                    QuickSlotKeyMap dbQuickSlotKeyMap = new QuickSlotKeyMap();
+                    dbQuickSlotKeyMap.CharacterID = InsertChar.ID;
+                    dbQuickSlotKeyMap.Key = QuickSlotKeys[i];
+                    dbQuickSlotKeyMap.Index = (byte)i;
+                    context.QuickSlotKeyMaps.Add(dbQuickSlotKeyMap);
+                }
                 #endregion
 
                 #region Skills
-                // foreach (Skill skill in Skills.Values)
-                // {
-                //     var insertSkill = new DB.Models.Skill();
-                //     insertSkill.SkillId = skill.SkillID;
-                //     insertSkill.CharacterId = ID;
-                //     insertSkill.Level = skill.Level;
-                //     insertSkill.MasterLevel = skill.MasterLevel;
-                //     insertSkill.Expiration = skill.Expiration;
+                foreach (Skill skill in _skills.Values)
+                {
+                    var insertSkill = new DB.Models.Skill();
+                    insertSkill.SkillId = skill.SkillID;
+                    insertSkill.CharacterID = ID;
+                    insertSkill.Level = skill.Level;
+                    insertSkill.MasterLevel = skill.MasterLevel;
+                    insertSkill.Expiration = skill.Expiration;
 
-                //     context.Skills.Add(insertSkill);
-                // }
+                    context.Skills.Add(insertSkill);
+                }
                 #endregion
                 context.SaveChanges();
             }
-
             return ID;
         }
 
-        internal void AddDoor(MysticDoor sourceDoor)
+        public void AddCooldown(int skillId, uint duration, DateTime? nStartTime = null) //duration in MS
         {
-            throw new NotImplementedException();
+            DateTime startTime = nStartTime ?? DateTime.UtcNow;
+            if (!_cooldowns.ContainsKey(skillId))
+            {
+                Cooldown cd = new Cooldown(duration, startTime);
+                cd.CancellationToken = new CancellationTokenSource();
+                Scheduler.ScheduleRemoveCooldown(this, skillId, (int)duration, cd.CancellationToken.Token);
+                _cooldowns.Add(skillId, cd);
+                Client.SendPacket(Skill.ShowCooldown(skillId, duration / 1000));
+            }
         }
 
-        internal void CancelDoor(int mYSTIC_DOOR)
+        public void AddCooldownSilent(int skillId, uint duration, DateTime? nStartTime = null, bool createCancelSchedule = true) //duration in MS
         {
-            throw new NotImplementedException();
-        }
-
-        internal void AddCooldown(int skillId, uint v)
-        {
-            throw new NotImplementedException();
+            DateTime startTime = nStartTime ?? DateTime.UtcNow;
+            if (!_cooldowns.ContainsKey(skillId))
+            {
+                Cooldown cd = new Cooldown(duration, startTime);
+                cd.CancellationToken = new CancellationTokenSource();
+                if (createCancelSchedule)
+                    Scheduler.ScheduleRemoveCooldown(this, skillId,(int) duration, cd.CancellationToken.Token);
+                _cooldowns.Add(skillId, cd);
+            }
         }
 
         public static MapleCharacter LoadFromDatabase(int characterId, bool characterScreen, MapleClient c = null)
         {
-            lock (CharacterDatabaseLock)
+            lock (_characterDatabaseLock)
             {
                 using (MapleDbContext dbContext = new MapleDbContext())
                 {
@@ -432,80 +356,80 @@ namespace RazzleServer.Player
                         chr.Client = c;
                     }
 
-                    //chr.Inventory = MapleInventory.LoadFromDatabase(chr);
+                    chr.Inventory = MapleInventory.LoadFromDatabase(chr);
 
-                    // foreach (QuestCustomData customQuest in dbContext.QuestCustomData.Where(x => x.CharacterId == characterId))
-                    // {
-                    //     if (!chr.CustomQuestData.ContainsKey(customQuest.Key))
-                    //         chr.CustomQuestData.Add(customQuest.Key, customQuest.Value);
-                    // }
+                    foreach (QuestCustomData customQuest in dbContext.QuestCustomData.Where(x => x.CharacterId == characterId))
+                    {
+                        if (!chr.CustomQuestData.ContainsKey(customQuest.Key))
+                            chr.CustomQuestData.Add(customQuest.Key, customQuest.Value);
+                    }
 
                     if (characterScreen) return chr; //No need to load more
 
                     #region Buddies
-                    //chr.BuddyList = MapleBuddyList.LoadFromDatabase(dbContext.Buddies.Where(x => x.AccountID == chr.AccountId || x.CharacterId == characterId).ToList(), chr.BuddyCapacity);
+                    chr.BuddyList = MapleBuddyList.LoadFromDatabase(dbContext.Buddies.Where(x => x.AccountID == chr.AccountId || x.CharacterId == characterId).ToList(), chr.BuddyCapacity);
                     #endregion
 
                     #region Skills
-                    // var dbSkills = dbContext.Skills.Where(x => x.CharacterId == characterId);
-                    // Dictionary<int, Skill> skills = new Dictionary<int, Skill>();
-                    // foreach (DB.Models.Skill DbSkill in dbSkills)
-                    // {
-                    //     Skill skill = new Skill(DbSkill.SkillId)
-                    //     {
-                    //         Level = DbSkill.Level,
-                    //         MasterLevel = DbSkill.MasterLevel,
-                    //         Expiration = DbSkill.Expiration,
-                    //         SkillExp = DbSkill.SkillExp
-                    //     };
-                    //     if (!skills.ContainsKey(skill.SkillId))
-                    //         skills.Add(skill.SkillId, skill);
-                    // }
-                    // chr.SetSkills(skills);
+                    var dbSkills = dbContext.Skills.Where(x => x.CharacterID == characterId);
+                    Dictionary<int, Skill> skills = new Dictionary<int, Skill>();
+                    foreach (DB.Models.Skill DbSkill in dbSkills)
+                    {
+                        Skill skill = new Skill(DbSkill.SkillId)
+                        {
+                            Level = DbSkill.Level,
+                            MasterLevel = DbSkill.MasterLevel,
+                            Expiration = DbSkill.Expiration,
+                            SkillExp = DbSkill.SkillExp
+                        };
+                        if (!skills.ContainsKey(skill.SkillID))
+                            skills.Add(skill.SkillID, skill);
+                    }
+                    chr.SetSkills(skills);
                     #endregion
 
                     #region Keybinds
-                    // List<KeyMap> dbKeyMaps = dbContext.KeyMaps.Where(x => x.CharacterId == characterId).ToList();
-                    // Dictionary<uint, Pair<byte, int>> keyMap = new Dictionary<uint, Pair<byte, int>>();
-                    // foreach (KeyMap dbKeyMap in dbKeyMaps)
-                    // {
-                    //     if (!keyMap.ContainsKey(dbKeyMap.Key))
-                    //     {
-                    //         keyMap.Add(dbKeyMap.Key, new Pair<byte, int>(dbKeyMap.Type, dbKeyMap.Action));
-                    //     }
-                    // }
-                    // chr.Keybinds = keyMap;
+                    List<KeyMap> dbKeyMaps = dbContext.KeyMaps.Where(x => x.CharacterID == characterId).ToList();
+                    Dictionary<uint, Tuple<byte, int>> keyMap = new Dictionary<uint, Tuple<byte, int>>();
+                    foreach (KeyMap dbKeyMap in dbKeyMaps)
+                    {
+                        if (!keyMap.ContainsKey(dbKeyMap.Key))
+                        {
+                            keyMap.Add(dbKeyMap.Key, new Tuple<byte, int>(dbKeyMap.Type, dbKeyMap.Action));
+                        }
+                    }
+                    chr.Keybinds = keyMap;
 
-                    // List<QuickSlotKeyMap> dbQuickSlotKeyMaps = dbContext.QuickSlotKeyMaps.Where(x => x.CharacterId == characterId).ToList();
-                    // int[] quickSlots = new int[28];
-                    // foreach (QuickSlotKeyMap dbQuickSlotKeyMap in dbQuickSlotKeyMaps)
-                    // {
-                    //     quickSlots[dbQuickSlotKeyMap.Index] = dbQuickSlotKeyMap.Key;
-                    // }
-                    // chr.QuickSlotKeys = quickSlots;
+                    List<QuickSlotKeyMap> dbQuickSlotKeyMaps = dbContext.QuickSlotKeyMaps.Where(x => x.CharacterID == characterId).ToList();
+                    int[] quickSlots = new int[28];
+                    foreach (QuickSlotKeyMap dbQuickSlotKeyMap in dbQuickSlotKeyMaps)
+                    {
+                        quickSlots[dbQuickSlotKeyMap.Index] = dbQuickSlotKeyMap.Key;
+                    }
+                    chr.QuickSlotKeys = quickSlots;
 
-                    // List<DbSkillMacro> dbSkillMacros = dbContext.SkillMacros.Where(x => x.CharacterId == characterId).ToList();
-                    // foreach (DbSkillMacro dbSkillMacro in dbSkillMacros)
-                    // {
-                    //     chr.SkillMacros[dbSkillMacro.Index] = new SkillMacro(dbSkillMacro.Name, dbSkillMacro.ShoutName, dbSkillMacro.Skill1, dbSkillMacro.Skill2, dbSkillMacro.Skill3);
-                    // }
+                    List<DbSkillMacro> dbSkillMacros = dbContext.SkillMacros.Where(x => x.CharacterId == characterId).ToList();
+                    foreach (DbSkillMacro dbSkillMacro in dbSkillMacros)
+                    {
+                        chr.SkillMacros[dbSkillMacro.Index] = new SkillMacro(dbSkillMacro.Name, dbSkillMacro.ShoutName, dbSkillMacro.Skill1, dbSkillMacro.Skill2, dbSkillMacro.Skill3);
+                    }
 
                     #endregion
 
                     #region Cooldowns
-                    // List<SkillCooldown> DbSkillCooldowns = dbContext.SkillCooldowns.Where(x => x.CharacterId == characterId).ToList();
-                    // foreach (SkillCooldown DbSkillCooldown in DbSkillCooldowns)
-                    // {
-                    //     if (!chr.Cooldowns.ContainsKey(DbSkillCooldown.SkillId))
-                    //     {
-                    //         DateTime startTime = new DateTime(DbSkillCooldown.StartTime);
-                    //         uint duration = (uint)DbSkillCooldown.Length;
-                    //         uint remaining = (uint)(startTime.AddMilliseconds(duration) - DateTime.UtcNow).TotalMilliseconds;
-                    //         if (remaining <= 2000) // less than 2 seconds is not worth the effort
-                    //             continue;
-                    //         chr.AddCooldownSilent(DbSkillCooldown.SkillId, duration, startTime);
-                    //     }
-                    // }
+                    List<SkillCooldown> DbSkillCooldowns = dbContext.SkillCooldowns.Where(x => x.CharacterID == characterId).ToList();
+                    foreach (SkillCooldown DbSkillCooldown in DbSkillCooldowns)
+                    {
+                        if (!chr._cooldowns.ContainsKey(DbSkillCooldown.SkillID))
+                        {
+                            DateTime startTime = new DateTime(DbSkillCooldown.StartTime);
+                            uint duration = (uint)DbSkillCooldown.Length;
+                            uint remaining = (uint)(startTime.AddMilliseconds(duration) - DateTime.UtcNow).TotalMilliseconds;
+                            if (remaining <= 2000) // less than 2 seconds is not worth the effort
+                                continue;
+                            chr.AddCooldownSilent(DbSkillCooldown.SkillID, duration, startTime);
+                        }
+                    }
                     #endregion
 
                     #region Quests
@@ -553,9 +477,10 @@ namespace RazzleServer.Player
             }
         }
 
-        internal void AddSummon(MapleSummon summon)
+        public void AddSummon(MapleSummon summon)
         {
-            throw new NotImplementedException();
+            _summons.Add(summon.SourceSkillId, summon);
+            Map.AddSummon(summon, true);
         }
 
         /// <summary>
@@ -564,30 +489,30 @@ namespace RazzleServer.Player
         /// <param name="chr">The character to save</param>
         public static void SaveToDatabase(MapleCharacter chr)
         {
-            lock (CharacterDatabaseLock)
+            lock (_characterDatabaseLock)
             {
                 using (MapleDbContext dbContext = new MapleDbContext())
                 {
-                    // chr.GuildId = chr.Guild == null ? 0 : chr.Guild.GuildId;
+                    chr.GuildID = chr.Guild == null ? 0 : chr.Guild.GuildID;
 
-                    // if (chr.Map != null)
-                    // {
-                    //     int forcedReturn = DataBuffer.GetMapById(chr.Map.MapId).ForcedReturn;
-                    //     if (forcedReturn != 999999999)
-                    //     {
-                    //         chr.MapId = forcedReturn;
-                    //         chr.SpawnPoint = 0;
-                    //     }
-                    //     else
-                    //     {
-                    //         chr.MapId = chr.Map.MapId;
-                    //         chr.SpawnPoint = chr.Map.GetClosestSpawnPointId(chr.Position);
-                    //     }
-                    // }
-                    // else
-                    // {
-                    //     chr.SpawnPoint = 0;
-                    // }
+                    if (chr.Map != null)
+                    {
+                        int forcedReturn = DataBuffer.GetMapById(chr.Map.MapID).ForcedReturn;
+                        if (forcedReturn != 999999999)
+                        {
+                            chr.MapID = forcedReturn;
+                            chr.SpawnPoint = 0;
+                        }
+                        else
+                        {
+                            chr.MapID = chr.Map.MapID;
+                            chr.SpawnPoint = chr.Map.GetClosestSpawnPointId(chr.Position);
+                        }
+                    }
+                    else
+                    {
+                        chr.SpawnPoint = 0;
+                    }
 
                     Character updateChar = dbContext.Characters.FirstOrDefault(x => x.ID == chr.ID);
                     updateChar.ID = chr.ID;
@@ -615,7 +540,7 @@ namespace RazzleServer.Player
                     updateChar.SP = chr.SP;
                     updateChar.BuddyCapacity = chr.BuddyCapacity;
 
-                    //chr.Inventory.SaveToDatabase();
+                    chr.Inventory.SaveToDatabase();
 
                     #region Skills
                     // List<DB.Models.Skill> DbSkills = dbContext.Skills.Where(x => x.CharacterId == chr.Id).ToList();
@@ -908,53 +833,53 @@ namespace RazzleServer.Player
         }
 
         #region Doors
-        // public bool HasDoor(int skillId)
-        // {
-        //     lock (Doors)
-        //     {
-        //         List<SpecialPortal> sameSkillPortals = Doors.Where(x => x.SkillId == skillId).ToList();
-        //         int count = sameSkillPortals.Count;
-        //         foreach (SpecialPortal portal in sameSkillPortals)
-        //         {
-        //             if (DateTime.UtcNow >= portal.Expiration)
-        //             {
-        //                 portal.FromMap.RemoveStaticObject(portal.ObjectId, false);
-        //                 Doors.Remove(portal);
-        //                 count--;
-        //             }
-        //         }
-        //         return count > 0;
-        //     }
-        // }
+        public bool HasDoor(int skillId)
+        {
+            lock (_doors)
+            {
+                List<SpecialPortal> sameSkillPortals = _doors.Where(x => x.SkillId == skillId).ToList();
+                int count = sameSkillPortals.Count;
+                foreach (SpecialPortal portal in sameSkillPortals)
+                {
+                    if (DateTime.UtcNow >= portal.Expiration)
+                    {
+                        portal.FromMap.RemoveStaticObject(portal.ObjectId, false);
+                        _doors.Remove(portal);
+                        count--;
+                    }
+                }
+                return count > 0;
+            }
+        }
 
-        // public void CancelDoor(int skillId = 0)
-        // {
-        //     List<SpecialPortal> sameSkillDoors;
-        //     lock (Doors)
-        //     {
-        //         sameSkillDoors = Doors.Where(x => skillId == 0 ? true : x.SkillId == skillId).ToList();
-        //     }
-        //     foreach (SpecialPortal door in sameSkillDoors)
-        //     {
-        //         door.FromMap.RemoveStaticObject(door.ObjectId, false);
-        //     }
-        // }
+        public void CancelDoor(int skillId = 0)
+        {
+            List<SpecialPortal> sameSkillDoors;
+            lock (_doors)
+            {
+                sameSkillDoors = _doors.Where(x => skillId == 0 ? true : x.SkillId == skillId).ToList();
+            }
+            foreach (SpecialPortal door in sameSkillDoors)
+            {
+                door.FromMap.RemoveStaticObject(door.ObjectId, false);
+            }
+        }
 
-        // public void RemoveDoor(int skillId)
-        // {
-        //     lock (Doors)
-        //     {
-        //         Doors.RemoveAll(x => x.SkillId == skillId);
-        //     }
-        // }
+        public void RemoveDoor(int skillId)
+        {
+            lock (_doors)
+            {
+                _doors.RemoveAll(x => x.SkillId == skillId);
+            }
+        }
 
-        // public void AddDoor(SpecialPortal door)
-        // {
-        //     lock (Doors)
-        //     {
-        //         Doors.Add(door);
-        //     }
-        // }
+        public void AddDoor(SpecialPortal door)
+        {
+            lock (_doors)
+            {
+                _doors.Add(door);
+            }
+        }
         #endregion
 
         #region Packets
@@ -985,12 +910,17 @@ namespace RazzleServer.Player
             AddCharStats(pw, chr);
             AddCharLook(pw, chr, true);
 
-            pw.WriteShort(0);
-            // If world rank enabled
-            //pw.WriteInt(0); // Rank
-            //pw.WriteInt(0); // Rank Move
-            //pw.WriteInt(0); // Job Rank
-            //pw.WriteInt(0); // Job Rank Move
+            bool rankEnabled = false;
+
+            pw.WriteShort((short) (rankEnabled ? 1 : 0));
+
+            if(rankEnabled)
+            {
+                pw.WriteInt(0); // Rank
+                pw.WriteInt(0); // Rank Move
+                pw.WriteInt(0); // Job Rank
+                pw.WriteInt(0); // Job Rank Move       
+            }
         }
 
         public static void AddCharStats(PacketWriter pw, MapleCharacter chr, bool CashShop = false)
@@ -1266,57 +1196,84 @@ namespace RazzleServer.Player
 
         private static void AddQuestInfo(PacketWriter pw, MapleCharacter chr)
         {
-            pw.WriteShort(0); // started.size
-            //for (MapleQuestStatus q : started)
-            //{
-            //    mplew.writeShort(q.getQuest().getId());
-            //    mplew.writeMapleAsciiString(q.getQuestData());
-            //}
-            pw.WriteShort(0);// completed.size
-            //for (MapleQuestStatus q : completed)
-            //{
-            //    mplew.writeShort(q.getQuest().getId());
-            //    mplew.writeLong(q.getCompletionTime());
-            //}
+            pw.WriteUShort((ushort)chr._startedQuests.Count); //started quests size
+            foreach (var questPair in chr._startedQuests)
+            {
+                pw.WriteUShort((ushort)questPair.Key);
+                pw.WriteMapleString(questPair.Value.Data);
+            }
+            pw.WriteUShort((ushort)chr._completedQuests.Count); //completed quests size
+            foreach (var questPair in chr._completedQuests)
+            {
+                pw.WriteUShort((ushort)questPair.Key);
+                pw.WriteLong(questPair.Value);
+            }
         }
 
         private static void AddSkillInfo(PacketWriter pw, MapleCharacter chr)
         {
-
             pw.WriteByte(0);
-            pw.WriteShort(0); // skills.size
-            //for (Entry<ISkill, MapleCharacter.SkillEntry> skill : skills.entrySet())
-            //{
-            //    mplew.writeInt(skill.getKey().getId());
-            //    mplew.writeInt(skill.getValue().skillevel);
+            pw.WriteShort((short)chr._skills.Count);
+            foreach (var skill in chr._skills)
+            {
+                pw.WriteInt(skill.Key);
+                pw.WriteInt(skill.Value.Level);
+                pw.WriteLong(MapleFormatHelper.GetMapleTimeStamp(skill.Value.Expiration));
 
-            //    mplew.write(0);
-            //    mplew.write(ITEM_MAGIC);
-            //    mplew.writeInt(400967355);
-            //    mplew.write(2);
+                if (skill.Value.HasMastery)
+                {
+                    pw.WriteInt(skill.Value.MasterLevel);
+                }
+            }
 
-            //    if (skill.getKey().isFourthJob())
-            //    {
-            //        mplew.writeInt(skill.getValue().masterlevel);
-            //    }
-            //}
-            pw.WriteShort(0); // cooldowns.size
-            //for (PlayerCoolDownValueHolder cooling : chr.getAllCooldowns())
-            //{
-            //    mplew.writeInt(cooling.skillId);
-            //    int timeLeft = (int)(cooling.length + cooling.startTime - System.currentTimeMillis());
-            //    mplew.writeShort(timeLeft / 1000);
-            //}
+            pw.WriteShort((short)chr._cooldowns.Count);
+            foreach (var cooldown in chr._cooldowns)
+            {
+                pw.WriteInt(cooldown.Key);
+                int remaining = (int)(cooldown.Value.StartTime.AddMilliseconds(cooldown.Value.Duration) - DateTime.UtcNow).TotalMilliseconds;
+                pw.WriteInt(remaining / 1000);
+            }
         }
 
         private static void AddInventoryInfo(PacketWriter pw, MapleCharacter chr)
         {
-            for (byte i = 1; i <= 5; i++)
+           
+            pw.WriteByte(chr.Inventory.EquipSlots);
+            pw.WriteByte(chr.Inventory.UseSlots);
+            pw.WriteByte(chr.Inventory.SetupSlots);
+            pw.WriteByte(chr.Inventory.EtcSlots);
+            pw.WriteByte(chr.Inventory.CashSlots);
+            pw.WriteLong(MapleFormatHelper.GetMapleTimeStamp(-2L));
+
+            //Equipped items
+            Dictionary<short, MapleItem> equipped = chr.Inventory.GetInventory(MapleInventoryType.Equipped);
+            foreach (var kvp in equipped.Where(kvp => kvp.Value.Position > -100 && kvp.Value.Position < 0))
             {
-                pw.WriteByte(0);
-                //mplew.write(chr.getInventory(MapleInventoryType.getByType(i)).getSlotLimit());
+                MapleItem.AddItemPosition(pw, kvp.Value);
+                MapleItem.AddItemInfo(pw, kvp.Value);
             }
-            pw.WriteHexString("00 40 E0 FD 3B 37 4F 01");
+            pw.WriteShort(0); //1
+
+            //Masked equipped items, Cash Shop stuff I think
+            foreach (var kvp in equipped.Where(kvp => kvp.Value.Position > -1000 && kvp.Value.Position < -100))
+            {
+                MapleItem.AddItemPosition(pw, kvp.Value);
+                MapleItem.AddItemInfo(pw, kvp.Value);
+            }
+            pw.WriteShort(0); //2
+
+            //Equip inventory
+            Dictionary<short, MapleItem> equipInventory = chr.Inventory.GetInventory(MapleInventoryType.Equip);
+            foreach (KeyValuePair<short, MapleItem> kvp in equipInventory)
+            {
+                MapleItem.AddItemPosition(pw, kvp.Value);
+                MapleItem.AddItemInfo(pw, kvp.Value);
+            }
+            pw.WriteShort(0); //3
+
+
+
+            
 
             //MapleInventory iv = chr.getInventory(MapleInventoryType.EQUIPPED);
             //Collection<IItem> equippedC = iv.list();
@@ -1711,10 +1668,52 @@ namespace RazzleServer.Player
 
             return pw;
         }
+        public static PacketWriter ShowKeybindLayout(Dictionary<uint, Tuple<byte, int>> keybinds)
+        {
+            PacketWriter pw = new PacketWriter(SendHeader.KeybindLayout);
+
+            bool empty = !keybinds.Any();
+            pw.WriteBool(empty);
+            for (byte i = 0; i < 89; i++)
+            {
+                Pair<byte, int> keybind;
+                if (keybinds.TryGetValue(i, out keybind))
+                {
+                    pw.WriteByte(keybind.Left);
+                    pw.WriteInt(keybind.Right);
+                }
+                else
+                {
+                    pw.WriteByte(0);
+                    pw.WriteInt(0);
+                }
+            }
+            return pw;
+        }
+
+        public static PacketWriter ShowQuickSlotKeys(int[] binds)
+        {
+            PacketWriter pw = new PacketWriter(SendHeader.ShowQuickSlotKeys);
+            pw.WriteByte(1);
+            if (binds.Length == 28)
+            {
+                for (int i = 0; i < 28; i++)
+                {
+                    pw.WriteInt(binds[i]);
+                }
+            }
+            else
+            {
+                pw.WriteZeroBytes(112);
+            }
+            return pw;
+        }
+
+        #endregion
 
         public bool IsDead
         {
-            get { lock (HpLock) { return HP <= 0; } }
+            get { lock (_hpLock) { return HP <= 0; } }
         }
 
         public bool IsFacingLeft => Stance % 2 != 0;
@@ -1793,6 +1792,5 @@ namespace RazzleServer.Player
         public bool IsBeastTamer { get { return Job == 11000 || Job / 100 == 112; } }
 
         public int CompletedQuestCount { get; internal set; }
-        #endregion
     }
 }

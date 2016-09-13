@@ -1,13 +1,14 @@
-using System.Collections.Generic;
-using RazzleServer.Player;
-using System.Linq;
-using RazzleServer.Util;
-using RazzleServer.Packet;
-using System;
-using RazzleServer.Map.Monster;
-using RazzleServer.Data.WZ;
-using RazzleServer.Server;
 using NLog;
+using RazzleServer.Data.WZ;
+using RazzleServer.Inventory;
+using RazzleServer.Map.Monster;
+using RazzleServer.Packet;
+using RazzleServer.Player;
+using RazzleServer.Server;
+using RazzleServer.Util;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace RazzleServer.Map
 {
@@ -314,6 +315,16 @@ namespace RazzleServer.Map
         }
 
         internal int GetNewObjectID()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void SpawnMapItem(MapleItem item, Point position, Point point, bool v, MapleDropType freeForAll, MapleCharacter owner)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void RemoveStaticObject(int objectId, bool v)
         {
             throw new NotImplementedException();
         }
