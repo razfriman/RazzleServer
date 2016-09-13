@@ -21,6 +21,7 @@ namespace RazzleServer.Data
         public DbSet<QuestCustomData> QuestCustomData { get; set; }
         public DbSet<Skill> Skills { get; set; }
         public DbSet<SkillCooldown> SkillCooldowns { get; set; }
+        public DbSet<DbSkillMacro> SkillMacros { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

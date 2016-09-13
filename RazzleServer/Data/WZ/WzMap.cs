@@ -103,7 +103,7 @@ namespace RazzleServer.Data.WZ
 
         public class Portal
         {
-            public byte ID { get; set; }
+            public byte Id { get; set; }
 
             public PortalType Type { get; set; }
 
@@ -140,6 +140,7 @@ namespace RazzleServer.Data.WZ
             public int Id { get; set; }
             public int ReactorTime { get; set; }
             public Point Position { get; set; }
+            public byte State { get; set; }
         }
 
         public enum PortalType : byte 

@@ -9,7 +9,7 @@ namespace RazzleServer.Map
 {
     public abstract class StaticMapObject
     {
-        public int ObjectId { get; set; }
+        public int ObjectID { get; set; }
         public MapleCharacter Owner { get; private set; }
         public Point Position { get; private set; }
         public DateTime Expiration { get; set; }
@@ -18,7 +18,7 @@ namespace RazzleServer.Map
 
         public StaticMapObject(int objectId, MapleCharacter owner, Point position, int durationMS, bool isPartyObject)
         {
-            ObjectId = objectId;
+            ObjectID = objectId;
             Owner = owner;
             Position = position;
             Expiration = DateTime.UtcNow.AddMilliseconds(durationMS);
@@ -56,7 +56,7 @@ namespace RazzleServer.Map
             PacketWriter pw = new PacketWriter();
             pw.WriteHeader(SMSGHeader.SPAWN_MIST);
 
-            pw.WriteInt(ObjectId);
+            pw.WriteInt(ObjectID);
             pw.WriteBool(!animatedSpawn); //not sure
             pw.WriteInt(Owner.ID);
             pw.WriteInt(SourceSkillId);
@@ -76,7 +76,7 @@ namespace RazzleServer.Map
         {
             PacketWriter pw = new PacketWriter();
             pw.WriteHeader(SMSGHeader.REMOVE_MIST);
-            pw.WriteInt(ObjectId);
+            pw.WriteInt(ObjectID);
             pw.WriteBool(animatedDestroy); //eruption?
 
             return pw;

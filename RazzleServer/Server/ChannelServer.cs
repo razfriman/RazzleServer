@@ -6,11 +6,13 @@ using RazzleServer.Player;
 using RazzleServer.Map;
 using NLog;
 using RazzleServer.Handlers;
+using System.Collections.Generic;
 
 namespace RazzleServer.Server
 {
     public class ChannelServer : MapleServer
     {
+        private Dictionary<int, MapleMap> _maps { get; set; } = new Dictionary<int, MapleMap>();
         public DateTime LastPing { get; set; }
 
         private static Logger Log = LogManager.GetCurrentClassLogger();
@@ -30,10 +32,12 @@ namespace RazzleServer.Server
 
         public MapleMap GetMap(int mapID)
         {
-            return new MapleMap()
+            MapleMap ret;
+            if (_maps.TryGetValue(mapID, out ret))
             {
-                MapID = mapID
-            };
+                return ret;
+            }
+            return null;
         }
 
         private void PingClients()

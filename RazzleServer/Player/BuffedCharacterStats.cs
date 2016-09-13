@@ -8,8 +8,8 @@ namespace RazzleServer.Player
 {
     public class BuffedCharacterStats
     {
-        public int MaxHp, MaxMp;
-        public int Str, Dex, Int, Luk;
+        public short MaxHp, MaxMp;
+        public short Str, Dex, Int, Luk;
         public int MinDamage, MaxDamage;
         public int AsrR;
         public int RecoveryHp, RecoveryMp;
@@ -30,8 +30,10 @@ namespace RazzleServer.Player
         public int CritRate;
         public int ExpLossReductionR;
 
-        //public void Recalculate(MapleCharacter chr)
-        //{
+        public void Recalculate(MapleCharacter chr)
+        {
+            
+        }
         //    int mhpX = 0, mmpX = 0;
         //    int mhpR = 0, mmpR = 0;
         //    int lv2mhp = 0, lv2mmp = 0;

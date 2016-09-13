@@ -1,5 +1,7 @@
+using NLog;
 using RazzleServer.Constants;
 using RazzleServer.Data;
+using RazzleServer.Data.WZ;
 using RazzleServer.DB.Models;
 using RazzleServer.Inventory;
 using RazzleServer.Map;
@@ -30,6 +32,8 @@ namespace RazzleServer.Player
 
         private readonly object _hpLock = new object();
         private static readonly object _characterDatabaseLock = new object();
+        private static Logger Log = LogManager.GetCurrentClassLogger();
+
 
         public MapleClient Client { get; private set; }
         public Point Position { get; set; }
@@ -53,8 +57,6 @@ namespace RazzleServer.Player
         public DateTime LastAttackTime { get; set; }
         public ActionState ActionState { get; private set; } = ActionState.DISABLED;
         public Dictionary<uint, Tuple<byte, int>> _keybinds { get; private set; }
-
-
         public static MapleCharacter GetDefaultCharacter(MapleClient client)
         {
             MapleCharacter newCharacter = new MapleCharacter
@@ -94,7 +96,7 @@ namespace RazzleServer.Player
                  Party = MapleParty.FindParty(ID);
                  Party?.UpdateParty();
 
-                 BuddyList.NotifyChannelChangeToBuddies(Id, AccountId, Name, Client.Channel, Client, true);
+                 BuddyList.NotifyChannelChangeToBuddies(ID, AccountID, Name, Client.Channel, Client, true);
         }
 
         public void LoggedOut()
@@ -123,7 +125,7 @@ namespace RazzleServer.Player
 
             oldMap.RemoveCharacter(ID);
             Position = portal.Position;
-            EnterMap(Client, toMap.MapID, portal.ID, fromSpecialPortal);
+            EnterMap(Client, toMap.MapID, portal.Id, fromSpecialPortal);
             toMap.AddCharacter(this);
             ActionState = ActionState.ENABLED;
         }
@@ -136,7 +138,7 @@ namespace RazzleServer.Player
             }
 
             HP = 49;
-            AddHP(restoreHpToFull ? Stats.MaxHp : 1);
+            AddHP(restoreHpToFull ? Stats.MaxHp : (short)1);
 
             if (returnToCity)
             {
@@ -315,32 +317,7 @@ namespace RazzleServer.Player
             return ID;
         }
 
-        public void AddCooldown(int skillId, uint duration, DateTime? nStartTime = null) //duration in MS
-        {
-            DateTime startTime = nStartTime ?? DateTime.UtcNow;
-            if (!_cooldowns.ContainsKey(skillId))
-            {
-                Cooldown cd = new Cooldown(duration, startTime);
-                cd.CancellationToken = new CancellationTokenSource();
-                Scheduler.ScheduleRemoveCooldown(this, skillId, (int)duration, cd.CancellationToken.Token);
-                _cooldowns.Add(skillId, cd);
-                Client.SendPacket(Skill.ShowCooldown(skillId, duration / 1000));
-            }
-        }
-
-        public void AddCooldownSilent(int skillId, uint duration, DateTime? nStartTime = null, bool createCancelSchedule = true) //duration in MS
-        {
-            DateTime startTime = nStartTime ?? DateTime.UtcNow;
-            if (!_cooldowns.ContainsKey(skillId))
-            {
-                Cooldown cd = new Cooldown(duration, startTime);
-                cd.CancellationToken = new CancellationTokenSource();
-                if (createCancelSchedule)
-                    Scheduler.ScheduleRemoveCooldown(this, skillId,(int) duration, cd.CancellationToken.Token);
-                _cooldowns.Add(skillId, cd);
-            }
-        }
-
+      
         public static MapleCharacter LoadFromDatabase(int characterId, bool characterScreen, MapleClient c = null)
         {
             lock (_characterDatabaseLock)
@@ -358,16 +335,16 @@ namespace RazzleServer.Player
 
                     chr.Inventory = MapleInventory.LoadFromDatabase(chr);
 
-                    foreach (QuestCustomData customQuest in dbContext.QuestCustomData.Where(x => x.CharacterId == characterId))
+                    foreach (QuestCustomData customQuest in dbContext.QuestCustomData.Where(x => x.CharacterID == characterId))
                     {
-                        if (!chr.CustomQuestData.ContainsKey(customQuest.Key))
-                            chr.CustomQuestData.Add(customQuest.Key, customQuest.Value);
+                        if (!chr._customQuestData.ContainsKey(customQuest.Key))
+                            chr._customQuestData.Add(customQuest.Key, customQuest.Value);
                     }
 
                     if (characterScreen) return chr; //No need to load more
 
                     #region Buddies
-                    chr.BuddyList = MapleBuddyList.LoadFromDatabase(dbContext.Buddies.Where(x => x.AccountID == chr.AccountId || x.CharacterId == characterId).ToList(), chr.BuddyCapacity);
+                    chr.BuddyList = MapleBuddyList.LoadFromDatabase(dbContext.Buddies.Where(x => x.AccountID == chr.AccountID || x.CharacterID == characterId).ToList(), chr.BuddyCapacity);
                     #endregion
 
                     #region Skills
@@ -408,7 +385,7 @@ namespace RazzleServer.Player
                     }
                     chr.QuickSlotKeys = quickSlots;
 
-                    List<DbSkillMacro> dbSkillMacros = dbContext.SkillMacros.Where(x => x.CharacterId == characterId).ToList();
+                    List<DbSkillMacro> dbSkillMacros = dbContext.SkillMacros.Where(x => x.CharacterID == characterId).ToList();
                     foreach (DbSkillMacro dbSkillMacro in dbSkillMacros)
                     {
                         chr.SkillMacros[dbSkillMacro.Index] = new SkillMacro(dbSkillMacro.Name, dbSkillMacro.ShoutName, dbSkillMacro.Skill1, dbSkillMacro.Skill2, dbSkillMacro.Skill3);
@@ -475,12 +452,6 @@ namespace RazzleServer.Player
                     return chr;
                 }
             }
-        }
-
-        public void AddSummon(MapleSummon summon)
-        {
-            _summons.Add(summon.SourceSkillId, summon);
-            Map.AddSummon(summon, true);
         }
 
         /// <summary>
@@ -695,23 +666,22 @@ namespace RazzleServer.Player
                     #endregion
 
                     #region Cooldowns
-                    // dbContext.SkillCooldowns.RemoveRange(dbContext.SkillCooldowns.Where(x => x.CharacterId == chr.Id));
-                    // foreach (var kvp in chr.Cooldowns)
-                    // {
-                    //     if (DateTime.UtcNow <= (kvp.Value.StartTime.AddMilliseconds(kvp.Value.Duration)))
-                    //     {
-                    //         SkillCooldown InserSkillCooldown = new SkillCooldown();
-                    //         InserSkillCooldown.CharacterId = chr.Id;
-                    //         InserSkillCooldown.SkillId = kvp.Key;
-                    //         if (kvp.Value.Duration > int.MaxValue)
-                    //             InserSkillCooldown.Length = int.MaxValue;
-                    //         else
-                    //             InserSkillCooldown.Length = (int)kvp.Value.Duration;
-                    //         InserSkillCooldown.StartTime = kvp.Value.StartTime.Ticks;
-                    //         dbContext.SkillCooldowns.Add(InserSkillCooldown);
-                    //     }
-                    // }
-
+                    dbContext.SkillCooldowns.RemoveRange(dbContext.SkillCooldowns.Where(x => x.CharacterID == chr.ID));
+                    foreach (var kvp in chr._cooldowns)
+                    {
+                        if (DateTime.UtcNow <= (kvp.Value.StartTime.AddMilliseconds(kvp.Value.Duration)))
+                        {
+                            SkillCooldown InserSkillCooldown = new SkillCooldown();
+                            InserSkillCooldown.CharacterID = chr.ID;
+                            InserSkillCooldown.SkillID = kvp.Key;
+                            if (kvp.Value.Duration > int.MaxValue)
+                                InserSkillCooldown.Length = int.MaxValue;
+                            else
+                                InserSkillCooldown.Length = (int)kvp.Value.Duration;
+                            InserSkillCooldown.StartTime = kvp.Value.StartTime.Ticks;
+                            dbContext.SkillCooldowns.Add(InserSkillCooldown);
+                        }
+                    }
                     #endregion
 
                     #region Quests
@@ -828,9 +798,962 @@ namespace RazzleServer.Player
         public void Bind(MapleClient c)
         {
             Client = c;
-            //Inventory.Bind(this);
+            Inventory.Bind(this);
             ActionState = ActionState.ENABLED;
         }
+
+        #region Exp, Level, Job
+        public void GainExp(int exp, bool show = false, bool fromMonster = false)
+        {
+            if (exp == 0 || Level >= 250 || (Level >= 120 && IsCygnus))
+                return;
+            Exp += exp;
+            while (Exp > GameConstants.GetCharacterExpNeeded(Level) && GameConstants.GetCharacterExpNeeded(Level) != 0)
+            {
+                Exp -= (int) GameConstants.GetCharacterExpNeeded(Level);
+                LevelUp();
+            }
+            UpdateSingleStat(Client, MapleCharacterStat.Exp, Exp, false);
+            if (show)
+            {
+                if (fromMonster)
+                {
+                    Client.SendPacket(ShowExpFromMonster(exp));
+                }
+                else
+                {
+                    //todo: show exp in chat
+                }
+            }
+        }
+
+        public void LevelUp()
+        {
+            if (Level == 250 || (Level == 120 && IsCygnus))
+                return;
+
+            Level++;
+
+            int apIncrease = (IsCygnus && Level <= 70) ? 6 : 5;
+            AP += (short)apIncrease;
+
+            #region HpMpIncrease
+            int hpInc = 0, mpInc = 0;
+
+            if (IsBeginnerJob)
+            {
+                hpInc = 13;
+                mpInc = 10;
+            }
+            else if (IsWarrior || IsDawnWarrior || IsMihile)
+            {
+                hpInc = 66;
+                mpInc = 6;
+            }
+            else if (IsDemonSlayer)
+            {
+                hpInc = 54;
+            }
+            else if (IsDemonAvenger)
+            {
+                hpInc = 30;
+            }
+            else if (IsHayato)
+            {
+                hpInc = 46;
+                mpInc = 8;
+            }
+            else if (IsKaiser)
+            {
+                hpInc = 65;
+                mpInc = 5;
+            }
+            else if (IsMagician || IsBlazeWizard || IsEvan)
+            {
+                hpInc = IsEvan ? 18 : 12;
+                mpInc = 48;
+            }
+            else if (IsBattleMage)
+            {
+                hpInc = 36;
+                mpInc = 28;
+            }
+            else if (IsKanna)
+            {
+                hpInc = 14;
+            }
+            else if (IsArcher || IsWindArcher || IsMercedes || IsWildHunter || IsThief || IsNightWalker || IsPhantom || IsXenon)
+            {
+                hpInc = 22;
+                mpInc = 15;
+            }
+            else if (IsPirate || IsJett || IsThunderBreaker || IsMechanic)
+            {
+                hpInc = 24;
+                mpInc = 20;
+            }
+            else if (IsAngelicBuster)
+            {
+                hpInc = 30;
+            }
+            else if (Job >= 900 && Job <= 910)
+            {
+                hpInc = 500;
+                mpInc = 500;
+            }
+            else
+            {
+                Log.Error($"Unhandled Job [{Job}] when giving HP and MP in MapleCharacter.LevelUp()");
+
+            }
+
+            MaxHP += (short)hpInc;
+            MaxMP += (short)mpInc;
+
+            MaxHP = (short)Math.Min(500000, Math.Abs(MaxHP));
+            MaxMP = (short)Math.Min(500000, Math.Abs(MaxMP));
+
+            //recalc stats
+
+            HP = MaxHP;
+            MP = MaxMP;
+            #endregion
+
+            Stats.Recalculate(this);
+            HP = Stats.MaxHp;
+            MP = Stats.MaxMp;
+            SP += 3;
+
+            SortedDictionary<MapleCharacterStat, long> updatedStats = new SortedDictionary<MapleCharacterStat, long>();
+            updatedStats.Add(MapleCharacterStat.Level, Level);
+            updatedStats.Add(MapleCharacterStat.Hp, HP);
+            updatedStats.Add(MapleCharacterStat.MaxHp, MaxHP);
+            updatedStats.Add(MapleCharacterStat.Mp, MP);
+            updatedStats.Add(MapleCharacterStat.MaxMp, MaxMP);
+            updatedStats.Add(MapleCharacterStat.Ap, AP);
+            updatedStats.Add(MapleCharacterStat.Sp, SP);
+
+            if ((IsCygnus || IsMihile) && Level < 120)
+            {
+                Exp += GameConstants.GetCharacterExpNeeded(Level) / 10;
+                updatedStats.Add(MapleCharacterStat.Exp, Exp);
+            }
+
+            UpdateStats(Client, updatedStats, false);
+            CheckAutoAdvance();
+        }
+
+        public void ChangeJob(short newJob)
+        {
+            if (DataBuffer.GetJobNameById(newJob).Length == 0) //check if valid job
+                return;
+            Job = newJob;
+
+            SortedDictionary<MapleCharacterStat, long> updatedStats = new SortedDictionary<MapleCharacterStat, long> { { MapleCharacterStat.Job, Job } };
+
+            if (newJob % 10 >= 1 && Level >= 70) //3rd job or higher
+            {
+                AP += 5;
+                updatedStats.Add(MapleCharacterStat.Ap, AP);
+            }
+            int oldMp = MaxMP;
+            #region HP increase
+            switch (Job)
+            {
+                #region 1st Job
+                case JobConstants.SWORDMAN:
+                case JobConstants.DAWNWARRIOR1:
+                case JobConstants.HAYATO1:
+                case JobConstants.MIHILE1:
+                    MaxHP += 269;
+                    MaxMP += 10;
+                    break;
+                case JobConstants.DEMONSLAYER1:
+                    MaxHP += 659;
+                    break;
+                case JobConstants.DEMONAVENGER1:
+                    MaxHP += 2209;
+                    break;
+                case JobConstants.KAISER1:
+                    MaxHP += 358;
+                    MaxMP += 109;
+                    break;
+                case JobConstants.MAGICIAN:
+                case JobConstants.BLAZEWIZARD1:
+                case JobConstants.EVAN1:
+                case JobConstants.BEASTTAMER1:
+                    MaxHP += 8;
+                    MaxMP += 176;
+                    break;
+                case JobConstants.BATTLEMAGE1:
+                    MaxHP += 175;
+                    MaxMP += 181;
+                    break;
+                case JobConstants.KANNA1:
+                    MaxHP += 100; //untested
+                    break;
+                case JobConstants.ARCHER:
+                case JobConstants.WINDARCHER1:
+                case JobConstants.MERCEDES1:
+                case JobConstants.WILDHUNTER1:
+                case JobConstants.THIEF:
+                case JobConstants.NIGHTWALKER1:
+                case JobConstants.PHANTOM1:
+                case JobConstants.PIRATE:
+                case JobConstants.JETT1:
+                case JobConstants.THUNDERBREAKER1:
+                case JobConstants.MECHANIC1:
+                    MaxHP += 159;
+                    MaxMP += 59;
+                    break;
+                case JobConstants.CANNONEER1:
+                    MaxHP += 228;
+                    MaxMP += 14;
+                    break;
+                case JobConstants.XENON1:
+                    MaxHP += 459;
+                    MaxMP += 159;
+                    break;
+                #endregion
+                #region other jobs
+                default:
+                    switch (Job / 10)
+                    {
+                        case 11: //Fighter
+                        case 12: //Page
+                        case 13: //Dragon Knight
+                        case 111: //Dawn Warrior
+                        case 211: //Aran
+                        case 411: //Hayato
+                        case 611: //Kaiser
+                        case 1011: //Zero
+                            MaxHP += 375;
+                            break;
+                        case 311: //Demon Slayer
+                        case 312: //Demon Avenger
+                        case 511: //Mihile
+                            MaxHP += 500;
+                            break;
+                        case 21: //Fire-Poison wizard
+                        case 22: //Ice-Lightning wizard
+                        case 23: //Cleric
+                        case 121: //Blaze Wizard
+                        case 1121: //Beast Tamer
+                            MaxMP += 480;
+                            break;
+                        case 221: //Evan         
+                            MaxMP += 100;
+                            break;
+                        case 270: //Luminous
+                            MaxMP += 300;
+                            break;
+                        case 321: //Battle Mage
+                            MaxHP += 200;
+                            MaxMP += 100;
+                            break;
+                        case 421: //Kanna
+                            MaxHP += 460;
+                            break;
+                        case 31: //Bowman
+                        case 32: //Crossbowman
+                        case 41: //Assassin
+                        case 42: //Bandit
+                        case 51: //Gunslinger
+                        case 52: //Brawler
+                        case 57: //Jett
+                        case 131: //Wind Archer
+                        case 141: //Night Walker
+                        case 241: //Phantom
+                            MaxHP += 310;
+                            MaxMP += 160;
+                            break;
+                        case 231: //Mercedes
+                            MaxHP += 170;
+                            MaxMP += 160;
+                            break;
+                        case 331: //Wild Hunter
+                            MaxHP += 210;
+                            MaxMP += 100;
+                            break;
+                        case 43: //DualBlade
+                        case 361: //Xenon, not checked
+                            MaxHP += 175;
+                            MaxHP += 100;
+                            break;
+                        case 53: //Cannoneer
+                            MaxHP += 325;
+                            MaxHP += 85;
+                            break;
+                        case 351: //Mechanic
+                            MaxHP += 150;
+                            MaxMP += 100;
+                            break;
+                        case 651: //Angelic Burster
+                            MaxHP += 350;
+                            break;
+                        default:
+                            if (!IsBeginnerJob)
+                            {
+                                Log.Error($"Unhandled Job [{Job}] when giving hp in MapleCharacter.ChangeJob()");
+                            }
+                            break;
+                    }
+                    break;
+                    #endregion
+            }
+            HP = MaxHP;
+            updatedStats.Add(MapleCharacterStat.MaxHp, MaxHP);
+            if (oldMp != MaxMP)
+                updatedStats.Add(MapleCharacterStat.MaxMp, MaxMP);
+            #endregion
+
+            if (!IsBeginnerJob)
+            {
+                short sp = 4;
+                if ((newJob >= JobConstants.EVAN1 && newJob <= JobConstants.EVAN5) || (IsResistance && newJob % 100 != 0))
+                    sp = 3;
+                else if (newJob % 100 == 0)
+                    sp = 5;
+                else
+                    sp = 4;
+
+                SP += sp;
+            }
+
+            GiveBaseJobSkills(Job);
+            Stats.Recalculate(this);
+            HP = Stats.MaxHp;
+            MP = Stats.MaxMp;
+            updatedStats.Add(MapleCharacterStat.Hp, HP);
+            updatedStats.Add(MapleCharacterStat.Mp, MP);
+            UpdateStats(Client, updatedStats, false);
+        }
+
+        public void CheckAutoAdvance()
+        {
+            int newJob = -1;
+            if (IsExplorer || IsCygnus)
+            {
+               if (IsCygnus && Level >= 30 && Level % 100 == 0)
+                {
+                    newJob = Job + 10;
+                }
+                else
+                {
+                    if (Job % 100 == 0 && Level >= 30)
+                    {
+                        OpenNpc(1092000);
+                        return;
+                    }
+                    else if ((Job % 10 == 0 && Level >= 60) || (Job % 10 == 1 && Level >= 100))
+                        newJob = Job + 1;
+                }
+            }
+            else if (IsEvan)
+            {
+                if (Job == JobConstants.EVAN1 && Level >= 20)
+                    newJob = JobConstants.EVAN2;
+                else if ((Job == JobConstants.EVAN2 && Level >= 30) ||
+                        (Job == JobConstants.EVAN3 && Level >= 40) ||
+                        (Job == JobConstants.EVAN4 && Level >= 50) ||
+                        (Job == JobConstants.EVAN5 && Level >= 60) ||
+                        (Job == JobConstants.EVAN6 && Level >= 80) ||
+                        (Job == JobConstants.EVAN7 && Level >= 100) ||
+                        (Job == JobConstants.EVAN8 && Level >= 120) ||
+                        (Job == JobConstants.EVAN9 && Level >= 160))
+                    newJob = Job + 1;
+            }
+            else if (IsDemonAvenger)
+            {
+                if (Job == 3101 && Level >= 30)
+                    newJob = 3120;
+                else if ((Job == 3120 && Level >= 60) || (Job == 3121 && Level >= 100))
+                    newJob = Job + 1;
+            }
+            else if (IsJett)
+            {
+                if (Job == 508 && Level >= 30)
+                    newJob = 570;
+                else if ((Job == 570 && Level >= 60) || (Job == 571 && Level >= 100))
+                    newJob = Job + 1;
+            }
+            else
+            {
+                if (Job % 100 == 0 && Level >= 30)
+                {
+                    newJob = Job + 10;
+                }
+                else if ((Job % 10 == 0 && Level >= 60) || (Job % 10 == 1 && Level >= 100))
+                    newJob = Job + 1;
+            }
+
+            if (newJob != -1)
+                ChangeJob((short)newJob);
+        }
+        #endregion
+
+
+        #region Skills, Cooldowns & Keybinds
+        public bool HasSkill(int skillId, int skillLevel = 0)
+        {
+            int trueSkillLevel = GetSkillLevel(skillId);
+            if (skillLevel > 0)
+                return trueSkillLevel >= skillLevel;
+            return trueSkillLevel > 0;
+        }
+
+        public byte GetSkillLevel(int skillId)
+        {
+            int trueSkillId = SkillConstants.CheckAndGetLinkedSkill(skillId);
+            Skill skill;
+            if (_skills.TryGetValue(trueSkillId, out skill))
+                return skill.Level;
+            return 0;
+        }
+
+        public byte GetSkillMasterLevel(int skillId)
+        {
+            Skill skill;
+            if (_skills.TryGetValue(skillId, out skill))
+            {
+                return skill.MasterLevel;
+            }
+            return 0;
+        }
+
+        public Skill GetSkill(int skillId)
+        {
+            Skill skill;
+            if (_skills.TryGetValue(skillId, out skill))
+            {
+                return skill;
+            }
+            return null;
+        }
+
+        public void IncreaseSkillLevel(int skillId, byte amount = 1, bool updateToClient = true)
+        {
+            Skill skill;
+            if (_skills.TryGetValue(skillId, out skill))
+            {
+                skill.Level += amount;
+                if (updateToClient)
+                    Client.SendPacket(Skill.UpdateSingleSkill(skill));
+                Stats.Recalculate(this);
+            }
+            else
+            {
+                LearnSkill(skillId, amount, null, updateToClient);
+            }
+        }
+
+        public void SetSkillLevel(int skillId, byte level, byte masterLevel = 0, bool updateToClient = true)
+        {
+            Skill skill;
+            if (_skills.TryGetValue(skillId, out skill))
+            {
+                skill.Level = level;
+                if (masterLevel > 0)
+                    skill.MasterLevel = masterLevel;
+            }
+            else
+            {
+                skill = new Skill(skillId);
+                skill.Level = level;
+                skill.MasterLevel = masterLevel;
+                _skills.Add(skillId, skill);
+            }
+            if (updateToClient)
+                Client.SendPacket(Skill.UpdateSkills(new List<Skill>() { skill }));
+            Stats.Recalculate(this);
+        }
+
+        public void SetSkillExp(int SkillId, short Exp)
+        {
+            Skill skill;
+            if (_skills.TryGetValue(SkillId, out skill))
+                skill.SkillExp = Exp;
+        }
+
+        public void SetSkills(Dictionary<int, Skill> skills)
+        {
+            _skills = skills;
+        }
+
+        public void AddSkillSilent(Skill skill)
+        {
+            if (!_skills.ContainsKey(skill.SkillID))
+                _skills.Add(skill.SkillID, skill);
+        }
+
+        public void RemoveSkillSilent(int skillId)
+        {
+            _skills.Remove(skillId);
+        }
+
+        public void LearnSkill(int skillId, byte level = 1, WzCharacterSkill skillInfo = null, bool updateToClient = true)
+        {
+            if (skillInfo == null)
+            {
+                skillInfo = DataBuffer.GetCharacterSkillById(skillId);
+                if (skillInfo == null)
+                    return;
+            }
+            if (!_skills.ContainsKey(skillId))
+            {
+                Skill skill = new Skill(skillId);
+                skill.MasterLevel = skillInfo.HasMastery ? skillInfo.DefaultMastery : skillInfo.MaxLevel;
+                skill.Level = level;
+                AddSkill(skill);
+                if (updateToClient)
+                    Client.SendPacket(Skill.UpdateSingleSkill(skill));
+                Stats.Recalculate(this);
+            }
+        }
+
+        public void AddSkills(List<Skill> addSkills, bool updateToClient = true)
+        {
+            List<Skill> newSkills = new List<Skill>();
+            foreach (Skill skill in addSkills)
+            {
+                if (!_skills.ContainsKey(skill.SkillID))
+                {
+                    _skills.Add(skill.SkillID, skill);
+                    newSkills.Add(skill);
+                }
+            }
+            if (updateToClient) Client.SendPacket(Skill.UpdateSkills(newSkills));
+            Stats.Recalculate(this);
+        }
+
+        public bool AddSkill(Skill skill)
+        {
+            if (_skills.ContainsKey(skill.SkillID))
+                return false;
+            _skills.Add(skill.SkillID, skill);
+            return true;
+        }
+
+        public void ClearSkills()
+        {
+            _skills.Clear();
+            Stats.Recalculate(this);
+        }
+
+        public List<Skill> GetSkillList()
+        {
+            return _skills.Values.ToList();
+        }
+
+        public void GiveBaseJobSkills(int jobId)
+        {
+            List<WzCharacterSkill> skills = DataBuffer.GetCharacterSkillListByJob(jobId);
+            List<Skill> newSkills = new List<Skill>();
+            foreach (WzCharacterSkill skillInfo in skills.Where(x => !x.IsInvisible && !x.HasFixedLevel && !x.IsHyperSkill && x.RequiredLevel <= Level && GetSkillLevel(x.SkillId) == 0 && GetSkillMasterLevel(x.SkillId) == 0 && x.DefaultMastery > 0))
+            {
+                Skill skill = new Skill(skillInfo.SkillId);
+                skill.MasterLevel = skillInfo.DefaultMastery;
+                newSkills.Add(skill);
+            }
+
+            AddSkills(newSkills);
+        }
+
+        public void AddCooldown(int skillId, uint duration, DateTime? nStartTime = null) //duration in MS
+        {
+            DateTime startTime = nStartTime ?? DateTime.UtcNow;
+            if (!_cooldowns.ContainsKey(skillId))
+            {
+                Cooldown cd = new Cooldown(duration, startTime);
+                cd.CancellationToken = new CancellationTokenSource();
+                Scheduler.ScheduleRemoveCooldown(this, skillId, (int)duration, cd.CancellationToken.Token);
+                _cooldowns.Add(skillId, cd);
+                Client.SendPacket(Skill.ShowCooldown(skillId, duration / 1000));
+            }
+        }
+
+        public void AddCooldownSilent(int skillId, uint duration, DateTime? nStartTime = null, bool createCancelSchedule = true) //duration in MS
+        {
+            DateTime startTime = nStartTime ?? DateTime.UtcNow;
+            if (!_cooldowns.ContainsKey(skillId))
+            {
+                Cooldown cd = new Cooldown(duration, startTime);
+                cd.CancellationToken = new CancellationTokenSource();
+                if (createCancelSchedule)
+                    Scheduler.ScheduleRemoveCooldown(this, skillId, (int)duration, cd.CancellationToken.Token);
+                _cooldowns.Add(skillId, cd);
+            }
+        }
+
+
+        public bool HasSkillOnCooldown(int skillId)
+        {
+            Cooldown cooldown;
+            if (_cooldowns.TryGetValue(skillId, out cooldown))
+            {
+                if (cooldown.StartTime.AddMilliseconds(cooldown.Duration) > DateTime.UtcNow)
+                    return true;
+                else
+                {
+                    _cooldowns.Remove(skillId);
+                    return false;
+                }
+            }
+            else
+                return false;
+        }
+
+        public void RemoveCooldown(int skillId)
+        {
+            if (_cooldowns.Remove(skillId))
+                Client.SendPacket(Skill.ShowCooldown(skillId, 0));
+        }
+
+        public void ChangeKeybind(uint key, byte type, int action)
+        {
+            Keybinds.Remove(key);
+            if (type != 0)
+                Keybinds.Add(key, new Tuple<byte, int>(type, action));
+            _keybindsChanged = true;
+        }
+
+        public void SetQuickSlotKeys(int[] newMap)
+        {
+            QuickSlotKeys = newMap;
+            _quickSlotKeyBindsChanged = true;
+        }
+
+        public void SetKeyMap(Dictionary<uint, Tuple<byte, int>> newBinds)
+        {
+            Keybinds = newBinds;
+            _keybindsChanged = true;
+        }
+        #endregion
+
+        #region Buffs
+        public void GiveBuff(Buff buff)
+        {
+            CancelBuffSilent(buff.SkillId);
+            _buffs.Add(buff.SkillId, buff);
+            switch (buff.SkillId)
+            {
+                case Spearman.EVIL_EYE:
+                case Berserker.EVIL_EYE_OF_DOMINATION:
+                    Client.SendPacket(Buff.GiveEvilEyeBuff(buff));
+                    break;
+                case Berserker.CROSS_SURGE:
+                    Client.SendPacket(Buff.GiveCrossSurgeBuff(buff, this, buff.Effect));
+                    break;
+                case DarkKnight.FINAL_PACT2:
+                    Client.SendPacket(Buff.GiveFinalPactBuff(buff));
+                    break;
+                case Priest.HOLY_MAGIC_SHELL:
+                    buff.Stacks = buff.Effect.Info[CharacterSkillStat.x];
+                    AddCooldownSilent(Priest.HOLY_MAGIC_SHELL + 1000, (uint)buff.Duration, buff.StartTime, false); //hackish
+                    Client.SendPacket(Buff.GiveBuff(buff));
+                    break;
+                default:
+                    Client.SendPacket(Buff.GiveBuff(buff));
+                    //TODO: broadcast to map
+                    break;
+            }
+            Stats.Recalculate(this);
+        }
+
+        public void GiveBuffSilent(Buff buff) //Doesn't send the buff packet to the player
+        {
+            int skillId = buff.SkillId;
+            CancelBuffSilent(skillId);
+            _buffs.Add(skillId, buff);
+            Stats.Recalculate(this);
+        }
+
+        public Buff CancelBuff(int skillId)
+        {
+            Buff buff;
+            if (!_buffs.TryGetValue(skillId, out buff)) return null;
+            _buffs.Remove(skillId);
+            buff.CancelRemoveBuffSchedule();
+            Client.SendPacket(Buff.CancelBuff(buff));
+            Stats.Recalculate(this);
+
+            #region Dark Knight Final Pact
+            if (buff.SkillId == DarkKnight.FINAL_PACT2)
+            {
+                if (buff.Stacks > 0) //didn't kill enough mobs
+                {
+                    AddHP((short)-HP);
+                }
+            }
+            #endregion
+
+            return buff;
+        }
+
+        public void CancelBuffs(List<int> skillIds)
+        {
+            bool removed = false;
+            foreach (int i in skillIds)
+            {
+                Buff buff;
+                if (!_buffs.TryGetValue(i, out buff)) continue;
+                removed = true;
+                _buffs.Remove(i);
+                buff.CancelRemoveBuffSchedule();
+                Client.SendPacket(Buff.CancelBuff(buff));
+            }
+            if (removed)
+                Stats.Recalculate(this);
+        }
+
+        public Buff CancelBuffSilent(int skillId) //doesnt update client and doesnt recalculate stats
+        {
+            Buff buff;
+            if (!_buffs.TryGetValue(skillId, out buff)) return null;
+            _buffs.Remove(skillId);
+            buff.CancelRemoveBuffSchedule();
+            return buff;
+        }
+
+        public void CancelBuffsSilent(List<int> skillIds) //doesnt update client and doesnt recalculate stats
+        {
+            foreach (int i in skillIds)
+            {
+                Buff buff;
+                if (!_buffs.TryGetValue(i, out buff)) continue;
+                _buffs.Remove(i);
+                buff.CancelRemoveBuffSchedule();
+            }
+        }
+
+        public bool HasBuff(int skillId)
+        {
+            return _buffs.ContainsKey(skillId);
+        }
+
+        public bool HasBuffStat(BuffStat buffStat)
+        {
+            foreach (Buff buff in _buffs.Values.ToList())
+            {
+                if (buff.Effect.BuffInfo.ContainsKey(buffStat))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public Buff GetBuff(int skillId)
+        {
+            Buff ret;
+            if (_buffs.TryGetValue(skillId, out ret))
+                return ret;
+            return null;
+        }
+
+        public List<Buff> GetBuffs()
+        {
+            return _buffs.Values.ToList();
+        }
+        #endregion
+
+        #region Summons
+        public bool HasActiveSummon(int sourceSkillId)
+        {
+            return _summons.ContainsKey(sourceSkillId);
+        }
+
+        public void AddSummon(MapleSummon summon)
+        {
+            _summons.Add(summon.SourceSkillId, summon);
+            Map.AddSummon(summon, true);
+        }
+
+        public bool RemoveSummon(int skillId)
+        {
+            MapleSummon summon;
+            if (!_summons.TryGetValue(skillId, out summon)) return false;
+            _summons.Remove(summon.SourceSkillId);
+            Map.RemoveSummon(summon.ObjectID, true);
+            summon.Dispose();
+            CancelBuff(skillId);
+            return true;
+        }
+
+        public MapleSummon GetSummon(int skillId)
+        {
+            MapleSummon ret;
+            return _summons.TryGetValue(skillId, out ret) ? ret : null;
+        }
+
+        public List<MapleSummon> GetSummons()
+        {
+            return _summons.Values.ToList();
+        }
+        #endregion
+
+        #region Quests
+        public MapleQuest ForfeitQuest(int questId)
+        {
+            MapleQuest quest = null;
+            if (_startedQuests.TryGetValue(questId, out quest))
+            {
+                _startedQuests.Remove(questId);
+                quest.Forfeit();
+                Client.SendPacket(quest.Update());
+            }
+            return quest;
+        }
+
+        public bool CompleteQuest(int questId, int npcId, int choice = 0)
+        {
+            MapleQuest quest = null;
+            if (_startedQuests.TryGetValue(questId, out quest))
+            {
+                if (Map == null || !Map.HasNpc(npcId)) return false;
+                foreach (WzQuestRequirement wqr in quest.QuestInfo.FinishRequirements)
+                {
+                    if (!wqr.Check(this, npcId, quest))
+                        return false;
+                }
+                ForceCompleteQuest(quest, npcId);
+                foreach (WzQuestAction wqa in quest.QuestInfo.FinishActions)
+                {
+                    wqa.Act(this, questId);
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public bool HasCompletedQuest(int questId)
+        {
+            return _completedQuests.ContainsKey(questId);
+        }
+
+        public int CompletedQuestCount
+        {
+            get
+            {
+                return _completedQuests.Count;
+            }
+        }
+
+        public bool HasQuestInProgress(int questId)
+        {
+            return _startedQuests.ContainsKey(questId);
+        }
+
+        public MapleQuest GetQuest(ushort questId)
+        {
+            MapleQuest ret;
+            if (_startedQuests.TryGetValue(questId, out ret))
+                return ret;
+            return null;
+        }
+
+        public bool StartQuest(int questId, int npcId)
+        {
+            if (!_startedQuests.ContainsKey(questId) && !_completedQuests.ContainsKey(questId))
+            {
+                if (Map == null || !Map.HasNpc(npcId)) return false;
+                WzQuest info = DataBuffer.GetQuestById((ushort)questId);
+                if (info == null) return false;
+                MapleQuest quest = new MapleQuest(info);
+                foreach (WzQuestRequirement wqr in info.StartRequirements)
+                {
+                    if (!wqr.Check(this, npcId, quest))
+                        return false;
+                }
+                foreach (WzQuestAction wqa in quest.QuestInfo.StartActions)
+                {
+                    wqa.Act(this, questId);
+                }
+                _startedQuests.Add(questId, quest);
+                Client.SendPacket(quest.Update());
+            }
+            return false;
+        }
+
+        public void AddQuest(MapleQuest quest, ushort questId)
+        {
+            if (!_startedQuests.ContainsKey(questId))
+            {
+                _startedQuests.Add(questId, quest);
+                Client.SendPacket(quest.Update());
+            }
+        }
+
+        public bool ForceCompleteQuest(MapleQuest quest, int npcId, int nextQuest = 0)
+        {
+            int questId = quest.QuestInfo.Id;
+            if (_startedQuests.ContainsKey(questId))
+            {
+                _startedQuests.Remove(questId);
+                quest.State = MapleQuestStatus.Completed;
+                if (!_completedQuests.ContainsKey(questId))
+                    _completedQuests.Add(questId, 0x4E35FF7B); //TODO: real date, some korean thing in minutes I think
+                Client.SendPacket(quest.Update());
+                Client.SendPacket(quest.UpdateFinish(npcId, nextQuest));
+                return true;
+            }
+            else if (!_completedQuests.ContainsKey(questId))
+            {
+                _completedQuests.Add(questId, 0x4E35FF7B); //TODO: real date, some korean thing in minutes I think
+                Client.SendPacket(quest.Update());
+                Client.SendPacket(quest.UpdateFinish(npcId, nextQuest));
+            }
+            return false;
+        }
+
+        public void UpdateQuestKills(int mobId)
+        {
+            foreach (var quest in _startedQuests)
+                quest.Value.KilledMob(Client, mobId);
+        }
+
+        public void SetQuestData(ushort questId, string data)
+        {
+            MapleQuest quest;
+            if (_startedQuests.TryGetValue(questId, out quest))
+            {
+                quest.Data = data;
+            }
+            else
+            {
+                WzQuest info = DataBuffer.GetQuestById(questId);
+                if (info == null) return;
+                quest = new MapleQuest(info, MapleQuestStatus.InProgress, data);
+                _startedQuests.Add(questId, quest);
+            }
+        }
+
+        public string GetQuestData(ushort questId)
+        {
+            MapleQuest quest;
+            return _startedQuests.TryGetValue(questId, out quest) ? quest.Data : null;
+        }
+
+        public string GetCustomQuestData(string customQuestKey)
+        {
+            string data;
+            return _customQuestData.TryGetValue(customQuestKey, out data) ? data : string.Empty;
+        }
+
+        //Removes the custom quest from the collection if data is null or empty
+        public void SetCustomQuestData(string customQuestKey, string data)
+        {
+            if (string.IsNullOrEmpty(data))
+            {
+                _customQuestData.Remove(customQuestKey);
+                return;
+            }
+            if (_customQuestData.ContainsKey(customQuestKey))
+                _customQuestData[customQuestKey] = data;
+            else
+                _customQuestData.Add(customQuestKey, data);
+        }
+        #endregion
 
         #region Doors
         public bool HasDoor(int skillId)
@@ -843,7 +1766,7 @@ namespace RazzleServer.Player
                 {
                     if (DateTime.UtcNow >= portal.Expiration)
                     {
-                        portal.FromMap.RemoveStaticObject(portal.ObjectId, false);
+                        portal.FromMap.RemoveStaticObject(portal.ObjectID, false);
                         _doors.Remove(portal);
                         count--;
                     }
@@ -861,7 +1784,7 @@ namespace RazzleServer.Player
             }
             foreach (SpecialPortal door in sameSkillDoors)
             {
-                door.FromMap.RemoveStaticObject(door.ObjectId, false);
+                door.FromMap.RemoveStaticObject(door.ObjectID, false);
             }
         }
 
@@ -879,6 +1802,134 @@ namespace RazzleServer.Player
             {
                 _doors.Add(door);
             }
+        }
+        #endregion
+
+        #region Stats
+        public void AddHP(int hpInc, bool updateToClient = true, bool healIfDead = false)
+        {
+            lock (_hpLock)
+            {
+                if (IsDead && !healIfDead) return;
+
+                short oldHp = HP;
+                short newHp = (short)(HP + hpInc);
+                if (newHp > Stats.MaxHp)
+                    HP = Stats.MaxHp;
+                else if (newHp <= 0)
+                {
+                    HP = 0;
+                    if (oldHp > HP)
+                        HandleDeath();
+                }
+                else
+                    HP = newHp;
+
+                if (Job == JobConstants.DARKKNIGHT)
+                    FinalPactHook(oldHp, newHp);
+
+                if (updateToClient)
+                    UpdateSingleStat(Client, MapleCharacterStat.Hp, HP);
+
+                if (Party != null)
+                {
+                    var members = Party.GetCharactersOnMap(Map, ID);
+                    if (members.Any())
+                    {
+                        PacketWriter partyHpUpdatePacket = MapleParty.Packets.UpdatePartyMemberHp(this);
+                        foreach (MapleCharacter member in members)
+                        {
+                            member.Client.SendPacket(partyHpUpdatePacket);
+                        }
+                    }
+                }
+            }
+        }
+
+        public void HandleDeath()
+        {
+            ActionState = ActionState.DEAD;
+            if (Job == JobConstants.DARKKNIGHT && !_cooldowns.ContainsKey(DarkKnight.FINAL_PACT2))
+            {
+                byte skillLevel = GetSkillLevel(DarkKnight.FINAL_PACT);
+                if (skillLevel > 0)
+                {
+                    SkillEffect effect = DataBuffer.GetCharacterSkillById(DarkKnight.FINAL_PACT2).GetEffect(skillLevel);
+                    AddCooldown(DarkKnight.FINAL_PACT2, (uint)effect.Info[CharacterSkillStat.cooltime] * 1000);
+                    Buff buff = new Buff(DarkKnight.FINAL_PACT2, effect, effect.Info[CharacterSkillStat.time] * 1000, this);
+                    buff.Stacks = effect.Info[CharacterSkillStat.z];
+                    GiveBuff(buff);
+                    Client.SendPacket(Skill.ShowBuffEffect(DarkKnight.FINAL_PACT2, Level, null, true));
+                    ActionState = ActionState.ENABLED;
+                    HP = Stats.MaxHp;
+                    AddMP(Stats.MaxMp);
+                    return;
+                }
+            }
+            foreach (Buff buff in _buffs.Values.ToList())
+            {
+                CancelBuffSilent(buff.SkillId);
+            }
+            foreach (MapleSummon summon in _summons.Values.ToList())
+            {
+                RemoveSummon(summon.SourceSkillId);
+            }
+            Stats.Recalculate(this);
+        }
+
+        public void AddMP(int mpInc, bool updateToClient = true)
+        {
+            short buffedMaxMP = Stats.MaxMp;
+            if (MP + mpInc > buffedMaxMP)
+                MP = buffedMaxMP;
+            else if (MP + mpInc < 0)
+                MP = 0;
+            else
+                MP += (short) mpInc;
+            if (updateToClient)
+                UpdateSingleStat(Client, MapleCharacterStat.Mp, MP, true);
+        }
+
+        private void FinalPactHook(int oldHp, int newHp)
+        {
+            byte skillLevel = GetSkillLevel(DarkKnight.FINAL_PACT);
+            if (skillLevel > 0)
+            {
+                SkillEffect passiveEffect = DataBuffer.GetCharacterSkillById(DarkKnight.FINAL_PACT).GetEffect(skillLevel);
+                int boundary = passiveEffect.Info[CharacterSkillStat.x];
+                int oldPercent = (int)((oldHp / (double)Stats.MaxHp) * 100);
+                int newPercent = (int)((newHp / (double)Stats.MaxHp) * 100);
+                if (oldPercent < boundary && newPercent >= boundary) //hp went from under to above the boundary
+                    Client.SendPacket(Skill.ShowBuffEffect(DarkKnight.FINAL_PACT, Level, skillLevel, true)); //TODO: show other ppl (dont know packet)
+                else if (oldPercent >= boundary && newPercent < boundary) //hp went from above to under the boundary
+                    Client.SendPacket(Skill.ShowBuffEffect(DarkKnight.FINAL_PACT, Level, skillLevel, false)); //TODO: show other ppl (dont know packet)               
+            }
+        }
+
+        public void DoDeathExpLosePenalty()
+        {
+            int totalNeededExp = GameConstants.GetCharacterExpNeeded(Level);
+            int loss = (int)(totalNeededExp * 0.1);
+            if (Stats.ExpLossReductionR > 0)
+                loss -= (int)(loss * (Stats.ExpLossReductionR / 100.0));
+            Exp -= loss;
+            Exp = Math.Max(0, Exp);
+            UpdateSingleStat(Client, MapleCharacterStat.Exp, Exp);
+        }
+
+        public void AddFame(int amount)
+        {
+            Fame += (short)amount;
+            UpdateSingleStat(Client, MapleCharacterStat.Fame, amount);
+        }
+        #endregion
+
+        #region NPC
+        public void OpenNpc(int npcId)
+        {
+            // TODO - NPC ENGINE
+            //Client.NpcEngine?.Dispose();
+            //NpcEngine.OpenNpc(npcId, -1, Client);
         }
         #endregion
 
@@ -1401,80 +2452,76 @@ namespace RazzleServer.Player
 
         public static void UpdateSingleStat(MapleClient c, MapleCharacterStat stat, long value, bool enableActions = false)
         {
-            //SortedDictionary<MapleCharacterStat, long> stats = new SortedDictionary<MapleCharacterStat, long>() { { stat, value } };
-            //UpdateStats(c, stats, enableActions);
+            SortedDictionary<MapleCharacterStat, long> stats = new SortedDictionary<MapleCharacterStat, long>() { { stat, value } };
+            UpdateStats(c, stats, enableActions);
         }
 
-        // public static void UpdateStats(MapleClient c, SortedDictionary<MapleCharacterStat, long> stats, bool enableActions)
-        // {
-        //     PacketWriter pw = new PacketWriter();
-        //     pw.WriteHeader(SMSGHeader.UpdateStats);
+        public static void UpdateStats(MapleClient c, SortedDictionary<MapleCharacterStat, long> stats, bool enableActions)
+        {
+            PacketWriter pw = new PacketWriter();
+            pw.WriteHeader(SMSGHeader.UPDATE_STATS);
 
-        //     pw.WriteBool(enableActions);
-        //     if (enableActions)
-        //         c.Account.Character.ActionState = ActionState.Enabled;
-        //     long mask = 0;
-        //     foreach (KeyValuePair<MapleCharacterStat, long> kvp in stats)
-        //     {
-        //         mask |= (long)kvp.Key;
-        //     }
-        //     pw.WriteLong(mask);
-        //     foreach (KeyValuePair<MapleCharacterStat, long> kvp in stats)
-        //     {
-        //         switch (kvp.Key)
-        //         {
-        //             case MapleCharacterStat.Skin:
-        //             case MapleCharacterStat.Level:
-        //             case MapleCharacterStat.Fatigue:
-        //             case MapleCharacterStat.BattleRank:
-        //             case MapleCharacterStat.IceGage: // not sure..
-        //                 pw.WriteByte((byte)kvp.Value);
-        //                 break;
-        //             case MapleCharacterStat.Str:
-        //             case MapleCharacterStat.Dex:
-        //             case MapleCharacterStat.Int:
-        //             case MapleCharacterStat.Luk:
-        //             case MapleCharacterStat.Ap:
-        //                 pw.WriteShort((short)kvp.Value);
-        //                 break;
-        //             case MapleCharacterStat.TraitLimit:
-        //                 pw.WriteInt((int)kvp.Value);
-        //                 pw.WriteInt((int)kvp.Value);
-        //                 pw.WriteInt((int)kvp.Value);
-        //                 break;
-        //             case MapleCharacterStat.Exp:
-        //             case MapleCharacterStat.Meso:
-        //                 pw.WriteLong(kvp.Value);
-        //                 break;
-        //             case MapleCharacterStat.Pet:
-        //                 pw.WriteLong(kvp.Value);
-        //                 pw.WriteLong(kvp.Value);
-        //                 pw.WriteLong(kvp.Value);
-        //                 break;
-        //             case MapleCharacterStat.Sp:
-        //                 if (c.Account.Character.IsSeparatedSpJob)
-        //                     AddSeparatedSP(c.Account.Character, pw);
-        //                 else
-        //                     pw.WriteShort((short)kvp.Value);
-        //                 break;
-        //             case MapleCharacterStat.Job:
-        //                 pw.WriteShort((short)kvp.Value);
-        //                 pw.WriteShort(c.Account.Character.SubJob); //new v144
-        //                 break;
-        //             default:
-        //                 pw.WriteInt((int)kvp.Value);
-        //                 break;
-        //         }
-        //     }
-        //     pw.WriteByte(0xFF);
-        //     if (mask == 0 && !enableActions)
-        //     {
-        //         pw.WriteByte(0);
-        //     }
-        //     pw.WriteInt(0);
+            pw.WriteBool(enableActions);
+            if (enableActions)
+                c.Account.Character.ActionState = ActionState.ENABLED;
+            long mask = 0;
+            foreach (KeyValuePair<MapleCharacterStat, long> kvp in stats)
+            {
+                mask |= (long)kvp.Key;
+            }
+            pw.WriteLong(mask);
+            foreach (KeyValuePair<MapleCharacterStat, long> kvp in stats)
+            {
+                switch (kvp.Key)
+                {
+                    case MapleCharacterStat.Skin:
+                    case MapleCharacterStat.Level:
+                    case MapleCharacterStat.Fatigue:
+                    case MapleCharacterStat.BattleRank:
+                    case MapleCharacterStat.IceGage: // not sure..
+                        pw.WriteByte((byte)kvp.Value);
+                        break;
+                    case MapleCharacterStat.Str:
+                    case MapleCharacterStat.Dex:
+                    case MapleCharacterStat.Int:
+                    case MapleCharacterStat.Luk:
+                    case MapleCharacterStat.Ap:
+                        pw.WriteShort((short)kvp.Value);
+                        break;
+                    case MapleCharacterStat.TraitLimit:
+                        pw.WriteInt((int)kvp.Value);
+                        pw.WriteInt((int)kvp.Value);
+                        pw.WriteInt((int)kvp.Value);
+                        break;
+                    case MapleCharacterStat.Exp:
+                    case MapleCharacterStat.Meso:
+                        pw.WriteLong(kvp.Value);
+                        break;
+                    case MapleCharacterStat.Pet:
+                        pw.WriteLong(kvp.Value);
+                        pw.WriteLong(kvp.Value);
+                        pw.WriteLong(kvp.Value);
+                        break;
+                    case MapleCharacterStat.Sp:
+                            pw.WriteShort((short)kvp.Value);
+                        break;
+                    case MapleCharacterStat.Job:
+                        pw.WriteShort((short)kvp.Value);
+                        break;
+                    default:
+                        pw.WriteInt((int)kvp.Value);
+                        break;
+                }
+            }
+            pw.WriteByte(0xFF);
+            if (mask == 0 && !enableActions)
+            {
+                pw.WriteByte(0);
+            }
+            pw.WriteInt(0);
 
-        //     c.SendPacket(pw);
-        // }
+            c.SendPacket(pw);
+        }
 
         public static PacketWriter RemovePlayerFromMap(int Id)
         {
@@ -1670,17 +2717,17 @@ namespace RazzleServer.Player
         }
         public static PacketWriter ShowKeybindLayout(Dictionary<uint, Tuple<byte, int>> keybinds)
         {
-            PacketWriter pw = new PacketWriter(SendHeader.KeybindLayout);
+            PacketWriter pw = new PacketWriter(SMSGHeader.KEYMAP);
 
             bool empty = !keybinds.Any();
             pw.WriteBool(empty);
             for (byte i = 0; i < 89; i++)
             {
-                Pair<byte, int> keybind;
+                Tuple<byte, int> keybind;
                 if (keybinds.TryGetValue(i, out keybind))
                 {
-                    pw.WriteByte(keybind.Left);
-                    pw.WriteInt(keybind.Right);
+                    pw.WriteByte(keybind.Item1);
+                    pw.WriteInt(keybind.Item2);
                 }
                 else
                 {
@@ -1693,7 +2740,7 @@ namespace RazzleServer.Player
 
         public static PacketWriter ShowQuickSlotKeys(int[] binds)
         {
-            PacketWriter pw = new PacketWriter(SendHeader.ShowQuickSlotKeys);
+            PacketWriter pw = new PacketWriter(SMSGHeader.QUICK_SLOT);
             pw.WriteByte(1);
             if (binds.Length == 28)
             {
@@ -1710,6 +2757,45 @@ namespace RazzleServer.Player
         }
 
         #endregion
+
+        public void Update()
+        {
+            if (IsBandit)
+            {
+                IncreaseCriticalGrowth(false);
+            }
+        }
+
+        public void IncreaseCriticalGrowth(bool fromAttack)
+        {
+            Buff criticalGrowth = GetBuff(Bandit.CRITICAL_GROWTH);
+            if (criticalGrowth != null)
+            {
+                if (Stats.CritRate + criticalGrowth.Stacks < 100)
+                {
+                    byte primeCriticalLevel = GetSkillLevel(Shadower.PRIME_CRITICAL);
+                    int critInc = 2;
+                    if (primeCriticalLevel > 0)
+                        critInc = DataBuffer.GetCharacterSkillById(Shadower.PRIME_CRITICAL).GetEffect(primeCriticalLevel).Info[CharacterSkillStat.x];
+                    criticalGrowth.Stacks += critInc;
+                    if (criticalGrowth.Stacks > 100)
+                        criticalGrowth.Stacks = 100;
+                    Client.SendPacket(Buff.GiveBuff(criticalGrowth));
+                }
+                else if (fromAttack)
+                {
+                    criticalGrowth.Stacks = 1;
+                    Client.SendPacket(Buff.GiveBuff(criticalGrowth));
+                }
+            }
+            else
+            {
+                SkillEffect effect = DataBuffer.GetCharacterSkillById(Bandit.CRITICAL_GROWTH).GetEffect(1);
+                criticalGrowth = new Buff(Bandit.CRITICAL_GROWTH, effect, SkillEffect.MAX_BUFF_TIME_MS, this);
+                criticalGrowth.Stacks = 2;
+                GiveBuff(criticalGrowth);
+            }
+        }
 
         public bool IsDead
         {
@@ -1790,7 +2876,5 @@ namespace RazzleServer.Player
         public bool IsAngelicBuster { get { return Job == 6001 || Job / 100 == 65; } }
         public bool IsZero { get { return Job == 10000 || Job / 100 == 101; } }
         public bool IsBeastTamer { get { return Job == 11000 || Job / 100 == 112; } }
-
-        public int CompletedQuestCount { get; internal set; }
     }
 }

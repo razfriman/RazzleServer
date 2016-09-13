@@ -1,6 +1,7 @@
 ﻿using RazzleServer.Constants;
 using RazzleServer.Data;
 using RazzleServer.Data.WZ;
+using RazzleServer.DB.Models;
 using RazzleServer.Map;
 using RazzleServer.Packet;
 using RazzleServer.Player;
@@ -782,6 +783,131 @@ namespace RazzleServer.Inventory
             }
         }
 
+
+        #region Database
+        public static MapleInventory LoadFromDatabase(MapleCharacter chr)
+        {
+            MapleInventory inventory = new MapleInventory(chr);
+            int characterId = chr.ID;
+
+            #region Items
+            List<InventoryItem> dbInventoryItems;
+            using (var dbContext = new MapleDbContext())
+            {
+                dbInventoryItems = dbContext.InventoryItems.Where(x => x.CharacterID == characterId).ToList();
+            }
+            foreach (InventoryItem dbInventoryItem in dbInventoryItems)
+            {
+                MapleInventoryType type = ItemConstants.GetInventoryType(dbInventoryItem.ItemID);
+                MapleItem item;
+                if (type == MapleInventoryType.Equip)
+                {
+                    MapleEquip equip = new MapleEquip(dbInventoryItem.ItemID, dbInventoryItem.Source, dbInventoryItem.Creator, (MapleItemFlags)dbInventoryItem.Flags, dbInventoryItem.Position, dbInventoryItem.ID); InventoryEquip dbInventoryEquip;
+                    using (var dbContext = new MapleDbContext())
+                    {
+                        dbInventoryEquip = dbContext.InventoryEquips.FirstOrDefault(x => x.InventoryItemID == dbInventoryItem.ID);
+                    }
+                    if (dbInventoryEquip != null)
+                    {
+                        equip.DbId = dbInventoryItem.ID;
+                        equip.RemainingUpgradeCount = dbInventoryEquip.RemainingUpgradeCount;
+                        equip.UpgradeCount = dbInventoryEquip.UpgradeCount;
+                        equip.Str = dbInventoryEquip.Str;
+                        equip.Dex = dbInventoryEquip.Dex;
+                        equip.Int = dbInventoryEquip.Int;
+                        equip.Luk = dbInventoryEquip.Luk;
+                        equip.IncMhp = dbInventoryEquip.IncMaxHP;
+                        equip.IncMmp = dbInventoryEquip.IncMaxMP;
+                        equip.Pad = dbInventoryEquip.Pad;
+                        equip.Mad = dbInventoryEquip.Mad;
+                        equip.Pdd = dbInventoryEquip.Pdd;
+                        equip.Mdd = dbInventoryEquip.Mdd;
+                        equip.Acc = dbInventoryEquip.Acc;
+                        equip.Eva = dbInventoryEquip.Eva;
+                        equip.Speed = dbInventoryEquip.Speed;
+                        equip.Jump = dbInventoryEquip.Jump;
+                        equip.Diligence = dbInventoryEquip.Diligence;
+                        equip.Durability = dbInventoryEquip.Durability;
+                        equip.Enhancements = dbInventoryEquip.Enhancements;
+                        equip.PotentialState = (MaplePotentialState)dbInventoryEquip.PotentialState;
+                        equip.Potential1 = (ushort)dbInventoryEquip.Potential1;
+                        equip.Potential2 = (ushort)dbInventoryEquip.Potential2;
+                        equip.Potential3 = (ushort)dbInventoryEquip.Potential3;
+                        equip.BonusPotential1 = (ushort)dbInventoryEquip.BonusPotential1;
+                        equip.BonusPotential2 = (ushort)dbInventoryEquip.BonusPotential2;
+                        equip.Socket1 = dbInventoryEquip.Socket1;
+                        equip.Socket2 = dbInventoryEquip.Socket2;
+                        equip.Socket3 = dbInventoryEquip.Socket3;
+                        equip.CustomLevel = dbInventoryEquip.CustomLevel;
+                        equip.CustomExp = dbInventoryEquip.CustomExp;
+                        equip.HammersApplied = dbInventoryEquip.HammerApplied;
+                    }
+                    item = equip;
+                }
+                else
+                {
+                    item = new MapleItem(dbInventoryItem.ItemID, dbInventoryItem.Source, dbInventoryItem.Quantity, dbInventoryItem.Creator, (MapleItemFlags)dbInventoryItem.Flags, dbInventoryItem.Position, dbInventoryItem.ID);
+                }
+                inventory.SetItem(item, item.InventoryType, item.Position, false);
+            }
+            #endregion
+
+            #region Slots
+            InventorySlot dbInventorySlot;
+            using (var dbContext = new MapleDbContext())
+            {
+                dbInventorySlot = dbContext.InventorySlots.SingleOrDefault(x => x.CharacterID == characterId);
+            }
+            if (dbInventorySlot != null)
+            {
+                inventory.EquipSlots = dbInventorySlot.EquipSlots;
+                inventory.UseSlots = dbInventorySlot.UseSlots;
+                inventory.SetupSlots = dbInventorySlot.SetupSlots;
+                inventory.EtcSlots = dbInventorySlot.EtcSlots;
+                inventory.CashSlots = dbInventorySlot.CashSlots;
+            }
+            #endregion
+
+            return inventory;
+        }
+
+        public void SaveToDatabase(bool insert = false)
+        {
+            List<MapleItem> inventoryItems = GetAllItems();
+            foreach (MapleItem item in inventoryItems)
+            {
+                item.SaveToDatabase(Owner);
+            }
+            #region Slots
+            using (var dbContext = new MapleDbContext())
+            {
+                InventorySlot updateSlot = dbContext.InventorySlots.FirstOrDefault(x => x.CharacterID == Owner.ID);
+                if (updateSlot != null && !insert)
+                {
+                    updateSlot.EquipSlots = EquipSlots;
+                    updateSlot.UseSlots = UseSlots;
+                    updateSlot.SetupSlots = SetupSlots;
+                    updateSlot.EtcSlots = EtcSlots;
+                    updateSlot.CashSlots = CashSlots;
+                }
+                else
+                {
+                    InventorySlot insertSlot = new InventorySlot();
+                    insertSlot.CharacterID = Owner.ID;
+                    insertSlot.EquipSlots = EquipSlots;
+                    insertSlot.UseSlots = UseSlots;
+                    insertSlot.SetupSlots = SetupSlots;
+                    insertSlot.EtcSlots = EtcSlots;
+                    insertSlot.CashSlots = CashSlots;
+                    dbContext.InventorySlots.Add(insertSlot);
+                }
+
+                dbContext.SaveChanges();
+            }
+
+            #endregion
+        }
+        #endregion
 
         public class InventoryOperation
         {

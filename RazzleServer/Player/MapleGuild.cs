@@ -329,8 +329,8 @@ namespace RazzleServer.Player
                         pw.WriteInt(ch.Job);
                         pw.WriteInt(ch.Level);
                         pw.WriteInt(ch.GuildRank);
-                        pw.WriteInt(1);
-                        pw.WriteInt(3);//nCommitment ?? "alliance rank"
+                        pw.WriteInt(1); // ch.Signature
+                        pw.WriteInt(ch.AllianceRank);
                         contribution = ch.GuildContribution;
                     }
                     GP += contribution;
@@ -344,25 +344,7 @@ namespace RazzleServer.Player
             pw.WriteByte((byte)LogoColor);
             pw.WriteMapleString(Notice);
             pw.WriteInt(GP);
-            pw.WriteInt(GP);//not sure abuot this one it may be something else GP related.
             pw.WriteInt(Alliance);
-            pw.WriteByte(GuildLevel(GP));
-            List<GuildSkill> DbGuildSkills;
-            using (var context = new MapleDbContext())
-            {
-                DbGuildSkills = context.GuildSkills.Where(x => x.GuildId == GuildID).ToList();
-            }
-            pw.WriteShort(0);//unk
-            pw.WriteShort((short)DbGuildSkills.Count);
-
-            foreach (GuildSkill DbGuildSkill in DbGuildSkills)
-            {
-                pw.WriteInt(DbGuildSkill.SkillId);
-                pw.WriteShort(DbGuildSkill.Level);
-                pw.WriteLong(DbGuildSkill.Timestamp);
-                pw.WriteMapleString(DbGuildSkill.Purchaser);
-                pw.WriteMapleString("");//activator
-            }
             return pw;
         }
         public void SaveToDatabase()

@@ -108,9 +108,9 @@ namespace RazzleServer.Constants
             600613720956,606619858165,612686956746,618812917313,625001046486,631251056950,637563567519,643939203194,650378595225,
                                           };
 
-        public static long GetCharacterExpNeeded(int currentLevel)
+        public static int GetCharacterExpNeeded(int currentLevel)
         {
-            return currentLevel > 249 || currentLevel < 0 ? 0 : PlayerExp[currentLevel];
+            return (int)(currentLevel > 249 || currentLevel < 0 ? 0 : PlayerExp[currentLevel]);
         }
 
         public const int BUFFSTAT_MASKS = 14;

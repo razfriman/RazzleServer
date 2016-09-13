@@ -10,12 +10,12 @@ namespace RazzleServer.Player
 {
     public class MapleQuest
     {
-        public MapleQuestStatusType State { get; set; }
+        public MapleQuestStatus State { get; set; }
         public WzQuest QuestInfo { get; private set; }
         public string Data { get; set; }
         public Dictionary<int, int> MonsterKills { get; set; }
 
-        public MapleQuest(WzQuest info, MapleQuestStatusType state = MapleQuestStatusType.IN_PROGRESS, string data = "", Dictionary<int, int> monsterData = null)
+        public MapleQuest(WzQuest info, MapleQuestStatus state = MapleQuestStatus.InProgress, string data = "", Dictionary<int, int> monsterData = null)
         {
             QuestInfo = info;
             State = state;
@@ -53,13 +53,13 @@ namespace RazzleServer.Player
             pw.WriteByte((byte)State);
             switch (State)
             {
-                case MapleQuestStatusType.NOT_STARTED:
+                case MapleQuestStatus.NotStarted:
                     pw.WriteByte(0);
                     break;
-                case MapleQuestStatusType.IN_PROGRESS:
+                case MapleQuestStatus.InProgress:
                     pw.WriteMapleString(Data);
                     break;
-                case MapleQuestStatusType.COMPLETED:
+                case MapleQuestStatus.Completed:
                     pw.WriteLong(MapleFormatHelper.GetMapleTimeStamp(DateTime.UtcNow));
                     break;
             }
@@ -156,7 +156,7 @@ namespace RazzleServer.Player
             {
                 MonsterKills[kvp.Key] = 0;
             }
-            this.State = MapleQuestStatusType.NOT_STARTED;
+            this.State = MapleQuestStatus.NotStarted;
         }
 
         public bool HasMonsterKillObjectives { get { return this.MonsterKills.Any(); } }
