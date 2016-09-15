@@ -306,8 +306,8 @@ namespace RazzleServer.Map.Monster
         #region Packets
         public static PacketWriter SpawnMob(int objectId, MapleMonster mob, bool newSpawn = false) //updated v158
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.SPAWN_MONSTER);
+            
+            var pw = new PacketWriter(SMSGHeader.SPAWN_MONSTER);
             pw.WriteByte(0);//RED, no idea
             pw.WriteInt(objectId);
             pw.WriteBool(true); //No idea
@@ -363,8 +363,8 @@ namespace RazzleServer.Map.Monster
 
         public static PacketWriter SetMobControl(int objectId, MapleMonster mob, bool newSpawn = false) //updated v142
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.SPAWN_MONSTER_CONTROL);
+            
+            var pw = new PacketWriter(SMSGHeader.SPAWN_MONSTER_CONTROL);
             pw.WriteByte((byte)(mob.ControllerHasAggro ? 2 : 1));
             pw.WriteInt(objectId);
             pw.WriteBool(true); //No idea

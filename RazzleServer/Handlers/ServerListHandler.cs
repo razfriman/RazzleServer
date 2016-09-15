@@ -10,8 +10,8 @@ namespace RazzleServer.Handlers
         public override void HandlePacket(PacketReader packet, MapleClient client)
         {
             //Todo: Loop for each world and channel
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.SERVERLIST);
+            
+            var pw = new PacketWriter(SMSGHeader.SERVERLIST);
             pw.WriteByte(0); // World id
             pw.WriteMapleString(ServerConfig.Instance.WorldName);
             pw.WriteByte(ServerConfig.Instance.WorldFlag);
@@ -35,8 +35,7 @@ namespace RazzleServer.Handlers
             pw.WriteShort(0);
             client.SendPacket(pw);
             
-            pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.SERVERLIST);
+            pw = new PacketWriter(SMSGHeader.SERVERLIST);
             pw.WriteByte(0xFF);
             pw.WriteByte(0);
             client.SendPacket(pw);

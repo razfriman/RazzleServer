@@ -258,7 +258,7 @@ namespace RazzleServer.Data.WZ
                         }
                     }
                 }
-                else if (wzCharacterSkill.IsGmSkill && chr.IsStaff)
+                else if (wzCharacterSkill.IsGmSkill && chr.IsAdmin)
                 {
                     var targets = chr.Map.GetCharactersInRange(effect.CalculateBoundingBox(chr.Position, chr.IsFacingLeft));
                     foreach (MapleCharacter target in targets.Where(x => x.ID != chr.ID))

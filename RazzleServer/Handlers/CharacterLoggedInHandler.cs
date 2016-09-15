@@ -31,7 +31,7 @@ namespace RazzleServer.Handlers
                         MapleCharacter.EnterChannel(client);
                         client.Account.Character.LoggedIn();
 
-                        //chr.Stats.Recalculate(chr);
+                        chr.Stats.Recalculate(chr);
                         chr.Position = map.GetStartpoint(0).Position;
 
                         map.AddCharacter(chr);

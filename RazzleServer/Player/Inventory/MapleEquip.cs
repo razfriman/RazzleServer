@@ -207,52 +207,25 @@ namespace RazzleServer.Inventory
         #region Packets
         public static void AddStats(MapleEquip equip, PacketWriter pw)
         {
-            Dictionary<MapleEquipStat, short> statValuePairs = new Dictionary<MapleEquipStat, short>();
-
-            statValuePairs.Add(MapleEquipStat.RemainingUpgrades, equip.RemainingUpgradeCount);
-
-            if (equip.UpgradeCount > 0) statValuePairs.Add(MapleEquipStat.Upgrades, equip.UpgradeCount);
-            if (equip.Str > 0) statValuePairs.Add(MapleEquipStat.Str, equip.Str);
-            if (equip.Dex > 0) statValuePairs.Add(MapleEquipStat.Dex, equip.Dex);
-            if (equip.Int > 0) statValuePairs.Add(MapleEquipStat.Int, equip.Int);
-            if (equip.Luk > 0) statValuePairs.Add(MapleEquipStat.Luk, equip.Luk);
-            if (equip.IncMhp > 0) statValuePairs.Add(MapleEquipStat.IncMhp, equip.IncMhp);
-            if (equip.IncMmp > 0) statValuePairs.Add(MapleEquipStat.IncMmp, equip.IncMmp);
-            if (equip.Pad > 0) statValuePairs.Add(MapleEquipStat.Pad, equip.Pad);
-            if (equip.Mad > 0) statValuePairs.Add(MapleEquipStat.Mad, equip.Mad);
-            if (equip.Pdd > 0) statValuePairs.Add(MapleEquipStat.Pdd, equip.Pdd);
-            if (equip.Mdd > 0) statValuePairs.Add(MapleEquipStat.Mdd, equip.Mdd);
-            if (equip.Acc > 0) statValuePairs.Add(MapleEquipStat.Acc, equip.Acc);
-            if (equip.Eva > 0) statValuePairs.Add(MapleEquipStat.Eva, equip.Eva);
-            if (equip.Diligence > 0) statValuePairs.Add(MapleEquipStat.Diligence, equip.Diligence);
-            if (equip.Speed > 0) statValuePairs.Add(MapleEquipStat.Speed, equip.Speed);
-            if (equip.Jump > 0) statValuePairs.Add(MapleEquipStat.Jump, equip.Jump);
-            if (equip.Flags > 0) statValuePairs.Add(MapleEquipStat.Flag, (short)equip.Flags);
-
-            if (equip.HammersApplied > 0) statValuePairs.Add(MapleEquipStat.Hammer, equip.HammersApplied);
-
-            int mask = 0;
-            foreach (KeyValuePair<MapleEquipStat, short> kvp in statValuePairs)
-            {
-                mask += (int)kvp.Key;
-            }
-            pw.WriteInt(mask);
-            foreach (KeyValuePair<MapleEquipStat, short> kvp in statValuePairs)
-            {
-                switch (kvp.Key)
-                {
-                    case MapleEquipStat.Hammer:
-                        pw.WriteInt(kvp.Value);
-                        break;
-                    case MapleEquipStat.RemainingUpgrades:
-                    case MapleEquipStat.Upgrades:
-                        pw.WriteByte((byte)kvp.Value);
-                        break;
-                    default:
-                        pw.WriteShort(kvp.Value);
-                        break;
-                }
-            }
+            pw.WriteByte(equip.RemainingUpgradeCount);
+            pw.WriteByte(equip.UpgradeCount);
+            pw.WriteShort(equip.Str);
+            pw.WriteShort(equip.Dex);
+            pw.WriteShort(equip.Int);
+            pw.WriteShort(equip.Luk);
+            pw.WriteShort(equip.IncMhp);
+            pw.WriteShort(equip.IncMmp);
+            pw.WriteShort(equip.Pad);
+            pw.WriteShort(equip.Mad);
+            pw.WriteShort(equip.Pdd);
+            pw.WriteShort(equip.Mdd);
+            pw.WriteShort(equip.Acc); 
+            pw.WriteShort(equip.Eva); // avoidability
+            pw.WriteShort(equip.Diligence); // hands
+            pw.WriteShort(equip.Speed);
+            pw.WriteShort(equip.Jump);
+            pw.WriteMapleString(equip.Creator);
+            pw.WriteShort((short)equip.Flags);
         }
     }
     #endregion

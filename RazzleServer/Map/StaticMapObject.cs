@@ -53,9 +53,7 @@ namespace RazzleServer.Map
         #region Packets
         public override PacketWriter GetSpawnPacket(bool animatedSpawn)
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.SPAWN_MIST);
-
+            PacketWriter pw = new PacketWriter(SMSGHeader.SPAWN_MIST);
             pw.WriteInt(ObjectID);
             pw.WriteBool(!animatedSpawn); //not sure
             pw.WriteInt(Owner.ID);
@@ -74,11 +72,9 @@ namespace RazzleServer.Map
 
         public override PacketWriter GetDestroyPacket(bool animatedDestroy)
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.REMOVE_MIST);
+            PacketWriter pw = new PacketWriter(SMSGHeader.REMOVE_MIST);
             pw.WriteInt(ObjectID);
             pw.WriteBool(animatedDestroy); //eruption?
-
             return pw;
         }
         #endregion

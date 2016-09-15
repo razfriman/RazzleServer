@@ -7,6 +7,7 @@ using RazzleServer.Server;
 using RazzleServer.Net;
 using RazzleServer.Util;
 using NLog;
+using RazzleServer.Scripts;
 
 namespace RazzleServer.Player
 {
@@ -23,6 +24,7 @@ namespace RazzleServer.Player
         public DateTime LastPong { get; set; }
         public MapleServer Server{get;set;}
         public string Key {get;set;}
+        public NpcEngine NpcEngine { get; set; }
 
         private static Logger Log = LogManager.GetCurrentClassLogger();
 
@@ -37,11 +39,12 @@ namespace RazzleServer.Player
             Connected = true;
         }
 
-        
         public static void RegisterPacketHandlers() {
             
             var types = Assembly.GetEntryAssembly().GetTypes();
-            
+
+            var handlerCount = 0;
+
             foreach (var type in types)
             {
                 var attribute = type.GetTypeInfo().GetCustomAttribute<PacketHandlerAttribute>();
@@ -53,36 +56,39 @@ namespace RazzleServer.Player
                         PacketHandlers[header] = new List<APacketHandler>();
                     }
 
+                    handlerCount++;
                     var handler = (APacketHandler)Activator.CreateInstance(type);
                     PacketHandlers[header].Add(handler);
+                    Log.Info($"Registered Packet Handler [{attribute.Header}] to [{type.Name}]");
                 }
             }
 
-            Log.Info($"Registered {PacketHandlers.Count} packet handlers");
+            Log.Info($"Registered {handlerCount} packet handlers");
         }
 
         internal void RecvPacket(PacketReader packet)
         {
-            Log.Debug($"Receiving: {Functions.ByteArrayToStr(packet.ToArray())}");
-
+            CMSGHeader header = CMSGHeader.UNKNOWN;
             try
             {
                 if(packet.Available >= 2) {
-                    var header = (CMSGHeader) packet.ReadHeader();
+                    header = (CMSGHeader) packet.ReadHeader();
 
-                    if(PacketHandlers.ContainsKey(header)) {
-                        foreach(var handler in PacketHandlers[header]) {
+                    if (PacketHandlers.ContainsKey(header)) {
+                        Log.Debug($"Recevied [{header.ToString()}] {Functions.ByteArrayToStr(packet.ToArray())}");
+
+                        foreach (var handler in PacketHandlers[header]) {
                             handler.HandlePacket(packet, this);
                         }
                     } else {
-                        Log.Warn($"Unhandled Packet [{header.ToString()}] - {Functions.ByteArrayToStr(packet.ToArray())}");
+                        Log.Warn($"Unhandled Packet [{header.ToString()}] {Functions.ByteArrayToStr(packet.ToArray())}");
                     }
 
                 }
             }
             catch (Exception e)
             {
-                Log.Error(e, "Packet Processing Error");
+                Log.Error(e, $"Packet Processing Error [{header.ToString()}] - {e.Message} - {e.StackTrace}");
             }
         }
 
@@ -127,8 +133,7 @@ namespace RazzleServer.Player
 
             Socket.Crypto.SetVectors(sIV, rIV);
 
-            PacketWriter writer = new PacketWriter();
-            writer.WriteShort(0x0E);
+            PacketWriter writer = new PacketWriter(0x0E);
             writer.WriteUShort(ServerConfig.Instance.Version);
             writer.WriteMapleString(ServerConfig.Instance.SubVersion.ToString());
             writer.WriteUInt(rIV);

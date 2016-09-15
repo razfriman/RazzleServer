@@ -67,8 +67,8 @@ namespace RazzleServer.Map
         #region Packets
         public PacketWriter GetSpawnPacket(bool spawnAnimated)
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.SPAWN_SPECIAL_MAPOBJECT); // SPAWN_SUMMON
+            
+            var pw = new PacketWriter(SMSGHeader.SPAWN_SPECIAL_MAPOBJECT); // SPAWN_SUMMON
 
             pw.WriteInt(Owner.ID);
             pw.WriteInt(ObjectID);
@@ -101,8 +101,8 @@ namespace RazzleServer.Map
 
         public PacketWriter RemovePacket(bool animated)
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.REMOVE_SPECIAL_MAPOBJECT); // REMOVE_SUMMON
+            
+            var pw = new PacketWriter(SMSGHeader.REMOVE_SPECIAL_MAPOBJECT); // REMOVE_SUMMON
 
             pw.WriteInt(Owner.ID);
             pw.WriteInt(ObjectID);
@@ -116,8 +116,8 @@ namespace RazzleServer.Map
 
         public PacketWriter MovePacket(Point startPosition, List<MapleMovementFragment> movementList)
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.MOVE_SUMMON);
+            
+            var pw = new PacketWriter(SMSGHeader.MOVE_SUMMON);
 
             pw.WriteInt(Owner.ID);
             pw.WriteInt(ObjectID);
@@ -132,8 +132,8 @@ namespace RazzleServer.Map
 
         public PacketWriter GetUseSkillPacket(int skillId, byte stance)
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.SUMMON_SKILL);
+            
+            var pw = new PacketWriter(SMSGHeader.SUMMON_SKILL);
             pw.WriteInt(Owner.ID);
             pw.WriteInt(skillId);
             pw.WriteByte(stance);
@@ -142,8 +142,8 @@ namespace RazzleServer.Map
 
         public PacketWriter GetAttackPacket(AttackInfo attackInfo, bool darkFlare = false)
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.SUMMON_ATTACK);
+            
+            var pw = new PacketWriter(SMSGHeader.SUMMON_ATTACK);
             pw.WriteInt(Owner.ID);
             pw.WriteInt(ObjectID);
             pw.WriteByte(Owner.Level);

@@ -5,8 +5,8 @@ using RazzleServer.Crypto;
 using RazzleServer.Packet;
 using RazzleServer.Player;
 using RazzleServer.Server;
-using RazzleServer.Util;
 using NLog;
+
 namespace RazzleServer.Net
 {
     public class ClientSocket : IDisposable
@@ -21,30 +21,11 @@ namespace RazzleServer.Net
 
         private static Logger Log = LogManager.GetCurrentClassLogger();
 
-
         public MapleCipherProvider Crypto { get; private set; }
+        public bool Connected => !disposed;
+        public string Host => _host;
+        public int Port => _port;
 
-        public bool Connected
-        {
-            get
-            {
-                return !disposed;
-            }
-        }
-        public string Host
-        {
-            get
-            {
-                return _host;
-            }
-        }
-        public int Port
-        {
-            get
-            {
-                return _port;
-            }
-        }
         public ClientSocket(MapleClient client, Socket socket)
         {
             _socket = socket;

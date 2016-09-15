@@ -49,8 +49,8 @@ namespace RazzleServer.Player
 
         public static PacketWriter CancelBuff(Buff buff)
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.REMOVE_BUFF);
+            
+            var pw = new PacketWriter(SMSGHeader.REMOVE_BUFF);
 
             WriteBuffMask(pw, buff.Effect.BuffInfo.Keys);
 
@@ -141,8 +141,8 @@ namespace RazzleServer.Player
         #region Special Buffs
         public static PacketWriter GiveEvilEyeBuff(Buff buff)
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.GIVE_BUFF);
+            
+            var pw = new PacketWriter(SMSGHeader.GIVE_BUFF);
 
             pw.WriteShort(1);
             pw.WriteInt(Spearman.EVIL_EYE);
@@ -175,8 +175,8 @@ namespace RazzleServer.Player
             BuffedCharacterStats stats = chr.Stats;
             int damageIncPercent = effect.Info[CharacterSkillStat.x];
             int absorbPercent = effect.Info[CharacterSkillStat.y];
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.GIVE_BUFF);
+            
+            var pw = new PacketWriter(SMSGHeader.GIVE_BUFF);
 
             WriteBuffMask(pw, buff.Effect.BuffInfo.Keys);
             double hpPercent = (chr.HP / (double)stats.MaxHp) * 100;
@@ -200,8 +200,8 @@ namespace RazzleServer.Player
 
         public static PacketWriter GiveFinalPactBuff(Buff buff)
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.GIVE_BUFF);
+            
+            var pw = new PacketWriter(SMSGHeader.GIVE_BUFF);
 
             WriteBuffMask(pw, buff.Effect.BuffInfo.Keys);
 
@@ -234,8 +234,8 @@ namespace RazzleServer.Player
 
         public static PacketWriter UpdateFinalPactKillCount(int remainingKillCount, uint remainingDurationMS)
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.GIVE_BUFF);
+            
+            var pw = new PacketWriter(SMSGHeader.GIVE_BUFF);
             //WriteSingleBuffMask(pw, MapleBuffStat.FINAL_PACT3);
 
             pw.WriteShort(1);

@@ -29,7 +29,7 @@ namespace RazzleServer.Inventory
 
         private MapleCharacter Owner;
 
-        public long Mesos
+        public int Mesos
         {
             get
             {
@@ -74,20 +74,20 @@ namespace RazzleServer.Inventory
             Owner = character;
         }
 
-        public void GainMesos(long gain, bool fromMonster = true, bool showInChat = false)
+        public void GainMesos(int gain, bool fromMonster = true, bool showInChat = false)
         {
             if (gain < 0) gain *= -1;
             AddMeso(gain, fromMonster, showInChat);
         }
 
-        public void RemoveMesos(long loss, bool fromMonster = true, bool showInChat = false)
+        public void RemoveMesos(int loss, bool fromMonster = true, bool showInChat = false)
         {
             if (loss == 0) return;
             if (loss > 0) loss *= -1;
             AddMeso(loss, fromMonster, showInChat);
         }
 
-        private void AddMeso(long amount, bool fromMonster = true, bool showInChat = false)
+        private void AddMeso(int amount, bool fromMonster = true, bool showInChat = false)
         {
             if (amount > 0 && Mesos == int.MaxValue)
                 return;
@@ -104,9 +104,9 @@ namespace RazzleServer.Inventory
             MapleCharacter.UpdateSingleStat(Owner.Client, MapleCharacterStat.Meso, Mesos, fromMonster);
 
             if (fromMonster)
-                Owner.Client.SendPacket(Packets.ShowMesoGain((int)amount, false));
+                Owner.Client.SendPacket(Packets.ShowMesoGain(amount, false));
             if (showInChat)
-                Owner.Client.SendPacket(Packets.ShowMesoGain((int)amount, true));
+                Owner.Client.SendPacket(Packets.ShowMesoGain(amount, true));
         }
 
         //Sets an item to the given inventory in the given slot
@@ -762,9 +762,6 @@ namespace RazzleServer.Inventory
             }
             return null;
         }
-
-
-
         public List<MapleItem> GetItemsFromInventory(MapleInventoryType inventoryType)
         {
             var inventory = GetInventory(inventoryType);
@@ -773,7 +770,6 @@ namespace RazzleServer.Inventory
                 return inventory.Values.ToList();
             }
         }
-
         public List<MapleItem> GetItemsFromInventory(MapleInventoryType type, Func<MapleItem, bool> condition)
         {
             var inventory = GetInventory(type);
@@ -782,7 +778,19 @@ namespace RazzleServer.Inventory
                 return inventory.Values.Where(condition).ToList();
             }
         }
-
+        public List<MapleEquip> GetEquipsWithRevealedPotential()
+        {
+            List<MapleEquip> ret = new List<MapleEquip>();
+            lock (EquippedInventory)
+            {
+                ret.AddRange(EquippedInventory.Values.Select(x => x as MapleEquip).Where(x => x.PotentialState >= MaplePotentialState.Rare));
+            }
+            lock (EquipInventory)
+            {
+                ret.AddRange(EquipInventory.Values.Select(x => x as MapleEquip).Where(x => x.PotentialState >= MaplePotentialState.Rare));
+            }
+            return ret;
+        }
 
         #region Database
         public static MapleInventory LoadFromDatabase(MapleCharacter chr)
@@ -909,6 +917,11 @@ namespace RazzleServer.Inventory
         }
         #endregion
 
+        public static void UpdateMesos(MapleClient c, int mesos)
+        {
+            MapleCharacter.UpdateSingleStat(c, MapleCharacterStat.Meso, mesos);
+        }
+
         public class InventoryOperation
         {
             public MapleInventoryOperationType OperationType;
@@ -953,8 +966,8 @@ namespace RazzleServer.Inventory
             //Client automatically swaps the items if the new position has an item in it
             public static PacketWriter ShowOperations(List<InventoryOperation> operations)
             {
-                PacketWriter pw = new PacketWriter();
-                pw.WriteHeader(SMSGHeader.INVENTORY_OPERATION);
+                
+                var pw = new PacketWriter(SMSGHeader.INVENTORY_OPERATION);
                 pw.WriteBool(true); //enable actions
                 pw.WriteShort((short)operations.Count);
 
@@ -990,8 +1003,8 @@ namespace RazzleServer.Inventory
 
             public static PacketWriter ShowMesoGain(int amount, bool inChat)
             {
-                PacketWriter pw = new PacketWriter();
-                pw.WriteHeader(SMSGHeader.SHOW_STATUS_INFO);
+                
+                var pw = new PacketWriter(SMSGHeader.SHOW_STATUS_INFO);
                 if (inChat)
                 {
                     pw.WriteByte(6);
@@ -1012,8 +1025,8 @@ namespace RazzleServer.Inventory
 
             public static PacketWriter ShowItemGain(int itemId, int quantity, bool inChat = false)
             {
-                PacketWriter pw = new PacketWriter();
-                pw.WriteHeader(SMSGHeader.SHOW_STATUS_INFO);
+                
+                var pw = new PacketWriter(SMSGHeader.SHOW_STATUS_INFO);
                 pw.WriteByte(0);
                 pw.WriteByte(0);
                 pw.WriteInt(itemId);
@@ -1023,8 +1036,8 @@ namespace RazzleServer.Inventory
 
             public static PacketWriter ShowInventoryFull()
             {
-                PacketWriter pw = new PacketWriter();
-                pw.WriteHeader(SMSGHeader.INVENTORY_OPERATION);
+                
+                var pw = new PacketWriter(SMSGHeader.INVENTORY_OPERATION);
                 pw.WriteByte(1);
                 pw.WriteByte(0);
                 pw.WriteByte(0);
@@ -1151,8 +1164,8 @@ namespace RazzleServer.Inventory
 
             public static PacketWriter UpdateCharacterLook(MapleCharacter chr)
             {
-                PacketWriter pw = new PacketWriter();
-                pw.WriteHeader(SMSGHeader.UPDATE_CHAR_LOOK);
+                
+                var pw = new PacketWriter(SMSGHeader.UPDATE_CHAR_LOOK);
                 pw.WriteInt(chr.ID);
                 pw.WriteByte(1);
                 MapleCharacter.AddCharLook(pw, chr, false);

@@ -8,6 +8,7 @@ using RazzleServer.Map;
 using RazzleServer.Movement;
 using RazzleServer.Packet;
 using RazzleServer.Party;
+using RazzleServer.Scripts;
 using RazzleServer.Server;
 using RazzleServer.Util;
 using System;
@@ -56,7 +57,6 @@ namespace RazzleServer.Player
         public MapleMessengerRoom ChatRoom { get; set; }
         public DateTime LastAttackTime { get; set; }
         public ActionState ActionState { get; private set; } = ActionState.DISABLED;
-        public Dictionary<uint, Tuple<byte, int>> _keybinds { get; private set; }
         public static MapleCharacter GetDefaultCharacter(MapleClient client)
         {
             MapleCharacter newCharacter = new MapleCharacter
@@ -84,19 +84,25 @@ namespace RazzleServer.Player
             return newCharacter;
         }
 
+        public MapleCharacter()
+        {
+            Hidden = false;
+            Stats = new BuffedCharacterStats();
+            LastAttackTime = DateTime.FromFileTime(0);
+        }
         public void LoggedIn()
         {
-                Client.SendPacket(ShowKeybindLayout(_keybinds));
-                Client.SendPacket(ShowQuickSlotKeys(QuickSlotKeys));
-                Client.SendPacket(SkillMacro.ShowSkillMacros(SkillMacros));
+            //Client.SendPacket(ShowKeybindLayout(Keybinds));
+            //Client.SendPacket(ShowQuickSlotKeys(QuickSlotKeys));
+            Client.SendPacket(SkillMacro.ShowSkillMacros(SkillMacros));
 
-                 Guild = MapleGuild.FindGuild(GuildID);
-                 Guild?.UpdateGuildData();
+            Guild = MapleGuild.FindGuild(GuildID);
+            Guild?.UpdateGuildData();
 
-                 Party = MapleParty.FindParty(ID);
-                 Party?.UpdateParty();
+            Party = MapleParty.FindParty(ID);
+            Party?.UpdateParty();
 
-                 BuddyList.NotifyChannelChangeToBuddies(ID, AccountID, Name, Client.Channel, Client, true);
+            BuddyList.NotifyChannelChangeToBuddies(ID, AccountID, Name, Client.Channel, Client, true);
         }
 
         public void LoggedOut()
@@ -105,6 +111,22 @@ namespace RazzleServer.Player
             Party?.CacheCharacterInfo(this);
             Party?.UpdateParty();
             BuddyList.NotifyChannelChangeToBuddies(ID, AccountID, Name, -1);
+        }
+
+        public int? GetSavedLocation(string script)
+        {
+            string data = GetCustomQuestData(CustomQuestKeys.SAVED_LOCATION + script);
+            if (string.IsNullOrEmpty(data))
+                return null;
+            return int.Parse(data);
+        }
+
+        public void SaveLocation(string script, int value)
+        {
+            string data = value.ToString();
+            if (value == -1)
+                data = null;
+            SetCustomQuestData(CustomQuestKeys.SAVED_LOCATION + script, data);
         }
 
         public void ChangeMap(int mapId, string toPortal = "")
@@ -246,6 +268,24 @@ namespace RazzleServer.Player
             };
         }
 
+        public bool CreateGuild(string guildName)
+        {
+            if (Guild != null)
+                return false;
+            MapleGuild guild = MapleGuild.CreateGuild(guildName, this);
+            if (guild == null)
+                return false;
+
+            Guild = guild;
+            GuildRank = 1;
+            GuildContribution = 500;
+            AllianceRank = 5;
+            SaveToDatabase(this);
+            Client.SendPacket(guild.GenerateGuildDataPacket());
+            MapleGuild.UpdateCharacterGuild(this, guildName);
+            return true;
+        }
+
         public int InsertCharacter()
         {
             Character InsertChar = new Character();
@@ -303,7 +343,7 @@ namespace RazzleServer.Player
                 foreach (Skill skill in _skills.Values)
                 {
                     var insertSkill = new DB.Models.Skill();
-                    insertSkill.SkillId = skill.SkillID;
+                    insertSkill.SkillID = skill.SkillID;
                     insertSkill.CharacterID = ID;
                     insertSkill.Level = skill.Level;
                     insertSkill.MasterLevel = skill.MasterLevel;
@@ -317,7 +357,7 @@ namespace RazzleServer.Player
             return ID;
         }
 
-      
+        #region Database
         public static MapleCharacter LoadFromDatabase(int characterId, bool characterScreen, MapleClient c = null)
         {
             lock (_characterDatabaseLock)
@@ -352,7 +392,7 @@ namespace RazzleServer.Player
                     Dictionary<int, Skill> skills = new Dictionary<int, Skill>();
                     foreach (DB.Models.Skill DbSkill in dbSkills)
                     {
-                        Skill skill = new Skill(DbSkill.SkillId)
+                        Skill skill = new Skill(DbSkill.SkillID)
                         {
                             Level = DbSkill.Level,
                             MasterLevel = DbSkill.MasterLevel,
@@ -410,43 +450,43 @@ namespace RazzleServer.Player
                     #endregion
 
                     #region Quests
-                    // List<QuestStatus> DbQuestStatuses = dbContext.QuestStatus.Where(x => x.CharacterId == characterId).ToList();
-                    // foreach (QuestStatus DbQuestStatus in DbQuestStatuses)
-                    // {
-                    //     MapleQuestStatus status = (MapleQuestStatus)DbQuestStatus.Status;
-                    //     int questId = DbQuestStatus.Quest;
-                    //     if (status == MapleQuestStatus.InProgress)
-                    //     {
-                    //         WzQuest info = DataBuffer.GetQuestById((ushort)questId);
-                    //         if (info != null)
-                    //         {
-                    //             string data = DbQuestStatus.CustomData ?? "";
-                    //             MapleQuest quest = null;
-                    //             if (info.FinishRequirements.Where(x => x.Type == QuestRequirementType.mob).Any())
-                    //             {
-                    //                 List<QuestMobStatus> DbQuestStatusesMobs = dbContext.QuestStatusMobs.Where(x => x.QuestStatusId == DbQuestStatus.Id).ToList();
-                    //                 Dictionary<int, int> mobs = new Dictionary<int, int>();
-                    //                 foreach (QuestMobStatus DbQuestStatusMobs in DbQuestStatusesMobs)
-                    //                 {
-                    //                     int mobId = DbQuestStatusMobs.Mob;
-                    //                     if (mobId > 0)
-                    //                         mobs.Add(mobId, DbQuestStatusMobs.Count);
-                    //                 }
-                    //                 quest = new MapleQuest(info, status, data, mobs);
-                    //             }
-                    //             else
-                    //             {
-                    //                 quest = new MapleQuest(info, status, data);
-                    //             }
-                    //             chr.StartedQuests.Add(questId, quest);
-                    //         }
-                    //     }
-                    //     else if (status == MapleQuestStatus.Completed)
-                    //     {
-                    //         if (!chr.CompletedQuests.ContainsKey(questId))
-                    //             chr.CompletedQuests.Add(questId, 0x4E35FF7B); //TODO: real date
-                    //     }
-                    // }
+                    List<QuestStatus> DbQuestStatuses = dbContext.QuestStatus.Where(x => x.CharacterID == characterId).ToList();
+                    foreach (QuestStatus DbQuestStatus in DbQuestStatuses)
+                    {
+                        MapleQuestStatus status = (MapleQuestStatus)DbQuestStatus.Status;
+                        int questId = DbQuestStatus.Quest;
+                        if (status == MapleQuestStatus.InProgress)
+                        {
+                            WzQuest info = DataBuffer.GetQuestById((ushort)questId);
+                            if (info != null)
+                            {
+                                string data = DbQuestStatus.CustomData ?? "";
+                                MapleQuest quest = null;
+                                if (info.FinishRequirements.Where(x => x.Type == QuestRequirementType.mob).Any())
+                                {
+                                    List<QuestMobStatus> DbQuestStatusesMobs = dbContext.QuestStatusMobs.Where(x => x.QuestStatusID == DbQuestStatus.ID).ToList();
+                                    Dictionary<int, int> mobs = new Dictionary<int, int>();
+                                    foreach (QuestMobStatus DbQuestStatusMobs in DbQuestStatusesMobs)
+                                    {
+                                        int mobId = DbQuestStatusMobs.Mob;
+                                        if (mobId > 0)
+                                            mobs.Add(mobId, DbQuestStatusMobs.Count);
+                                    }
+                                    quest = new MapleQuest(info, status, data, mobs);
+                                }
+                                else
+                                {
+                                    quest = new MapleQuest(info, status, data);
+                                }
+                                chr._startedQuests.Add(questId, quest);
+                            }
+                        }
+                        else if (status == MapleQuestStatus.Completed)
+                        {
+                            if (!chr._completedQuests.ContainsKey(questId))
+                                chr._completedQuests.Add(questId, 0x4E35FF7B); //TODO: real date
+                        }
+                    }
                     #endregion
 
                     return chr;
@@ -514,155 +554,155 @@ namespace RazzleServer.Player
                     chr.Inventory.SaveToDatabase();
 
                     #region Skills
-                    // List<DB.Models.Skill> DbSkills = dbContext.Skills.Where(x => x.CharacterId == chr.Id).ToList();
-                    // foreach (DB.Models.Skill DbSkill in DbSkills)
-                    // {
-                    //     if (!chr.Skills.ContainsKey(DbSkill.SkillId)) //skill was removed                                 
-                    //         dbContext.Skills.Remove(DbSkill);
-                    // }
-                    // foreach (Skill skill in chr.Skills.Values)
-                    // {
-                    //     DB.Models.Skill dbSkill = DbSkills.Where(x => x.SkillId == skill.SkillId).FirstOrDefault();
-                    //     if (dbSkill != null) //Update                   
-                    //     {
-                    //         dbSkill.Level = skill.Level;
-                    //         dbSkill.MasterLevel = skill.MasterLevel;
-                    //         dbSkill.Expiration = skill.Expiration;
-                    //         dbSkill.SkillExp = skill.SkillExp;
-                    //     }
-                    //     else //Insert
-                    //     {
-                    //         DB.Models.Skill InsertSkill = new DB.Models.Skill();
-                    //         InsertSkill.CharacterId = chr.Id;
-                    //         InsertSkill.SkillId = skill.SkillId;
-                    //         InsertSkill.Level = skill.Level;
-                    //         InsertSkill.MasterLevel = skill.MasterLevel;
-                    //         InsertSkill.Expiration = skill.Expiration;
-                    //         InsertSkill.SkillExp = skill.SkillExp;
-                    //         dbContext.Skills.Add(InsertSkill);
-                    //     }
-                    // }
+                    List<DB.Models.Skill> DbSkills = dbContext.Skills.Where(x => x.CharacterID == chr.ID).ToList();
+                    foreach (DB.Models.Skill DbSkill in DbSkills)
+                    {
+                        if (!chr._skills.ContainsKey(DbSkill.SkillID)) //skill was removed                                 
+                            dbContext.Skills.Remove(DbSkill);
+                    }
+                    foreach (Skill skill in chr._skills.Values)
+                    {
+                        DB.Models.Skill dbSkill = DbSkills.Where(x => x.SkillID == skill.SkillID).FirstOrDefault();
+                        if (dbSkill != null) //Update                   
+                        {
+                            dbSkill.Level = skill.Level;
+                            dbSkill.MasterLevel = skill.MasterLevel;
+                            dbSkill.Expiration = skill.Expiration;
+                            dbSkill.SkillExp = skill.SkillExp;
+                        }
+                        else //Insert
+                        {
+                            DB.Models.Skill InsertSkill = new DB.Models.Skill();
+                            InsertSkill.CharacterID = chr.ID;
+                            InsertSkill.SkillID = skill.SkillID;
+                            InsertSkill.Level = skill.Level;
+                            InsertSkill.MasterLevel = skill.MasterLevel;
+                            InsertSkill.Expiration = skill.Expiration;
+                            InsertSkill.SkillExp = skill.SkillExp;
+                            dbContext.Skills.Add(InsertSkill);
+                        }
+                    }
                     #endregion
 
                     #region Keybinds
-                    // if (chr.KeybindsChanged)
-                    // {
-                    //     dbContext.KeyMaps.RemoveRange(dbContext.KeyMaps.Where(x => x.CharacterId == chr.Id));
-                    //     foreach (var kvp in chr.Keybinds)
-                    //     {
-                    //         KeyMap insertKeyMap = new KeyMap();
-                    //         insertKeyMap.CharacterId = chr.Id;
-                    //         insertKeyMap.Key = (byte)kvp.Key; //Posible overflow?
-                    //         insertKeyMap.Type = kvp.Value.Left;
-                    //         insertKeyMap.Action = kvp.Value.Right;
-                    //         dbContext.KeyMaps.Add(insertKeyMap);
-                    //     }
-                    // }
-                    // if (chr.QuickSlotKeyBindsChanged)
-                    // {
-                    //     dbContext.QuickSlotKeyMaps.RemoveRange(dbContext.QuickSlotKeyMaps.Where(x => x.CharacterId == chr.Id));
-                    //     for (int i = 0; i < chr.QuickSlotKeys.Length; i++)
-                    //     {
-                    //         int key = chr.QuickSlotKeys[i];
-                    //         if (key > 0)
-                    //         {
-                    //             QuickSlotKeyMap dbQuickSlotKeyMap = new QuickSlotKeyMap();
-                    //             dbQuickSlotKeyMap.CharacterId = chr.Id;
-                    //             dbQuickSlotKeyMap.Key = key;
-                    //             dbQuickSlotKeyMap.Index = (byte)i;
-                    //             dbContext.QuickSlotKeyMaps.Add(dbQuickSlotKeyMap);
-                    //         }
-                    //     }
-                    // }
-                    // List<DbSkillMacro> dbSkillMacros = dbContext.SkillMacros.Where(x => x.CharacterId == chr.Id).ToList();
-                    // foreach (DbSkillMacro dbSkillMacro in dbSkillMacros)
-                    // {
-                    //     if (chr.SkillMacros[dbSkillMacro.Index] == null)
-                    //         dbContext.SkillMacros.Remove(dbSkillMacro);
-                    // }
-                    // for (int i = 0; i < 5; i++)
-                    // {
-                    //     if (chr.SkillMacros[i] != null && chr.SkillMacros[i].Changed)
-                    //     {
-                    //         SkillMacro macro = chr.SkillMacros[i];
-                    //         DbSkillMacro dbSkillMacro = dbSkillMacros.FirstOrDefault(x => x.Index == i);
-                    //         if (dbSkillMacro != null)
-                    //         {
-                    //             dbSkillMacro.Name = macro.Name;
-                    //             dbSkillMacro.ShoutName = macro.ShoutName;
-                    //             dbSkillMacro.Skill1 = macro.Skills[0];
-                    //             dbSkillMacro.Skill2 = macro.Skills[1];
-                    //             dbSkillMacro.Skill3 = macro.Skills[2];
-                    //         }
-                    //         else
-                    //         {
-                    //             dbSkillMacro = new DbSkillMacro { Index = (byte)i, CharacterId = chr.Id, Name = macro.Name, ShoutName = macro.ShoutName, Skill1 = macro.Skills[0], Skill2 = macro.Skills[1], Skill3 = macro.Skills[2] };
-                    //             dbContext.SkillMacros.Add(dbSkillMacro);
-                    //         }
-                    //         macro.Changed = false;
-                    //     }
-                    // }
+                    if (chr._keybindsChanged)
+                    {
+                        dbContext.KeyMaps.RemoveRange(dbContext.KeyMaps.Where(x => x.CharacterID == chr.ID));
+                        foreach (var kvp in chr.Keybinds)
+                        {
+                            KeyMap insertKeyMap = new KeyMap();
+                            insertKeyMap.CharacterID = chr.ID;
+                            insertKeyMap.Key = (byte)kvp.Key; //Posible overflow?
+                            insertKeyMap.Type = kvp.Value.Item1;
+                            insertKeyMap.Action = kvp.Value.Item2;
+                            dbContext.KeyMaps.Add(insertKeyMap);
+                        }
+                    }
+                    if (chr._quickSlotKeyBindsChanged)
+                    {
+                        dbContext.QuickSlotKeyMaps.RemoveRange(dbContext.QuickSlotKeyMaps.Where(x => x.CharacterID == chr.ID));
+                        for (int i = 0; i < chr.QuickSlotKeys.Length; i++)
+                        {
+                            int key = chr.QuickSlotKeys[i];
+                            if (key > 0)
+                            {
+                                QuickSlotKeyMap dbQuickSlotKeyMap = new QuickSlotKeyMap();
+                                dbQuickSlotKeyMap.CharacterID = chr.ID;
+                                dbQuickSlotKeyMap.Key = key;
+                                dbQuickSlotKeyMap.Index = (byte)i;
+                                dbContext.QuickSlotKeyMaps.Add(dbQuickSlotKeyMap);
+                            }
+                        }
+                    }
+                    List<DbSkillMacro> dbSkillMacros = dbContext.SkillMacros.Where(x => x.CharacterID == chr.ID).ToList();
+                    foreach (DbSkillMacro dbSkillMacro in dbSkillMacros)
+                    {
+                        if (chr.SkillMacros[dbSkillMacro.Index] == null)
+                            dbContext.SkillMacros.Remove(dbSkillMacro);
+                    }
+                    for (int i = 0; i < 5; i++)
+                    {
+                        if (chr.SkillMacros[i] != null && chr.SkillMacros[i].Changed)
+                        {
+                            SkillMacro macro = chr.SkillMacros[i];
+                            DbSkillMacro dbSkillMacro = dbSkillMacros.FirstOrDefault(x => x.Index == i);
+                            if (dbSkillMacro != null)
+                            {
+                                dbSkillMacro.Name = macro.Name;
+                                dbSkillMacro.ShoutName = macro.ShoutName;
+                                dbSkillMacro.Skill1 = macro.Skills[0];
+                                dbSkillMacro.Skill2 = macro.Skills[1];
+                                dbSkillMacro.Skill3 = macro.Skills[2];
+                            }
+                            else
+                            {
+                                dbSkillMacro = new DbSkillMacro { Index = (byte)i, CharacterID = chr.ID, Name = macro.Name, ShoutName = macro.ShoutName, Skill1 = macro.Skills[0], Skill2 = macro.Skills[1], Skill3 = macro.Skills[2] };
+                                dbContext.SkillMacros.Add(dbSkillMacro);
+                            }
+                            macro.Changed = false;
+                        }
+                    }
                     #endregion
 
                     #region Buddies
-                    // List<MapleBuddy> buddies = chr.BuddyList.GetAllBuddies();
-                    // var currentDbBuddies = dbContext.Buddies.Where(x => x.AccountId == chr.AccountId || x.CharacterId == chr.Id);
-                    // //Removed buddies:
-                    // foreach (Buddy b in currentDbBuddies)
-                    // {
-                    //     bool accbuddy = b.BuddyAccountId > 0;
-                    //     if (accbuddy)
-                    //     {
-                    //         if (!buddies.Exists(x => x.AccountId == b.BuddyAccountId)) //check if the character's buddlist contains the buddy that is in the database
-                    //             dbContext.Buddies.Remove(b);
-                    //     }
-                    //     else
-                    //     {
-                    //         if (!buddies.Exists(x => x.CharacterId == b.BuddyCharacterId)) //ditto for non-account buddy
-                    //             dbContext.Buddies.Remove(b);
-                    //     }
-                    // }
+                    List<MapleBuddy> buddies = chr.BuddyList.GetAllBuddies();
+                    var currentDbBuddies = dbContext.Buddies.Where(x => x.AccountID == chr.AccountID || x.CharacterID == chr.ID);
+                    //Removed buddies:
+                    foreach (Buddy b in currentDbBuddies)
+                    {
+                        bool accbuddy = b.BuddyAccountID > 0;
+                        if (accbuddy)
+                        {
+                            if (!buddies.Exists(x => x.AccountID == b.BuddyAccountID)) //check if the character's buddlist contains the buddy that is in the database
+                                dbContext.Buddies.Remove(b);
+                        }
+                        else
+                        {
+                            if (!buddies.Exists(x => x.CharacterID == b.BuddyCharacterID)) //ditto for non-account buddy
+                                dbContext.Buddies.Remove(b);
+                        }
+                    }
 
-                    // foreach (MapleBuddy buddy in buddies)
-                    // {
-                    //     Buddy dbBuddy;
-                    //     if ((dbBuddy = currentDbBuddies.FirstOrDefault(x => x.BuddyAccountId == buddy.AccountId || x.BuddyCharacterId == buddy.CharacterId)) != null)
-                    //     {
-                    //         dbBuddy.Name = buddy.NickName;
-                    //         dbBuddy.Group = buddy.Group;
-                    //         dbBuddy.Memo = buddy.Memo;
-                    //         dbBuddy.IsRequest = buddy.IsRequest;
-                    //     }
-                    //     else
-                    //     {
-                    //         Buddy newBuddy;
-                    //         if (buddy.AccountBuddy)
-                    //         {
-                    //             newBuddy = new Buddy()
-                    //             {
-                    //                 AccountId = chr.AccountId,
-                    //                 BuddyAccountId = buddy.AccountId,
-                    //                 Name = buddy.NickName,
-                    //                 Group = buddy.Group,
-                    //                 Memo = buddy.Memo,
-                    //                 IsRequest = buddy.IsRequest
-                    //             };
-                    //         }
-                    //         else
-                    //         {
-                    //             newBuddy = new Buddy()
-                    //             {
-                    //                 CharacterId = chr.Id,
-                    //                 BuddyCharacterId = buddy.CharacterId,
-                    //                 Name = buddy.NickName,
-                    //                 Group = buddy.Group,
-                    //                 Memo = buddy.Memo,
-                    //                 IsRequest = buddy.IsRequest
-                    //             };
-                    //         }
-                    //         dbContext.Buddies.Add(newBuddy);
-                    //     }
-                    // }
+                    foreach (MapleBuddy buddy in buddies)
+                    {
+                        Buddy dbBuddy;
+                        if ((dbBuddy = currentDbBuddies.FirstOrDefault(x => x.BuddyAccountID == buddy.AccountID || x.BuddyCharacterID == buddy.CharacterID)) != null)
+                        {
+                            dbBuddy.Name = buddy.NickName;
+                            dbBuddy.Group = buddy.Group;
+                            dbBuddy.Memo = buddy.Memo;
+                            dbBuddy.IsRequest = buddy.IsRequest;
+                        }
+                        else
+                        {
+                            Buddy newBuddy;
+                            if (buddy.AccountBuddy)
+                            {
+                                newBuddy = new Buddy()
+                                {
+                                    AccountID = chr.AccountID,
+                                    BuddyAccountID = buddy.AccountID,
+                                    Name = buddy.NickName,
+                                    Group = buddy.Group,
+                                    Memo = buddy.Memo,
+                                    IsRequest = buddy.IsRequest
+                                };
+                            }
+                            else
+                            {
+                                newBuddy = new Buddy()
+                                {
+                                    CharacterID = chr.ID,
+                                    BuddyCharacterID = buddy.CharacterID,
+                                    Name = buddy.NickName,
+                                    Group = buddy.Group,
+                                    Memo = buddy.Memo,
+                                    IsRequest = buddy.IsRequest
+                                };
+                            }
+                            dbContext.Buddies.Add(newBuddy);
+                        }
+                    }
                     #endregion
 
                     #region Cooldowns
@@ -685,115 +725,117 @@ namespace RazzleServer.Player
                     #endregion
 
                     #region Quests
-                    // var dbCustomQuestData = dbContext.QuestCustomData.Where(x => x.CharacterId == chr.Id).ToList();
-                    // foreach (var dbCustomQuest in dbCustomQuestData)
-                    // {
-                    //     if (chr.CustomQuestData.All(x => x.Key != dbCustomQuest.Key)) //doesn't exist in current chr.CustomQuestData but it does in the DB
-                    //     {
-                    //         dbContext.QuestCustomData.Remove(dbCustomQuest); //Delete it from the DB
-                    //     }
-                    // }
-                    // foreach (var kvp in chr.CustomQuestData)
-                    // {
-                    //     QuestCustomData dbCustomQuest = dbCustomQuestData.FirstOrDefault(x => x.Key == kvp.Key);
-                    //     if (dbCustomQuest != null)
-                    //     {
-                    //         dbCustomQuest.Value = kvp.Value;
-                    //     }
-                    //     else
-                    //     {
-                    //         QuestCustomData newCustomQuest = new QuestCustomData { CharacterId = chr.Id, Key = kvp.Key, Value = kvp.Value };
-                    //         dbContext.QuestCustomData.Add(newCustomQuest);
-                    //     }
-                    // }
-                    // List<QuestStatus> databaseQuests = dbContext.QuestStatus.Where(x => x.CharacterId == chr.Id).ToList();
-                    // List<QuestStatus> startedDatabaseQuests = databaseQuests.Where(x => x.Status == 1).ToList();
-                    // List<QuestStatus> completedDatabaseQuests = databaseQuests.Where(x => x.Status == 2).ToList();
-                    // foreach (QuestStatus qs in startedDatabaseQuests)
-                    // {
-                    //     if (!chr.StartedQuests.ContainsKey(qs.Quest)) //quest in progress was removed or forfeited
-                    //     {
-                    //         dbContext.QuestStatusMobs.RemoveRange(dbContext.QuestStatusMobs.Where(x => x.QuestStatusId == qs.Id));
-                    //         dbContext.QuestStatus.Remove(qs);
-                    //     }
-                    // }
-                    // foreach (var questPair in chr.StartedQuests)
-                    // {
-                    //     MapleQuest quest = questPair.Value;
-                    //     QuestStatus dbQuestStatus = startedDatabaseQuests.FirstOrDefault(x => x.Quest == questPair.Key);
-                    //     if (dbQuestStatus != null) //record exists
-                    //     {
-                    //         dbQuestStatus.CustomData = quest.Data;
-                    //         dbQuestStatus.Status = (byte)quest.State;
-                    //         if (quest.HasMonsterKillObjectives)
-                    //         {
-                    //             List<QuestMobStatus> qmsList = dbContext.QuestStatusMobs.Where(x => x.QuestStatusId == dbQuestStatus.Id).ToList();
-                    //             foreach (var mobPair in quest.MonsterKills)
-                    //             {
-                    //                 QuestMobStatus qms = qmsList.FirstOrDefault(x => x.Mob == mobPair.Key);
-                    //                 if (qms != null) //record exists                                
-                    //                     qms.Count = mobPair.Value;
-                    //                 else //doesnt exist yet, need to insert
-                    //                 {
-                    //                     qms = new QuestMobStatus();
-                    //                     qms.Mob = mobPair.Key;
-                    //                     qms.Count = mobPair.Value;
-                    //                     qms.QuestStatusId = dbQuestStatus.Id;
-                    //                     dbContext.QuestStatusMobs.Add(qms);
-                    //                 }
-                    //             }
-                    //         }
-                    //     }
-                    //     else //doesnt exist yet, need to insert
-                    //     {
-                    //         dbQuestStatus = new QuestStatus();
-                    //         dbQuestStatus.CharacterId = chr.Id;
-                    //         dbQuestStatus.Quest = questPair.Key;
-                    //         dbQuestStatus.Status = (byte)quest.State;
-                    //         dbQuestStatus.CustomData = quest.Data;
-                    //         dbContext.QuestStatus.Add(dbQuestStatus);
-                    //         if (quest.HasMonsterKillObjectives)
-                    //         {
-                    //             dbContext.SaveChanges();
-                    //             foreach (var kvp in quest.MonsterKills)
-                    //             {
-                    //                 QuestMobStatus qms = new QuestMobStatus();
-                    //                 qms.QuestStatusId = dbQuestStatus.Id;
-                    //                 qms.Mob = kvp.Key;
-                    //                 qms.Count = kvp.Value;
-                    //                 dbContext.QuestStatusMobs.Add(qms);
-                    //             }
-                    //         }
-                    //     }
-                    // }
-                    // foreach (var questPair in chr.CompletedQuests)
-                    // {
-                    //     if (!completedDatabaseQuests.Where(x => x.Quest == questPair.Key).Any()) //completed quest isn't in the completed Database yet
-                    //     {
-                    //         QuestStatus qs = databaseQuests.Where(x => x.Quest == questPair.Key).FirstOrDefault();
-                    //         if (qs != null) //quest is in StartedQuests database
-                    //         {
-                    //             dbContext.QuestStatusMobs.RemoveRange(dbContext.QuestStatusMobs.Where(x => x.QuestStatusId == qs.Id));
-                    //             qs.Status = (byte)MapleQuestStatus.Completed;
-                    //             qs.CompleteTime = questPair.Value;
-                    //         }
-                    //         else //not in database yet
-                    //         {
-                    //             qs = new QuestStatus();
-                    //             qs.CharacterId = chr.Id;
-                    //             qs.Quest = questPair.Key;
-                    //             qs.CompleteTime = questPair.Value;
-                    //             qs.Status = (byte)MapleQuestStatus.Completed;
-                    //             dbContext.QuestStatus.Add(qs);
-                    //         }
-                    //     }
-                    // }
+                    var dbCustomQuestData = dbContext.QuestCustomData.Where(x => x.CharacterID == chr.ID).ToList();
+                    foreach (var dbCustomQuest in dbCustomQuestData)
+                    {
+                        if (chr._customQuestData.All(x => x.Key != dbCustomQuest.Key)) //doesn't exist in current chr.CustomQuestData but it does in the DB
+                        {
+                            dbContext.QuestCustomData.Remove(dbCustomQuest); //Delete it from the DB
+                        }
+                    }
+                    foreach (var kvp in chr._customQuestData)
+                    {
+                        QuestCustomData dbCustomQuest = dbCustomQuestData.FirstOrDefault(x => x.Key == kvp.Key);
+                        if (dbCustomQuest != null)
+                        {
+                            dbCustomQuest.Value = kvp.Value;
+                        }
+                        else
+                        {
+                            QuestCustomData newCustomQuest = new QuestCustomData { CharacterID = chr.ID, Key = kvp.Key, Value = kvp.Value };
+                            dbContext.QuestCustomData.Add(newCustomQuest);
+                        }
+                    }
+                    List<QuestStatus> databaseQuests = dbContext.QuestStatus.Where(x => x.CharacterID == chr.ID).ToList();
+                    List<QuestStatus> startedDatabaseQuests = databaseQuests.Where(x => x.Status == 1).ToList();
+                    List<QuestStatus> completedDatabaseQuests = databaseQuests.Where(x => x.Status == 2).ToList();
+                    foreach (QuestStatus qs in startedDatabaseQuests)
+                    {
+                        if (!chr._startedQuests.ContainsKey(qs.Quest)) //quest in progress was removed or forfeited
+                        {
+                            dbContext.QuestStatusMobs.RemoveRange(dbContext.QuestStatusMobs.Where(x => x.QuestStatusID == qs.ID));
+                            dbContext.QuestStatus.Remove(qs);
+                        }
+                    }
+                    foreach (var questPair in chr._startedQuests)
+                    {
+                        MapleQuest quest = questPair.Value;
+                        QuestStatus dbQuestStatus = startedDatabaseQuests.FirstOrDefault(x => x.Quest == questPair.Key);
+                        if (dbQuestStatus != null) //record exists
+                        {
+                            dbQuestStatus.CustomData = quest.Data;
+                            dbQuestStatus.Status = (byte)quest.State;
+                            if (quest.HasMonsterKillObjectives)
+                            {
+                                List<QuestMobStatus> qmsList = dbContext.QuestStatusMobs.Where(x => x.QuestStatusID == dbQuestStatus.ID).ToList();
+                                foreach (var mobPair in quest.MonsterKills)
+                                {
+                                    QuestMobStatus qms = qmsList.FirstOrDefault(x => x.Mob == mobPair.Key);
+                                    if (qms != null) //record exists                                
+                                        qms.Count = mobPair.Value;
+                                    else //doesnt exist yet, need to insert
+                                    {
+                                        qms = new QuestMobStatus();
+                                        qms.Mob = mobPair.Key;
+                                        qms.Count = mobPair.Value;
+                                        qms.QuestStatusID = dbQuestStatus.ID;
+                                        dbContext.QuestStatusMobs.Add(qms);
+                                    }
+                                }
+                            }
+                        }
+                        else //doesnt exist yet, need to insert
+                        {
+                            dbQuestStatus = new QuestStatus();
+                            dbQuestStatus.CharacterID = chr.ID;
+                            dbQuestStatus.Quest = questPair.Key;
+                            dbQuestStatus.Status = (byte)quest.State;
+                            dbQuestStatus.CustomData = quest.Data;
+                            dbContext.QuestStatus.Add(dbQuestStatus);
+                            if (quest.HasMonsterKillObjectives)
+                            {
+                                dbContext.SaveChanges();
+                                foreach (var kvp in quest.MonsterKills)
+                                {
+                                    QuestMobStatus qms = new QuestMobStatus();
+                                    qms.QuestStatusID = dbQuestStatus.ID;
+                                    qms.Mob = kvp.Key;
+                                    qms.Count = kvp.Value;
+                                    dbContext.QuestStatusMobs.Add(qms);
+                                }
+                            }
+                        }
+                    }
+                    foreach (var questPair in chr._completedQuests)
+                    {
+                        if (!completedDatabaseQuests.Where(x => x.Quest == questPair.Key).Any()) //completed quest isn't in the completed Database yet
+                        {
+                            QuestStatus qs = databaseQuests.Where(x => x.Quest == questPair.Key).FirstOrDefault();
+                            if (qs != null) //quest is in StartedQuests database
+                            {
+                                dbContext.QuestStatusMobs.RemoveRange(dbContext.QuestStatusMobs.Where(x => x.QuestStatusID == qs.ID));
+                                qs.Status = (byte)MapleQuestStatus.Completed;
+                                qs.CompleteTime = questPair.Value;
+                            }
+                            else //not in database yet
+                            {
+                                qs = new QuestStatus();
+                                qs.CharacterID = chr.ID;
+                                qs.Quest = questPair.Key;
+                                qs.CompleteTime = questPair.Value;
+                                qs.Status = (byte)MapleQuestStatus.Completed;
+                                dbContext.QuestStatus.Add(qs);
+                            }
+                        }
+                    }
                     #endregion
 
                     dbContext.SaveChanges();
                 }
             }
         }
+
+        #endregion
 
         public void Bind(MapleClient c)
         {
@@ -810,7 +852,7 @@ namespace RazzleServer.Player
             Exp += exp;
             while (Exp > GameConstants.GetCharacterExpNeeded(Level) && GameConstants.GetCharacterExpNeeded(Level) != 0)
             {
-                Exp -= (int) GameConstants.GetCharacterExpNeeded(Level);
+                Exp -= (int)GameConstants.GetCharacterExpNeeded(Level);
                 LevelUp();
             }
             UpdateSingleStat(Client, MapleCharacterStat.Exp, Exp, false);
@@ -924,7 +966,7 @@ namespace RazzleServer.Player
             MP = Stats.MaxMp;
             SP += 3;
 
-            SortedDictionary<MapleCharacterStat, long> updatedStats = new SortedDictionary<MapleCharacterStat, long>();
+            var updatedStats = new SortedDictionary<MapleCharacterStat, int>();
             updatedStats.Add(MapleCharacterStat.Level, Level);
             updatedStats.Add(MapleCharacterStat.Hp, HP);
             updatedStats.Add(MapleCharacterStat.MaxHp, MaxHP);
@@ -949,7 +991,7 @@ namespace RazzleServer.Player
                 return;
             Job = newJob;
 
-            SortedDictionary<MapleCharacterStat, long> updatedStats = new SortedDictionary<MapleCharacterStat, long> { { MapleCharacterStat.Job, Job } };
+            var updatedStats = new SortedDictionary<MapleCharacterStat, int> { { MapleCharacterStat.Job, Job } };
 
             if (newJob % 10 >= 1 && Level >= 70) //3rd job or higher
             {
@@ -1134,7 +1176,7 @@ namespace RazzleServer.Player
             int newJob = -1;
             if (IsExplorer || IsCygnus)
             {
-               if (IsCygnus && Level >= 30 && Level % 100 == 0)
+                if (IsCygnus && Level >= 30 && Level % 100 == 0)
                 {
                     newJob = Job + 10;
                 }
@@ -1191,7 +1233,6 @@ namespace RazzleServer.Player
                 ChangeJob((short)newJob);
         }
         #endregion
-
 
         #region Skills, Cooldowns & Keybinds
         public bool HasSkill(int skillId, int skillLevel = 0)
@@ -1885,7 +1926,7 @@ namespace RazzleServer.Player
             else if (MP + mpInc < 0)
                 MP = 0;
             else
-                MP += (short) mpInc;
+                MP += (short)mpInc;
             if (updateToClient)
                 UpdateSingleStat(Client, MapleCharacterStat.Mp, MP, true);
         }
@@ -1927,17 +1968,15 @@ namespace RazzleServer.Player
         #region NPC
         public void OpenNpc(int npcId)
         {
-            // TODO - NPC ENGINE
-            //Client.NpcEngine?.Dispose();
-            //NpcEngine.OpenNpc(npcId, -1, Client);
+            Client.NpcEngine?.Dispose();
+            NpcEngine.OpenNpc(npcId, -1, Client);
         }
         #endregion
 
         #region Packets
         public static PacketWriter ShowExpFromMonster(int exp)
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.SHOW_STATUS_INFO);
+            var pw = new PacketWriter(SMSGHeader.SHOW_STATUS_INFO);
             pw.WriteByte(3);
             pw.WriteByte(1);
             pw.WriteInt(exp);
@@ -1947,8 +1986,7 @@ namespace RazzleServer.Player
 
         public static PacketWriter ShowGainMapleCharacterStat(int amount, MapleCharacterStat stat)
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.SHOW_STATUS_INFO);
+            var pw = new PacketWriter(SMSGHeader.SHOW_STATUS_INFO);
             pw.WriteByte(0x11);
             pw.WriteLong((long)stat);
             pw.WriteInt(amount);
@@ -1963,9 +2001,9 @@ namespace RazzleServer.Player
 
             bool rankEnabled = false;
 
-            pw.WriteShort((short) (rankEnabled ? 1 : 0));
+            pw.WriteShort((short)(rankEnabled ? 1 : 0));
 
-            if(rankEnabled)
+            if (rankEnabled)
             {
                 pw.WriteInt(0); // Rank
                 pw.WriteInt(0); // Rank Move
@@ -1977,15 +2015,16 @@ namespace RazzleServer.Player
         public static void AddCharStats(PacketWriter pw, MapleCharacter chr, bool CashShop = false)
         {
             pw.WriteInt(chr.ID);
-            pw.WriteStaticString(chr.Name.PadRight(13, '\0'));
+            pw.WriteStaticString(chr.Name, 13);
             pw.WriteByte(chr.Gender);
             pw.WriteByte(chr.Skin);
             pw.WriteInt(chr.Face);
             pw.WriteInt(chr.Hair);
 
-            pw.WriteLong(0);
-            pw.WriteLong(0);
-            pw.WriteLong(0);
+            for(int i = 0; i < 3; i++)
+            {
+                pw.WriteLong(0); // PetID
+            }
 
             pw.WriteByte(chr.Level);
             pw.WriteShort(chr.Job);
@@ -2006,7 +2045,7 @@ namespace RazzleServer.Player
             pw.WriteInt(chr.Exp);
             pw.WriteShort(chr.Fame);
 
-            pw.WriteInt(0);
+            pw.WriteInt(0); // Gachapon EXP
             pw.WriteInt(chr.MapID);
             pw.WriteByte(chr.SpawnPoint);
             pw.WriteInt(0);
@@ -2194,7 +2233,6 @@ namespace RazzleServer.Player
             }
 
             AddCharacterInfo(chr, pw);
-
             pw.WriteLong(MapleFormatHelper.GetMapleTimeStamp(DateTime.UtcNow)); //current time
             c.SendPacket(pw);
         }
@@ -2214,7 +2252,7 @@ namespace RazzleServer.Player
                 pw.WriteMapleString(linkedName);
             }
 
-            pw.WriteInt((int)chr.Mesos);
+            pw.WriteInt(chr.Mesos);
             AddInventoryInfo(pw, chr);
             AddSkillInfo(pw, chr);
             AddQuestInfo(pw, chr);
@@ -2282,13 +2320,13 @@ namespace RazzleServer.Player
             {
                 pw.WriteInt(cooldown.Key);
                 int remaining = (int)(cooldown.Value.StartTime.AddMilliseconds(cooldown.Value.Duration) - DateTime.UtcNow).TotalMilliseconds;
-                pw.WriteInt(remaining / 1000);
+                pw.WriteShort((short) (remaining / 1000));
             }
         }
 
         private static void AddInventoryInfo(PacketWriter pw, MapleCharacter chr)
         {
-           
+
             pw.WriteByte(chr.Inventory.EquipSlots);
             pw.WriteByte(chr.Inventory.UseSlots);
             pw.WriteByte(chr.Inventory.SetupSlots);
@@ -2296,86 +2334,62 @@ namespace RazzleServer.Player
             pw.WriteByte(chr.Inventory.CashSlots);
             pw.WriteLong(MapleFormatHelper.GetMapleTimeStamp(-2L));
 
+            var inventory = chr.Inventory;
+
             //Equipped items
-            Dictionary<short, MapleItem> equipped = chr.Inventory.GetInventory(MapleInventoryType.Equipped);
+            Dictionary<short, MapleItem> equipped = inventory.GetInventory(MapleInventoryType.Equipped);
             foreach (var kvp in equipped.Where(kvp => kvp.Value.Position > -100 && kvp.Value.Position < 0))
             {
                 MapleItem.AddItemPosition(pw, kvp.Value);
                 MapleItem.AddItemInfo(pw, kvp.Value);
             }
-            pw.WriteShort(0); //1
-
-            //Masked equipped items, Cash Shop stuff I think
+            pw.WriteShort(0);
+            
             foreach (var kvp in equipped.Where(kvp => kvp.Value.Position > -1000 && kvp.Value.Position < -100))
             {
                 MapleItem.AddItemPosition(pw, kvp.Value);
                 MapleItem.AddItemInfo(pw, kvp.Value);
             }
-            pw.WriteShort(0); //2
+            pw.WriteShort(0);
 
-            //Equip inventory
-            Dictionary<short, MapleItem> equipInventory = chr.Inventory.GetInventory(MapleInventoryType.Equip);
+            Dictionary<short, MapleItem> equipInventory = inventory.GetInventory(MapleInventoryType.Equip);
             foreach (KeyValuePair<short, MapleItem> kvp in equipInventory)
             {
                 MapleItem.AddItemPosition(pw, kvp.Value);
                 MapleItem.AddItemInfo(pw, kvp.Value);
             }
-            pw.WriteShort(0); //3
-
-
-
-            
-
-            //MapleInventory iv = chr.getInventory(MapleInventoryType.EQUIPPED);
-            //Collection<IItem> equippedC = iv.list();
-            //List<Item> equipped = new ArrayList<Item>(equippedC.size());
-            //List<Item> equippedCash = new ArrayList<Item>(equippedC.size());
-            //for (IItem item : equippedC)
-            //{
-            //    if (item.getPosition() <= -100)
-            //    {
-            //        equippedCash.add((Item)item);
-            //    }
-            //    else
-            //    {
-            //        equipped.add((Item)item);
-            //    }
-            //}
-            //Collections.sort(equipped);
-            //for (Item item : equipped)
-            //{
-            //    addItemInfo(mplew, item);
-            //}
-            pw.WriteShort(0);
-            //for (Item item : equippedCash)
-            //{
-            //    addItemInfo(mplew, item);
-            //}
-            pw.WriteShort(0);
-            //for (IItem item : chr.getInventory(MapleInventoryType.EQUIP).list())
-            //{
-            //    addItemInfo(mplew, item);
-            //}
             pw.WriteInt(0);
-            //for (IItem item : chr.getInventory(MapleInventoryType.USE).list())
-            //{
-            //    addItemInfo(mplew, item);
-            //}
+
+            Dictionary<short, MapleItem> useInventory = inventory.GetInventory(MapleInventoryType.Use);
+            foreach (KeyValuePair<short, MapleItem> kvp in useInventory)
+            {
+                MapleItem.AddItemPosition(pw, kvp.Value);
+                MapleItem.AddItemInfo(pw, kvp.Value);
+            }
+            pw.WriteByte(0);  
+
+            Dictionary<short, MapleItem> setupInventory = inventory.GetInventory(MapleInventoryType.Setup);
+            foreach (KeyValuePair<short, MapleItem> kvp in setupInventory)
+            {
+                MapleItem.AddItemPosition(pw, kvp.Value);
+                MapleItem.AddItemInfo(pw, kvp.Value);
+            }
+            pw.WriteByte(0);           
+
+            Dictionary<short, MapleItem> etcInventory = inventory.GetInventory(MapleInventoryType.Etc);
+            foreach (KeyValuePair<short, MapleItem> kvp in etcInventory)
+            {
+                MapleItem.AddItemPosition(pw, kvp.Value);
+                MapleItem.AddItemInfo(pw, kvp.Value);
+            }
             pw.WriteByte(0);
-            //for (IItem item : chr.getInventory(MapleInventoryType.SETUP).list())
-            //{
-            //    addItemInfo(mplew, item);
-            //}
-            pw.WriteByte(0);
-            //for (IItem item : chr.getInventory(MapleInventoryType.ETC).list())
-            //{
-            //    addItemInfo(mplew, item);
-            //}
-            pw.WriteByte(0);
-            //for (IItem item : chr.getInventory(MapleInventoryType.CASH).list())
-            //{
-            //    addItemInfo(mplew, item);
-            //}
+
+            Dictionary<short, MapleItem> cashInventory = inventory.GetInventory(MapleInventoryType.Cash);
+            foreach (KeyValuePair<short, MapleItem> kvp in cashInventory)
+            {
+                MapleItem.AddItemPosition(pw, kvp.Value);
+                MapleItem.AddItemInfo(pw, kvp.Value);
+            }
         }
 
         public static void EnterMap(MapleClient c, int mapId, byte spawnPoint, bool fromSpecialPortal = false)
@@ -2406,9 +2420,9 @@ namespace RazzleServer.Player
         public static void SendCSInfo(MapleClient c)
         {
             MapleCharacter chr = c.Account.Character;
-            PacketWriter pw = new PacketWriter();
+            
 
-            pw.WriteHeader(SMSGHeader.ENTER_CASH_SHOP);
+            var pw = new PacketWriter(SMSGHeader.ENTER_CASH_SHOP);
 
             MapleCharacter.AddCharInfo(pw, chr);
             pw.WriteBool(true); //IsNotBeta? lol
@@ -2429,10 +2443,11 @@ namespace RazzleServer.Player
 
         public void EnableActions(bool updateClient = true)
         {
-            //ActionState = ActionState.Enabled;
+            ActionState = ActionState.ENABLED;
             if (!updateClient) return;
-            //SortedDictionary<MapleCharacterStat, long> empty = new SortedDictionary<MapleCharacterStat, long>();
-            //UpdateStats(Client, empty, true);
+
+            var empty = new SortedDictionary<MapleCharacterStat, int>();
+            UpdateStats(Client, empty, true);
         }
 
         public void SetActionState(ActionState state)
@@ -2450,27 +2465,27 @@ namespace RazzleServer.Player
             return true;
         }
 
-        public static void UpdateSingleStat(MapleClient c, MapleCharacterStat stat, long value, bool enableActions = false)
+        public static void UpdateSingleStat(MapleClient c, MapleCharacterStat stat, int value, bool enableActions = false)
         {
-            SortedDictionary<MapleCharacterStat, long> stats = new SortedDictionary<MapleCharacterStat, long>() { { stat, value } };
+            var stats = new SortedDictionary<MapleCharacterStat, int>() { { stat, value } };
             UpdateStats(c, stats, enableActions);
         }
 
-        public static void UpdateStats(MapleClient c, SortedDictionary<MapleCharacterStat, long> stats, bool enableActions)
+        public static void UpdateStats(MapleClient c, SortedDictionary<MapleCharacterStat, int> stats, bool enableActions)
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.UPDATE_STATS);
+            
+            var pw = new PacketWriter(SMSGHeader.UPDATE_STATS);
 
             pw.WriteBool(enableActions);
             if (enableActions)
                 c.Account.Character.ActionState = ActionState.ENABLED;
-            long mask = 0;
-            foreach (KeyValuePair<MapleCharacterStat, long> kvp in stats)
+            int mask = 0;
+            foreach (KeyValuePair<MapleCharacterStat, int> kvp in stats)
             {
-                mask |= (long)kvp.Key;
+                mask |= (int) kvp.Key;
             }
-            pw.WriteLong(mask);
-            foreach (KeyValuePair<MapleCharacterStat, long> kvp in stats)
+            pw.WriteInt(mask);
+            foreach (KeyValuePair<MapleCharacterStat, int> kvp in stats)
             {
                 switch (kvp.Key)
                 {
@@ -2503,7 +2518,7 @@ namespace RazzleServer.Player
                         pw.WriteLong(kvp.Value);
                         break;
                     case MapleCharacterStat.Sp:
-                            pw.WriteShort((short)kvp.Value);
+                        pw.WriteShort((short)kvp.Value);
                         break;
                     case MapleCharacterStat.Job:
                         pw.WriteShort((short)kvp.Value);
@@ -2513,28 +2528,20 @@ namespace RazzleServer.Player
                         break;
                 }
             }
-            pw.WriteByte(0xFF);
-            if (mask == 0 && !enableActions)
-            {
-                pw.WriteByte(0);
-            }
-            pw.WriteInt(0);
-
             c.SendPacket(pw);
         }
 
         public static PacketWriter RemovePlayerFromMap(int Id)
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.REMOVE_PLAYER);
+            
+            var pw = new PacketWriter(SMSGHeader.REMOVE_PLAYER);
             pw.WriteInt(Id);
             return pw;
         }
 
         public static PacketWriter SystemMessage(string message, short type)
         {
-            PacketWriter pw = new PacketWriter();
-            //pw.WriteHeader(SMSGHeader.SYSTEM_MESSAGE);
+            var pw = new PacketWriter(SMSGHeader.SERVER_NOTICE); // SERVER_MESSAGE
             pw.WriteShort(type);
             pw.WriteMapleString(message);
             return pw;
@@ -2542,8 +2549,8 @@ namespace RazzleServer.Player
 
         public static PacketWriter ServerNotice(string message, byte type, int channel = 0, bool whisperIcon = false)
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.SERVER_NOTICE);
+            
+            var pw = new PacketWriter(SMSGHeader.SERVER_NOTICE);
 
             pw.WriteByte(type);
             if (type == 4)
@@ -2590,8 +2597,8 @@ namespace RazzleServer.Player
 
         public static PacketWriter SpawnPlayer(MapleCharacter chr)
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.SPAWN_PLAYER);
+            
+            var pw = new PacketWriter(SMSGHeader.SPAWN_PLAYER);
             pw.WriteInt(chr.ID);
             pw.WriteByte(chr.Level);
             pw.WriteMapleString(chr.Name);
@@ -2719,7 +2726,7 @@ namespace RazzleServer.Player
         {
             PacketWriter pw = new PacketWriter(SMSGHeader.KEYMAP);
 
-            bool empty = !keybinds.Any();
+            bool empty = keybinds == null || !keybinds.Any();
             pw.WriteBool(empty);
             for (byte i = 0; i < 89; i++)
             {
@@ -2804,10 +2811,9 @@ namespace RazzleServer.Player
 
         public bool IsFacingLeft => Stance % 2 != 0;
 
-        public bool IsStaff => Client.Account.AccountType >= 2;
-
         public bool IsAdmin => Client.Account.AccountType == 3;
 
+        #region Jobs
         public int CurrentLevelSkillBook
         {
             get
@@ -2826,7 +2832,6 @@ namespace RazzleServer.Player
                 return 0;
             }
         }
-       
         public bool IsBeginnerJob => JobConstants.IsBeginnerJob(Job);
         public bool IsExplorer => Job < 600;
         public bool IsWarrior { get { return Job / 100 == 1; } }
@@ -2876,5 +2881,6 @@ namespace RazzleServer.Player
         public bool IsAngelicBuster { get { return Job == 6001 || Job / 100 == 65; } }
         public bool IsZero { get { return Job == 10000 || Job / 100 == 101; } }
         public bool IsBeastTamer { get { return Job == 11000 || Job / 100 == 112; } }
+        #endregion
     }
 }

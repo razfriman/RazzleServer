@@ -43,8 +43,8 @@ namespace RazzleServer.Player
         public int Signature = 0;
         public int Alliance = 0;
         public List<int> Characters = new List<int>();
-
         private object sync = new object();
+
         private MapleGuild()
         {
         }
@@ -138,18 +138,7 @@ namespace RazzleServer.Player
                 guild.SaveToDatabase();
             }
         }
-
         public bool HasCharacter(int characterId) => Characters.Contains(characterId);
-
-        public void AddCharacter(MapleCharacter character)
-        {
-            character.Guild = this;
-            character.GuildRank = 3;
-            character.AllianceRank = 5;
-            character.GuildContribution = 500;
-            MapleCharacter.SaveToDatabase(character);
-            UpdateGuildData(character.Client);
-        }
         public static MapleGuild CreateGuild(string name, MapleCharacter leader)
         {
             foreach (MapleGuild g in Guilds.Values)
@@ -190,8 +179,8 @@ namespace RazzleServer.Player
         }
         public PacketWriter GenerateKickPacket(MapleCharacter character)
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.GUILD_OPERATION);
+            
+            var pw = new PacketWriter(SMSGHeader.GUILD_OPERATION);
             pw.WriteByte(0x35);
             pw.WriteUInt((uint)GuildID);
             pw.WriteInt(character.ID);
@@ -200,8 +189,8 @@ namespace RazzleServer.Player
         }
         public PacketWriter GenerateSetMaster(MapleCharacter character)
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.GUILD_OPERATION);
+            
+            var pw = new PacketWriter(SMSGHeader.GUILD_OPERATION);
             pw.WriteByte(0x59);
             pw.WriteUInt((uint)GuildID);
             pw.WriteUInt((uint)LeaderID);
@@ -211,8 +200,8 @@ namespace RazzleServer.Player
         }
         public PacketWriter GenerateChangeRankPacket(MapleCharacter character, byte newRank)
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.GUILD_OPERATION);
+            
+            var pw = new PacketWriter(SMSGHeader.GUILD_OPERATION);
             pw.WriteByte(0x46);
             pw.WriteUInt((uint)GuildID);
             pw.WriteInt(character.ID);
@@ -221,8 +210,8 @@ namespace RazzleServer.Player
         }
         public PacketWriter GenerateNoticeChangePacket()
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.GUILD_OPERATION);
+            
+            var pw = new PacketWriter(SMSGHeader.GUILD_OPERATION);
             pw.WriteByte(0x4B);
             pw.WriteUInt((uint)GuildID);
             pw.WriteMapleString(Notice);
@@ -230,16 +219,16 @@ namespace RazzleServer.Player
         }
         public PacketWriter GenerateGuildDisbandPacket()
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.GUILD_OPERATION);
+            
+            var pw = new PacketWriter(SMSGHeader.GUILD_OPERATION);
             pw.WriteByte(0x38);
             pw.WriteUInt((uint)GuildID);
             return pw;
         }
         public PacketWriter GenerateGuildInvite(MapleCharacter fromcharacter)
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.GUILD_OPERATION);
+            
+            var pw = new PacketWriter(SMSGHeader.GUILD_OPERATION);
             pw.WriteByte(0x05);
             pw.WriteUInt((uint)GuildID);
             pw.WriteMapleString(fromcharacter.Name);
@@ -250,8 +239,8 @@ namespace RazzleServer.Player
         }
         public static void UpdateCharacterGuild(MapleCharacter fromcharacter, string name)
         {
-            PacketWriter pw = new PacketWriter();
-            //pw.WriteHeader(SendHeader.UpdateGuildName);
+            
+            var pw = new PacketWriter(SMSGHeader.GUILD_OPERATION); // UPDATE_GUILD_NAME
             pw.WriteInt(fromcharacter.ID);
             pw.WriteMapleString(name);
             fromcharacter.Map.BroadcastPacket(pw, fromcharacter);
@@ -259,8 +248,8 @@ namespace RazzleServer.Player
         }
         public void BroadcastCharacterJoinedMessage(MapleCharacter fromcharacter)
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.GUILD_OPERATION);
+            
+            var pw = new PacketWriter(SMSGHeader.GUILD_OPERATION);
             pw.WriteByte(0x2D);
             pw.WriteUInt((uint)GuildID);
             pw.WriteInt(fromcharacter.ID);
@@ -284,8 +273,8 @@ namespace RazzleServer.Player
         }
         public PacketWriter GenerateGuildDataPacket()
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.GUILD_OPERATION);
+            
+            var pw = new PacketWriter(SMSGHeader.GUILD_OPERATION);
             pw.WriteByte(0x20);
             pw.WriteByte(1);//?
             pw.WriteUInt((uint)GuildID);

@@ -8,6 +8,7 @@ using RazzleServer.Map.Monster;
 using RazzleServer.Packet;
 using RazzleServer.Party;
 using RazzleServer.Player;
+using RazzleServer.Scripts;
 using RazzleServer.Server;
 using RazzleServer.Util;
 using System;
@@ -101,7 +102,7 @@ namespace RazzleServer.Map
             else
             {
                 foreach (WzMap.Portal portal in wzMap.Portals.Values.Where(x => x.Type == WzMap.PortalType.Startpoint).ToList())
-                    this.Portals.Add(portal.Name, portal);
+                    Portals.Add(portal.Name, portal);
             }
         }
 
@@ -261,7 +262,7 @@ namespace RazzleServer.Map
                 foreach (var characterKVP in Characters.Where(x => x.Key != chr.ID))
                 {
                     chr.Client.SendPacket(MapleCharacter.SpawnPlayer(characterKVP.Value));
-                    chr.Client.SendPacket(PlayerMovementHandler.CharacterMovePacket(chr.ID, new List<Movement.MapleMovementFragment>(), chr.Position));
+                    chr.Client.SendPacket(PlayerMovementHandler.CharacterMovePacket(chr.ID, new List<Movement.MapleMovementFragment>()));
                 }
             }
         }
@@ -270,7 +271,7 @@ namespace RazzleServer.Map
         {
             lock (Characters)
             {
-                foreach (var characterKvp in Characters.Where(x => x.Key != chr.ID && !x.Value.IsStaff))
+                foreach (var characterKvp in Characters.Where(x => x.Key != chr.ID && !x.Value.IsAdmin))
                 {
                     characterKvp.Value.Client.SendPacket(MapleCharacter.RemovePlayerFromMap(chr.ID));
                 }
@@ -283,10 +284,10 @@ namespace RazzleServer.Map
         {
             lock (Characters)
             {
-                foreach (var characterKVP in Characters.Where(x => x.Key != chr.ID && !x.Value.IsStaff))
+                foreach (var characterKVP in Characters.Where(x => x.Key != chr.ID && !x.Value.IsAdmin))
                 {
                     characterKVP.Value.Client.SendPacket(MapleCharacter.SpawnPlayer(chr));
-                    chr.Client.SendPacket(PlayerMovementHandler.CharacterMovePacket(chr.ID, new List<Movement.MapleMovementFragment>(), chr.Position));
+                    chr.Client.SendPacket(PlayerMovementHandler.CharacterMovePacket(chr.ID, new List<Movement.MapleMovementFragment>()));
                 }
             }
             UpdateMonsterControl();
@@ -369,6 +370,13 @@ namespace RazzleServer.Map
                 {
                     c.Account.Character.ChangeMap(toMap, portal.ToName);
                 }
+            } else
+            {
+                c.Account.Character.ChangeMap(ServerManager.GetChannelServer(c.Channel).GetMap(1000000));
+
+
+                c.Account.Character.EnableActions();
+                Log.Error($"Cannot load portal [{portalName}] for map {MapID}]");
             }
         }
         /// <summary>
@@ -382,8 +390,7 @@ namespace RazzleServer.Map
             WzMap.Portal portal = GetPortal(portalName);
             if (portal != null && !string.IsNullOrEmpty(portal.Script))
             {
-                // TODO - PORTAL ENGINE
-                //PortalEngine.EnterScriptedPortal(portal, c.Account.Character);
+                PortalEngine.EnterScriptedPortal(portal, c.Account.Character);
             }
             else
             {
@@ -409,13 +416,13 @@ namespace RazzleServer.Map
                     {
                         foreach (var kvp in Characters)
                         {
-                            if (kvp.Value != null && kvp.Value.Client != null && (source == null || (!source.Hidden || kvp.Value.IsStaff))) //send if unknown source, source isn't hidden or receiving character is a GM
+                            if (kvp.Value != null && kvp.Value.Client != null && (source == null || (!source.Hidden || kvp.Value.IsAdmin))) //send if unknown source, source isn't hidden or receiving character is a GM
                                 kvp.Value.Client.SendPacket(packet);
                         }
                     }
                     else
                     {
-                        foreach (var kvp in Characters.Where(x => x.Value != source && (!!source.Hidden || x.Value.IsStaff)))
+                        foreach (var kvp in Characters.Where(x => x.Value != source && (!!source.Hidden || x.Value.IsAdmin)))
                         {
                             if (kvp.Value != null && kvp.Value.Client != null)
                                 kvp.Value.Client.SendPacket(packet);
@@ -1196,8 +1203,8 @@ namespace RazzleServer.Map
         public static PacketWriter SpawnReactor(int objectId, WzMap.Reactor Reactor)
         {
             //[F4 65 03 00] [41 0D 03 00] [00] [[CE 00] [FD 01]] [00 00 00]
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.REACTOR_SPAWN);
+            
+            var pw = new PacketWriter(SMSGHeader.REACTOR_SPAWN);
             pw.WriteInt(objectId);
             pw.WriteInt(Reactor.Id);
             pw.WriteByte(Reactor.State);
@@ -1209,8 +1216,8 @@ namespace RazzleServer.Map
         public static PacketWriter DestroyReactor(int objectId, WzMap.Reactor Reactor)
         {
             //F4 65 03 00 04 CE 00 FD 01
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.REACTOR_SPAWN);
+            
+            var pw = new PacketWriter(SMSGHeader.REACTOR_SPAWN);
             pw.WriteInt(objectId);
             pw.WriteByte(4); //Unk
             pw.WritePoint(Reactor.Position);
@@ -1229,8 +1236,8 @@ namespace RazzleServer.Map
 
         public static PacketWriter ShowNpc(int objectId, WzMap.Npc Npc)
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.SPAWN_NPC);
+            
+            var pw = new PacketWriter(SMSGHeader.SPAWN_NPC);
             pw.WriteInt(objectId);
             pw.WriteInt(Npc.Id);
             pw.WriteShort(Npc.x);

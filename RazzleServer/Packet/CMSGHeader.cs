@@ -108,7 +108,6 @@ namespace RazzleServer.Packet
         BUDDYLIST_MODIFY = 0x82,
         NOTE_ACTION = 0x81,
         USE_DOOR = 0x5BFF,
-        CHANGE_KEYMAP = 0x87,
         RING_ACTION = 0x87FF,
 
         ADD_FAMILY = 0x91,
@@ -128,8 +127,11 @@ namespace RazzleServer.Packet
         PET_AUTO_POT = 0xAB,
         PET_EXCLUDE_ITEMS = 0xAC,
         MOVE_SUMMON = 0xAF,
+
         SUMMON_ATTACK = 0xB0,
         DAMAGE_SUMMON = 0xB1,
+        CHANGE_KEYMAP = 0xB7,
+
         BEHOLDER = 0xACFF,
 
         MOVE_LIFE = 0xBC,

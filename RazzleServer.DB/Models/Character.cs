@@ -15,7 +15,7 @@ namespace RazzleServer.DB.Models
         public short AP { get; set; }
         public int GuildID { get; set; }
         public int Exp { get; set; }
-        public long Mesos { get; set; }
+        public int Mesos { get; set; }
         public int MapID { get; set; }
         public byte SpawnPoint { get; set; }
         public short HP { get; set; }

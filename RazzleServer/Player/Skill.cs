@@ -1,4 +1,6 @@
-﻿using RazzleServer.Packet;
+﻿using RazzleServer.Data;
+using RazzleServer.Data.WZ;
+using RazzleServer.Packet;
 using RazzleServer.Util;
 using System.Collections.Generic;
 
@@ -26,11 +28,11 @@ namespace RazzleServer.Player
         {
             get
             {
-                //WzCharacterSkill skillInfo = DataBuffer.GetCharacterSkillById(SkillID);
-                //if (skillInfo == null)
+                WzCharacterSkill skillInfo = DataBuffer.GetCharacterSkillById(SkillID);
+                if (skillInfo == null)
                     return false;
-                //else
-                //    return skillInfo.HasMastery;
+                else
+                    return skillInfo.HasMastery;
             }
         }
         #endregion
@@ -38,14 +40,12 @@ namespace RazzleServer.Player
         #region Packets
         public static PacketWriter UpdateSkills(List<Skill> skills)
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.UPDATE_SKILLS);
-
+            var pw = new PacketWriter(SMSGHeader.UPDATE_SKILLS);
             pw.WriteBool(true); //enable actions
             pw.WriteByte(0);
             pw.WriteByte(0);
 
-            short count = (short)skills.Count;
+            var count = (short)skills.Count;
             pw.WriteShort(count);
             for (int i = 0; i < count; i++)
             {
@@ -65,19 +65,15 @@ namespace RazzleServer.Player
 
         public static PacketWriter ShowCooldown(int skillId, uint time)
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.GIVE_COOLDOWN);
-
+            var pw = new PacketWriter(SMSGHeader.GIVE_COOLDOWN);
             pw.WriteInt(skillId);
-            pw.WriteUInt(time); //time in seconds, 0 = cooldown is removed
+            pw.WriteUInt(time);
             return pw;
         }
 
         public static PacketWriter ShowOwnSkillEffect(int skillId, byte skillLevel)
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.SHOW_SKILL_EFFECT);
-
+            var pw = new PacketWriter(SMSGHeader.SHOW_SKILL_EFFECT);
             pw.WriteByte(2);
             pw.WriteInt(skillId);
             pw.WriteByte(skillLevel);
@@ -86,14 +82,14 @@ namespace RazzleServer.Player
 
         public static PacketWriter ShowBuffEffect(int skillId, byte characterLevel, byte? skillLevel, bool show) //remove if show = false
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.SHOW_SKILL_EFFECT);
-
+            var pw = new PacketWriter(SMSGHeader.SHOW_SKILL_EFFECT);
             pw.WriteByte(1);
             pw.WriteInt(skillId);
             pw.WriteByte(characterLevel);
-            if (skillLevel.HasValue) //some use this and some don't, idk why :S
+            if (skillLevel.HasValue)
+            {
                 pw.WriteByte(skillLevel.Value);
+            }
             pw.WriteBool(show);
             return pw;
         }

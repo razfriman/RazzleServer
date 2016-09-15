@@ -1,4 +1,6 @@
-﻿using RazzleServer.Player;
+﻿using RazzleServer.Map;
+using RazzleServer.Player;
+using RazzleServer.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +10,9 @@ namespace RazzleServer.Server
 {
     public static class ServerManager
     {
+        private static Dictionary<int, MapleEvent> Events = new Dictionary<int, MapleEvent>();
+        private static AutoIncrement EventId = new AutoIncrement();
+
         public static LoginServer LoginServer { get; set; }
         public static Dictionary<int, ChannelServer> ChannelServers { get; set; } = new Dictionary<int, ChannelServer>();
 
@@ -36,7 +41,6 @@ namespace RazzleServer.Server
             }
             return false;
         }
-
 
         public static MapleClient GetClientByCharacterId(int chrId)
         {
@@ -134,6 +138,25 @@ namespace RazzleServer.Server
                 }
             }
             return onlineBuddies;
+        }
+
+        public static int RegisterEvent(MapleEvent Event)
+        {
+            int eventId = EventId.Get;
+            Events.Add(eventId, Event);
+            return eventId;
+        }
+
+        public static MapleEvent GetEventById(int id)
+        {
+            MapleEvent ret = null;
+            Events.TryGetValue(id, out ret);
+            return ret;
+        }
+
+        public static void UnregisterEvent(int eventId)
+        {
+            Events.Remove(eventId);
         }
     }
 }

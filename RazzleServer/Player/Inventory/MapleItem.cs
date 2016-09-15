@@ -91,8 +91,8 @@ namespace RazzleServer.Inventory
         #region Packets
         public static PacketWriter ShowItemGain(MapleItem item)
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.SHOW_STATUS_INFO);
+            
+            var pw = new PacketWriter(SMSGHeader.SHOW_STATUS_INFO);
             pw.WriteShort(0);
             pw.WriteInt(item.ItemId);
             pw.WriteInt(item.Quantity);
@@ -125,51 +125,31 @@ namespace RazzleServer.Inventory
         {
             pw.WriteByte(item.Type); //TODO: pets = 3
             pw.WriteInt(item.ItemId);
-            pw.WriteByte(0); //TODO:UniqueID,
-            //pw.WriteLong(uniqueId) if uniqueId = 1;   
+
+            bool isCashShop = false;
+
+            pw.WriteBool(isCashShop);
+            if(isCashShop)
+            {
+                //var uniqueID = isPet ? item.getPetId() : isRing ? equip.getRingId() : item.getCashId());
+                //pw.WriteLong(uniqueID); 
+            }
+
             pw.WriteLong(MapleFormatHelper.GetMapleTimeStamp(-1)); //TODO: item expiration
-            pw.WriteInt(-1); //TODO: extended slots
+
             if (item.Type == 1) //Equip
             {
                 MapleEquip equip = (MapleEquip)item;
                 MapleEquip.AddStats(equip, pw);
 
-                pw.WriteInt(4); //no clue
-                pw.WriteByte(0xFF); //no clue
-
-                pw.WriteMapleString(equip.Creator);
-                pw.WriteByte((byte)equip.PotentialState);
-                pw.WriteByte(equip.Enhancements);
-                if (equip.PotentialState >= MaplePotentialState.Rare)
-                {
-                    pw.WriteUShort(equip.Potential1);
-                    pw.WriteUShort(equip.Potential2);
-                    pw.WriteUShort(equip.Potential3);
-                }
-                else
-                {
-                    pw.WriteZeroBytes(6); //Don't show the client the potentials if they're hidden
-                }
-                pw.WriteUShort(equip.BonusPotential1);
-                pw.WriteUShort(equip.BonusPotential2);
-                pw.WriteShort(0); //bonus pot 3
+                pw.WriteByte(0);
+                pw.WriteByte(equip.CustomLevel);
                 pw.WriteShort(0);
-                pw.WriteShort(0); //socket state
-                pw.WriteShort(equip.Socket1);
-                pw.WriteShort(equip.Socket2);
-                pw.WriteShort(equip.Socket3);
-
-                //if (!HasUniqueId)
-                pw.WriteLong(equip.DbId);
-
+                pw.WriteShort(equip.CustomExp);
+                pw.WriteInt(0); // Vicious
+                pw.WriteLong(0); // DbID
                 pw.WriteLong(MapleFormatHelper.GetMapleTimeStamp(-2)); //don't know
-
                 pw.WriteInt(-1);
-                pw.WriteLong(0); //new v142
-                pw.WriteLong(MapleFormatHelper.GetMapleTimeStamp(-2)); //new v142
-                for (int i = 0; i < 5; i++)
-                    pw.WriteInt(0);
-                pw.WriteShort(0x1);
             }
             else
             {

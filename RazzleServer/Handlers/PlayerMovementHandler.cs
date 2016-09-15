@@ -16,39 +16,24 @@ namespace RazzleServer.Handlers
             pr.Skip(1); //dont know, == 1 in spawn map and becomes 3 after changing map
             pr.Skip(4); //CRC ?
             int tickCount = pr.ReadInt();
-            pr.Skip(1);
-            pr.Skip(4); //new v137
-            Point originalPosition = pr.ReadPoint();
-            pr.Skip(4); //wobble?
 
             List<MapleMovementFragment> movementList = ParseMovement.Parse(pr);
             updatePosition(movementList, c.Account.Character, 0);
             MapleMap Map = c.Account.Character.Map;
             if (movementList != null && pr.Available > 10 && Map.CharacterCount > 1)
             {
-                PacketWriter packet = CharacterMovePacket(c.Account.Character.ID, movementList, originalPosition);
+                PacketWriter packet = CharacterMovePacket(c.Account.Character.ID, movementList);
                 Map.BroadcastPacket(packet, c.Account.Character);
             }
         }
 
-        public static PacketWriter CharacterMovePacket(int characterId, List<MapleMovementFragment> movementList, Point startPosition)
+        public static PacketWriter CharacterMovePacket(int characterId, List<MapleMovementFragment> movementList)
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.MOVE_PLAYER);
-
+            var pw = new PacketWriter(SMSGHeader.MOVE_PLAYER);
             pw.WriteInt(characterId);
             pw.WriteInt(0);
-            pw.WritePoint(startPosition);
-            pw.WriteInt(0);
-
-            byte size = (byte)movementList.Count;
-            pw.WriteByte(size);
-            for (byte i = 0; i < size; i++)
-            {
-                MapleMovementFragment mmf = movementList[i];
-                mmf.Serialize(pw);
-            }
-
+            pw.WriteByte((byte)movementList.Count);
+            movementList.ForEach(x => x.Serialize(pw));
             return pw;
         }
 

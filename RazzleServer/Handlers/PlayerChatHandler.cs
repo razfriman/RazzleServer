@@ -52,8 +52,8 @@ namespace RazzleServer.Handlers
 
         public static PacketWriter PlayerChatPacket(int characterId, string message, byte show, bool whiteBackground)
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.PLAYER_CHAT);
+            
+            var pw = new PacketWriter(SMSGHeader.PLAYER_CHAT);
             pw.WriteInt(characterId);
             pw.WriteBool(whiteBackground);
             pw.WriteMapleString(message);

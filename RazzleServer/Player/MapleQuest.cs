@@ -45,9 +45,7 @@ namespace RazzleServer.Player
         #region packets
         public PacketWriter Update()
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.SHOW_STATUS_INFO);
-
+            var pw = new PacketWriter(SMSGHeader.SHOW_STATUS_INFO);
             pw.WriteByte(1);
             pw.WriteUShort(25672);
             pw.WriteByte((byte)State);
@@ -68,8 +66,8 @@ namespace RazzleServer.Player
 
         public PacketWriter UpdateFinish(int questId, int npcId, int nextQuest = 0)
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.UPDATE_QUEST_INFO);
+            
+            var pw = new PacketWriter(SMSGHeader.UPDATE_QUEST_INFO);
 
             pw.WriteByte(0xA);
             pw.WriteUShort((ushort)questId);
@@ -81,8 +79,8 @@ namespace RazzleServer.Player
 
         public PacketWriter UpdateMobKillProgress()
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.SHOW_STATUS_INFO);
+            
+            var pw = new PacketWriter(SMSGHeader.SHOW_STATUS_INFO);
 
             pw.WriteByte(1);
             pw.WriteUShort(QuestInfo.Id);
@@ -93,8 +91,8 @@ namespace RazzleServer.Player
 
         public static PacketWriter ShowQuestCompleteNotice(ushort questId)
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.SHOW_QUEST_COMPLETION);
+            
+            var pw = new PacketWriter(SMSGHeader.SHOW_QUEST_COMPLETION);
             pw.WriteUShort(questId);
             return pw;
         }
@@ -151,12 +149,12 @@ namespace RazzleServer.Player
 
         public void Forfeit()
         {
-            this.Data = "";
+            Data = "";
             foreach (var kvp in this.MonsterKills)
             {
                 MonsterKills[kvp.Key] = 0;
             }
-            this.State = MapleQuestStatus.NotStarted;
+            State = MapleQuestStatus.NotStarted;
         }
 
         public bool HasMonsterKillObjectives { get { return this.MonsterKills.Any(); } }

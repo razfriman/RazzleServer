@@ -37,8 +37,8 @@ namespace RazzleServer.Map.Monster
 
         public virtual PacketWriter GetApplicationPacket()
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.GIVE_FOREIGN_BUFF);
+            
+            var pw = new PacketWriter(SMSGHeader.GIVE_FOREIGN_BUFF);
             pw.WriteInt(Victim.ObjectID);
             WriteSingleBuffMask(pw, BuffStat);
             pw.WriteInt(BuffValue);
@@ -57,8 +57,8 @@ namespace RazzleServer.Map.Monster
 
         public virtual PacketWriter GetRemovePacket()
         {
-            PacketWriter pw = new PacketWriter();
-            pw.WriteHeader(SMSGHeader.CANCEL_FOREIGN_BUFF);
+            
+            var pw = new PacketWriter(SMSGHeader.CANCEL_FOREIGN_BUFF);
             pw.WriteInt(Victim.ObjectID);
             WriteSingleBuffMask(pw, BuffStat);
             pw.WriteInt(0);

@@ -37,6 +37,21 @@ namespace RazzleServer.Server
             {
                 return ret;
             }
+
+            // TODO - LOAD FROM WZ
+            var map = new MapleMap(mapID, new Data.WZ.WzMap
+            {
+                Portals = new Dictionary<string, Data.WZ.WzMap.Portal>(),
+                MobSpawnPoints = new List<Data.WZ.WzMap.MobSpawn>(),
+                Npcs = new List<Data.WZ.WzMap.Npc>(),
+                MapId = mapID,
+                ReturnMap = 100000000,
+            });
+            _maps.Add(mapID, map);
+            return map;
+            // END TODO
+
+
             return null;
         }
 
