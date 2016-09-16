@@ -103,12 +103,17 @@ namespace RazzleServer.Player
 
         internal void Disconnected()
         {
+            var save = Account?.Character; ;
             try
             {
+                Account?.Release();
+                Connected = false;
                 Server.RemoveClient(this);
-                Socket.Dispose();
-            } catch { 
-
+                save?.LoggedOut();
+                NpcEngine?.Dispose();
+                Socket?.Dispose();
+            } catch (Exception e) {
+                Log.Error(e, $"Error while disconnecting. Account [{Account?.Name}] Character [{save?.Name}]");
             }
         }
 

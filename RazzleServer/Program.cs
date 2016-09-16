@@ -20,10 +20,19 @@ namespace RazzleServer
             sw.Stop();
         }
 
+        public static void LoadMobs()
+        {
+            Stopwatch sw = Stopwatch.StartNew();
+            int count = DataProvider.LoadMobs(@"C:\Nexon\MapleStoryV83\Mob.wz");
+            Log.Info($"{count} Mobs loaded in {sw.ElapsedMilliseconds} ms");
+            sw.Stop();
+        }
+
         public static void Main(string[] args)
         {
             ServerConfig.LoadFromFile("ServerConfig.json");
 
+            LoadMobs();
             LoadMaps();
 
             MapleClient.RegisterPacketHandlers();

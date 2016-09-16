@@ -78,25 +78,25 @@ namespace MapleLib.WzLib.WzProperties
 			this.mName = pName;
 			this.mVal = pValue;
 		}
-		#endregion
+        #endregion
 
         #region Cast Values
-        internal override float ToFloat(float pDef)
+        public override float ToFloat(float pDef)
         {
             return float.Parse(mVal);
         }
 
-        internal override double ToDouble(double pDef)
+        public override double ToDouble(double pDef)
         {
             return double.Parse(mVal);
         }
 
-        internal override int ToInt(int pDef)
+        public override int ToInt(int pDef)
         {
             return int.Parse(mVal);
         }
 
-        internal override ushort ToUnsignedShort(ushort pDef)
+        public override ushort ToUnsignedShort(ushort pDef)
         {
             return ushort.Parse(mVal);
         }

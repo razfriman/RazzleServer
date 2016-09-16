@@ -34,7 +34,7 @@ namespace MapleLib.WzLib
         {
             get
             {
-                string result = this.Name;
+                string result = Name;
                 AWzObject currObj = this;
                 while (currObj.Parent != null)
                 {
@@ -88,32 +88,32 @@ namespace MapleLib.WzLib
             return obj.ToPoint(0, 0);
         }
 
-        internal virtual float ToFloat(float def = 0)
+        public virtual float ToFloat(float def = 0)
         {
             return def;
         }
 
-        internal virtual WzPngProperty ToPngProperty(WzPngProperty def = null)
+        public virtual WzPngProperty ToPngProperty(WzPngProperty def = null)
         {
             return def;
         }
 
-        internal virtual int ToInt(int def = 0)
+        public virtual int ToInt(int def = 0)
         {
             return def;
         }
 
-        internal virtual double ToDouble(double def = 0)
+        public virtual double ToDouble(double def = 0)
         {
             return def;
         }
 
-        internal virtual Bitmap ToBitmap(Bitmap def = null)
+        public virtual Bitmap ToBitmap(Bitmap def = null)
         {
             return def;
         }
 
-        internal virtual byte[] ToBytes(byte[] def = null)
+        public virtual byte[] ToBytes(byte[] def = null)
         {
             return def;
         }
@@ -123,12 +123,12 @@ namespace MapleLib.WzLib
             return WzValue.ToString();
         }
 
-        internal virtual ushort ToUnsignedShort(ushort def = 0)
+        public virtual ushort ToUnsignedShort(ushort def = 0)
         {
             return def;
         }
 
-        internal virtual Point ToPoint(int pXDef = 0, int pYDef = 0)
+        public virtual Point ToPoint(int pXDef = 0, int pYDef = 0)
         {
             return new Point(pXDef, pYDef);
         }

@@ -306,17 +306,17 @@ namespace MapleLib.WzLib.WzProperties
         #endregion
 
         #region Cast Values
-        internal override WzPngProperty ToPngProperty(WzPngProperty pDef)
+        public override WzPngProperty ToPngProperty(WzPngProperty pDef)
         {
             return this;
         }
 
-        internal override Bitmap ToBitmap(Bitmap pDef)
+        public override Bitmap ToBitmap(Bitmap pDef)
         {
             return GetPNG(false);
         }
 
-        internal override byte[] ToBytes(byte[] pDef)
+        public override byte[] ToBytes(byte[] pDef)
         {
             return base.ToBytes(pDef);
         }

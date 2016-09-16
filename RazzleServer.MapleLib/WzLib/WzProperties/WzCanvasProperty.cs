@@ -118,10 +118,10 @@ namespace MapleLib.WzLib.WzProperties
 		{
 			this.mName = pName;
 		}
-		#endregion
+        #endregion
 
         #region Cast Values
-        internal override WzPngProperty ToPngProperty(WzPngProperty pDef)
+        public override WzPngProperty ToPngProperty(WzPngProperty pDef)
         {
             return mImageProp;
         }

@@ -205,12 +205,14 @@ namespace RazzleServer.Map
             ShowReactors(chr);
             ShowStaticObjects(chr);
             ShowSummons(chr); // Always do this before adding the chr's summons or they will be shown twice
+
             foreach (MapleSummon summon in chr.GetSummons())
             {
                 summon.ObjectID = ObjectIDCounter.Get;
                 summon.Position = chr.Position;
                 AddSummon(summon, false);
             }
+
             if (chr.Party != null)
             {
                 var partyMembersOnMap = chr.Party.GetCharactersOnMap(this, chr.ID);

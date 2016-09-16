@@ -154,7 +154,7 @@ namespace MapleLib.WzLib.WzProperties
         #endregion
 
         #region Cast Values
-        internal override byte[] ToBytes(byte[] pDef)
+        public override byte[] ToBytes(byte[] pDef)
         {
             return GetBytes();
         }

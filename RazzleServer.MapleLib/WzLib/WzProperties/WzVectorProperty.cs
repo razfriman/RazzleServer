@@ -110,10 +110,10 @@ namespace MapleLib.WzLib.WzProperties
 			this.x = x;
 			this.y = y;
 		}
-		#endregion
+        #endregion
 
         #region Cast Values
-        internal override System.Drawing.Point ToPoint(int pXDef = 0, int pYDef = 0)
+        public override System.Drawing.Point ToPoint(int pXDef = 0, int pYDef = 0)
         {
             return new System.Drawing.Point(x.mVal, y.mVal);
         }

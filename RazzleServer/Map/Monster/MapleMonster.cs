@@ -309,47 +309,32 @@ namespace RazzleServer.Map.Monster
         {
             
             var pw = new PacketWriter(SMSGHeader.SPAWN_MONSTER);
-            pw.WriteByte(0);//RED, no idea
             pw.WriteInt(objectId);
-            pw.WriteBool(true); //No idea
+            pw.WriteBool(true); //No idea 5 or 1
             pw.WriteInt(mob.WzInfo.MobId);
-            pw.WriteBool(true); //No idea
 
-            pw.WriteInt(mob.WzInfo.HP);
-            pw.WriteInt(mob.WzInfo.MP);
-            pw.WriteInt(mob.WzInfo.Exp);
-            pw.WriteInt(mob.WzInfo.PAD);
-            pw.WriteInt(mob.WzInfo.MAD);
-            pw.WriteInt(mob.WzInfo.PDRate);
-            pw.WriteInt(mob.WzInfo.MDRate);
-            pw.WriteInt(mob.WzInfo.Acc);
-            pw.WriteInt(mob.WzInfo.Eva);
-            pw.WriteInt(mob.WzInfo.Kb);
-            pw.WriteInt(0); //?
-            pw.WriteInt(mob.WzInfo.Level);
-            pw.WriteInt(0); //?
+            pw.WriteZeroBytes(15);
+            pw.WriteByte(0x88);
+            pw.WriteZeroBytes(6);
+            //pw.WriteShort((short) mob.WzInfo.HP);
+            //pw.WriteShort((short) mob.WzInfo.MP);
+            //pw.WriteShort((short) mob.WzInfo.Exp);
+            //pw.WriteShort((short) mob.WzInfo.PAD);
+            //pw.WriteShort((short) mob.WzInfo.MAD);
+            //pw.WriteShort((short) mob.WzInfo.PDRate);
+            //pw.WriteShort((short) mob.WzInfo.MDRate);
+            //pw.WriteShort((short)mob.WzInfo.Acc);
+            //pw.WriteShort((short) mob.WzInfo.Eva);
+            //pw.WriteShort((short) mob.WzInfo.Kb);
+            //pw.WriteShort((short) mob.WzInfo.Level);
 
-            pw.WriteHexString("BF 02 00 60 00 00 00 FC 00 00 00 00 00 00 00 00");
-
-            AddMobStatus(pw, mob);
-
-            //[7C 01] [61 FE] [02] [84 00] [87 00] 
-            pw.WriteShort((short)mob.Position.X);
-            pw.WriteShort((short)(mob.Position.Y - 1));
-            //pw.WritePoint(Mob.Position);
+            pw.WritePoint(mob.Position);
             pw.WriteByte(mob.Stance);
-
-            pw.WriteShort(0); //current fh aka leave 0 else it looks they go back to respawn
+            pw.WriteShort(0); //start  fh aka leave 0 else it looks they go back to respawn
             pw.WriteShort(mob.Fh); //initial fh
 
             pw.WriteByte(newSpawn ? (byte)0xFE : (byte)0xFF); //-1 = instant, -2 = fade in
             pw.WriteByte(0xFF); //carnival team
-            pw.WriteByte(0x7D);
-            pw.WriteZeroBytes(24);
-            pw.WriteInt(-1);
-            pw.WriteByte(0);
-            pw.WriteZeroBytes(8);
-            pw.WriteInt(-1);
             pw.WriteInt(0);
             return pw;
         }
@@ -370,39 +355,29 @@ namespace RazzleServer.Map.Monster
             pw.WriteInt(objectId);
             pw.WriteBool(true); //No idea
             pw.WriteInt(mob.WzInfo.MobId);
-            pw.WriteBool(true); //No idea
-
-            pw.WriteInt(mob.WzInfo.HP);
-            pw.WriteInt(mob.WzInfo.MP);
-            pw.WriteInt(mob.WzInfo.Exp);
-            pw.WriteInt(mob.WzInfo.PAD);
-            pw.WriteInt(mob.WzInfo.MAD);
-            pw.WriteInt(mob.WzInfo.PDRate);
-            pw.WriteInt(mob.WzInfo.MDRate);
-            pw.WriteInt(mob.WzInfo.Acc);
-            pw.WriteInt(mob.WzInfo.Eva);
-            pw.WriteInt(mob.WzInfo.Kb);
-            pw.WriteInt(0); //?
-            pw.WriteInt(mob.WzInfo.Level);
-            pw.WriteInt(0); //?
-                            //pw.WriteZeroBytes(3);
-            pw.WriteHexString("BF 02 00 60 00 00 00 FC 00 00 00 00 00 00 00 00");
-
-            AddMobStatus(pw, mob);
+            pw.WriteZeroBytes(15);
+            pw.WriteByte(0x88);
+            pw.WriteZeroBytes(6);
+            //pw.WriteShort((short) mob.WzInfo.HP);
+            //pw.WriteShort((short) mob.WzInfo.MP);
+            //pw.WriteShort((short) mob.WzInfo.Exp);
+            //pw.WriteShort((short) mob.WzInfo.PAD);
+            //pw.WriteShort((short) mob.WzInfo.MAD);
+            //pw.WriteShort((short) mob.WzInfo.PDRate);
+            //pw.WriteShort((short) mob.WzInfo.MDRate);
+            //pw.WriteShort((short)mob.WzInfo.Acc);
+            //pw.WriteShort((short) mob.WzInfo.Eva);
+            //pw.WriteShort((short) mob.WzInfo.Kb);
+            //pw.WriteShort((short) mob.WzInfo.Level);
 
             pw.WritePoint(mob.Position);
-            //DF 01 C7 01 [02] [A1 00] [9C 00] [FF] [FF] [7D] [00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00] [FF FF FF FF] [00 00 00 00 00 00 00 00 00 00 00 00 00] [FF]
             pw.WriteByte(mob.Stance);
-            pw.WriteShort(0);
-            pw.WriteShort(mob.Fh);
-            pw.WriteByte(newSpawn ? (byte)0xFE : (byte)0xFF);
+            pw.WriteShort(0); //start  fh aka leave 0 else it looks they go back to respawn
+            pw.WriteShort(mob.Fh); //initial fh
+
+            pw.WriteByte(newSpawn ? (byte)0xFE : (byte)0xFF); //-1 = instant, -2 = fade in
             pw.WriteByte(0xFF); //carnival team
-            pw.WriteByte(0x7D);
-            pw.WriteZeroBytes(24);
-            pw.WriteInt(-1);
-            pw.WriteByte(3);
-            pw.WriteZeroBytes(12);
-            pw.WriteByte(0xFF);
+            pw.WriteInt(0);
             return pw;
         }
 
@@ -412,11 +387,6 @@ namespace RazzleServer.Map.Monster
             pw.WriteByte(0);
             pw.WriteInt(objectid);
             return pw;
-        }
-
-        private static void AddMobStatus(PacketWriter pw, MapleMonster mob) //updated 158
-        {
-            pw.WriteHexString("58 03 00 00 00 00 00 00 00 00 58 03 00 00 00 00 00 00 00 00 58 03 00 00 00 00 00 00 00 00 58 03 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00");
         }
 
         public static PacketWriter UpdateHp(int objectId, byte hpPercentage)

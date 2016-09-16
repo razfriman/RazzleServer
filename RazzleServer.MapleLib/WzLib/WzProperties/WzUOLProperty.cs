@@ -124,41 +124,41 @@ namespace MapleLib.WzLib.WzProperties
 			this.mName = pName;
 			this.mVal = pValue;
 		}
-		#endregion
+        #endregion
 
         #region Cast Values
-        internal override Bitmap ToBitmap(Bitmap pDef)
+        public override Bitmap ToBitmap(Bitmap pDef)
         {
             return LinkValue.ToBitmap(pDef);
         }
 
 
-        internal override byte[] ToBytes(byte[] pDef)
+        public override byte[] ToBytes(byte[] pDef)
         {
             return LinkValue.ToBytes(pDef);
         }
 
-        internal override double ToDouble(double pDef)
+        public override double ToDouble(double pDef)
         {
             return LinkValue.ToDouble(pDef);
         }
 
-        internal override float ToFloat(float pDef)
+        public override float ToFloat(float pDef)
         {
             return LinkValue.ToFloat(pDef);
         }
 
-        internal override int ToInt(int pDef)
+        public override int ToInt(int pDef)
         {
             return LinkValue.ToInt(pDef);
         }
 
-        internal override WzPngProperty ToPngProperty(WzPngProperty pDef)
+        public override WzPngProperty ToPngProperty(WzPngProperty pDef)
         {
             return LinkValue.ToPngProperty(pDef);
         }
 
-        internal override System.Drawing.Point ToPoint(int pXDef = 0, int pYDef = 0)
+        public override System.Drawing.Point ToPoint(int pXDef = 0, int pYDef = 0)
         {
             return LinkValue.ToPoint(pXDef, pYDef);
         }
@@ -168,7 +168,7 @@ namespace MapleLib.WzLib.WzProperties
             return LinkValue.ToString();
         }
 
-        internal override ushort ToUnsignedShort(ushort pDef)
+        public override ushort ToUnsignedShort(ushort pDef)
         {
             return LinkValue.ToUnsignedShort(pDef);
         }
