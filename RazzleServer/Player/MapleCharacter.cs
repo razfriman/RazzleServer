@@ -13,6 +13,7 @@ using RazzleServer.Server;
 using RazzleServer.Util;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading;
 
@@ -2395,25 +2396,14 @@ namespace RazzleServer.Player
         public static void EnterMap(MapleClient c, int mapId, byte spawnPoint, bool fromSpecialPortal = false)
         {
             PacketWriter pw = new PacketWriter(SMSGHeader.ENTER_MAP);
-            pw.WriteShort(2);
-            pw.WriteLong(1);
-            pw.WriteLong(2);
             pw.WriteInt(c.Channel);
             pw.WriteInt(0);
             pw.WriteByte(0);
-            pw.WriteByte(fromSpecialPortal ? (byte)2 : (byte)3);
-            pw.WriteLong(0);
             pw.WriteInt(mapId);
             pw.WriteByte(spawnPoint);
-            pw.WriteInt(c.Account.Character.HP);
+            pw.WriteShort(c.Account.Character.HP);
             pw.WriteByte(0);
             pw.WriteLong(MapleFormatHelper.GetMapleTimeStamp(DateTime.UtcNow));
-            pw.WriteInt(100);
-            pw.WriteByte(0);
-            pw.WriteByte(0);
-            pw.WriteByte(1);
-            pw.WriteZeroBytes(6);
-
             c.SendPacket(pw);
         }
 

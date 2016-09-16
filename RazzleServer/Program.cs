@@ -4,6 +4,7 @@ using RazzleServer.Data;
 using System.Linq;
 using NLog;
 using System.Threading;
+using System.Diagnostics;
 
 namespace RazzleServer
 {
@@ -11,9 +12,19 @@ namespace RazzleServer
     {
         private static Logger Log = LogManager.GetCurrentClassLogger();
 
+        public static void LoadMaps()
+        {
+            Stopwatch sw = Stopwatch.StartNew();
+            int count = DataProvider.LoadMaps(@"C:\Nexon\MapleStoryV83\Map.wz");
+            Log.Info($"{count} Maps loaded in {sw.ElapsedMilliseconds} ms");
+            sw.Stop();
+        }
+
         public static void Main(string[] args)
         {
             ServerConfig.LoadFromFile("ServerConfig.json");
+
+            LoadMaps();
 
             MapleClient.RegisterPacketHandlers();
 

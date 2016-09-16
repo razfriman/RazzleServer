@@ -9,6 +9,7 @@ using RazzleServer.Server;
 using RazzleServer.Util;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using static RazzleServer.Data.WZ.WzMap;
 
@@ -284,7 +285,7 @@ namespace RazzleServer.Data.WZ
             #region Mist
             if (SkillConstants.IsMistSkill(Parent.SkillId)) 
             {
-                Point sourcePos = source.Position;
+                var sourcePos = source.Position;
                 BoundingBox boundingBox = CalculateBoundingBox(sourcePos, source.IsFacingLeft);
                 source.Map.SpawnMist(Parent.SkillId, Level, source, boundingBox, sourcePos, Info[CharacterSkillStat.time] * 1000, false);
             } 

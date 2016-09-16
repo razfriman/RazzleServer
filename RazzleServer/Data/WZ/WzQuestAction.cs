@@ -102,7 +102,7 @@ namespace RazzleServer.Data.WZ
     public class WzQuestItemAction : WzQuestAction
     {
         private List<WzQuestItemReward> Rewards;
-        private List<int> Jobs;
+        //private List<int> Jobs;
 
         public WzQuestItemAction(List<WzQuestItemReward> data) 
             : base(QuestActionType.item)

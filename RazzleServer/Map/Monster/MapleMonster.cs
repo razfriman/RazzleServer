@@ -10,6 +10,7 @@ using RazzleServer.Util;
 using RazzleServer.Constants;
 using RazzleServer.Server;
 using RazzleServer.Data.WZ;
+using System.Drawing;
 
 namespace RazzleServer.Map.Monster
 {

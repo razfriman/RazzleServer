@@ -13,6 +13,7 @@ using RazzleServer.Server;
 using RazzleServer.Util;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 
 namespace RazzleServer.Map
@@ -943,7 +944,7 @@ namespace RazzleServer.Map
             {
                 foreach (var kvp in MapItems)
                 {
-                    chr.Client.SendPacket(MapleMapItem.Packets.SpawnMapItem(kvp.Value, new Point(), 2));
+                    chr.Client.SendPacket(MapleMapItem.Packets.SpawnMapItem(kvp.Value, kvp.Value.Position, 2));
                 }
             }
         }
@@ -1038,7 +1039,7 @@ namespace RazzleServer.Map
                     }
                     if (mapItem != null)
                     {
-                        this.MapItems.Add(mapItem.ObjectID, mapItem);
+                        MapItems.Add(mapItem.ObjectID, mapItem);
                         BroadcastPacket(MapleMapItem.Packets.SpawnMapItem(mapItem, sourcePosition, 0, mob.ObjectID));
                         BroadcastPacket(MapleMapItem.Packets.SpawnMapItem(mapItem, sourcePosition, 1, mob.ObjectID));
                         count++;

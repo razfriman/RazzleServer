@@ -80,8 +80,7 @@ namespace RazzleServer.Scripts
             }
             catch (Exception ex)
             {
-                //Log.Error(ex, $"NPC script execution error - NpcID [{NpcId}] State [{ScriptInterface.State}] Selection [{ScriptInterface.Selection}]");
-                SendOk("An error occured, please report this on the forums\r\nNpcId: " + NpcId);
+                Log.Error(ex, $"NPC script execution error - NpcID [{NpcId}]");
                 Dispose();
                 return false;
             }

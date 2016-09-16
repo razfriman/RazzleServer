@@ -7,6 +7,8 @@ using RazzleServer.Map;
 using NLog;
 using RazzleServer.Handlers;
 using System.Collections.Generic;
+using RazzleServer.Data.WZ;
+using RazzleServer.Data;
 
 namespace RazzleServer.Server
 {
@@ -18,6 +20,15 @@ namespace RazzleServer.Server
         private static Logger Log = LogManager.GetCurrentClassLogger();
 
         public ChannelServer(ushort port) {
+
+            _maps = new Dictionary<int, MapleMap>();
+            foreach (KeyValuePair<int, WzMap> kvp in DataBuffer.MapBuffer)
+            {
+                MapleMap map = new MapleMap(kvp.Key, kvp.Value);
+                _maps.Add(kvp.Key, map);
+            }
+
+
             byte[] channelIp = new byte[] { 0, 0, 0, 0 };
             Start(new IPAddress(channelIp), port);
         }
@@ -37,20 +48,6 @@ namespace RazzleServer.Server
             {
                 return ret;
             }
-
-            // TODO - LOAD FROM WZ
-            var map = new MapleMap(mapID, new Data.WZ.WzMap
-            {
-                Portals = new Dictionary<string, Data.WZ.WzMap.Portal>(),
-                MobSpawnPoints = new List<Data.WZ.WzMap.MobSpawn>(),
-                Npcs = new List<Data.WZ.WzMap.Npc>(),
-                MapId = mapID,
-                ReturnMap = 100000000,
-            });
-            _maps.Add(mapID, map);
-            return map;
-            // END TODO
-
 
             return null;
         }

@@ -9,6 +9,10 @@
     "RazzleServer.DB": {
       "target": "project"
     },
+    "RazzleServer.MapleLib": {
+      "target": "project"
+    },
+    "System.Drawing-dotnet-core": "1.0.1",
     "Microsoft.EntityFrameworkCore.Sqlite": "1.0.0",
     "Microsoft.EntityFrameworkCore.Design": {
       "version": "1.0.0-preview2-final",

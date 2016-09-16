@@ -1,4 +1,6 @@
-﻿namespace RazzleServer.Data.WZ
+﻿using System.Drawing;
+
+namespace RazzleServer.Data.WZ
 {
     //These skill doesn't have any levels like player skills
 
