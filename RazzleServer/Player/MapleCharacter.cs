@@ -82,6 +82,11 @@ namespace RazzleServer.Player
                 Mesos = 0,
                 BuddyCapacity = 50
             };
+
+            newCharacter.Inventory = new MapleInventory(newCharacter);
+
+            newCharacter.Stats.Recalculate(newCharacter);
+
             return newCharacter;
         }
 
@@ -1995,15 +2000,18 @@ namespace RazzleServer.Player
         }
 
 
-        public static void AddCharEntry(PacketWriter pw, MapleCharacter chr)
+        public static void AddCharEntry(PacketWriter pw, MapleCharacter chr, bool viewAll = false)
         {
             AddCharStats(pw, chr);
             AddCharLook(pw, chr, true);
 
+            if (!viewAll)
+            {
+                pw.WriteByte(0);
+            }
+
             bool rankEnabled = false;
-
-            pw.WriteShort((short)(rankEnabled ? 1 : 0));
-
+            pw.WriteBool(rankEnabled);
             if (rankEnabled)
             {
                 pw.WriteInt(0); // Rank
@@ -2022,7 +2030,7 @@ namespace RazzleServer.Player
             pw.WriteInt(chr.Face);
             pw.WriteInt(chr.Hair);
 
-            for(int i = 0; i < 3; i++)
+            for (int i = 0; i < 3; i++)
             {
                 pw.WriteLong(0); // PetID
             }
@@ -2054,27 +2062,59 @@ namespace RazzleServer.Player
 
         public static void AddCharLook(PacketWriter pw, MapleCharacter chr, bool mega = false)
         {
-
             pw.WriteByte(chr.Gender);
             pw.WriteByte(chr.Skin);
             pw.WriteInt(chr.Face);
             pw.WriteBool(mega);
             pw.WriteInt(chr.Hair);
+            AddEquipInfo(pw, chr);
+        }
 
-            // Visible Items - repeat
-            //byte - key
-            //int value
+        private static void AddEquipInfo(PacketWriter pw, MapleCharacter chr)
+        {
+            IEnumerable<MapleItem> allEquips = chr.Inventory.GetItemsFromInventory(MapleInventoryType.Equipped);
+            Dictionary<byte, MapleItem> equips = new Dictionary<byte, MapleItem>();
+            Dictionary<byte, MapleItem> maskedEquips = new Dictionary<byte, MapleItem>();
+            foreach (MapleItem equip in allEquips)
+            {
+                byte pos = (byte)Math.Abs(equip.Position);
+                if (!equips.ContainsKey(pos) && pos < 100)
+                    equips.Add(pos, equip);
+                else if (pos > 100 && pos != 111)
+                {
+                    pos %= 100;
+                    if (equips.ContainsKey(pos))
+                        maskedEquips.Add(pos, equip);
+                    else
+                        equips.Add(pos, equip);
+                }
+                else if (equips.ContainsKey(pos))
+                    maskedEquips.Add(pos, equip);
+            }
+
+            foreach (var equip in equips)
+            {
+                pw.WriteByte(equip.Key);
+                pw.WriteInt(equip.Value.ItemId);
+            }
             pw.WriteByte(0xFF);
 
-            // Masked Items - repeat
-            //byte - key
-            //int value
+            foreach (var equip in maskedEquips)
+            {
+                pw.WriteByte(equip.Key);
+                pw.WriteInt(equip.Value.ItemId);
+            }
             pw.WriteByte(0xFF);
 
+            MapleItem weapon = chr.Inventory.GetEquippedItem((short)MapleEquipPosition.Weapon);
+            int weaponId = 0;
+            if (weapon != null) weaponId = weapon.ItemId;
+            pw.WriteInt(weaponId);
 
-            pw.WriteInt(0); // Weapon
-            pw.WriteInt(0); // Shield
-            pw.WriteLong(0);
+            for (int i = 0; i < 3; i++)
+            {
+                pw.WriteInt(0); // Pet ID
+            }
         }
 
         public static void AddMonsterBookInfo(PacketWriter pw, MapleCharacter chr)
@@ -2321,7 +2361,7 @@ namespace RazzleServer.Player
             {
                 pw.WriteInt(cooldown.Key);
                 int remaining = (int)(cooldown.Value.StartTime.AddMilliseconds(cooldown.Value.Duration) - DateTime.UtcNow).TotalMilliseconds;
-                pw.WriteShort((short) (remaining / 1000));
+                pw.WriteShort((short)(remaining / 1000));
             }
         }
 
@@ -2345,7 +2385,7 @@ namespace RazzleServer.Player
                 MapleItem.AddItemInfo(pw, kvp.Value);
             }
             pw.WriteShort(0);
-            
+
             foreach (var kvp in equipped.Where(kvp => kvp.Value.Position > -1000 && kvp.Value.Position < -100))
             {
                 MapleItem.AddItemPosition(pw, kvp.Value);
@@ -2367,7 +2407,7 @@ namespace RazzleServer.Player
                 MapleItem.AddItemPosition(pw, kvp.Value);
                 MapleItem.AddItemInfo(pw, kvp.Value);
             }
-            pw.WriteByte(0);  
+            pw.WriteByte(0);
 
             Dictionary<short, MapleItem> setupInventory = inventory.GetInventory(MapleInventoryType.Setup);
             foreach (KeyValuePair<short, MapleItem> kvp in setupInventory)
@@ -2375,7 +2415,7 @@ namespace RazzleServer.Player
                 MapleItem.AddItemPosition(pw, kvp.Value);
                 MapleItem.AddItemInfo(pw, kvp.Value);
             }
-            pw.WriteByte(0);           
+            pw.WriteByte(0);
 
             Dictionary<short, MapleItem> etcInventory = inventory.GetInventory(MapleInventoryType.Etc);
             foreach (KeyValuePair<short, MapleItem> kvp in etcInventory)
@@ -2410,7 +2450,7 @@ namespace RazzleServer.Player
         public static void SendCSInfo(MapleClient c)
         {
             MapleCharacter chr = c.Account.Character;
-            
+
 
             var pw = new PacketWriter(SMSGHeader.ENTER_CASH_SHOP);
 
@@ -2463,7 +2503,7 @@ namespace RazzleServer.Player
 
         public static void UpdateStats(MapleClient c, SortedDictionary<MapleCharacterStat, int> stats, bool enableActions)
         {
-            
+
             var pw = new PacketWriter(SMSGHeader.UPDATE_STATS);
 
             pw.WriteBool(enableActions);
@@ -2472,7 +2512,7 @@ namespace RazzleServer.Player
             int mask = 0;
             foreach (KeyValuePair<MapleCharacterStat, int> kvp in stats)
             {
-                mask |= (int) kvp.Key;
+                mask |= (int)kvp.Key;
             }
             pw.WriteInt(mask);
             foreach (KeyValuePair<MapleCharacterStat, int> kvp in stats)
@@ -2523,7 +2563,7 @@ namespace RazzleServer.Player
 
         public static PacketWriter RemovePlayerFromMap(int Id)
         {
-            
+
             var pw = new PacketWriter(SMSGHeader.REMOVE_PLAYER);
             pw.WriteInt(Id);
             return pw;
@@ -2539,7 +2579,7 @@ namespace RazzleServer.Player
 
         public static PacketWriter ServerNotice(string message, byte type, int channel = 0, bool whisperIcon = false)
         {
-            
+
             var pw = new PacketWriter(SMSGHeader.SERVER_NOTICE);
 
             pw.WriteByte(type);
@@ -2587,7 +2627,7 @@ namespace RazzleServer.Player
 
         public static PacketWriter SpawnPlayer(MapleCharacter chr)
         {
-            
+
             var pw = new PacketWriter(SMSGHeader.SPAWN_PLAYER);
             pw.WriteInt(chr.ID);
             pw.WriteByte(chr.Level);
@@ -2629,7 +2669,7 @@ namespace RazzleServer.Player
             for (int i = 0; i < 10; i++)
                 pw.WriteInt(0);
 
-            int encodetime = System.Environment.TickCount;
+            int encodetime = Environment.TickCount;
             EncodeTime(pw, encodetime);
             pw.WriteInt(0);
             pw.WriteInt(0);
@@ -2718,7 +2758,7 @@ namespace RazzleServer.Player
 
             bool empty = keybinds == null || !keybinds.Any();
             pw.WriteBool(empty);
-            for (byte i = 0; i < 89; i++)
+            for (byte i = 0; i < 90; i++)
             {
                 Tuple<byte, int> keybind;
                 if (keybinds.TryGetValue(i, out keybind))

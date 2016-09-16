@@ -18,9 +18,9 @@ namespace RazzleServer.Handlers
             {
                 using (var context = new MapleDbContext())
                 {
-                    //context.InventorySlots.RemoveRange(DBContext.InventorySlots.Where(x => x.CharacterId == characterId));
-                    //context.KeyMaps.RemoveRange(DBContext.KeyMaps.Where(x => x.CharacterId == characterId));
-                    //context.QuickSlotKeyMaps.RemoveRange(DBContext.QuickSlotKeyMaps.Where(x => x.CharacterId == characterId));
+                    context.InventorySlots.RemoveRange(context.InventorySlots.Where(x => x.CharacterID == characterID));
+                    context.KeyMaps.RemoveRange(context.KeyMaps.Where(x => x.CharacterID == characterID));
+                    context.QuickSlotKeyMaps.RemoveRange(context.QuickSlotKeyMaps.Where(x => x.CharacterID == characterID));
                     context.Characters.Remove(context.Characters.SingleOrDefault(x => x.ID == characterID));
                     context.SaveChanges();
                 }
