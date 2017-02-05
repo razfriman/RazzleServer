@@ -5,6 +5,7 @@ using System.Linq;
 using NLog;
 using System.Threading;
 using System.Diagnostics;
+using System.IO;
 
 namespace RazzleServer
 {
@@ -27,14 +28,14 @@ namespace RazzleServer
         public static void LoadMaps()
         {
             Stopwatch sw = Stopwatch.StartNew();
-            int count = DataProvider.LoadMaps(@"C:\Nexon\MapleStoryV83\Map.wz");
+            int count = DataProvider.LoadMaps(Path.Combine(ServerConfig.Instance.WzFilePath, "Map.wz"));
             Log.Info($"{count} Maps loaded in {sw.ElapsedMilliseconds} ms");
             sw.Stop();
         }
         public static void LoadMobs()
         {
             Stopwatch sw = Stopwatch.StartNew();
-            int count = DataProvider.LoadMobs(@"C:\Nexon\MapleStoryV83\Mob.wz");
+            int count = DataProvider.LoadMaps(Path.Combine(ServerConfig.Instance.WzFilePath, "Mob.wz"));
             Log.Info($"{count} Mobs loaded in {sw.ElapsedMilliseconds} ms");
             sw.Stop();
         }

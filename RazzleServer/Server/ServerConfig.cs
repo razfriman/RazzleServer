@@ -19,6 +19,7 @@ namespace RazzleServer.Server
         public string EventMessage {get;set; } = "Raz's Event";
         public int DefaultMapID{get;set;} = 100000000;
         public string DatabaseName { get; set; } = "MapleServer.db";
+        public string WzFilePath { get; set; }
         public ushort Version { get; set; } = 83;
         public byte SubVersion { get; set; } = 1;
         public byte ServerType { get; set; } = 8;
