@@ -1,13 +1,14 @@
-﻿using NLog;
-using RazzleServer.Packet;
+﻿using Microsoft.Extensions.Logging;
+using MapleLib.PacketLib;
 using System.Collections.Generic;
 using System.Drawing;
+using RazzleServer.Util;
 
 namespace RazzleServer.Movement
 {
     public static class ParseMovement
     {
-        private static Logger Log = LogManager.GetCurrentClassLogger();
+        private static ILogger Log = LogManager.Log;
 
         public static List<MapleMovementFragment> Parse(PacketReader pr)
         {
@@ -142,7 +143,7 @@ namespace RazzleServer.Movement
                             break;
                         }
                     default:
-                        Log.Warn($"Unknown movement type [{type}] [{pr.ToString(true)}]");
+                        Log.LogWarning($"Unknown movement type [{type}] [{pr.ToString(true)}]");
                         return null;
                 }
             }
@@ -150,7 +151,7 @@ namespace RazzleServer.Movement
             if (movements != movementList.Count) //probably hack
             {
                 string packet = pr.ToString();
-                Log.Warn($"Movement count mismatch in packet [{packet.Substring(0, 5)}] [{packet}]");
+                Log.LogWarning($"Movement count mismatch in packet [{packet.Substring(0, 5)}] [{packet}]");
                 return null;
             }
 

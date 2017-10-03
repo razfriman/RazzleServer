@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Reflection;
-using RazzleServer.Packet;
+using MapleLib.PacketLib;
 using RazzleServer.Server;
-using RazzleServer.Net;
 using RazzleServer.Util;
-using NLog;
+using Microsoft.Extensions.Logging;
 using RazzleServer.Scripts;
+using RazzleServer.Packet;
 
 namespace RazzleServer.Player
 {
-    public class MapleClient
+    public class MapleClient : IClient
     {
         public static Dictionary<CMSGHeader,List<APacketHandler>> PacketHandlers = new Dictionary<CMSGHeader,List<APacketHandler>>();
         
@@ -26,12 +26,12 @@ namespace RazzleServer.Player
         public string Key {get;set;}
         public NpcEngine NpcEngine { get; set; }
 
-        private static Logger Log = LogManager.GetCurrentClassLogger();
+        private static ILogger Log = LogManager.Log;
 
 
         public MapleClient(Socket session, MapleServer server)
         {
-            Socket = new ClientSocket(this, session);
+            Socket = new ClientSocket(session, this, ServerConfig.Instance.AESKey);
             Server = server;
             Host = Socket.Host;
             Port = Socket.Port;
@@ -59,14 +59,14 @@ namespace RazzleServer.Player
                     handlerCount++;
                     var handler = (APacketHandler)Activator.CreateInstance(type);
                     PacketHandlers[header].Add(handler);
-                    Log.Info($"Registered Packet Handler [{attribute.Header}] to [{type.Name}]");
+                    Log.LogInformation($"Registered Packet Handler [{attribute.Header}] to [{type.Name}]");
                 }
             }
 
-            Log.Info($"Registered {handlerCount} packet handlers");
+            Log.LogInformation($"Registered {handlerCount} packet handlers");
         }
 
-        internal void RecvPacket(PacketReader packet)
+        public void RecvPacket(PacketReader packet)
         {
             CMSGHeader header = CMSGHeader.UNKNOWN;
             try
@@ -75,33 +75,33 @@ namespace RazzleServer.Player
                     header = (CMSGHeader) packet.ReadHeader();
 
                     if (PacketHandlers.ContainsKey(header)) {
-                        Log.Debug($"Recevied [{header.ToString()}] {Functions.ByteArrayToStr(packet.ToArray())}");
+                        Log.LogDebug($"Recevied [{header.ToString()}] {Functions.ByteArrayToStr(packet.ToArray())}");
 
                         foreach (var handler in PacketHandlers[header]) {
                             handler.HandlePacket(packet, this);
                         }
                     } else {
-                        Log.Warn($"Unhandled Packet [{header.ToString()}] {Functions.ByteArrayToStr(packet.ToArray())}");
+                        Log.LogWarning($"Unhandled Packet [{header.ToString()}] {Functions.ByteArrayToStr(packet.ToArray())}");
                     }
 
                 }
             }
             catch (Exception e)
             {
-                Log.Error(e, $"Packet Processing Error [{header.ToString()}] - {e.Message} - {e.StackTrace}");
+                Log.LogError(e, $"Packet Processing Error [{header.ToString()}] - {e.Message} - {e.StackTrace}");
             }
         }
 
         public void Disconnect(string reason, params object[] values)
         {
-            Log.Info($"Disconnected client with reason: {string.Format(reason, values)}");
+            Log.LogInformation($"Disconnected client with reason: {string.Format(reason, values)}");
 
             if (Socket != null) {
                 Socket.Disconnect();
             }
         }
 
-        internal void Disconnected()
+        public void Disconnected()
         {
             var save = Account?.Character; ;
             try
@@ -113,7 +113,7 @@ namespace RazzleServer.Player
                 NpcEngine?.Dispose();
                 Socket?.Dispose();
             } catch (Exception e) {
-                Log.Error(e, $"Error while disconnecting. Account [{Account?.Name}] Character [{save?.Name}]");
+                Log.LogError(e, $"Error while disconnecting. Account [{Account?.Name}] Character [{save?.Name}]");
             }
         }
 
@@ -121,7 +121,7 @@ namespace RazzleServer.Player
         {
             if (ServerConfig.Instance.PrintPackets)
             {
-                Log.Debug($"Sending: {Functions.ByteArrayToStr(packet.ToArray())}");
+                Log.LogDebug($"Sending: {Functions.ByteArrayToStr(packet.ToArray())}");
             }
 
             if (Socket == null) return;
@@ -133,16 +133,16 @@ namespace RazzleServer.Player
         {
             if (Socket == null) return;
 
-            uint sIV = Functions.RandomUInt();
-            uint rIV = Functions.RandomUInt();
+            var sIV = Functions.RandomBytes(4);
+            var rIV = Functions.RandomBytes(4);
 
             Socket.Crypto.SetVectors(sIV, rIV);
 
             PacketWriter writer = new PacketWriter(0x0E);
             writer.WriteUShort(ServerConfig.Instance.Version);
             writer.WriteMapleString(ServerConfig.Instance.SubVersion.ToString());
-            writer.WriteUInt(rIV);
-            writer.WriteUInt(sIV);
+            writer.WriteBytes(rIV);
+            writer.WriteBytes(sIV);
             writer.WriteByte(ServerConfig.Instance.ServerType);
             Socket.SendRawPacket(writer.ToArray());
         }

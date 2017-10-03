@@ -1,8 +1,8 @@
-﻿using NLog;
+﻿using Microsoft.Extensions.Logging;
 using RazzleServer.Constants;
 using RazzleServer.Data;
 using RazzleServer.Data.WZ;
-using RazzleServer.Packet;
+using MapleLib.PacketLib;
 using RazzleServer.Player;
 using RazzleServer.Util;
 using System;
@@ -12,7 +12,7 @@ namespace RazzleServer.Inventory
 {
     public static class MapleEquipEnhancer
     {
-        private static Logger Log = LogManager.GetCurrentClassLogger();
+        private static ILogger Log = LogManager.Log;
 
         public static void UseEquipEnhancementScroll(MapleEquip equip, MapleItem scroll, MapleCharacter chr)
         {
@@ -65,7 +65,7 @@ namespace RazzleServer.Inventory
                         }
 
                         chr.SendPopUpMessage("This item is not coded, please report it on the forums. ItemId " + scroll.ItemId);
-                        Log.Debug($"ItemID {scroll.ItemId} is unhandled in UseEnhancementScroll");
+                        Log.LogDebug($"ItemID {scroll.ItemId} is unhandled in UseEnhancementScroll");
                         return;
                     }
             }

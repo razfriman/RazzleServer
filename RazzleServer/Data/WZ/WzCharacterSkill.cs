@@ -1,9 +1,9 @@
-﻿using NLog;
+﻿using Microsoft.Extensions.Logging;
 using RazzleServer.Constants;
 using RazzleServer.Handlers;
 using RazzleServer.Map;
 using RazzleServer.Map.Monster;
-using RazzleServer.Packet;
+using MapleLib.PacketLib;
 using RazzleServer.Player;
 using RazzleServer.Server;
 using RazzleServer.Util;
@@ -90,7 +90,7 @@ namespace RazzleServer.Data.WZ
         public const int MAX_BUFF_TIME_S = 2000000;
         public const int MAX_BUFF_TIME_MS = 2000000000;
 
-        private static Logger Log = LogManager.GetCurrentClassLogger();
+        private static ILogger Log = LogManager.Log;
 
         public SkillEffect(WzCharacterSkill parent, byte level)
         {
@@ -117,7 +117,7 @@ namespace RazzleServer.Data.WZ
 
             if (skillLevel == 0 || (chr.HasSkillOnCooldown(skillId)))
             {
-                Log.Warn($"Player tried using skill ${skillId} while level 0 or on cooldown.");
+                Log.LogWarning($"Player tried using skill ${skillId} while level 0 or on cooldown.");
                 return false;
             }
 
@@ -146,7 +146,7 @@ namespace RazzleServer.Data.WZ
                     bulletConsume *= 2; 
                 if (!DealDamageHandler.HandleRangedAttackAmmoUsage(chr, bulletConsume))
                 {
-                    Log.Warn($"Character with job [{chr.Job}] tried using a skill with bulletCount [{bulletConsume}] but doesn't have the bullets!");
+                    Log.LogWarning($"Character with job [{chr.Job}] tried using a skill with bulletCount [{bulletConsume}] but doesn't have the bullets!");
                     return false;
                 }
             }
@@ -359,7 +359,7 @@ namespace RazzleServer.Data.WZ
             }
             else
             {
-                Log.Error($"Buff from skill [{Parent.SkillId}] has no buff time");
+                Log.LogError($"Buff from skill [{Parent.SkillId}] has no buff time");
             }
         }
 
@@ -374,7 +374,7 @@ namespace RazzleServer.Data.WZ
                     return new BoundingBox(origin.X, origin.Y - 100, origin.X + range, origin.Y);
             }
             else
-                Log.Error($"Skill [{Parent.SkillId}] is a Party ability but has no bounding box or range attributes");            
+                Log.LogError($"Skill [{Parent.SkillId}] is a Party ability but has no bounding box or range attributes");            
             return new BoundingBox();
         }
         

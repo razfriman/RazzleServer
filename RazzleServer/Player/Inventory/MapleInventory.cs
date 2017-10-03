@@ -3,7 +3,7 @@ using RazzleServer.Data;
 using RazzleServer.Data.WZ;
 using RazzleServer.DB.Models;
 using RazzleServer.Map;
-using RazzleServer.Packet;
+using MapleLib.PacketLib;
 using RazzleServer.Player;
 using RazzleServer.Util;
 using System;

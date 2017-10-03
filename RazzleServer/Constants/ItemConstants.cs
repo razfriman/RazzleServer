@@ -1,14 +1,15 @@
-﻿using NLog;
+﻿using Microsoft.Extensions.Logging;
 using RazzleServer.Inventory;
 using RazzleServer.Player;
 using System;
 using System.Collections.Generic;
+using MapleLib.Helper;
 
 namespace RazzleServer.Constants
 {
     public static class ItemConstants
     {
-        private static Logger Log = LogManager.GetCurrentClassLogger();
+        private static ILogger Log = LogManager.Log;
 
 
         #region Weapon Damage Modifiers
@@ -50,7 +51,7 @@ namespace RazzleServer.Constants
             WeaponInfo ret;
             if (WeaponInfo.TryGetValue(weaponType, out ret))
                 return ret;
-            Log.Warn($"Unhandled MapleItemType [{Enum.GetName(typeof(MapleItemType), weaponType)}] for getting Weapon Modifier Info in ItemConstants");
+            Log.LogWarning($"Unhandled MapleItemType [{Enum.GetName(typeof(MapleItemType), weaponType)}] for getting Weapon Modifier Info in ItemConstants");
             return defaultWeaponModInfo;
         }
 

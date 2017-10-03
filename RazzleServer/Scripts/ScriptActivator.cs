@@ -1,12 +1,13 @@
-﻿using NLog;
+﻿using Microsoft.Extensions.Logging;
 using RazzleServer.Player;
 using System;
+using RazzleServer.Util;
 
 namespace RazzleServer.Scripts
 {
     public class ScriptActivator
     {
-        private static Logger Log = LogManager.GetCurrentClassLogger();
+        private static ILogger Log = LogManager.Log;
 
         //private static ScriptInterface ScriptDataProvider = new ScriptInterface();
 
@@ -16,7 +17,7 @@ namespace RazzleServer.Scripts
 
             if (instance == null)
             {
-                Log.Error($"Type [{scriptType}] cannot be cast to 'Script'");
+                Log.LogError($"Type [{scriptType}] cannot be cast to 'Script'");
                 return null;
             }
             //if (instance is CharacterScript)

@@ -1,8 +1,9 @@
-﻿using NLog;
+﻿using Microsoft.Extensions.Logging;
 using RazzleServer.Player;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using RazzleServer.Util;
 
 namespace RazzleServer.Data.WZ
 {
@@ -39,7 +40,7 @@ namespace RazzleServer.Data.WZ
     {        
         public int Data { get; private set; }
 
-        private static Logger Log = LogManager.GetCurrentClassLogger();
+        private static ILogger Log = LogManager.Log;
 
         public WzQuestIntegerRequirement(QuestRequirementType type, int data)
             : base(type)
@@ -66,7 +67,7 @@ namespace RazzleServer.Data.WZ
                 case QuestRequirementType.pop: //fame
                     return chr.Fame >= Data;
                 default:
-                    Log.Warn($"No check handler for {Type.ToString()}");
+                    Log.LogWarning($"No check handler for {Type.ToString()}");
                     break;                    
             }
             return false;
@@ -77,7 +78,7 @@ namespace RazzleServer.Data.WZ
     {        
         public Dictionary<int, int> Data { get; private set; }
 
-        private static Logger Log = LogManager.GetCurrentClassLogger();
+        private static ILogger Log = LogManager.Log;
 
 
         public WzQuestIntegerPairRequirement(QuestRequirementType type, Dictionary<int, int> data)
@@ -112,7 +113,7 @@ namespace RazzleServer.Data.WZ
                     }
                     return true;
                 default:
-                    Log.Warn($"No check handler for {Type.ToString()}");
+                    Log.LogWarning($"No check handler for {Type.ToString()}");
                     break;                    
             }
             return false;
@@ -123,7 +124,7 @@ namespace RazzleServer.Data.WZ
     {       
         public List<int> Data { get; private set; }
 
-        private static Logger Log = LogManager.GetCurrentClassLogger();
+        private static ILogger Log = LogManager.Log;
 
 
         public WzQuestIntegerListRequirement(QuestRequirementType type, List<int> data)
@@ -146,7 +147,7 @@ namespace RazzleServer.Data.WZ
                      return Data.Where(x => x == chr.GetPet(0).ItemId).Any();
                      */
                 default:
-                    Log.Warn($"No check handler for {Type.ToString()}");
+                    Log.LogWarning($"No check handler for {Type.ToString()}");
                     break;                    
             }
             return false;
@@ -157,7 +158,7 @@ namespace RazzleServer.Data.WZ
     {        
         public DateTime Date { get; private set; }
 
-        private static Logger Log = LogManager.GetCurrentClassLogger();
+        private static ILogger Log = LogManager.Log;
 
         public WzQuestDateRequirement(QuestRequirementType type, DateTime date)
             : base(type)
@@ -172,7 +173,7 @@ namespace RazzleServer.Data.WZ
                 case QuestRequirementType.end:
                     return DateTime.UtcNow <= Date;
                 default:
-                    Log.Warn($"No check handler for {Type.ToString()}");
+                    Log.LogWarning($"No check handler for {Type}");
                     break;                    
             }
             return false;

@@ -1,20 +1,22 @@
-﻿using NLog;
-using RazzleServer.Packet;
+﻿using Microsoft.Extensions.Logging;
+using MapleLib.PacketLib;
 using RazzleServer.Player;
+using RazzleServer.Util;
+using RazzleServer.Packet;
 
 namespace RazzleServer.Handlers
 {
     [PacketHandler(CMSGHeader.GENERAL_CHAT)]
     public class PlayerChatHandler : APacketHandler
     {
-        private static Logger Log = LogManager.GetCurrentClassLogger();
+        private static ILogger Log = LogManager.Log;
 
         public override void HandlePacket(PacketReader packet, MapleClient client)
         {
             string message = packet.ReadMapleString();
             byte show = packet.ReadByte();
 
-            Log.Info($"{client.Account.Character.Name}: {message}");
+            Log.LogInformation($"{client.Account.Character.Name}: {message}");
 
             //if (message[0] == '@')
             //{

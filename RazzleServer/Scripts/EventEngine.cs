@@ -1,10 +1,11 @@
-﻿using NLog;
+﻿using Microsoft.Extensions.Logging;
 using RazzleServer.Data;
 using RazzleServer.Data.WZ;
 using RazzleServer.Map;
 using RazzleServer.Map.Monster;
 using RazzleServer.Player;
 using RazzleServer.Server;
+using RazzleServer.Util;
 using System;
 using System.Drawing;
 
@@ -20,7 +21,7 @@ namespace RazzleServer.Scripts
         public int EventId { get; }
         public byte ChannelId { get; }
 
-        private static Logger Log = LogManager.GetCurrentClassLogger();
+        private static ILogger Log = LogManager.Log;
 
         public EventEngine(MapleCharacter starter, string script, int recreateMap = -1, bool skipSpawn = false)
         {
@@ -31,7 +32,7 @@ namespace RazzleServer.Scripts
             EventInstance = ScriptActivator.CreateScriptInstance(EventType, script, starter) as EventScript;
             if (EventInstance == null)
             {
-                Log.Error($"Error loading [EventScript] {script}");
+                Log.LogError($"Error loading [EventScript] {script}");
                 return;
             }
             RecreatedMap = recreateMap != -1;

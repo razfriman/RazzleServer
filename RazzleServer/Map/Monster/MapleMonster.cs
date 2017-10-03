@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using RazzleServer.Player;
-using RazzleServer.Packet;
+using MapleLib.PacketLib;
 using RazzleServer.Inventory;
 using RazzleServer.Data;
 using RazzleServer.Util;

@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazzleServer.DB", "RazzleServer.DB\RazzleServer.DB.csproj", "{F791C1A9-66AD-463A-93B4-6FEB8BD8C45D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapleLib", "MapleLib\MapleLib.csproj", "{BD26D4D7-B1B9-4FA2-8B42-E68D1DB6AF89}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazzleServer", "RazzleServer\RazzleServer.csproj", "{B758B3CD-C420-47E7-8DEC-5E88A4D1FE8F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F791C1A9-66AD-463A-93B4-6FEB8BD8C45D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F791C1A9-66AD-463A-93B4-6FEB8BD8C45D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F791C1A9-66AD-463A-93B4-6FEB8BD8C45D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F791C1A9-66AD-463A-93B4-6FEB8BD8C45D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD26D4D7-B1B9-4FA2-8B42-E68D1DB6AF89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD26D4D7-B1B9-4FA2-8B42-E68D1DB6AF89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD26D4D7-B1B9-4FA2-8B42-E68D1DB6AF89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD26D4D7-B1B9-4FA2-8B42-E68D1DB6AF89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B758B3CD-C420-47E7-8DEC-5E88A4D1FE8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B758B3CD-C420-47E7-8DEC-5E88A4D1FE8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B758B3CD-C420-47E7-8DEC-5E88A4D1FE8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B758B3CD-C420-47E7-8DEC-5E88A4D1FE8F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

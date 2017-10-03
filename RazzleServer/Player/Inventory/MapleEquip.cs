@@ -1,8 +1,8 @@
-﻿using NLog;
+﻿using Microsoft.Extensions.Logging;
 using RazzleServer.Data;
 using RazzleServer.Data.WZ;
 using RazzleServer.DB.Models;
-using RazzleServer.Packet;
+using MapleLib.PacketLib;
 using RazzleServer.Player;
 using RazzleServer.Util;
 using System;
@@ -45,7 +45,7 @@ namespace RazzleServer.Inventory
         public byte CustomLevel { get; set; }
         public short CustomExp { get; set; }
 
-        private static Logger Log = LogManager.GetCurrentClassLogger();
+        private static ILogger Log = LogManager.Log;
 
         public override byte Type => 1;
         public override MapleInventoryType InventoryType => MapleInventoryType.Equip;
@@ -189,7 +189,7 @@ namespace RazzleServer.Inventory
             }
             else
             {
-                Log.Error($"Equip ID {ItemId} is not in Data Buffer");
+                Log.LogError($"Equip ID {ItemId} is not in Data Buffer");
             }
         }
 

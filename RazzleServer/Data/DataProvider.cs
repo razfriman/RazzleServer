@@ -1,18 +1,17 @@
 ﻿using MapleLib.WzLib;
-using NLog;
+using Microsoft.Extensions.Logging;
 using RazzleServer.Data.WZ;
 using RazzleServer.Server;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Threading.Tasks;
+using RazzleServer.Util;
+using MapleLib.WzLib.WzProperties;
 
 namespace RazzleServer.Data
 {
     public static class DataProvider
     {
-        private static Logger Log = LogManager.GetCurrentClassLogger();
+        private static ILogger Log = LogManager.Log;
 
         public static int LoadMaps(string path)
         {
@@ -28,12 +27,14 @@ namespace RazzleServer.Data
 
                     int mapId = int.Parse(img.Name.Replace(".img", ""));
 
+
                     if(!img.Name.StartsWith("1"))
                     {
                         // ONLY LOAD SOME MAPS
                         // TODO - TEMPORARY
                         continue;
                     }
+
                     var info = img["info"];
                     var ladderRope = img["ladderRope"];
                     var portals = img["portal"];
@@ -43,19 +44,19 @@ namespace RazzleServer.Data
                     {
                         if (info["link"] != null) //Linked map aka timed mini dungeon, we dont need that to load
                             continue;
-                        var town = info["town"]?.ToInt() ?? 0;
+                        var town = info["town"]?.GetInt() ?? 0;
                         map.Town = town == 1;
-                        map.FieldType = info["fieldType"]?.ToInt() ?? 0;
+                        map.FieldType = info["fieldType"]?.GetInt() ?? 0;
                         map.FieldScript = info["fieldScript"]?.ToString();
                         map.FirstUserEnter = info["onFirstUserEnter"]?.ToString();
                         map.UserEnter = info["onUserEnter"]?.ToString();
-                        map.Fly = info["fly"]?.ToInt() ?? 0;
-                        map.Swim = info["swim"]?.ToInt() ?? 0;
-                        map.ForcedReturn = info["forcedReturn"]?.ToInt() ?? 0;
-                        map.ReturnMap = info["returnMap"]?.ToInt() ?? 0;
-                        map.TimeLimit = info["timeLimit"]?.ToInt() ?? 0;
-                        map.MobRate = info["mobRate"]?.ToDouble() ?? 1;
-                        map.Limit = (WzMap.FieldLimit)(info["fieldLimit"]?.ToInt() ?? 0);
+                        map.Fly = info["fly"]?.GetInt() ?? 0;
+                        map.Swim = info["swim"]?.GetInt() ?? 0;
+                        map.ForcedReturn = info["forcedReturn"]?.GetInt() ?? 0;
+                        map.ReturnMap = info["returnMap"]?.GetInt() ?? 0;
+                        map.TimeLimit = info["timeLimit"]?.GetInt() ?? 0;
+                        map.MobRate = info["mobRate"]?.GetDouble() ?? 1;
+                        map.Limit = (WzMap.FieldLimit)(info["fieldLimit"]?.GetInt() ?? 0);
                     }
 
                     if (life != null)
@@ -66,22 +67,22 @@ namespace RazzleServer.Data
                             if (Type == "m")
                             {
                                 WzMap.MobSpawn mobSpawn = new WzMap.MobSpawn();
-                                mobSpawn.MobId = child["id"].ToInt();
+                                mobSpawn.MobId = child["id"].GetInt();
                                 mobSpawn.wzMob = DataBuffer.GetMobById(mobSpawn.MobId);
                                 if (mobSpawn.wzMob == null)
                                 {
-                                    Log.Error($"WzMob not found for mob [{mobSpawn.MobId}] on map [{map.MapId}]");
+                                    Log.LogError($"WzMob not found for mob [{mobSpawn.MobId}] on map [{map.MapId}]");
                                 }
-                                mobSpawn.Position = new Point(child["x"].ToInt(), child["y"].ToInt());
-                                int mobTime = child["mobTime"]?.ToInt() ?? 0;
+                                mobSpawn.Position = new Point(child["x"].GetInt(), child["y"].GetInt());
+                                int mobTime = child["mobTime"]?.GetInt() ?? 0;
                                 mobSpawn.MobTime = mobTime < 0 ? -1 : mobTime * 1000; //mobTime is in seconds in the .WZ
-                                mobSpawn.Rx0 = (short)child["rx0"].ToInt();
-                                mobSpawn.Rx1 = (short)child["rx1"].ToInt();
-                                mobSpawn.Cy = (short)child["cy"].ToInt();
-                                mobSpawn.Fh = (short)child["fh"].ToInt();
-                                int F = child["f"]?.ToInt() ?? 0;
+                                mobSpawn.Rx0 = (short)child["rx0"].GetInt();
+                                mobSpawn.Rx1 = (short)child["rx1"].GetInt();
+                                mobSpawn.Cy = (short)child["cy"].GetInt();
+                                mobSpawn.Fh = (short)child["fh"].GetInt();
+                                int F = child["f"]?.GetInt() ?? 0;
                                 mobSpawn.F = (F == 1 ? false : true);
-                                int Hide = child["hide"]?.ToInt() ?? 0;
+                                int Hide = child["hide"]?.GetInt() ?? 0;
                                 mobSpawn.Hide = (Hide == 1);
                                 map.MobSpawnPoints.Add(mobSpawn);
                             }
@@ -98,7 +99,7 @@ namespace RazzleServer.Data
                             WzMap.Portal portal = new WzMap.Portal();
                             portal.Id = portalId;
 
-                            portal.Type = (WzMap.PortalType)childNode["pt"].ToInt(0);
+                            portal.Type = (WzMap.PortalType) ((WzIntProperty)childNode["pt"]).Value;
                             if (portal.Type == WzMap.PortalType.TownportalPoint)
                             {
                                 portal.Id = townPortal;
@@ -106,7 +107,7 @@ namespace RazzleServer.Data
                             }
 
                             portal.Position = new Point((int)childNode["x"].WzValue, (int)childNode["y"].WzValue);
-                            portal.ToMap = childNode["tm"].ToInt(0);
+                            portal.ToMap = ((WzIntProperty)childNode["tm"]).Value;
                             portal.Name = childNode["pn"].ToString();
                             portal.ToName = childNode["tn"].ToString();
 
@@ -136,9 +137,11 @@ namespace RazzleServer.Data
         {
             var file = new WzFile(path, (short)ServerConfig.Instance.Version, WzMapleVersion.GMS);
             file.ParseWzFile();
+            file.WzDirectory.ParseImages();
+
             int ret = 0;
 
-            foreach (var imgNode in file.WzImages)
+            foreach (var imgNode in file.WzDirectory.WzImages)
             {
                 if (!(imgNode["info"] != null && imgNode.Name.Contains(".img")))
                     continue;
@@ -155,26 +158,26 @@ namespace RazzleServer.Data
 
                 WzMob Mob = new WzMob();
                 Mob.MobId = MobId;
-                Mob.Level = mobInfo["level"]?.ToInt() ?? 1;
-                Mob.HP = mobInfo["maxHP"]?.ToInt() ?? 1;
-                Mob.MP = mobInfo["maxMP"]?.ToInt() ?? 1;
-                Mob.Speed = mobInfo["speed"]?.ToInt() ?? 0;
-                Mob.Kb = mobInfo["pushed"]?.ToInt() ?? 0;
-                Mob.PAD = mobInfo["PADamage"]?.ToInt() ?? 0;
-                Mob.PDD = mobInfo["PDDamage"]?.ToInt() ?? 0;
-                Mob.PDRate = mobInfo["PDRate"]?.ToInt() ?? 0;
-                Mob.MAD = mobInfo["MADamage"]?.ToInt() ?? 0;
-                Mob.MDD = mobInfo["MDDamage"]?.ToInt() ?? 0;
-                Mob.MDRate = mobInfo["MDRate"]?.ToInt() ?? 0;
-                Mob.Eva = mobInfo["eva"]?.ToInt() ?? 0;
-                Mob.Acc = mobInfo["acc"]?.ToInt() ?? 0;
-                Mob.Exp = mobInfo["exp"]?.ToInt() ?? 0;
-                Mob.SummonType = mobInfo["summonType"]?.ToInt() ?? 0;
-                //Mob.Invincible = mobInfo["invincible"].ToInt();
-                //Mob.FixedDamage = mobInfo["fixDamage"].ToInt(); ;
-                //Mob.FFALoot = mobInfo["publicReward"].ToInt() > 0;
-                //Mob.ExplosiveReward = mobInfo["explosiveReward"].ToInt() > 0;
-                //Mob.IsBoss = mobInfo["boss"].ToInt() > 0;
+                Mob.Level = mobInfo["level"]?.GetInt() ?? 1;
+                Mob.HP = mobInfo["maxHP"]?.GetInt() ?? 1;
+                Mob.MP = mobInfo["maxMP"]?.GetInt() ?? 1;
+                Mob.Speed = mobInfo["speed"]?.GetInt() ?? 0;
+                Mob.Kb = mobInfo["pushed"]?.GetInt() ?? 0;
+                Mob.PAD = mobInfo["PADamage"]?.GetInt() ?? 0;
+                Mob.PDD = mobInfo["PDDamage"]?.GetInt() ?? 0;
+                Mob.PDRate = mobInfo["PDRate"]?.GetInt() ?? 0;
+                Mob.MAD = mobInfo["MADamage"]?.GetInt() ?? 0;
+                Mob.MDD = mobInfo["MDDamage"]?.GetInt() ?? 0;
+                Mob.MDRate = mobInfo["MDRate"]?.GetInt() ?? 0;
+                Mob.Eva = mobInfo["eva"]?.GetInt() ?? 0;
+                Mob.Acc = mobInfo["acc"]?.GetInt() ?? 0;
+                Mob.Exp = mobInfo["exp"]?.GetInt() ?? 0;
+                Mob.SummonType = mobInfo["summonType"]?.GetInt() ?? 0;
+                //Mob.Invincible = mobInfo["invincible"].GetInt();
+                //Mob.FixedDamage = mobInfo["fixDamage"].GetInt(); ;
+                //Mob.FFALoot = mobInfo["publicReward"].GetInt() > 0;
+                //Mob.ExplosiveReward = mobInfo["explosiveReward"].GetInt() > 0;
+                //Mob.IsBoss = mobInfo["boss"].GetInt() > 0;
                 //if (Info.ContainsChild("skill"))
                 //{
                 //    NXNode skill = Info.GetChild("skill");

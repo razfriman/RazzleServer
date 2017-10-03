@@ -1,16 +1,15 @@
-﻿using NLog;
+﻿using Microsoft.Extensions.Logging;
 using RazzleServer.Inventory;
-using RazzleServer.Packet;
-using System;
+using MapleLib.PacketLib;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using RazzleServer.Util;
 
 namespace RazzleServer.Player
 {
     public class MapleTrade
     {
-        private static Logger Log = LogManager.GetCurrentClassLogger();
+        private static ILogger Log = LogManager.Log;
         private static uint GlobalTradeID = 0;
         public static Dictionary<uint, MapleTrade> TradeIDs = new Dictionary<uint, MapleTrade>();//ID of trade | Trade
         public List<MapleCharacter> Partners = new List<MapleCharacter>();
@@ -113,7 +112,7 @@ namespace RazzleServer.Player
             }
             else
             {
-                Log.Error($"Unable to accept trade because this character isn't registered as in the trade. Partner count [{Partners.Count}]");
+                Log.LogError($"Unable to accept trade because this character isn't registered as in the trade. Partner count [{Partners.Count}]");
                 return;
             }
             if (OwnerAccepted && PartnerAccepted)

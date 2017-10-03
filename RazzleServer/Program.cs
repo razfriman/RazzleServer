@@ -2,16 +2,17 @@
 using RazzleServer.Server;
 using RazzleServer.Data;
 using System.Linq;
-using NLog;
 using System.Threading;
 using System.Diagnostics;
 using System.IO;
+using Microsoft.Extensions.Logging;
+using RazzleServer.Util;
 
 namespace RazzleServer
 {
     public class Program
     {
-        private static Logger Log = LogManager.GetCurrentClassLogger();
+        private static ILogger Log = LogManager.Log;
 
         public static void Main(string[] args)
         {
@@ -29,14 +30,14 @@ namespace RazzleServer
         {
             Stopwatch sw = Stopwatch.StartNew();
             int count = DataProvider.LoadMaps(Path.Combine(ServerConfig.Instance.WzFilePath, "Map.wz"));
-            Log.Info($"{count} Maps loaded in {sw.ElapsedMilliseconds} ms");
+            Log.LogInformation($"{count} Maps loaded in {sw.ElapsedMilliseconds} ms");
             sw.Stop();
         }
         public static void LoadMobs()
         {
             Stopwatch sw = Stopwatch.StartNew();
             int count = DataProvider.LoadMaps(Path.Combine(ServerConfig.Instance.WzFilePath, "Mob.wz"));
-            Log.Info($"{count} Mobs loaded in {sw.ElapsedMilliseconds} ms");
+            Log.LogInformation($"{count} Mobs loaded in {sw.ElapsedMilliseconds} ms");
             sw.Stop();
         }
         private static void InitializeChannelServers()
@@ -53,7 +54,7 @@ namespace RazzleServer
         }
         private static void InitializeDatabase()
         {
-            Log.Info("Initializing Database");
+            Log.LogInformation("Initializing Database");
             using (var context = new MapleDbContext())
             {
                 var accounts = context.Accounts.ToArray();

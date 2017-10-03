@@ -1,8 +1,8 @@
-﻿using NLog;
+﻿using Microsoft.Extensions.Logging;
 using RazzleServer.Constants;
 using RazzleServer.Data;
 using RazzleServer.Map;
-using RazzleServer.Packet;
+using MapleLib.PacketLib;
 using RazzleServer.Player;
 using RazzleServer.Util;
 using System;
@@ -17,7 +17,7 @@ namespace RazzleServer.Scripts
         public NpcScript ScriptInstance;
         public bool IsShop = false;
 
-        private static Logger Log = LogManager.GetCurrentClassLogger();
+        private static ILogger Log = LogManager.Log;
 
         public NpcEngine(MapleClient c, int id)
         {
@@ -29,7 +29,7 @@ namespace RazzleServer.Scripts
                 ScriptInstance = ScriptActivator.CreateScriptInstance(npcT, npcT.ToString(), c.Account.Character) as NpcScript;
                 if (ScriptInstance == null)
                 {
-                    Log.Error($"Error loading [NpcScript] [{npcT.Name}]");
+                    Log.LogError($"Error loading [NpcScript] [{npcT.Name}]");
                     return;
                 }
                 if (ScriptInstance.IsShop)
@@ -51,7 +51,7 @@ namespace RazzleServer.Scripts
             else
             {
                 SendOk(string.Format(@"An error has occured in my script. Please report this as a bug\r\nNpcId: {0}", NpcId));
-                Log.Debug($"Missing script for NPC [{NpcId}]");
+                Log.LogDebug($"Missing script for NPC [{NpcId}]");
                 ScriptInstance = null;
                 c.Account.Character.EnableActions();
             }
@@ -80,7 +80,7 @@ namespace RazzleServer.Scripts
             }
             catch (Exception ex)
             {
-                Log.Error(ex, $"NPC script execution error - NpcID [{NpcId}]");
+                Log.LogError(ex, $"NPC script execution error - NpcID [{NpcId}]");
                 Dispose();
                 return false;
             }

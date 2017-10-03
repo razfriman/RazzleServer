@@ -1,11 +1,11 @@
-using NLog;
+﻿using Microsoft.Extensions.Logging;
 using RazzleServer.Constants;
 using RazzleServer.Data;
 using RazzleServer.Data.WZ;
 using RazzleServer.Handlers;
 using RazzleServer.Inventory;
 using RazzleServer.Map.Monster;
-using RazzleServer.Packet;
+using MapleLib.PacketLib;
 using RazzleServer.Party;
 using RazzleServer.Player;
 using RazzleServer.Scripts;
@@ -42,7 +42,7 @@ namespace RazzleServer.Map
 
         private WzMap WzInfo;
 
-        private static Logger Log = LogManager.GetCurrentClassLogger();
+        private static ILogger Log = LogManager.Log;
 
 
         public int ReturnMap => WzInfo.ReturnMap;
@@ -379,7 +379,7 @@ namespace RazzleServer.Map
 
 
                 c.Account.Character.EnableActions();
-                Log.Error($"Cannot load portal [{portalName}] for map {MapID}]");
+                Log.LogError($"Cannot load portal [{portalName}] for map {MapID}]");
             }
         }
         /// <summary>
@@ -397,7 +397,7 @@ namespace RazzleServer.Map
             }
             else
             {
-                Log.Error($"Unable to enter portal [{portalName}] in map [{c.Account.Character.MapID}]");
+                Log.LogError($"Unable to enter portal [{portalName}] in map [{c.Account.Character.MapID}]");
                 c.Account.Character.SendBlueMessage($"[{portalName}] on [{c.Account.Character.MapID}] is not scripted yet");
             }
         }

@@ -4,7 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using NLog;
+using Microsoft.Extensions.Logging;
 using RazzleServer.Util;
 
 namespace RazzleServer.Server
@@ -18,7 +18,7 @@ namespace RazzleServer.Server
         private const int BACKLOG_SIZE = 50;
         private bool _disposed = false;
 
-        private static Logger Log = LogManager.GetCurrentClassLogger();
+        private static ILogger Log = LogManager.Log;
         
         public virtual void RemoveClient(MapleClient client)
         {
@@ -58,11 +58,11 @@ namespace RazzleServer.Server
             if (!AllowConnection(ip))
             {
                 socket.Shutdown(SocketShutdown.Both);
-                Log.Warn("Rejected Client");
+                Log.LogWarning("Rejected Client");
                 return null;
             }
 
-            Log.Info("Client Connected");
+            Log.LogInformation("Client Connected");
 
             MapleClient client = new MapleClient(socket, this);
             try
@@ -74,7 +74,7 @@ namespace RazzleServer.Server
             }
             catch (Exception e)
             {
-                Log.Error(e, "Error sending handshake. Disconnecting.");
+                Log.LogError(e, "Error sending handshake. Disconnecting.");
                 client.Disconnect(e.ToString());
                 RemoveClient(client);
                 return null;
@@ -99,7 +99,7 @@ namespace RazzleServer.Server
 
         public void Start(IPAddress ip, ushort port)
         {
-            Log.Info($"Starting server on port [{port}]");
+            Log.LogInformation($"Starting server on port [{port}]");
             Port = port;
             _listener = new TcpListener(ip, port);
             _listener.Start(BACKLOG_SIZE);

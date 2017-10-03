@@ -1,14 +1,15 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Net;
-using RazzleServer.Packet;
+using MapleLib.PacketLib;
 using RazzleServer.Player;
 using RazzleServer.Map;
-using NLog;
+using Microsoft.Extensions.Logging;
 using RazzleServer.Handlers;
 using System.Collections.Generic;
 using RazzleServer.Data.WZ;
 using RazzleServer.Data;
+using RazzleServer.Util;
 
 namespace RazzleServer.Server
 {
@@ -17,7 +18,7 @@ namespace RazzleServer.Server
         private Dictionary<int, MapleMap> _maps { get; set; } = new Dictionary<int, MapleMap>();
         public DateTime LastPing { get; set; }
 
-        private static Logger Log = LogManager.GetCurrentClassLogger();
+        private static ILogger Log = LogManager.Log;
 
         public ChannelServer(ushort port) {
 

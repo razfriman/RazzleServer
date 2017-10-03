@@ -1,4 +1,5 @@
-using NLog;
+﻿using Microsoft.Extensions.Logging;
+using MapleLib.PacketLib;
 using RazzleServer.Constants;
 using RazzleServer.Data;
 using RazzleServer.Data.WZ;
@@ -6,7 +7,6 @@ using RazzleServer.DB.Models;
 using RazzleServer.Inventory;
 using RazzleServer.Map;
 using RazzleServer.Movement;
-using RazzleServer.Packet;
 using RazzleServer.Party;
 using RazzleServer.Scripts;
 using RazzleServer.Server;
@@ -34,7 +34,7 @@ namespace RazzleServer.Player
 
         private readonly object _hpLock = new object();
         private static readonly object _characterDatabaseLock = new object();
-        private static Logger Log = LogManager.GetCurrentClassLogger();
+        private static ILogger Log = LogManager.Log;
 
 
         public MapleClient Client { get; private set; }
@@ -951,7 +951,7 @@ namespace RazzleServer.Player
             }
             else
             {
-                Log.Error($"Unhandled Job [{Job}] when giving HP and MP in MapleCharacter.LevelUp()");
+                Log.LogError($"Unhandled Job [{Job}] when giving HP and MP in MapleCharacter.LevelUp()");
 
             }
 
@@ -1142,7 +1142,7 @@ namespace RazzleServer.Player
                         default:
                             if (!IsBeginnerJob)
                             {
-                                Log.Error($"Unhandled Job [{Job}] when giving hp in MapleCharacter.ChangeJob()");
+                                Log.LogError($"Unhandled Job [{Job}] when giving hp in MapleCharacter.ChangeJob()");
                             }
                             break;
                     }

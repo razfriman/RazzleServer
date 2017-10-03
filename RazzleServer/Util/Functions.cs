@@ -89,7 +89,7 @@ namespace RazzleServer.Util
                 return null;//odd number of hex digits.
             byte[] arr = new byte[hex.Length >> 1];
 
-            for (int i = 0; i < hex.Length >> 1; ++i)
+            for (int i = 0; i < (hex.Length >> 1); ++i)
             {
                 int v1 = GetHexVal(hex[i << 1]);
                 int v2 = GetHexVal(hex[(i << 1) + 1]);
@@ -147,33 +147,28 @@ namespace RazzleServer.Util
         /// <summary>
         /// Creates a random byte
         /// </summary>
-        public static byte RandomByte()
-        {
-            return (byte)Math.Floor((double)(r.Next() / 0x1010101));
-        }
+        public static byte RandomByte() => (byte)Math.Floor((double)(r.Next() / 0x1010101));
+
+		/// <summary>
+		/// Creates a random array of bytes
+		/// </summary>
+		public static byte[] RandomBytes(int length)
+		{
+			byte[] randomBytes = new byte[length];
+			r.NextBytes(randomBytes);
+            return randomBytes;
+		}
 
         /// <summary>
         /// Creates a boolean that is randomly true or false
         /// </summary>
         /// <returns></returns>
-        public static bool RandomBoolean()
-        {
-            return r.Next(0, 100) < 50;
-        }
+        public static bool RandomBoolean() => r.Next(0, 100) < 50;
 
-        public static uint RandomUInt()
-        {
-            byte[] randomBytes = new byte[4];
-            r.NextBytes(randomBytes);
-            return BitConverter.ToUInt32(randomBytes, 0);
-        }
+        public static uint RandomUInt() => BitConverter.ToUInt32(RandomBytes(4), 0);
 
-        public static long RandomLong()
-        {
-            byte[] randomBytes = new byte[8];
-            r.NextBytes(randomBytes);
-            return BitConverter.ToInt64(randomBytes, 0);
-        }
+        public static long RandomLong() => BitConverter.ToInt64(RandomBytes(8), 0);
+
 
         /// <summary>
         /// Creates a random int
@@ -188,10 +183,6 @@ namespace RazzleServer.Util
         /// </summary>
         public static int Random(int max) => r.Next(max);
 
-        public static void RandomBytes(byte[] input)
-        {
-            r.NextBytes(input);
-        }
         /// <summary>
         /// Creates a random int with an inclusive min and inclusive max value
         /// </summary>

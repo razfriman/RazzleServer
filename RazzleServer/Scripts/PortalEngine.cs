@@ -1,14 +1,15 @@
-﻿using NLog;
+﻿using Microsoft.Extensions.Logging;
 using RazzleServer.Data;
 using RazzleServer.Data.WZ;
 using RazzleServer.Player;
+using RazzleServer.Util;
 using System;
 
 namespace RazzleServer.Scripts
 {
     public static class PortalEngine
     {
-        private static Logger Log = LogManager.GetCurrentClassLogger();
+        private static ILogger Log = LogManager.Log;
 
         public static void EnterScriptedPortal(WzMap.Portal portal, MapleCharacter character)
         {
@@ -20,7 +21,7 @@ namespace RazzleServer.Scripts
                     PortalScript scriptInstance = Activator.CreateInstance(portalScriptType) as PortalScript;
                     if (scriptInstance == null)
                     {
-                        Log.Error($"Error loading [PortalScript] [{portal.Script}]");
+                        Log.LogError($"Error loading [PortalScript] [{portal.Script}]");
                         return;
                     }
                     scriptInstance.Character = new ScriptCharacter(character, portal.Script);
@@ -30,7 +31,7 @@ namespace RazzleServer.Scripts
                     }
                     catch (Exception e)
                     {
-                        Log.Error(e, $"Portal Script Error [{0}]");
+                        Log.LogError(e, $"Portal Script Error [{0}]");
                         character.EnableActions();
                     }
                 }

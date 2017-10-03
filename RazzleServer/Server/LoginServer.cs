@@ -6,7 +6,7 @@ namespace RazzleServer.Server
     {
         public LoginServer()
         {
-            byte[] loginIp = new byte[] { 0, 0, 0, 0 };
+            byte[] loginIp = { 0, 0, 0, 0 };
             Start(new IPAddress(loginIp), ServerConfig.Instance.LoginPort);
         }
     }
