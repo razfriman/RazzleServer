@@ -1,6 +1,6 @@
 ﻿using RazzleServer.Constants;
 using RazzleServer.Data.WZ;
-using MapleLib.PacketLib;
+using RazzleServer.Packet;
 using RazzleServer.Server;
 using RazzleServer.Util;
 using System;

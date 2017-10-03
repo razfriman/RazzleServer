@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using MapleLib.PacketLib;
+using RazzleServer.Packet;
 using RazzleServer.Constants;
 using RazzleServer.Data;
 using RazzleServer.Data.WZ;

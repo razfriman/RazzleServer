@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Reflection;
-using MapleLib.PacketLib;
+using RazzleServer.Packet;
 using RazzleServer.Server;
 using RazzleServer.Util;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Scripts;
-using RazzleServer.Packet;
+using MapleLib.PacketLib;
 
 namespace RazzleServer.Player
 {
@@ -31,7 +31,7 @@ namespace RazzleServer.Player
 
         public MapleClient(Socket session, MapleServer server)
         {
-            Socket = new ClientSocket(session, this, ServerConfig.Instance.AESKey);
+            Socket = new ClientSocket(session, this, ServerConfig.Instance.Version, ServerConfig.Instance.AESKey);
             Server = server;
             Host = Socket.Host;
             Port = Socket.Port;
@@ -66,13 +66,13 @@ namespace RazzleServer.Player
             Log.LogInformation($"Registered {handlerCount} packet handlers");
         }
 
-        public void RecvPacket(PacketReader packet)
+        public void RecvPacket(MapleLib.PacketLib.PacketReader packet)
         {
             CMSGHeader header = CMSGHeader.UNKNOWN;
             try
             {
                 if(packet.Available >= 2) {
-                    header = (CMSGHeader) packet.ReadHeader();
+                    header = (CMSGHeader) packet.ReadUShort();
 
                     if (PacketHandlers.ContainsKey(header)) {
                         Log.LogDebug($"Recevied [{header.ToString()}] {Functions.ByteArrayToStr(packet.ToArray())}");
@@ -98,7 +98,7 @@ namespace RazzleServer.Player
 
             if (Socket != null) {
                 Socket.Disconnect();
-            }
+       }
         }
 
         public void Disconnected()
@@ -117,7 +117,7 @@ namespace RazzleServer.Player
             }
         }
 
-        public void SendPacket(PacketWriter packet)
+        public void SendPacket(Packet.PacketWriter packet)
         {
             if (ServerConfig.Instance.PrintPackets)
             {
@@ -133,12 +133,12 @@ namespace RazzleServer.Player
         {
             if (Socket == null) return;
 
-            var sIV = Functions.RandomBytes(4);
-            var rIV = Functions.RandomBytes(4);
+            var sIV = Functions.RandomUInt();
+            var rIV = Functions.RandomUInt();
 
             Socket.Crypto.SetVectors(sIV, rIV);
 
-            PacketWriter writer = new PacketWriter(0x0E);
+            var writer = new Packet.PacketWriter(0x0E);
             writer.WriteUShort(ServerConfig.Instance.Version);
             writer.WriteMapleString(ServerConfig.Instance.SubVersion.ToString());
             writer.WriteBytes(rIV);

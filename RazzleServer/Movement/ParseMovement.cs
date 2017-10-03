@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using MapleLib.PacketLib;
+using RazzleServer.Packet;
 using System.Collections.Generic;
 using System.Drawing;
 using RazzleServer.Util;
@@ -143,7 +143,7 @@ namespace RazzleServer.Movement
                             break;
                         }
                     default:
-                        Log.LogWarning($"Unknown movement type [{type}] [{pr.ToString(true)}]");
+                        Log.LogWarning($"Unknown movement type [{type}] [{pr}]");
                         return null;
                 }
             }

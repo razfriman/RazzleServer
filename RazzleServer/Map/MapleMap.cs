@@ -5,7 +5,7 @@ using RazzleServer.Data.WZ;
 using RazzleServer.Handlers;
 using RazzleServer.Inventory;
 using RazzleServer.Map.Monster;
-using MapleLib.PacketLib;
+using RazzleServer.Packet;
 using RazzleServer.Party;
 using RazzleServer.Player;
 using RazzleServer.Scripts;

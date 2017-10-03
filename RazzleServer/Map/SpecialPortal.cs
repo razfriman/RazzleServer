@@ -1,5 +1,5 @@
 ﻿using RazzleServer.Data.WZ;
-using MapleLib.PacketLib;
+using RazzleServer.Packet;
 using RazzleServer.Player;
 using System.Drawing;
 using static RazzleServer.Data.WZ.WzMap;
