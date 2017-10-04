@@ -4,3 +4,4 @@ obj
 .vs
 Logs
 project.lock.json
+*.userprefs

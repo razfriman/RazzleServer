@@ -30,7 +30,7 @@ namespace RazzleServer.Constants
         //    {JobType.BeastTamer,    false},
         //};
 
-        public static readonly Dictionary<uint, Tuple<byte, int>> DefaultBasicKeyBinds = new Dictionary<uint, Tuple<byte, int>>()
+        public static readonly Dictionary<uint, Tuple<byte, int>> DefaultBasicKeyBinds = new Dictionary<uint, Tuple<byte, int>>
         {
             {2, new Tuple<byte, int>(4, 10)},{3, new Tuple<byte, int>(4, 12)},{4, new Tuple<byte, int>(4, 13)},{5, new Tuple<byte, int>(4, 18)},
             {6, new Tuple<byte, int>(4, 24)},{7, new Tuple<byte, int>(4, 21)},{12, new Tuple<byte, int>(4, 37)},{13, new Tuple<byte, int>(4, 33)},
@@ -46,7 +46,7 @@ namespace RazzleServer.Constants
             { 65, new Tuple<byte, int>(6, 105)},{66, new Tuple<byte, int>(6, 106)}
         };
 
-        public static readonly Dictionary<uint, Tuple<byte, int>> DefaultSecondaryKeyBinds = new Dictionary<uint, Tuple<byte, int>>()
+        public static readonly Dictionary<uint, Tuple<byte, int>> DefaultSecondaryKeyBinds = new Dictionary<uint, Tuple<byte, int>>
         {
             {20, new Tuple<byte, int>(4, 28)},{21, new Tuple<byte, int>(4, 31)},{22, new Tuple<byte, int>(4, 0)},{23, new Tuple<byte, int>(4, 1)},
             { 25, new Tuple<byte, int>(4, 19)},{26, new Tuple<byte, int>(4, 14)},{27, new Tuple<byte, int>(4, 15)},{29, new Tuple<byte, int>(5, 52)},

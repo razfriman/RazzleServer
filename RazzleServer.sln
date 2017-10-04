@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazzleServer.DB", "RazzleSe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapleLib", "MapleLib\MapleLib.csproj", "{BD26D4D7-B1B9-4FA2-8B42-E68D1DB6AF89}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazzleServer", "RazzleServer\RazzleServer.csproj", "{B758B3CD-C420-47E7-8DEC-5E88A4D1FE8F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazzleServer", "RazzleServer\RazzleServer.csproj", "{23750A73-86BE-49CF-9159-39B34627990F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{BD26D4D7-B1B9-4FA2-8B42-E68D1DB6AF89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD26D4D7-B1B9-4FA2-8B42-E68D1DB6AF89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD26D4D7-B1B9-4FA2-8B42-E68D1DB6AF89}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B758B3CD-C420-47E7-8DEC-5E88A4D1FE8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B758B3CD-C420-47E7-8DEC-5E88A4D1FE8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B758B3CD-C420-47E7-8DEC-5E88A4D1FE8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B758B3CD-C420-47E7-8DEC-5E88A4D1FE8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23750A73-86BE-49CF-9159-39B34627990F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23750A73-86BE-49CF-9159-39B34627990F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23750A73-86BE-49CF-9159-39B34627990F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23750A73-86BE-49CF-9159-39B34627990F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
