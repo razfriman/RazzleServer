@@ -12,24 +12,20 @@ namespace RazzleServer.Server
     public abstract class MapleServer : IDisposable
     {
         public Dictionary<string, MapleClient> Clients { get; set; } = new Dictionary<string, MapleClient>();
-        public ushort Port = 0;
+        public ushort Port;
 
         private TcpListener _listener;
         private const int BACKLOG_SIZE = 50;
-        private bool _disposed = false;
+        private bool _disposed;
 
         private static ILogger Log = LogManager.Log;
-        
+
         public virtual void RemoveClient(MapleClient client)
         {
-            if(Clients.ContainsKey(client.Key)) {
+            if (Clients.ContainsKey(client.Key))
+            {
                 Clients.Remove(client.Key);
             }
-        }
-
-        ~MapleServer()
-        {
-            Dispose(false);
         }
 
         protected virtual void Dispose(bool disposing)
@@ -47,10 +43,7 @@ namespace RazzleServer.Server
         }
 
 
-        public virtual bool AllowConnection(string address)
-        {
-            return true;
-        }
+        public virtual bool AllowConnection(string address) => true;
 
         public virtual MapleClient CreateMapleClient(Socket socket)
         {
@@ -80,7 +73,7 @@ namespace RazzleServer.Server
                 return null;
             }
         }
-        
+
         public virtual void ShutDown()
         {
             try
@@ -94,7 +87,10 @@ namespace RazzleServer.Server
                 _listener.Stop();
                 _listener.Server.Shutdown(SocketShutdown.Both);
             }
-            catch { }
+            catch (Exception e)
+            {
+                Log.LogError("Error during server shutdown", e);
+            }
         }
 
         public void Start(IPAddress ip, ushort port)
@@ -107,7 +103,7 @@ namespace RazzleServer.Server
             Task.Factory.StartNew(ListenLoop);
         }
 
-        private async void ListenLoop()
+        private async Task ListenLoop()
         {
             while (true)
             {

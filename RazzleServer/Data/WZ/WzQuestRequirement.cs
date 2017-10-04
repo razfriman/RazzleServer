@@ -9,21 +9,21 @@ namespace RazzleServer.Data.WZ
 {
     public class WzQuestRequirement
     {
-        public QuestRequirementType Type { get; set; }        
+        public QuestRequirementType Type { get; set; }
 
         protected WzQuestRequirement(QuestRequirementType type)
         {
-            Type = type;            
+            Type = type;
         }
 
         public virtual bool Check(MapleCharacter chr, int npcId, MapleQuest quest) { return false; }
     }
 
     public class WzQuestStringRequirement : WzQuestRequirement
-    {        
+    {
         public string Data { get; private set; }
 
-        public WzQuestStringRequirement(QuestRequirementType type,string data)
+        public WzQuestStringRequirement(QuestRequirementType type, string data)
             : base(type)
         {
             Data = data;
@@ -37,10 +37,10 @@ namespace RazzleServer.Data.WZ
     }
 
     public class WzQuestIntegerRequirement : WzQuestRequirement
-    {        
+    {
         public int Data { get; private set; }
 
-        private static ILogger Log = LogManager.Log;
+        private static readonly ILogger Log = LogManager.Log;
 
         public WzQuestIntegerRequirement(QuestRequirementType type, int data)
             : base(type)
@@ -57,8 +57,8 @@ namespace RazzleServer.Data.WZ
                 case QuestRequirementType.lvmax:
                     return chr.Level <= Data;
                 case QuestRequirementType.npc:
-                    return npcId == Data;                   
-                case QuestRequirementType.interval:                    
+                    return npcId == Data;
+                case QuestRequirementType.interval:
                     return true; //todo: quest is repeatable
                 case QuestRequirementType.pettamenessmin:
                     return true; //todo: chr.GetPet(0).Tameness >= Data;
@@ -68,17 +68,17 @@ namespace RazzleServer.Data.WZ
                     return chr.Fame >= Data;
                 default:
                     Log.LogWarning($"No check handler for {Type.ToString()}");
-                    break;                    
+                    break;
             }
             return false;
         }
     }
 
     public class WzQuestIntegerPairRequirement : WzQuestRequirement
-    {        
+    {
         public Dictionary<int, int> Data { get; private set; }
 
-        private static ILogger Log = LogManager.Log;
+        private static readonly ILogger Log = LogManager.Log;
 
 
         public WzQuestIntegerPairRequirement(QuestRequirementType type, Dictionary<int, int> data)
@@ -94,37 +94,37 @@ namespace RazzleServer.Data.WZ
                 case QuestRequirementType.item:
                     foreach (var itemPair in Data)
                     {
-                        if (!chr.Inventory.HasItem(itemPair.Key, itemPair.Value)) 
+                        if (!chr.Inventory.HasItem(itemPair.Key, itemPair.Value))
                             return false;
                     }
                     return true;
                 case QuestRequirementType.mob:
                     foreach (var mobPair in Data)
                     {
-                        if (!quest.MonsterKills.ContainsKey(mobPair.Key) || quest.MonsterKills[mobPair.Key] < mobPair.Value) 
+                        if (!quest.MonsterKills.ContainsKey(mobPair.Key) || quest.MonsterKills[mobPair.Key] < mobPair.Value)
                             return false;
                     }
                     return true;
                 case QuestRequirementType.quest:
                     foreach (var questPair in Data)
                     {
-                        if (!chr.HasCompletedQuest(questPair.Key)) 
+                        if (!chr.HasCompletedQuest(questPair.Key))
                             return false;
                     }
                     return true;
                 default:
                     Log.LogWarning($"No check handler for {Type.ToString()}");
-                    break;                    
+                    break;
             }
             return false;
         }
     }
 
     public class WzQuestIntegerListRequirement : WzQuestRequirement
-    {       
+    {
         public List<int> Data { get; private set; }
 
-        private static ILogger Log = LogManager.Log;
+        private static readonly ILogger Log = LogManager.Log;
 
 
         public WzQuestIntegerListRequirement(QuestRequirementType type, List<int> data)
@@ -138,27 +138,27 @@ namespace RazzleServer.Data.WZ
             switch (Type)
             {
                 case QuestRequirementType.job:
-                    return Data.Where(i => i == chr.Job).Any();                  
+                    return Data.Any(i => i == chr.Job);
                 case QuestRequirementType.fieldEnter:
-                    return Data.Where(i => i == chr.MapID).Any();
+                    return Data.Any(i => i == chr.MapID);
                 case QuestRequirementType.pet:
                     return true; //todo: 
-                    /*
-                     return Data.Where(x => x == chr.GetPet(0).ItemId).Any();
-                     */
+                                 /*
+                                  return Data.Where(x => x == chr.GetPet(0).ItemId).Any();
+                                  */
                 default:
                     Log.LogWarning($"No check handler for {Type.ToString()}");
-                    break;                    
+                    break;
             }
             return false;
         }
     }
 
     public class WzQuestDateRequirement : WzQuestRequirement
-    {        
+    {
         public DateTime Date { get; private set; }
 
-        private static ILogger Log = LogManager.Log;
+        private static readonly ILogger Log = LogManager.Log;
 
         public WzQuestDateRequirement(QuestRequirementType type, DateTime date)
             : base(type)
@@ -174,12 +174,12 @@ namespace RazzleServer.Data.WZ
                     return DateTime.UtcNow <= Date;
                 default:
                     Log.LogWarning($"No check handler for {Type}");
-                    break;                    
+                    break;
             }
             return false;
         }
     }
-    
+
     public enum QuestRequirementType
     {
         undefined,
@@ -196,7 +196,7 @@ namespace RazzleServer.Data.WZ
         startscript,
         endscript,
         pet,
-        pettamenessmin,       
+        pettamenessmin,
         questComplete,
         pop,
         subJobFlags,

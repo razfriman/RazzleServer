@@ -4,14 +4,13 @@ using RazzleServer.Player;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using RazzleServer.Inventory;
 using RazzleServer.Util;
 using RazzleServer.Constants;
 
 namespace RazzleServer.Data
 {
-    public class DataBuffer
+    public static class DataBuffer
     {
         public static Dictionary<int, WzEquip> EquipBuffer = new Dictionary<int, WzEquip>();
         public static Dictionary<int, WzItem> ItemBuffer = new Dictionary<int, WzItem>();
@@ -34,17 +33,9 @@ namespace RazzleServer.Data
         public static Dictionary<string, Type> PortalScripts = new Dictionary<string, Type>();
         public static Dictionary<string, Type> EventScripts = new Dictionary<string, Type>();
 
-        public static WzEquip GetEquipById(int itemId)
-        {
-            WzEquip ret;
-            return EquipBuffer.TryGetValue(itemId, out ret) ? ret : null;
-        }
+        public static WzEquip GetEquipById(int itemId) => EquipBuffer.TryGetValue(itemId, out WzEquip ret) ? ret : null;
 
-        public static WzItem GetItemById(int itemId)
-        {
-            WzItem ret;
-            return ItemBuffer.TryGetValue(itemId, out ret) ? ret : null;
-        }
+        public static WzItem GetItemById(int itemId) => ItemBuffer.TryGetValue(itemId, out WzItem ret) ? ret : null;
 
         public static List<Tuple<int, string>> GetItemsByName(string name)
         {
@@ -61,11 +52,7 @@ namespace RazzleServer.Data
             return idNamePairs;
         }
 
-        public static WzMob GetMobById(int mobId)
-        {
-            WzMob ret;
-            return MobBuffer.TryGetValue(mobId, out ret) ? ret : null;
-        }
+        public static WzMob GetMobById(int mobId) => MobBuffer.TryGetValue(mobId, out WzMob ret) ? ret : null;
 
         public static List<Tuple<int, string>> GetMobsByName(string name)
         {
@@ -78,17 +65,9 @@ namespace RazzleServer.Data
             return idNamePairs;
         }
 
-        public static List<MobDrop> GetMobDropsById(int mobId)
-        {
-            List<MobDrop> ret;
-            return MobDropBuffer.TryGetValue(mobId, out ret) ? ret : new List<MobDrop>();
-        }
+        public static List<MobDrop> GetMobDropsById(int mobId) => MobDropBuffer.TryGetValue(mobId, out List<MobDrop> ret) ? ret : new List<MobDrop>();
 
-        public static WzMap GetMapById(int mapId)
-        {
-            WzMap ret;
-            return MapBuffer.TryGetValue(mapId, out ret) ? ret : null;
-        }
+        public static WzMap GetMapById(int mapId) => MapBuffer.TryGetValue(mapId, out WzMap ret) ? ret : null;
 
         public static List<Tuple<int, string>> GetMapsByName(string name)
         {
@@ -101,11 +80,7 @@ namespace RazzleServer.Data
             return idNamePairs;
         }
 
-        public static WzCharacterSkill GetCharacterSkillById(int skillId)
-        {
-            WzCharacterSkill ret;
-            return CharacterSkillBuffer.TryGetValue(skillId, out ret) ? ret : null;
-        }
+        public static WzCharacterSkill GetCharacterSkillById(int skillId) => CharacterSkillBuffer.TryGetValue(skillId, out WzCharacterSkill ret) ? ret : null;
 
         public static List<WzCharacterSkill> GetCharacterSkillListByJob(int jobId)
         {
@@ -118,11 +93,7 @@ namespace RazzleServer.Data
             return list;
         }
 
-        public static string GetSkillNameById(int skillId)
-        {
-            WzCharacterSkill ret;
-            return CharacterSkillBuffer.TryGetValue(skillId, out ret) ? ret.Name : string.Empty;
-        }
+        public static string GetSkillNameById(int skillId) => CharacterSkillBuffer.TryGetValue(skillId, out WzCharacterSkill ret) ? ret.Name : string.Empty;
 
         public static Dictionary<int, string> GetSkillsByName(string name)
         {
@@ -135,71 +106,35 @@ namespace RazzleServer.Data
             return idNamePairs;
         }
 
-        public static WzFamiliarSkill GetFamiliarSkillById(int skillId)
-        {
-            WzFamiliarSkill ret;
-            return FamiliarSkillBuffer.TryGetValue(skillId, out ret) ? ret : null;
-        }
+        public static WzFamiliarSkill GetFamiliarSkillById(int skillId) => FamiliarSkillBuffer.TryGetValue(skillId, out WzFamiliarSkill ret) ? ret : null;
 
-        public static Dictionary<int, string> GetAllJobNameIds()
-        {
-            return JobNames.ToDictionary(x => x.Key, x => x.Value);
-        }
+        public static Dictionary<int, string> GetAllJobNameIds() => JobNames.ToDictionary(x => x.Key, x => x.Value);
 
-        public static List<int> GetAllJobIds()
-        {
-            return JobConstants.JobIdNamePairs.Keys.ToList();
-        }
+        public static List<int> GetAllJobIds() => JobConstants.JobIdNamePairs.Keys.ToList();
 
-        public static List<KeyValuePair<int, string>> GetJobsByName(string name)
-        {
-            name = name.ToLower();
-            return JobConstants.JobIdNamePairs.Where(x => x.Value.ToLower().Contains(name)).ToList();
-        }
+        public static List<KeyValuePair<int, string>> GetJobsByName(string name) => JobConstants.JobIdNamePairs.Where(x => x.Value.ToLower().Contains(name.ToLower())).ToList();
 
-        public static string GetJobNameById(int id)
-        {
-            string ret;
-            return JobConstants.JobIdNamePairs.TryGetValue(id, out ret) ? ret : string.Empty;
-        }
+        public static string GetJobNameById(int id) => JobConstants.JobIdNamePairs.TryGetValue(id, out string ret) ? ret : string.Empty;
 
-        public static WzQuest GetQuestById(ushort id)
-        {
-            WzQuest ret;
-            return QuestBuffer.TryGetValue(id, out ret) ? ret : null;
-        }
+        public static WzQuest GetQuestById(ushort id) => QuestBuffer.TryGetValue(id, out WzQuest ret) ? ret : null;
 
-        public static List<KeyValuePair<int, string>> GetNPCsByName(string name)
-        {
-            name = name.ToLower();
-            return NpcNames.Where(x => x.Value.ToLower().Contains(name)).ToList();
-        }
+        public static List<KeyValuePair<int, string>> GetNPCsByName(string name) => NpcNames.Where(x => x.Value.ToLower().Contains(name.ToLower())).ToList();
 
-        public static string GetNPCNameById(int id)
-        {
-            string ret;
-            return NpcNames.TryGetValue(id, out ret) ? ret : string.Empty;
-        }
+        public static string GetNPCNameById(int id) => NpcNames.TryGetValue(id, out string ret) ? ret : string.Empty;
 
-        public static WzRecipe GetCraftRecipeById(int Id)
-        {
-            WzRecipe ret;
-            return CraftRecipeBuffer.TryGetValue(Id, out ret) ? ret : null;
-        }
+        public static WzRecipe GetCraftRecipeById(int Id) => CraftRecipeBuffer.TryGetValue(Id, out WzRecipe ret) ? ret : null;
 
         public static WzMakeCharInfo GetCharCreationInfo(JobType jobType)
         {
-            WzMakeCharInfo info;
             if (jobType == JobType.Cannonneer)
+            {
                 jobType = JobType.Explorer;
-            return CharCreationInfo.TryGetValue(jobType, out info) ? info : null;
+            }
+
+            return CharCreationInfo.TryGetValue(jobType, out WzMakeCharInfo info) ? info : null;
         }
 
-        public static WzItemOption GetPotential(int id)
-        {
-            WzItemOption ret;
-            return PotentialBuffer.TryGetValue(id, out ret) ? ret : null;
-        }
+        public static WzItemOption GetPotential(int id) => PotentialBuffer.TryGetValue(id, out WzItemOption ret) ? ret : null;
 
         public static ushort GetRandomPotential(MaplePotentialState grade, byte reqLevel, int itemIdFor, bool bonusPotential = false)
         {

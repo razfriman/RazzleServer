@@ -7,7 +7,7 @@ namespace RazzleServer.Util
     {
         public static void Shuffle<T>(this IList<T> list)
         {
-            Random r = new Random();
+            var r = new Random();
             var len = list.Count;
             for (var i = len - 1; i >= 1; --i)
             {

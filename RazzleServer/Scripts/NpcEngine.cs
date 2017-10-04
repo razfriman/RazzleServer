@@ -16,7 +16,7 @@ namespace RazzleServer.Scripts
         private MapleClient Client;
         public int NpcId;
         public NpcScript ScriptInstance;
-        public bool IsShop = false;
+        public bool IsShop;
 
         private static ILogger Log = LogManager.Log;
 
@@ -99,45 +99,22 @@ namespace RazzleServer.Scripts
         }
 
         #region Messages
-        private void SendOk(string text)
-        {
-            Client.SendPacket(MapleNpc.GetNpcTalk(NpcId, 0, MapleNpc.ChatType.None, text));
-        }
 
-        private void SendNext(string text)
-        {
-            Client.SendPacket(MapleNpc.GetNpcTalk(NpcId, 0, MapleNpc.ChatType.None, text, next: true));
-        }
+        private void SendOk(string text) => Client.SendPacket(MapleNpc.GetNpcTalk(NpcId, 0, MapleNpc.ChatType.None, text));
 
-        private void SendPrev(string text)
-        {
-            Client.SendPacket(MapleNpc.GetNpcTalk(NpcId, 0, MapleNpc.ChatType.None, text, prev: true));
-        }
+        private void SendNext(string text) => Client.SendPacket(MapleNpc.GetNpcTalk(NpcId, 0, MapleNpc.ChatType.None, text, next: true));
 
-        private void SendNextPrev(string text)
-        {
-            Client.SendPacket(MapleNpc.GetNpcTalk(NpcId, 0, MapleNpc.ChatType.None, text, next: true, prev: true));
-        }
+        private void SendPrev(string text) => Client.SendPacket(MapleNpc.GetNpcTalk(NpcId, 0, MapleNpc.ChatType.None, text, prev: true));
 
-        private void SendYesNo(string text)
-        {
-            Client.SendPacket(MapleNpc.GetNpcTalk(NpcId, 2, MapleNpc.ChatType.None, text));
-        }
+        private void SendNextPrev(string text) => Client.SendPacket(MapleNpc.GetNpcTalk(NpcId, 0, MapleNpc.ChatType.None, text, next: true, prev: true));
 
-        private void SendSimple(string text)
-        {
-            Client.SendPacket(MapleNpc.GetNpcTalk(NpcId, 5, MapleNpc.ChatType.None, text));
-        }
+        private void SendYesNo(string text) => Client.SendPacket(MapleNpc.GetNpcTalk(NpcId, 2, MapleNpc.ChatType.None, text));
 
-        private void SendGetNumber(string text, int defaultValue, int minValue, int maxValue)
-        {
-            Client.SendPacket(MapleNpc.GetNpcTalkNum(NpcId, text, defaultValue, minValue, maxValue));
-        }
+        private void SendSimple(string text) => Client.SendPacket(MapleNpc.GetNpcTalk(NpcId, 5, MapleNpc.ChatType.None, text));
 
-        private void SendAskText(string text, int min, int max, string textboxText = "")
-        {
-            Client.SendPacket(MapleNpc.GetNpcTalkAskText(NpcId, text, min, max, textboxText));
-        }
+        private void SendGetNumber(string text, int defaultValue, int minValue, int maxValue) => Client.SendPacket(MapleNpc.GetNpcTalkNum(NpcId, text, defaultValue, minValue, maxValue));
+
+        private void SendAskText(string text, int min, int max, string textboxText = "") => Client.SendPacket(MapleNpc.GetNpcTalkAskText(NpcId, text, min, max, textboxText));
 
         public void BuyItem(int purchaseId, short index, short quantity)
         {

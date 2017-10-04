@@ -8,10 +8,10 @@ namespace RazzleServer.Server
 {
 	public class ServerConfig
 	{
-		public int ExpRate { get; set; }
-		public int MesoRate { get; set; }
-		public int DropRate { get; set; }
-		public int QuestExpRate { get; set; }
+        public int ExpRate { get; set; } = 1;
+        public int MesoRate { get; set; } = 1;
+        public int DropRate { get; set; } = 1;
+        public int QuestExpRate { get; set; } = 1;
 		public ushort LoginPort { get; set; } = 8484;
 		public ushort ChannelStartPort { get; set; } = 8585;
 		public byte Channels { get; set; } = 1;
@@ -20,7 +20,7 @@ namespace RazzleServer.Server
 		public string EventMessage { get; set; } = "Raz's Event";
 		public int DefaultMapID { get; set; } = 100000000;
 		public string DatabaseName { get; set; } = "MapleServer.db";
-		public string WzFilePath { get; set; }
+        public string WzFilePath { get; set; } = string.Empty;
 		public ushort Version { get; set; } = 83;
 		public byte SubVersion { get; set; } = 1;
 		public byte ServerType { get; set; } = 8;
@@ -31,7 +31,6 @@ namespace RazzleServer.Server
 		public bool LoginCreatesNewAccount { get; set; } = true;
 
         private static ILogger Log = LogManager.Log;
-
 
 		public static void LoadFromFile(string path)
 		{

@@ -7,14 +7,15 @@ using System.Diagnostics;
 using System.IO;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Util;
+using System.Threading.Tasks;
 
 namespace RazzleServer
 {
-    public class Program
+    public static class Program
     {
-        private static ILogger Log = LogManager.Log;
+        private static readonly ILogger Log = LogManager.Log;
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             ServerConfig.LoadFromFile("ServerConfig.json");
             MapleClient.RegisterPacketHandlers();
@@ -26,6 +27,7 @@ namespace RazzleServer
 
             Thread.Sleep(Timeout.Infinite);
         }
+
         public static void LoadMaps()
         {
             Stopwatch sw = Stopwatch.StartNew();
@@ -33,6 +35,7 @@ namespace RazzleServer
             Log.LogInformation($"{count} Maps loaded in {sw.ElapsedMilliseconds} ms");
             sw.Stop();
         }
+
         public static void LoadMobs()
         {
             Stopwatch sw = Stopwatch.StartNew();
@@ -40,6 +43,7 @@ namespace RazzleServer
             Log.LogInformation($"{count} Mobs loaded in {sw.ElapsedMilliseconds} ms");
             sw.Stop();
         }
+
         private static void InitializeChannelServers()
         {
             for (var i = 0; i < ServerConfig.Instance.Channels; i++)
@@ -48,10 +52,12 @@ namespace RazzleServer
                 ServerManager.ChannelServers[i] = channelServer;
             }
         }
+
         private static void InitializeLoginServer()
         {
             ServerManager.LoginServer = new LoginServer();
         }
+
         private static void InitializeDatabase()
         {
             Log.LogInformation("Initializing Database");

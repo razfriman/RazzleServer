@@ -28,10 +28,7 @@ namespace RazzleServer.Map
             PartyId = owner.Party != null ? owner.Party.ID : -1;
         }
 
-        public virtual void Dispose()
-        {
-            Owner = null;
-        }
+        public virtual void Dispose() => Owner = null;
 
         public abstract PacketWriter GetSpawnPacket(bool animatedSpawn);
 

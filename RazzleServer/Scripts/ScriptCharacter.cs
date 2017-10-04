@@ -5,28 +5,22 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace RazzleServer.Scripts
 {
     public class ScriptCharacter : AScriptCharacter
     {
         public string AssignedScriptName { get; }
+
         WeakReference<MapleCharacter> CharacterReference { get; }
+
         public ScriptCharacter(MapleCharacter chr, string scriptName)
         {
             CharacterReference = new WeakReference<MapleCharacter>(chr);
             AssignedScriptName = scriptName;
         }
 
-        private MapleCharacter Character
-        {
-            get
-            {
-                MapleCharacter ret;
-                return CharacterReference.TryGetTarget(out ret) ? ret : null;
-            }
-        }
+        private MapleCharacter Character => CharacterReference.TryGetTarget(out MapleCharacter ret) ? ret : null;
 
         public override int Id => Character.ID;
         public override string Name => Character.Name;
@@ -107,11 +101,8 @@ namespace RazzleServer.Scripts
         public override bool HasItem(int itemId, int quantity = 1) => Character.Inventory.HasItem(itemId, quantity);
         public override bool RemoveItems(int itemId, int amount) => Character.Inventory.RemoveItemsById(itemId, amount);
 
-        public override List<dynamic> GetEquipsWithRevealedPotential()
-        {
-            List<MapleEquip> equips = Character.Inventory.GetEquipsWithRevealedPotential();
-            return new List<dynamic>(equips.Select(x => x as dynamic));
-        }
+        public override List<dynamic> GetEquipsWithRevealedPotential() => new List<dynamic>(Character.Inventory.GetEquipsWithRevealedPotential()
+                                                                                            .Select(x => x as dynamic));
 
         #endregion
         #region Quest

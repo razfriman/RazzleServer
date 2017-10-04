@@ -11,132 +11,89 @@ namespace RazzleServer.Server
     public static class ServerManager
     {
         private static Dictionary<int, MapleEvent> Events = new Dictionary<int, MapleEvent>();
+
         private static AutoIncrement EventId = new AutoIncrement();
 
         public static LoginServer LoginServer { get; set; }
+
         public static Dictionary<int, ChannelServer> ChannelServers { get; set; } = new Dictionary<int, ChannelServer>();
 
-        public static ChannelServer GetChannelServer(int channel)
-        {
-            if (ChannelServers.ContainsKey(channel))
-            {
-                return ChannelServers[channel];
-            }
-            return null;
-        }
+        public static ChannelServer GetChannelServer(int channel) => ChannelServers.ContainsKey(channel) ? ChannelServers[channel]  : null;
 
-        public static bool IsCharacterOnline(int characterId)
-        {
-            return GetClientByCharacterId(characterId) != null;
-        }
+        public static bool IsCharacterOnline(int characterId) => GetClientByCharacterId(characterId) != null;
 
-        public static bool IsAccountOnline(int accountId)
-        {
-            foreach (var channel in ChannelServers.Values)
-            {
-                if (channel.Clients.Values.Any(client => client?.Account?.ID == accountId))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
+        public static bool IsAccountOnline(int accountId) => ChannelServers
+            .Values
+            .SelectMany(x => x.Clients.Values)
+            .Any(x => x?.Account?.ID == accountId);
 
-        public static MapleClient GetClientByCharacterId(int chrId)
-        {
-            foreach (var channel in ChannelServers.Values)
-            {
-                var client = channel.Clients.Values.FirstOrDefault(x => x?.Account?.Character?.ID == chrId);
-                if (client != null)
-                {
-                    return client;
-                }
-            }
-            return null;
-        }
+        public static MapleClient GetClientByCharacterId(int chrId) => ChannelServers
+            .Values
+            .SelectMany(x => x.Clients.Values)
+            .Where(x => x?.Account?.Character?.ID == chrId)
+            .FirstOrDefault(x => x != null);
 
-        public static MapleClient GetClientByCharacterName(string ign)
-        {
-            foreach (var channel in ChannelServers.Values)
-            {
-                var client = channel.Clients.Values.FirstOrDefault(x => x?.Account?.Character?.Name?.ToLower() == ign);
-                if (client != null)
-                {
-                    return client;
-                }
-            }
-            return null;
-        }
+		public static MapleClient GetClientByCharacterName(string ign) => ChannelServers
+            .Values
+			.SelectMany(x => x.Clients.Values)
+			.Where(x => x?.Account?.Character?.Name?.ToLower() == ign)
+			.FirstOrDefault(x => x != null);
 
-        public static MapleCharacter GetCharacterById(int chrId)
-        {
-            foreach (var channel in ChannelServers.Values)
-            {
-                var client = channel.Clients.Values.FirstOrDefault(x => x?.Account?.Character?.ID == chrId);
-                if (client != null)
-                {
-                    return client.Account.Character;
-                }
-            }
-            return null;
-        }
-        public static MapleClient GetClientByAccountId(int accountId)
-        {
-            foreach (var channel in ChannelServers.Values)
-            {
-                var client = channel.Clients.Values.FirstOrDefault(x => x?.Account?.ID == accountId);
-                if (client != null)
-                {
-                    return client;
-                }
-            }
-            return null;
-        }
+		public static MapleCharacter GetCharacterById(int chrId) => ChannelServers
+			.Values
+			.SelectMany(x => x.Clients.Values)
+            .Where(x => x?.Account?.Character?.ID == chrId)
+            .Select(x => x.Account.Character)
+			.FirstOrDefault(x => x != null);
 
-        public static MapleCharacter GetCharacterByAccountId(int accountId)
-        {
-            MapleClient c = GetClientByAccountId(accountId);
-            return c != null ? c.Account.Character : null;
-        }
+		public static MapleClient GetClientByAccountId(int accountId) => ChannelServers
+			.Values
+			.SelectMany(x => x.Clients.Values)
+            .Where(x => x?.Account?.ID == accountId)
+			.FirstOrDefault(x => x != null);
 
-        public static MapleCharacter GetCharacterByName(string ign)
-        {
-            foreach (var channel in ChannelServers.Values)
-            {
-                var client = channel.Clients.Values.FirstOrDefault(x => x?.Account?.Character?.Name?.ToLower() == ign);
-                if (client != null)
-                {
-                    return client.Account.Character;
-                }
-            }
-            return null;
-        }
+        public static MapleCharacter GetCharacterByAccountId(int accountId) => GetClientByAccountId(accountId)?.Account.Character;
+
+		public static MapleCharacter GetCharacterByName(string ign) => ChannelServers
+			.Values
+			.SelectMany(x => x.Clients.Values)
+			.Where(x => x?.Account?.Character?.Name?.ToLower() == ign)
+            .Select(x => x.Account.Character)
+			.FirstOrDefault(x => x != null);
 
         public static Dictionary<MapleClient, bool> GetOnlineBuddies(List<int> characterIds, List<int> accountIds)
         {
-            Dictionary<MapleClient, bool> onlineBuddies = new Dictionary<MapleClient, bool>();
+            var onlineBuddies = new Dictionary<MapleClient, bool>();
 
-            foreach (var channel in ChannelServers.Values)
+            if (accountIds.Count == 0 && characterIds.Count == 0)
             {
-                foreach (MapleClient c in channel.Clients.Values.Where(x => x.Account?.Character != null))
-                {
-                    if (accountIds.Count == 0 && characterIds.Count == 0)
-                        break;
-                    if (!onlineBuddies.ContainsKey(c))
-                    {
-                        if (accountIds.Contains(c.Account.ID))
-                        {
-                            accountIds.Remove(c.Account.ID);
-                            onlineBuddies.Add(c, true);
-                        }
-                        else if (characterIds.Contains(c.Account.Character.ID))
-                        {
-                            characterIds.Remove(c.Account.Character.ID);
-                            onlineBuddies.Add(c, false);
-                        }
-                    }
-                }
+                return onlineBuddies;
             }
+
+            ChannelServers
+                .Values
+                .SelectMany(x => x.Clients.Values)
+                .Where(x => x.Account?.Character != null)
+                .ToList()
+                .ForEach(c =>
+                {
+                    if (onlineBuddies.ContainsKey(c))
+                    {
+                        return;
+                    }
+
+                    if (accountIds.Contains(c.Account.ID))
+                    {
+                        accountIds.Remove(c.Account.ID);
+                        onlineBuddies.Add(c, true);
+                    }
+                    else if (characterIds.Contains(c.Account.Character.ID))
+                    {
+                        characterIds.Remove(c.Account.Character.ID);
+                        onlineBuddies.Add(c, false);
+                    }
+                });
+
             return onlineBuddies;
         }
 
@@ -149,14 +106,10 @@ namespace RazzleServer.Server
 
         public static MapleEvent GetEventById(int id)
         {
-            MapleEvent ret = null;
-            Events.TryGetValue(id, out ret);
+            Events.TryGetValue(id, out var ret);
             return ret;
         }
 
-        public static void UnregisterEvent(int eventId)
-        {
-            Events.Remove(eventId);
-        }
+        public static void UnregisterEvent(int eventId) => Events.Remove(eventId);
     }
 }

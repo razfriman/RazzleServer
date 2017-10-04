@@ -12,9 +12,6 @@ namespace RazzleServer.Packet
             this.header = header;
         }
 
-        public CMSGHeader Header
-        {
-            get { return header; }
-        }
+        public CMSGHeader Header => header;
     }
 }

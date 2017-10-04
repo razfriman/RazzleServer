@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -20,6 +21,7 @@ namespace RazzleServer.Util
 
             public override int GetHashCode() { return Value.GetHashCode(); }
         };
+
         private Dictionary<TKey, ExpiringValueHolder<TValue>> innerDictionary;
         private TimeSpan expiryTimeSpan;
 
@@ -29,7 +31,7 @@ namespace RazzleServer.Util
             {
                 var value = innerDictionary[key];
 
-                if (value.Expiry < System.DateTime.UtcNow)
+                if (value.Expiry < DateTime.UtcNow)
                 {
                     //Expired, nuke it in the background and continue
                     innerDictionary.Remove(key);
@@ -66,7 +68,7 @@ namespace RazzleServer.Util
 
         public ICollection<TKey> Keys
         {
-            get { return innerDictionary.Keys; }
+            get => innerDictionary.Keys;
         }
 
         public bool TryGetValue(TKey key, out TValue value)
@@ -86,7 +88,7 @@ namespace RazzleServer.Util
 
         public ICollection<TValue> Values
         {
-            get { return innerDictionary.Values.Select(vals => vals.Value).ToList(); }
+            get => innerDictionary.Values.Select(vals => vals.Value).ToList();
         }
 
         public TValue this[TKey key]
@@ -110,44 +112,23 @@ namespace RazzleServer.Util
             innerDictionary.Add(item.Key, new ExpiringValueHolder<TValue>(item.Value, expiryTimeSpan));
         }
 
-        public void Clear()
-        {
-            innerDictionary.Clear();
-        }
+        public void Clear() => innerDictionary.Clear();
 
-        public int Count
-        {
-            get { return innerDictionary.Count; }
-        }
+        public int Count => innerDictionary.Count;
 
-        public bool IsReadOnly
-        {
-            get { return false; }
-        }
+        public bool IsReadOnly => false;
 
-        public bool Contains(KeyValuePair<TKey, TValue> item)
-        {
-            throw new NotImplementedException();
-        }
+        public bool Contains(KeyValuePair<TKey, TValue> item) => innerDictionary.ContainsKey(item.Key);
 
         public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
         {
             throw new NotImplementedException();
         }
 
-        public bool Remove(KeyValuePair<TKey, TValue> item)
-        {
-            throw new NotImplementedException();
-        }
+        public bool Remove(KeyValuePair<TKey, TValue> item) => innerDictionary.Remove(item.Key);
 
-        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
+        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => innerDictionary.Select(x => new KeyValuePair<TKey, TValue>(x.Key, x.Value.Value)).GetEnumerator();
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => innerDictionary.Select(x => new KeyValuePair<TKey, TValue>(x.Key, x.Value.Value)).GetEnumerator();
     }
 }

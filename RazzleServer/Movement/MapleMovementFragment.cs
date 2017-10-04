@@ -1,5 +1,4 @@
-﻿using RazzleServer.Packet;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using MapleLib.PacketLib;
 
@@ -11,7 +10,7 @@ namespace RazzleServer.Movement
         public Point Position { get; set; }
         public short Duration { get; set; }
         public byte State { get; set; }
-        private short fh = 0;
+        private short fh;
         public short Foothold { get { return fh; } set { fh = value; } }
 
         public MapleMovementFragment(byte type, Point position, byte state, short duration)

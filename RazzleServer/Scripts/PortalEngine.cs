@@ -9,7 +9,7 @@ namespace RazzleServer.Scripts
 {
     public static class PortalEngine
     {
-        private static ILogger Log = LogManager.Log;
+        private static readonly ILogger Log = LogManager.Log;
 
         public static void EnterScriptedPortal(WzMap.Portal portal, MapleCharacter character)
         {

@@ -31,8 +31,7 @@ namespace RazzleServer.Server
         {
             lock (MigrationLock)
             {
-                MigrationData connection = null;
-                if (MigrationQueue.TryGetValue(id, out connection))
+                if (MigrationQueue.TryGetValue(id, out var connection))
                 {
                     if (connection.ToChannel == channel)
                     {

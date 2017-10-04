@@ -5,11 +5,9 @@ using RazzleServer.Util;
 
 namespace RazzleServer.Scripts
 {
-    public class ScriptActivator
+    public static class ScriptActivator
     {
-        private static ILogger Log = LogManager.Log;
-
-        //private static ScriptInterface ScriptDataProvider = new ScriptInterface();
+        private static readonly ILogger Log = LogManager.Log;
 
         public static AMapleScript CreateScriptInstance(Type scriptType, string scriptName, MapleCharacter chr)
         {

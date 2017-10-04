@@ -8,7 +8,7 @@ namespace RazzleServer.Movement
 {
     public static class ParseMovement
     {
-        private static ILogger Log = LogManager.Log;
+        private static readonly ILogger Log = LogManager.Log;
 
         public static List<MapleMovementFragment> Parse(PacketReader pr)
         {

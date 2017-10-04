@@ -3,7 +3,6 @@ using RazzleServer.Server;
 using System;
 using System.Text;
 using System.Xml;
-//using System.Xml;
 
 namespace RazzleServer
 {

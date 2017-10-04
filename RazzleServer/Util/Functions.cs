@@ -15,25 +15,16 @@ namespace RazzleServer.Util
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>
-        public static bool IsAlphaNumerical(string s)
-        {
-            return !string.IsNullOrEmpty(s) && new Regex("^[a-zA-Z0-9]*$").IsMatch(s);
-        }
+        public static bool IsAlphaNumerical(string s) => !string.IsNullOrEmpty(s) && new Regex("^[a-zA-Z0-9]*$").IsMatch(s);
 
         /// <summary>
         /// Converts a byte array to a hex parsed string
         /// </summary>
         /// <param name="bytes">Byte array in</param>
         /// <returns>Hex string out</returns>
-        public static string ByteArrayToStr(byte[] bytes)
-        {
-            return bytes.ByteArrayToString();
-        }
+        public static string ByteArrayToStr(byte[] bytes) => bytes.ByteArrayToString();
 
-        public static byte[] ASCIIToBytes(string s)
-        {
-            return Encoding.ASCII.GetBytes(s);
-        }
+        public static byte[] ASCIIToBytes(string s) => Encoding.ASCII.GetBytes(s);
 
         /// <summary>
         /// Converts a byte array to a hexadecimal string
@@ -66,7 +57,7 @@ namespace RazzleServer.Util
 
         private static int GetHexVal(char hex)
         {
-            int val = (int)hex;
+            int val = hex;
             //For uppercase A-F letters:
             if (val < 38 || (val > 57 && val < 65) || val > 70)
                 return -1;//NOT a hex value.
@@ -107,9 +98,8 @@ namespace RazzleServer.Util
         /// <returns>Parsed uint</returns>
         public static uint ByteArrayToInt(byte[] bytes)
         {
-            uint ret;
             string str = ByteArrayToStr(bytes);
-            uint.TryParse(str, NumberStyles.HexNumber, null, out ret);
+            uint.TryParse(str, NumberStyles.HexNumber, null, out uint ret);
             return ret;
         }
 
@@ -139,10 +129,7 @@ namespace RazzleServer.Util
         /// <summary>
         /// Creates a random double between 0.0 and 0.1
         /// </summary>
-        public static double RandomDouble()
-        {
-            return r.NextDouble();
-        }
+        public static double RandomDouble() => r.NextDouble();
 
         /// <summary>
         /// Creates a random byte
@@ -173,10 +160,7 @@ namespace RazzleServer.Util
         /// <summary>
         /// Creates a random int
         /// </summary>
-        public static int Random()
-        {
-            return (int)Math.Floor((double)r.Next());
-        }
+        public static int Random() => (int)Math.Floor((double)r.Next());
 
         /// <summary>
         /// Creates a random with an exclusive upper bound
@@ -188,10 +172,7 @@ namespace RazzleServer.Util
         /// </summary>
         /// <param name="min">Lowest value in range</param>
         /// <param name="max">Highest value in range</param>
-        public static int Random(int min, int max)
-        {
-            return r.Next(min, max + 1);
-        }
+        public static int Random(int min, int max) => r.Next(min, max + 1);
 
         /// <summary>
         /// Creates a SHA1 string
@@ -243,14 +224,11 @@ namespace RazzleServer.Util
         /// Generic extension to compare 2 objects
         /// </summary>
         /// <typeparam name="T">Type to use</typeparam>
-        /// <param name="value">Value in</param>
+        /// <param name="inputValue">Value in</param>
         /// <param name="from">From range</param>
         /// <param name="to">To range</param>
         /// <returns></returns>
-        public static bool InRange<T>(this T value, T from, T to) where T : IComparable<T>
-        {
-            return value.CompareTo(from) >= 1 && value.CompareTo(to) <= -1;
-        }
+        public static bool InRange<T>(this T inputValue, T from, T to) where T : IComparable<T> => inputValue.CompareTo(from) >= 1 && inputValue.CompareTo(to) <= -1;
 
         /// <summary>
         /// Method to compare the 2D distance between two Point structs
@@ -258,10 +236,7 @@ namespace RazzleServer.Util
         /// <param name="a">The first nullable Point</param>
         /// <param name="b">The second nullable Point</param>
         /// <returns>A double representing the distance between the two points</returns>
-        public static double Distance(Point? a, Point? b)
-        {
-            return Distance((Point)a, (Point)b);
-        }
+        public static double Distance(Point? a, Point? b) => Distance(a.Value, b.Value);
 
         /// <summary>
         /// Method to compare the 2D distance between two Point structs
@@ -276,10 +251,7 @@ namespace RazzleServer.Util
             return Math.Sqrt((distX * distX) + (distY * distY));
         }
 
-        public static double DistanceTo(this Point a, Point b)
-        {
-            return Distance(a, b);
-        }
+        public static double DistanceTo(this Point a, Point b) => Distance(a, b);
 
         /// <summary>
         /// Creates a string by combining the strings from an array with a separator (default: space) between them
@@ -289,7 +261,7 @@ namespace RazzleServer.Util
         /// <returns>A string with all the strings from the startindex appended with a space between them</returns>
         public static string Fuse(this string[] arr, int startIndex = 0, string separator = " ")
         {
-            StringBuilder ret = new StringBuilder();
+            var ret = new StringBuilder();
             for (int i = startIndex; i < arr.Length; i++)
             {
                 ret.Append(arr[i]);

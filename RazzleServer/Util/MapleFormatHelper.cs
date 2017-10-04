@@ -26,20 +26,10 @@ namespace RazzleServer.Util
             return new DateTime(timeStamp).ToFileTimeUtc();
         }
 
-        public static long GetMapleTimeStamp(DateTime date)
-        {
-            return date.ToFileTimeUtc();
-        }
+        public static long GetMapleTimeStamp(DateTime date) => date.ToFileTimeUtc();
 
-        public static DateTime GetDateTimeFromMapleTimeStamp(long mapleTimeStamp)
-        {
-            return DateTime.FromFileTimeUtc(mapleTimeStamp);
-        }
+        public static DateTime GetDateTimeFromMapleTimeStamp(long mapleTimeStamp) => DateTime.FromFileTimeUtc(mapleTimeStamp);
 
-        public static int GetCurrentDate()
-        {
-            string date = DateTime.UtcNow.ToString("yyyyMMddhh");
-            return int.Parse(date);
-        }
+        public static int GetCurrentDate() => int.Parse(DateTime.UtcNow.ToString("yyyyMMddhh"));
     }
 }

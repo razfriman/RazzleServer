@@ -31,10 +31,7 @@ namespace RazzleServer.Map
             base.Dispose();
         }
 
-        public void Warp(MapleCharacter chr)
-        {
-            chr.ChangeMap(ToMap, ToMapPortal.Name, true);
-        }
+        public void Warp(MapleCharacter chr) => chr.ChangeMap(ToMap, ToMapPortal.Name, true);
 
         public override PacketWriter GetSpawnPacket(bool animatedSpawn)
         {
