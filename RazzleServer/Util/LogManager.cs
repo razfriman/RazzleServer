@@ -16,7 +16,7 @@ namespace RazzleServer.Util
 						.AddConsole()
 						.AddDebug();
 
-					_log = factory.CreateLogger("MapleLib");
+					_log = factory.CreateLogger("RazzleServer");
 				}
 
 				return _log;
