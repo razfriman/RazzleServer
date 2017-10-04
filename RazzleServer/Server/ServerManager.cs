@@ -1,15 +1,20 @@
 ﻿using RazzleServer.Map;
 using RazzleServer.Player;
 using RazzleServer.Util;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using RazzleServer.Data;
+using System.Diagnostics;
+using Microsoft.Extensions.Logging;
+using System.IO;
 
 namespace RazzleServer.Server
 {
     public static class ServerManager
     {
+        private static readonly ILogger Log = LogManager.Log;
+
         private static Dictionary<int, MapleEvent> Events = new Dictionary<int, MapleEvent>();
 
         private static AutoIncrement EventId = new AutoIncrement();
@@ -111,5 +116,56 @@ namespace RazzleServer.Server
         }
 
         public static void UnregisterEvent(int eventId) => Events.Remove(eventId);
+
+        public static async Task Configure()
+        {
+			await ServerConfig.LoadFromFile("ServerConfig.json");
+			MapleClient.RegisterPacketHandlers();
+			LoadMobs();
+			LoadMaps();
+			InitializeDatabase();
+			InitializeLoginServer();
+			InitializeChannelServers();
+        }
+
+		public static void LoadMaps()
+		{
+			var sw = Stopwatch.StartNew();
+			int count = DataProvider.LoadMaps(Path.Combine(ServerConfig.Instance.WzFilePath, "Map.wz"));
+			Log.LogInformation($"{count} Maps loaded in {sw.ElapsedMilliseconds} ms");
+			sw.Stop();
+		}
+
+		public static void LoadMobs()
+		{
+			var sw = Stopwatch.StartNew();
+			int count = DataProvider.LoadMobs(Path.Combine(ServerConfig.Instance.WzFilePath, "Mob.wz"));
+			Log.LogInformation($"{count} Mobs loaded in {sw.ElapsedMilliseconds} ms");
+			sw.Stop();
+		}
+
+		private static void InitializeChannelServers()
+		{
+			for (var i = 0; i < ServerConfig.Instance.Channels; i++)
+			{
+				var channelServer = new ChannelServer((ushort)(ServerConfig.Instance.ChannelStartPort + i));
+				ServerManager.ChannelServers[i] = channelServer;
+			}
+		}
+
+		private static void InitializeLoginServer()
+		{
+			LoginServer = new LoginServer();
+		}
+
+		private static void InitializeDatabase()
+		{
+			Log.LogInformation("Initializing Database");
+
+			using (var context = new MapleDbContext())
+			{
+				var accounts = context.Accounts.ToArray();
+			}
+		}
     }
 }
