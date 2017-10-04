@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Drawing;
+using System.IO;
 using System.Text;
 
 namespace MapleLib.PacketLib
@@ -105,5 +106,31 @@ namespace MapleLib.PacketLib
 		/// </summary>
 		/// <returns>A maple string</returns>
 		public string ReadMapleString() => ReadString(ReadShort());
+
+		/// <summary>      
+		/// Reads the first two bytes from the stream, no matter what. If the position = 0, it advances two, otherwise, it does not change.       
+		/// </summary>        
+		/// <returns></returns>       
+		public ushort ReadHeader()
+		{
+			var oldPos = _buffer.Position;
+			_buffer.Position = 0;
+			ushort ret = ReadUShort();
+			if (oldPos != 0)
+				_buffer.Position = oldPos;
+			return ret;
+		}
+
+		/// <summary>     
+		/// Reads a point from the stream     
+		/// </summary>        
+		/// <returns>A point</returns>        
+		public Point ReadPoint()
+		{
+			short x = ReadShort();
+			short y = ReadShort();
+			Point ret = new Point(x, y);
+			return ret;
+		}
 	}
 }

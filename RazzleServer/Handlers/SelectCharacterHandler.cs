@@ -1,4 +1,4 @@
-﻿using RazzleServer.Packet;
+﻿using MapleLib.PacketLib;
 using RazzleServer.Packet;
 using RazzleServer.Player;
 using RazzleServer.Server;
@@ -28,7 +28,7 @@ namespace RazzleServer.Handlers
 
         public static PacketWriter ChannelIpPacket(ushort port, int characterId)
         {
-            var pw = new PacketWriter(SMSGHeader.SERVER_IP);
+            var pw = new PacketWriter((ushort)SMSGHeader.SERVER_IP);
             pw.WriteShort(0);
             pw.WriteBytes(new byte[] { 127, 0, 0, 1 }); // Localhost
             pw.WriteUShort(port);

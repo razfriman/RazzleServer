@@ -11,6 +11,7 @@ using RazzleServer.Constants;
 using RazzleServer.Server;
 using RazzleServer.Data.WZ;
 using System.Drawing;
+using MapleLib.PacketLib;
 
 namespace RazzleServer.Map.Monster
 {
@@ -308,7 +309,7 @@ namespace RazzleServer.Map.Monster
         public static PacketWriter SpawnMob(int objectId, MapleMonster mob, bool newSpawn = false) //updated v158
         {
             
-            var pw = new PacketWriter(SMSGHeader.SPAWN_MONSTER);
+            var pw = new PacketWriter((ushort)SMSGHeader.SPAWN_MONSTER);
             pw.WriteInt(objectId);
             pw.WriteBool(true); //No idea 5 or 1
             pw.WriteInt(mob.WzInfo.MobId);
@@ -341,7 +342,7 @@ namespace RazzleServer.Map.Monster
 
         public static PacketWriter KillMob(int objectId)
         {
-            PacketWriter pw = new PacketWriter(SMSGHeader.KILL_MONSTER);
+            var pw = new PacketWriter((ushort)SMSGHeader.KILL_MONSTER);
             pw.WriteInt(objectId);
             pw.WriteByte(1); //animation, 1 = death animation, 0 = vanish I think
             return pw;
@@ -350,7 +351,7 @@ namespace RazzleServer.Map.Monster
         public static PacketWriter SetMobControl(int objectId, MapleMonster mob, bool newSpawn = false) //updated v142
         {
             
-            var pw = new PacketWriter(SMSGHeader.SPAWN_MONSTER_CONTROL);
+            var pw = new PacketWriter((ushort)SMSGHeader.SPAWN_MONSTER_CONTROL);
             pw.WriteByte((byte)(mob.ControllerHasAggro ? 2 : 1));
             pw.WriteInt(objectId);
             pw.WriteBool(true); //No idea
@@ -383,7 +384,7 @@ namespace RazzleServer.Map.Monster
 
         public static PacketWriter RemoveMobControl(int objectid)
         {
-            PacketWriter pw = new PacketWriter(SMSGHeader.SPAWN_MONSTER_CONTROL);
+            var pw = new PacketWriter((ushort)SMSGHeader.SPAWN_MONSTER_CONTROL);
             pw.WriteByte(0);
             pw.WriteInt(objectid);
             return pw;
@@ -391,7 +392,7 @@ namespace RazzleServer.Map.Monster
 
         public static PacketWriter UpdateHp(int objectId, byte hpPercentage)
         {
-            PacketWriter pw = new PacketWriter(SMSGHeader.SHOW_MONSTER_HP);
+            var pw = new PacketWriter((ushort)SMSGHeader.SHOW_MONSTER_HP);
             pw.WriteInt(objectId);
             pw.WriteByte(hpPercentage);
             return pw;

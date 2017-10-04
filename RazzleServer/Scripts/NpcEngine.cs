@@ -7,6 +7,7 @@ using RazzleServer.Player;
 using RazzleServer.Util;
 using System;
 using System.Collections.Generic;
+using MapleLib.PacketLib;
 
 namespace RazzleServer.Scripts
 {
@@ -163,7 +164,7 @@ namespace RazzleServer.Scripts
         {
             public static PacketWriter ShopTransactionResponse(byte response)
             {
-                PacketWriter pw = new PacketWriter(SMSGHeader.NPC_ACTION);
+                var pw = new PacketWriter((ushort)SMSGHeader.NPC_ACTION);
                 pw.WriteByte(response);
                 pw.WriteByte(0);
                 pw.WriteByte(0);
@@ -173,7 +174,7 @@ namespace RazzleServer.Scripts
             public static PacketWriter ShowShop(ShopScript shop, int npcId)
             {
                 List<ShopItem> items = shop.ShopItems;
-                PacketWriter pw = new PacketWriter(SMSGHeader.OPEN_NPC_SHOP);
+                var pw = new PacketWriter((ushort)SMSGHeader.OPEN_NPC_SHOP);
                 pw.WriteByte(0);
                 pw.WriteInt(0);
                 pw.WriteInt(npcId);

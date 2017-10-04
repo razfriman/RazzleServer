@@ -8,6 +8,7 @@ using RazzleServer.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MapleLib.PacketLib;
 
 namespace RazzleServer.Inventory
 {

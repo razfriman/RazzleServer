@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MapleLib.PacketLib;
 
 namespace RazzleServer.Player
 {
@@ -256,7 +257,7 @@ namespace RazzleServer.Player
         {
             public static PacketWriter RemoveBuddy(int buddyId, bool accountBuddy)
             {
-                PacketWriter pw = new PacketWriter(SMSGHeader.BUDDYLIST);
+                var pw = new PacketWriter((ushort)SMSGHeader.BUDDYLIST);
                 pw.WriteByte(0x25);
                 pw.WriteBool(accountBuddy);
                 pw.WriteInt(buddyId);
@@ -266,24 +267,25 @@ namespace RazzleServer.Player
             public static void AddBuddyInfo(PacketWriter pw, MapleBuddy buddy)
             {
                 pw.WriteInt(buddy.CharacterID);
-                pw.WriteStaticString(buddy.Name, 13);
-                if(buddy.IsRequest)
+                pw.WriteString(buddy.Name, 13);
+                if (buddy.IsRequest)
                 {
-                    pw.WriteByte(buddy.AccountBuddy ? (byte)6 : (byte)1);
-                } else
+                    pw.WriteByte(buddy.AccountBuddy ? 6 : 1);
+                }
+                else
                 {
-                    pw.WriteByte(buddy.AccountBuddy ? (byte)7 : (byte)2);
+                    pw.WriteByte(buddy.AccountBuddy ? 7 : 2);
                 }
                 pw.WriteInt(buddy.Channel);
-                pw.WriteStaticString(buddy.Group, 13);
+                pw.WriteString(buddy.Group, 13);
                 pw.WriteInt(0);
             }
 
             public static PacketWriter UpdateBuddy(MapleBuddy buddy)
             {
-                PacketWriter pw = new PacketWriter(SMSGHeader.BUDDYLIST);
+                var pw = new PacketWriter((ushort)SMSGHeader.BUDDYLIST);
                 // TODO: NOT UDPATED FOR V83
-                pw.WriteByte(0x15); 
+                pw.WriteByte(0x15);
                 pw.WriteInt(buddy.CharacterID);
                 pw.WriteInt(buddy.AccountID);
                 AddBuddyInfo(pw, buddy);
@@ -293,7 +295,7 @@ namespace RazzleServer.Player
 
             public static PacketWriter UpdateBuddyList(List<MapleBuddy> buddies)
             {
-                PacketWriter pw = new PacketWriter(SMSGHeader.BUDDYLIST);
+                var pw = new PacketWriter((ushort)SMSGHeader.BUDDYLIST);
                 pw.WriteByte(7);
                 pw.WriteInt(buddies.Count);
                 foreach (MapleBuddy buddy in buddies)
@@ -306,7 +308,7 @@ namespace RazzleServer.Player
 
             public static PacketWriter UpdateCurrentStatus(bool invisible)
             {
-                PacketWriter pw = new PacketWriter(SMSGHeader.BUDDYLIST);
+                var pw = new PacketWriter((ushort)SMSGHeader.BUDDYLIST);
                 pw.WriteByte(0x22);
                 pw.WriteInt(invisible ? 1 : 0);
                 return pw;
@@ -314,7 +316,7 @@ namespace RazzleServer.Player
 
             public static PacketWriter BuddyChannelUpdate(int characterId, int accountId, int channel, bool invisible, string name)
             {
-                PacketWriter pw = new PacketWriter(SMSGHeader.BUDDYLIST);
+                var pw = new PacketWriter((ushort)SMSGHeader.BUDDYLIST);
                 pw.WriteByte(0x14);
                 pw.WriteInt(characterId);
                 pw.WriteByte(0);

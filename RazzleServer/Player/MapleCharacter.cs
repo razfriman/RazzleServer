@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
+using MapleLib.PacketLib;
 
 namespace RazzleServer.Player
 {
@@ -1982,7 +1983,7 @@ namespace RazzleServer.Player
         #region Packets
         public static PacketWriter ShowExpFromMonster(int exp)
         {
-            var pw = new PacketWriter(SMSGHeader.SHOW_STATUS_INFO);
+            var pw = new PacketWriter((ushort)SMSGHeader.SHOW_STATUS_INFO);
             pw.WriteByte(3);
             pw.WriteByte(1);
             pw.WriteInt(exp);
@@ -1992,7 +1993,7 @@ namespace RazzleServer.Player
 
         public static PacketWriter ShowGainMapleCharacterStat(int amount, MapleCharacterStat stat)
         {
-            var pw = new PacketWriter(SMSGHeader.SHOW_STATUS_INFO);
+            var pw = new PacketWriter((ushort)SMSGHeader.SHOW_STATUS_INFO);
             pw.WriteByte(0x11);
             pw.WriteLong((long)stat);
             pw.WriteInt(amount);
@@ -2024,7 +2025,7 @@ namespace RazzleServer.Player
         public static void AddCharStats(PacketWriter pw, MapleCharacter chr, bool CashShop = false)
         {
             pw.WriteInt(chr.ID);
-            pw.WriteStaticString(chr.Name, 13);
+            pw.WriteString(chr.Name, 13);
             pw.WriteByte(chr.Gender);
             pw.WriteByte(chr.Skin);
             pw.WriteInt(chr.Face);
@@ -2263,7 +2264,7 @@ namespace RazzleServer.Player
         public static void EnterChannel(MapleClient c)
         {
             MapleCharacter chr = c.Account.Character;
-            PacketWriter pw = new PacketWriter(SMSGHeader.ENTER_MAP);
+            var pw = new PacketWriter((ushort)SMSGHeader.ENTER_MAP);
             pw.WriteInt(c.Channel);
             pw.WriteByte(1);
             pw.WriteByte(1);
@@ -2435,7 +2436,7 @@ namespace RazzleServer.Player
 
         public static void EnterMap(MapleClient c, int mapId, byte spawnPoint, bool fromSpecialPortal = false)
         {
-            PacketWriter pw = new PacketWriter(SMSGHeader.ENTER_MAP);
+            var pw = new PacketWriter((ushort)SMSGHeader.ENTER_MAP);
             pw.WriteInt(c.Channel);
             pw.WriteInt(0);
             pw.WriteByte(0);
@@ -2452,7 +2453,7 @@ namespace RazzleServer.Player
             MapleCharacter chr = c.Account.Character;
 
 
-            var pw = new PacketWriter(SMSGHeader.ENTER_CASH_SHOP);
+            var pw = new PacketWriter((ushort)SMSGHeader.ENTER_CASH_SHOP);
 
             MapleCharacter.AddCharInfo(pw, chr);
             pw.WriteBool(true); //IsNotBeta? lol
@@ -2504,7 +2505,7 @@ namespace RazzleServer.Player
         public static void UpdateStats(MapleClient c, SortedDictionary<MapleCharacterStat, int> stats, bool enableActions)
         {
 
-            var pw = new PacketWriter(SMSGHeader.UPDATE_STATS);
+            var pw = new PacketWriter((ushort)SMSGHeader.UPDATE_STATS);
 
             pw.WriteBool(enableActions);
             if (enableActions)
@@ -2564,14 +2565,14 @@ namespace RazzleServer.Player
         public static PacketWriter RemovePlayerFromMap(int Id)
         {
 
-            var pw = new PacketWriter(SMSGHeader.REMOVE_PLAYER);
+            var pw = new PacketWriter((ushort)SMSGHeader.REMOVE_PLAYER);
             pw.WriteInt(Id);
             return pw;
         }
 
         public static PacketWriter SystemMessage(string message, short type)
         {
-            var pw = new PacketWriter(SMSGHeader.SERVER_NOTICE); // SERVER_MESSAGE
+            var pw = new PacketWriter((ushort)SMSGHeader.SERVER_NOTICE); // SERVER_MESSAGE
             pw.WriteShort(type);
             pw.WriteMapleString(message);
             return pw;
@@ -2580,7 +2581,7 @@ namespace RazzleServer.Player
         public static PacketWriter ServerNotice(string message, byte type, int channel = 0, bool whisperIcon = false)
         {
 
-            var pw = new PacketWriter(SMSGHeader.SERVER_NOTICE);
+            var pw = new PacketWriter((ushort)SMSGHeader.SERVER_NOTICE);
 
             pw.WriteByte(type);
             if (type == 4)
@@ -2628,7 +2629,7 @@ namespace RazzleServer.Player
         public static PacketWriter SpawnPlayer(MapleCharacter chr)
         {
 
-            var pw = new PacketWriter(SMSGHeader.SPAWN_PLAYER);
+            var pw = new PacketWriter((ushort)SMSGHeader.SPAWN_PLAYER);
             pw.WriteInt(chr.ID);
             pw.WriteByte(chr.Level);
             pw.WriteMapleString(chr.Name);
@@ -2754,7 +2755,7 @@ namespace RazzleServer.Player
         }
         public static PacketWriter ShowKeybindLayout(Dictionary<uint, Tuple<byte, int>> keybinds)
         {
-            PacketWriter pw = new PacketWriter(SMSGHeader.KEYMAP);
+            var pw = new PacketWriter((ushort)SMSGHeader.KEYMAP);
 
             bool empty = keybinds == null || !keybinds.Any();
             pw.WriteBool(empty);
@@ -2777,7 +2778,7 @@ namespace RazzleServer.Player
 
         public static PacketWriter ShowQuickSlotKeys(int[] binds)
         {
-            PacketWriter pw = new PacketWriter(SMSGHeader.QUICK_SLOT);
+            var pw = new PacketWriter((ushort)SMSGHeader.QUICK_SLOT);
             pw.WriteByte(1);
             if (binds.Length == 28)
             {

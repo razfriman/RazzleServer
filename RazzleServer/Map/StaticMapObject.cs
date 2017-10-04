@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
+using MapleLib.PacketLib;
 
 namespace RazzleServer.Map
 {
@@ -54,7 +55,7 @@ namespace RazzleServer.Map
         #region Packets
         public override PacketWriter GetSpawnPacket(bool animatedSpawn)
         {
-            PacketWriter pw = new PacketWriter(SMSGHeader.SPAWN_MIST);
+            var pw = new PacketWriter((ushort)SMSGHeader.SPAWN_MIST);
             pw.WriteInt(ObjectID);
             pw.WriteBool(!animatedSpawn); //not sure
             pw.WriteInt(Owner.ID);
@@ -73,7 +74,7 @@ namespace RazzleServer.Map
 
         public override PacketWriter GetDestroyPacket(bool animatedDestroy)
         {
-            PacketWriter pw = new PacketWriter(SMSGHeader.REMOVE_MIST);
+            var pw = new PacketWriter((ushort)SMSGHeader.REMOVE_MIST);
             pw.WriteInt(ObjectID);
             pw.WriteBool(animatedDestroy); //eruption?
             return pw;

@@ -2,7 +2,7 @@
 using RazzleServer.Player;
 using RazzleServer.Util;
 using System;
-using RazzleServer.Packet;
+using MapleLib.PacketLib;
 
 namespace RazzleServer.Handlers
 {
@@ -11,7 +11,7 @@ namespace RazzleServer.Handlers
     {
         public override void HandlePacket(PacketReader packet, MapleClient client)
         {
-            var pw = new PacketWriter(SMSGHeader.SEND_LINK);
+            var pw = new PacketWriter((ushort)SMSGHeader.SEND_LINK);
             pw.WriteShort(0x100);
             pw.WriteInt(Functions.Random(999999));
             pw.WriteLong(0);

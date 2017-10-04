@@ -1,43 +1,42 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workbench ActiveDocument="RazzleServer/Player/MapleClient.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="RazzleServer/Player/Buddy/MapleBuddyList.cs">
     <Files>
-      <File FileName="RazzleServer/Player/MapleClient.cs" Line="81" Column="50" />
+      <File FileName="RazzleServer/Map/MapleNpc.cs" Line="1" Column="1" />
       <File FileName="RazzleServer/Map/MapleMap.cs" Line="1" Column="1" />
-      <File FileName="RazzleServer/Handlers/ChangeMapHandler.cs" Line="1" Column="1" />
-      <File FileName="RazzleServer/Player/MapleCharacter.cs" Line="2027" Column="33" />
-      <File FileName="MapleLib/PacketLib/PacketWriter.cs" Line="81" Column="17" />
-      <File FileName="RazzleServer/Handlers/CharacterLoggedInHandler.cs" Line="1" Column="1" />
-      <File FileName="RazzleServer/Handlers/ClientStartHandler.cs" Line="1" Column="1" />
-      <File FileName="RazzleServer/Handlers/CharacterListHandler.cs" Line="1" Column="1" />
-      <File FileName="RazzleServer/Handlers/CheckCharacterNameHandler.cs" Line="1" Column="1" />
-      <File FileName="RazzleServer/Handlers/DeleteCharacterHandler.cs" Line="1" Column="1" />
-      <File FileName="RazzleServer/Handlers/GuestLoginHandler.cs" Line="1" Column="1" />
-      <File FileName="RazzleServer/Handlers/LoginHandler.cs" Line="1" Column="1" />
-      <File FileName="RazzleServer/Handlers/CreateCharacterHandler.cs" Line="1" Column="1" />
-      <File FileName="RazzleServer/Packet/APacketHandler.cs" Line="1" Column="1" />
-      <File FileName="RazzleServer/Packet/PacketHandlerAttribute.cs" Line="1" Column="1" />
-      <File FileName="RazzleServer/Server/ServerConfig.cs" Line="52" Column="40" />
-      <File FileName="RazzleServer/ServerConfig.json" Line="17" Column="32" />
-      <File FileName="RazzleServer/Handlers/TEMPLATE.cs" Line="1" Column="1" />
-      <File FileName="RazzleServer/Handlers/ViewAllCharactersHandler.cs" Line="1" Column="1" />
-      <File FileName="RazzleServer/Handlers/ServerStatusHandler.cs" Line="1" Column="1" />
-      <File FileName="RazzleServer/Handlers/PlayerChatHandler.cs" Line="1" Column="1" />
-      <File FileName="RazzleServer/Handlers/PlayerMovementHandler.cs" Line="1" Column="1" />
-      <File FileName="RazzleServer/Handlers/ServerListHandler.cs" Line="1" Column="1" />
-      <File FileName="RazzleServer/Handlers/SelectCharacterHandler.cs" Line="40" Column="2" />
-      <File FileName="RazzleServer/Handlers/PongHandler.cs" Line="1" Column="1" />
-      <File FileName="RazzleServer/Handlers/RegisterPinHandler.cs" Line="1" Column="1" />
-      <File FileName="RazzleServer/Handlers/ReLoginHandler.cs" Line="1" Column="1" />
-      <File FileName="RazzleServer/Map/MapleNpc.cs" Line="3" Column="1" />
-      <File FileName="MapleLib/PacketLib/PacketReader.cs" Line="21" Column="20" />
-      <File FileName="RazzleServer/Util/MapleSharkConfigCreator.cs" Line="1" Column="1" />
-      <File FileName="RazzleServer/Packet/PacketWriter.cs" Line="38" Column="9" />
-      <File FileName="RazzleServer/Packet/PacketReader.cs" Line="8" Column="18" />
-      <File FileName="RazzleServer/Movement/ParseMovement.cs" Line="146" Column="77" />
-      <File FileName="RazzleServer/Player/SkillMacro.cs" Line="74" Column="9" />
-      <File FileName="RazzleServer/Map/MapleMapItem.cs" Line="48" Column="34" />
-      <File FileName="RazzleServer/Player/MapleGuild.cs" Line="317" Column="28" />
-      <File FileName="RazzleServer/Player/Buddy/MapleBuddyList.cs" Line="269" Column="20" />
+      <File FileName="RazzleServer/Player/MapleClient.cs" Line="120" Column="41" />
+      <File FileName="RazzleServer/Map/MapleMapItem.cs" Line="1" Column="1" />
+      <File FileName="RazzleServer/Player/MapleCharacter.cs" Line="1" Column="1" />
+      <File FileName="RazzleServer/Map/Monster/MapleMonster.cs" Line="1" Column="1" />
+      <File FileName="RazzleServer/Packet/SMSGHeader.cs" Line="169" Column="9" />
+      <File FileName="RazzleServer/Server/ChannelServer.cs" Line="38" Column="40" />
+      <File FileName="RazzleServer/Map/Monster/MonsterBuff.cs" Line="66" Column="23" />
+      <File FileName="RazzleServer/Map/MapleSummon.cs" Line="104" Column="17" />
+      <File FileName="RazzleServer/Movement/MapleMovementFragment.cs" Line="25" Column="41" />
+      <File FileName="RazzleServer/Map/SpecialPortal.cs" Line="1" Column="1" />
+      <File FileName="RazzleServer/Map/StaticMapObject.cs" Line="1" Column="1" />
+      <File FileName="RazzleServer/Movement/ChangeEquipMovement.cs" Line="17" Column="41" />
+      <File FileName="RazzleServer/Movement/GroundMovement.cs" Line="1" Column="1" />
+      <File FileName="RazzleServer/Movement/AbsoluteLifeMovement.cs" Line="1" Column="1" />
+      <File FileName="RazzleServer/Player/Skill.cs" Line="44" Column="35" />
+      <File FileName="MapleLib/PacketLib/PacketWriter.cs" Line="38" Column="1" />
+      <File FileName="RazzleServer/Movement/BounceMovement.cs" Line="1" Column="1" />
+      <File FileName="RazzleServer/Player/Buff/Buff.cs" Line="37" Column="40" />
+      <File FileName="RazzleServer/Movement/RelativeLifeMovement.cs" Line="1" Column="1" />
+      <File FileName="RazzleServer/Movement/TeleportMovement.cs" Line="7" Column="5" />
+      <File FileName="RazzleServer/Player/Inventory/MapleEquip.cs" Line="209" Column="57" />
+      <File FileName="RazzleServer/Data/WZ/WzCharacterSkill.cs" Line="598" Column="14" />
+      <File FileName="RazzleServer/Player/Buddy/MapleBuddyList.cs" Line="270" Column="37" />
+      <File FileName="RazzleServer/Movement/WobbleMovement.cs" Line="1" Column="1" />
+      <File FileName="RazzleServer/Player/Inventory/MapleEquipEnhancer.cs" Line="984" Column="28" />
+      <File FileName="RazzleServer/Player/MapleTrade.cs" Line="318" Column="18" />
+      <File FileName="RazzleServer/Scripts/NpcEngine.cs" Line="165" Column="30" />
+      <File FileName="RazzleServer/Player/MapleQuest.cs" Line="47" Column="18" />
+      <File FileName="RazzleServer/Player/Inventory/MapleInventory.cs" Line="947" Column="28" />
+      <File FileName="RazzleServer/Player/Inventory/MapleItem.cs" Line="93" Column="24" />
+      <File FileName="RazzleServer/Player/MapleMessengerRoom.cs" Line="93" Column="40" />
+      <File FileName="RazzleServer/Player/MapleGuild.cs" Line="279" Column="19" />
+      <File FileName="RazzleServer/Player/SkillMacro.cs" Line="53" Column="24" />
+      <File FileName="RazzleServer/Player/Party/MapleParty.cs" Line="319" Column="28" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

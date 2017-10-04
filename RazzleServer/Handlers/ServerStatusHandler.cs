@@ -1,4 +1,4 @@
-﻿using RazzleServer.Packet;
+﻿using MapleLib.PacketLib;
 using RazzleServer.Packet;
 using RazzleServer.Player;
 using RazzleServer.Server;
@@ -12,7 +12,7 @@ namespace RazzleServer.Handlers
         {
             var worldIndex = packet.ReadShort();
 
-            var pw = new PacketWriter(SMSGHeader.SERVERSTATUS);
+            var pw = new PacketWriter((ushort)SMSGHeader.SERVERSTATUS);
             pw.WriteShort((short)ServerLoadType.NORMAL); // 0=Normal, 1=Highly Populated, 2=Full
             client.SendPacket(pw);
         }

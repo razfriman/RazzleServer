@@ -3,6 +3,7 @@ using RazzleServer.Packet;
 using RazzleServer.Util;
 using System;
 using System.Drawing;
+using MapleLib.PacketLib;
 
 namespace RazzleServer.Map
 {
@@ -38,7 +39,7 @@ namespace RazzleServer.Map
             public static PacketWriter SpawnMapItem(MapleMapItem mapItem, Point sourcePosition, byte type, int ownerObjectId = 0)
             {
                 
-                var pw = new PacketWriter(SMSGHeader.DROP_ITEM_FROM_MAPOBJECT);
+                var pw = new PacketWriter((ushort)SMSGHeader.DROP_ITEM_FROM_MAPOBJECT);
 
                 bool meso = mapItem.Meso > 0;
                 pw.WriteByte(0);
@@ -69,7 +70,7 @@ namespace RazzleServer.Map
             public static PacketWriter RemoveMapItem(int objectId, byte animation, int characterId = 0, int petSlot = 0)
             {
                 
-                var pw = new PacketWriter(SMSGHeader.REMOVE_ITEM_FROM_MAP);
+                var pw = new PacketWriter((ushort)SMSGHeader.REMOVE_ITEM_FROM_MAP);
 
                 pw.WriteByte(animation); //0 = face, 1 = instant, 2 = looted by player, 5 = looted by pet
                 pw.WriteInt(objectId);

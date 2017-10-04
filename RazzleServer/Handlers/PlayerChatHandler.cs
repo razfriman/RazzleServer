@@ -2,7 +2,7 @@
 using RazzleServer.Packet;
 using RazzleServer.Player;
 using RazzleServer.Util;
-using RazzleServer.Packet;
+using MapleLib.PacketLib;
 
 namespace RazzleServer.Handlers
 {
@@ -55,7 +55,7 @@ namespace RazzleServer.Handlers
         public static PacketWriter PlayerChatPacket(int characterId, string message, byte show, bool whiteBackground)
         {
             
-            var pw = new PacketWriter(SMSGHeader.PLAYER_CHAT);
+            var pw = new PacketWriter((ushort)SMSGHeader.PLAYER_CHAT);
             pw.WriteInt(characterId);
             pw.WriteBool(whiteBackground);
             pw.WriteMapleString(message);

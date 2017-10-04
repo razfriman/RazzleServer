@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Drawing;
 using System.IO;
 using System.Text;
 
@@ -9,6 +9,8 @@ namespace MapleLib.PacketLib
 	/// </summary>
 	public class PacketWriter : AbstractPacket
 	{
+        public const int DEFAULT_SIZE = 1024;
+
 		/// <summary>
 		/// The main writer tool
 		/// </summary>
@@ -22,11 +24,18 @@ namespace MapleLib.PacketLib
 		/// <summary>
 		/// Creates a new instance of PacketWriter
 		/// </summary>
-		/// <param name="size">Starting size of the buffer</param>
-        public PacketWriter(int size = 0)
+		public PacketWriter()
 		{
-			_buffer = new MemoryStream(size);
+			_buffer = new MemoryStream(DEFAULT_SIZE);
 			_binWriter = new BinaryWriter(_buffer, Encoding.ASCII);
+		}
+
+		/// <summary>
+		/// Creates a new instance of PacketWriter
+		/// </summary>
+        public PacketWriter(ushort header) : this()
+		{
+            WriteUShort(header);
 		}
 
         public PacketWriter(byte[] data)
@@ -100,6 +109,20 @@ namespace MapleLib.PacketLib
 		/// </summary>
 		/// <param name="writeValue">The string to write</param>
         public void WriteString(string writeValue) => _binWriter.Write(writeValue.ToCharArray());
+
+        /// <summary>
+        /// Writes a string to the stream. Pads it with 0 until the specified length
+        /// </summary>
+        /// <param name="writeValue">The string to write</param>
+        public void WriteString(string writeValue, int length)
+        {
+            WriteString(writeValue);
+
+            if (writeValue.Length < length)
+            {
+                WriteZeroBytes(length - writeValue.Length);
+            }
+        }  
 
 		/// <summary>
 		/// Writes a string prefixed with a [short] length before it, to the stream
@@ -234,5 +257,17 @@ namespace MapleLib.PacketLib
 			_buffer.Position = oldIndex;
 		}
 
+		public void WriteZeroBytes(int length) => WriteBytes(new byte[length]);
+
+		public void WritePoint(Point writeValue)
+		{
+			WriteShort((short)writeValue.X);
+			WriteShort((short)writeValue.Y);
+		}
+
+        public override string ToString()
+        {
+            return string.Format("[PacketWriter: Length={0}]", Length);
+        }
 	}
 }

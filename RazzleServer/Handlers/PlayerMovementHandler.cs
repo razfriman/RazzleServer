@@ -1,11 +1,10 @@
-﻿using System;
-using RazzleServer.Packet;
+﻿using RazzleServer.Packet;
 using RazzleServer.Player;
 using RazzleServer.Map;
 using System.Collections.Generic;
 using RazzleServer.Movement;
 using System.Drawing;
-using RazzleServer.Packet;
+using MapleLib.PacketLib;
 
 namespace RazzleServer.Handlers
 {
@@ -31,7 +30,7 @@ namespace RazzleServer.Handlers
 
         public static PacketWriter CharacterMovePacket(int characterId, List<MapleMovementFragment> movementList)
         {
-            var pw = new PacketWriter(SMSGHeader.MOVE_PLAYER);
+            var pw = new PacketWriter((ushort)SMSGHeader.MOVE_PLAYER);
             pw.WriteInt(characterId);
             pw.WriteInt(0);
             pw.WriteByte((byte)movementList.Count);

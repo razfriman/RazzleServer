@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using static RazzleServer.Data.WZ.WzMap;
+using MapleLib.PacketLib;
 
 namespace RazzleServer.Data.WZ
 {
@@ -595,7 +596,7 @@ namespace RazzleServer.Data.WZ
         {
             public static PacketWriter ShowForeignSkillEffect(int characterId, byte characterLevel, int skillId, byte skillLevel)
             {
-                PacketWriter pw = new PacketWriter(SMSGHeader.SHOW_SKILL_EFFECT);
+                var pw = new PacketWriter((ushort)SMSGHeader.SHOW_SKILL_EFFECT);
                 pw.WriteInt(characterId);
                 pw.WriteByte(1);
                 pw.WriteInt(skillId);

@@ -1,4 +1,4 @@
-﻿using RazzleServer.Packet;
+﻿using MapleLib.PacketLib;
 using RazzleServer.Packet;
 using RazzleServer.Player;
 
@@ -24,7 +24,7 @@ namespace RazzleServer.Handlers
         {
             var chars = acc.GetCharsFromDatabase();
 
-            var pw = new PacketWriter(SMSGHeader.CHARLIST);
+            var pw = new PacketWriter((ushort)SMSGHeader.CHARLIST);
 
             pw.WriteByte(0);
             pw.WriteByte((byte)chars.Count);

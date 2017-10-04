@@ -7,6 +7,7 @@ using RazzleServer.Player;
 using RazzleServer.Util;
 using System;
 using System.Linq;
+using MapleLib.PacketLib;
 
 namespace RazzleServer.Inventory
 {
@@ -982,7 +983,7 @@ namespace RazzleServer.Inventory
         {
             public static PacketWriter ShowScrollEffect(int characterId, byte scrollResult, int scrollItemId, int equipItemId, bool legendarySpirit = false)
             {
-                PacketWriter pw = new PacketWriter(SMSGHeader.SHOW_SCROLL_EFFECT);
+                var pw = new PacketWriter((ushort)SMSGHeader.SHOW_SCROLL_EFFECT);
                 pw.WriteInt(characterId);
                 pw.WriteByte(scrollResult);
                 pw.WriteBool(legendarySpirit);

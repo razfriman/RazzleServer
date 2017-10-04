@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using MapleLib.PacketLib;
 
 namespace RazzleServer.Map
 {
@@ -373,7 +374,8 @@ namespace RazzleServer.Map
                 {
                     c.Account.Character.ChangeMap(toMap, portal.ToName);
                 }
-            } else
+            }
+            else
             {
                 c.Account.Character.ChangeMap(ServerManager.GetChannelServer(c.Channel).GetMap(1000000));
 
@@ -576,7 +578,7 @@ namespace RazzleServer.Map
                     mob.Fh = fh.Id;
                     int id = ObjectIDCounter.Get;
                     mob.ObjectID = id;
-                    this.Mobs.Add(id, mob);
+                    Mobs.Add(id, mob);
                     BroadcastPacket(MapleMonster.SpawnMob(id, mob, true));
                     uncontrolled.Add(id);
                 }
@@ -593,7 +595,7 @@ namespace RazzleServer.Map
                 {
                     int id = ObjectIDCounter.Get;
                     mob.ObjectID = id;
-                    this.Mobs.Add(id, mob);
+                    Mobs.Add(id, mob);
                     BroadcastPacket(MapleMonster.SpawnMob(id, mob, true));
                     uncontrolled.Add(id);
                 }
@@ -612,7 +614,7 @@ namespace RazzleServer.Map
                     {
                         int id = ObjectIDCounter.Get;
                         mob.ObjectID = id;
-                        this.Mobs.Add(id, mob);
+                        Mobs.Add(id, mob);
 
                         BroadcastPacket(MapleMonster.SpawnMob(id, mob, true));
 
@@ -1206,8 +1208,8 @@ namespace RazzleServer.Map
         public static PacketWriter SpawnReactor(int objectId, WzMap.Reactor Reactor)
         {
             //[F4 65 03 00] [41 0D 03 00] [00] [[CE 00] [FD 01]] [00 00 00]
-            
-            var pw = new PacketWriter(SMSGHeader.REACTOR_SPAWN);
+
+            var pw = new PacketWriter((ushort)SMSGHeader.REACTOR_SPAWN);
             pw.WriteInt(objectId);
             pw.WriteInt(Reactor.Id);
             pw.WriteByte(Reactor.State);
@@ -1219,8 +1221,8 @@ namespace RazzleServer.Map
         public static PacketWriter DestroyReactor(int objectId, WzMap.Reactor Reactor)
         {
             //F4 65 03 00 04 CE 00 FD 01
-            
-            var pw = new PacketWriter(SMSGHeader.REACTOR_SPAWN);
+
+            var pw = new PacketWriter((ushort)SMSGHeader.REACTOR_SPAWN);
             pw.WriteInt(objectId);
             pw.WriteByte(4); //Unk
             pw.WritePoint(Reactor.Position);
@@ -1239,8 +1241,8 @@ namespace RazzleServer.Map
 
         public static PacketWriter ShowNpc(int objectId, WzMap.Npc Npc)
         {
-            
-            var pw = new PacketWriter(SMSGHeader.SPAWN_NPC);
+
+            var pw = new PacketWriter((ushort)SMSGHeader.SPAWN_NPC);
             pw.WriteInt(objectId);
             pw.WriteInt(Npc.Id);
             pw.WriteShort(Npc.x);

@@ -3,6 +3,7 @@ using RazzleServer.Packet;
 using RazzleServer.Player;
 using System.Drawing;
 using static RazzleServer.Data.WZ.WzMap;
+using MapleLib.PacketLib;
 
 namespace RazzleServer.Map
 {
@@ -37,7 +38,7 @@ namespace RazzleServer.Map
 
         public override PacketWriter GetSpawnPacket(bool animatedSpawn)
         {
-            PacketWriter pw = new PacketWriter(SMSGHeader.SPAWN_PORTAL);
+            var pw = new PacketWriter((ushort)SMSGHeader.SPAWN_PORTAL);
             pw.WriteInt(ToMap.MapID);
             pw.WriteInt(FromMap.MapID);
             pw.WriteInt(SkillId);
@@ -47,7 +48,7 @@ namespace RazzleServer.Map
 
         public override PacketWriter GetDestroyPacket(bool animatedDestroy)
         {
-            PacketWriter pw = new PacketWriter(SMSGHeader.SPAWN_PORTAL);
+            var pw = new PacketWriter((ushort)SMSGHeader.SPAWN_PORTAL);
             pw.WriteInt(999999999);
             pw.WriteInt(999999999);
             return pw;
@@ -65,7 +66,7 @@ namespace RazzleServer.Map
         public override PacketWriter GetSpawnPacket(bool animatedSpawn)
         {
             
-            var pw = new PacketWriter(SMSGHeader.SPAWN_SPECIAL_MAPOBJECT);
+            var pw = new PacketWriter((ushort)SMSGHeader.SPAWN_SPECIAL_MAPOBJECT);
             pw.WriteBool(!animatedSpawn);
             pw.WriteInt(Owner.ID);
             pw.WriteInt(SkillId);
@@ -77,7 +78,7 @@ namespace RazzleServer.Map
         public override PacketWriter GetDestroyPacket(bool animatedDestroy)
         {
             
-            var pw = new PacketWriter(SMSGHeader.REMOVE_SPECIAL_MAPOBJECT);
+            var pw = new PacketWriter((ushort)SMSGHeader.REMOVE_SPECIAL_MAPOBJECT);
             pw.WriteBool(true);
             pw.WriteInt(Owner.ID);
             return pw;

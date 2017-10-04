@@ -1,4 +1,4 @@
-﻿using RazzleServer.Packet;
+﻿using MapleLib.PacketLib;
 using RazzleServer.Packet;
 using RazzleServer.Player;
 using RazzleServer.Server;
@@ -12,7 +12,7 @@ namespace RazzleServer.Handlers
         {
             //Todo: Loop for each world and channel
             
-            var pw = new PacketWriter(SMSGHeader.SERVERLIST);
+            var pw = new PacketWriter((ushort)SMSGHeader.SERVERLIST);
             pw.WriteByte(0); // World id
             pw.WriteMapleString(ServerConfig.Instance.WorldName);
             pw.WriteByte(ServerConfig.Instance.WorldFlag);
@@ -36,7 +36,7 @@ namespace RazzleServer.Handlers
             pw.WriteShort(0);
             client.SendPacket(pw);
             
-            pw = new PacketWriter(SMSGHeader.SERVERLIST);
+            pw = new PacketWriter((ushort)SMSGHeader.SERVERLIST);
             pw.WriteByte(0xFF);
             pw.WriteByte(0);
             client.SendPacket(pw);

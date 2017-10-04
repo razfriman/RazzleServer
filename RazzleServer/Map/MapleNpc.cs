@@ -1,5 +1,6 @@
 ﻿using RazzleServer.Packet;
 using System;
+using MapleLib.PacketLib;
 
 namespace RazzleServer.Map
 {
@@ -7,7 +8,8 @@ namespace RazzleServer.Map
     {
         public static PacketWriter GetNpcTalk(int npcId, byte msgType, ChatType chatType, string text, int diffNpc = 0, bool prev = false, bool next = false)
         {
-            PacketWriter pw = new PacketWriter(SMSGHeader.NPC_TALK);
+            var pw = new PacketWriter();
+            pw.WriteHeader(SMSGHeader.NPC_TALK);
             pw.WriteByte(msgType);
             pw.WriteByte(4); //always 4?
             pw.WriteByte((byte)chatType);
@@ -27,7 +29,7 @@ namespace RazzleServer.Map
 
         public static PacketWriter GetNpcTalkNum(int NpcId, string Text, int Def, int Min, int Max) //outdated
         {
-            PacketWriter pw = new PacketWriter(SMSGHeader.NPC_TALK);
+            var pw = new PacketWriter((ushort)SMSGHeader.NPC_TALK);
             pw.WriteByte(4);
             pw.WriteInt(NpcId);
             pw.WriteShort(4);
@@ -41,7 +43,7 @@ namespace RazzleServer.Map
         }
         public static PacketWriter GetNpcTalkAskText(int NpcId, string Text, int min, int max, string textboxText) //outdated
         {
-            PacketWriter pw = new PacketWriter(SMSGHeader.NPC_TALK);
+            var pw = new PacketWriter((ushort)SMSGHeader.NPC_TALK);
             pw.WriteByte(4);
             pw.WriteInt(NpcId);
             pw.WriteByte(0);
@@ -57,7 +59,7 @@ namespace RazzleServer.Map
 
         public static PacketWriter GetPlayerNpcChat(byte MsgType, ChatType Type, string Text, bool Prev = false, bool Next = false) //outdated
         {
-            PacketWriter pw = new PacketWriter(SMSGHeader.NPC_TALK);
+            var pw = new PacketWriter((ushort)SMSGHeader.NPC_TALK);
             pw.WriteByte(4);
             pw.WriteInt(0);
             pw.WriteByte(MsgType);

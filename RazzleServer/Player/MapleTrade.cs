@@ -4,6 +4,7 @@ using RazzleServer.Packet;
 using System.Collections.Generic;
 using System.Linq;
 using RazzleServer.Util;
+using MapleLib.PacketLib;
 
 namespace RazzleServer.Player
 {
@@ -281,7 +282,7 @@ namespace RazzleServer.Player
         }
         public PacketWriter GenerateCharacterBusyMessage(string name)
         {
-            var pw = new PacketWriter(SMSGHeader.PLAYER_INTERACTION);
+            var pw = new PacketWriter((ushort)SMSGHeader.PLAYER_INTERACTION);
             pw.WriteByte(0x16);
             pw.WriteByte(0x02);
             pw.WriteByte(0x0);
@@ -290,7 +291,7 @@ namespace RazzleServer.Player
         }
         public PacketWriter UpdateTradeMesos(long mesos, byte character)
         {
-            var pw = new PacketWriter(SMSGHeader.PLAYER_INTERACTION);
+            var pw = new PacketWriter((ushort)SMSGHeader.PLAYER_INTERACTION);
             pw.WriteByte(0x04);
             pw.WriteByte(character);
             pw.WriteLong(mesos);
@@ -298,7 +299,7 @@ namespace RazzleServer.Player
         }
         public PacketWriter GenerateChatMessage(string name, byte speakingCharacter)
         {
-            var pw = new PacketWriter(SMSGHeader.PLAYER_INTERACTION);
+            var pw = new PacketWriter((ushort)SMSGHeader.PLAYER_INTERACTION);
             pw.WriteByte(0x18);
             pw.WriteByte(0x19);
             pw.WriteByte(speakingCharacter);
@@ -307,7 +308,7 @@ namespace RazzleServer.Player
         }
         public PacketWriter GenerateTradeItemAdd(MapleItem item, bool mine, byte TradeSlot)
         {
-            var pw = new PacketWriter(SMSGHeader.PLAYER_INTERACTION);
+            var pw = new PacketWriter((ushort)SMSGHeader.PLAYER_INTERACTION);
             pw.WriteByte(0);
             pw.WriteBool(mine);
             pw.WriteByte(TradeSlot);
@@ -316,7 +317,7 @@ namespace RazzleServer.Player
         }
         public PacketWriter GenerateRoomClosedMessage()
         {
-            var pw = new PacketWriter(SMSGHeader.PLAYER_INTERACTION);
+            var pw = new PacketWriter((ushort)SMSGHeader.PLAYER_INTERACTION);
             pw.WriteByte(0x14);
             pw.WriteByte(0);
             pw.WriteByte(1);
@@ -324,13 +325,13 @@ namespace RazzleServer.Player
         }
         public PacketWriter GenerateTradeAccepted()
         {
-            var pw = new PacketWriter(SMSGHeader.PLAYER_INTERACTION);
+            var pw = new PacketWriter((ushort)SMSGHeader.PLAYER_INTERACTION);
             pw.WriteByte(8);
             return pw;
         }
         public PacketWriter GenerateTradeClose(bool Finished, bool success)
         {
-            var pw = new PacketWriter(SMSGHeader.PLAYER_INTERACTION);
+            var pw = new PacketWriter((ushort)SMSGHeader.PLAYER_INTERACTION);
             pw.WriteByte(0x1C);
             if (!Finished)
             {
@@ -346,7 +347,7 @@ namespace RazzleServer.Player
         }
         public PacketWriter GenerateTradeDeny(MapleCharacter chr)
         {
-            var pw = new PacketWriter(SMSGHeader.PLAYER_INTERACTION);
+            var pw = new PacketWriter((ushort)SMSGHeader.PLAYER_INTERACTION);
             pw.WriteByte(0x16);
             pw.WriteByte(3);
             pw.WriteByte(0);
@@ -355,7 +356,7 @@ namespace RazzleServer.Player
         }
         public PacketWriter GenerateTradeInvite(MapleCharacter invitedBy)
         {
-            var pw = new PacketWriter(SMSGHeader.PLAYER_INTERACTION);
+            var pw = new PacketWriter((ushort)SMSGHeader.PLAYER_INTERACTION);
             pw.WriteByte(0x15);
             pw.WriteByte(4);
             pw.WriteMapleString(invitedBy.Name);
@@ -364,7 +365,7 @@ namespace RazzleServer.Player
         }
         public PacketWriter GenerateTradePartnerAdd(MapleCharacter c, byte position)
         {
-            var pw = new PacketWriter(SMSGHeader.PLAYER_INTERACTION);
+            var pw = new PacketWriter((ushort)SMSGHeader.PLAYER_INTERACTION);
             pw.WriteByte(0x13);
             pw.WriteByte(position);
             MapleCharacter.AddCharLook(pw, c, false);
@@ -374,7 +375,7 @@ namespace RazzleServer.Player
         }
         public PacketWriter GenerateTradeStart(MapleCharacter c, bool includeOwner)
         {
-            var pw = new PacketWriter(SMSGHeader.PLAYER_INTERACTION);
+            var pw = new PacketWriter((ushort)SMSGHeader.PLAYER_INTERACTION);
             pw.WriteByte(0x14);
             pw.WriteByte(4);
             pw.WriteByte(2);

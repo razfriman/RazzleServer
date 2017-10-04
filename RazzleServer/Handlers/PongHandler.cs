@@ -1,5 +1,5 @@
 ﻿using System;
-using RazzleServer.Packet;
+using MapleLib.PacketLib;
 using RazzleServer.Packet;
 using RazzleServer.Player;
 
@@ -15,7 +15,7 @@ namespace RazzleServer.Handlers
 
         public static PacketWriter PingPacket()
         {
-            return new PacketWriter(SMSGHeader.PING);
+            return new PacketWriter((ushort)SMSGHeader.PING);
         }
     }
 }

@@ -5,7 +5,7 @@ using RazzleServer.Packet;
 using RazzleServer.Player;
 using RazzleServer.Util;
 using System.Collections.Generic;
-using RazzleServer.Packet;
+using MapleLib.PacketLib;
 
 namespace RazzleServer.Handlers
 {
@@ -57,7 +57,7 @@ namespace RazzleServer.Handlers
                 newCharacter?.Inventory.SaveToDatabase(true);
             }
 
-            PacketWriter pw = new PacketWriter(SMSGHeader.ADD_NEW_CHAR_ENTRY);
+            var pw = new PacketWriter((ushort)SMSGHeader.ADD_NEW_CHAR_ENTRY);
             pw.WriteBool(!nameAvailable);
             if (nameAvailable)
             {

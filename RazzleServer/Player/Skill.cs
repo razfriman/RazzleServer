@@ -3,6 +3,7 @@ using RazzleServer.Data.WZ;
 using RazzleServer.Packet;
 using RazzleServer.Util;
 using System.Collections.Generic;
+using MapleLib.PacketLib;
 
 namespace RazzleServer.Player
 {
@@ -40,7 +41,8 @@ namespace RazzleServer.Player
         #region Packets
         public static PacketWriter UpdateSkills(List<Skill> skills)
         {
-            var pw = new PacketWriter(SMSGHeader.UPDATE_SKILLS);
+            var pw = new PacketWriter();
+            pw.WriteHeader(SMSGHeader.UPDATE_SKILLS);
             pw.WriteBool(true); //enable actions
             pw.WriteByte(0);
             pw.WriteByte(0);
@@ -65,7 +67,8 @@ namespace RazzleServer.Player
 
         public static PacketWriter ShowCooldown(int skillId, uint time)
         {
-            var pw = new PacketWriter(SMSGHeader.GIVE_COOLDOWN);
+            var pw = new PacketWriter();
+            pw.WriteHeader(SMSGHeader.GIVE_COOLDOWN);
             pw.WriteInt(skillId);
             pw.WriteUInt(time);
             return pw;
@@ -73,7 +76,8 @@ namespace RazzleServer.Player
 
         public static PacketWriter ShowOwnSkillEffect(int skillId, byte skillLevel)
         {
-            var pw = new PacketWriter(SMSGHeader.SHOW_SKILL_EFFECT);
+            var pw = new PacketWriter();
+            pw.WriteHeader(SMSGHeader.SHOW_SKILL_EFFECT);
             pw.WriteByte(2);
             pw.WriteInt(skillId);
             pw.WriteByte(skillLevel);
@@ -82,7 +86,8 @@ namespace RazzleServer.Player
 
         public static PacketWriter ShowBuffEffect(int skillId, byte characterLevel, byte? skillLevel, bool show) //remove if show = false
         {
-            var pw = new PacketWriter(SMSGHeader.SHOW_SKILL_EFFECT);
+            var pw = new PacketWriter();
+            pw.WriteHeader(SMSGHeader.SHOW_SKILL_EFFECT);
             pw.WriteByte(1);
             pw.WriteInt(skillId);
             pw.WriteByte(characterLevel);

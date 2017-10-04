@@ -2,7 +2,7 @@
 using RazzleServer.Packet;
 using RazzleServer.Player;
 using System.Linq;
-using RazzleServer.Packet;
+using MapleLib.PacketLib;
 
 namespace RazzleServer.Handlers
 {
@@ -29,7 +29,7 @@ namespace RazzleServer.Handlers
                 state = 0;
             }
 
-            var pw = new PacketWriter(SMSGHeader.DELETE_CHAR_RESPONSE);
+            var pw = new PacketWriter((ushort)SMSGHeader.DELETE_CHAR_RESPONSE);
             pw.WriteInt(characterID);
             pw.WriteByte(state);
             client.SendPacket(pw);

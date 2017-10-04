@@ -1,4 +1,4 @@
-﻿using RazzleServer.Packet;
+﻿using MapleLib.PacketLib;
 using RazzleServer.Packet;
 using RazzleServer.Player;
 
@@ -11,7 +11,7 @@ namespace RazzleServer.Handlers
         {
             var name = packet.ReadMapleString();
 
-            PacketWriter pw = new PacketWriter(SMSGHeader.CHAR_NAME_RESPONSE);
+            var pw = new PacketWriter((ushort)SMSGHeader.CHAR_NAME_RESPONSE);
             pw.WriteMapleString(name);
             pw.WriteBool(MapleCharacter.CharacterExists(name));
             client.SendPacket(pw);

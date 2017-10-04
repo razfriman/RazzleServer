@@ -6,6 +6,7 @@ using RazzleServer.Util;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using MapleLib.PacketLib;
 
 namespace RazzleServer.Player
 {
@@ -27,13 +28,13 @@ namespace RazzleServer.Player
         /// <param name="duration">Milliseconds</param>
         /// <param name="startTime"></param>
         /// <param name="affectedCharacter"></param>
-        public Buff(int skillId, SkillEffect effect, int duration, MapleCharacter affectedCharacter, DateTime? nStartTime = null)
+        public Buff(int skillId, SkillEffect effect, int duration, MapleCharacter affectedCharacter, DateTime? startTime = null)
         {
-            DateTime startTime = nStartTime ?? DateTime.UtcNow;
+            startTime = startTime ?? DateTime.UtcNow;
             SkillId = skillId;
             Effect = effect;
             Duration = duration;
-            StartTime = startTime;
+            StartTime = startTime.Value;
             if (duration < SkillEffect.MAX_BUFF_TIME_MS)
             {
                 CancellationToken = new CancellationTokenSource();
@@ -50,7 +51,7 @@ namespace RazzleServer.Player
         public static PacketWriter CancelBuff(Buff buff)
         {
             
-            var pw = new PacketWriter(SMSGHeader.REMOVE_BUFF);
+            var pw = new PacketWriter((ushort)SMSGHeader.REMOVE_BUFF);
 
             WriteBuffMask(pw, buff.Effect.BuffInfo.Keys);
 
@@ -87,7 +88,7 @@ namespace RazzleServer.Player
 
         public static PacketWriter GiveBuff(Buff buff)
         {
-            PacketWriter pw = new PacketWriter(SMSGHeader.GIVE_BUFF);
+            var pw = new PacketWriter((ushort)SMSGHeader.GIVE_BUFF);
 
             WriteBuffMask(pw, buff.Effect.BuffInfo.Keys);
             bool stacked = false;
@@ -142,7 +143,7 @@ namespace RazzleServer.Player
         public static PacketWriter GiveEvilEyeBuff(Buff buff)
         {
             
-            var pw = new PacketWriter(SMSGHeader.GIVE_BUFF);
+            var pw = new PacketWriter((ushort)SMSGHeader.GIVE_BUFF);
 
             pw.WriteShort(1);
             pw.WriteInt(Spearman.EVIL_EYE);
@@ -176,7 +177,7 @@ namespace RazzleServer.Player
             int damageIncPercent = effect.Info[CharacterSkillStat.x];
             int absorbPercent = effect.Info[CharacterSkillStat.y];
             
-            var pw = new PacketWriter(SMSGHeader.GIVE_BUFF);
+            var pw = new PacketWriter((ushort)SMSGHeader.GIVE_BUFF);
 
             WriteBuffMask(pw, buff.Effect.BuffInfo.Keys);
             double hpPercent = (chr.HP / (double)stats.MaxHp) * 100;
@@ -201,7 +202,7 @@ namespace RazzleServer.Player
         public static PacketWriter GiveFinalPactBuff(Buff buff)
         {
             
-            var pw = new PacketWriter(SMSGHeader.GIVE_BUFF);
+            var pw = new PacketWriter((ushort)SMSGHeader.GIVE_BUFF);
 
             WriteBuffMask(pw, buff.Effect.BuffInfo.Keys);
 
@@ -235,7 +236,7 @@ namespace RazzleServer.Player
         public static PacketWriter UpdateFinalPactKillCount(int remainingKillCount, uint remainingDurationMS)
         {
             
-            var pw = new PacketWriter(SMSGHeader.GIVE_BUFF);
+            var pw = new PacketWriter((ushort)SMSGHeader.GIVE_BUFF);
             //WriteSingleBuffMask(pw, MapleBuffStat.FINAL_PACT3);
 
             pw.WriteShort(1);

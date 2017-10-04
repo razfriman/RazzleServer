@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using MapleLib.PacketLib;
 
 namespace RazzleServer.Map.Monster
 {
@@ -38,7 +39,7 @@ namespace RazzleServer.Map.Monster
         public virtual PacketWriter GetApplicationPacket()
         {
             
-            var pw = new PacketWriter(SMSGHeader.GIVE_FOREIGN_BUFF);
+            var pw = new PacketWriter((ushort)SMSGHeader.GIVE_FOREIGN_BUFF);
             pw.WriteInt(Victim.ObjectID);
             WriteSingleBuffMask(pw, BuffStat);
             pw.WriteInt(BuffValue);
@@ -58,7 +59,7 @@ namespace RazzleServer.Map.Monster
         public virtual PacketWriter GetRemovePacket()
         {
             
-            var pw = new PacketWriter(SMSGHeader.CANCEL_FOREIGN_BUFF);
+            var pw = new PacketWriter((ushort)SMSGHeader.CANCEL_FOREIGN_BUFF);
             pw.WriteInt(Victim.ObjectID);
             WriteSingleBuffMask(pw, BuffStat);
             pw.WriteInt(0);

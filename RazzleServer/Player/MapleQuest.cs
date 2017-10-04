@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MapleLib.PacketLib;
 
 namespace RazzleServer.Player
 {
@@ -45,7 +46,7 @@ namespace RazzleServer.Player
         #region packets
         public PacketWriter Update()
         {
-            var pw = new PacketWriter(SMSGHeader.SHOW_STATUS_INFO);
+            var pw = new PacketWriter((ushort)SMSGHeader.SHOW_STATUS_INFO);
             pw.WriteByte(1);
             pw.WriteUShort(25672);
             pw.WriteByte((byte)State);
@@ -67,7 +68,7 @@ namespace RazzleServer.Player
         public PacketWriter UpdateFinish(int questId, int npcId, int nextQuest = 0)
         {
             
-            var pw = new PacketWriter(SMSGHeader.UPDATE_QUEST_INFO);
+            var pw = new PacketWriter((ushort)SMSGHeader.UPDATE_QUEST_INFO);
 
             pw.WriteByte(0xA);
             pw.WriteUShort((ushort)questId);
@@ -80,7 +81,7 @@ namespace RazzleServer.Player
         public PacketWriter UpdateMobKillProgress()
         {
             
-            var pw = new PacketWriter(SMSGHeader.SHOW_STATUS_INFO);
+            var pw = new PacketWriter((ushort)SMSGHeader.SHOW_STATUS_INFO);
 
             pw.WriteByte(1);
             pw.WriteUShort(QuestInfo.Id);
@@ -92,7 +93,7 @@ namespace RazzleServer.Player
         public static PacketWriter ShowQuestCompleteNotice(ushort questId)
         {
             
-            var pw = new PacketWriter(SMSGHeader.SHOW_QUEST_COMPLETION);
+            var pw = new PacketWriter((ushort)SMSGHeader.SHOW_QUEST_COMPLETION);
             pw.WriteUShort(questId);
             return pw;
         }

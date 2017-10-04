@@ -1,7 +1,7 @@
 ﻿using RazzleServer.Player;
 using RazzleServer.Packet;
 using RazzleServer.Server;
-using RazzleServer.Packet;
+using MapleLib.PacketLib;
 
 namespace RazzleServer.Handlers
 {
@@ -46,7 +46,7 @@ namespace RazzleServer.Handlers
 
         public static PacketWriter LoginAccountSuccess(MapleAccount acc)
         {
-            PacketWriter pw = new PacketWriter(SMSGHeader.LOGIN_RESPONSE);
+            var pw = new PacketWriter((ushort)SMSGHeader.LOGIN_RESPONSE);
 
             pw.WriteByte(0);
             pw.WriteByte(0);
@@ -75,7 +75,7 @@ namespace RazzleServer.Handlers
 
         static PacketWriter LoginAccountFailed(byte reason)
         {
-            PacketWriter pw = new PacketWriter(SMSGHeader.LOGIN_RESPONSE);
+            var pw = new PacketWriter((ushort)SMSGHeader.LOGIN_RESPONSE);
             pw.WriteByte(reason);
             pw.WriteByte(0);
             pw.WriteInt(0);

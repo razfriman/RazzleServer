@@ -5,6 +5,7 @@ using RazzleServer.Server;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MapleLib.PacketLib;
 
 namespace RazzleServer.Player
 {
@@ -150,9 +151,11 @@ namespace RazzleServer.Player
             }
             using (var context = new MapleDbContext())
             {
-                Guild InsertGuild = new Guild();
-                InsertGuild.Leader = leader.ID;
-                InsertGuild.Name = name;
+                Guild InsertGuild = new Guild()
+                {
+                    Leader = leader.ID,
+                    Name = name
+                };
                 context.Guilds.Add(InsertGuild);
                 Character DbChar = context.Characters.SingleOrDefault(x => x.ID == leader.ID);
                 DbChar.GuildContribution = 500;
@@ -160,27 +163,29 @@ namespace RazzleServer.Player
                 DbChar.GuildRank = 1;
                 context.SaveChanges();
 
-                MapleGuild gld = new MapleGuild();
-                gld.GuildID = InsertGuild.ID;
-                gld.LeaderID = leader.ID;
-                gld.GP = 0;
-                gld.Logo = 0;
-                gld.LogoColor = 0;
-                gld.Name = name;
-                gld.Capacity = 10;
-                gld.LogoBG = 0;
-                gld.LogoBGColor = 0;
-                gld.Notice = null;
-                gld.Signature = 0;
-                gld.Alliance = 0;
+                MapleGuild gld = new MapleGuild
+                {
+                    GuildID = InsertGuild.ID,
+                    LeaderID = leader.ID,
+                    GP = 0,
+                    Logo = 0,
+                    LogoColor = 0,
+                    Name = name,
+                    Capacity = 10,
+                    LogoBG = 0,
+                    LogoBGColor = 0,
+                    Notice = null,
+                    Signature = 0,
+                    Alliance = 0
+                };
                 Guilds.Add(gld.GuildID, gld);
                 return gld;
             }
         }
         public PacketWriter GenerateKickPacket(MapleCharacter character)
         {
-            
-            var pw = new PacketWriter(SMSGHeader.GUILD_OPERATION);
+            var pw = new PacketWriter();
+            pw.WriteHeader(SMSGHeader.GUILD_OPERATION);
             pw.WriteByte(0x35);
             pw.WriteUInt((uint)GuildID);
             pw.WriteInt(character.ID);
@@ -190,7 +195,7 @@ namespace RazzleServer.Player
         public PacketWriter GenerateSetMaster(MapleCharacter character)
         {
             
-            var pw = new PacketWriter(SMSGHeader.GUILD_OPERATION);
+            var pw = new PacketWriter((ushort)SMSGHeader.GUILD_OPERATION);
             pw.WriteByte(0x59);
             pw.WriteUInt((uint)GuildID);
             pw.WriteUInt((uint)LeaderID);
@@ -201,7 +206,7 @@ namespace RazzleServer.Player
         public PacketWriter GenerateChangeRankPacket(MapleCharacter character, byte newRank)
         {
             
-            var pw = new PacketWriter(SMSGHeader.GUILD_OPERATION);
+            var pw = new PacketWriter((ushort)SMSGHeader.GUILD_OPERATION);
             pw.WriteByte(0x46);
             pw.WriteUInt((uint)GuildID);
             pw.WriteInt(character.ID);
@@ -211,7 +216,7 @@ namespace RazzleServer.Player
         public PacketWriter GenerateNoticeChangePacket()
         {
             
-            var pw = new PacketWriter(SMSGHeader.GUILD_OPERATION);
+            var pw = new PacketWriter((ushort)SMSGHeader.GUILD_OPERATION);
             pw.WriteByte(0x4B);
             pw.WriteUInt((uint)GuildID);
             pw.WriteMapleString(Notice);
@@ -219,16 +224,16 @@ namespace RazzleServer.Player
         }
         public PacketWriter GenerateGuildDisbandPacket()
         {
-            
-            var pw = new PacketWriter(SMSGHeader.GUILD_OPERATION);
+            var pw = new PacketWriter();
+            pw.WriteHeader(SMSGHeader.GUILD_OPERATION);
             pw.WriteByte(0x38);
             pw.WriteUInt((uint)GuildID);
             return pw;
         }
         public PacketWriter GenerateGuildInvite(MapleCharacter fromcharacter)
         {
-            
-            var pw = new PacketWriter(SMSGHeader.GUILD_OPERATION);
+            var pw = new PacketWriter();
+            pw.WriteHeader(SMSGHeader.GUILD_OPERATION);
             pw.WriteByte(0x05);
             pw.WriteUInt((uint)GuildID);
             pw.WriteMapleString(fromcharacter.Name);
@@ -240,7 +245,7 @@ namespace RazzleServer.Player
         public static void UpdateCharacterGuild(MapleCharacter fromcharacter, string name)
         {
             
-            var pw = new PacketWriter(SMSGHeader.GUILD_OPERATION); // UPDATE_GUILD_NAME
+            var pw = new PacketWriter((ushort)SMSGHeader.GUILD_OPERATION); // UPDATE_GUILD_NAME
             pw.WriteInt(fromcharacter.ID);
             pw.WriteMapleString(name);
             fromcharacter.Map.BroadcastPacket(pw, fromcharacter);
@@ -249,11 +254,11 @@ namespace RazzleServer.Player
         public void BroadcastCharacterJoinedMessage(MapleCharacter fromcharacter)
         {
             
-            var pw = new PacketWriter(SMSGHeader.GUILD_OPERATION);
+            var pw = new PacketWriter((ushort)SMSGHeader.GUILD_OPERATION);
             pw.WriteByte(0x2D);
             pw.WriteUInt((uint)GuildID);
             pw.WriteInt(fromcharacter.ID);
-            pw.WriteStaticString(fromcharacter.Name, 13);
+            pw.WriteString(fromcharacter.Name, 13);
             pw.WriteInt(fromcharacter.Job);
             pw.WriteInt(fromcharacter.Level);
             pw.WriteInt(fromcharacter.GuildRank);
@@ -274,7 +279,7 @@ namespace RazzleServer.Player
         public PacketWriter GenerateGuildDataPacket()
         {
             
-            var pw = new PacketWriter(SMSGHeader.GUILD_OPERATION);
+            var pw = new PacketWriter((ushort)SMSGHeader.GUILD_OPERATION);
             pw.WriteByte(0x20);
             pw.WriteByte(1);//?
             pw.WriteUInt((uint)GuildID);
@@ -302,7 +307,7 @@ namespace RazzleServer.Player
                     int contribution = 0;
                     if (c == null)
                     {
-                        pw.WriteStaticString(Character.Name, 13);
+                        pw.WriteString(Character.Name, 13);
                         pw.WriteInt(Character.Job);
                         pw.WriteInt(Character.Level);
                         pw.WriteInt(Character.GuildRank);
@@ -314,7 +319,7 @@ namespace RazzleServer.Player
                     else//the character might have unsaved data so we use this instead.
                     {
                         MapleCharacter ch = c.Account.Character;
-                        pw.WriteStaticString(ch.Name, 13);
+                        pw.WriteString(ch.Name, 13);
                         pw.WriteInt(ch.Job);
                         pw.WriteInt(ch.Level);
                         pw.WriteInt(ch.GuildRank);

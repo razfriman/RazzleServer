@@ -1,4 +1,4 @@
-﻿using RazzleServer.Packet;
+﻿using MapleLib.PacketLib;
 using RazzleServer.Packet;
 using RazzleServer.Player;
 
@@ -9,7 +9,7 @@ namespace RazzleServer.Handlers
     {
         public override void HandlePacket(PacketReader packet, MapleClient client)
         {
-            var pw = new PacketWriter(SMSGHeader.RELOG_RESPONSE);
+            var pw = new PacketWriter((ushort)SMSGHeader.RELOG_RESPONSE);
             pw.WriteByte(1);
             client.SendPacket(pw);
         }

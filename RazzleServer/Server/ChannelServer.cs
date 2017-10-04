@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using RazzleServer.Data.WZ;
 using RazzleServer.Data;
 using RazzleServer.Util;
+using MapleLib.PacketLib;
 
 namespace RazzleServer.Server
 {
@@ -30,7 +31,7 @@ namespace RazzleServer.Server
             }
 
 
-            byte[] channelIp = new byte[] { 0, 0, 0, 0 };
+            byte[] channelIp = { 0, 0, 0, 0 };
             Start(new IPAddress(channelIp), port);
         }
 

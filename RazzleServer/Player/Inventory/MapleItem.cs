@@ -6,6 +6,7 @@ using RazzleServer.Player;
 using RazzleServer.Util;
 using System;
 using System.Linq;
+using MapleLib.PacketLib;
 
 namespace RazzleServer.Inventory
 {
@@ -92,7 +93,7 @@ namespace RazzleServer.Inventory
         public static PacketWriter ShowItemGain(MapleItem item)
         {
             
-            var pw = new PacketWriter(SMSGHeader.SHOW_STATUS_INFO);
+            var pw = new PacketWriter((ushort)SMSGHeader.SHOW_STATUS_INFO);
             pw.WriteShort(0);
             pw.WriteInt(item.ItemId);
             pw.WriteInt(item.Quantity);

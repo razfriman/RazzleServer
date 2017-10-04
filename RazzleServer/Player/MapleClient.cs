@@ -117,7 +117,7 @@ namespace RazzleServer.Player
             }
         }
 
-        public void SendPacket(Packet.PacketWriter packet)
+        public void SendPacket(PacketWriter packet)
         {
             if (ServerConfig.Instance.PrintPackets)
             {
@@ -138,11 +138,11 @@ namespace RazzleServer.Player
 
             Socket.Crypto.SetVectors(sIV, rIV);
 
-            var writer = new Packet.PacketWriter(0x0E);
+            var writer = new PacketWriter(0x0E);
             writer.WriteUShort(ServerConfig.Instance.Version);
             writer.WriteMapleString(ServerConfig.Instance.SubVersion.ToString());
-            writer.WriteBytes(rIV);
-            writer.WriteBytes(sIV);
+            writer.WriteUInt(rIV);
+            writer.WriteUInt(sIV);
             writer.WriteByte(ServerConfig.Instance.ServerType);
             Socket.SendRawPacket(writer.ToArray());
         }
