@@ -140,9 +140,6 @@ namespace MapleLib.PacketLib
 			}
 		}
 
-		~ClientSocket()
-		{
-			Dispose();
-		}
+		~ClientSocket() => Dispose();
 	}
 }

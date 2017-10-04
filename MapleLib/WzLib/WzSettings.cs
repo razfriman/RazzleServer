@@ -194,21 +194,16 @@ namespace MapleLib.WzLib
 
         public void Load()
         {
-            if (File.Exists(wzPath))
+            if (!File.Exists(wzPath))
             {
-                WzFile wzFile = new WzFile(wzPath, 1337, WzMapleVersion.CLASSIC);
-                try
-                {
-                    wzFile.ParseWzFile();
-                    ExtractSettingsImage((WzImage)wzFile["UserSettings.img"], userSettingsType);
-                    ExtractSettingsImage((WzImage)wzFile["ApplicationSettings.img"], appSettingsType);
-                    wzFile.Dispose();
-                }
-                catch
-                {
-                    wzFile.Dispose();
-                    throw;
-                }
+                return;
+            }
+         
+            using (var wzFile = new WzFile(wzPath, 1337, WzMapleVersion.CLASSIC))
+            {
+                wzFile.ParseWzFile();
+                ExtractSettingsImage((WzImage)wzFile["UserSettings.img"], userSettingsType);
+                ExtractSettingsImage((WzImage)wzFile["ApplicationSettings.img"], appSettingsType);
             }
         }
 

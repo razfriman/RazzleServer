@@ -7,20 +7,14 @@ namespace MapleLib.MapleCryptoLib
     /// </summary>
     public class FastAES
     {
-        #region Constructor and Variables
         private uint[][] WorkingKey;
 
         /// <summary>
         /// Creates a new instace of the AES crypto
         /// </summary>
         /// <param name="Key">Key required by the crypto</param>
-        internal FastAES(byte[] Key)
-        {
-            WorkingKey = GenerateWorkingKey(Key);
-        }
-        #endregion
+        internal FastAES(byte[] Key) => WorkingKey = GenerateWorkingKey(Key);
 
-        #region Main functionality
         /// <summary>
         /// Transforms <paramref name="block"/> using the current AES instance
         /// </summary>
@@ -129,9 +123,7 @@ namespace MapleLib.MapleCryptoLib
 
             return KeyResult;
         }
-        #endregion
-
-        #region Helper functions
+       
         private static uint Shift(uint x, int shift)
         {
             return unchecked((x >> shift) | (x << (32 - shift)));
@@ -145,16 +137,11 @@ namespace MapleLib.MapleCryptoLib
                 | (((uint)Sbox[(x >> 24) & 255]) << 24);
         }
 
-        private static uint LeToUInt32(byte[] buffer, int off)
-        {
-            return (uint)buffer[off]
-                | (uint)buffer[off + 1] << 8
-                | (uint)buffer[off + 2] << 16
-                | (uint)buffer[off + 3] << 24;
-        }
-        #endregion
+		private static uint LeToUInt32(byte[] buffer, int off) => (uint)buffer[off]
+				| (uint)buffer[off + 1] << 8
+				| (uint)buffer[off + 2] << 16
+				| (uint)buffer[off + 3] << 24;
 
-        #region Constants
         private const uint m1 = 0x80808080;
         private const uint m2 = 0x7f7f7f7f;
         private const uint m3 = 0x0000001b;
@@ -649,6 +636,5 @@ namespace MapleLib.MapleCryptoLib
             0xd89ce4b4, 0x6490c156, 0x7b6184cb, 0xd570b632, 0x48745c6c,
             0xd04257b8
         };
-        #endregion
     }
 }

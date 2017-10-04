@@ -57,13 +57,9 @@ namespace MapleLib.WzLib
         {
             name = null;
             reader = null;
-            if (properties != null)
-            {
-                foreach (WzImageProperty prop in properties)
-                    prop.Dispose();
-                properties.Clear();
-                properties = null;
-            }
+			properties?.ForEach(x => x.Dispose());
+			properties?.Clear();
+			properties = null;
         }
         #endregion
 

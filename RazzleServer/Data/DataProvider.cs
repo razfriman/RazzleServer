@@ -135,63 +135,67 @@ namespace RazzleServer.Data
 
         public static int LoadMobs(string path)
         {
-            var file = new WzFile(path, (short)ServerConfig.Instance.Version, WzMapleVersion.GMS);
-            file.ParseWzFile();
-            file.WzDirectory.ParseImages();
-
-            int ret = 0;
-
-            foreach (var imgNode in file.WzDirectory.WzImages)
+            using (var file = new WzFile(path, (short)ServerConfig.Instance.Version, WzMapleVersion.GMS))
             {
-                if (!(imgNode["info"] != null && imgNode.Name.Contains(".img")))
-                    continue;
+                file.ParseWzFile();
+                file.WzDirectory.ParseImages();
 
-                int start = 0;
-                if (imgNode.Name.StartsWith("0")) start = 1;
+                int ret = 0;
 
-                int MobId = int.Parse(imgNode.Name.Substring(start, 7 - start));
+                foreach (var imgNode in file.WzDirectory.WzImages)
+                {
+                    if (!(imgNode["info"] != null && imgNode.Name.Contains(".img")))
+                        continue;
 
-                if (DataBuffer.MobBuffer.ContainsKey(MobId))
-                    continue;
+                    int start = 0;
+                    if (imgNode.Name.StartsWith("0")) start = 1;
 
-                var mobInfo = imgNode["info"];
+                    int MobId = int.Parse(imgNode.Name.Substring(start, 7 - start));
 
-                WzMob Mob = new WzMob();
-                Mob.MobId = MobId;
-                Mob.Level = mobInfo["level"]?.GetInt() ?? 1;
-                Mob.HP = mobInfo["maxHP"]?.GetInt() ?? 1;
-                Mob.MP = mobInfo["maxMP"]?.GetInt() ?? 1;
-                Mob.Speed = mobInfo["speed"]?.GetInt() ?? 0;
-                Mob.Kb = mobInfo["pushed"]?.GetInt() ?? 0;
-                Mob.PAD = mobInfo["PADamage"]?.GetInt() ?? 0;
-                Mob.PDD = mobInfo["PDDamage"]?.GetInt() ?? 0;
-                Mob.PDRate = mobInfo["PDRate"]?.GetInt() ?? 0;
-                Mob.MAD = mobInfo["MADamage"]?.GetInt() ?? 0;
-                Mob.MDD = mobInfo["MDDamage"]?.GetInt() ?? 0;
-                Mob.MDRate = mobInfo["MDRate"]?.GetInt() ?? 0;
-                Mob.Eva = mobInfo["eva"]?.GetInt() ?? 0;
-                Mob.Acc = mobInfo["acc"]?.GetInt() ?? 0;
-                Mob.Exp = mobInfo["exp"]?.GetInt() ?? 0;
-                Mob.SummonType = mobInfo["summonType"]?.GetInt() ?? 0;
-                //Mob.Invincible = mobInfo["invincible"].GetInt();
-                //Mob.FixedDamage = mobInfo["fixDamage"].GetInt(); ;
-                //Mob.FFALoot = mobInfo["publicReward"].GetInt() > 0;
-                //Mob.ExplosiveReward = mobInfo["explosiveReward"].GetInt() > 0;
-                //Mob.IsBoss = mobInfo["boss"].GetInt() > 0;
-                //if (Info.ContainsChild("skill"))
-                //{
-                //    NXNode skill = Info.GetChild("skill");
-                //    for (int i = 0; skill.ContainsChild(i.ToString()); i++)
-                //    {
-                //        NXNode child = skill.GetChild(i.ToString());
-                //        Mob.Skills.Add(MobSkill.GetSkill(GetIntFromChild(child, "skill"), GetIntFromChild(child, "level")));
-                //    }
-                //}
-                DataBuffer.MobBuffer.Add(MobId, Mob);
-                ret++;
-            }
-            file.Dispose();
+                    if (DataBuffer.MobBuffer.ContainsKey(MobId))
+                        continue;
+
+                    var mobInfo = imgNode["info"];
+
+                    WzMob Mob = new WzMob();
+                    Mob.MobId = MobId;
+                    Mob.Level = mobInfo["level"]?.GetInt() ?? 1;
+                    Mob.HP = mobInfo["maxHP"]?.GetInt() ?? 1;
+                    Mob.MP = mobInfo["maxMP"]?.GetInt() ?? 1;
+                    //Mob.Speed = mobInfo["speed"]?.GetInt() ?? 0;
+                    //Mob.Kb = mobInfo["pushed"]?.GetInt() ?? 0;
+                    //Mob.PAD = mobInfo["PADamage"]?.GetInt() ?? 0;
+                    //Mob.PDD = mobInfo["PDDamage"]?.GetInt() ?? 0;
+                    //Mob.PDRate = mobInfo["PDRate"]?.GetInt() ?? 0;
+                    //Mob.MAD = mobInfo["MADamage"]?.GetInt() ?? 0;
+                    //Mob.MDD = mobInfo["MDDamage"]?.GetInt() ?? 0;
+                    //Mob.MDRate = mobInfo["MDRate"]?.GetInt() ?? 0;
+                    //Mob.Eva = mobInfo["eva"]?.GetInt() ?? 0;
+                    //Mob.Acc = mobInfo["acc"]?.GetInt() ?? 0;
+                    //Mob.Exp = mobInfo["exp"]?.GetInt() ?? 0;
+                    //Mob.SummonType = mobInfo["summonType"]?.GetInt() ?? 0;
+
+
+                    //Mob.Invincible = mobInfo["invincible"].GetInt();
+                    //Mob.FixedDamage = mobInfo["fixDamage"].GetInt(); ;
+                    //Mob.FFALoot = mobInfo["publicReward"].GetInt() > 0;
+                    //Mob.ExplosiveReward = mobInfo["explosiveReward"].GetInt() > 0;
+                    //Mob.IsBoss = mobInfo["boss"].GetInt() > 0;
+                    //if (Info.ContainsChild("skill"))
+                    //{
+                    //    NXNode skill = Info.GetChild("skill");
+                    //    for (int i = 0; skill.ContainsChild(i.ToString()); i++)
+                    //    {
+                    //        NXNode child = skill.GetChild(i.ToString());
+                    //        Mob.Skills.Add(MobSkill.GetSkill(GetIntFromChild(child, "skill"), GetIntFromChild(child, "level")));
+                    //    }
+                    //}
+                    DataBuffer.MobBuffer.Add(MobId, Mob);
+                    ret++;
+                }
             return ret;
-        }
+			}
+
+		}
     }
 }

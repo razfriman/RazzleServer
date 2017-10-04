@@ -45,8 +45,7 @@ namespace RazzleServer.Server
 
         public MapleMap GetMap(int mapID)
         {
-            MapleMap ret;
-            if (_maps.TryGetValue(mapID, out ret))
+            if (_maps.TryGetValue(mapID, out var ret))
             {
                 return ret;
             }

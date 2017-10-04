@@ -176,11 +176,12 @@ namespace MapleLib.WzLib.WzProperties
         public WzSoundProperty(string name, string file)
         {
             this.name = name;
-            Mp3FileReader reader = new Mp3FileReader(file);
-            wavFormat = reader.Mp3WaveFormat;
-            len_ms = (int)(reader.Length * 1000d / reader.WaveFormat.AverageBytesPerSecond);
-            RebuildHeader();
-            reader.Dispose();
+            using (var reader = new Mp3FileReader(file))
+            {
+                wavFormat = reader.Mp3WaveFormat;
+                len_ms = (int)(reader.Length * 1000d / reader.WaveFormat.AverageBytesPerSecond);
+                RebuildHeader();
+            }
             mp3bytes = File.ReadAllBytes(file);
         }
 

@@ -11,8 +11,7 @@ namespace MapleLib.MapleCryptoLib
 	/// </summary>
 	public class MapleCipherProvider
 	{
-		#region Constructor and Variables
-		/// <summary>
+        /// <summary>
 		/// Packet crypto, Incomming
 		/// </summary>
 		private MapleCipher RecvCipher { get; set; }
@@ -59,9 +58,7 @@ namespace MapleLib.MapleCryptoLib
 			WaitForData = 0;
 			IsWaiting = true;
 		}
-		#endregion
 
-		#region Events
 		/// <summary>
 		/// Callback for when a packet is finished
 		/// </summary>
@@ -81,9 +78,7 @@ namespace MapleLib.MapleCryptoLib
 		/// Event called when a handshake has been handled by the crypto
 		/// </summary>
 		public event CallHandshakeFinished HandshakeFinished;
-		#endregion
 
-		#region Public Methods
 		/// <summary>
 		/// Adds data to the buffer to await decryption
 		/// </summary>
@@ -123,13 +118,7 @@ namespace MapleLib.MapleCryptoLib
 		/// <summary>
 		/// Encrypts packet data
 		/// </summary>
-		public ushort? Encrypt(ref byte[] data, bool toClient = false)
-		{
-			return SendCipher.Encrypt(ref data, toClient);
-		}
-		#endregion
-
-		#region Private Methods
+		public ushort? Encrypt(ref byte[] data, bool toClient = false) => SendCipher.Encrypt(ref data, toClient);
 
 		/// <summary>
 		/// Prevents the buffer being to small
@@ -225,6 +214,5 @@ namespace MapleLib.MapleCryptoLib
 				WaitMore(packetLength);
 			}
 		}
-		#endregion
 	}
 }

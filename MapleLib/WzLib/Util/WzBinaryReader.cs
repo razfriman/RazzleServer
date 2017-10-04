@@ -6,25 +6,16 @@ namespace MapleLib.WzLib.Util
 {
     public class WzBinaryReader : BinaryReader
     {
-        #region Properties
         public WzMutableKey WzKey { get; set; }
+
         public uint Hash { get; set; }
+
         public WzHeader Header { get; set; }
-        #endregion
 
-        #region Constructors
         public WzBinaryReader(Stream input, byte[] WzIv)
-            : base(input)
-        {
-            WzKey = WzKeyGenerator.GenerateWzKey(WzIv);
-        }
-        #endregion
+            : base(input) => WzKey = WzKeyGenerator.GenerateWzKey(WzIv);
 
-        #region Methods
-        public string ReadStringAtOffset(long Offset)
-        {
-            return ReadStringAtOffset(Offset, false);
-        }
+        public string ReadStringAtOffset(long Offset) => ReadStringAtOffset(Offset, false);
 
         public string ReadStringAtOffset(long Offset, bool readByte)
         {
@@ -107,10 +98,7 @@ namespace MapleLib.WzLib.Util
         /// Reads an ASCII string, without decryption
         /// </summary>
         /// <param name="length">Length of bytes to read</param>
-        public string ReadString(int length)
-        {
-            return Encoding.ASCII.GetString(ReadBytes(length));
-        }
+        public string ReadString(int length) => Encoding.ASCII.GetString(ReadBytes(length));
 
         public string ReadNullTerminatedString()
         {
@@ -187,7 +175,5 @@ namespace MapleLib.WzLib.Util
                     return "";
             }
         }
-
-        #endregion
     }
 }

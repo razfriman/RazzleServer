@@ -9,15 +9,16 @@ namespace MapleLib.WzLib.Util
 	*/
     public class WzBinaryWriter : BinaryWriter
     {
-        #region Properties
         public WzMutableKey WzKey { get; set; }
-        public uint Hash { get; set; }
-        public Hashtable StringCache { get; set; }
-        public WzHeader Header { get; set; }
-        public bool LeaveOpen { get; internal set; }
-        #endregion
 
-        #region Constructors
+        public uint Hash { get; set; }
+
+        public Hashtable StringCache { get; set; }
+
+        public WzHeader Header { get; set; }
+
+        public bool LeaveOpen { get; internal set; }
+
         public WzBinaryWriter(Stream output, byte[] WzIv)
             : this(output, WzIv, false) { }
 
@@ -28,9 +29,7 @@ namespace MapleLib.WzLib.Util
             StringCache = new Hashtable();
             this.LeaveOpen = leaveOpen;
         }
-        #endregion
 
-        #region Methods
         public void WriteStringValue(string s, int withoutOffset, int withOffset)
         {
             if (s.Length > 4 && StringCache.ContainsKey(s))
@@ -210,14 +209,10 @@ namespace MapleLib.WzLib.Util
             Write(writeOffset);
         }
 
-        private uint RotateLeft(uint x, byte n)
-        {
-            return ((x) << (n)) | ((x) >> (32 - (n)));
-        }
-        private uint RotateRight(uint x, byte n)
-        {
-            return ((x) >> (n)) | ((x) << (32 - (n)));
-        }
+        private uint RotateLeft(uint x, byte n) => ((x) << (n)) | ((x) >> (32 - (n)));
+
+        private uint RotateRight(uint x, byte n) => ((x) >> (n)) | ((x) << (32 - (n)));
+       
         public override void Close()
         {
             if (!LeaveOpen)
@@ -225,7 +220,5 @@ namespace MapleLib.WzLib.Util
                 base.Close();
             }
         }
-
-        #endregion
     }
 }

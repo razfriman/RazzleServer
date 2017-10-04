@@ -36,7 +36,7 @@ namespace RazzleServer
         public static void LoadMobs()
         {
             Stopwatch sw = Stopwatch.StartNew();
-            int count = DataProvider.LoadMaps(Path.Combine(ServerConfig.Instance.WzFilePath, "Mob.wz"));
+            int count = DataProvider.LoadMobs(Path.Combine(ServerConfig.Instance.WzFilePath, "Mob.wz"));
             Log.LogInformation($"{count} Mobs loaded in {sw.ElapsedMilliseconds} ms");
             sw.Stop();
         }

@@ -134,8 +134,7 @@ namespace MapleLib.WzLib.WzProperties
         public override void Dispose()
         {
             name = null;
-            foreach (WzImageProperty exProp in properties)
-                exProp.Dispose();
+            properties?.ForEach(x => x.Dispose());
             properties.Clear();
             properties = null;
         }

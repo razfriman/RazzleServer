@@ -18,5 +18,6 @@
   "PingTimeout": 30,
   "PrintPackets": true,
   "IsLocalHost": true,
-  "LoginCreatesNewAccount": true
+  "LoginCreatesNewAccount": true,
+  "WzFilePath":  "/Users/razfriman/Desktop/WZ"
 }

@@ -104,12 +104,9 @@ namespace RazzleServer.Util
             }), delay, cancellationToken);
         }
 
-        public static Task ScheduleRemoveMonsterStatusEffect(MonsterBuff effect, int delay, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            return ScheduleDelayedAction(new Action(() =>
-            {
-                effect.Dispose(false);
-            }), delay, cancellationToken);
-        }
+		public static Task ScheduleRemoveMonsterStatusEffect(MonsterBuff effect, int delay, CancellationToken cancellationToken = default(CancellationToken)) => ScheduleDelayedAction(new Action(() =>
+		{
+			effect.Dispose(false);
+		}), delay, cancellationToken);
     }
 }

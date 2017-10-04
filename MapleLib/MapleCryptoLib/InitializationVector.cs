@@ -17,10 +17,7 @@ namespace MapleLib.MapleCryptoLib
         /// </summary>
         internal byte[] Bytes
         {
-            get
-            {
-                return BitConverter.GetBytes(Value);
-            }
+            get => BitConverter.GetBytes(Value);
         }
 
         /// <summary>
@@ -28,10 +25,7 @@ namespace MapleLib.MapleCryptoLib
         /// </summary>
         internal ushort HIWORD
         {
-            get
-            {
-                return unchecked((ushort)(Value >> 16));
-            }
+            get => unchecked((ushort)(Value >> 16));
         }
 
         /// <summary>
@@ -39,10 +33,7 @@ namespace MapleLib.MapleCryptoLib
         /// </summary>
         internal ushort LOWORD
         {
-            get
-            {
-                return (ushort)Value;
-            }
+            get => (ushort)Value;
         }
 
         /// <summary>
@@ -50,20 +41,14 @@ namespace MapleLib.MapleCryptoLib
         /// </summary>
         internal bool MustSend
         {
-            get
-            {
-                return LOWORD % 0x1F == 0;
-            }
+            get => LOWORD % 0x1F == 0;
         }
 
         /// <summary>
         /// Creates a IV instance using <paramref name="vector"/>
         /// </summary>
         /// <param name="vector">Initialization vector</param>
-        internal InitializationVector(uint vector)
-        {
-            Value = vector;
-        }
+        internal InitializationVector(uint vector) => Value = vector;
 
         /// <summary>
         /// Shuffles the current IV to the next vector using the shuffle table

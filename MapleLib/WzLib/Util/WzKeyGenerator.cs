@@ -5,8 +5,6 @@ namespace MapleLib.WzLib.Util
 {
     public static class WzKeyGenerator
     {
-        #region Methods
-
         public static byte[] GetIvFromZlz(FileStream zlzStream)
         {
             byte[] iv = new byte[4];
@@ -29,10 +27,6 @@ namespace MapleLib.WzLib.Util
             return aes;
         }
 
-        public static WzMutableKey GenerateWzKey(byte[] WzIv)
-        {
-            return new WzMutableKey(WzIv, CryptoConstants.GetTrimmedUserKey());
-        }
-        #endregion
+        public static WzMutableKey GenerateWzKey(byte[] WzIv) => new WzMutableKey(WzIv, CryptoConstants.GetTrimmedUserKey());
     }
 }

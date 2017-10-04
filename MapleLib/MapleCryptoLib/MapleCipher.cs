@@ -7,8 +7,7 @@ namespace MapleLib.MapleCryptoLib
 	/// </summary>
 	public class MapleCipher
 	{
-		#region Constructor and Variables
-		/// <summary>
+        /// <summary>
 		/// AES transformer
 		/// </summary>
 		private FastAES Transformer { get; set; }
@@ -44,10 +43,8 @@ namespace MapleLib.MapleCryptoLib
 			GameVersion = currentGameVersion;
 			Transformer = new FastAES(ExpandKey(AESKey));
 		}
-		#endregion
-
-		#region Public Methods
-		/// <summary>
+		
+        /// <summary>
 		/// Encrypts packet data
 		/// </summary>
 		public ushort? Encrypt(ref byte[] data, bool toClient)
@@ -105,10 +102,7 @@ namespace MapleLib.MapleCryptoLib
 		/// </summary>
 		/// <param name="data">Data to check</param>
 		/// <returns>Length of <paramref name="data"/></returns>
-		public int GetPacketLength(byte[] data)
-		{
-			return (data[0] + (data[1] << 8)) ^ (data[2] + (data[3] << 8));
-		}
+		public int GetPacketLength(byte[] data) => (data[0] + (data[1] << 8)) ^ (data[2] + (data[3] << 8));
 
 		/// <summary>
 		/// Manually sets the vector for the current instance
@@ -129,10 +123,8 @@ namespace MapleLib.MapleCryptoLib
 			Buffer.BlockCopy(data, 2, ret, 0, ret.Length);
 			data = ret;
 		}
-		#endregion
-
-		#region Private Methods
-		/// <summary>
+		
+        /// <summary>
 		/// Expands the key we store as long
 		/// </summary>
 		/// <returns>The expanded key</returns>
@@ -288,6 +280,5 @@ namespace MapleLib.MapleCryptoLib
 			int tmp = b << (8 - (count & 7));
 			return unchecked((byte)(tmp | (tmp >> 8)));
 		}
-		#endregion
 	}
 }

@@ -90,28 +90,5 @@ namespace MapleLib.PacketLib
 
             return bytes;
         }
-
-        /// <summary>
-        /// Convert byte array to ASCII
-        /// </summary>
-        /// <param name="bytes">Bytes to convert to ASCII</param>
-        /// <returns>The byte array as an ASCII string</returns>
-        public static string ToStringFromAscii(byte[] bytes)
-        {
-            var ret = new char[bytes.Length];
-            for (var x = 0; x < bytes.Length; x++)
-            {
-                if (bytes[x] < 32 && bytes[x] >= 0)
-                {
-                    ret[x] = '.';
-                }
-                else
-                {
-                    var chr = bytes[x] & 0xFF;
-                    ret[x] = (char)chr;
-                }
-            }
-            return new string(ret);
-        }
     }
 }

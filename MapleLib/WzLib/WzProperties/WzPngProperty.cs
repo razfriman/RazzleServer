@@ -70,11 +70,8 @@ namespace MapleLib.WzLib.WzProperties
         public override void Dispose()
         {
             compressedBytes = null;
-            if (png != null)
-            {
-                png.Dispose();
-                png = null;
-            }
+            png?.Dispose();
+            png = null;
         }
         #endregion
 
@@ -198,33 +195,38 @@ namespace MapleLib.WzLib.WzProperties
 
         internal byte[] Decompress(byte[] compressedBuffer, int decompressedSize)
         {
-            MemoryStream memStream = new MemoryStream();
-            memStream.Write(compressedBuffer, 2, compressedBuffer.Length - 2);
-            byte[] buffer = new byte[decompressedSize];
-            memStream.Position = 0;
-            DeflateStream zip = new DeflateStream(memStream, CompressionMode.Decompress);
-            zip.Read(buffer, 0, buffer.Length);
-            zip.Close();
-            zip.Dispose();
-            memStream.Close();
-            memStream.Dispose();
-            return buffer;
+            using (var memStream = new MemoryStream())
+            {
+                memStream.Write(compressedBuffer, 2, compressedBuffer.Length - 2);
+                var buffer = new byte[decompressedSize];
+                memStream.Position = 0;
+                using (var zip = new DeflateStream(memStream, CompressionMode.Decompress))
+                {
+                    zip.Read(buffer, 0, buffer.Length);
+                    zip.Close();
+                    zip.Dispose();
+                    return buffer;
+                }
+            }
         }
+
         internal byte[] Compress(byte[] decompressedBuffer)
         {
-            MemoryStream memStream = new MemoryStream();
-            DeflateStream zip = new DeflateStream(memStream, CompressionMode.Compress, true);
-            zip.Write(decompressedBuffer, 0, decompressedBuffer.Length);
-            zip.Close();
-            memStream.Position = 0;
-            byte[] buffer = new byte[memStream.Length + 2];
-            memStream.Read(buffer, 2, buffer.Length - 2);
-            memStream.Close();
-            memStream.Dispose();
-            zip.Dispose();
-            System.Buffer.BlockCopy(new byte[] { 0x78, 0x9C }, 0, buffer, 0, 2);
-            return buffer;
+            using (var memStream = new MemoryStream())
+            {
+                using (var zip = new DeflateStream(memStream, CompressionMode.Compress, true))
+                {
+                    zip.Write(decompressedBuffer, 0, decompressedBuffer.Length);
+                    zip.Close();
+                    memStream.Position = 0;
+                    byte[] buffer = new byte[memStream.Length + 2];
+                    memStream.Read(buffer, 2, buffer.Length - 2);
+					System.Buffer.BlockCopy(new byte[] { 0x78, 0x9C }, 0, buffer, 0, 2);
+					return buffer;
+                }
+            }
         }
+
         internal void ParsePng()
         {
             DeflateStream zlib;

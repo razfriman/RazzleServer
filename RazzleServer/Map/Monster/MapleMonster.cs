@@ -192,10 +192,7 @@ namespace RazzleServer.Map.Monster
                 #endregion
 
                 Map = null;
-                foreach (MonsterBuff effect in Buffs)
-                {
-                    effect.Dispose(true);
-                }
+                Buffs?.ForEach(x => x.Dispose(true));
             }
         }
 
@@ -292,8 +289,7 @@ namespace RazzleServer.Map.Monster
 
         public MapleCharacter GetController()
         {
-            MapleCharacter chr;
-            Controller.TryGetTarget(out chr);
+            Controller.TryGetTarget(out var chr);
             return chr;
         }
 

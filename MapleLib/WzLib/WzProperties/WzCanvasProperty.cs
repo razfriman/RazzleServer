@@ -170,10 +170,7 @@ namespace MapleLib.WzLib.WzProperties
             name = null;
             imageProp.Dispose();
             imageProp = null;
-            foreach (WzImageProperty prop in properties)
-            {
-                prop.Dispose();
-            }
+            properties?.ForEach(x => x.Dispose());
             properties.Clear();
             properties = null;
         }

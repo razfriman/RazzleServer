@@ -1655,8 +1655,7 @@ namespace RazzleServer.Player
 
         public bool CompleteQuest(int questId, int npcId, int choice = 0)
         {
-            MapleQuest quest = null;
-            if (_startedQuests.TryGetValue(questId, out quest))
+            if (_startedQuests.TryGetValue(questId, out var quest))
             {
                 if (Map == null || !Map.HasNpc(npcId)) return false;
                 foreach (WzQuestRequirement wqr in quest.QuestInfo.FinishRequirements)

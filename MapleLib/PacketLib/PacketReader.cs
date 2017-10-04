@@ -97,9 +97,9 @@ namespace MapleLib.PacketLib
 		/// <summary>
 		/// Reads an ASCII string from the stream
 		/// </summary>
-		/// <param name="pLength">Amount of bytes</param>
+		/// <param name="length">Amount of bytes</param>
 		/// <returns>An ASCII string</returns>
-		public string ReadString(int pLength) => Encoding.ASCII.GetString(ReadBytes(pLength));
+        public string ReadString(int length) => Encoding.ASCII.GetString(ReadBytes(length));
 
 		/// <summary>
 		/// Reads a maple string from the stream
@@ -116,9 +116,13 @@ namespace MapleLib.PacketLib
 			var oldPos = _buffer.Position;
 			_buffer.Position = 0;
 			ushort ret = ReadUShort();
-			if (oldPos != 0)
-				_buffer.Position = oldPos;
-			return ret;
+
+            if (oldPos != 0)
+            {
+                _buffer.Position = oldPos;
+            }
+			
+            return ret;
 		}
 
 		/// <summary>     

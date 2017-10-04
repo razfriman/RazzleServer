@@ -49,10 +49,8 @@ namespace MapleLib.WzLib
 		{
 			name = null;
 			reader = null;
-			foreach (WzImage img in images)
-				img.Dispose();
-			foreach (WzDirectory dir in subDirs)
-				dir.Dispose();
+            images?.ForEach(x => x.Dispose());
+            subDirs?.ForEach(x => x.Dispose());
 			images.Clear();
 			subDirs.Clear();
 			images = null;
