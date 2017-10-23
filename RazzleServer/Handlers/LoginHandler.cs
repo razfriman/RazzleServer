@@ -46,7 +46,7 @@ namespace RazzleServer.Handlers
 
         public static PacketWriter LoginAccountSuccess(MapleAccount acc)
         {
-            var pw = new PacketWriter((ushort)SMSGHeader.LOGIN_RESPONSE);
+            var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.LOGIN_RESPONSE);
 
             pw.WriteByte(0);
             pw.WriteByte(0);
@@ -75,7 +75,7 @@ namespace RazzleServer.Handlers
 
         static PacketWriter LoginAccountFailed(byte reason)
         {
-            var pw = new PacketWriter((ushort)SMSGHeader.LOGIN_RESPONSE);
+            var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.LOGIN_RESPONSE);
             pw.WriteByte(reason);
             pw.WriteByte(0);
             pw.WriteInt(0);

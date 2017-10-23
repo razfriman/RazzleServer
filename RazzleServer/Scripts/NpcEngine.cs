@@ -141,7 +141,8 @@ namespace RazzleServer.Scripts
         {
             public static PacketWriter ShopTransactionResponse(byte response)
             {
-                var pw = new PacketWriter((ushort)SMSGHeader.NPC_ACTION);
+                var pw = new PacketWriter();
+                pw.WriteHeader(SMSGHeader.NPC_ACTION);
                 pw.WriteByte(response);
                 pw.WriteByte(0);
                 pw.WriteByte(0);
@@ -151,7 +152,7 @@ namespace RazzleServer.Scripts
             public static PacketWriter ShowShop(ShopScript shop, int npcId)
             {
                 List<ShopItem> items = shop.ShopItems;
-                var pw = new PacketWriter((ushort)SMSGHeader.OPEN_NPC_SHOP);
+                var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.OPEN_NPC_SHOP);
                 pw.WriteByte(0);
                 pw.WriteInt(0);
                 pw.WriteInt(npcId);

@@ -52,7 +52,7 @@ namespace RazzleServer.Player
 
         public static PacketWriter ShowSkillMacros(SkillMacro[] skillMacros)
         {
-            var pw = new PacketWriter((ushort)SMSGHeader.SKILL_MACRO);
+            var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.SKILL_MACRO);
             byte count = 0;
             for (int i = 0; i < 5; i++)
             {

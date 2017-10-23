@@ -257,7 +257,7 @@ namespace RazzleServer.Player
         {
             public static PacketWriter RemoveBuddy(int buddyId, bool accountBuddy)
             {
-                var pw = new PacketWriter((ushort)SMSGHeader.BUDDYLIST);
+                var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.BUDDYLIST);
                 pw.WriteByte(0x25);
                 pw.WriteBool(accountBuddy);
                 pw.WriteInt(buddyId);
@@ -283,7 +283,7 @@ namespace RazzleServer.Player
 
             public static PacketWriter UpdateBuddy(MapleBuddy buddy)
             {
-                var pw = new PacketWriter((ushort)SMSGHeader.BUDDYLIST);
+                var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.BUDDYLIST);
                 // TODO: NOT UDPATED FOR V83
                 pw.WriteByte(0x15);
                 pw.WriteInt(buddy.CharacterID);
@@ -295,7 +295,7 @@ namespace RazzleServer.Player
 
             public static PacketWriter UpdateBuddyList(List<MapleBuddy> buddies)
             {
-                var pw = new PacketWriter((ushort)SMSGHeader.BUDDYLIST);
+                var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.BUDDYLIST);
                 pw.WriteByte(7);
                 pw.WriteInt(buddies.Count);
                 foreach (MapleBuddy buddy in buddies)
@@ -308,7 +308,7 @@ namespace RazzleServer.Player
 
             public static PacketWriter UpdateCurrentStatus(bool invisible)
             {
-                var pw = new PacketWriter((ushort)SMSGHeader.BUDDYLIST);
+                var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.BUDDYLIST);
                 pw.WriteByte(0x22);
                 pw.WriteInt(invisible ? 1 : 0);
                 return pw;
@@ -316,7 +316,7 @@ namespace RazzleServer.Player
 
             public static PacketWriter BuddyChannelUpdate(int characterId, int accountId, int channel, bool invisible, string name)
             {
-                var pw = new PacketWriter((ushort)SMSGHeader.BUDDYLIST);
+                var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.BUDDYLIST);
                 pw.WriteByte(0x14);
                 pw.WriteInt(characterId);
                 pw.WriteByte(0);

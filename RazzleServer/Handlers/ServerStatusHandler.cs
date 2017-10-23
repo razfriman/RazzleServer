@@ -12,7 +12,7 @@ namespace RazzleServer.Handlers
         {
             var worldIndex = packet.ReadShort();
 
-            var pw = new PacketWriter((ushort)SMSGHeader.SERVERSTATUS);
+            var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.SERVERSTATUS);
             pw.WriteShort((short)ServerLoadType.NORMAL);
             client.SendPacket(pw);
         }

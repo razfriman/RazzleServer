@@ -24,16 +24,11 @@ namespace RazzleServer.Handlers
         {
             var chars = acc.GetCharsFromDatabase();
 
-            var pw = new PacketWriter((ushort)SMSGHeader.CHARLIST);
+            var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.CHARLIST);
 
             pw.WriteByte(0);
             pw.WriteByte((byte)chars.Count);
-
-            foreach (var chr in chars)
-            {
-                MapleCharacter.AddCharEntry(pw, chr);
-            }
-
+            chars.ForEach(chr => MapleCharacter.AddCharEntry(pw, chr);
             pw.WriteByte(1);
             pw.WriteInt(acc.CharacterSlots);
             return pw;

@@ -596,7 +596,7 @@ namespace RazzleServer.Data.WZ
         {
             public static PacketWriter ShowForeignSkillEffect(int characterId, byte characterLevel, int skillId, byte skillLevel)
             {
-                var pw = new PacketWriter((ushort)SMSGHeader.SHOW_SKILL_EFFECT);
+                var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.SHOW_SKILL_EFFECT);
                 pw.WriteInt(characterId);
                 pw.WriteByte(1);
                 pw.WriteInt(skillId);

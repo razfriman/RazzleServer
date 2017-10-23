@@ -30,7 +30,7 @@ namespace RazzleServer.Handlers
 
         public static PacketWriter CharacterMovePacket(int characterId, List<MapleMovementFragment> movementList)
         {
-            var pw = new PacketWriter((ushort)SMSGHeader.MOVE_PLAYER);
+            var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.MOVE_PLAYER);
             pw.WriteInt(characterId);
             pw.WriteInt(0);
             pw.WriteByte((byte)movementList.Count);

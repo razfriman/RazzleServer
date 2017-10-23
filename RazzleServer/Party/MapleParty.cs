@@ -252,7 +252,7 @@ namespace RazzleServer.Party
             public static PacketWriter GenerateInvite(MapleCharacter from)
             {
                 
-                var pw = new PacketWriter((ushort)SMSGHeader.PARTY_OPERATION);
+                var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.PARTY_OPERATION);
                 pw.WriteByte(0x04);
                 pw.WriteInt(from.ID);
                 pw.WriteMapleString(from.Name);
@@ -265,7 +265,7 @@ namespace RazzleServer.Party
             public static PacketWriter CreateParty(MapleParty party)
             {
                 
-                var pw = new PacketWriter((ushort)SMSGHeader.PARTY_OPERATION);
+                var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.PARTY_OPERATION);
                 pw.WriteByte(0x10);
                 pw.WriteInt(party.ID);
                 pw.WriteInt(999999999); //telerock?
@@ -283,7 +283,7 @@ namespace RazzleServer.Party
 
             public static PacketWriter UpdatePartyName(MapleParty party)
             {
-                var pw = new PacketWriter((ushort)SMSGHeader.PARTY_OPERATION);
+                var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.PARTY_OPERATION);
                 pw.WriteByte(0x4D);
                 pw.WriteBool(!party.IsPrivate);
                 pw.WriteMapleString(party.Name);
@@ -293,7 +293,7 @@ namespace RazzleServer.Party
             public static PacketWriter InviteResponse(byte response, string ign)
             {
                 
-                var pw = new PacketWriter((ushort)SMSGHeader.PARTY_OPERATION);
+                var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.PARTY_OPERATION);
                 pw.WriteByte(response);
                 pw.WriteMapleString(ign);
                 return pw;
@@ -376,7 +376,7 @@ namespace RazzleServer.Party
             public static PacketWriter UpdatePartyMemberHp(MapleCharacter chr)
             {
                 
-                var pw = new PacketWriter((ushort)SMSGHeader.UPDATE_PARTYMEMBER_HP);
+                var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.UPDATE_PARTYMEMBER_HP);
                 pw.WriteInt(chr.ID);
                 pw.WriteInt(chr.HP);
                 pw.WriteInt(chr.MaxHP);
@@ -386,7 +386,7 @@ namespace RazzleServer.Party
             public static PacketWriter UpdateParty(MapleParty party)
             {
                 
-                var pw = new PacketWriter((ushort)SMSGHeader.PARTY_OPERATION);
+                var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.PARTY_OPERATION);
                 pw.WriteByte(0x0F);
                 pw.WriteInt(party.ID);
                 AddPartyPlayersInfo(pw, party);
@@ -396,7 +396,7 @@ namespace RazzleServer.Party
             public static PacketWriter SetLeader(int leader, bool dc)
             {
                 
-                var pw = new PacketWriter((ushort)SMSGHeader.PARTY_OPERATION);
+                var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.PARTY_OPERATION);
                 pw.WriteByte(0x30); //0x2D + 3 ? not sure todo: check this
                 pw.WriteInt(leader);
                 pw.WriteBool(dc);
@@ -406,7 +406,7 @@ namespace RazzleServer.Party
             public static PacketWriter PlayerJoin(MapleParty party, MapleCharacter newChar)
             {
                 
-                var pw = new PacketWriter((ushort)SMSGHeader.PARTY_OPERATION);
+                var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.PARTY_OPERATION);
                 pw.WriteByte(0x18); //0x15 +3
                 pw.WriteInt(party.ID);
                 pw.WriteMapleString(newChar.Name);
@@ -417,7 +417,7 @@ namespace RazzleServer.Party
             public static PacketWriter PlayerLeave(MapleParty party, MapleCharacter leaveChar, MapleCharacter recipient, bool disband, bool kicked = false)
             {
                 
-                var pw = new PacketWriter((ushort)SMSGHeader.PARTY_OPERATION);
+                var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.PARTY_OPERATION);
                 pw.WriteByte(0x15); //0x12 + 3
                 pw.WriteInt(party.ID);
                 pw.WriteInt(leaveChar.ID);

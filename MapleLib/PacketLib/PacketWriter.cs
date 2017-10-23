@@ -7,7 +7,7 @@ namespace MapleLib.PacketLib
 	/// <summary>
 	/// Class to handle writing packets
 	/// </summary>
-	public class PacketWriter : AbstractPacket
+	public  class PacketWriter : AbstractPacket
 	{
         public const int DEFAULT_SIZE = 1024;
 

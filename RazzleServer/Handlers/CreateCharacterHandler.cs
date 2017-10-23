@@ -57,7 +57,7 @@ namespace RazzleServer.Handlers
                 newCharacter?.Inventory.SaveToDatabase(true);
             }
 
-            var pw = new PacketWriter((ushort)SMSGHeader.ADD_NEW_CHAR_ENTRY);
+            var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.ADD_NEW_CHAR_ENTRY);
             pw.WriteBool(!nameAvailable);
             if (nameAvailable)
             {

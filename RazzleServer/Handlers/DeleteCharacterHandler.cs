@@ -29,7 +29,7 @@ namespace RazzleServer.Handlers
                 state = 0;
             }
 
-            var pw = new PacketWriter((ushort)SMSGHeader.DELETE_CHAR_RESPONSE);
+            var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.DELETE_CHAR_RESPONSE);
             pw.WriteInt(characterID);
             pw.WriteByte(state);
             client.SendPacket(pw);

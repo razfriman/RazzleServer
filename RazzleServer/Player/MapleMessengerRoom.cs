@@ -101,7 +101,7 @@ namespace RazzleServer.Player
         {
             public static PacketWriter EnterRoom(byte position)
             {
-                var pw = new PacketWriter((ushort)SMSGHeader.MESSENGER);
+                var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.MESSENGER);
                 pw.WriteByte(1);
                 pw.WriteByte(position);
                 return pw;
@@ -109,7 +109,7 @@ namespace RazzleServer.Player
 
             public static PacketWriter PlayerLeft(byte position)
             {
-                var pw = new PacketWriter((ushort)SMSGHeader.MESSENGER);
+                var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.MESSENGER);
                 pw.WriteByte(2);
                 pw.WriteByte(position);
                 return pw;
@@ -117,7 +117,7 @@ namespace RazzleServer.Player
 
             public static PacketWriter Chat(string characterName, string message)
             {
-                var pw = new PacketWriter((ushort)SMSGHeader.MESSENGER);
+                var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.MESSENGER);
                 pw.WriteByte(6);
                 pw.WriteMapleString(characterName);
                 pw.WriteMapleString(message);
@@ -127,7 +127,7 @@ namespace RazzleServer.Player
             public static PacketWriter AddPlayer(MapleMessengerCharacter mcc)
             {
                 MapleCharacter player = mcc.Character;
-                var pw = new PacketWriter((ushort)SMSGHeader.MESSENGER);
+                var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.MESSENGER);
                 pw.WriteByte(0);
                 pw.WriteByte((byte)mcc.Position);
                 MapleCharacter.AddCharLook(pw, player, false);

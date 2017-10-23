@@ -3,10 +3,6 @@ using MapleLib.PacketLib;
 
 namespace RazzleServer.Packet
 {
-    public partial class PacketWriter {
-        
-    }
-
     public static class PacketWriterExtensions
 	{
        
