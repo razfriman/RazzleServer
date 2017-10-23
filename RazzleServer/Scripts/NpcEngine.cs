@@ -52,7 +52,7 @@ namespace RazzleServer.Scripts
             else
             {
                 SendOk(string.Format(@"An error has occured in my script. Please report this as a bug\r\nNpcId: {0}", NpcId));
-                Log.LogDebug($"Missing script for NPC [{NpcId}]");
+                Log.LogWarning($"Missing script for NPC [{NpcId}]");
                 ScriptInstance = null;
                 c.Account.Character.EnableActions();
             }

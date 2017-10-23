@@ -66,7 +66,7 @@ namespace RazzleServer.Inventory
                         }
 
                         chr.SendPopUpMessage("This item is not coded, please report it on the forums. ItemId " + scroll.ItemId);
-                        Log.LogDebug($"ItemID {scroll.ItemId} is unhandled in UseEnhancementScroll");
+                        Log.LogInformation($"ItemID {scroll.ItemId} is unhandled in UseEnhancementScroll");
                         return;
                     }
             }

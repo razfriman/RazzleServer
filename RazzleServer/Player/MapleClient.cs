@@ -75,7 +75,7 @@ namespace RazzleServer.Player
                     header = (CMSGHeader) packet.ReadUShort();
 
                     if (PacketHandlers.ContainsKey(header)) {
-                        Log.LogDebug($"Recevied [{header.ToString()}] {Functions.ByteArrayToStr(packet.ToArray())}");
+                        Log.LogInformation($"Recevied [{header.ToString()}] {Functions.ByteArrayToStr(packet.ToArray())}");
 
                         foreach (var handler in PacketHandlers[header]) {
                             handler.HandlePacket(packet, this);
@@ -121,7 +121,7 @@ namespace RazzleServer.Player
         {
             if (ServerConfig.Instance.PrintPackets)
             {
-                Log.LogDebug($"Sending: {Functions.ByteArrayToStr(packet.ToArray())}");
+                Log.LogInformation($"Sending: {Functions.ByteArrayToStr(packet.ToArray())}");
             }
 
             if (Socket == null) return;

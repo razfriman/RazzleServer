@@ -12,6 +12,7 @@ namespace MapleLib.PacketLib
 		private readonly Socket _socket;
 		private readonly byte[] _socketBuffer;
 		private readonly string _host;
+        private readonly byte[] _hostBytes;
 		private readonly int _port;
 		private readonly object _disposeSync;
         private readonly IClient _client;
@@ -22,6 +23,7 @@ namespace MapleLib.PacketLib
 		public MapleCipherProvider Crypto { get; private set; }
 		public bool Connected => !disposed;
 		public string Host => _host;
+        public byte[] HostBytes => _hostBytes;
 		public int Port => _port;
 
         public ClientSocket(Socket socket, IClient client, ushort currentGameVersion, ulong aesKey)
@@ -29,6 +31,7 @@ namespace MapleLib.PacketLib
 			_socket = socket;
 			_socketBuffer = new byte[1024];
 			_host = ((IPEndPoint)socket.RemoteEndPoint).Address.ToString();
+            _hostBytes = ((IPEndPoint)socket.RemoteEndPoint).Address.GetAddressBytes();
 			_port = ((IPEndPoint)socket.LocalEndPoint).Port;
 			_disposeSync = new object();
 			_client = client;

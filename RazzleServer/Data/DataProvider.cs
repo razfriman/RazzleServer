@@ -27,14 +27,6 @@ namespace RazzleServer.Data
 
                     int mapId = int.Parse(img.Name.Replace(".img", ""));
 
-
-                    if(!img.Name.StartsWith("1"))
-                    {
-                        // ONLY LOAD SOME MAPS
-                        // TODO - TEMPORARY
-                        continue;
-                    }
-
                     var info = img["info"];
                     var ladderRope = img["ladderRope"];
                     var portals = img["portal"];

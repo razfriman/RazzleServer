@@ -8,10 +8,6 @@ namespace MapleLib.WzLib
 	/// </summary>
 	public abstract class WzObject : IDisposable
 	{
-        private object tag;
-        private object tag2;
-        private object tag3;
-
 		public abstract void Dispose();
 
 		/// <summary>
@@ -35,21 +31,21 @@ namespace MapleLib.WzLib
         {
             get
             {
-                if (this is WzFile)
+                if (this is WzFile wzFile)
                 {
-                    return ((WzFile)this)[name];
+                    return wzFile[name];
                 }
-                if (this is WzDirectory)
+                if (this is WzDirectory wzDirectory)
                 {
-                    return ((WzDirectory)this)[name];
+                    return wzDirectory[name];
                 }
-                if (this is WzImage)
+                if (this is WzImage wzImage)
                 {
-                    return ((WzImage)this)[name];
+                    return wzImage[name];
                 }
-                if (this is WzImageProperty)
+                if (this is WzImageProperty wzImageProperty)
                 {
-                    return ((WzImageProperty)this)[name];
+                    return wzImageProperty[name];
                 }
                 throw new NotImplementedException();
             }
@@ -69,33 +65,6 @@ namespace MapleLib.WzLib
                 }
                 return result;
             }
-        }
-
-        /// <summary>
-        /// Used in HaCreator to save already parsed images
-        /// </summary>
-        public virtual object HCTag
-        {
-            get { return tag; }
-            set { tag = value; }
-        }
-
-        /// <summary>
-        /// Used in HaCreator's MapSimulator to save already parsed textures
-        /// </summary>
-        public virtual object MSTag
-        {
-            get { return tag2; }
-            set { tag2 = value; }
-        }
-
-        /// <summary>
-        /// Used in HaRepacker to save WzNodes
-        /// </summary>
-        public virtual object HRTag
-        {
-            get { return tag3; }
-            set { tag3 = value; }
         }
 
         public virtual object WzValue { get { return null; } }

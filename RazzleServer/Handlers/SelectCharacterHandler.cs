@@ -22,15 +22,15 @@ namespace RazzleServer.Handlers
                 client.Account.MigrationData.Character.Hidden = client.Account.IsGM;
                 MigrationWorker.EnqueueMigration(characterId, client.Account.MigrationData);
 
-                client.SendPacket(ChannelIpPacket(port, characterId));
+                client.SendPacket(ChannelIpPacket(port, characterId, client.Socket.HostBytes));
             }
         }
 
-        public static PacketWriter ChannelIpPacket(ushort port, int characterId)
+        public static PacketWriter ChannelIpPacket(ushort port, int characterId, byte[] host)
         {
             var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.SERVER_IP);
             pw.WriteShort(0);
-            pw.WriteBytes(new byte[] { 127, 0, 0, 1 }); // Localhost
+            pw.WriteBytes(host);
             pw.WriteUShort(port);
             pw.WriteInt(characterId);
             pw.WriteZeroBytes(5);

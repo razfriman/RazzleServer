@@ -21,6 +21,11 @@ namespace RazzleServer.Server
         {
             lock (MigrationLock)
             {
+                if (MigrationQueue.ContainsKey(id))
+                {
+                    MigrationQueue.Remove(id);
+                }
+
                 MigrationQueue.Add(id, data);
             }
         }

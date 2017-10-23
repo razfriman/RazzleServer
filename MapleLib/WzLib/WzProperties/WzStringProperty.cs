@@ -89,18 +89,14 @@ namespace MapleLib.WzLib.WzProperties
 			this.name = name;
 			this.val = value;
 		}
-		#endregion
+        #endregion
 
         #region Cast Values
-        public override string GetString()
-        {
-            return val;
-        }
+        public override string GetString() => val;
 
-        public override string ToString()
-        {
-            return val;
-        }
+        public override int GetInt() => int.TryParse(val, out var result) ? result : 0;
+
+        public override string ToString() => val;
         #endregion
 	}
 }

@@ -6,6 +6,7 @@ using RazzleServer.Server;
 namespace RazzleServer.Handlers
 {
     [PacketHandler(CMSGHeader.SERVERLIST_REQUEST)]
+    [PacketHandler(CMSGHeader.SERVERLIST_REREQUEST)]
     public class ServerListHandler : APacketHandler
     {
         public override void HandlePacket(PacketReader packet, MapleClient client)
