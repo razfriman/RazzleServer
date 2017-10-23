@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Util;
+using System.Threading.Tasks;
 
 namespace RazzleServer.Server
 {
@@ -32,13 +33,13 @@ namespace RazzleServer.Server
 
         private static ILogger Log = LogManager.Log;
 
-		public static void LoadFromFile(string path)
+		public static async Task LoadFromFile(string path)
 		{
 			try
 			{
 				if (File.Exists(path))
 				{
-					string contents = File.ReadAllText(path);
+					string contents = await File.ReadAllTextAsync(path);
 					_instance = JsonConvert.DeserializeObject<ServerConfig>(contents);
 				}
 			}

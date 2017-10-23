@@ -6,7 +6,7 @@ using System.Linq;
 using RazzleServer.Util;
 using MapleLib.PacketLib;
 
-namespace RazzleServer.Player
+namespace RazzleServer.Player.Trade
 {
     public class MapleTrade
     {
@@ -28,7 +28,7 @@ namespace RazzleServer.Player
         {
             Type = type;
             TradeID = GlobalTradeID++;
-            if (type == TradeType.Trade)
+            if (type == TradeType.TRADE)
             {
                 items.Add(new TradeItem[9]);
                 items.Add(new TradeItem[9]);
@@ -82,25 +82,39 @@ namespace RazzleServer.Player
         private static bool TransferItems(TradeItem[] list, MapleCharacter owner, MapleCharacter partner)
         {
             if (!CanTransferItems(list, partner))
+            {
                 return false;
+            }
+
             foreach (var item in list)
             {
-                if (item == null) continue;
+                if (item == null)
+                {
+                    continue;
+                }
+
                 MapleItem mitem = item.Item;
                 MapleItem newItem;
+
                 if (mitem.InventoryType == MapleInventoryType.Equip)
+                {
                     newItem = mitem;
+                }
                 else
+                {
                     newItem = new MapleItem(mitem, item.Item.Source) { Quantity = item.Count };
+                }
+
                 owner.Inventory.RemoveItemsFromSlot(mitem.InventoryType, mitem.Position, item.Count, false);
                 partner.Inventory.AddItem(newItem, newItem.InventoryType);
             }
+
             return true;
         }
 
         public void AcceptTrade(MapleCharacter chr)
         {
-            if (Type != TradeType.Trade) return;
+            if (Type != TradeType.TRADE) return;
             if (Partners.Count == 1 && chr == Owner)
             {
                 OwnerAccepted = true;
@@ -179,7 +193,7 @@ namespace RazzleServer.Player
                 chr.Client.SendPacket(GenerateTradeClose(finished, success));
                 chr.Trade = null;
                 MapleInventory.UpdateMesos(chr.Client, chr.Inventory.Mesos);
-                if (Type == TradeType.Trade)
+                if (Type == TradeType.TRADE)
                 {
                     if (!success || !finished)
                     {
@@ -195,10 +209,7 @@ namespace RazzleServer.Player
             TradeIDs.Remove(TradeID);
         }
 
-        public bool IsOwner(MapleCharacter c)
-        {
-            return (Owner == c);
-        }
+        public bool IsOwner(MapleCharacter c) => Owner == c;
 
         public bool AddItem(MapleItem item, byte tradeSlot, short quantity, MapleCharacter itemOwner)
         {
@@ -212,7 +223,7 @@ namespace RazzleServer.Player
                     return false;
                 }
             }
-            if (Type == TradeType.Trade)
+            if (Type == TradeType.TRADE)
             {
                 if (tradeSlot > 9 || tradeSlot < 1)
                     return false;//hacking
@@ -256,7 +267,7 @@ namespace RazzleServer.Player
 
         public void AddMesos(MapleCharacter chr, int mesos)
         {
-            if (Type == TradeType.Trade && Partners.Count == 1 && Partners[0].Trade == this)
+            if (Type == TradeType.TRADE && Partners.Count == 1 && Partners[0].Trade == this)
             {
                 if (chr == Owner)
                 {
@@ -394,20 +405,5 @@ namespace RazzleServer.Player
             pw.WriteByte(0xFF);
             return pw;
         }
-    }
-    public class TradeItem
-    {
-        public MapleItem Item { get; private set; }
-        public short Count { get; private set; }
-        public TradeItem(MapleItem item, short count)
-        {
-            Count = count;
-            Item = item;
-        }
-    }
-    public enum TradeType
-    {
-        Trade,
-        Shop,
     }
 }

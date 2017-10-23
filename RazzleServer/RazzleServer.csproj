@@ -30,5 +30,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Migrations\" />
+    <Folder Include="Buddy\" />
+    <Folder Include="Inventory\" />
+    <Folder Include="Buff\" />
+    <Folder Include="Party\" />
+    <Folder Include="Trade\" />
   </ItemGroup>
 </Project>

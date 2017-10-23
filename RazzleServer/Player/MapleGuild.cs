@@ -36,7 +36,7 @@ namespace RazzleServer.Player
         public int Logo = 0;
         public short LogoColor = 0;
         public string Name;
-        public string[] RankTitles = new string[] { "Master", "Jr. Master", "Member", "Member", "Member" };
+        public string[] RankTitles = { "Master", "Jr. Master", "Member", "Member", "Member" };
         public int Capacity = 10;
         public int LogoBG = 0;
         public short LogoBGColor = 0;
@@ -72,14 +72,14 @@ namespace RazzleServer.Player
         }
         private static Dictionary<int, MapleGuild> LoadGuilds()
         {
-            List<DB.Models.Guild> dbGuilds;
+            List<Guild> dbGuilds;
             using (var context = new MapleDbContext())
             {
                 dbGuilds = context.Guilds.ToList();
             }
             Dictionary<int, MapleGuild> ret = new Dictionary<int, MapleGuild>();
 
-            foreach (DB.Models.Guild DbGuild in dbGuilds)
+            foreach (Guild DbGuild in dbGuilds)
             {
                 MapleGuild gld = new MapleGuild();
                 gld.GuildID = DbGuild.ID;
@@ -104,17 +104,10 @@ namespace RazzleServer.Player
             }
             return ret;
         }
-        public static void InitializeGuildDatabase()
-        {
-            Guilds = LoadGuilds();
-        }
-        public static MapleGuild FindGuild(int ID)
-        {
-            MapleGuild ret = null;
-            if (Guilds.TryGetValue(ID, out ret))
-                return ret;
-            return null;
-        }
+        public static void InitializeGuildDatabase() => Guilds = LoadGuilds();
+
+        public static MapleGuild FindGuild(int ID) => Guilds.TryGetValue(ID, out var ret) ? ret : null;
+
         private void SendToAllGuildMembers(PacketWriter pw)
         {
 
@@ -140,6 +133,7 @@ namespace RazzleServer.Player
             }
         }
         public bool HasCharacter(int characterId) => Characters.Contains(characterId);
+
         public static MapleGuild CreateGuild(string name, MapleCharacter leader)
         {
             foreach (MapleGuild g in Guilds.Values)

@@ -149,14 +149,11 @@ namespace RazzleServer.Server
 			for (var i = 0; i < ServerConfig.Instance.Channels; i++)
 			{
 				var channelServer = new ChannelServer((ushort)(ServerConfig.Instance.ChannelStartPort + i));
-				ServerManager.ChannelServers[i] = channelServer;
+				ChannelServers[i] = channelServer;
 			}
 		}
 
-		private static void InitializeLoginServer()
-		{
-			LoginServer = new LoginServer();
-		}
+        private static void InitializeLoginServer() => LoginServer = new LoginServer();
 
 		private static void InitializeDatabase()
 		{

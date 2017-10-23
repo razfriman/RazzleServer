@@ -66,19 +66,17 @@ namespace RazzleServer.Inventory
             }
         }
 
-        public void Release()
-        {
-            Owner = null;
-        }
+        public void Release() => Owner = null;
 
-        public void Bind(MapleCharacter character)
-        {
-            Owner = character;
-        }
+        public void Bind(MapleCharacter character) => Owner = character;
 
         public void GainMesos(int gain, bool fromMonster = true, bool showInChat = false)
         {
-            if (gain < 0) gain *= -1;
+            if (gain < 0)
+            {
+                gain *= -1;
+            }
+
             AddMeso(gain, fromMonster, showInChat);
         }
 
@@ -919,10 +917,7 @@ namespace RazzleServer.Inventory
         }
         #endregion
 
-        public static void UpdateMesos(MapleClient c, int mesos)
-        {
-            MapleCharacter.UpdateSingleStat(c, MapleCharacterStat.Meso, mesos);
-        }
+        public static void UpdateMesos(MapleClient c, int mesos) => MapleCharacter.UpdateSingleStat(c, MapleCharacterStat.Meso, mesos);
 
         public class InventoryOperation
         {
@@ -944,26 +939,14 @@ namespace RazzleServer.Inventory
 
         public static class Packets
         {
-            public static PacketWriter UpdateItemQuantity(MapleInventoryType inventoryType, short position, short quantity)
-            {
-                return ShowOperations(new List<InventoryOperation> { new InventoryOperation(MapleInventoryOperationType.UpdateQuantity, inventoryType, position) { Quantity = quantity } });
-            }
+            public static PacketWriter UpdateItemQuantity(MapleInventoryType inventoryType, short position, short quantity) => ShowOperations(new List<InventoryOperation> { new InventoryOperation(MapleInventoryOperationType.UpdateQuantity, inventoryType, position) { Quantity = quantity } });
 
             //Completely removes the item from inventory
-            public static PacketWriter RemoveItem(MapleInventoryType inventoryType, short position)
-            {
-                return ShowOperations(new List<InventoryOperation> { new InventoryOperation(MapleInventoryOperationType.Remove, inventoryType, position) });
-            }
+            public static PacketWriter RemoveItem(MapleInventoryType inventoryType, short position) => ShowOperations(new List<InventoryOperation> { new InventoryOperation(MapleInventoryOperationType.Remove, inventoryType, position) });
 
-            public static PacketWriter MoveItem(MapleInventoryType type, short oldPosition, short newPosition)
-            {
-                return ShowOperations(new List<InventoryOperation> { new InventoryOperation(MapleInventoryOperationType.Move, type, oldPosition) { NewPosition = newPosition } });
-            }
+            public static PacketWriter MoveItem(MapleInventoryType type, short oldPosition, short newPosition) => ShowOperations(new List<InventoryOperation> { new InventoryOperation(MapleInventoryOperationType.Move, type, oldPosition) { NewPosition = newPosition } });
 
-            public static PacketWriter AddItem(MapleItem item, MapleInventoryType inventoryType, short position)
-            {
-                return ShowOperations(new List<InventoryOperation> { new InventoryOperation(MapleInventoryOperationType.Add, inventoryType, position) { Item = item } });
-            }
+            public static PacketWriter AddItem(MapleItem item, MapleInventoryType inventoryType, short position) => ShowOperations(new List<InventoryOperation> { new InventoryOperation(MapleInventoryOperationType.Add, inventoryType, position) { Item = item } });
 
             //Client automatically swaps the items if the new position has an item in it
             public static PacketWriter ShowOperations(List<InventoryOperation> operations)
@@ -1200,41 +1183,5 @@ namespace RazzleServer.Inventory
                     return new Dictionary<short, MapleItem>();
             }
         }
-    }
-
-
-
-    public enum MapleInventoryType : sbyte
-    {
-        Equipped = -1,
-        Undefined = 0,
-        Equip = 1,
-        Use = 2,
-        Setup = 3,
-        Etc = 4,
-        Cash = 5
-    }
-
-    public enum MapleInventoryOperationType : byte
-    {
-        Add = 0,
-        UpdateQuantity = 1,
-        Move = 2,
-        Remove = 3
-    }
-
-    public enum MapleEquipPosition : short
-    {
-        Hat = -1,
-        FaceAcc = -2,
-        EyeAcc = -3,
-        Earings = -4,
-        Top = -5,
-        Bottom = -6,
-        Shoes = -7,
-        Gloves = -8,
-        Cape = -9,
-        SecondWeapon = -10,
-        Weapon = -11
     }
 }

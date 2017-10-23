@@ -156,7 +156,6 @@ namespace RazzleServer.Util
 
         public static long RandomLong() => BitConverter.ToInt64(RandomBytes(8), 0);
 
-
         /// <summary>
         /// Creates a random int
         /// </summary>

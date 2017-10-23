@@ -233,10 +233,7 @@ namespace RazzleServer.Party
             }
         }
 
-        public MapleCharacter GetLeader()
-        {
-            return ServerManager.GetCharacterById(LeaderID);
-        }
+        public MapleCharacter GetLeader() => ServerManager.GetCharacterById(LeaderID);
 
         public void BroadcastPacket(PacketWriter packet, int chrIdFrom = 0, bool sendToSource = false)
         {

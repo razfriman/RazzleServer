@@ -17,6 +17,7 @@ using System.Drawing;
 using System.Linq;
 using System.Threading;
 using MapleLib.PacketLib;
+using RazzleServer.Player.Trade;
 
 namespace RazzleServer.Player
 {
@@ -210,25 +211,13 @@ namespace RazzleServer.Player
             Client = null;
         }
 
-        public void SendMessage(string message, byte type = 0)
-        {
-            Client.SendPacket(ServerNotice(message, type));
-        }
+        public void SendMessage(string message, byte type = 0) => Client.SendPacket(ServerNotice(message, type));
 
-        public void SendBlueMessage(string message)
-        {
-            SendMessage(message, 6);
-        }
+        public void SendBlueMessage(string message) => SendMessage(message, 6);
 
-        public void SendPopUpMessage(string message)
-        {
-            SendMessage(message, 1);
-        }
+        public void SendPopUpMessage(string message) => SendMessage(message, 1);
 
-        public void SendWhiteMessage(string message)
-        {
-            Client.SendPacket(SystemMessage(message, 0x0B));
-        }
+        public void SendWhiteMessage(string message) => Client.SendPacket(SystemMessage(message, 0x0B));
 
         public static bool CharacterExists(string name)
         {
@@ -369,7 +358,7 @@ namespace RazzleServer.Player
         {
             lock (_characterDatabaseLock)
             {
-                using (MapleDbContext dbContext = new MapleDbContext())
+                using (var dbContext = new MapleDbContext())
                 {
                     Character dbChar = dbContext.Characters.SingleOrDefault(x => x.ID == characterId);
                     if (dbChar == null)
@@ -509,7 +498,7 @@ namespace RazzleServer.Player
         {
             lock (_characterDatabaseLock)
             {
-                using (MapleDbContext dbContext = new MapleDbContext())
+                using (var dbContext = new MapleDbContext())
                 {
                     chr.GuildID = chr.Guild == null ? 0 : chr.Guild.GuildID;
 

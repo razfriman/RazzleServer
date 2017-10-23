@@ -25,11 +25,7 @@ namespace RazzleServer.Player
             Rooms.Add(ID, this);
         }
 
-        public static MapleMessengerRoom GetChatRoom(int id)
-        {
-            MapleMessengerRoom ret;
-            return Rooms.TryGetValue(id, out ret) ? ret : null;
-        }
+        public static MapleMessengerRoom GetChatRoom(int id) => Rooms.TryGetValue(id, out MapleMessengerRoom ret) ? ret : null;
 
         public bool AddPlayer(MapleCharacter chr)
         {

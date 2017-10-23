@@ -2,7 +2,7 @@ namespace RazzleServer.Util
 {
     public class AutoIncrement
     {
-        private object locker = new object();
+        private readonly object locker = new object();
         private int current;
 
         public AutoIncrement(int startValue = 0)

@@ -1,12 +1,12 @@
-﻿using System;
-using System.Drawing;
-using System.IO;
-using System.Text;
-using RazzleServer.Util;
+﻿using RazzleServer.Util;
 using MapleLib.PacketLib;
 
 namespace RazzleServer.Packet
 {
+    public partial class PacketWriter {
+        
+    }
+
     public static class PacketWriterExtensions
 	{
        

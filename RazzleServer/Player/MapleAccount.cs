@@ -1,4 +1,4 @@
-using RazzleServer.Data;
+﻿using RazzleServer.Data;
 using RazzleServer.DB.Models;
 using RazzleServer.Server;
 using System;
@@ -81,21 +81,9 @@ namespace RazzleServer.Player
             }
         }
 
-        public bool IsGM
-        {
-            get
-            {
-                return AccountType >= 2;
-            }
-        }
+        public bool IsGM => AccountType >= 2;
 
-        public bool IsAdmin
-        {
-            get
-            {
-                return AccountType >= 3;
-            }
-        }
+        public bool IsAdmin => AccountType >= 3;
 
         public void Release()
         {
@@ -115,9 +103,9 @@ namespace RazzleServer.Player
         public List<MapleCharacter> GetCharsFromDatabase()
         {
             List<Character> DbChars;
-            using (MapleDbContext DBContext = new MapleDbContext())
+            using (var dbContext = new MapleDbContext())
             {
-                DbChars = DBContext.Characters.Where(x => x.AccountID == ID).ToList();
+                DbChars = dbContext.Characters.Where(x => x.AccountID == ID).ToList();
             }
             List<MapleCharacter> ret = new List<MapleCharacter>();
             foreach (Character DbChar in DbChars)
@@ -131,9 +119,9 @@ namespace RazzleServer.Player
 
         public bool HasCharacter(int characterId)
         {
-            using (MapleDbContext DBContext = new MapleDbContext())
+            using (var dbContext = new MapleDbContext())
             {
-                Character DbChar = DBContext.Characters.SingleOrDefault(x => x.ID == characterId);
+                Character DbChar = dbContext.Characters.SingleOrDefault(x => x.ID == characterId);
                 return DbChar != null;
             }
         }
@@ -159,35 +147,27 @@ namespace RazzleServer.Player
         }
         public bool HasPic()
         {
-            Account DbAccount;
-            using (MapleDbContext DBContext = new MapleDbContext())
+            using (var dbContext = new MapleDbContext())
             {
-                DbAccount = DBContext.Accounts.SingleOrDefault(x => x.ID == ID);
+                var DbAccount = dbContext.Accounts.FirstOrDefault(x => x.ID == ID);
+                return DbAccount?.Pic?.Length > 0;
             }
-            try
-            {
-                if (DbAccount.Pic.Length != 0)
-                    return true;
-            }
-            catch (Exception) { }
-            return false;
-
         }
 
         public static bool AccountExists(string name)
         {
-            using (MapleDbContext DBContext = new MapleDbContext())
+            using (var dbContext = new MapleDbContext())
             {
-                return DBContext.Accounts.SingleOrDefault(x => x.Name.ToLower().Equals(name.ToLower())) != null;
+                return dbContext.Accounts.SingleOrDefault(x => x.Name.ToLower().Equals(name.ToLower())) != null;
             }
         }
 
         public bool CheckPassword(string enteredPassword)
         {
             Account DbAccount;
-            using (MapleDbContext DBContext = new MapleDbContext())
+            using (var dbContext = new MapleDbContext())
             {
-                DbAccount = DBContext.Accounts.SingleOrDefault(x => x.ID == ID);
+                DbAccount = dbContext.Accounts.SingleOrDefault(x => x.ID == ID);
             }
             if (DbAccount == null) return false;
             return enteredPassword == DbAccount.Password;

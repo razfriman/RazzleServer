@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using RazzleServer.DB.Models;
 using RazzleServer.Server;
 

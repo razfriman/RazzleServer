@@ -66,7 +66,7 @@ namespace RazzleServer.Player
             Log.LogInformation($"Registered {handlerCount} packet handlers");
         }
 
-        public void RecvPacket(MapleLib.PacketLib.PacketReader packet)
+        public void RecvPacket(PacketReader packet)
         {
             CMSGHeader header = CMSGHeader.UNKNOWN;
             try

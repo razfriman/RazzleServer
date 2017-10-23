@@ -24,19 +24,7 @@ namespace RazzleServer.Player
             SkillExp = 0;
         }
 
-        #region Helpers        
-        public bool HasMastery
-        {
-            get
-            {
-                WzCharacterSkill skillInfo = DataBuffer.GetCharacterSkillById(SkillID);
-                if (skillInfo == null)
-                    return false;
-                else
-                    return skillInfo.HasMastery;
-            }
-        }
-        #endregion
+        public bool HasMastery => DataBuffer.GetCharacterSkillById(SkillID)?.HasMastery ?? false;
 
         #region Packets
         public static PacketWriter UpdateSkills(List<Skill> skills)
@@ -60,10 +48,7 @@ namespace RazzleServer.Player
             return pw;
         }
 
-        public static PacketWriter UpdateSingleSkill(Skill skill)
-        {
-            return UpdateSkills(new List<Skill>() { skill });
-        }
+        public static PacketWriter UpdateSingleSkill(Skill skill) => UpdateSkills(new List<Skill> { skill });
 
         public static PacketWriter ShowCooldown(int skillId, uint time)
         {

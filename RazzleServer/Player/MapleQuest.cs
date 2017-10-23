@@ -4,7 +4,6 @@ using RazzleServer.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using MapleLib.PacketLib;
 
 namespace RazzleServer.Player
@@ -151,14 +150,14 @@ namespace RazzleServer.Player
         public void Forfeit()
         {
             Data = "";
-            foreach (var kvp in this.MonsterKills)
+            foreach (var kvp in MonsterKills)
             {
                 MonsterKills[kvp.Key] = 0;
             }
             State = MapleQuestStatus.NotStarted;
         }
 
-        public bool HasMonsterKillObjectives { get { return this.MonsterKills.Any(); } }
+        public bool HasMonsterKillObjectives => MonsterKills.Any();
         #endregion
     }
 }
