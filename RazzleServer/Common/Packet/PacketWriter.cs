@@ -39,7 +39,7 @@ namespace RazzleServer.Common.Packet
         /// <summary>
         /// Creates a new instance of PacketWriter
         /// </summary>
-        public PacketWriter(SMSGHeader header) : this() => WriteHeader(header);
+        public PacketWriter(ServerOperationCode header) : this() => WriteHeader(header);
 
         /// <summary>
         /// Creates a new instance of PacketWriter
@@ -156,13 +156,9 @@ namespace RazzleServer.Common.Packet
             WriteShort((short)writeValue.Y);
         }
 
-        public void WriteHeader(ServerOperationCode header) => WriteUShort((ushort)header);
-
         public void WriteHeader(InteroperabilityOperationCode header) => WriteUShort((ushort)header);
 
-        public void WriteHeader(RazzleServer.Packet.ClientOperationCode header) => WriteUShort((ushort)header);
-
-        public void WriteHeader(SMSGHeader header) => WriteUShort((ushort)header);
+        public void WriteHeader(ServerOperationCode header) => WriteUShort((ushort)header);
 
         public void WriteBox(BoundingBox box)
         {

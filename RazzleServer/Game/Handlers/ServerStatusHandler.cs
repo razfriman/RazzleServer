@@ -1,19 +1,18 @@
-﻿using MapleLib.PacketLib;
+﻿using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
-using RazzleServer.Player;
-using RazzleServer.Server;
+using RazzleServer.Game;
 
 namespace RazzleServer.Handlers
 {
     [PacketHandler(ClientOperationCode.SERVERSTATUS_REQUEST)]
-    public class ServerStatusHandler : APacketHandler
+    public class ServerStatusHandler : GamePacketHandler
     {
-        public override void HandlePacket(PacketReader packet, MapleClient client)
+        public override void HandlePacket(PacketReader packet, GameClient client)
         {
             var worldIndex = packet.ReadShort();
 
-            var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.SERVERSTATUS);
-            pw.WriteShort((short)ServerLoadType.NORMAL);
+            var pw = new PacketWriter(ServerOperationCode.SERVERSTATUS);
+            pw.WriteShort((short)WorldStatus.Normal);
             client.Send(pw);
         }
     }

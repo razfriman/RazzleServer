@@ -1,16 +1,10 @@
-﻿using Destiny.Data;
-using Destiny.Interoperability;
-using Destiny.IO;
-using Destiny.Maple.Data;
-using Destiny.Network;
-using Destiny.Shell;
-using System;
+﻿using System;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
-namespace Destiny
+namespace RazzleServer.Game
 {
     public static class WvsGame
     {

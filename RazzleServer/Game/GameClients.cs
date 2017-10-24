@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace Destiny.Network
+namespace RazzleServer.Game
 {
     public sealed class GameClients : KeyedCollection<long, GameClient>
     {

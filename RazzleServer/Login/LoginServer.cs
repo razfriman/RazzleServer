@@ -1,14 +1,13 @@
 using System.Net;
-using Destiny.Maple;
-using RazzleServer.Login;
+using RazzleServer.Login.Maple;
+using RazzleServer.Server;
 
-namespace RazzleServer.Server
+namespace RazzleServer.Login
 {
     public class LoginServer : MapleServer
     {
         public static CenterServer CenterConnection { get; set; }
         public static Worlds Worlds { get; private set; }
-
         public static bool AutoRegister { get; private set; }
         public static bool RequestPin { get; private set; }
         public static bool RequestPic { get; private set; }
@@ -17,7 +16,6 @@ namespace RazzleServer.Server
 
         public LoginServer()
         {
-
             for (byte i = 0; i < ServerConfig.Instance.Worlds; i++)
             {
                 Worlds.Add(new World(i));
@@ -25,9 +23,6 @@ namespace RazzleServer.Server
 
             byte[] loginIp = { 0, 0, 0, 0 };
             Start(new IPAddress(loginIp), ServerConfig.Instance.LoginPort);
-
-
-
         }
     }
 }

@@ -13,7 +13,7 @@ namespace RazzleServer.Handlers
         {
             //Todo: Loop for each world and channel
             
-            var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.SERVERLIST);
+            var pw = new PacketWriter(ServerOperationCode.SERVERLIST);
             pw.WriteByte(0); // World id
             pw.WriteMapleString(ServerConfig.Instance.WorldName);
             pw.WriteByte(ServerConfig.Instance.WorldFlag);

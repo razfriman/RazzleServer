@@ -28,7 +28,7 @@ namespace RazzleServer.Handlers
 
         public static PacketWriter ChannelIpPacket(ushort port, int characterId, byte[] host)
         {
-            var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.SERVER_IP);
+            var pw = new PacketWriter(ServerOperationCode.SERVER_IP);
             pw.WriteShort(0);
             pw.WriteBytes(host);
             pw.WriteUShort(port);

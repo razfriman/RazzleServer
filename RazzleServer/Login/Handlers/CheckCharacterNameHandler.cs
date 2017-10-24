@@ -11,7 +11,7 @@ namespace RazzleServer.Handlers
         {
             var name = packet.ReadString();
 
-            var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.CHAR_NAME_RESPONSE);
+            var pw = new PacketWriter(ServerOperationCode.CHAR_NAME_RESPONSE);
             pw.WriteMapleString(name);
             pw.WriteBool(MapleCharacter.CharacterExists(name));
             client.Send(pw);

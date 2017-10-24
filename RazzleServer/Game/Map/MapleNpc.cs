@@ -29,7 +29,7 @@ namespace RazzleServer.Map
 
         public static PacketWriter GetNpcTalkNum(int NpcId, string Text, int Def, int Min, int Max) //outdated
         {
-            var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.NPC_TALK);
+            var pw = new PacketWriter(ServerOperationCode.NPC_TALK);
             pw.WriteByte(4);
             pw.WriteInt(NpcId);
             pw.WriteShort(4);
@@ -43,7 +43,7 @@ namespace RazzleServer.Map
         }
         public static PacketWriter GetNpcTalkAskText(int NpcId, string Text, int min, int max, string textboxText) //outdated
         {
-            var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.NPC_TALK);
+            var pw = new PacketWriter(ServerOperationCode.NPC_TALK);
             pw.WriteByte(4);
             pw.WriteInt(NpcId);
             pw.WriteByte(0);
@@ -59,7 +59,7 @@ namespace RazzleServer.Map
 
         public static PacketWriter GetPlayerNpcChat(byte MsgType, ChatType Type, string Text, bool Prev = false, bool Next = false) //outdated
         {
-            var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.NPC_TALK);
+            var pw = new PacketWriter(ServerOperationCode.NPC_TALK);
             pw.WriteByte(4);
             pw.WriteInt(0);
             pw.WriteByte(MsgType);

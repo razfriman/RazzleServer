@@ -90,7 +90,7 @@ namespace RazzleServer.Inventory
         public static PacketWriter ShowItemGain(MapleItem item)
         {
             
-            var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.SHOW_STATUS_INFO);
+            var pw = new PacketWriter(ServerOperationCode.SHOW_STATUS_INFO);
             pw.WriteShort(0);
             pw.WriteInt(item.ItemId);
             pw.WriteInt(item.Quantity);

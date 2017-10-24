@@ -983,7 +983,7 @@ namespace RazzleServer.Inventory
         {
             public static PacketWriter ShowScrollEffect(int characterId, byte scrollResult, int scrollItemId, int equipItemId, bool legendarySpirit = false)
             {
-                var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.SHOW_SCROLL_EFFECT);
+                var pw = new PacketWriter(ServerOperationCode.SHOW_SCROLL_EFFECT);
                 pw.WriteInt(characterId);
                 pw.WriteByte(scrollResult);
                 pw.WriteBool(legendarySpirit);

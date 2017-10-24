@@ -952,7 +952,7 @@ namespace RazzleServer.Inventory
             public static PacketWriter ShowOperations(List<InventoryOperation> operations)
             {
                 
-                var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.INVENTORY_OPERATION);
+                var pw = new PacketWriter(ServerOperationCode.INVENTORY_OPERATION);
                 pw.WriteBool(true); //enable actions
                 pw.WriteShort((short)operations.Count);
 
@@ -989,7 +989,7 @@ namespace RazzleServer.Inventory
             public static PacketWriter ShowMesoGain(int amount, bool inChat)
             {
                 
-                var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.SHOW_STATUS_INFO);
+                var pw = new PacketWriter(ServerOperationCode.SHOW_STATUS_INFO);
                 if (inChat)
                 {
                     pw.WriteByte(6);
@@ -1011,7 +1011,7 @@ namespace RazzleServer.Inventory
             public static PacketWriter ShowItemGain(int itemId, int quantity, bool inChat = false)
             {
                 
-                var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.SHOW_STATUS_INFO);
+                var pw = new PacketWriter(ServerOperationCode.SHOW_STATUS_INFO);
                 pw.WriteByte(0);
                 pw.WriteByte(0);
                 pw.WriteInt(itemId);
@@ -1022,7 +1022,7 @@ namespace RazzleServer.Inventory
             public static PacketWriter ShowInventoryFull()
             {
                 
-                var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.INVENTORY_OPERATION);
+                var pw = new PacketWriter(ServerOperationCode.INVENTORY_OPERATION);
                 pw.WriteByte(1);
                 pw.WriteByte(0);
                 pw.WriteByte(0);
@@ -1150,7 +1150,7 @@ namespace RazzleServer.Inventory
             public static PacketWriter UpdateCharacterLook(MapleCharacter chr)
             {
                 
-                var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.UPDATE_CHAR_LOOK);
+                var pw = new PacketWriter(ServerOperationCode.UPDATE_CHAR_LOOK);
                 pw.WriteInt(chr.ID);
                 pw.WriteByte(1);
                 MapleCharacter.AddCharLook(pw, chr, false);

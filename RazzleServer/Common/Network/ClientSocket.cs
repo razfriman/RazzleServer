@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Util;
 using MapleLib.MapleCryptoLib;
+using RazzleServer.Common.Packet;
 
 namespace MapleLib.PacketLib
 {
@@ -37,10 +38,7 @@ namespace MapleLib.PacketLib
 			_client = client;
 
             Crypto = new MapleCipherProvider(currentGameVersion, aesKey);
-			Crypto.PacketFinished += (data) =>
-			{
-				_client.RecvPacket(new PacketReader(data));
-			};
+            Crypto.PacketFinished += (data) => _client.Receive(new PacketReader(data));
 
 			WaitForData();
 		}
@@ -106,7 +104,7 @@ namespace MapleLib.PacketLib
 			}
 		}
 
-		public void SendPacket(PacketWriter data)
+		public void Send(PacketWriter data)
 		{
 			if (!disposed)
 			{
@@ -142,7 +140,5 @@ namespace MapleLib.PacketLib
 				}
 			}
 		}
-
-		~ClientSocket() => Dispose();
 	}
 }

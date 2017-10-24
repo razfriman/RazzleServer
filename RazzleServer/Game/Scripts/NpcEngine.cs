@@ -152,7 +152,7 @@ namespace RazzleServer.Scripts
             public static PacketWriter ShowShop(ShopScript shop, int npcId)
             {
                 List<ShopItem> items = shop.ShopItems;
-                var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.OPEN_NPC_SHOP);
+                var pw = new PacketWriter(ServerOperationCode.OPEN_NPC_SHOP);
                 pw.WriteByte(0);
                 pw.WriteInt(0);
                 pw.WriteInt(npcId);

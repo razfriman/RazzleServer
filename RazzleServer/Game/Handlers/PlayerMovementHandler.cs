@@ -5,13 +5,14 @@ using System.Collections.Generic;
 using RazzleServer.Movement;
 using System.Drawing;
 using MapleLib.PacketLib;
+using RazzleServer.Game;
 
 namespace RazzleServer.Handlers
 {
     [PacketHandler(ClientOperationCode.MOVE_PLAYER)]
-    public class PlayerMovementHandler : APacketHandler
+    public class PlayerMovementHandler : GamePacketHandler
     {
-        public override void HandlePacket(PacketReader pr, MapleClient c)
+        public override void HandlePacket(PacketReader pr, GameClient c)
         {
 
             pr.Skip(1); //dont know, == 1 in spawn map and becomes 3 after changing map
@@ -30,7 +31,7 @@ namespace RazzleServer.Handlers
 
         public static PacketWriter CharacterMovePacket(int characterId, List<MapleMovementFragment> movementList)
         {
-            var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.MOVE_PLAYER);
+            var pw = new PacketWriter(ServerOperationCode.MOVE_PLAYER);
             pw.WriteInt(characterId);
             pw.WriteInt(0);
             pw.WriteByte((byte)movementList.Count);

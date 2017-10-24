@@ -1209,7 +1209,7 @@ namespace RazzleServer.Map
         {
             //[F4 65 03 00] [41 0D 03 00] [00] [[CE 00] [FD 01]] [00 00 00]
 
-            var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.REACTOR_SPAWN);
+            var pw = new PacketWriter(ServerOperationCode.REACTOR_SPAWN);
             pw.WriteInt(objectId);
             pw.WriteInt(Reactor.Id);
             pw.WriteByte(Reactor.State);
@@ -1222,7 +1222,7 @@ namespace RazzleServer.Map
         {
             //F4 65 03 00 04 CE 00 FD 01
 
-            var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.REACTOR_SPAWN);
+            var pw = new PacketWriter(ServerOperationCode.REACTOR_SPAWN);
             pw.WriteInt(objectId);
             pw.WriteByte(4); //Unk
             pw.WritePoint(Reactor.Position);
@@ -1242,7 +1242,7 @@ namespace RazzleServer.Map
         public static PacketWriter ShowNpc(int objectId, WzMap.Npc Npc)
         {
 
-            var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.SPAWN_NPC);
+            var pw = new PacketWriter(ServerOperationCode.SPAWN_NPC);
             pw.WriteInt(objectId);
             pw.WriteInt(Npc.Id);
             pw.WriteShort(Npc.x);

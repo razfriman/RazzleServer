@@ -1,13 +1,13 @@
-﻿using MapleLib.PacketLib;
-using RazzleServer.Common.Packet;
+﻿using RazzleServer.Common.Packet;
+using RazzleServer.Game;
 using RazzleServer.Player;
 
 namespace RazzleServer.Handlers
 {
     [PacketHandler(ClientOperationCode.CHANGE_MAP)]
-    public class ChangeMapHandler : APacketHandler
+    public class ChangeMapHandler : GamePacketHandler
     {
-        public override void HandlePacket(PacketReader packet, MapleClient client)
+        public override void HandlePacket(PacketReader packet, GameClient client)
         {
             MapleCharacter chr = client.Account.Character;
             if (chr.HP <= 0 || chr.ActionState == ActionState.DEAD)

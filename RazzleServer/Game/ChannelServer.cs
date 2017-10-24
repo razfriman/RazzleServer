@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using RazzleServer.Data.WZ;
 using RazzleServer.Data;
 using RazzleServer.Util;
-using MapleLib.PacketLib;
 
 namespace RazzleServer.Server
 {
@@ -26,7 +25,7 @@ namespace RazzleServer.Server
             _maps = new Dictionary<int, MapleMap>();
             foreach (KeyValuePair<int, WzMap> kvp in DataBuffer.MapBuffer)
             {
-                MapleMap map = new MapleMap(kvp.Key, kvp.Value);
+                var map = new MapleMap(kvp.Key, kvp.Value);
                 _maps.Add(kvp.Key, map);
             }
 
@@ -37,26 +36,18 @@ namespace RazzleServer.Server
 
         public void BroadCastPacket(PacketWriter pw)
         {
-            foreach (MapleClient client in Clients.Values)
+            foreach (var client in Clients.Values)
             {
                 client.Send(pw);
             }
         }
 
-        public MapleMap GetMap(int mapID)
-        {
-            if (_maps.TryGetValue(mapID, out var ret))
-            {
-                return ret;
-            }
-
-            return null;
-        }
+        public MapleMap GetMap(int mapID) => _maps.TryGetValue(mapID, out var ret) ? ret : null;
 
         private void PingClients()
         {
             TimeSpan LastCheck = DateTime.UtcNow.Subtract(LastPing);
-            foreach (MapleClient c in Clients.Values.Where(x => x.Account != null).ToList())
+            foreach (var c in Clients.Values.Where(x => x.Account != null).ToList())
             {
                 c.Send(PongHandler.PingPacket());
                 if (c.LastPong == DateTime.MinValue)

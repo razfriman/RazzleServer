@@ -9,7 +9,7 @@ namespace RazzleServer.Handlers
     {
         public override void HandlePacket(PacketReader packet, MapleClient client)
         {
-            var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.RELOG_RESPONSE);
+            var pw = new PacketWriter(ServerOperationCode.RELOG_RESPONSE);
             pw.WriteByte(1);
             client.Send(pw);
         }

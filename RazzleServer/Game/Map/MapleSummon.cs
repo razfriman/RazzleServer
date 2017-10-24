@@ -70,7 +70,7 @@ namespace RazzleServer.Map
         public PacketWriter GetSpawnPacket(bool spawnAnimated)
         {
             
-            var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.SPAWN_SPECIAL_MAPOBJECT); // SPAWN_SUMMON
+            var pw = new PacketWriter(ServerOperationCode.SPAWN_SPECIAL_MAPOBJECT); // SPAWN_SUMMON
 
             pw.WriteInt(Owner.ID);
             pw.WriteInt(ObjectID);
@@ -104,7 +104,7 @@ namespace RazzleServer.Map
         public PacketWriter RemovePacket(bool animated)
         {
             
-            var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.REMOVE_SPECIAL_MAPOBJECT); // REMOVE_SUMMON
+            var pw = new PacketWriter(ServerOperationCode.REMOVE_SPECIAL_MAPOBJECT); // REMOVE_SUMMON
 
             pw.WriteInt(Owner.ID);
             pw.WriteInt(ObjectID);
@@ -119,7 +119,7 @@ namespace RazzleServer.Map
         public PacketWriter MovePacket(Point startPosition, List<MapleMovementFragment> movementList)
         {
             
-            var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.MOVE_SUMMON);
+            var pw = new PacketWriter(ServerOperationCode.MOVE_SUMMON);
 
             pw.WriteInt(Owner.ID);
             pw.WriteInt(ObjectID);
@@ -135,7 +135,7 @@ namespace RazzleServer.Map
         public PacketWriter GetUseSkillPacket(int skillId, byte stance)
         {
             
-            var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.SUMMON_SKILL);
+            var pw = new PacketWriter(ServerOperationCode.SUMMON_SKILL);
             pw.WriteInt(Owner.ID);
             pw.WriteInt(skillId);
             pw.WriteByte(stance);
@@ -145,7 +145,7 @@ namespace RazzleServer.Map
         public PacketWriter GetAttackPacket(AttackInfo attackInfo, bool darkFlare = false)
         {
             
-            var pw = new PacketWriter(); pw.WriteHeader(SMSGHeader.SUMMON_ATTACK);
+            var pw = new PacketWriter(ServerOperationCode.SUMMON_ATTACK);
             pw.WriteInt(Owner.ID);
             pw.WriteInt(ObjectID);
             pw.WriteByte(Owner.Level);

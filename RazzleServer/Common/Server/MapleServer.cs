@@ -28,6 +28,18 @@ namespace RazzleServer.Server
             }
         }
 
+        public virtual void AddClient(MapleClient client)
+        {
+            if (!Clients.ContainsKey(client.Key))
+            {
+                Clients.Add(client.Key, client);
+            }
+            else
+            {
+                Log.LogError($"Client already exists with Key={client.Key}");
+            }
+        }
+
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)
@@ -62,7 +74,7 @@ namespace RazzleServer.Server
             {
                 client.SendHandshake();
                 client.Key = ip + Functions.Random();
-                Clients.Add(client.Key, client);
+                AddClient(client);
                 return client;
             }
             catch (Exception e)
@@ -73,6 +85,8 @@ namespace RazzleServer.Server
                 return null;
             }
         }
+
+
 
         public virtual void ShutDown()
         {

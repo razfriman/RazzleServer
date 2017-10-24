@@ -57,9 +57,5 @@
     <Folder Include="Center\Maple\" />
     <Folder Include="Common\Network\" />
     <Folder Include="Login\Maple\" />
-    <Folder Include="Game\Maple\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="DESTINY\Common\Collections\PendingKeyedQueue.cs" />
   </ItemGroup>
 </Project>
