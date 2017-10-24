@@ -6,8 +6,6 @@
   "LoginPort": 8484,
   "ChannelStartPort": 8585,
   "Channels": 3,
-  "WorldName": "Scania",
-  "WorldFlag": 2,
   "EventMessage": "Welcome to RazzleMS",
   "DefaultMapID": 100000000,
   "DatabaseName": "MapleServer.db",

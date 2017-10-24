@@ -21,25 +21,43 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <ProjectReference Include="..\MapleLib\MapleLib.csproj" />
     <ProjectReference Include="..\RazzleServer.DB\RazzleServer.DB.csproj" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.0.0" />
+    <PackageReference Include="CoreCompat.System.Drawing.v2" Version="5.2.0-preview1-r131" />
+    <PackageReference Include="NAudio" Version="1.8.3" />
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Migrations\" />
-    <Folder Include="Buddy\" />
-    <Folder Include="Inventory\" />
-    <Folder Include="Buff\" />
-    <Folder Include="Party\" />
-    <Folder Include="Trade\" />
-    <Folder Include="DESTINY\" />
-    <Folder Include="DESTINY\WvsCenter\" />
-    <Folder Include="DESTINY\WvsGame\" />
-    <Folder Include="DESTINY\WvsLogin\" />
-    <Folder Include="DESTINY\Common\" />
+    <Folder Include="Login\" />
+    <Folder Include="Game\" />
+    <Folder Include="Center\" />
+    <Folder Include="Login\Handlers\" />
+    <Folder Include="Game\Handlers\" />
+    <Folder Include="Game\Buddy\" />
+    <Folder Include="Game\Buff\" />
+    <Folder Include="Game\Inventory\" />
+    <Folder Include="Game\Movement\" />
+    <Folder Include="Game\Party\" />
+    <Folder Include="Game\Player\" />
+    <Folder Include="Game\Trade\" />
+    <Folder Include="Game\Map\" />
+    <Folder Include="Common\" />
+    <Folder Include="Common\Constants\" />
+    <Folder Include="Common\Data\" />
+    <Folder Include="Common\Server\" />
+    <Folder Include="Common\Util\" />
+    <Folder Include="Common\Wz\" />
+    <Folder Include="Game\Commands\" />
+    <Folder Include="Common\Crypto\" />
+    <Folder Include="Game\Scripts\" />
+    <Folder Include="Common\Packet\" />
+    <Folder Include="Center\Maple\" />
+    <Folder Include="Common\Network\" />
+    <Folder Include="Login\Maple\" />
+    <Folder Include="Game\Maple\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="DESTINY\Common\Collections\PendingKeyedQueue.cs" />
