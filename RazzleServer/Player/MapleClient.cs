@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Sockets;
 using System.Reflection;
 using RazzleServer.Packet;
@@ -13,8 +14,8 @@ namespace RazzleServer.Player
 {
     public class MapleClient : IClient
     {
-        public static Dictionary<CMSGHeader,List<APacketHandler>> PacketHandlers = new Dictionary<CMSGHeader,List<APacketHandler>>();
-        
+        public static Dictionary<CMSGHeader, List<APacketHandler>> PacketHandlers = new Dictionary<CMSGHeader, List<APacketHandler>>();
+
         public string Host { get; set; }
         public int Port { get; set; }
         public ClientSocket Socket { get; set; }
@@ -22,8 +23,8 @@ namespace RazzleServer.Player
         public byte Channel { get; set; }
         public bool Connected { get; set; }
         public DateTime LastPong { get; set; }
-        public MapleServer Server{get;set;}
-        public string Key {get;set;}
+        public MapleServer Server { get; set; }
+        public string Key { get; set; }
         public NpcEngine NpcEngine { get; set; }
 
         private static ILogger Log = LogManager.Log;
@@ -39,27 +40,33 @@ namespace RazzleServer.Player
             Connected = true;
         }
 
-        public static void RegisterPacketHandlers() {
-            
+        public static void RegisterPacketHandlers()
+        {
+
             var types = Assembly.GetEntryAssembly().GetTypes();
 
             var handlerCount = 0;
 
             foreach (var type in types)
             {
-                var attribute = type.GetTypeInfo().GetCustomAttribute<PacketHandlerAttribute>();
+                var attributes = type.GetTypeInfo().GetCustomAttributes()
+                                     .Where(x => x is PacketHandlerAttribute)
+                                     .Select(x => x as PacketHandlerAttribute)
+                                     .ToList();
 
-                if(attribute != null) {
+                foreach (var attribute in attributes)
+                {
                     var header = attribute.Header;
 
-                    if(!PacketHandlers.ContainsKey(header)) {
+                    if (!PacketHandlers.ContainsKey(header))
+                    {
                         PacketHandlers[header] = new List<APacketHandler>();
                     }
 
                     handlerCount++;
                     var handler = (APacketHandler)Activator.CreateInstance(type);
                     PacketHandlers[header].Add(handler);
-                    Log.LogInformation($"Registered Packet Handler [{attribute.Header}] to [{type.Name}]");
+                    Log.LogDebug($"Registered Packet Handler [{attribute.Header}] to [{type.Name}]");
                 }
             }
 
@@ -71,16 +78,21 @@ namespace RazzleServer.Player
             CMSGHeader header = CMSGHeader.UNKNOWN;
             try
             {
-                if(packet.Available >= 2) {
-                    header = (CMSGHeader) packet.ReadUShort();
+                if (packet.Available >= 2)
+                {
+                    header = (CMSGHeader)packet.ReadUShort();
 
-                    if (PacketHandlers.ContainsKey(header)) {
+                    if (PacketHandlers.ContainsKey(header))
+                    {
                         Log.LogInformation($"Recevied [{header.ToString()}] {Functions.ByteArrayToStr(packet.ToArray())}");
 
-                        foreach (var handler in PacketHandlers[header]) {
+                        foreach (var handler in PacketHandlers[header])
+                        {
                             handler.HandlePacket(packet, this);
                         }
-                    } else {
+                    }
+                    else
+                    {
                         Log.LogWarning($"Unhandled Packet [{header.ToString()}] {Functions.ByteArrayToStr(packet.ToArray())}");
                     }
 
@@ -96,9 +108,10 @@ namespace RazzleServer.Player
         {
             Log.LogInformation($"Disconnected client with reason: {string.Format(reason, values)}");
 
-            if (Socket != null) {
+            if (Socket != null)
+            {
                 Socket.Disconnect();
-       }
+            }
         }
 
         public void Disconnected()
@@ -112,7 +125,9 @@ namespace RazzleServer.Player
                 save?.LoggedOut();
                 NpcEngine?.Dispose();
                 Socket?.Dispose();
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 Log.LogError(e, $"Error while disconnecting. Account [{Account?.Name}] Character [{save?.Name}]");
             }
         }
@@ -128,7 +143,7 @@ namespace RazzleServer.Player
 
             Socket.SendPacket(packet);
         }
-        
+
         public void SendHandshake()
         {
             if (Socket == null) return;

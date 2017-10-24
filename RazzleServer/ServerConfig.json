@@ -5,7 +5,7 @@
   "QuestExpRate": 1,
   "LoginPort": 8484,
   "ChannelStartPort": 8585,
-  "Channels": 1,
+  "Channels": 3,
   "WorldName": "Scania",
   "WorldFlag": 2,
   "EventMessage": "Welcome to RazzleMS",

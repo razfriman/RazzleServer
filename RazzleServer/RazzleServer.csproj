@@ -35,5 +35,13 @@
     <Folder Include="Buff\" />
     <Folder Include="Party\" />
     <Folder Include="Trade\" />
+    <Folder Include="DESTINY\" />
+    <Folder Include="DESTINY\WvsCenter\" />
+    <Folder Include="DESTINY\WvsGame\" />
+    <Folder Include="DESTINY\WvsLogin\" />
+    <Folder Include="DESTINY\Common\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="DESTINY\Common\Collections\PendingKeyedQueue.cs" />
   </ItemGroup>
 </Project>

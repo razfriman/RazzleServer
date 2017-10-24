@@ -16,37 +16,35 @@ namespace RazzleServer.Handlers
             string message = packet.ReadMapleString();
             byte show = packet.ReadByte();
 
-            Log.LogInformation($"{client.Account.Character.Name}: {message}");
-
-            //if (message[0] == '@')
-            //{
-            //    if (PlayerCommands.ProcessCommand(message.Substring(1).Split(' '), client))
-            //        return;
-            //}
-            //else if (message[0] == '!')
-            //{
-            //    if (client.Account.IsGM)
-            //    {
-            //        string[] split = message.Substring(1).Split(' ');
-            //        if (GMCommands.ProcessCommand(split, client))
-            //            return;
-            //        if (client.Account.IsAdmin)
-            //        {
-            //            if (AdminCommands.ProcessCommand(split, client))
-            //                return;
-            //            else
-            //            {
-            //                client.Account.Character.SendBlueMessage("Unrecognized Admin command");
-            //                return;
-            //            }
-            //        }
-            //        else
-            //        {
-            //            client.Account.Character.SendBlueMessage("Unrecognized GM command");
-            //            return;
-            //        }
-            //    }
-            //}
+            if (message[0] == '@')
+            {
+                if (PlayerCommands.ProcessCommand(message.Substring(1).Split(' '), client))
+                    return;
+            }
+            else if (message[0] == '!')
+            {
+                if (client.Account.IsGM)
+                {
+                    string[] split = message.Substring(1).Split(' ');
+                    if (GMCommands.ProcessCommand(split, client))
+                        return;
+                    if (client.Account.IsAdmin)
+                    {
+                        if (AdminCommands.ProcessCommand(split, client))
+                            return;
+                        else
+                        {
+                            client.Account.Character.SendBlueMessage("Unrecognized Admin command");
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        client.Account.Character.SendBlueMessage("Unrecognized GM command");
+                        return;
+                    }
+                }
+            }
 
             var pw = PlayerChatPacket(client.Account.Character.ID, message, show, client.Account.IsGM);
             client.Account.Character.Map.BroadcastPacket(pw);

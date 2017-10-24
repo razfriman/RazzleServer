@@ -41,7 +41,7 @@ namespace RazzleServer.Map
 
         private object ReactorLock = new object();
 
-        private WzMap WzInfo;
+        private readonly WzMap WzInfo;
 
         private static ILogger Log = LogManager.Log;
 

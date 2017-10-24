@@ -30,6 +30,9 @@ namespace RazzleServer.Server
 		public bool IsLocalHost { get; set; } = true;
 		public ulong AESKey { get; set; } = 0x52330F1BB4060813;
 		public bool LoginCreatesNewAccount { get; set; } = true;
+        public string CommandIndiciator { get; set; } = "!";
+        public ulong CenterServerKey { get; set; } = 0x5233EF1BD4160412;
+        public ushort CenterPort { get; set; } = 8181;
 
         private static ILogger Log = LogManager.Log;
 
@@ -41,7 +44,9 @@ namespace RazzleServer.Server
 				{
 					string contents = await File.ReadAllTextAsync(path);
 					_instance = JsonConvert.DeserializeObject<ServerConfig>(contents);
-				}
+                } else {
+                    Log.LogWarning($"Using default config. Config file does not exist at '{path}'");
+                }
 			}
 			catch (Exception e)
 			{
