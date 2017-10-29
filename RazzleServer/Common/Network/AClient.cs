@@ -10,7 +10,7 @@ namespace MapleLib.PacketLib
     public abstract class AClient
     {
         public string Host { get; set; }
-        public int Port { get; set; }
+        public ushort Port { get; set; }
         public ClientSocket Socket { get; set; }
         public bool Connected { get; set; }
         public DateTime LastPong { get; set; }
@@ -31,13 +31,20 @@ namespace MapleLib.PacketLib
         public virtual void Send(PacketWriter packet) {
             if (ServerConfig.Instance.PrintPackets)
             {
-                Log.LogInformation($"Sending: {Functions.ByteArrayToStr(packet.ToArray())}");
+                Log.LogInformation($"Sending: {packet.ToPacketString()}");
             }
 
             if (Socket == null) return;
 
             Socket.Send(packet);
         }
+
+        public virtual void Terminate(string message = null)
+        {
+            Log.LogInformation($"Disconnecting Client - {Key}");
+            Socket.Disconnect();
+        }
+
 
         public virtual void Disconnected()
         {
@@ -62,11 +69,7 @@ namespace MapleLib.PacketLib
 
         }
 
-        public virtual void Terminate()
-        {
-
-        }
-
+       
         public void SendHandshake()
         {
             if (Socket == null) return;

@@ -4,7 +4,7 @@ using RazzleServer.Server;
 
 namespace RazzleServer.Login
 {
-    public class LoginServer : MapleServer
+    public class LoginServer : MapleServer<LoginClient>
     {
         public static CenterServer CenterConnection { get; set; }
         public static Worlds Worlds { get; private set; }

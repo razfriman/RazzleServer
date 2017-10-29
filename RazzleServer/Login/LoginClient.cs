@@ -1,13 +1,13 @@
-﻿using Destiny.Data;
-using Destiny.Maple;
-using Destiny.Security;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
+using MapleLib.PacketLib;
+using RazzleServer.Common.Packet;
+using RazzleServer.Login.Maple;
 
-namespace Destiny.Network
+namespace RazzleServer.Login
 {
-    public sealed class LoginClient : MapleClientHandler
+    public sealed class LoginClient : AClient
     {
         public long ID { get; private set; }
         public byte World { get; private set; }
@@ -16,11 +16,13 @@ namespace Destiny.Network
         public string LastUsername { get; private set; }
         public string LastPassword { get; private set; }
         public string[] MacAddresses { get; private set; }
+        public LoginServer Server { get; private set; }
 
-        public LoginClient(Socket socket)
+        public LoginClient(Socket socket, LoginServer server)
             : base(socket)
         {
-            this.ID = Application.Random.Next();
+            ID = Application.Random.Next();
+            Server = server;
         }
 
         protected override bool IsServerAlive
@@ -649,5 +651,9 @@ namespace Destiny.Network
             }
         }
 
+        public override void Receive(PacketReader packet)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

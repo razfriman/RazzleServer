@@ -57,5 +57,6 @@
     <Folder Include="Center\Maple\" />
     <Folder Include="Common\Network\" />
     <Folder Include="Login\Maple\" />
+    <Folder Include="Center\Handlers\" />
   </ItemGroup>
 </Project>

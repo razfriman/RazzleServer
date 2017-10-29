@@ -1,17 +1,17 @@
-﻿using RazzleServer.Player;
-using System;
+﻿using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Util;
+using MapleLib.PacketLib;
 
 namespace RazzleServer.Server
 {
-    public abstract class MapleServer : IDisposable
+    public abstract class MapleServer<T> where T : AClient, IDisposable
     {
-        public Dictionary<string, MapleClient> Clients { get; set; } = new Dictionary<string, MapleClient>();
+        public Dictionary<string, T> Clients { get; set; } = new Dictionary<string, T>();
         public ushort Port;
 
         private TcpListener _listener;
@@ -20,7 +20,7 @@ namespace RazzleServer.Server
 
         private static ILogger Log = LogManager.Log;
 
-        public virtual void RemoveClient(MapleClient client)
+        public virtual void RemoveClient(T client)
         {
             if (Clients.ContainsKey(client.Key))
             {
@@ -28,7 +28,7 @@ namespace RazzleServer.Server
             }
         }
 
-        public virtual void AddClient(MapleClient client)
+        public virtual void AddClient(T client)
         {
             if (!Clients.ContainsKey(client.Key))
             {
@@ -57,7 +57,7 @@ namespace RazzleServer.Server
 
         public virtual bool AllowConnection(string address) => true;
 
-        public virtual MapleClient CreateMapleClient(Socket socket)
+        public T GenerateClient(Socket socket)
         {
             string ip = ((IPEndPoint)socket.RemoteEndPoint).Address.ToString();
             if (!AllowConnection(ip))
@@ -69,7 +69,8 @@ namespace RazzleServer.Server
 
             Log.LogInformation("Client Connected");
 
-            MapleClient client = new MapleClient(socket, this);
+            var client = Activator.CreateInstance(typeof(T), new object[] { socket, this }) as T;
+
             try
             {
                 client.SendHandshake();
@@ -80,7 +81,7 @@ namespace RazzleServer.Server
             catch (Exception e)
             {
                 Log.LogError(e, "Error sending handshake. Disconnecting.");
-                client.Disconnect(e.ToString());
+                client.Terminate(e.ToString());
                 RemoveClient(client);
                 return null;
             }
@@ -94,7 +95,7 @@ namespace RazzleServer.Server
             {
                 foreach (var client in Clients.Values)
                 {
-                    client.Disconnect("Server is shutting down");
+                    client.Terminate("Server is shutting down");
                 }
 
                 _disposed = true;
@@ -128,7 +129,7 @@ namespace RazzleServer.Server
                     break;
                 }
 
-                CreateMapleClient(socket);
+                GenerateClient(socket);
             }
         }
     }

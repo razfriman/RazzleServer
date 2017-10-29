@@ -6,7 +6,7 @@ using RazzleServer.Util;
 
 namespace RazzleServer.Login
 {
-    public class CenterServer : MapleServer
+    public class CenterServer : MapleServer<CenterClient>
     {
         public CenterServer(IPEndPoint remoteEP, string code){
             

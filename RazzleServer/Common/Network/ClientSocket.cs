@@ -14,7 +14,7 @@ namespace MapleLib.PacketLib
 		private readonly byte[] _socketBuffer;
 		private readonly string _host;
         private readonly byte[] _hostBytes;
-		private readonly int _port;
+		private readonly ushort _port;
 		private readonly object _disposeSync;
         private readonly AClient _client;
 		private bool disposed;
@@ -25,7 +25,7 @@ namespace MapleLib.PacketLib
 		public bool Connected => !disposed;
 		public string Host => _host;
         public byte[] HostBytes => _hostBytes;
-		public int Port => _port;
+		public ushort Port => _port;
 
         public ClientSocket(Socket socket, AClient client, ushort currentGameVersion, ulong aesKey)
 		{
@@ -33,7 +33,7 @@ namespace MapleLib.PacketLib
 			_socketBuffer = new byte[1024];
 			_host = ((IPEndPoint)socket.RemoteEndPoint).Address.ToString();
             _hostBytes = ((IPEndPoint)socket.RemoteEndPoint).Address.GetAddressBytes();
-			_port = ((IPEndPoint)socket.LocalEndPoint).Port;
+			_port = (ushort)((IPEndPoint)socket.LocalEndPoint).Port;
 			_disposeSync = new object();
 			_client = client;
 
@@ -48,7 +48,7 @@ namespace MapleLib.PacketLib
 			{
 				SocketError error = SocketError.Success;
 
-				var socketArgs = new SocketAsyncEventArgs()
+				var socketArgs = new SocketAsyncEventArgs
 				{
 					SocketFlags = SocketFlags.None
 				};
