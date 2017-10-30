@@ -2,207 +2,7 @@
 
 namespace RazzleServer.Common.Constants
 {
-    public static class ExperienceTables
-    {
-        public static readonly int[] CharacterLevel = { 1, 15, 34, 57, 92, 135, 372, 560, 840, 1242, 1242, 1242, 1242, 1242, 1242, 1490, 1788, 2146, 2575, 3090, 3708, 4450, 5340, 6408, 7690, 9228, 11074, 13289, 15947, 19136, 19136, 19136, 19136, 19136, 19136, 22963, 27556, 33067, 39681, 47616, 51425, 55539, 59582, 64781, 69963, 75560, 81605, 88133, 95184, 102799, 111023, 119905, 129497, 139857, 151046, 163129, 176180, 190274, 205496, 221936, 239691, 258866, 279575, 301941, 326097, 352184, 380359, 410788, 443651, 479143, 479143, 479143, 479143, 479143, 479143, 512683, 548571, 586971, 628059, 672024, 719065, 769400, 823258, 880886, 942548, 1008526, 1079123, 1154662, 1235488, 1321972, 1414511, 1513526, 1619473, 1732836, 1854135, 1983924, 2122799, 2271395, 2430393, 2600520, 2782557, 2977336, 3185749, 3408752, 3647365, 3902680, 4175868, 4468179, 4780951, 5115618, 5473711, 5856871, 6266852, 6705531, 7176919, 7677163, 8214565, 8789584, 9404855, 10063195, 10063195, 10063195, 10063195, 10063195, 10063195, 10767619, 11521352, 12327847, 13190796, 14114152, 15102142, 16159292, 17290443, 18500774, 19795828, 21181536, 22664244, 24250741, 25948292, 27764673, 29708200, 31787774, 34012918, 36393823, 38941390, 41667310, 44584022, 47704904, 51044247, 54617344, 58440558, 62531397, 66908595, 71592197, 76603651, 81965907, 87703520, 93842766, 100411760, 107440583, 113887018, 120720239, 127963453, 135641260, 143779736, 152406520, 161550911, 171243966, 181518604, 192409720, 203954303, 216191561, 229163055, 242912838, 257487608, 272936864, 289313076, 306671861, 325072173, 344576503, 365251093, 387166159, 410396129, 435019897, 461121091, 488788356, 518115657, 549202596, 582154752, 617084037, 654109079, 693355624, 734956961, 779054379, 825797642, 875345501, 927866231, 983538205, 1042550497, 1105103527, int.MaxValue }; //NOTE: Last value is needed or else level 200 characters will throw an IndexOutOfRange exception
-    }
-
-    public static class ServerRegistrationResponseResolver
-    {
-        public static string Explain(ServerRegsitrationResponse Packet)
-        {
-            switch (Packet)
-            {
-                case ServerRegsitrationResponse.InvalidType:
-                    return "Unknown server type.";
-
-                case ServerRegsitrationResponse.InvalidCode:
-                    return "The provided security code is not corresponding.";
-
-                case ServerRegsitrationResponse.Full:
-                    return "Cannot register as all the spots are occupied.";
-
-                default:
-                    return null;
-            }
-        }
-    }
-
-    public enum ServerRegsitrationResponse : byte
-    {
-        Valid,
-        InvalidType,
-        InvalidCode,
-        Full
-    }
-
     #region Character
-    public enum Gender : byte
-    {
-        Male,
-        Female,
-        Both,
-        Unset = 10
-    }
-
-    public enum Job : short
-    {
-        Beginner,
-
-        Warrior = 100,
-        Fighter = 110,
-        Crusader,
-        Hero,
-        Page = 120,
-        WhiteKnight,
-        Paladin,
-        Spearman = 130,
-        DragonKnight,
-        DarkKnight,
-
-        Magician = 200,
-        FirePoisonWizard = 210,
-        FirePoisonMage,
-        FirePoisonArchMage,
-        IceLightningWizard = 220,
-        IceLightningMage,
-        IceLightningArchMage,
-        Cleric = 230,
-        Priest,
-        Bishop,
-
-        Bowman = 300,
-        Hunter = 310,
-        Ranger,
-        BowMaster,
-        CrossbowMan = 320,
-        Sniper,
-        CrossbowMaster,
-
-        Thief = 400,
-        Assassin = 410,
-        Hermit,
-        NightLord,
-        Bandit = 420,
-        ChiefBandit,
-        Shadower,
-
-        Pirate = 500,
-        Brawler = 510,
-        Marauder,
-        Buccaneer,
-        Gunslinger = 520,
-        Outlaw,
-        Corsair,
-
-        GM = 900,
-        SuperGM = 910,
-
-        Noblesse = 1000,
-
-        DawnWarrior1 = 1100,
-        DawnWarrior2 = 1110,
-        DawnWarrior3 = 1111,
-
-        BlazeWizard1 = 1200,
-        BlazeWizard2 = 1210,
-        BlazeWizard3 = 1211,
-
-        WindArcher1 = 1300,
-        WindArcher2 = 1310,
-        WindArcher3 = 1311,
-
-        NightWalker1 = 1400,
-        NightWalker2 = 1410,
-        NightWalker3 = 1411,
-
-        ThunderBreaker1 = 1500,
-        ThunderBreaker2 = 1510,
-        ThunderBreaker3 = 1511,
-
-        Legend = 2000
-    }
-
-    public enum JobType
-    {
-        Cygnus = 0,
-        Explorer = 1,
-        Aran = 2
-    }
-
-    public enum UserEffect : byte
-    {
-        LevelUp = 0,
-        SkillUse = 1,
-        SkillAffected = 2,
-        Quest = 3,
-        Pet = 4,
-        SkillSpecial = 5,
-        ProtectOnDieItemUse = 6,
-        PlayPortalSE = 7,
-        JobChanged = 8,
-        QuestComplete = 9,
-        IncDecHPEffect = 10,
-        BuffItemEffect = 11,
-        SquibEffect = 12,
-        MonsterBookCardGet = 13,
-        LotteryUse = 14,
-        ItemLevelUp = 15,
-        ItemMaker = 16,
-        ExpItemConsumed = 17,
-        ReservedEffect = 18,
-        Buff = 19,
-        ConsumeEffect = 20,
-        UpgradeTombItemUse = 21,
-        BattlefieldItemUse = 22,
-        AvatarOriented = 23,
-        IncubatorUse = 24,
-        PlaySoundWithMuteBGM = 25,
-        SoulStoneUse = 26,
-        IncDecHPEffect_EX = 27,
-        DeliveryQuestItemUse = 28, // NOTE: Post big bang update.
-        RepeatEffectRemove = 29, // NOTE: Post big bang update.
-        EvolRing = 30 // NOTE: Post big bang update.
-    }
-
-    [Flags]
-    public enum StatisticType : int
-    {
-        Skin = 0x1,
-        Face = 0x2,
-        Hair = 0x4,
-        Level = 0x10,
-        Job = 0x20,
-        Strength = 0x40,
-        Dexterity = 0x80,
-        Intelligence = 0x100,
-        Luck = 0x200,
-        Health = 0x400,
-        MaxHealth = 0x800,
-        Mana = 0x1000,
-        MaxMana = 0x2000,
-        AbilityPoints = 0x4000,
-        SkillPoints = 0x8000,
-        Experience = 0x10000,
-        Fame = 0x20000,
-        Mesos = 0x40000,
-        Pet = 0x180000,
-        GachaponExperience = 0x200000
-    }
-
-    public enum AttackType
-    {
-        Melee,
-        Range,
-        Magic,
-        Summon
-    }
-
-    public enum CommandType : byte
-    {
-        Find = 5,
-        Whisper = 6
-    }
 
     public enum AdminCommandType : byte
     {
@@ -480,132 +280,6 @@ namespace RazzleServer.Common.Constants
         Annoyed = 106
     }
 
-    public enum KeymapKey : int
-    {
-        None = 0,
-        Escape = 1,
-        One = 2,
-        Two = 3,
-        Three = 4,
-        Four = 5,
-        Five = 6,
-        Six = 7,
-        Seven = 8,
-        Eight = 9,
-        Nine = 10,
-        Zero = 11,
-        Minus = 12,
-        Equals = 13,
-        Backspace = 14,
-        Tab = 15,
-        Q = 16,
-        W = 17,
-        E = 18,
-        R = 19,
-        T = 20,
-        Y = 21,
-        U = 22,
-        I = 23,
-        O = 24,
-        P = 25,
-        BracketLeft = 26,
-        BracketRight = 27,
-        Enter = 28,
-        LeftCtrl = 29,
-        A = 30,
-        S = 31,
-        D = 32,
-        F = 33,
-        G = 34,
-        H = 35,
-        J = 36,
-        K = 37,
-        L = 38,
-        Semicolon = 39,
-        Quote = 40,
-        Backtick = 41,
-        LeftShift = 42,
-        Backslash = 43,
-        Z = 44,
-        X = 45,
-        C = 46,
-        V = 47,
-        B = 48,
-        N = 49,
-        M = 50,
-        Comma = 51,
-        Dot = 52,
-        Slash = 53,
-        RightShift = 54, // NOTE: Maps to LeftShift automatically
-        Multiply = 55,
-        LeftAlt = 56,
-        Space = 57,
-        CapsLock = 58,
-        F1 = 59,
-        F2 = 60,
-        F3 = 61,
-        F4 = 62,
-        F5 = 63,
-        F6 = 64,
-        F7 = 65,
-        F8 = 66,
-        F9 = 67,
-        F10 = 68,
-        NumLock = 69,
-        ScrollLock = 70,
-        Numpad7 = 71,
-        Numpad8 = 72,
-        Numpad9 = 73,
-        Subtract = 74,
-        Numpad4 = 75,
-        Numpad5 = 76,
-        Numpad6 = 77,
-        Add = 78,
-        Numpad1 = 79,
-        Numpad2 = 80,
-        Numpad3 = 81,
-        Numpad0 = 82,
-        NumpadDecimal = 83,
-        F11 = 87,
-        F12 = 88,
-        F13 = 100,
-        F14 = 101,
-        F15 = 102,
-        JapaneseKana = 112,
-        JapaneseConvert = 121,
-        JapaneseNoConvert = 122,
-        JapaneseYen = 125,
-        NumpadEquals = 141,
-        JapaneseCircumflex = 144,
-        NecpcAt = 145,
-        NecpcColon = 146,
-        NecpcUnderline = 147,
-        JapaneseKanji = 148,
-        NecpcStop = 149,
-        JapanAX = 150,
-        J3100Unlabeled = 151,
-        NumpadEnter = 156,
-        RightCtrl = 157,
-        Divide = 181,
-        Sysrq = 183,
-        RightAlt = 184,
-        Pause = 197,
-        Home = 199,
-        ArrowUp = 200,
-        PageUp = 201,
-        ArrowLeft = 203,
-        ArrowRight = 205,
-        End = 207,
-        ArrowDown = 208,
-        PageDown = 209,
-        Insert = 210,
-        DeleteKey = 211,
-        LeftWindows = 219,
-        RightWindows = 220,
-        Menu = 221,
-        Power = 222,
-        Sleep = 223
-    }
     #endregion
 
     #region Login
@@ -1675,49 +1349,28 @@ namespace RazzleServer.Common.Constants
         Full
     }
 
-    public static class WorldNameResolver
-    {
-        public static byte GetID(string name)
+    public class QuickSlotConstants {
+        public static readonly int[] DefaultBasicQuickSlotKeyMap =
         {
-            try
-            {
-                return (byte)Enum.Parse(typeof(WorldNames), name.ToCamel());
-            }
-            catch
-            {
-                throw new ArgumentException("The specified World name is invalid.");
-            }
-        }
+            0x2A, 0x52, 0x47, 0x49,
+            0x1D, 0x53, 0x4F, 0x51,
+            0x02, 0x03, 0x04, 0x05,
+            0x10, 0x11, 0x12, 0x13,
+            0x06, 0x07, 0x08, 0x09,
+            0x14, 0x1E, 0x1F, 0x20,
+            0x0A, 0x0B, 0x21, 0x22
+        };
 
-        public static string GetName(byte id)
+        public static readonly int[] DefaultSecondaryQuickSlotKeyMap =
         {
-            try
-            {
-                return Enum.GetName(typeof(WorldNames), id);
-            }
-            catch
-            {
-                throw new ArgumentException("The specified World ID is invalid.");
-            }
-        }
-
-        public static bool IsValid(byte id)
-        {
-            return Enum.IsDefined(typeof(WorldNames), id);
-        }
-
-        public static bool IsValid(string name)
-        {
-            try
-            {
-                WorldNameResolver.GetID(name);
-                return true;
-            }
-            catch (ArgumentException)
-            {
-                return false;
-            }
-        }
+            0x10, 0x11, 0x12, 0x13,
+            0x1E, 0x1F, 0x20, 0x21,
+            0x02, 0x03, 0x04, 0x05,
+            0x1D, 0x38, 0x2C, 0x2D,
+            0x06, 0x07, 0x08, 0x09,
+            0x2E, 0x16, 0x17, 0x24,
+            0x0A, 0x0B, 0x25, 0x31
+        };
     }
     #endregion
 }

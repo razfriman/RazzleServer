@@ -125,7 +125,7 @@ namespace RazzleServer.Game.Player
 
         public int? GetSavedLocation(string script)
         {
-            string data = GetCustomQuestData(CustomQuestKeys.SAVED_LOCATION + script);
+            string data = GetCustomQuestData(SAVED_LOCATION + script);
             if (string.IsNullOrEmpty(data))
                 return null;
             return int.Parse(data);
@@ -136,7 +136,7 @@ namespace RazzleServer.Game.Player
             string data = value.ToString();
             if (value == -1)
                 data = null;
-            SetCustomQuestData(CustomQuestKeys.SAVED_LOCATION + script, data);
+            SetCustomQuestData(SAVED_LOCATION + script, data);
         }
 
         public void ChangeMap(int mapId, string toPortal = "")

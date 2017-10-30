@@ -12,6 +12,8 @@ namespace RazzleServer.Player
 {
     public class Buff
     {
+        public const int BUFFSTAT_MASKS = 14;
+
         public int SkillId { get; private set; }
         public int Duration { get; private set; }
         public DateTime StartTime { get; private set; }
@@ -69,7 +71,7 @@ namespace RazzleServer.Player
 
         public static void WriteBuffMask(PacketWriter pw, ICollection<BuffStat> buffStats)
         {
-            int[] mask = new int[GameConstants.BUFFSTAT_MASKS];
+            int[] mask = new int[BUFFSTAT_MASKS];
             foreach (BuffStat buffStat in buffStats)
             {
                 int maskIndex = buffStat.BitIndex / 32;

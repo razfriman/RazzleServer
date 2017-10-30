@@ -60,5 +60,6 @@
     <Folder Include="Common\Server\" />
     <Folder Include="Common\Util\" />
     <Folder Include="Common\Wz\" />
+    <Folder Include="Game\Constants\" />
   </ItemGroup>
 </Project>
