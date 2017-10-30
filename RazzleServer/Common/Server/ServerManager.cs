@@ -20,18 +20,7 @@ namespace RazzleServer.Server
 			await ServerConfig.LoadFromFile("ServerConfig.json");
 			LoginClient.RegisterPacketHandlers();
             GameClient.RegisterPacketHandlers();
-			LoadMobs();
-			LoadMaps();
-			InitializeDatabase();
         }
-
-		public static void LoadMaps()
-		{
-		}
-
-		public static void LoadMobs()
-		{
-		}
 
 		private static void InitializeDatabase()
 		{

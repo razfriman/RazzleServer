@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Util;
 using RazzleServer.Common.Network;
+using System.Threading;
 
 namespace RazzleServer.Server
 {
@@ -15,6 +16,7 @@ namespace RazzleServer.Server
         public ushort Port;
 
         private TcpListener _listener;
+        private Socket _centerSocket;
         private const int BACKLOG_SIZE = 50;
         private bool _disposed;
 
@@ -52,6 +54,16 @@ namespace RazzleServer.Server
         {
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        public virtual void CenterServerConnected()
+        {
+            
+        }
+
+        public virtual void ServerRegistered() 
+        {
+            
         }
 
 
@@ -106,6 +118,38 @@ namespace RazzleServer.Server
             {
                 Log.LogError("Error during server shutdown", e);
             }
+        }
+
+        public void StartCenterConnection(IPAddress ip, ushort port)
+        {
+            _centerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            _centerSocket.Connect(ip, port);
+
+            bool connected = false;
+            int tries = 0;
+
+            while (!connected && tries < 5)
+            {
+                try
+                {
+                    _centerSocket.Connect(ip, port);
+                    connected = true;
+                }
+                catch
+                {
+                    Log.LogWarning($"Could not connect to Center Server at {ip}:{port}");
+                    tries++;
+                    Thread.Sleep(2000);
+                }
+            }
+
+            if (!connected)
+            {
+                Log.LogCritical($"Connection to Center Server failed at {ip}:{port}");
+                return;
+            }
+
+            CenterServerConnected();
         }
 
         public void Start(IPAddress ip, ushort port)

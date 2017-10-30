@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
+using RazzleServer.Data;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
 
@@ -172,9 +174,8 @@ namespace RazzleServer.Game.Maple
                     {
                         using (var oPacket = new PacketWriter(ServerOperationCode.Cooldown))
                         {
-                            oPacket
-                                .WriteInt(this.MapleID)
-                                .WriteShort(0);
+                            oPacket.WriteInt(this.MapleID);
+                            oPacket.WriteShort(0);
 
                             this.Character.Client.Send(oPacket);
                         }
@@ -290,23 +291,29 @@ namespace RazzleServer.Game.Maple
 
         public void Delete()
         {
-            Database.Delete("skills", "ID = {0}", this.ID);
+            using (var dbContext = new MapleDbContext())
+            {
+                var skill = dbContext.Skills.FirstOrDefault(x => x.ID == ID);
+                if (skill != null)
+                {
+                    dbContext.Skills.Remove(skill);
+                }
+            }
 
-            this.Assigned = false;
+            Assigned = false;
         }
 
         public void Update()
         {
             using (var oPacket = new PacketWriter(ServerOperationCode.ChangeSkillRecordResult))
             {
-                oPacket
-                    .WriteByte(1)
-                    .WriteShort(1)
-                    .WriteInt(this.MapleID)
-                    .WriteInt(this.CurrentLevel)
-                    .WriteInt(this.MaxLevel)
-                    .WriteDateTime(this.Expiration)
-                    .WriteByte(4);
+                oPacket.WriteByte(1);
+                oPacket.WriteShort(1);
+                oPacket.WriteInt(this.MapleID);
+                oPacket.WriteInt(this.CurrentLevel);
+                oPacket.WriteInt(this.MaxLevel);
+                oPacket.WriteDateTime(this.Expiration);
+                oPacket.WriteByte(4);
 
                 this.Character.Client.Send(oPacket);
             }
@@ -844,20 +851,18 @@ namespace RazzleServer.Game.Maple
 
         public byte[] ToByteArray()
         {
-            using (ByteBuffer oPacket = new ByteBuffer())
+            using (var oPacket = new PacketWriter())
             {
-                oPacket
-                    .WriteInt(this.MapleID)
-                    .WriteInt(this.CurrentLevel)
-                    .WriteDateTime(this.Expiration);
+                oPacket.WriteInt(this.MapleID);
+                oPacket.WriteInt(this.CurrentLevel);
+                oPacket.WriteDateTime(this.Expiration);
 
                 if (this.IsFromFourthJob)
                 {
                     oPacket.WriteInt(this.MaxLevel);
                 }
 
-                oPacket.Flip();
-                return oPacket.GetContent();
+                return oPacket.ToArray();
             }
         }
     }

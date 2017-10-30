@@ -6,10 +6,12 @@ using Microsoft.Extensions.Logging;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Server;
 using RazzleServer.Common.Util;
+using RazzleServer.Common.Packet;
+using RazzleServer.Common.Constants;
 
 namespace RazzleServer.Game
 {
-    public class ChannelServer : MapleServer<GameClient>
+    public class GameServer : MapleServer<GameClient>
     {
         public GameCenterClient CenterConnection { get; set; }
 
@@ -25,22 +27,29 @@ namespace RazzleServer.Game
 
         private static readonly ILogger Log = LogManager.Log;
 
-        public ChannelServer(ushort port)
+        public GameServer(ushort port)
         {
-            DataProvider.Initialize();
+            Port = port;
+            StartCenterConnection(IPAddress.Loopback, ServerConfig.Instance.CenterPort);
+        }
 
-            //new Thread(new ThreadStart(CenterServer.Main)).Start();
-            //CenterConnectionDone.WaitOne();
+        public override void ServerRegistered()
+        {
+            Log.LogInformation($"Registered Game Server ({WorldName} [{WorldID}]-{ChannelID}).");
+            Start(IPAddress.Loopback, Port);
+        }
 
-            byte[] channelIp = { 0, 0, 0, 0 };
-            Start(new IPAddress(channelIp), port);
+        public override void CenterServerConnected()
+        {
+            var pw = new PacketWriter(InteroperabilityOperationCode.RegistrationRequest);
+            pw.WriteByte((int)ServerType.Channel);
+            CenterConnection.Send(pw);
         }
 
         public override void Dispose()
         {
             CenterConnection?.Dispose();
             ShutDown();
-            Log.LogInformation($"Server disposed from thread {Thread.CurrentThread.ManagedThreadId}");
         }
     }
 }

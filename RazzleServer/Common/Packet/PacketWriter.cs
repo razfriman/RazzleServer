@@ -2,6 +2,7 @@
 using System.Text;
 using RazzleServer.Game.Maple;
 using RazzleServer.Common.Util;
+using System;
 
 namespace RazzleServer.Common.Packet
 {
@@ -167,6 +168,10 @@ namespace RazzleServer.Common.Packet
             WriteInt(box.RB.X);
             WriteInt(box.RB.Y);
         }
+
+        public void WriteDateTime(DateTime item) => WriteLong((long)(item.ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds);
+
+        public void WriteKoreanDateTime(DateTime item) => WriteLong((long)(item.ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds * 10000 + 116444592000000000L);
 
         public string ToPacketString() => Functions.ByteArrayToStr(ToArray());
     }

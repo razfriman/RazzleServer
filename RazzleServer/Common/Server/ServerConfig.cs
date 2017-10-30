@@ -24,7 +24,7 @@ namespace RazzleServer.Server
 		public bool LoginCreatesNewAccount { get; set; } = true;
         public string CommandIndicator { get; set; } = "!";
         public ushort CenterPort { get; set; } = 8181;
-        public IEnumerable<WorldConfig> Worlds { get; set; }
+        public List<WorldConfig> Worlds { get; set; }
 
         private static ILogger Log = LogManager.Log;
 

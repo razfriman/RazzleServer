@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using RazzleServer.Common.Util;
 
 namespace RazzleServer.Game.Maple.Life
 {
@@ -17,7 +18,7 @@ namespace RazzleServer.Game.Maple.Life
         {
             get
             {
-                return base[Application.Random.Next(this.Count - 1)];
+                return base[Functions.Random(this.Count - 1)];
             }
         }
 

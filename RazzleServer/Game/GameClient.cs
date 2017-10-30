@@ -17,12 +17,12 @@ namespace RazzleServer.Game
     {
         public static Dictionary<ClientOperationCode, List<GamePacketHandler>> PacketHandlers = new Dictionary<ClientOperationCode, List<GamePacketHandler>>();
         public Account Account { get; set; }
-        public ChannelServer Server { get; set; }
+        public GameServer Server { get; set; }
         public Character Character { get; set; }
 
-        private static ILogger Log = LogManager.Log;
+        private static readonly ILogger Log = LogManager.Log;
 
-        public GameClient(Socket session, ChannelServer server) : base(session)
+        public GameClient(Socket session, GameServer server) : base(session)
         {
             Socket = new ClientSocket(session, this, ServerConfig.Instance.Version, ServerConfig.Instance.AESKey);
             Server = server;
@@ -116,7 +116,7 @@ namespace RazzleServer.Game
             int accountID;
             int characterID = inPacket.ReadInt();
 
-            if ((accountID = WvsGame.CenterConnection.ValidateMigration(Socket.Host, characterID)) == 0)
+            if ((accountID = Server.CenterConnection.ValidateMigration(Socket.Host, characterID)) == 0)
             {
                 Terminate("Invalid migration");
                 return;
@@ -156,7 +156,7 @@ namespace RazzleServer.Game
             var outPacket = new PacketWriter(ServerOperationCode.MigrateCommand);
             outPacket.WriteBool(true);
             outPacket.WriteBytes(Socket.HostBytes);
-            outPacket.WriteUShort(WvsGame.CenterConnection.GetChannelPort(channelID));
+            outPacket.WriteUShort(Server.CenterConnection.GetChannelPort(channelID));
             Send(outPacket);
         }
     }

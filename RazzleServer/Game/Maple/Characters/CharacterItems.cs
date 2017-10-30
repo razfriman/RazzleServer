@@ -519,7 +519,7 @@ namespace RazzleServer.Game.Maple.Characters
                             oPacket
                                 .WriteByte((byte)NoticeType.SuperMegaphone)
                                 .WriteString(message)
-                                .WriteByte(WvsGame.ChannelID)
+                                .WriteByte(Parent.Client.Server.ChannelID)
                                 .WriteBool(whisper);
 
                             //this.Parent.Client.World.Broadcast(oPacket);
@@ -555,7 +555,7 @@ namespace RazzleServer.Game.Maple.Characters
                                 .WriteString(text2)
                                 .WriteString(text3)
                                 .WriteString(text4)
-                                .WriteInt(WvsGame.ChannelID)
+                                .WriteInt(Parent.Client.Server.ChannelID)
                                 .WriteBool(whisper)
                                 .WriteBytes(this.Parent.AppearanceToByteArray());
 
@@ -594,7 +594,7 @@ namespace RazzleServer.Game.Maple.Characters
                             oPacket
                                 .WriteByte((byte)NoticeType.ItemMegaphone)
                                 .WriteString(message)
-                                .WriteByte(WvsGame.ChannelID)
+                                .WriteByte(Parent.Client.Server.ChannelID)
                                 .WriteBool(whisper)
                                 .WriteByte((byte)(targetItem != null ? targetItem.Slot : 0));
 

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
+using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Game.Maple.Data;
 
 namespace RazzleServer.Game.Maple
 {
@@ -23,7 +25,7 @@ namespace RazzleServer.Game.Maple
         {
             get
             {
-                return this.Parent.Parent;
+                return Parent.Parent;
             }
         }
 
@@ -33,7 +35,7 @@ namespace RazzleServer.Game.Maple
             {
                 long mask = 0;
 
-                foreach (KeyValuePair<PrimaryBuffStat, short> primaryStatup in this.PrimaryStatups)
+                foreach (KeyValuePair<PrimaryBuffStat, short> primaryStatup in PrimaryStatups)
                 {
                     mask |= (long)primaryStatup.Key;
                 }
@@ -48,7 +50,7 @@ namespace RazzleServer.Game.Maple
             {
                 long mask = 0;
 
-                foreach (KeyValuePair<SecondaryBuffStat, short> secondaryStatus in this.SecondaryStatups)
+                foreach (KeyValuePair<SecondaryBuffStat, short> secondaryStatus in SecondaryStatups)
                 {
                     mask |= (long)secondaryStatus.Key;
                 }
@@ -59,90 +61,88 @@ namespace RazzleServer.Game.Maple
 
         public Buff(CharacterBuffs parent, Skill skill, int value)
         {
-            this.Parent = parent;
-            this.MapleID = skill.MapleID;
-            this.SkillLevel = skill.CurrentLevel;
-            this.Type = 1;
-            this.Value = value;
-            this.End = DateTime.Now.AddSeconds(skill.BuffTime);
-            this.PrimaryStatups = new Dictionary<PrimaryBuffStat, short>();
-            this.SecondaryStatups = new Dictionary<SecondaryBuffStat, short>();
+            Parent = parent;
+            MapleID = skill.MapleID;
+            SkillLevel = skill.CurrentLevel;
+            Type = 1;
+            Value = value;
+            End = DateTime.Now.AddSeconds(skill.BuffTime);
+            PrimaryStatups = new Dictionary<PrimaryBuffStat, short>();
+            SecondaryStatups = new Dictionary<SecondaryBuffStat, short>();
 
-            this.CalculateStatups(skill);
+            CalculateStatups(skill);
 
             Delay.Execute(() =>
             {
-                if (this.Parent.Contains(this))
+                if (Parent.Contains(this))
                 {
-                    this.Parent.Remove(this);
+                    Parent.Remove(this);
                 }
-            }, (int)(this.End - DateTime.Now).TotalMilliseconds);
+            }, (int)(End - DateTime.Now).TotalMilliseconds);
         }
 
         public Buff(CharacterBuffs parent, Datum datum)
         {
-            this.Parent = parent;
-            this.MapleID = (int)datum["MapleID"];
-            this.SkillLevel = (byte)datum["SkillLevel"];
-            this.Type = (byte)datum["Type"];
-            this.Value = (int)datum["Value"];
-            this.End = (DateTime)datum["End"];
-            this.PrimaryStatups = new Dictionary<PrimaryBuffStat, short>();
-            this.SecondaryStatups = new Dictionary<SecondaryBuffStat, short>();
+            Parent = parent;
+            MapleID = (int)datum["MapleID"];
+            SkillLevel = (byte)datum["SkillLevel"];
+            Type = (byte)datum["Type"];
+            Value = (int)datum["Value"];
+            End = (DateTime)datum["End"];
+            PrimaryStatups = new Dictionary<PrimaryBuffStat, short>();
+            SecondaryStatups = new Dictionary<SecondaryBuffStat, short>();
 
-            if (this.Type == 1)
+            if (Type == 1)
             {
-                this.CalculateStatups(DataProvider.Skills[this.MapleID][this.SkillLevel]);
+                CalculateStatups(DataProvider.Skills[MapleID][SkillLevel]);
             }
 
             Delay.Execute(() =>
             {
-                if (this.Parent.Contains(this))
+                if (Parent.Contains(this))
                 {
-                    this.Parent.Remove(this);
+                    Parent.Remove(this);
                 }
-            }, (int)(this.End - DateTime.Now).TotalMilliseconds);
+            }, (int)(End - DateTime.Now).TotalMilliseconds);
         }
 
         public void Save()
         {
             Datum datum = new Datum("buffs");
 
-            datum["CharacterID"] = this.Character.ID;
-            datum["MapleID"] = this.MapleID;
-            datum["SkillLevel"] = this.SkillLevel;
-            datum["Type"] = this.Type;
-            datum["Value"] = this.Value;
-            datum["End"] = this.End;
+            datum["CharacterID"] = Character.ID;
+            datum["MapleID"] = MapleID;
+            datum["SkillLevel"] = SkillLevel;
+            datum["Type"] = Type;
+            datum["Value"] = Value;
+            datum["End"] = End;
 
             datum.Insert();
         }
 
         public void Apply()
         {
-            switch (this.MapleID)
+            switch (MapleID)
             {
                 default:
                     {
                         using (var oPacket = new PacketWriter(ServerOperationCode.TemporaryStatSet))
                         {
-                            oPacket
-                                .WriteLong(this.PrimaryBuffMask)
-                                .WriteLong(this.SecondaryBuffMask);
+                            oPacket.WriteLong(PrimaryBuffMask);
+                            oPacket.WriteLong(SecondaryBuffMask);
 
-                            foreach (KeyValuePair<PrimaryBuffStat, short> primaryStatup in this.PrimaryStatups)
+                            foreach (KeyValuePair<PrimaryBuffStat, short> primaryStatup in PrimaryStatups)
                             {
-                                oPacket
-                                    .WriteShort(primaryStatup.Value)
-                                    .WriteInt(this.MapleID)
-                                    .WriteInt((int)(this.End - DateTime.Now).TotalMilliseconds);
+                                oPacket.WriteShort(primaryStatup.Value);
+                                oPacket.WriteInt(MapleID);
+                                oPacket.WriteInt((int)(End - DateTime.Now).TotalMilliseconds);
                             }
 
-                            foreach (KeyValuePair<SecondaryBuffStat, short> secondaryStatup in this.SecondaryStatups)
+                            foreach (KeyValuePair<SecondaryBuffStat, short> secondaryStatup in SecondaryStatups)
                             {
                                 oPacket.WriteShort(secondaryStatup.Value);
-                                oPacket.WriteInt(this.MapleID);
-                                oPacket.WriteInt((int)(this.End - DateTime.Now).TotalMilliseconds);
+                                oPacket.WriteInt(MapleID);
+                                oPacket.WriteInt((int)(End - DateTime.Now).TotalMilliseconds);
                             }
 
                             oPacket.WriteShort(0);
@@ -150,22 +150,21 @@ namespace RazzleServer.Game.Maple
                             oPacket.WriteByte(0);
                             oPacket.WriteInt(0);
 
-                            this.Character.Client.Send(oPacket);
+                            Character.Client.Send(oPacket);
                         }
 
                         using (var oPacket = new PacketWriter(ServerOperationCode.SetTemporaryStat))
                         {
-                            oPacket
-                                .WriteInt(this.Character.ID)
-                                .WriteLong(this.PrimaryBuffMask)
-                                .WriteLong(this.SecondaryBuffMask);
+                            oPacket.WriteInt(Character.ID);
+                            oPacket.WriteLong(PrimaryBuffMask);
+                            oPacket.WriteLong(SecondaryBuffMask);
 
-                            foreach (KeyValuePair<PrimaryBuffStat, short> primaryStatup in this.PrimaryStatups)
+                            foreach (KeyValuePair<PrimaryBuffStat, short> primaryStatup in PrimaryStatups)
                             {
                                 oPacket.WriteShort(primaryStatup.Value);
                             }
 
-                            foreach (KeyValuePair<SecondaryBuffStat, short> secondaryStatup in this.SecondaryStatups)
+                            foreach (KeyValuePair<SecondaryBuffStat, short> secondaryStatup in SecondaryStatups)
                             {
                                 oPacket.WriteShort(secondaryStatup.Value);
                             }
@@ -173,7 +172,7 @@ namespace RazzleServer.Game.Maple
                             oPacket.WriteInt(0);
                             oPacket.WriteShort(0);
 
-                            this.Character.Map.Broadcast(oPacket);
+                            Character.Map.Broadcast(oPacket);
                         }
                     }
                     break;
@@ -184,22 +183,20 @@ namespace RazzleServer.Game.Maple
         {
             using (var oPacket = new PacketWriter(ServerOperationCode.TemporaryStatReset))
             {
-                oPacket
-                    .WriteLong(this.PrimaryBuffMask)
-                    .WriteLong(this.SecondaryBuffMask)
-                    .WriteByte(1);
+                oPacket.WriteLong(PrimaryBuffMask);
+                oPacket.WriteLong(SecondaryBuffMask);
+                oPacket.WriteByte(1);
 
-                this.Character.Client.Send(oPacket);
+                Character.Client.Send(oPacket);
             }
 
             using (var oPacket = new PacketWriter(ServerOperationCode.ResetTemporaryStat))
             {
-                oPacket
-                    .WriteInt(this.Character.ID)
-                    .WriteLong(this.PrimaryBuffMask)
-                    .WriteLong(this.SecondaryBuffMask);
+                oPacket.WriteInt(Character.ID);
+                oPacket.WriteLong(PrimaryBuffMask);
+                oPacket.WriteLong(SecondaryBuffMask);
 
-                this.Character.Map.Broadcast(oPacket);
+                Character.Map.Broadcast(oPacket);
             }
         }
 
@@ -207,62 +204,62 @@ namespace RazzleServer.Game.Maple
         {
             if (skill.WeaponAttack > 0)
             {
-                this.SecondaryStatups.Add(SecondaryBuffStat.WeaponAttack, skill.WeaponAttack);
+                SecondaryStatups.Add(SecondaryBuffStat.WeaponAttack, skill.WeaponAttack);
             }
 
             if (skill.WeaponDefense > 0)
             {
-                this.SecondaryStatups.Add(SecondaryBuffStat.WeaponDefense, skill.WeaponDefense);
+                SecondaryStatups.Add(SecondaryBuffStat.WeaponDefense, skill.WeaponDefense);
             }
 
             if (skill.MagicAttack > 0)
             {
-                this.SecondaryStatups.Add(SecondaryBuffStat.MagicAttack, skill.MagicAttack);
+                SecondaryStatups.Add(SecondaryBuffStat.MagicAttack, skill.MagicAttack);
             }
 
             if (skill.MagicDefense > 0)
             {
-                this.SecondaryStatups.Add(SecondaryBuffStat.MagicDefense, skill.MagicAttack);
+                SecondaryStatups.Add(SecondaryBuffStat.MagicDefense, skill.MagicAttack);
             }
 
             if (skill.Accuracy > 0)
             {
-                this.SecondaryStatups.Add(SecondaryBuffStat.Accuracy, skill.Accuracy);
+                SecondaryStatups.Add(SecondaryBuffStat.Accuracy, skill.Accuracy);
             }
 
             if (skill.Avoidability > 0)
             {
-                this.SecondaryStatups.Add(SecondaryBuffStat.Avoid, skill.Avoidability);
+                SecondaryStatups.Add(SecondaryBuffStat.Avoid, skill.Avoidability);
             }
 
             if (skill.Speed > 0)
             {
-                this.SecondaryStatups.Add(SecondaryBuffStat.Speed, skill.Speed);
+                SecondaryStatups.Add(SecondaryBuffStat.Speed, skill.Speed);
             }
 
             if (skill.Jump > 0)
             {
-                this.SecondaryStatups.Add(SecondaryBuffStat.Jump, skill.Jump);
+                SecondaryStatups.Add(SecondaryBuffStat.Jump, skill.Jump);
             }
 
             if (skill.Morph > 0)
             {
-                this.SecondaryStatups.Add(SecondaryBuffStat.Morph, (short)(skill.Morph + 100 * (int)this.Character.Gender));
+                SecondaryStatups.Add(SecondaryBuffStat.Morph, (short)(skill.Morph + 100 * (int)Character.Gender));
             }
 
-            switch (this.MapleID)
+            switch (MapleID)
             {
                 case (int)SkillNames.SuperGM.HyperBody:
-                    this.SecondaryStatups.Add(SecondaryBuffStat.HyperBodyHP, skill.ParameterA);
-                    this.SecondaryStatups.Add(SecondaryBuffStat.HyperBodyMP, skill.ParameterB);
+                    SecondaryStatups.Add(SecondaryBuffStat.HyperBodyHP, skill.ParameterA);
+                    SecondaryStatups.Add(SecondaryBuffStat.HyperBodyMP, skill.ParameterB);
                     break;
 
                 case (int)SkillNames.SuperGM.HolySymbol:
-                    this.SecondaryStatups.Add(SecondaryBuffStat.HolySymbol, skill.ParameterA);
+                    SecondaryStatups.Add(SecondaryBuffStat.HolySymbol, skill.ParameterA);
                     break;
 
                 case (int)SkillNames.SuperGM.Hide:
-                    this.SecondaryStatups.Add(SecondaryBuffStat.DarkSight, skill.ParameterA);
+                    SecondaryStatups.Add(SecondaryBuffStat.DarkSight, skill.ParameterA);
                     break;
             }
         }

@@ -23,7 +23,7 @@ namespace RazzleServer.Login
         public string[] MacAddresses { get; private set; }
         public LoginServer Server { get; private set; }
 
-        private static ILogger Log = LogManager.Log;
+        private static readonly ILogger Log = LogManager.Log;
 
         public LoginClient(Socket socket, LoginServer server)
             : base(socket)

@@ -10,16 +10,14 @@ namespace RazzleServer.Game.Maple.Scripting
         private Portal mPortal;
 
         public PortalScript(Portal portal, Character character)
-            : base(ScriptType.Portal, portal.Script, character, false)
+            : base(ScriptType.Portal, portal.Script, character)
         {
             mPortal = portal;
-
-            this.Expose("playPortalSe", new Action(this.PlayPortalSoundEffect));
         }
 
         private void PlayPortalSoundEffect()
         {
-            mCharacter.ShowLocalUserEffect(UserEffect.PlayPortalSE);
+            Character.ShowLocalUserEffect(UserEffect.PlayPortalSE);
         }
     }
 }

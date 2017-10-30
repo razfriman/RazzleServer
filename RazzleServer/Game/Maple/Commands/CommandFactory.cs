@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Server;
 
 namespace RazzleServer.Game.Maple.Commands
 {
@@ -27,7 +28,7 @@ namespace RazzleServer.Game.Maple.Commands
 
             splitted[0] = splitted[0].ToLower();
 
-            string commandName = splitted[0].TrimStart(Application.CommandIndiciator);
+            string commandName = splitted[0].TrimStart(ServerConfig.Instance.CommandIndicator[0]);
 
             string[] args = new string[splitted.Length - 1];
 

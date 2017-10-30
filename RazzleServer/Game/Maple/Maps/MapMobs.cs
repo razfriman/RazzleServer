@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
+using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Life;
@@ -51,11 +52,11 @@ namespace RazzleServer.Game.Maple.Maps
 
                 foreach (Loot loopLoot in item.Loots)
                 {
-                    if ((Application.Random.Next(1000000) / WvsGame.DropRate) <= loopLoot.Chance)
+                    if ((Functions.Random(1000000) / this.Map.Server.DropRate) <= loopLoot.Chance)
                     {
                         if (loopLoot.IsMeso)
                         {
-                            drops.Add(new Meso((short)(Application.Random.Next(loopLoot.MinimumQuantity, loopLoot.MaximumQuantity) * WvsGame.MesoRate))
+                            drops.Add(new Meso((short)(Functions.Random(loopLoot.MinimumQuantity, loopLoot.MaximumQuantity) * WvsGame.MesoRate))
                             {
                                 Dropper = item,
                                 Owner = owner
@@ -63,7 +64,7 @@ namespace RazzleServer.Game.Maple.Maps
                         }
                         else
                         {
-                            drops.Add(new Item(loopLoot.MapleID, (short)Application.Random.Next(loopLoot.MinimumQuantity, loopLoot.MaximumQuantity))
+                            drops.Add(new Item(loopLoot.MapleID, (short)Functions.Random(loopLoot.MinimumQuantity, loopLoot.MaximumQuantity))
                             {
                                 Dropper = item,
                                 Owner = owner
@@ -92,10 +93,9 @@ namespace RazzleServer.Game.Maple.Maps
 
                             using (var oPacket = new PacketWriter(ServerOperationCode.Message))
                             {
-                                oPacket
-                                    .WriteByte((byte)MessageType.QuestRecord)
-                                    .WriteUShort(loopStarted.Key)
-                                    .WriteByte(1);
+                                oPacket.WriteByte((byte)MessageType.QuestRecord);
+                                oPacket.WriteUShort(loopStarted.Key);
+                                oPacket.WriteByte(1);
 
                                 string kills = string.Empty;
 
@@ -104,10 +104,9 @@ namespace RazzleServer.Game.Maple.Maps
                                     kills += kill.ToString().PadLeft(3, '0');
                                 }
 
-                                oPacket
-                                    .WriteString(kills)
-                                    .WriteInt()
-                                    .WriteInt();
+                                oPacket.WriteString(kills);
+                                oPacket.WriteInt();
+                                oPacket.WriteInt();
 
                                 owner.Client.Send(oPacket);
 

@@ -4,6 +4,8 @@ using RazzleServer.Common.Constants;
 using RazzleServer.Common.Data;
 using RazzleServer.Common.Exceptions;
 using RazzleServer.Common.Packet;
+using RazzleServer.Common.Util;
+using RazzleServer.Game.Maple.Commands;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Interaction;
 using RazzleServer.Game.Maple.Life;
@@ -606,10 +608,9 @@ namespace RazzleServer.Game.Maple.Characters
 
                 using (var oPacket = new PacketWriter(ServerOperationCode.Chalkboard))
                 {
-                    oPacket
-                        .WriteInt(ID)
-                        .WriteBool(!string.IsNullOrEmpty(Chalkboard))
-                        .WriteString(Chalkboard);
+                    oPacket.WriteInt(ID);
+                    oPacket.WriteBool(!string.IsNullOrEmpty(Chalkboard));
+                    oPacket.WriteString(Chalkboard);
 
                     Map.Broadcast(oPacket);
                 }
@@ -801,19 +802,18 @@ namespace RazzleServer.Game.Maple.Characters
             using (var oPacket = new PacketWriter(ServerOperationCode.SetField))
             {
                 oPacket
-                    .WriteInt(WvsGame.ChannelID)
+                    .WriteInt(Client.Server.ChannelID)
                     .WriteByte(++Portals)
                     .WriteBool(true)
                     .WriteShort(); // NOTE: Floating messages at top corner.
 
                 for (int i = 0; i < 3; i++)
                 {
-                    oPacket.WriteInt(Application.Random.Next());
+                    oPacket.WriteInt(Functions.Random());
                 }
 
-                oPacket
-                    .WriteBytes(DataToByteArray())
-                    .WriteDateTime(DateTime.UtcNow);
+                oPacket.WriteBytes(DataToByteArray());
+                oPacket.WriteDateTime(DateTime.UtcNow);
 
                 Client.Send(oPacket);
             }
@@ -1054,7 +1054,7 @@ namespace RazzleServer.Game.Maple.Characters
             using (var oPacket = new PacketWriter(ServerOperationCode.SetField))
             {
                 oPacket
-                    .WriteInt(WvsGame.ChannelID)
+                    .WriteInt(Client.Server.ChannelID)
                     .WriteByte(++Portals)
                     .WriteBool(false)
                     .WriteShort()
@@ -1416,7 +1416,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                     if (mpBurn > 0)
                     {
-                        Mana -= (short)mpBurn;
+                        Mana -= mpBurn;
                     }
                 }
 
@@ -1473,7 +1473,7 @@ namespace RazzleServer.Game.Maple.Characters
             string text = iPacket.ReadString();
             bool shout = iPacket.ReadBool(); // NOTE: Used for skill macros.
 
-            if (text.StartsWith(Application.CommandIndiciator.ToString()))
+            if (text.StartsWith(ServerConfig.Instance.CommandIndicator.ToString()))
             {
                 CommandFactory.Execute(this, text);
             }
@@ -1529,7 +1529,7 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 oPacket
                     .WriteInt(ID)
-                    .WriteByte((byte)effect);
+                    .WriteByte(effect);
 
                 Map.Broadcast(oPacket, skipSelf ? this : null);
             }
@@ -1742,7 +1742,7 @@ namespace RazzleServer.Game.Maple.Characters
                 oPacket
                     .WriteInt(target.ID)
                     .WriteByte(target.Level)
-                    .WriteShort((short)target.Job)
+                    .WriteShort(target.Job)
                     .WriteShort(target.Fame)
                     .WriteBool(false) // NOTE: Marriage.
                     .WriteString("-") // NOTE: Guild name.
@@ -1810,7 +1810,7 @@ namespace RazzleServer.Game.Maple.Characters
 
             // NOTE: This is here for convinience. If you accidently use another text window (like party) and not the main text window,
             // your commands won't be shown but instead executed from there as well.
-            if (text.StartsWith(Application.CommandIndiciator.ToString()))
+            if (text.StartsWith(ServerConfig.Instance.CommandIndicator))
             {
                 CommandFactory.Execute(this, text);
             }
@@ -1818,10 +1818,9 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 using (var oPacket = new PacketWriter(ServerOperationCode.GroupMessage))
                 {
-                    oPacket
-                        .WriteByte((byte)type)
-                        .WriteString(Name)
-                        .WriteString(text);
+                    oPacket.WriteByte((byte)type);
+                    oPacket.WriteString(Name);
+                    oPacket.WriteString(text);
 
                     foreach (int recipient in recipients)
                     {
@@ -2284,7 +2283,7 @@ namespace RazzleServer.Game.Maple.Characters
                 oPacket
                     .WriteInt(ID)
                     .WriteStringFixed(Name, 13)
-                    .WriteByte((byte)Gender)
+                    .WriteByte(Gender)
                     .WriteByte(Skin)
                     .WriteInt(Face)
                     .WriteInt(Hair)
@@ -2292,7 +2291,7 @@ namespace RazzleServer.Game.Maple.Characters
                     .WriteLong()
                     .WriteLong()
                     .WriteByte(Level)
-                    .WriteShort((short)Job)
+                    .WriteShort(Job)
                     .WriteShort(Strength)
                     .WriteShort(Dexterity)
                     .WriteShort(Intelligence)
@@ -2320,7 +2319,7 @@ namespace RazzleServer.Game.Maple.Characters
             using (ByteBuffer oPacket = new ByteBuffer())
             {
                 oPacket
-                    .WriteByte((byte)Gender)
+                    .WriteByte(Gender)
                     .WriteByte(Skin)
                     .WriteInt(Face)
                     .WriteBool(true)
@@ -2402,8 +2401,8 @@ namespace RazzleServer.Game.Maple.Characters
             pw.WriteShort(0);// NOTE: Rings (1).
             pw.WriteShort(0);// NOTE: Rings (2). 
             pw.WriteShort(0);// NOTE: Rings (3).
-            pw.WriteBytes(Tocks.RegularToByteArray());
-            pw.WriteBytes(Tocks.VIPToByteArray());
+            pw.WriteBytes(Trocks.RegularToByteArray());
+            pw.WriteBytes(Trocks.VIPToByteArray());
             pw.WriteInt(0); // NOTE: Monster Book cover ID.
             pw.WriteByte(0); // NOTE: Monster Book cards.
             pw.WriteShort(0);// NOTE: New Year Cards.
@@ -2419,40 +2418,31 @@ namespace RazzleServer.Game.Maple.Characters
         {
             var oPacket = new PacketWriter(ServerOperationCode.UserEnterField);
 
-            oPacket
-                .WriteInt(ID)
-                .WriteByte(Level)
-                .WriteString(Name);
+            oPacket.WriteInt(ID);
+            oPacket.WriteByte(Level);
+            oPacket.WriteString(Name);
 
-            if (false)
-            {
-                oPacket
-                    .WriteString("")
-                    .WriteShort()
-                    .WriteByte()
-                    .WriteShort()
-                    .WriteByte();
-            }
-            else
-            {
-                oPacket.Skip(8);
-            }
+            oPacket.WriteString("");
+            oPacket.WriteShort(0);
+            oPacket.WriteByte(0);
+            oPacket.WriteShort(0);
+            oPacket.WriteByte(0);
 
-            oPacket
-                .WriteBytes(Buffs.ToByteArray())
-                .WriteShort((short)Job)
-                .WriteBytes(AppearanceToByteArray())
-                .WriteInt(Items.Available(5110000))
-                .WriteInt() // NOTE: Item effect.
-                .WriteInt((int)(Item.GetType(Chair) == ItemType.Setup ? Chair : 0))
-                .WriteShort(Position.X)
-                .WriteShort(Position.Y)
-                .WriteByte(Stance)
-                .WriteShort(Foothold)
-                .WriteByte()
-                .WriteByte()
-                .WriteInt(1)
-                .WriteLong();
+
+            oPacket.WriteBytes(Buffs.ToByteArray());
+            oPacket.WriteShort((short)Job);
+            oPacket.WriteBytes(AppearanceToByteArray());
+            oPacket.WriteInt(Items.Available(5110000));
+            oPacket.WriteInt(0); // NOTE: Item effect.
+            oPacket.WriteInt(Item.GetType(Chair) == ItemType.Setup ? Chair : 0);
+            oPacket.WriteShort(Position.X);
+            oPacket.WriteShort(Position.Y);
+            oPacket.WriteByte(Stance);
+            oPacket.WriteShort(Foothold);
+            oPacket.WriteByte(0);
+            oPacket.WriteByte(0);
+            oPacket.WriteInt(1);
+            oPacket.WriteLong(0);
 
             if (PlayerShop != null && PlayerShop.Owner == this)
             {

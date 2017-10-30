@@ -8,15 +8,18 @@ using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Common.Util;
 using System.Linq;
-using System.Net;
 using Microsoft.Extensions.Logging;
 
 namespace RazzleServer.Game
 {
     public class GameCenterClient : AClient
     {
-        ChannelServer Server { get; set; }
-        public GameCenterClient(ChannelServer server, Socket session) : base(session)
+        public GameServer Server { get; set; }
+
+        private readonly PendingKeyedQueue<string, int> MigrationValidationPool = new PendingKeyedQueue<string, int>();
+
+
+        public GameCenterClient(GameServer server, Socket session) : base(session)
         {
             Server = server;
         }
@@ -56,54 +59,19 @@ namespace RazzleServer.Game
             }
         }
 
-
-        public void Initialize(params object[] args)
-        {
-            var pw = new PacketWriter(InteroperabilityOperationCode.RegistrationRequest);
-            pw.WriteByte((int)ServerType.Channel);
-            pw.WriteString((string)args[0]);
-            Send(pw);
-        }
-
-
         private void Register(PacketReader inPacket)
         {
             var response = (ServerRegistrationResponse)inPacket.ReadByte();
 
-            switch (response)
+            if (response == ServerRegistrationResponse.Valid)
             {
-                case ServerRegistrationResponse.Valid:
-                    {
-                        Server.WorldID = inPacket.ReadByte();
-                        Server.WorldName = inPacket.ReadString();
-                        Server.TickerMessage = inPacket.ReadString();
-                        Server.ChannelID = inPacket.ReadByte();
-                        Server.RemoteEndPoint = new IPEndPoint(IPAddress.Loopback, inPacket.ReadUShort());
-                        Server.Listen();
-                        Server.AllowMultiLeveling = inPacket.ReadBool();
-
-                        Log.LogInformation("Characters will {0}be able to continuously level-up.", Server.AllowMultiLeveling ? "" : "not ");
-
-                        Server.ExperienceRate = inPacket.ReadInt();
-                        Server.QuestExperienceRate = inPacket.ReadInt();
-                        Server.PartyQuestExperienceRate = inPacket.ReadInt();
-                        Server.MesoRate = inPacket.ReadInt();
-                        Server.DropRate = inPacket.ReadInt();
-
-                        Log.Success("Registered Channel Server ({0} [{1}]-{2}).", Server.WorldName, Server.WorldID, Server.ChannelID);
-                    }
-                    break;
-
-                default:
-                    {
-                        Log.Error("Unable to register as Channel Server: {0}", ServerRegistrationResponseResolver.Explain(response));
-
-                        Server.Stop();
-                    }
-                    break;
+                Server.ServerRegistered();
             }
-
-            Server.CenterConnectionDone.Set();
+            else
+            {
+                Log.LogError($"Unable to register as Channel Server: {response}");
+                Server.ShutDown();
+            }
         }
 
         private void UpdateChannelID(PacketReader inPacket)
@@ -175,64 +143,58 @@ namespace RazzleServer.Game
 
             if (gender == Gender.Male)
             {
-                if (!DataProvider.CreationData.MaleSkins.Any(x => x.Item1 == jobType && x.Item2 == skin)
+                error |= (!DataProvider.CreationData.MaleSkins.Any(x => x.Item1 == jobType && x.Item2 == skin)
                     || !DataProvider.CreationData.MaleFaces.Any(x => x.Item1 == jobType && x.Item2 == face)
                     || !DataProvider.CreationData.MaleHairs.Any(x => x.Item1 == jobType && x.Item2 == hair)
                     || !DataProvider.CreationData.MaleHairColors.Any(x => x.Item1 == jobType && x.Item2 == hairColor)
                     || !DataProvider.CreationData.MaleTops.Any(x => x.Item1 == jobType && x.Item2 == topID)
                     || !DataProvider.CreationData.MaleBottoms.Any(x => x.Item1 == jobType && x.Item2 == bottomID)
                     || !DataProvider.CreationData.MaleShoes.Any(x => x.Item1 == jobType && x.Item2 == shoesID)
-                    || !DataProvider.CreationData.MaleWeapons.Any(x => x.Item1 == jobType && x.Item2 == weaponID))
-                {
-                    error = true;
-                }
+                    || !DataProvider.CreationData.MaleWeapons.Any(x => x.Item1 == jobType && x.Item2 == weaponID));
             }
             else if (gender == Gender.Female)
             {
-                if (!DataProvider.CreationData.FemaleSkins.Any(x => x.Item1 == jobType && x.Item2 == skin)
+                error |= (!DataProvider.CreationData.FemaleSkins.Any(x => x.Item1 == jobType && x.Item2 == skin)
                     || !DataProvider.CreationData.FemaleFaces.Any(x => x.Item1 == jobType && x.Item2 == face)
                     || !DataProvider.CreationData.FemaleHairs.Any(x => x.Item1 == jobType && x.Item2 == hair)
                     || !DataProvider.CreationData.FemaleHairColors.Any(x => x.Item1 == jobType && x.Item2 == hairColor)
                     || !DataProvider.CreationData.FemaleTops.Any(x => x.Item1 == jobType && x.Item2 == topID)
                     || !DataProvider.CreationData.FemaleBottoms.Any(x => x.Item1 == jobType && x.Item2 == bottomID)
                     || !DataProvider.CreationData.FemaleShoes.Any(x => x.Item1 == jobType && x.Item2 == shoesID)
-                    || !DataProvider.CreationData.FemaleWeapons.Any(x => x.Item1 == jobType && x.Item2 == weaponID))
-                {
-                    error = true;
-                }
+                    || !DataProvider.CreationData.FemaleWeapons.Any(x => x.Item1 == jobType && x.Item2 == weaponID));
             }
             else // NOTE: Not allowed to choose "both" genders at character creation.
             {
                 error = true;
             }
 
-            Character character = new Character();
-
-            character.AccountID = accountID;
-            character.WorldID = Server.WorldID;
-            character.Name = name;
-            character.Gender = gender;
-            character.Skin = skin;
-            character.Face = face;
-            character.Hair = hair + hairColor;
-            character.Level = 1;
-            character.Job = jobType == JobType.Cygnus ? Job.Noblesse : jobType == JobType.Explorer ? Job.Beginner : Job.Legend;
-            character.Strength = 12;
-            character.Dexterity = 5;
-            character.Intelligence = 4;
-            character.Luck = 4;
-            character.MaxHealth = 50;
-            character.MaxMana = 5;
-            character.Health = 50;
-            character.Mana = 5;
-            character.AbilityPoints = 0;
-            character.SkillPoints = 0;
-            character.Experience = 0;
-            character.Fame = 0;
-            character.Map = DataProvider.Maps[jobType == JobType.Cygnus ? 130030000 : jobType == JobType.Explorer ? 10000 : 914000000];
-            character.SpawnPoint = 0;
-            character.Meso = 0;
-
+            Character character = new Character
+            {
+                AccountID = accountID,
+                WorldID = Server.WorldID,
+                Name = name,
+                Gender = gender,
+                Skin = skin,
+                Face = face,
+                Hair = hair + hairColor,
+                Level = 1,
+                Job = jobType == JobType.Cygnus ? Job.Noblesse : jobType == JobType.Explorer ? Job.Beginner : Job.Legend,
+                Strength = 12,
+                Dexterity = 5,
+                Intelligence = 4,
+                Luck = 4,
+                MaxHealth = 50,
+                MaxMana = 5,
+                Health = 50,
+                Mana = 5,
+                AbilityPoints = 0,
+                SkillPoints = 0,
+                Experience = 0,
+                Fame = 0,
+                Map = DataProvider.Maps[jobType == JobType.Cygnus ? 130030000 : jobType == JobType.Explorer ? 10000 : 914000000],
+                SpawnPoint = 0,
+                Meso = 0
+            };
             character.Items.Add(new Item(topID, equipped: true));
             character.Items.Add(new Item(bottomID, equipped: true));
             character.Items.Add(new Item(shoesID, equipped: true));
@@ -280,14 +242,19 @@ namespace RazzleServer.Game
             character.Keymap.Add(new Shortcut(KeymapKey.F6, KeymapAction.Shocked));
             character.Keymap.Add(new Shortcut(KeymapKey.F7, KeymapAction.Annoyed));
 
-            character.Save();
-
-            using (var outPacket = new PacketWriter(InteroperabilityOperationCode.CharacterCreationResponse))
+            if (!error)
             {
-                outPacket.WriteInt(accountID);
-                outPacket.WriteBytes(character.ToByteArray());
+                character.Save();
 
-                Send(outPacket);
+                using (var outPacket = new PacketWriter(InteroperabilityOperationCode.CharacterCreationResponse))
+                {
+                    outPacket.WriteInt(accountID);
+                    outPacket.WriteBytes(character.ToByteArray());
+
+                    Send(outPacket);
+                }
+            } else {
+                Log.LogError("Error when trying to create character");
             }
         }
 
@@ -322,10 +289,6 @@ namespace RazzleServer.Game
 
             return ChannelPortPool.Dequeue(channelID);
         }
-
-        private PendingKeyedQueue<string, int> MigrationValidationPool = new PendingKeyedQueue<string, int>();
-
-
 
         public int ValidateMigration(string host, int characterID)
         {

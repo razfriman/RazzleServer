@@ -13,8 +13,8 @@ namespace RazzleServer.Login
 {
     public class LoginCenterClient : AClient
     {
-
         public LoginServer Server { get; set; }
+        private readonly PendingKeyedQueue<string, bool> MigrationPool = new PendingKeyedQueue<string, bool>();
 
         public LoginCenterClient(LoginServer server, Socket session) : base(session)
         {
@@ -45,7 +45,7 @@ namespace RazzleServer.Login
                     Packet.WriteInt(loopWorld.DropRate);
                 }
 
-                this.Send(Packet);
+                Send(Packet);
             }
         }
 
@@ -55,31 +55,31 @@ namespace RazzleServer.Login
             switch (header)
             {
                 case InteroperabilityOperationCode.RegistrationResponse:
-                    this.Register(packet);
+                    Register(packet);
                     break;
 
                 case InteroperabilityOperationCode.UpdateChannel:
-                    this.UpdateChannel(packet);
+                    UpdateChannel(packet);
                     break;
 
                 case InteroperabilityOperationCode.UpdateChannelPopulation:
-                    this.UpdateChannelPopulation(packet);
+                    UpdateChannelPopulation(packet);
                     break;
 
                 case InteroperabilityOperationCode.CharacterNameCheckResponse:
-                    this.CheckCharacterName(packet);
+                    CheckCharacterName(packet);
                     break;
 
                 case InteroperabilityOperationCode.CharacterEntriesResponse:
-                    this.GetCharacters(packet);
+                    GetCharacters(packet);
                     break;
 
                 case InteroperabilityOperationCode.CharacterCreationResponse:
-                    this.CreateCharacter(packet);
+                    CreateCharacter(packet);
                     break;
 
                 case InteroperabilityOperationCode.MigrationRegisterResponse:
-                    this.Migrate(packet);
+                    Migrate(packet);
                     break;
             }
         }
@@ -100,7 +100,7 @@ namespace RazzleServer.Login
 
                 default:
                     {
-                        Log.LogError(response);
+                        Log.LogError(response.ToString());
                         Server.ShutDown();
                     }
                     break;
@@ -112,7 +112,7 @@ namespace RazzleServer.Login
             var worldID = inPacket.ReadByte();
             var add = inPacket.ReadBool();
 
-            var world = WvsLogin.Worlds[worldID];
+            var world = Server.Worlds[worldID];
 
             if (add)
             {
@@ -132,7 +132,7 @@ namespace RazzleServer.Login
             byte channelID = inPacket.ReadByte();
             int population = inPacket.ReadInt();
 
-            WvsLogin.Worlds[worldID][channelID].Population = population;
+            Server.Worlds[worldID][channelID].Population = population;
         }
 
         private void CheckCharacterName(PacketReader inPacket)
@@ -140,7 +140,7 @@ namespace RazzleServer.Login
             string name = inPacket.ReadString();
             bool unusable = inPacket.ReadBool();
 
-            this.NameCheckPool.Enqueue(name, unusable);
+            NameCheckPool.Enqueue(name, unusable);
         }
 
         private PendingKeyedQueue<int, List<byte[]>> CharacterEntriesPool = new PendingKeyedQueue<int, List<byte[]>>();
@@ -151,12 +151,12 @@ namespace RazzleServer.Login
 
             List<byte[]> entires = new List<byte[]>();
 
-            while (inPacket.Remaining > 0)
+            while (inPacket.Available > 0)
             {
                 entires.Add(inPacket.ReadBytes(inPacket.ReadByte()));
             }
 
-            this.CharacterEntriesPool.Enqueue(accountID, entires);
+            CharacterEntriesPool.Enqueue(accountID, entires);
         }
 
         public List<byte[]> GetCharacters(byte worldID, int accountID)
@@ -166,10 +166,10 @@ namespace RazzleServer.Login
                 outPacket.WriteByte(worldID);
                 outPacket.WriteInt(accountID);
 
-                this.Send(outPacket);
+                Send(outPacket);
             }
 
-            return this.CharacterEntriesPool.Dequeue(accountID);
+            return CharacterEntriesPool.Dequeue(accountID);
         }
 
         private PendingKeyedQueue<string, bool> NameCheckPool = new PendingKeyedQueue<string, bool>();
@@ -180,10 +180,10 @@ namespace RazzleServer.Login
             {
                 outPacket.WriteString(name);
 
-                this.Send(outPacket);
+                Send(outPacket);
             }
 
-            return this.NameCheckPool.Dequeue(name);
+            return NameCheckPool.Dequeue(name);
         }
 
         private PendingKeyedQueue<int, byte[]> CharacterCreationPool = new PendingKeyedQueue<int, byte[]>();
@@ -191,9 +191,9 @@ namespace RazzleServer.Login
         private void CreateCharacter(PacketReader inPacket)
         {
             int accountID = inPacket.ReadInt();
-            byte[] characterData = inPacket.ReadBytes(inPacket.Available);
+            byte[] characterData = inPacket.ReadBytes((int)inPacket.Available);
 
-            this.CharacterCreationPool.Enqueue(accountID, characterData);
+            CharacterCreationPool.Enqueue(accountID, characterData);
         }
 
         public byte[] CreateCharacter(byte worldID, int accountID, byte[] characterData)
@@ -204,29 +204,24 @@ namespace RazzleServer.Login
                 outPacket.WriteInt(accountID);
                 outPacket.WriteBytes(characterData);
 
-                this.Send(outPacket);
+                Send(outPacket);
             }
 
-            return this.CharacterCreationPool.Dequeue(accountID);
+            return CharacterCreationPool.Dequeue(accountID);
         }
-
-        private PendingKeyedQueue<string, bool> MigrationPool = new PendingKeyedQueue<string, bool>();
-
-
 
         public bool Migrate(string host, int accountID, int characterID)
         {
             using (var outPacket = new PacketWriter(InteroperabilityOperationCode.MigrationRegisterRequest))
             {
-                outPacket
-                    .WriteString(host)
-                    .WriteInt(accountID)
-                    .WriteInt(characterID);
+                outPacket.WriteString(host);
+                outPacket.WriteInt(accountID);
+                outPacket.WriteInt(characterID);
 
-                this.Send(outPacket);
+                Send(outPacket);
             }
 
-            return this.MigrationPool.Dequeue(host);
+            return MigrationPool.Dequeue(host);
         }
 
         private void Migrate(PacketReader inPacket)
@@ -234,7 +229,7 @@ namespace RazzleServer.Login
             string host = inPacket.ReadString();
             bool valid = inPacket.ReadBool();
 
-            this.MigrationPool.Enqueue(host, valid);
+            MigrationPool.Enqueue(host, valid);
         }
     }
 }

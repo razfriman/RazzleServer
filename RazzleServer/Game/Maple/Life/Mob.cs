@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
+using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Maps;
@@ -60,7 +61,7 @@ namespace RazzleServer.Game.Maple.Life
         {
             get
             {
-                return this.Stance % 2 == 0;
+                return Stance % 2 == 0;
             }
         }
 
@@ -78,122 +79,122 @@ namespace RazzleServer.Game.Maple.Life
         {
             get
             {
-                return DataProvider.Mobs[this.MapleID];
+                return DataProvider.Mobs[MapleID];
             }
         }
 
         public Mob(Datum datum)
             : base()
         {
-            this.MapleID = (int)datum["mobid"];
+            MapleID = (int)datum["mobid"];
 
-            this.Level = (short)datum["mob_level"];
-            this.Health = this.MaxHealth = (uint)datum["hp"];
-            this.Mana = this.MaxMana = (uint)datum["mp"];
-            this.HealthRecovery = (uint)datum["hp_recovery"];
-            this.ManaRecovery = (uint)datum["mp_recovery"];
-            this.ExplodeHealth = (int)datum["explode_hp"];
-            this.Experience = (uint)datum["experience"];
-            this.Link = (int)datum["link"];
-            this.SummonType = (short)datum["summon_type"];
-            this.KnockBack = (int)datum["knockback"];
-            this.FixedDamage = (int)datum["fixed_damage"];
-            this.DeathBuff = (int)datum["death_buff"];
-            this.DeathAfter = (int)datum["death_after"];
-            this.Traction = (double)datum["traction"];
-            this.DamagedBySkillOnly = (int)datum["damaged_by_skill_only"];
-            this.DamagedByMobOnly = (int)datum["damaged_by_mob_only"];
-            this.DropItemPeriod = (int)datum["drop_item_period"];
-            this.HpBarForeColor = (byte)(sbyte)datum["hp_bar_color"];
-            this.HpBarBackColor = (byte)(sbyte)datum["hp_bar_bg_color"];
-            this.CarnivalPoints = (byte)(sbyte)datum["carnival_points"];
-            this.WeaponAttack = (int)datum["physical_attack"];
-            this.WeaponDefense = (int)datum["physical_defense"];
-            this.MagicAttack = (int)datum["magical_attack"];
-            this.MagicDefense = (int)datum["magical_defense"];
-            this.Accuracy = (short)datum["accuracy"];
-            this.Avoidability = (short)datum["avoidability"];
-            this.Speed = (short)datum["speed"];
-            this.ChaseSpeed = (short)datum["chase_speed"];
+            Level = (short)datum["mob_level"];
+            Health = MaxHealth = (uint)datum["hp"];
+            Mana = MaxMana = (uint)datum["mp"];
+            HealthRecovery = (uint)datum["hp_recovery"];
+            ManaRecovery = (uint)datum["mp_recovery"];
+            ExplodeHealth = (int)datum["explode_hp"];
+            Experience = (uint)datum["experience"];
+            Link = (int)datum["link"];
+            SummonType = (short)datum["summon_type"];
+            KnockBack = (int)datum["knockback"];
+            FixedDamage = (int)datum["fixed_damage"];
+            DeathBuff = (int)datum["death_buff"];
+            DeathAfter = (int)datum["death_after"];
+            Traction = (double)datum["traction"];
+            DamagedBySkillOnly = (int)datum["damaged_by_skill_only"];
+            DamagedByMobOnly = (int)datum["damaged_by_mob_only"];
+            DropItemPeriod = (int)datum["drop_item_period"];
+            HpBarForeColor = (byte)(sbyte)datum["hp_bar_color"];
+            HpBarBackColor = (byte)(sbyte)datum["hp_bar_bg_color"];
+            CarnivalPoints = (byte)(sbyte)datum["carnival_points"];
+            WeaponAttack = (int)datum["physical_attack"];
+            WeaponDefense = (int)datum["physical_defense"];
+            MagicAttack = (int)datum["magical_attack"];
+            MagicDefense = (int)datum["magical_defense"];
+            Accuracy = (short)datum["accuracy"];
+            Avoidability = (short)datum["avoidability"];
+            Speed = (short)datum["speed"];
+            ChaseSpeed = (short)datum["chase_speed"];
 
-            this.Loots = new List<Loot>();
-            this.Skills = new MobSkills(this);
-            this.DeathSummons = new List<int>();
+            Loots = new List<Loot>();
+            Skills = new MobSkills(this);
+            DeathSummons = new List<int>();
         }
 
         public Mob(int mapleID)
         {
-            this.MapleID = mapleID;
+            MapleID = mapleID;
 
-            this.Level = this.CachedReference.Level;
-            this.Health = this.CachedReference.Health;
-            this.Mana = this.CachedReference.Mana;
-            this.MaxHealth = this.CachedReference.MaxHealth;
-            this.MaxMana = this.CachedReference.MaxMana;
-            this.HealthRecovery = this.CachedReference.HealthRecovery;
-            this.ManaRecovery = this.CachedReference.ManaRecovery;
-            this.ExplodeHealth = this.CachedReference.ExplodeHealth;
-            this.Experience = this.CachedReference.Experience;
-            this.Link = this.CachedReference.Link;
-            this.SummonType = this.CachedReference.SummonType;
-            this.KnockBack = this.CachedReference.KnockBack;
-            this.FixedDamage = this.CachedReference.FixedDamage;
-            this.DeathBuff = this.CachedReference.DeathBuff;
-            this.DeathAfter = this.CachedReference.DeathAfter;
-            this.Traction = this.CachedReference.Traction;
-            this.DamagedBySkillOnly = this.CachedReference.DamagedBySkillOnly;
-            this.DamagedByMobOnly = this.CachedReference.DamagedByMobOnly;
-            this.DropItemPeriod = this.CachedReference.DropItemPeriod;
-            this.HpBarForeColor = this.CachedReference.HpBarForeColor;
-            this.HpBarBackColor = this.CachedReference.HpBarBackColor;
-            this.CarnivalPoints = this.CachedReference.CarnivalPoints;
-            this.WeaponAttack = this.CachedReference.WeaponAttack;
-            this.WeaponDefense = this.CachedReference.WeaponDefense;
-            this.MagicAttack = this.CachedReference.MagicAttack;
-            this.MagicDefense = this.CachedReference.MagicDefense;
-            this.Accuracy = this.CachedReference.Accuracy;
-            this.Avoidability = this.CachedReference.Avoidability;
-            this.Speed = this.CachedReference.Speed;
-            this.ChaseSpeed = this.CachedReference.ChaseSpeed;
+            Level = CachedReference.Level;
+            Health = CachedReference.Health;
+            Mana = CachedReference.Mana;
+            MaxHealth = CachedReference.MaxHealth;
+            MaxMana = CachedReference.MaxMana;
+            HealthRecovery = CachedReference.HealthRecovery;
+            ManaRecovery = CachedReference.ManaRecovery;
+            ExplodeHealth = CachedReference.ExplodeHealth;
+            Experience = CachedReference.Experience;
+            Link = CachedReference.Link;
+            SummonType = CachedReference.SummonType;
+            KnockBack = CachedReference.KnockBack;
+            FixedDamage = CachedReference.FixedDamage;
+            DeathBuff = CachedReference.DeathBuff;
+            DeathAfter = CachedReference.DeathAfter;
+            Traction = CachedReference.Traction;
+            DamagedBySkillOnly = CachedReference.DamagedBySkillOnly;
+            DamagedByMobOnly = CachedReference.DamagedByMobOnly;
+            DropItemPeriod = CachedReference.DropItemPeriod;
+            HpBarForeColor = CachedReference.HpBarForeColor;
+            HpBarBackColor = CachedReference.HpBarBackColor;
+            CarnivalPoints = CachedReference.CarnivalPoints;
+            WeaponAttack = CachedReference.WeaponAttack;
+            WeaponDefense = CachedReference.WeaponDefense;
+            MagicAttack = CachedReference.MagicAttack;
+            MagicDefense = CachedReference.MagicDefense;
+            Accuracy = CachedReference.Accuracy;
+            Avoidability = CachedReference.Avoidability;
+            Speed = CachedReference.Speed;
+            ChaseSpeed = CachedReference.ChaseSpeed;
 
-            this.Loots = this.CachedReference.Loots;
-            this.Skills = this.CachedReference.Skills;
-            this.DeathSummons = this.CachedReference.DeathSummons;
+            Loots = CachedReference.Loots;
+            Skills = CachedReference.Skills;
+            DeathSummons = CachedReference.DeathSummons;
 
-            this.Attackers = new Dictionary<Character, uint>();
-            this.Cooldowns = new Dictionary<MobSkill, DateTime>();
-            this.Buffs = new List<MobStatus>();
-            this.Stance = 5;
-            this.CanDrop = true;
+            Attackers = new Dictionary<Character, uint>();
+            Cooldowns = new Dictionary<MobSkill, DateTime>();
+            Buffs = new List<MobStatus>();
+            Stance = 5;
+            CanDrop = true;
         }
 
         public Mob(SpawnPoint spawnPoint)
             : this(spawnPoint.MapleID)
         {
-            this.SpawnPoint = spawnPoint;
-            this.Foothold = this.SpawnPoint.Foothold;
-            this.Position = this.SpawnPoint.Position;
-            this.Position.Y -= 1; // TODO: Is this needed?
+            SpawnPoint = spawnPoint;
+            Foothold = SpawnPoint.Foothold;
+            Position = SpawnPoint.Position;
+            Position.Y -= 1; // TODO: Is this needed?
         }
 
         public Mob(int mapleID, Point position)
             : this(mapleID)
         {
-            this.Foothold = 0; // TODO.
-            this.Position = position;
-            this.Position.Y -= 5; // TODO: Is this needed?
+            Foothold = 0; // TODO.
+            Position = position;
+            Position.Y -= 5; // TODO: Is this needed?
         }
 
         public void AssignController()
         {
-            if (this.Controller == null)
+            if (Controller == null)
             {
                 int leastControlled = int.MaxValue;
                 Character newController = null;
 
-                lock (this.Map.Characters)
+                lock (Map.Characters)
                 {
-                    foreach (Character character in this.Map.Characters)
+                    foreach (Character character in Map.Characters)
                     {
                         if (character.ControlledMobs.Count < leastControlled)
                         {
@@ -205,7 +206,7 @@ namespace RazzleServer.Game.Maple.Life
 
                 if (newController != null)
                 {
-                    this.IsProvoked = false;
+                    IsProvoked = false;
 
                     newController.ControlledMobs.Add(this);
                 }
@@ -216,9 +217,9 @@ namespace RazzleServer.Game.Maple.Life
         {
             lock (this)
             {
-                if (this.Controller != newController)
+                if (Controller != newController)
                 {
-                    this.Controller.ControlledMobs.Remove(this);
+                    Controller.ControlledMobs.Remove(this);
 
                     newController.ControlledMobs.Add(this);
                 }
@@ -237,9 +238,9 @@ namespace RazzleServer.Game.Maple.Life
 
             Movements movements = Movements.Decode(iPacket);
 
-            this.Position = movements.Position;
-            this.Foothold = movements.Foothold;
-            this.Stance = movements.Stance;
+            Position = movements.Position;
+            Foothold = movements.Foothold;
+            Stance = movements.Stance;
 
             byte skillID = 0;
             byte skillLevel = 0;
@@ -247,9 +248,9 @@ namespace RazzleServer.Game.Maple.Life
 
             if (skill != null)
             {
-                if (this.Health * 100 / this.MaxHealth > skill.PercentageLimitHP ||
-                    (this.Cooldowns.ContainsKey(skill) && this.Cooldowns[skill].AddSeconds(skill.Cooldown) >= DateTime.Now) ||
-                    ((MobSkillName)skill.MapleID) == MobSkillName.Summon && this.Map.Mobs.Count >= 100)
+                if (Health * 100 / MaxHealth > skill.PercentageLimitHP ||
+                    (Cooldowns.ContainsKey(skill) && Cooldowns[skill].AddSeconds(skill.Cooldown) >= DateTime.Now) ||
+                    ((MobSkillName)skill.MapleID) == MobSkillName.Summon && Map.Mobs.Count >= 100)
                 {
                     skill = null;
                 }
@@ -263,27 +264,27 @@ namespace RazzleServer.Game.Maple.Life
             using (var oPacket = new PacketWriter(ServerOperationCode.MobCtrlAck))
             {
                 oPacket
-                    .WriteInt(this.ObjectID)
+                    .WriteInt(ObjectID)
                     .WriteShort(moveAction)
                     .WriteBool(cheatResult)
-                    .WriteShort((short)this.Mana)
+                    .WriteShort((short)Mana)
                     .WriteByte(skillID)
                     .WriteByte(skillLevel);
 
-                this.Controller.Client.Send(oPacket);
+                Controller.Client.Send(oPacket);
             }
 
             using (var oPacket = new PacketWriter(ServerOperationCode.MobMove))
             {
                 oPacket
-                    .WriteInt(this.ObjectID)
+                    .WriteInt(ObjectID)
                     .WriteBool(false)
                     .WriteBool(cheatResult)
                     .WriteByte(centerSplit)
                     .WriteInt(illegalVelocity)
                     .WriteBytes(movements.ToByteArray());
 
-                this.Map.Broadcast(oPacket, this.Controller);
+                Map.Broadcast(oPacket, Controller);
             }
         }
 
@@ -291,60 +292,56 @@ namespace RazzleServer.Game.Maple.Life
         {
             using (var oPacket = new PacketWriter(ServerOperationCode.MobStatSet))
             {
-                oPacket
-                    .WriteInt(this.ObjectID)
-                    .WriteLong()
-                    .WriteInt()
-                    .WriteInt((int)buff)
-                    .WriteShort(value)
-                    .WriteShort(skill.MapleID)
-                    .WriteShort(skill.Level)
-                    .WriteShort(-1)
-                    .WriteShort(0) // Delay
-                    .WriteInt();
+                oPacket.WriteInt(ObjectID);
+                oPacket.WriteLong(0);
+                oPacket.WriteInt(0);
+                oPacket.WriteInt((int)buff);
+                oPacket.WriteShort(value);
+                oPacket.WriteShort(skill.MapleID);
+                oPacket.WriteShort(skill.Level);
+                oPacket.WriteShort(-1);
+                oPacket.WriteShort(0);// Delay
+                oPacket.WriteInt(0);
 
-                this.Map.Broadcast(oPacket);
+                Map.Broadcast(oPacket);
             }
 
             Delay.Execute(() =>
             {
-                using (PacketReader Packet = new PacketWriter(ServerOperationCode.MobStatReset))
+                using (var packet = new PacketWriter(ServerOperationCode.MobStatReset))
                 {
-                    Packet
-                        .WriteInt(this.ObjectID)
-                        .WriteLong()
-                        .WriteInt()
-                        .WriteInt((int)buff)
-                        .WriteInt();
+                    packet.WriteInt(ObjectID);
+                    packet.WriteLong(0);
+                    packet.WriteInt(0);
+                    packet.WriteInt((int)buff);
+                    packet.WriteInt(0);
 
-                    this.Map.Broadcast(Packet);
+                    Map.Broadcast(packet);
                 }
 
-                this.Buffs.Remove(buff);
+                Buffs.Remove(buff);
             }, skill.Duration * 1000);
         }
 
         public void Heal(uint hp, int range)
         {
-            this.Health = Math.Min(this.MaxHealth, (uint)(this.Health + hp + Application.Random.Next(-range / 2, range / 2)));
+            Health = Math.Min(MaxHealth, (uint)(Health + hp + Functions.Random(-range / 2, range / 2)));
 
-            using (PacketReader Packet = new PacketWriter(ServerOperationCode.MobDamaged))
+            using (var packet = new PacketWriter(ServerOperationCode.MobDamaged))
             {
-                Packet
-                    .WriteInt(this.ObjectID)
-                    .WriteByte()
-                    .WriteInt((int)-hp)
-                    .WriteByte()
-                    .WriteByte()
-                    .WriteByte();
-
-                this.Map.Broadcast(Packet);
+                packet.WriteInt(ObjectID);
+                packet.WriteByte(0);
+                packet.WriteInt((int)-hp);
+                packet.WriteByte(0);
+                packet.WriteByte(0);
+                packet.WriteByte(0);
+                Map.Broadcast(packet);
             }
         }
 
         public void Die()
         {
-            if (!this.Map.Mobs.Remove(this))
+            if (!Map.Mobs.Remove(this))
             {
 
             }
@@ -356,29 +353,28 @@ namespace RazzleServer.Game.Maple.Life
             {
                 uint originalAmount = amount;
 
-                amount = Math.Min(amount, this.Health);
+                amount = Math.Min(amount, Health);
 
-                if (this.Attackers.ContainsKey(attacker))
+                if (Attackers.ContainsKey(attacker))
                 {
-                    this.Attackers[attacker] += amount;
+                    Attackers[attacker] += amount;
                 }
                 else
                 {
-                    this.Attackers.Add(attacker, amount);
+                    Attackers.Add(attacker, amount);
                 }
 
-                this.Health -= amount;
+                Health -= amount;
 
                 using (var oPacket = new PacketWriter(ServerOperationCode.MobHPIndicator))
                 {
-                    oPacket
-                        .WriteInt(this.ObjectID)
-                        .WriteByte((byte)((this.Health * 100) / this.MaxHealth));
+                    oPacket.WriteInt(ObjectID);
+                    oPacket.WriteByte((byte)((Health * 100) / MaxHealth));
 
                     attacker.Client.Send(oPacket);
                 }
 
-                if (this.Health <= 0)
+                if (Health <= 0)
                 {
                     return true;
                 }
@@ -389,17 +385,17 @@ namespace RazzleServer.Game.Maple.Life
 
         public PacketWriter GetCreatePacket()
         {
-            return this.GetInternalPacket(false, true);
+            return GetInternalPacket(false, true);
         }
 
         public PacketWriter GetSpawnPacket()
         {
-            return this.GetInternalPacket(false, false);
+            return GetInternalPacket(false, false);
         }
 
         public PacketWriter GetControlRequestPacket()
         {
-            return this.GetInternalPacket(true, false);
+            return GetInternalPacket(true, false);
         }
 
         private PacketWriter GetInternalPacket(bool requestControl, bool newSpawn)
@@ -408,28 +404,28 @@ namespace RazzleServer.Game.Maple.Life
 
             if (requestControl)
             {
-                oPacket.WriteByte((byte)(this.IsProvoked ? 2 : 1));
+                oPacket.WriteByte((byte)(IsProvoked ? 2 : 1));
             }
 
-            oPacket.WriteInt(this.ObjectID);
-            oPacket.WriteByte((byte)(this.Controller == null ? 5 : 1));
-            oPacket.WriteInt(this.MapleID);
+            oPacket.WriteInt(ObjectID);
+            oPacket.WriteByte((byte)(Controller == null ? 5 : 1));
+            oPacket.WriteInt(MapleID);
             oPacket.WriteZeroBytes(15); // NOTE: Unknown.
             oPacket.WriteByte(0x88); // NOTE: Unknown.
             oPacket.WriteZeroBytes(6); // NOTE: Unknown.
-            oPacket.WriteShort(this.Position.X);
-            oPacket.WriteShort(this.Position.Y);
-            oPacket.WriteByte((byte)(0x02 | (this.IsFacingLeft ? 0x01 : 0x00)));
-            oPacket.WriteShort(this.Foothold);
-            oPacket.WriteShort(this.Foothold);
+            oPacket.WriteShort(Position.X);
+            oPacket.WriteShort(Position.Y);
+            oPacket.WriteByte((byte)(0x02 | (IsFacingLeft ? 0x01 : 0x00)));
+            oPacket.WriteShort(Foothold);
+            oPacket.WriteShort(Foothold);
 
-            if (this.SpawnEffect > 0)
+            if (SpawnEffect > 0)
             {
-                oPacket.WriteByte((byte)this.SpawnEffect);
+                oPacket.WriteByte((byte)SpawnEffect);
                 oPacket.WriteByte(0);
                 oPacket.WriteShort(0);
 
-                if (this.SpawnEffect == 15)
+                if (SpawnEffect == 15)
                 {
                     oPacket.WriteByte(0);
                 }
@@ -448,7 +444,7 @@ namespace RazzleServer.Game.Maple.Life
             var oPacket = new PacketWriter(ServerOperationCode.MobChangeController);
 
             oPacket.WriteBool(false);
-            oPacket.WriteInt(this.ObjectID);
+            oPacket.WriteInt(ObjectID);
 
             return oPacket;
         }
@@ -457,7 +453,7 @@ namespace RazzleServer.Game.Maple.Life
         {
             var oPacket = new PacketWriter(ServerOperationCode.MobLeaveField);
 
-            oPacket.WriteInt(this.ObjectID);
+            oPacket.WriteInt(ObjectID);
             oPacket.WriteByte(1);
             oPacket.WriteByte(1); // TODO: Death effects.
 

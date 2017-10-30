@@ -1,12 +1,7 @@
-﻿using System;
-namespace RazzleServer.Center.Handlers
+﻿namespace RazzleServer.Center.Handlers
 {
     public class CharacterNameCheckRequestHandler
     {
-        public CharacterNameCheckRequestHandler()
-        {
-        }
-
         //private void CharacterNameCheckRequest(PacketReader inPacket)
         //{
         //    string name = inPacket.ReadString();

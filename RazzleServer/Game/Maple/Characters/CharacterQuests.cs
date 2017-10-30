@@ -207,7 +207,7 @@ namespace RazzleServer.Game.Maple.Characters
 
             this.Parent.Experience += quest.ExperienceReward[0];
             this.Parent.Fame += (short)quest.FameReward[0];
-            this.Parent.Meso += quest.MesoReward[0] * WvsGame.MesoRate;
+            this.Parent.Meso += quest.MesoReward[0] * Parent.Client.Server.MesoRate;
 
             // TODO: Skill and pet rewards.
 
@@ -270,7 +270,7 @@ namespace RazzleServer.Game.Maple.Characters
 
             // TODO: Fame gain packet in chat.
 
-            this.Parent.Meso += quest.MesoReward[1] * WvsGame.MesoRate;
+            this.Parent.Meso += quest.MesoReward[1] * Parent.Client.Server.MesoRate;
 
             // TODO: Meso gain packet in chat.
 
