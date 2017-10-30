@@ -9,6 +9,7 @@ using RazzleServer.Game.Maple.Data;
 using RazzleServer.Common.Util;
 using System.Linq;
 using System.Net;
+using Microsoft.Extensions.Logging;
 
 namespace RazzleServer.Game
 {
@@ -81,7 +82,7 @@ namespace RazzleServer.Game
                         Server.Listen();
                         Server.AllowMultiLeveling = inPacket.ReadBool();
 
-                        Log.Inform("Characters will {0}be able to continuously level-up.", Server.AllowMultiLeveling ? "" : "not ");
+                        Log.LogInformation("Characters will {0}be able to continuously level-up.", Server.AllowMultiLeveling ? "" : "not ");
 
                         Server.ExperienceRate = inPacket.ReadInt();
                         Server.QuestExperienceRate = inPacket.ReadInt();

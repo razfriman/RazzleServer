@@ -140,17 +140,15 @@ namespace RazzleServer.Game.Maple
 
                             foreach (KeyValuePair<SecondaryBuffStat, short> secondaryStatup in this.SecondaryStatups)
                             {
-                                oPacket
-                                    .WriteShort(secondaryStatup.Value)
-                                    .WriteInt(this.MapleID)
-                                    .WriteInt((int)(this.End - DateTime.Now).TotalMilliseconds);
+                                oPacket.WriteShort(secondaryStatup.Value);
+                                oPacket.WriteInt(this.MapleID);
+                                oPacket.WriteInt((int)(this.End - DateTime.Now).TotalMilliseconds);
                             }
 
-                            oPacket
-                                .WriteShort()
-                                .WriteShort()
-                                .WriteByte()
-                                .WriteInt();
+                            oPacket.WriteShort(0);
+                            oPacket.WriteShort(0);
+                            oPacket.WriteByte(0);
+                            oPacket.WriteInt(0);
 
                             this.Character.Client.Send(oPacket);
                         }
@@ -172,9 +170,8 @@ namespace RazzleServer.Game.Maple
                                 oPacket.WriteShort(secondaryStatup.Value);
                             }
 
-                            oPacket
-                                .WriteInt()
-                                .WriteShort();
+                            oPacket.WriteInt(0);
+                            oPacket.WriteShort(0);
 
                             this.Character.Map.Broadcast(oPacket);
                         }

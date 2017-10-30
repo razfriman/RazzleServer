@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using RazzleServer.Game.Maple.Characters;
 
 namespace RazzleServer.Game.Maple.Maps
 {

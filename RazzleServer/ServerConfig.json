@@ -16,7 +16,7 @@
       "ID": 1,
       "Port": 8585,
       "ShopPort": 9090,
-      "ChannelCount": 3,
+      "Channels": 3,
       "Flag": "",
       "EventMessage": "",
       "TickerMessage": "",

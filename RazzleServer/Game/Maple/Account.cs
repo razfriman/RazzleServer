@@ -26,15 +26,7 @@ namespace RazzleServer.Game.Maple
         public void Load(int accountID)
         {
             Datum datum = new Datum("accounts");
-
-            try
-            {
-                datum.Populate("ID = {0}", accountID);
-            }
-            catch (RowNotInTableException)
-            {
-                throw new NoAccountException();
-            }
+            datum.Populate("ID = {0}", accountID);
 
             this.ID = (int)datum["ID"];
             this.Assigned = true;

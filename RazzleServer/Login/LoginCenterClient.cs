@@ -5,26 +5,37 @@ using RazzleServer.Common.Network;
 using RazzleServer.Login.Maple;
 using RazzleServer.Common.Util;
 using System.Net.Sockets;
+using Microsoft.Extensions.Logging;
+using System.Net;
+using RazzleServer.Server;
 
 namespace RazzleServer.Login
 {
     public class LoginCenterClient : AClient
     {
+
+        public LoginServer Server { get; set; }
+
+        public LoginCenterClient(LoginServer server, Socket session) : base(session)
+        {
+            Server = server;
+        }
+
         public void Initialize(params object[] args)
         {
             using (var Packet = new PacketWriter(InteroperabilityOperationCode.RegistrationRequest))
             {
                 Packet.WriteByte((byte)ServerType.Login);
                 Packet.WriteString((string)args[0]);
-                Packet.WriteByte((byte)WvsLogin.Worlds.Count);
+                Packet.WriteByte((byte)Server.Worlds.Count);
 
-                foreach (World loopWorld in WvsLogin.Worlds)
+                foreach (World loopWorld in Server.Worlds)
                 {
                     Packet.WriteByte(loopWorld.ID);
                     Packet.WriteString(loopWorld.Name);
                     Packet.WriteUShort(loopWorld.Port);
                     Packet.WriteUShort(loopWorld.ShopPort);
-                    Packet.WriteByte(loopWorld.Channels);
+                    Packet.WriteByte(loopWorld.Count);
                     Packet.WriteString(loopWorld.TickerMessage);
                     Packet.WriteBool(loopWorld.AllowMultiLeveling);
                     Packet.WriteInt(loopWorld.ExperienceRate);
@@ -81,17 +92,16 @@ namespace RazzleServer.Login
             {
                 case ServerRegistrationResponse.Valid:
                     {
-                        WvsLogin.Listen();
-                        WvsLogin.CenterConnectionDone.Set();
-
-                        Log.Success("Registered Login Server.");
+                        byte[] loginIp = { 0, 0, 0, 0 };
+                        Server.Start(new IPAddress(loginIp), ServerConfig.Instance.LoginPort);
+                        Log.LogInformation("Registered Login Server.");
                     }
                     break;
 
                 default:
                     {
-                        Log.Error(ServerRegistrationResponseResolver.Explain(response));
-                        WvsLogin.Stop();
+                        Log.LogError(response);
+                        Server.ShutDown();
                     }
                     break;
             }
@@ -202,9 +212,7 @@ namespace RazzleServer.Login
 
         private PendingKeyedQueue<string, bool> MigrationPool = new PendingKeyedQueue<string, bool>();
 
-        public LoginCenterClient(Socket session) : base(session)
-        {
-        }
+
 
         public bool Migrate(string host, int accountID, int characterID)
         {

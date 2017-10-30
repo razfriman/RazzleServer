@@ -1,4 +1,5 @@
-﻿using RazzleServer.Game.Maple.Characters;
+﻿using RazzleServer.Common.Util;
+using RazzleServer.Game.Maple.Characters;
 
 namespace RazzleServer.Game.Maple.Maps
 {

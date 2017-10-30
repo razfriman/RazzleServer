@@ -129,7 +129,7 @@ namespace RazzleServer.Game.Maple.Shops
 
                         using (var oPacket = new PacketWriter(ServerOperationCode.ConfirmShopTransaction))
                         {
-                            oPacket.WriteByte();
+                            oPacket.WriteByte(0);
 
                             customer.Client.Send(oPacket);
                         }

@@ -16,7 +16,7 @@ namespace RazzleServer.Common.Network
         public DateTime LastPong { get; set; }
         public string Key { get; set; }
 
-        private static ILogger Log = LogManager.Log;
+        protected static ILogger Log = LogManager.Log;
 
         public AClient(Socket session)
         {

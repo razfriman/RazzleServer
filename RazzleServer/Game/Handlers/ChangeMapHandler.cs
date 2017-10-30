@@ -9,9 +9,9 @@ namespace RazzleServer.Game.Handlers
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
             Character chr = client.Character;
-            if (chr.HP <= 0)
+            if (chr.Health <= 0)
             {
-                chr.re(true);
+                chr.Revive();
                 return;
             }
 
@@ -27,14 +27,14 @@ namespace RazzleServer.Game.Handlers
             int targetMap = packet.ReadInt();
             string portalName = packet.ReadString();
 
-            if (client.Account.Character.Map != null)
+            if (client.Character.Map != null)
             {
                 if (targetMap == -1)
                 {
-                    client.Account.Character.Map.EnterPortal(client, portalName);
+                    client.Character.EnterPortal(portalName);
                 } else
                 {
-                    client.Account.Character.ChangeMap(targetMap, portalName);
+                    client.Character.ChangeMap(targetMap, portalName);
                 }
             }
         }

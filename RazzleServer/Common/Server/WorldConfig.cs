@@ -9,7 +9,7 @@ namespace RazzleServer.Common.Server
         public string Name { get; private set; }
         public ushort Port { get; private set; }
         public ushort ShopPort { get; private set; }
-        public byte ChannelCount { get; private set; }
+        public byte Channels { get; private set; }
         public WorldStatusFlag Flag { get; private set; }
         public string EventMessage { get; private set; }
         public string TickerMessage { get; private set; }

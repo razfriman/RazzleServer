@@ -8,6 +8,7 @@ using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Interaction;
 using RazzleServer.Game.Maple.Life;
 using RazzleServer.Game.Maple.Maps;
+using RazzleServer.Game.Maple.Scripting;
 using RazzleServer.Server;
 
 namespace RazzleServer.Game.Maple.Characters
@@ -1266,13 +1267,12 @@ namespace RazzleServer.Game.Maple.Characters
                     oPacket.WriteInt(attack.SkillID);
                 }
 
-                oPacket
-                    .WriteByte() // NOTE: Unknown.
-                    .WriteByte(attack.Display)
-                    .WriteByte(attack.Animation)
-                    .WriteByte(attack.WeaponSpeed)
-                    .WriteByte() // NOTE: Skill mastery.
-                    .WriteInt(); // NOTE: Unknown.
+                oPacket.WriteByte(0); // NOTE: Unknown.
+                oPacket.WriteByte(attack.Display);
+                oPacket.WriteByte(attack.Animation);
+                oPacket.WriteByte(attack.WeaponSpeed);
+                oPacket.WriteByte(0); // NOTE: Skill mastery.
+                oPacket.WriteInt(0); // NOTE: Unknown.
 
                 foreach (var target in attack.Damages)
                 {
@@ -2468,7 +2468,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
             else
             {
-                oPacket.WriteByte();
+                oPacket.WriteByte(0);
             }
 
             bool hasChalkboard = !string.IsNullOrEmpty(Chalkboard);
@@ -2480,12 +2480,12 @@ namespace RazzleServer.Game.Maple.Characters
                 oPacket.WriteString(Chalkboard);
             }
 
-            oPacket
-                .WriteByte() // NOTE: Couple ring.
-                .WriteByte() // NOTE: Friendship ring.
-                .WriteByte() // NOTE: Marriage ring.
-                .Skip(3) // NOTE: Unknown.
-                .WriteByte(byte.MaxValue); // NOTE: Team.
+
+            oPacket.WriteByte(0); // NOTE: Couple ring.
+            oPacket.WriteByte(0); // NOTE: Friendship ring.
+            oPacket.WriteByte(0); // NOTE: Marriage ring.
+            oPacket.WriteZeroBytes(3); // NOTE: Unknown.
+            oPacket.WriteByte(byte.MaxValue); // NOTE: Team.
 
             return oPacket;
         }

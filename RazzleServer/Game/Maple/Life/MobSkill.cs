@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Data;
+using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple.Characters;
 
 namespace RazzleServer.Game.Maple.Life
@@ -29,25 +30,25 @@ namespace RazzleServer.Game.Maple.Life
 
         public MobSkill(Datum datum)
         {
-            this.MapleID = (byte)(int)datum["skillid"];
-            this.Level = (byte)(short)datum["skill_level"];
-            this.EffectDelay = (short)(short)datum["effect_delay"];
+            MapleID = (byte)(int)datum["skillid"];
+            Level = (byte)(short)datum["skill_level"];
+            EffectDelay = (short)(short)datum["effect_delay"];
         }
 
         public void Load(Datum datum)
         {
-            this.Duration = (short)datum["buff_time"];
-            this.MpCost = (short)datum["mp_cost"];
-            this.ParameterA = (int)datum["x_property"];
-            this.ParameterB = (int)datum["y_property"];
-            this.Chance = (short)datum["chance"];
-            this.TargetCount = (short)datum["target_count"];
-            this.Cooldown = (int)datum["cooldown"];
-            this.LT = new Point((short)datum["ltx"], (short)datum["lty"]);
-            this.RB = new Point((short)datum["rbx"], (short)datum["rby"]);
-            this.PercentageLimitHP = (short)datum["hp_limit_percentage"];
-            this.SummonLimit = (short)datum["summon_limit"];
-            this.SummonEffect = (short)datum["summon_effect"];
+            Duration = (short)datum["buff_time"];
+            MpCost = (short)datum["mp_cost"];
+            ParameterA = (int)datum["x_property"];
+            ParameterB = (int)datum["y_property"];
+            Chance = (short)datum["chance"];
+            TargetCount = (short)datum["target_count"];
+            Cooldown = (int)datum["cooldown"];
+            LT = new Point((short)datum["ltx"], (short)datum["lty"]);
+            RB = new Point((short)datum["rbx"], (short)datum["rby"]);
+            PercentageLimitHP = (short)datum["hp_limit_percentage"];
+            SummonLimit = (short)datum["summon_limit"];
+            SummonEffect = (short)datum["summon_effect"];
         }
 
         public void Cast(Mob caster)
@@ -58,7 +59,7 @@ namespace RazzleServer.Game.Maple.Life
             bool banish = false;
             bool dispel = false;
 
-            switch ((MobSkillName)this.MapleID)
+            switch ((MobSkillName)MapleID)
             {
                 case MobSkillName.WeaponAttackUp:
                 case MobSkillName.WeaponAttackUpAreaOfEffect:
@@ -162,12 +163,12 @@ namespace RazzleServer.Game.Maple.Life
 
                 case MobSkillName.Summon:
 
-                    foreach (int mobId in MobSkill.Summons[this.Level])
+                    foreach (int mobId in MobSkill.Summons[Level])
                     {
                         Mob summon = new Mob(mobId)
                         {
                             Position = caster.Position,
-                            SpawnEffect = this.SummonEffect
+                            SpawnEffect = SummonEffect
                         };
 
                         caster.Map.Mobs.Add(summon);
@@ -175,20 +176,20 @@ namespace RazzleServer.Game.Maple.Life
                     break;
             }
 
-            foreach (Mob affectedMob in this.GetAffectedMobs(caster))
+            foreach (Mob affectedMob in GetAffectedMobs(caster))
             {
                 if (heal)
                 {
-                    affectedMob.Heal((uint)this.ParameterA, this.ParameterB);
+                    affectedMob.Heal((uint)ParameterA, ParameterB);
                 }
 
                 if (status != MobStatus.None && !affectedMob.Buffs.Contains(status))
                 {
-                    affectedMob.Buff(status, (short)this.ParameterA, this);
+                    affectedMob.Buff(status, (short)ParameterA, this);
                 }
             }
 
-            foreach (Character affectedCharacter in this.GetAffectedCharacters(caster))
+            foreach (Character affectedCharacter in GetAffectedCharacters(caster))
             {
                 if (dispel)
                 {
@@ -204,20 +205,17 @@ namespace RazzleServer.Game.Maple.Life
                 {
                     using (var oPacket = new PacketWriter(ServerOperationCode.TemporaryStatSet))
                     {
-                        oPacket
-                            .WriteLong()
-                            .WriteLong((long)disease);
+                        oPacket.WriteLong(0);
+                        oPacket.WriteLong(disease);
 
-                        oPacket
-                            .WriteShort((short)this.ParameterA)
-                            .WriteShort(this.MapleID)
-                            .WriteShort(this.Level)
-                            .WriteInt(this.Duration);
+                        oPacket.WriteShort((short)ParameterA);
+                        oPacket.WriteShort(MapleID);
+                        oPacket.WriteShort(Level);
+                        oPacket.WriteInt(Duration);
 
-                        oPacket
-                            .WriteShort()
-                            .WriteShort(900)
-                            .WriteByte(1);
+                        oPacket.WriteShort(0);
+                        oPacket.WriteShort(900);
+                        oPacket.WriteByte(1);
 
                         affectedCharacter.Client.Send(oPacket);
                     }
@@ -226,7 +224,7 @@ namespace RazzleServer.Game.Maple.Life
                 }
             }
 
-            caster.Mana -= (uint)this.MpCost;
+            caster.Mana -= (uint)MpCost;
 
             if (caster.Cooldowns.ContainsKey(this))
             {
@@ -240,7 +238,7 @@ namespace RazzleServer.Game.Maple.Life
 
         private IEnumerable<Character> GetAffectedCharacters(Mob caster)
         {
-            Rectangle Rectangle = new Rectangle(this.LT + caster.Position, this.RB + caster.Position);
+            Rectangle Rectangle = new Rectangle(LT + caster.Position, RB + caster.Position);
 
             foreach (Character character in caster.Map.Characters)
             {
@@ -253,7 +251,7 @@ namespace RazzleServer.Game.Maple.Life
 
         private IEnumerable<Mob> GetAffectedMobs(Mob caster)
         {
-            Rectangle Rectangle = new Rectangle(this.LT + caster.Position, this.RB + caster.Position);
+            Rectangle Rectangle = new Rectangle(LT + caster.Position, RB + caster.Position);
 
             foreach (Mob mob in caster.Map.Mobs)
             {

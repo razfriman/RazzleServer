@@ -96,9 +96,8 @@ namespace RazzleServer.Game.Maple.Characters
                     oPacket.WriteBytes(item.ToByteArray(true, true));
                 }
 
-                oPacket
-                    .WriteShort()
-                    .WriteByte();
+                oPacket.WriteShort(0);
+                oPacket.WriteByte(0);
 
                 this.Parent.Client.Send(oPacket);
             }

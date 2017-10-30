@@ -1,4 +1,5 @@
 ﻿using RazzleServer.Common.Packet;
+using RazzleServer.Game.Maple.Characters;
 
 namespace RazzleServer.Login.Handlers
 {
@@ -11,7 +12,10 @@ namespace RazzleServer.Login.Handlers
 
             var pw = new PacketWriter(ServerOperationCode.CHAR_NAME_RESPONSE);
             pw.WriteMapleString(name);
-            pw.WriteBool(Character.CharacterExists(name));
+
+            pw.WriteBool(false); // TODO - Check database
+            //pw.WriteBool(Character.CharacterExists(name));
+
             client.Send(pw);
         }
     }

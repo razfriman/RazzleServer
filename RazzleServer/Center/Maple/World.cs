@@ -13,7 +13,7 @@ namespace RazzleServer.Center.Maple
         public ushort ShopPort { get; private set; }
         public byte Channels { get; private set; }
         public string TickerMessage { get; private set; }
-        public bool AllowMultiLeveling { get; private set; }
+        public bool EnableMultiLeveling { get; private set; }
         public int ExperienceRate { get; private set; }
         public int QuestExperienceRate { get; private set; }
         public int PartyQuestExperienceRate { get; private set; }
@@ -50,7 +50,7 @@ namespace RazzleServer.Center.Maple
             ShopPort = inPacket.ReadUShort();
             Channels = inPacket.ReadByte();
             TickerMessage = inPacket.ReadString();
-            AllowMultiLeveling = inPacket.ReadBool();
+            EnableMultiLeveling = inPacket.ReadBool();
             ExperienceRate = inPacket.ReadInt();
             QuestExperienceRate = inPacket.ReadInt();
             PartyQuestExperienceRate = inPacket.ReadInt();

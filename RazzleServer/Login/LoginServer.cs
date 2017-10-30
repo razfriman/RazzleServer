@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Net;
 using RazzleServer.Login.Maple;
 using RazzleServer.Server;
@@ -11,9 +12,9 @@ namespace RazzleServer.Login
 
         public LoginServer()
         {
-            for (byte i = 0; i < ServerConfig.Instance.Worlds; i++)
+            for (byte i = 0; i < ServerConfig.Instance.Worlds.Count(); i++)
             {
-                Worlds.Add(new World(i));
+                Worlds.Add(new World(ServerConfig.Instance.Worlds[i]));
             }
 
             // start center server connection
