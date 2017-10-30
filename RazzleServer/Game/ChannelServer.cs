@@ -3,14 +3,15 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using Microsoft.Extensions.Logging;
+using RazzleServer.Game.Maple.Data;
 using RazzleServer.Server;
 using RazzleServer.Util;
 
 namespace RazzleServer.Game
 {
-    public class WvsGame : MapleServer<GameClient>
+    public class ChannelServer : MapleServer<GameClient>
     {
-        public CenterServer CenterConnection { get; set; }
+        public GameCenterClient CenterConnection { get; set; }
 
         public byte ChannelID { get; set; }
         public byte WorldID { get; set; }
@@ -24,13 +25,12 @@ namespace RazzleServer.Game
 
         private static readonly ILogger Log = LogManager.Log;
 
-        public WvsGame(ushort port)
+        public ChannelServer(ushort port)
         {
             DataProvider.Initialize();
 
-            new Thread(new ThreadStart(CenterServer.Main)).Start();
-
-            WvsGame.CenterConnectionDone.WaitOne();
+            //new Thread(new ThreadStart(CenterServer.Main)).Start();
+            //CenterConnectionDone.WaitOne();
 
             byte[] channelIp = { 0, 0, 0, 0 };
             Start(new IPAddress(channelIp), port);

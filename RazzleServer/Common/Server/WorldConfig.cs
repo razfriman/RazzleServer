@@ -1,13 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using Newtonsoft.Json;
+﻿using System;
 using RazzleServer.Common.Constants;
-using RazzleServer.Util;
 
-namespace RazzleServer.Login.Maple
+namespace RazzleServer.Common.Server
 {
-    public sealed class World : KeyedCollection<byte, Channel>
+    public class WorldConfig
     {
         public byte ID { get; private set; }
         public string Name { get; private set; }
@@ -26,19 +22,5 @@ namespace RazzleServer.Login.Maple
         public int PartyQuestExperienceRate { get; set; }
         public int MesoRate { get; set; }
         public int DropRate { get; set; }
-
-        [JsonIgnore]
-        public Dictionary<byte, Channel> Channels { get; set; }
-
-        [JsonIgnore]
-        public WorldStatus Status => WorldStatus.Normal;
-
-        [JsonIgnore]
-        public int Population => this.Sum(x => x.Population);
-
-        [JsonIgnore]
-        public Channel RandomChannel => this[Functions.Random(Count)];
-
-        protected override byte GetKeyForItem(Channel item) => item.ID;
     }
 }

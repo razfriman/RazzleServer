@@ -124,7 +124,7 @@ namespace RazzleServer.Game.Maple
             {
                 default:
                     {
-                        using (PacketReader oPacket = new PacketWriter(ServerOperationCode.TemporaryStatSet))
+                        using (var oPacket = new PacketWriter(ServerOperationCode.TemporaryStatSet))
                         {
                             oPacket
                                 .WriteLong(this.PrimaryBuffMask)
@@ -155,7 +155,7 @@ namespace RazzleServer.Game.Maple
                             this.Character.Client.Send(oPacket);
                         }
 
-                        using (PacketReader oPacket = new PacketWriter(ServerOperationCode.SetTemporaryStat))
+                        using (var oPacket = new PacketWriter(ServerOperationCode.SetTemporaryStat))
                         {
                             oPacket
                                 .WriteInt(this.Character.ID)
@@ -185,7 +185,7 @@ namespace RazzleServer.Game.Maple
 
         public void Cancel()
         {
-            using (PacketReader oPacket = new PacketWriter(ServerOperationCode.TemporaryStatReset))
+            using (var oPacket = new PacketWriter(ServerOperationCode.TemporaryStatReset))
             {
                 oPacket
                     .WriteLong(this.PrimaryBuffMask)
@@ -195,7 +195,7 @@ namespace RazzleServer.Game.Maple
                 this.Character.Client.Send(oPacket);
             }
 
-            using (PacketReader oPacket = new PacketWriter(ServerOperationCode.ResetTemporaryStat))
+            using (var oPacket = new PacketWriter(ServerOperationCode.ResetTemporaryStat))
             {
                 oPacket
                     .WriteInt(this.Character.ID)

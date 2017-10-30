@@ -1,5 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using RazzleServer.Common.Constants;
+using RazzleServer.Common.Packet;
+using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Game.Maple.Data;
+using RazzleServer.Game.Maple.Life;
 
 namespace RazzleServer.Game.Maple.Maps
 {
@@ -13,11 +18,7 @@ namespace RazzleServer.Game.Maple.Maps
 
             if (DataProvider.IsInitialized)
             {
-                using (PacketReader oPacket = item.GetCreatePacket())
-                {
-                    this.Map.Broadcast(oPacket);
-                }
-
+                this.Map.Broadcast(item.GetCreatePacket());
                 item.AssignController();
             }
         }
@@ -89,7 +90,7 @@ namespace RazzleServer.Game.Maple.Maps
                         {
                             loopStarted.Value[item.MapleID]++;
 
-                            using (PacketReader oPacket = new Packet(ServerOperationCode.Message))
+                            using (var oPacket = new PacketWriter(ServerOperationCode.Message))
                             {
                                 oPacket
                                     .WriteByte((byte)MessageType.QuestRecord)
@@ -123,11 +124,7 @@ namespace RazzleServer.Game.Maple.Maps
             if (DataProvider.IsInitialized)
             {
                 item.Controller.ControlledMobs.Remove(item);
-
-                using (PacketReader oPacket = item.GetDestroyPacket())
-                {
-                    this.Map.Broadcast(oPacket);
-                }
+                this.Map.Broadcast(item.GetDestroyPacket());
             }
 
             base.RemoveItem(index);

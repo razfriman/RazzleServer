@@ -64,7 +64,7 @@ namespace RazzleServer.Game.Maple.Shops
 
         public void Show(Character customer)
         {
-            using (PacketReader oPacket = new Packet(ServerOperationCode.OpenNpcShop))
+            using (var oPacket = new PacketWriter(ServerOperationCode.OpenNpcShop))
             {
                 oPacket
                     .WriteInt(this.ID)
@@ -127,7 +127,7 @@ namespace RazzleServer.Game.Maple.Shops
                             customer.Items.Add(purchase);
                         }
 
-                        using (PacketReader oPacket = new Packet(ServerOperationCode.ConfirmShopTransaction))
+                        using (var oPacket = new PacketWriter(ServerOperationCode.ConfirmShopTransaction))
                         {
                             oPacket.WriteByte();
 
@@ -172,7 +172,7 @@ namespace RazzleServer.Game.Maple.Shops
                             customer.Meso += item.SalePrice * quantity;
                         }
 
-                        using (PacketReader oPacket = new Packet(ServerOperationCode.ConfirmShopTransaction))
+                        using (var oPacket = new PacketWriter(ServerOperationCode.ConfirmShopTransaction))
                         {
                             oPacket.WriteByte(8);
 
@@ -201,7 +201,7 @@ namespace RazzleServer.Game.Maple.Shops
                             item.Update();
                         }
 
-                        using (PacketReader oPacket = new Packet(ServerOperationCode.ConfirmShopTransaction))
+                        using (var oPacket = new PacketWriter(ServerOperationCode.ConfirmShopTransaction))
                         {
                             oPacket.WriteByte(8);
 

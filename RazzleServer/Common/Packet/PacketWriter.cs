@@ -1,6 +1,6 @@
-﻿using System.Drawing;
-using System.IO;
+﻿using System.IO;
 using System.Text;
+using RazzleServer.Game.Maple;
 using RazzleServer.Util;
 
 namespace RazzleServer.Common.Packet
@@ -160,12 +160,12 @@ namespace RazzleServer.Common.Packet
 
         public void WriteHeader(ServerOperationCode header) => WriteUShort((ushort)header);
 
-        public void WriteBox(BoundingBox box)
+        public void WriteBox(Rectangle box)
         {
-            WriteInt(box.LeftTop.X);
-            WriteInt(box.LeftTop.Y);
-            WriteInt(box.RightBottom.X);
-            WriteInt(box.RightBottom.Y);
+            WriteInt(box.LT.X);
+            WriteInt(box.LT.Y);
+            WriteInt(box.RB.X);
+            WriteInt(box.R.Y);
         }
 
         public string ToPacketString() => Functions.ByteArrayToStr(ToArray());

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using RazzleServer.Common.Data;
+using RazzleServer.Game.Maple.Characters;
 
 namespace RazzleServer.Game.Maple.Life
 {
@@ -199,7 +201,7 @@ namespace RazzleServer.Game.Maple.Life
 
                 if (disease != CharacterDisease.None)
                 {
-                    using (PacketReader oPacket = new Packet(ServerOperationCode.TemporaryStatSet))
+                    using (var oPacket = new PacketWriter(ServerOperationCode.TemporaryStatSet))
                     {
                         oPacket
                             .WriteLong()
@@ -237,11 +239,11 @@ namespace RazzleServer.Game.Maple.Life
 
         private IEnumerable<Character> GetAffectedCharacters(Mob caster)
         {
-            Rectangle boundingBox = new Rectangle(this.LT + caster.Position, this.RB + caster.Position);
+            Rectangle Rectangle = new Rectangle(this.LT + caster.Position, this.RB + caster.Position);
 
             foreach (Character character in caster.Map.Characters)
             {
-                if (character.Position.IsInRectangle(boundingBox))
+                if (character.Position.IsInRectangle(Rectangle))
                 {
                     yield return character;
                 }
@@ -250,11 +252,11 @@ namespace RazzleServer.Game.Maple.Life
 
         private IEnumerable<Mob> GetAffectedMobs(Mob caster)
         {
-            Rectangle boundingBox = new Rectangle(this.LT + caster.Position, this.RB + caster.Position);
+            Rectangle Rectangle = new Rectangle(this.LT + caster.Position, this.RB + caster.Position);
 
             foreach (Mob mob in caster.Map.Mobs)
             {
-                if (mob.Position.IsInRectangle(boundingBox))
+                if (mob.Position.IsInRectangle(Rectangle))
                 {
                     yield return mob;
                 }

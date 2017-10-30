@@ -1,4 +1,8 @@
-﻿namespace RazzleServer.Game.Maple
+﻿using RazzleServer.Common.Constants;
+using RazzleServer.Common.Packet;
+using RazzleServer.Game.Maple.Maps;
+
+namespace RazzleServer.Game.Maple
 {
     public sealed class Meso : Drop
     {
@@ -10,16 +14,15 @@
             this.Amount = amount;
         }
 
-        public override Packet GetShowGainPacket()
+        public override PacketWriter GetShowGainPacket()
         {
-            Packet oPacket = new Packet(ServerOperationCode.Message);
+            var oPacket = new PacketWriter(ServerOperationCode.Message);
 
-            oPacket
-                .WriteByte((byte)MessageType.DropPickup)
-                .WriteBool(true)
-                .WriteByte() // NOTE: Unknown.
-                .WriteInt(this.Amount)
-                .WriteShort();
+            oPacket.WriteByte((byte)MessageType.DropPickup);
+            oPacket.WriteBool(true);
+            oPacket.WriteByte(0); // NOTE: Unknown.
+            oPacket.WriteInt(this.Amount);
+            oPacket.WriteShort(0);
 
             return oPacket;
         }

@@ -3,6 +3,13 @@ using System;
 using System.Collections;
 using System.Linq;
 using RazzleServer.Common.Constants;
+using RazzleServer.Game.Maple.Maps;
+using RazzleServer.Common.Packet;
+using RazzleServer.Common.Exceptions;
+using RazzleServer.Game.Maple.Life;
+using RazzleServer.Game.Maple.Data;
+using RazzleServer.Util;
+using RazzleServer.Common.Data;
 
 namespace RazzleServer.Game.Maple.Characters
 {
@@ -97,7 +104,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                 if (this.Parent.IsInitialized)
                 {
-                    using (PacketReader oPacket = new Packet(ServerOperationCode.InventoryOperation))
+                    using (var oPacket = new PacketWriter(ServerOperationCode.InventoryOperation))
                     {
                         oPacket
                             .WriteBool(fromDrop)
@@ -161,7 +168,7 @@ namespace RazzleServer.Game.Maple.Characters
 
             if (removeFromSlot)
             {
-                using (PacketReader oPacket = new Packet(ServerOperationCode.InventoryOperation))
+                using (var oPacket = new PacketWriter(ServerOperationCode.InventoryOperation))
                 {
                     oPacket
                         .WriteBool(fromDrop)
@@ -411,7 +418,7 @@ namespace RazzleServer.Game.Maple.Characters
 
             foreach (Tuple<int, short> summon in item.Summons)
             {
-                if (Application.Random.Next(0, 100) < summon.Item2)
+                if (Functions.Random(0, 100) < summon.Item2)
                 {
                     if (DataProvider.Mobs.Contains(summon.Item1))
                     {
@@ -480,7 +487,7 @@ namespace RazzleServer.Game.Maple.Characters
                         string message = string.Format($"{this.Parent.Name} : {text}"); // TODO: Include medal name.
 
                         // NOTE: In GMS, this sends to everyone on the current channel, not the map (despite the item's description).
-                        using (PacketReader oPacket = new Packet(ServerOperationCode.BroadcastMsg))
+                        using (var oPacket = new PacketWriter(ServerOperationCode.BroadcastMsg))
                         {
                             oPacket
                                 .WriteByte((byte)NoticeType.Megaphone)
@@ -507,7 +514,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                         string message = string.Format($"{this.Parent.Name} : {text}"); // TODO: Include medal name.
 
-                        using (PacketReader oPacket = new Packet(ServerOperationCode.BroadcastMsg))
+                        using (var oPacket = new PacketWriter(ServerOperationCode.BroadcastMsg))
                         {
                             oPacket
                                 .WriteByte((byte)NoticeType.SuperMegaphone)
@@ -539,7 +546,7 @@ namespace RazzleServer.Game.Maple.Characters
                         string text4 = iPacket.ReadString();
                         bool whisper = iPacket.ReadBool();
 
-                        using (PacketReader oPacket = new Packet(ServerOperationCode.SetAvatarMegaphone))
+                        using (var oPacket = new PacketWriter(ServerOperationCode.SetAvatarMegaphone))
                         {
                             oPacket
                                 .WriteInt(itemID)
@@ -582,7 +589,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                         string message = string.Format($"{this.Parent.Name} : {text}"); // TODO: Include medal name.
 
-                        using (PacketReader oPacket = new Packet(ServerOperationCode.BroadcastMsg))
+                        using (var oPacket = new PacketWriter(ServerOperationCode.BroadcastMsg))
                         {
                             oPacket
                                 .WriteByte((byte)NoticeType.ItemMegaphone)
@@ -615,7 +622,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                         //string name = iPacket.ReadString();
 
-                        //using (PacketReader oPacket = new Packet(ServerOperationCode.PetNameChanged))
+                        //using (var oPacket = new PacketWriter(ServerOperationCode.PetNameChanged))
                         //{
                         //    oPacket
                         //        .WriteInt(this.Parent.ID)
@@ -686,7 +693,7 @@ namespace RazzleServer.Game.Maple.Characters
                         this.Parent.Meso += item.Meso;
 
                         // TODO: We definitely need a GainMeso method with inChat parameter.
-                        using (PacketReader oPacket = new Packet(ServerOperationCode.Message))
+                        using (var oPacket = new PacketWriter(ServerOperationCode.Message))
                         {
                             oPacket
                                 .WriteByte((byte)MessageType.IncreaseMeso)
@@ -730,7 +737,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                         //if (this.Parent.Client.World.IsCharacterOnline(targetName))
                         //{
-                        //    using (PacketReader oPacket = new Packet(ServerOperationCode.MemoResult))
+                        //    using (var oPacket = new PacketWriter(ServerOperationCode.MemoResult))
                         //    {
                         //        oPacket
                         //            .WriteByte((byte)MemoResult.Error)
@@ -741,7 +748,7 @@ namespace RazzleServer.Game.Maple.Characters
                         //}
                         //else if (!Database.Exists("characters", "Name = {0}", targetName))
                         //{
-                        //    using (PacketReader oPacket = new Packet(ServerOperationCode.MemoResult))
+                        //    using (var oPacket = new PacketWriter(ServerOperationCode.MemoResult))
                         //    {
                         //        oPacket
                         //            .WriteByte((byte)MemoResult.Error)
@@ -752,7 +759,7 @@ namespace RazzleServer.Game.Maple.Characters
                         //}
                         //else if (false) // TODO: Receiver's inbox is full. I believe the maximum amount is 5, but need to verify.
                         //{
-                        //    using (PacketReader oPacket = new Packet(ServerOperationCode.MemoResult))
+                        //    using (var oPacket = new PacketWriter(ServerOperationCode.MemoResult))
                         //    {
                         //        oPacket
                         //            .WriteByte((byte)MemoResult.Error)
@@ -772,7 +779,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                         //    datum.Insert();
 
-                        //    using (PacketReader oPacket = new Packet(ServerOperationCode.MemoResult))
+                        //    using (var oPacket = new PacketWriter(ServerOperationCode.MemoResult))
                         //    {
                         //        oPacket.WriteByte((byte)MemoResult.Sent);
 
@@ -845,11 +852,7 @@ namespace RazzleServer.Game.Maple.Characters
                     }
 
                     this.Parent.Map.Drops.Remove(drop);
-
-                    using (PacketReader oPacket = drop.GetShowGainPacket())
-                    {
-                        drop.Picker.Client.Send(oPacket);
-                    }
+                    drop.Picker.Client.Send(drop.GetShowGainPacket());
                 }
                 catch (InventoryFullException)
                 {

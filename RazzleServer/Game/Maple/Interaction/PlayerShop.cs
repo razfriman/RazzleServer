@@ -213,7 +213,7 @@ namespace RazzleServer.Game.Maple.Interaction
                     {
                         string text = iPacket.ReadString();
 
-                        using (PacketReader oPacket = new Packet(ServerOperationCode.PlayerInteraction))
+                        using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                         {
                             oPacket
                                 .WriteByte((byte)InteractionCode.Chat)
@@ -258,7 +258,7 @@ namespace RazzleServer.Game.Maple.Interaction
                 {
                     if (this.Visitors[i] != null)
                     {
-                        using (PacketReader oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
+                        using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                         {
                             oPacket
                                 .WriteByte((byte)InteractionCode.Exit)
@@ -278,7 +278,7 @@ namespace RazzleServer.Game.Maple.Interaction
 
         public void UpdateItems()
         {
-            using (PacketReader oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
+            using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
             {
                 oPacket
                     .WriteByte((byte)InteractionCode.UpdateItems)
@@ -319,7 +319,7 @@ namespace RazzleServer.Game.Maple.Interaction
             {
                 if (this.Visitors[i] == null)
                 {
-                    using (PacketReader oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
+                    using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                     {
                         oPacket
                             .WriteByte((byte)InteractionCode.Visit)
@@ -333,7 +333,7 @@ namespace RazzleServer.Game.Maple.Interaction
                     visitor.PlayerShop = this;
                     this.Visitors[i] = visitor;
 
-                    using (PacketReader oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
+                    using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                     {
                         oPacket
                             .WriteByte((byte)InteractionCode.Room)
@@ -387,7 +387,7 @@ namespace RazzleServer.Game.Maple.Interaction
                     visitor.PlayerShop = null;
                     this.Visitors[i] = null;
 
-                    using (PacketReader oPacket = new Packet(ServerOperationCode.PlayerInteraction))
+                    using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                     {
                         oPacket.WriteByte((byte)InteractionCode.Exit);
 
@@ -399,7 +399,7 @@ namespace RazzleServer.Game.Maple.Interaction
                         this.Broadcast(oPacket, false);
                     }
 
-                    using (PacketReader oPacket = new Packet(ServerOperationCode.PlayerInteraction))
+                    using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                     {
                         oPacket
                             .WriteByte((byte)InteractionCode.Exit)
@@ -413,14 +413,14 @@ namespace RazzleServer.Game.Maple.Interaction
             }
         }
 
-        public Packet GetCreatePacket()
+        public PacketWriter GetCreatePacket()
         {
             return this.GetSpawnPacket();
         }
 
-        public Packet GetSpawnPacket()
+        public PacketWriter GetSpawnPacket()
         {
-            Packet oPacket = new Packet(ServerOperationCode.AnnounceBox);
+            var oPacket = new PacketWriter(ServerOperationCode.AnnounceBox);
 
             oPacket
                 .WriteInt(this.Owner.ID)
@@ -436,9 +436,9 @@ namespace RazzleServer.Game.Maple.Interaction
             return oPacket;
         }
 
-        public Packet GetDestroyPacket()
+        public PacketWriter GetDestroyPacket()
         {
-            Packet oPacket = new Packet(ServerOperationCode.AnnounceBox);
+            var oPacket = new PacketWriter(ServerOperationCode.AnnounceBox);
 
             oPacket
                 .WriteInt(this.Owner.ID)

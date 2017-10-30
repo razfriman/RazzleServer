@@ -703,7 +703,7 @@ namespace RazzleServer.Game.Maple
 
         public void Update()
         {
-            using (PacketReader oPacket = new Packet(ServerOperationCode.InventoryOperation))
+            using (var oPacket = new PacketWriter(ServerOperationCode.InventoryOperation))
             {
                 oPacket
                     .WriteBool(true)
@@ -750,7 +750,7 @@ namespace RazzleServer.Game.Maple
 
             this.Slot = (short)destinationSlot;
 
-            using (PacketReader oPacket = new Packet(ServerOperationCode.InventoryOperation))
+            using (var oPacket = new PacketWriter(ServerOperationCode.InventoryOperation))
             {
                 oPacket
                     .WriteBool(true)
@@ -822,7 +822,7 @@ namespace RazzleServer.Game.Maple
 
             this.Slot = destinationSlot;
 
-            using (PacketReader oPacket = new Packet(ServerOperationCode.InventoryOperation))
+            using (var oPacket = new PacketWriter(ServerOperationCode.InventoryOperation))
             {
                 oPacket
                     .WriteBool(true)
@@ -858,7 +858,7 @@ namespace RazzleServer.Game.Maple
 
             if (quantity == this.Quantity)
             {
-                using (PacketReader oPacket = new Packet(ServerOperationCode.InventoryOperation))
+                using (var oPacket = new PacketWriter(ServerOperationCode.InventoryOperation))
                 {
                     oPacket
                         .WriteBool(true)
@@ -886,7 +886,7 @@ namespace RazzleServer.Game.Maple
             {
                 this.Quantity -= quantity;
 
-                using (PacketReader oPacket = new Packet(ServerOperationCode.InventoryOperation))
+                using (var oPacket = new PacketWriter(ServerOperationCode.InventoryOperation))
                 {
                     oPacket
                         .WriteBool(true)
@@ -925,7 +925,7 @@ namespace RazzleServer.Game.Maple
                 {
                     this.Quantity -= (short)(destination.MaxPerStack - destination.Quantity);
 
-                    using (PacketReader oPacket = new Packet(ServerOperationCode.InventoryOperation))
+                    using (var oPacket = new PacketWriter(ServerOperationCode.InventoryOperation))
                     {
                         oPacket
                             .WriteBool(true)
@@ -946,7 +946,7 @@ namespace RazzleServer.Game.Maple
                 {
                     destination.Quantity += this.Quantity;
 
-                    using (PacketReader oPacket = new Packet(ServerOperationCode.InventoryOperation))
+                    using (var oPacket = new PacketWriter(ServerOperationCode.InventoryOperation))
                     {
                         oPacket
                             .WriteBool(true)
@@ -972,7 +972,7 @@ namespace RazzleServer.Game.Maple
 
                 this.Slot = destinationSlot;
 
-                using (PacketReader oPacket = new Packet(ServerOperationCode.InventoryOperation))
+                using (var oPacket = new PacketWriter(ServerOperationCode.InventoryOperation))
                 {
                     oPacket
                         .WriteBool(true)

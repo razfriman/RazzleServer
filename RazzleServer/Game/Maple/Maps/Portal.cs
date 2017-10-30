@@ -1,5 +1,4 @@
-﻿using System;
-using RazzleServer.Common.Constants;
+﻿using RazzleServer.Common.Constants;
 using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple.Characters;
@@ -15,48 +14,29 @@ namespace RazzleServer.Game.Maple.Maps
         public string DestinationLabel { get; private set; }
         public string Script { get; private set; }
 
-        public bool IsSpawnPoint
-        {
-            get
-            {
-                return this.Label == "sp";
-            }
-        }
+        public bool IsSpawnPoint => Label == "sp";
 
-        public Map DestinationMap
-        {
-            get
-            {
-                return DataProvider.Maps[this.DestinationMapID];
-            }
-        }
+        public Map DestinationMap => DataProvider.Maps[DestinationMapID];
 
-        public Portal Link
-        {
-            get
-            {
-                return DataProvider.Maps[this.DestinationMapID].Portals[this.DestinationLabel];
-            }
-        }
+        public Portal Link => DataProvider.Maps[DestinationMapID].Portals[DestinationLabel];
 
         public Portal(Datum datum)
         {
-            this.ID = (byte)(int)datum["id"];
-            this.Label = (string)datum["label"];
-            this.Position = new Point((short)datum["x_pos"], (short)datum["y_pos"]);
-            this.DestinationMapID = (int)datum["destination"];
-            this.DestinationLabel = (string)datum["destination_label"];
-            this.Script = (string)datum["script"];
+            ID = (byte)(int)datum["id"];
+            Label = (string)datum["label"];
+            Position = new Point((short)datum["x_pos"], (short)datum["y_pos"]);
+            DestinationMapID = (int)datum["destination"];
+            DestinationLabel = (string)datum["destination_label"];
+            Script = (string)datum["script"];
         }
 
         public virtual void Enter(Character character)
         {
-            Log.Warn("'{0}' attempted to enter an unimplemented portal '{1}'.", character.Name, this.Script);
+            Log.Warn("'{0}' attempted to enter an unimplemented portal '{1}'.", character.Name, Script);
 
-            using (PacketReader oPacket = new Packet(ServerOperationCode.TransferFieldReqInogred))
+            using (var oPacket = new PacketWriter(ServerOperationCode.TransferFieldReqInogred))
             {
                 oPacket.WriteByte((byte)MapTransferResult.NoReason);
-
                 character.Client.Send(oPacket);
             }
         }
@@ -75,14 +55,15 @@ namespace RazzleServer.Game.Maple.Maps
             oPacket.WriteByte(1);
             character.Client.Send(oPacket);
         }
-    }
 
-    public void ShowTutorialMessage(Character character, string dataPath)
-    {
-        var oPacket = new PacketWriter(ServerOperationCode.Effect);
-        oPacket.WriteByte((byte)UserEffect.AvatarOriented);
-        oPacket.WriteString(dataPath);
-        oPacket.WriteInt(1);
-        character.Client.Send(oPacket);
+
+        public void ShowTutorialMessage(Character character, string dataPath)
+        {
+            var oPacket = new PacketWriter(ServerOperationCode.Effect);
+            oPacket.WriteByte((byte)UserEffect.AvatarOriented);
+            oPacket.WriteString(dataPath);
+            oPacket.WriteInt(1);
+            character.Client.Send(oPacket);
+        }
     }
 }

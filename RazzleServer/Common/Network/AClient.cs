@@ -5,7 +5,7 @@ using RazzleServer.Common.Packet;
 using RazzleServer.Server;
 using RazzleServer.Util;
 
-namespace RazzleServer.Common.PacketLib
+namespace RazzleServer.Common.Network
 {
     public abstract class AClient : IDisposable
     {

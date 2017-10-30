@@ -78,7 +78,7 @@ namespace RazzleServer.Game.Maple.Characters
 
             this.Load();
 
-            using (PacketReader oPacket = new Packet(ServerOperationCode.Storage))
+            using (var oPacket = new PacketWriter(ServerOperationCode.Storage))
             {
                 oPacket
                     .WriteByte(22)
@@ -139,7 +139,7 @@ namespace RazzleServer.Game.Maple.Characters
                             }
                         }
 
-                        using (PacketReader oPacket = new Packet(ServerOperationCode.Storage))
+                        using (var oPacket = new PacketWriter(ServerOperationCode.Storage))
                         {
                             oPacket
                                 .WriteByte(13)
@@ -169,7 +169,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                         if (this.IsFull)
                         {
-                            using (PacketReader oPacket = new Packet(ServerOperationCode.Storage))
+                            using (var oPacket = new PacketWriter(ServerOperationCode.Storage))
                             {
                                 oPacket.WriteByte(17);
 
@@ -206,7 +206,7 @@ namespace RazzleServer.Game.Maple.Characters
                             }
                         }
 
-                        using (PacketReader oPacket = new Packet(ServerOperationCode.Storage))
+                        using (var oPacket = new PacketWriter(ServerOperationCode.Storage))
                         {
                             oPacket
                                 .WriteByte(13)
@@ -242,7 +242,7 @@ namespace RazzleServer.Game.Maple.Characters
                         this.Meso -= meso;
                         this.Parent.Meso += meso;
 
-                        using (PacketReader oPacket = new Packet(ServerOperationCode.Storage))
+                        using (var oPacket = new PacketWriter(ServerOperationCode.Storage))
                         {
                             oPacket
                                 .WriteByte(19)

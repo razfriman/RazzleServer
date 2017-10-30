@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Util;
-using RazzleServer.Common.PacketLib;
+using RazzleServer.Common.Network;
 
 namespace RazzleServer.Server
 {

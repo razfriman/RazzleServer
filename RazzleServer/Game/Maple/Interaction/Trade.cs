@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using RazzleServer.Common.Constants;
+using RazzleServer.Common.Packet;
+using RazzleServer.Game.Maple.Characters;
 
 namespace RazzleServer.Game.Maple.Interaction
 {
@@ -26,7 +29,7 @@ namespace RazzleServer.Game.Maple.Interaction
             this.OwnerLocked = false;
             this.VisitorLocked = false;
 
-            using (PacketReader oPacket = new Packet(ServerOperationCode.PlayerInteraction))
+            using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
             {
                 oPacket
                     .WriteByte((byte)InteractionCode.Room)
@@ -42,7 +45,7 @@ namespace RazzleServer.Game.Maple.Interaction
             }
         }
 
-        public void Handle(Character character, InteractionCode code, Packet iPacket)
+        public void Handle(Character character, InteractionCode code, PacketReader iPacket)
         {
             switch (code)
             {
@@ -61,7 +64,7 @@ namespace RazzleServer.Game.Maple.Interaction
 
                         if (invitee.Trade != null)
                         {
-                            using (PacketReader oPacket = new Packet(ServerOperationCode.PlayerInteraction))
+                            using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                             {
                                 oPacket
                                     .WriteByte((byte)InteractionCode.Decline)
@@ -76,7 +79,7 @@ namespace RazzleServer.Game.Maple.Interaction
                             invitee.Trade = this;
                             this.Visitor = invitee;
 
-                            using (PacketReader oPacket = new Packet(ServerOperationCode.PlayerInteraction))
+                            using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                             {
                                 oPacket
                                     .WriteByte((byte)InteractionCode.Invite)
@@ -92,7 +95,7 @@ namespace RazzleServer.Game.Maple.Interaction
 
                 case InteractionCode.Decline:
                     {
-                        using (PacketReader oPacket = new Packet(ServerOperationCode.PlayerInteraction))
+                        using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                         {
                             oPacket
                                 .WriteByte((byte)InteractionCode.Decline)
@@ -122,7 +125,7 @@ namespace RazzleServer.Game.Maple.Interaction
                         {
                             this.Started = true;
 
-                            using (PacketReader oPacket = new Packet(ServerOperationCode.PlayerInteraction))
+                            using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                             {
                                 oPacket
                                     .WriteByte((byte)InteractionCode.Visit)
@@ -133,7 +136,7 @@ namespace RazzleServer.Game.Maple.Interaction
                                 this.Owner.Client.Send(oPacket);
                             }
 
-                            using (PacketReader oPacket = new Packet(ServerOperationCode.PlayerInteraction))
+                            using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                             {
                                 oPacket
                                     .WriteByte((byte)InteractionCode.Room)
@@ -187,7 +190,7 @@ namespace RazzleServer.Game.Maple.Interaction
 
                         item.Slot = 0;
 
-                        using (PacketReader oPacket = new Packet(ServerOperationCode.PlayerInteraction))
+                        using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                         {
                             oPacket
                                 .WriteByte((byte)InteractionCode.SetItems)
@@ -209,7 +212,7 @@ namespace RazzleServer.Game.Maple.Interaction
                             }
                         }
 
-                        using (PacketReader oPacket = new Packet(ServerOperationCode.PlayerInteraction))
+                        using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                         {
                             oPacket
                                 .WriteByte((byte)InteractionCode.SetItems)
@@ -241,7 +244,7 @@ namespace RazzleServer.Game.Maple.Interaction
                         // TODO: The meso written in this packet is the added meso amount.
                         // The amount that should be written is the total amount.
 
-                        using (PacketReader oPacket = new Packet(ServerOperationCode.PlayerInteraction))
+                        using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                         {
                             oPacket
                                 .WriteByte((byte)InteractionCode.SetMeso)
@@ -274,7 +277,7 @@ namespace RazzleServer.Game.Maple.Interaction
                             }
                         }
 
-                        using (PacketReader oPacket = new Packet(ServerOperationCode.PlayerInteraction))
+                        using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                         {
                             oPacket
                                 .WriteByte((byte)InteractionCode.SetMeso)
@@ -301,7 +304,7 @@ namespace RazzleServer.Game.Maple.Interaction
                         {
                             this.Cancel();
 
-                            using (PacketReader oPacket = new Packet(ServerOperationCode.PlayerInteraction))
+                            using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                             {
                                 oPacket
                                    .WriteByte((byte)InteractionCode.Exit)
@@ -319,7 +322,7 @@ namespace RazzleServer.Game.Maple.Interaction
                         }
                         else
                         {
-                            using (PacketReader oPacket = new Packet(ServerOperationCode.PlayerInteraction))
+                            using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                             {
                                 oPacket
                                    .WriteByte((byte)InteractionCode.Exit)
@@ -337,7 +340,7 @@ namespace RazzleServer.Game.Maple.Interaction
 
                 case InteractionCode.Confirm:
                     {
-                        using (PacketReader oPacket = new Packet(ServerOperationCode.PlayerInteraction))
+                        using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                         {
                             oPacket.WriteByte((byte)InteractionCode.Confirm);
 
@@ -359,7 +362,7 @@ namespace RazzleServer.Game.Maple.Interaction
                         {
                             this.Complete();
 
-                            using (PacketReader oPacket = new Packet(ServerOperationCode.PlayerInteraction))
+                            using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                             {
                                 oPacket
                                     .WriteByte((byte)InteractionCode.Exit)
@@ -382,7 +385,7 @@ namespace RazzleServer.Game.Maple.Interaction
                     {
                         string text = iPacket.ReadString();
 
-                        using (PacketReader oPacket = new Packet(ServerOperationCode.PlayerInteraction))
+                        using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                         {
                             oPacket
                                 .WriteByte((byte)InteractionCode.Chat)

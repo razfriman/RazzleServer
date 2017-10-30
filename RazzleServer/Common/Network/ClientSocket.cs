@@ -6,7 +6,7 @@ using RazzleServer.Util;
 using RazzleServer.Common.MapleCryptoLib;
 using RazzleServer.Common.Packet;
 
-namespace RazzleServer.Common.PacketLib
+namespace RazzleServer.Common.Network
 {
 	public class ClientSocket : IDisposable
 	{

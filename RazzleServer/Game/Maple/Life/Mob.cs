@@ -260,7 +260,7 @@ namespace RazzleServer.Game.Maple.Life
                 skill.Cast(this);
             }
 
-            using (PacketReader oPacket = new Packet(ServerOperationCode.MobCtrlAck))
+            using (var oPacket = new PacketWriter(ServerOperationCode.MobCtrlAck))
             {
                 oPacket
                     .WriteInt(this.ObjectID)
@@ -273,7 +273,7 @@ namespace RazzleServer.Game.Maple.Life
                 this.Controller.Client.Send(oPacket);
             }
 
-            using (PacketReader oPacket = new Packet(ServerOperationCode.MobMove))
+            using (var oPacket = new PacketWriter(ServerOperationCode.MobMove))
             {
                 oPacket
                     .WriteInt(this.ObjectID)
@@ -289,7 +289,7 @@ namespace RazzleServer.Game.Maple.Life
 
         public void Buff(MobStatus buff, short value, MobSkill skill)
         {
-            using (PacketReader oPacket = new Packet(ServerOperationCode.MobStatSet))
+            using (var oPacket = new PacketWriter(ServerOperationCode.MobStatSet))
             {
                 oPacket
                     .WriteInt(this.ObjectID)
@@ -369,7 +369,7 @@ namespace RazzleServer.Game.Maple.Life
 
                 this.Health -= amount;
 
-                using (PacketReader oPacket = new Packet(ServerOperationCode.MobHPIndicator))
+                using (var oPacket = new PacketWriter(ServerOperationCode.MobHPIndicator))
                 {
                     oPacket
                         .WriteInt(this.ObjectID)

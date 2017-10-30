@@ -158,7 +158,7 @@ namespace RazzleServer.Game.Maple
 
                 if (this.IsCoolingDown)
                 {
-                    using (PacketReader oPacket = new Packet(ServerOperationCode.Cooldown))
+                    using (var oPacket = new PacketWriter(ServerOperationCode.Cooldown))
                     {
                         oPacket
                             .WriteInt(this.MapleID)
@@ -169,7 +169,7 @@ namespace RazzleServer.Game.Maple
 
                     Delay.Execute(() =>
                     {
-                        using (PacketReader oPacket = new Packet(ServerOperationCode.Cooldown))
+                        using (var oPacket = new PacketWriter(ServerOperationCode.Cooldown))
                         {
                             oPacket
                                 .WriteInt(this.MapleID)
@@ -296,7 +296,7 @@ namespace RazzleServer.Game.Maple
 
         public void Update()
         {
-            using (PacketReader oPacket = new Packet(ServerOperationCode.ChangeSkillRecordResult))
+            using (var oPacket = new PacketWriter(ServerOperationCode.ChangeSkillRecordResult))
             {
                 oPacket
                     .WriteByte(1)
@@ -683,7 +683,7 @@ namespace RazzleServer.Game.Maple
 
         //                    foreach (PartyMember member in affected)
         //                    {
-        //                        using (PacketReader oPacket = new Packet(ServerOperationCode.Effect))
+        //                        using (var oPacket = new PacketWriter(ServerOperationCode.Effect))
         //                        {
         //                            oPacket
         //                                .WriteByte((byte)UserEffect.SkillAffected)
@@ -694,7 +694,7 @@ namespace RazzleServer.Game.Maple
         //                            member.Character.Client.Send(oPacket);
         //                        }
 
-        //                        using (PacketReader oPacket = new Packet(ServerOperationCode.RemoteEffect))
+        //                        using (var oPacket = new PacketWriter(ServerOperationCode.RemoteEffect))
         //                        {
         //                            oPacket
         //                                .WriteInt(member.Character.ID)
@@ -769,7 +769,7 @@ namespace RazzleServer.Game.Maple
 
         //                    if (target != this.Character && condition(target))
         //                    {
-        //                        using (PacketReader oPacket = new Packet(ServerOperationCode.Effect))
+        //                        using (var oPacket = new PacketWriter(ServerOperationCode.Effect))
         //                        {
         //                            oPacket
         //                                .WriteByte((byte)UserEffect.SkillAffected)
@@ -780,7 +780,7 @@ namespace RazzleServer.Game.Maple
         //                            target.Client.Send(oPacket);
         //                        }
 
-        //                        using (PacketReader oPacket = new Packet(ServerOperationCode.RemoteEffect))
+        //                        using (var oPacket = new PacketWriter(ServerOperationCode.RemoteEffect))
         //                        {
         //                            oPacket
         //                                .WriteInt(target.ID)
@@ -812,7 +812,7 @@ namespace RazzleServer.Game.Maple
         //            break;
         //    }
 
-        //    using (PacketReader oPacket = new Packet(ServerOperationCode.Effect))
+        //    using (var oPacket = new PacketWriter(ServerOperationCode.Effect))
         //    {
         //        oPacket
         //            .WriteByte((byte)UserEffect.SkillUse)
@@ -823,7 +823,7 @@ namespace RazzleServer.Game.Maple
         //        this.Character.Client.Send(oPacket);
         //    }
 
-        //    using (PacketReader oPacket = new Packet(ServerOperationCode.RemoteEffect))
+        //    using (var oPacket = new PacketWriter(ServerOperationCode.RemoteEffect))
         //    {
         //        oPacket
         //            .WriteInt(Character.ID)

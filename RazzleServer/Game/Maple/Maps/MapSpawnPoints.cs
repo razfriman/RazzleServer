@@ -1,4 +1,6 @@
-﻿namespace RazzleServer.Game.Maple.Maps
+﻿using RazzleServer.Game.Maple.Life;
+
+namespace RazzleServer.Game.Maple.Maps
 {
     public sealed class MapSpawnPoints : MapObjects<SpawnPoint>
     {

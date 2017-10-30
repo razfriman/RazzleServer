@@ -1,4 +1,6 @@
 ﻿using System;
+using RazzleServer.Common.Constants;
+using RazzleServer.Common.Data;
 
 namespace RazzleServer.Game.Maple.Life
 {

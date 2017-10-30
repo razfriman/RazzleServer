@@ -1,4 +1,7 @@
 ﻿using System.Collections.ObjectModel;
+using RazzleServer.Common.Constants;
+using RazzleServer.Common.Data;
+using RazzleServer.Common.Packet;
 
 namespace RazzleServer.Game.Maple.Characters
 {
@@ -24,7 +27,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Handle(PacketReader iPacket)
         {
-            MemoAction action = (MemoAction)iPacket.ReadByte();
+            var action = (MemoAction)iPacket.ReadByte();
 
             switch (action)
             {
@@ -60,11 +63,10 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Send()
         {
-            using (PacketReader oPacket = new Packet(ServerOperationCode.MemoResult))
+            using (var oPacket = new PacketWriter(ServerOperationCode.MemoResult))
             {
-                oPacket
-                    .WriteByte((byte)MemoResult.Send)
-                    .WriteByte((byte)this.Count);
+                oPacket.WriteByte((byte)MemoResult.Send);
+                oPacket.WriteByte((byte)this.Count);
 
                 foreach (Memo memo in this)
                 {

@@ -1,4 +1,8 @@
 ﻿using System.Collections.Generic;
+using RazzleServer.Common.Constants;
+using RazzleServer.Common.Data;
+using RazzleServer.Common.Packet;
+using RazzleServer.Game.Maple.Data;
 
 namespace RazzleServer.Game.Maple.Characters
 {
@@ -37,7 +41,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Save()
         {
-            Database.Delete("trocks", "CharacterID = {0}", this.Parent.ID);
+            //Database.Delete("trocks", "CharacterID = {0}", this.Parent.ID);
 
             byte index = 0;
 
@@ -89,8 +93,8 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Update(PacketReader iPacket)
         {
-            TrockAction action = (TrockAction)iPacket.ReadByte();
-            TrockType type = (TrockType)iPacket.ReadByte();
+            var action = (TrockAction)iPacket.ReadByte();
+            var type = (TrockType)iPacket.ReadByte();
 
             switch (action)
             {
@@ -138,24 +142,22 @@ namespace RazzleServer.Game.Maple.Characters
                         }
                         else
                         {
-                            return;
                         }
                     }
                     break;
             }
 
-            using (PacketReader oPacket = new Packet(ServerOperationCode.MapTransferResult))
+            using (var oPacket = new PacketWriter(ServerOperationCode.MapTransferResult))
             {
-                oPacket
-                    .WriteByte((byte)(action == TrockAction.Remove ? 2 : 3))
-                    .WriteByte((byte)type)
-                    .WriteBytes(type == TrockType.Regular ? this.RegularToByteArray() : this.VIPToByteArray());
+                oPacket.WriteByte((byte)(action == TrockAction.Remove ? 2 : 3));
+                oPacket.WriteByte((byte)type);
+                oPacket.WriteBytes(type == TrockType.Regular ? this.RegularToByteArray() : this.VIPToByteArray());
 
                 this.Parent.Client.Send(oPacket);
             }
         }
 
-        public bool Use(int itemID, Packet iPacket)
+        public bool Use(int itemID, PacketReader iPacket)
         {
             bool used = false;
             byte action = iPacket.ReadByte();
@@ -196,8 +198,8 @@ namespace RazzleServer.Game.Maple.Characters
 
             if (destinationMapID != -1)
             {
-                Map originMap = this.Parent.Map;
-                Map destinationMap = DataProvider.Maps[destinationMapID];
+                var originMap = this.Parent.Map;
+                var destinationMap = DataProvider.Maps[destinationMapID];
 
                 if (false) // TODO: Field limit check.
                 {
@@ -216,7 +218,7 @@ namespace RazzleServer.Game.Maple.Characters
                     result = TrockResult.CannotGo;
                 }
             }
-            
+
             if (result == TrockResult.Success)
             {
                 this.Parent.ChangeMap(destinationMapID);
@@ -225,11 +227,10 @@ namespace RazzleServer.Game.Maple.Characters
             }
             else
             {
-                using (PacketReader oPacket = new Packet(ServerOperationCode.MapTransferResult))
+                using (var oPacket = new PacketWriter(ServerOperationCode.MapTransferResult))
                 {
-                    oPacket
-                        .WriteByte((byte)result)
-                        .WriteByte((byte)type);
+                    oPacket.WriteByte((byte)result);
+                    oPacket.WriteByte((byte)type);
 
                     this.Parent.Client.Send(oPacket);
                 }
@@ -240,7 +241,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public byte[] RegularToByteArray()
         {
-            using (ByteBuffer oPacket = new ByteBuffer())
+            using (var oPacket = new ByteBuffer())
             {
                 int remaining = 1;
 
@@ -265,7 +266,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public byte[] VIPToByteArray()
         {
-            using (ByteBuffer oPacket = new ByteBuffer())
+            using (var oPacket = new ByteBuffer())
             {
                 int remaining = 1;
 

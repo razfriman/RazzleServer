@@ -602,7 +602,7 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 chalkboard = value;
 
-                using (PacketReader oPacket = new Packet(ServerOperationCode.Chalkboard))
+                using (var oPacket = new PacketWriter(ServerOperationCode.Chalkboard))
                 {
                     oPacket
                         .WriteInt(ID)
@@ -796,7 +796,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Initialize()
         {
-            using (PacketReader oPacket = new Packet(ServerOperationCode.SetField))
+            using (var oPacket = new PacketWriter(ServerOperationCode.SetField))
             {
                 oPacket
                     .WriteInt(WvsGame.ChannelID)
@@ -816,7 +816,7 @@ namespace RazzleServer.Game.Maple.Characters
                 Client.Send(oPacket);
             }
 
-            using (PacketReader oPacket = new Packet(ServerOperationCode.ClaimSvrStatusChanged))
+            using (var oPacket = new PacketWriter(ServerOperationCode.ClaimSvrStatusChanged))
             {
                 oPacket.WriteBool(true);
 
@@ -931,7 +931,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void UpdateApperance()
         {
-            using (PacketReader oPacket = new Packet(ServerOperationCode.AvatarModified))
+            using (var oPacket = new PacketWriter(ServerOperationCode.AvatarModified))
             {
                 oPacket
                     .WriteInt(ID)
@@ -951,7 +951,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Notify(string message, NoticeType type = NoticeType.Pink)
         {
-            using (PacketReader oPacket = new Packet(ServerOperationCode.BroadcastMsg))
+            using (var oPacket = new PacketWriter(ServerOperationCode.BroadcastMsg))
             {
                 oPacket.WriteByte((byte)type);
 
@@ -1049,7 +1049,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             Map.Characters.Remove(this);
 
-            using (PacketReader oPacket = new Packet(ServerOperationCode.SetField))
+            using (var oPacket = new PacketWriter(ServerOperationCode.SetField))
             {
                 oPacket
                     .WriteInt(WvsGame.ChannelID)
@@ -1156,7 +1156,7 @@ namespace RazzleServer.Game.Maple.Characters
             Foothold = movements.Foothold;
             Stance = movements.Stance;
 
-            using (PacketReader oPacket = new Packet(ServerOperationCode.Move))
+            using (var oPacket = new PacketWriter(ServerOperationCode.Move))
             {
                 oPacket
                     .WriteInt(ID)
@@ -1185,7 +1185,7 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 Chair = 0;
 
-                using (PacketReader oPacket = new Packet(ServerOperationCode.SetActiveRemoteChair))
+                using (var oPacket = new PacketWriter(ServerOperationCode.SetActiveRemoteChair))
                 {
                     oPacket
                         .WriteInt(ID)
@@ -1199,7 +1199,7 @@ namespace RazzleServer.Game.Maple.Characters
                 Chair = seatID;
             }
 
-            using (PacketReader oPacket = new Packet(ServerOperationCode.Sit))
+            using (var oPacket = new PacketWriter(ServerOperationCode.Sit))
             {
                 oPacket.WriteBool(seatID != -1);
 
@@ -1223,7 +1223,7 @@ namespace RazzleServer.Game.Maple.Characters
 
             Chair = mapleID;
 
-            using (PacketReader oPacket = new Packet(ServerOperationCode.SetActiveRemoteChair))
+            using (var oPacket = new PacketWriter(ServerOperationCode.SetActiveRemoteChair))
             {
                 oPacket
                     .WriteInt(ID)
@@ -1252,7 +1252,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
 
             // TODO: Modify packet based on attack type.
-            using (PacketReader oPacket = new Packet(ServerOperationCode.CloseRangeAttack))
+            using (var oPacket = new PacketWriter(ServerOperationCode.CloseRangeAttack))
             {
                 oPacket
                     .WriteInt(ID)
@@ -1422,7 +1422,7 @@ namespace RazzleServer.Game.Maple.Characters
                 // TODO: Apply damage to buffs.
             }
 
-            using (PacketReader oPacket = new Packet(ServerOperationCode.Hit))
+            using (var oPacket = new PacketWriter(ServerOperationCode.Hit))
             {
                 oPacket
                     .WriteInt(ID)
@@ -1478,7 +1478,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
             else
             {
-                using (PacketReader oPacket = new Packet(ServerOperationCode.UserChat))
+                using (var oPacket = new PacketWriter(ServerOperationCode.UserChat))
                 {
                     oPacket
                         .WriteInt(ID)
@@ -1502,7 +1502,7 @@ namespace RazzleServer.Game.Maple.Characters
                 // TODO: Validate if item exists.
             }
 
-            using (PacketReader oPacket = new Packet(ServerOperationCode.Emotion))
+            using (var oPacket = new PacketWriter(ServerOperationCode.Emotion))
             {
                 oPacket
                     .WriteInt(ID)
@@ -1514,7 +1514,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void ShowLocalUserEffect(UserEffect effect)
         {
-            using (PacketReader oPacket = new Packet(ServerOperationCode.Effect))
+            using (var oPacket = new PacketWriter(ServerOperationCode.Effect))
             {
                 oPacket.WriteByte((byte)effect);
 
@@ -1524,7 +1524,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void ShowRemoteUserEffect(UserEffect effect, bool skipSelf = false)
         {
-            using (PacketReader oPacket = new Packet(ServerOperationCode.RemoteEffect))
+            using (var oPacket = new PacketWriter(ServerOperationCode.RemoteEffect))
             {
                 oPacket
                     .WriteInt(ID)
@@ -1736,7 +1736,7 @@ namespace RazzleServer.Game.Maple.Characters
                 return;
             }
 
-            using (PacketReader oPacket = new Packet(ServerOperationCode.CharacterInformation))
+            using (var oPacket = new PacketWriter(ServerOperationCode.CharacterInformation))
             {
                 oPacket
                     .WriteInt(target.ID)
@@ -1815,7 +1815,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
             else
             {
-                using (PacketReader oPacket = new Packet(ServerOperationCode.GroupMessage))
+                using (var oPacket = new PacketWriter(ServerOperationCode.GroupMessage))
                 {
                     oPacket
                         .WriteByte((byte)type)
@@ -1844,7 +1844,7 @@ namespace RazzleServer.Game.Maple.Characters
                     {
                         if (target == null)
                         {
-                            using (PacketReader oPacket = new Packet(ServerOperationCode.Whisper))
+                            using (var oPacket = new PacketWriter(ServerOperationCode.Whisper))
                             {
                                 oPacket
                                     .WriteByte(0x0A)
@@ -1858,7 +1858,7 @@ namespace RazzleServer.Game.Maple.Characters
                         {
                             bool isInSameChannel = this.Client.ChannelID == target.Client.ChannelID;
 
-                            using (PacketReader oPacket = new Packet(ServerOperationCode.Whisper))
+                            using (var oPacket = new PacketWriter(ServerOperationCode.Whisper))
                             {
                                 oPacket
                                     .WriteByte(0x09)
@@ -1878,7 +1878,7 @@ namespace RazzleServer.Game.Maple.Characters
                     {
                         string text = iPacket.ReadString();
 
-                        using (PacketReader oPacket = new Packet(ServerOperationCode.Whisper))
+                        using (var oPacket = new PacketWriter(ServerOperationCode.Whisper))
                         {
                             oPacket
                                 .WriteByte(10)
@@ -1890,7 +1890,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                         if (target != null)
                         {
-                            using (PacketReader oPacket = new Packet(ServerOperationCode.Whisper))
+                            using (var oPacket = new PacketWriter(ServerOperationCode.Whisper))
                             {
                                 oPacket
                                     .WriteByte(18)
@@ -2022,7 +2022,7 @@ namespace RazzleServer.Game.Maple.Characters
                         }
                         else
                         {
-                            using (PacketReader oPacket = new Packet(ServerOperationCode.AdminResult))
+                            using (var oPacket = new PacketWriter(ServerOperationCode.AdminResult))
                             {
                                 oPacket
                                     .WriteByte(6)
@@ -2087,7 +2087,7 @@ namespace RazzleServer.Game.Maple.Characters
                         }
                         else
                         {
-                            using (PacketReader oPacket = new Packet(ServerOperationCode.AdminResult))
+                            using (var oPacket = new PacketWriter(ServerOperationCode.AdminResult))
                             {
                                 oPacket
                                     .WriteByte(6)
@@ -2135,7 +2135,7 @@ namespace RazzleServer.Game.Maple.Characters
                             target.Notify(text, NoticeType.Popup);
                         }
 
-                        using (PacketReader oPacket = new Packet(ServerOperationCode.AdminResult))
+                        using (var oPacket = new PacketWriter(ServerOperationCode.AdminResult))
                         {
                             oPacket
                                 .WriteByte(29)
@@ -2239,7 +2239,7 @@ namespace RazzleServer.Game.Maple.Characters
                 result = ReportResult.Max10TimesADay;
             }
 
-            using (PacketReader oPacket = new Packet(ServerOperationCode.SueCharacterResult))
+            using (var oPacket = new PacketWriter(ServerOperationCode.SueCharacterResult))
             {
                 oPacket.WriteByte((byte)result);
 

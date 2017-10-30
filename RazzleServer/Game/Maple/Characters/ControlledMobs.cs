@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using RazzleServer.Common.Packet;
+using RazzleServer.Game.Maple.Life;
 
 namespace RazzleServer.Game.Maple.Characters
 {
@@ -34,16 +36,13 @@ namespace RazzleServer.Game.Maple.Characters
         {
             lock (this)
             {
-                if (this.Parent.Client.IsAlive)
+                if (this.Parent.Client.Connected)
                 {
                     item.Controller = this.Parent;
 
                     base.InsertItem(index, item);
 
-                    using (PacketReader oPacket = item.GetControlRequestPacket())
-                    {
-                        this.Parent.Client.Send(oPacket);
-                    }
+                    this.Parent.Client.Send(item.GetControlRequestPacket());
                 }
                 else
                 {
@@ -58,12 +57,9 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 Mob item = base.Items[index];
 
-                if (this.Parent.Client.IsAlive)
+                if (this.Parent.Client.Connected)
                 {
-                    using (PacketReader oPacket = item.GetControlCancelPacket())
-                    {
-                        this.Parent.Client.Send(oPacket);
-                    }
+                    this.Parent.Client.Send(item.GetControlCancelPacket());
                 }
 
                 item.Controller = null;

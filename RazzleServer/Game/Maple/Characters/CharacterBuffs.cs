@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using RazzleServer.Common.Constants;
+using RazzleServer.Common.Data;
+using RazzleServer.Common.Packet;
+using RazzleServer.Util;
 
 namespace RazzleServer.Game.Maple.Characters
 {
@@ -14,7 +18,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             get
             {
-                foreach (Buff loopBuff in this.Buffs)
+                foreach (Buff loopBuff in Buffs)
                 {
                     if (loopBuff.MapleID == mapleId)
                     {
@@ -29,27 +33,27 @@ namespace RazzleServer.Game.Maple.Characters
         public CharacterBuffs(Character parent)
             : base()
         {
-            this.Parent = parent;
+            Parent = parent;
 
-            this.Buffs = new List<Buff>();
+            Buffs = new List<Buff>();
         }
 
         public void Load()
         {
-            foreach (Datum datum in new Datums("buffs").Populate("CharacterID = {0}", this.Parent.ID))
+            foreach (Datum datum in new Datums("buffs").Populate("CharacterID = {0}", Parent.ID))
             {
                 if ((DateTime)datum["End"] > DateTime.Now)
                 {
-                    this.Add(new Buff(this, datum));
+                    Add(new Buff(this, datum));
                 }
             }
         }
 
         public void Save()
         {
-            this.Delete();
+            Delete();
 
-            foreach (Buff loopBuff in this.Buffs)
+            foreach (Buff loopBuff in Buffs)
             {
                 loopBuff.Save();
             }
@@ -57,17 +61,17 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Delete()
         {
-            Database.Delete("buffs", "CharacterID = {0}", this.Parent.ID);
+            //Database.Delete("buffs", "CharacterID = {0}", this.Parent.ID);
         }
 
         public bool Contains(Buff buff)
         {
-            return this.Buffs.Contains(buff);
+            return Buffs.Contains(buff);
         }
 
         public bool Contains(int mapleId)
         {
-            foreach (Buff loopBuff in this.Buffs)
+            foreach (Buff loopBuff in Buffs)
             {
                 if (loopBuff.MapleID == mapleId)
                 {
@@ -80,16 +84,16 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Add(Skill skill, int value)
         {
-            this.Add(new Buff(this, skill, value));
+            Add(new Buff(this, skill, value));
         }
 
         public void Add(Buff buff)
         {
-            foreach (Buff loopBuff in this.Buffs)
+            foreach (Buff loopBuff in Buffs)
             {
                 if (loopBuff.MapleID == buff.MapleID)
                 {
-                    this.Remove(loopBuff);
+                    Remove(loopBuff);
 
                     break;
                 }
@@ -97,9 +101,9 @@ namespace RazzleServer.Game.Maple.Characters
 
             buff.Parent = this;
 
-            this.Buffs.Add(buff);
+            Buffs.Add(buff);
 
-            if (this.Parent.IsInitialized && buff.Type == 1)
+            if (Parent.IsInitialized && buff.Type == 1)
             {
                 buff.Apply();
             }
@@ -107,14 +111,14 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Remove(int mapleId)
         {
-            this.Remove(this[mapleId]);
+            Remove(this[mapleId]);
         }
 
         public void Remove(Buff buff)
         {
-            this.Buffs.Remove(buff);
+            Buffs.Remove(buff);
 
-            if (this.Parent.IsInitialized)
+            if (Parent.IsInitialized)
             {
                 buff.Cancel();
             }
@@ -129,19 +133,19 @@ namespace RazzleServer.Game.Maple.Characters
                 // TODO: Handle special skills.
 
                 default:
-                    this.Remove(mapleID);
+                    Remove(mapleID);
                     break;
             }
         }
 
         public IEnumerator<Buff> GetEnumerator()
         {
-            return this.Buffs.GetEnumerator();
+            return Buffs.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return ((IEnumerable)this.Buffs).GetEnumerator();
+            return ((IEnumerable)Buffs).GetEnumerator();
         }
 
         // TODO: Refactor this to use actual TwoStateTemporaryStat and not some random values.
@@ -160,23 +164,23 @@ namespace RazzleServer.Game.Maple.Characters
                 long mask = 0;
                 int value = 0;
 
-                if (this.Contains((int)SkillNames.Rogue.DarkSight))
+                if (Contains((int)SkillNames.Rogue.DarkSight))
                 {
                     mask |= (long)SecondaryBuffStat.DarkSight;
                 }
 
-                if (this.Contains((int)SkillNames.Crusader.ComboAttack))
+                if (Contains((int)SkillNames.Crusader.ComboAttack))
                 {
                     mask |= (long)SecondaryBuffStat.Combo;
                     value = this[(int)SkillNames.Crusader.ComboAttack].Value;
                 }
 
-                if (this.Contains((int)SkillNames.Hermit.ShadowPartner))
+                if (Contains((int)SkillNames.Hermit.ShadowPartner))
                 {
                     mask |= (long)SecondaryBuffStat.ShadowPartner;
                 }
 
-                if (this.Contains((int)SkillNames.Hunter.SoulArrow) || this.Contains((int)SkillNames.Crossbowman.SoulArrow))
+                if (Contains((int)SkillNames.Hunter.SoulArrow) || Contains((int)SkillNames.Crossbowman.SoulArrow))
                 {
                     mask |= (long)SecondaryBuffStat.SoulArrow;
                 }
@@ -190,7 +194,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                 oPacket.WriteInt((int)(mask & 0xFFFFFFFFL));
 
-                int magic = Application.Random.Next();
+                int magic = Functions.Random();
 
                 oPacket
                     .Skip(6)

@@ -63,7 +63,7 @@ namespace RazzleServer.Game.Maple.Life
                         }
                         else
                         {
-                            using (PacketReader oPacket = new Packet(ServerOperationCode.ReactorChangeState))
+                            using (var oPacket = new PacketWriter(ServerOperationCode.ReactorChangeState))
                             {
                                 oPacket
                                     .WriteInt(this.ObjectID)

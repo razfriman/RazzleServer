@@ -224,7 +224,7 @@ namespace RazzleServer.Game.Maple.Characters
 
             this.Update(quest.MapleID, QuestStatus.InProgress);
 
-            using (PacketReader oPacket = new Packet(ServerOperationCode.QuestResult))
+            using (var oPacket = new PacketWriter(ServerOperationCode.QuestResult))
             {
                 oPacket
                     .WriteByte((byte)QuestResult.Complete)
@@ -245,7 +245,7 @@ namespace RazzleServer.Game.Maple.Characters
 
             this.Parent.Experience += quest.ExperienceReward[1];
 
-            using (PacketReader oPacket = new Packet(ServerOperationCode.Message))
+            using (var oPacket = new PacketWriter(ServerOperationCode.Message))
             {
                 oPacket
                     .WriteByte((byte)MessageType.IncreaseEXP)
@@ -293,7 +293,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                 //    this.Parent.Items.Add(new Item(item.Key, item.Value));
 
-                //    using (PacketReader oPacket = new Packet(ServerOperationCode.Effect))
+                //    using (var oPacket = new PacketWriter(ServerOperationCode.Effect))
                 //    {
                 //        oPacket
                 //            .WriteByte((byte)UserEffect.Quest)
@@ -322,7 +322,7 @@ namespace RazzleServer.Game.Maple.Characters
                         this.Parent.Items.Remove(item.Key, Math.Abs(item.Value));
                     }
 
-                    using (PacketReader oPacket = new Packet(ServerOperationCode.Effect))
+                    using (var oPacket = new PacketWriter(ServerOperationCode.Effect))
                     {
                         oPacket
                             .WriteByte((byte)UserEffect.Quest)
@@ -354,7 +354,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         private void Update(ushort questID, QuestStatus status, string progress = "")
         {
-            using (PacketReader oPacket = new Packet(ServerOperationCode.Message))
+            using (var oPacket = new PacketWriter(ServerOperationCode.Message))
             {
                 oPacket
                     .WriteByte((byte)MessageType.QuestRecord)
@@ -417,7 +417,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void NotifyComplete(ushort questID)
         {
-            using (PacketReader oPacket = new Packet(ServerOperationCode.QuestClear))
+            using (var oPacket = new PacketWriter(ServerOperationCode.QuestClear))
             {
                 oPacket.WriteUShort(questID);
 

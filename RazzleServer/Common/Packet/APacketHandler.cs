@@ -1,4 +1,4 @@
-﻿using RazzleServer.Common.PacketLib;
+﻿using RazzleServer.Common.Network;
 
 namespace RazzleServer.Common.Packet
 {

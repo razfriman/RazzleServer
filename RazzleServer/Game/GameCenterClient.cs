@@ -1,60 +1,65 @@
-﻿using System.Linq;
-using System.Net;
+﻿using System.Net.Sockets;
 using RazzleServer.Common.Constants;
+using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
+using RazzleServer.Common.Network;
 using RazzleServer.Game.Maple;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
-using RazzleServer.Server;
 using RazzleServer.Util;
 
 namespace RazzleServer.Game
 {
-    public class CenterServer : MapleServer<Center.CenterClient>
+    public class GameCenterClient : AClient
     {
-        
-        public void Initialize(params object[] args)
+        public GameCenterClient(Socket session) : base(session)
         {
-                var pw = new PacketWriter(InteroperabilityOperationCode.RegistrationRequest);
-                pw.WriteByte((int)ServerType.Channel);
-                pw.WriteString((string)args[0]);
-                Send(pw);
         }
 
-        public override void Receive(PacketReader inPacket)
+        public override void Receive(PacketReader packet)
         {
-            var header = (InteroperabilityOperationCode)inPacket.ReadUShort();
+            var header = (InteroperabilityOperationCode)packet.ReadUShort();
             switch (header)
             {
                 case InteroperabilityOperationCode.RegistrationResponse:
-                    this.Register(inPacket);
+                    Register(packet);
                     break;
 
                 case InteroperabilityOperationCode.UpdateChannelID:
-                    this.UpdateChannelID(inPacket);
+                    UpdateChannelID(packet);
                     break;
 
                 case InteroperabilityOperationCode.CharacterNameCheckRequest:
-                    this.CheckCharacterName(inPacket);
+                    CheckCharacterName(packet);
                     break;
 
                 case InteroperabilityOperationCode.CharacterEntriesRequest:
-                    this.SendCharacters(inPacket);
+                    SendCharacters(packet);
                     break;
 
                 case InteroperabilityOperationCode.CharacterCreationRequest:
-                    this.CreateCharacter(inPacket);
+                    CreateCharacter(packet);
                     break;
 
                 case InteroperabilityOperationCode.MigrationResponse:
-                    this.Migrate(inPacket);
+                    Migrate(packet);
                     break;
 
                 case InteroperabilityOperationCode.ChannelPortResponse:
-                    this.ChannelPortResponse(inPacket);
+                    ChannelPortResponse(packet);
                     break;
             }
         }
+
+
+        public void Initialize(params object[] args)
+        {
+            var pw = new PacketWriter(InteroperabilityOperationCode.RegistrationRequest);
+            pw.WriteByte((int)ServerType.Channel);
+            pw.WriteString((string)args[0]);
+            Send(pw);
+        }
+
 
         private void Register(PacketReader inPacket)
         {
@@ -112,13 +117,13 @@ namespace RazzleServer.Game
             string name = inPacket.ReadString();
             bool unusable = Database.Exists("characters", "Name = {0}", name);
 
-            using (PacketReader outPacket = new Packet(InteroperabilityOperationCode.CharacterNameCheckResponse))
+            using (var outPacket = new PacketWriter(InteroperabilityOperationCode.CharacterNameCheckResponse))
             {
                 outPacket
                     .WriteString(name)
                     .WriteBool(unusable);
 
-                this.Send(outPacket);
+                Send(outPacket);
             }
         }
 
@@ -126,7 +131,7 @@ namespace RazzleServer.Game
         {
             int accountID = inPacket.ReadInt();
 
-            using (PacketReader outPacket = new Packet(InteroperabilityOperationCode.CharacterEntriesResponse))
+            using (var outPacket = new PacketWriter(InteroperabilityOperationCode.CharacterEntriesResponse))
             {
                 outPacket.WriteInt(accountID);
 
@@ -141,7 +146,7 @@ namespace RazzleServer.Game
                     outPacket.WriteBytes(entry);
                 }
 
-                this.Send(outPacket);
+                Send(outPacket);
             }
         }
 
@@ -279,12 +284,12 @@ namespace RazzleServer.Game
 
             character.Save();
 
-            using (PacketReader outPacket = new Packet(InteroperabilityOperationCode.CharacterCreationResponse))
+            using (var outPacket = new PacketWriter(InteroperabilityOperationCode.CharacterCreationResponse))
             {
                 outPacket.WriteInt(accountID);
                 outPacket.WriteBytes(character.ToByteArray());
 
-                this.Send(outPacket);
+                Send(outPacket);
             }
         }
 
@@ -293,16 +298,16 @@ namespace RazzleServer.Game
             byte id = inPacket.ReadByte();
             ushort port = inPacket.ReadUShort();
 
-            this.ChannelPortPool.Enqueue(id, port);
+            ChannelPortPool.Enqueue(id, port);
         }
 
         public void UpdatePopulation(int population)
         {
-            using (PacketReader outPacket = new Packet(InteroperabilityOperationCode.UpdateChannelPopulation))
+            using (var outPacket = new PacketWriter(InteroperabilityOperationCode.UpdateChannelPopulation))
             {
                 outPacket.WriteInt(population);
 
-                this.Send(outPacket);
+                Send(outPacket);
             }
         }
 
@@ -310,30 +315,30 @@ namespace RazzleServer.Game
 
         public ushort GetChannelPort(byte channelID)
         {
-            using (PacketReader outPacket = new Packet(InteroperabilityOperationCode.ChannelPortRequest))
+            using (var outPacket = new PacketWriter(InteroperabilityOperationCode.ChannelPortRequest))
             {
                 outPacket.WriteByte(channelID);
 
-                this.Send(outPacket);
+                Send(outPacket);
             }
 
-            return this.ChannelPortPool.Dequeue(channelID);
+            return ChannelPortPool.Dequeue(channelID);
         }
 
         private PendingKeyedQueue<string, int> MigrationValidationPool = new PendingKeyedQueue<string, int>();
 
+
+
         public int ValidateMigration(string host, int characterID)
         {
-            using (PacketReader outPacket = new Packet(InteroperabilityOperationCode.MigrationRequest))
+            using (var outPacket = new PacketWriter(InteroperabilityOperationCode.MigrationRequest))
             {
-                outPacket
-                    .WriteString(host)
-                    .WriteInt(characterID);
-
-                this.Send(outPacket);
+                outPacket.WriteString(host);
+                outPacket.WriteInt(characterID);
+                Send(outPacket);
             }
 
-            return this.MigrationValidationPool.Dequeue(host);
+            return MigrationValidationPool.Dequeue(host);
         }
 
         private void Migrate(PacketReader inPacket)
@@ -341,7 +346,7 @@ namespace RazzleServer.Game
             string host = inPacket.ReadString();
             int accountID = inPacket.ReadInt();
 
-            this.MigrationValidationPool.Enqueue(host, accountID);
+            MigrationValidationPool.Enqueue(host, accountID);
         }
     }
 }

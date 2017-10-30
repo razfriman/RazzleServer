@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using RazzleServer.Common.PacketLib;
+using RazzleServer.Common.Network;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Util;
 

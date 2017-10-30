@@ -44,17 +44,11 @@ namespace RazzleServer.Game.Maple.Maps
                 {
                     if (drop.Owner == null)
                     {
-                        using (PacketReader oPacket = drop.GetSpawnPacket(item))
-                        {
-                            item.Client.Send(oPacket);
-                        }
+                        item.Client.Send(drop.GetSpawnPacket(item));
                     }
                     else
                     {
-                        using (PacketReader oPacket = drop.GetSpawnPacket())
-                        {
-                            item.Client.Send(oPacket);
-                        }
+                        item.Client.Send(drop.GetSpawnPacket());
                     }
                 }
             }
@@ -63,10 +57,7 @@ namespace RazzleServer.Game.Maple.Maps
             {
                 foreach (Mob mob in Map.Mobs)
                 {
-                    using (PacketReader oPacket = mob.GetSpawnPacket())
-                    {
-                        item.Client.Send(oPacket);
-                    }
+                    item.Client.Send(mob.GetSpawnPacket());
                 }
             }
 
@@ -74,10 +65,7 @@ namespace RazzleServer.Game.Maple.Maps
             {
                 foreach (Npc npc in Map.Npcs)
                 {
-                    using (PacketReader oPacket = npc.GetSpawnPacket())
-                    {
-                        item.Client.Send(oPacket);
-                    }
+                    item.Client.Send(npc.GetSpawnPacket());
                 }
             }
 
@@ -85,10 +73,7 @@ namespace RazzleServer.Game.Maple.Maps
             {
                 foreach (Reactor reactor in Map.Reactors)
                 {
-                    using (PacketReader oPacket = reactor.GetSpawnPacket())
-                    {
-                        item.Client.Send(oPacket);
-                    }
+                    item.Client.Send(reactor.GetSpawnPacket());
                 }
             }
 
@@ -108,10 +93,7 @@ namespace RazzleServer.Game.Maple.Maps
                 }
             }
 
-            using (PacketReader oPacket = item.GetCreatePacket())
-            {
-                Map.Broadcast(oPacket, item);
-            }
+            Map.Broadcast(item.GetCreatePacket(), item);
         }
 
         protected override void RemoveItem(int index)
@@ -123,10 +105,7 @@ namespace RazzleServer.Game.Maple.Maps
                 item.ControlledMobs.Clear();
                 item.ControlledNpcs.Clear();
 
-                using (PacketReader oPacket = item.GetDestroyPacket())
-                {
-                    Map.Broadcast(oPacket, item);
-                }
+                Map.Broadcast(item.GetDestroyPacket(), item);
             }
 
             base.RemoveItem(index);

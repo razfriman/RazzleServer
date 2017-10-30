@@ -1,4 +1,6 @@
-﻿namespace RazzleServer.Game.Maple.Life
+﻿using RazzleServer.Common.Data;
+
+namespace RazzleServer.Game.Maple.Life
 {
     public sealed class SpawnPoint : LifeObject
     {

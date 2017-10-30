@@ -1,51 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
+﻿using System.Collections.Generic;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
+using RazzleServer.Common.Network;
 using RazzleServer.Login.Maple;
-using RazzleServer.Server;
 using RazzleServer.Util;
+using System.Net.Sockets;
 
 namespace RazzleServer.Login
 {
-    public class CenterServer : MapleServer<CenterClient>
+    public class LoginCenterClient : AClient
     {
-        public CenterServer(IPEndPoint remoteEP, string code){
-            
-        }
-
-        protected override void StopServer()
+        public void Initialize(params object[] args)
         {
-            WvsLogin.Stop();
-        }
-
-        public static void Main()
-        {
-            try
-            {
-                WvsLogin.CenterConnection = new LoginCenterServer(new IPEndPoint(
-                        Settings.GetIPAddress("Center/IP"),
-                        Settings.GetInt("Center/Port")),
-                        Settings.GetString("Center/SecurityCode"));
-
-                WvsLogin.CenterConnection.Loop();
-            }
-            catch (Exception e)
-            {
-                Log.Error("Server connection failed: \n{0}", e.Message);
-
-                WvsLogin.Stop();
-            }
-            finally
-            {
-                WvsLogin.CenterConnectionDone.Set();
-            }
-        }
-
-        protected override void Initialize(params object[] args)
-        {
-            using (PacketReader Packet = new Packet(InteroperabilityOperationCode.RegistrationRequest))
+            using (var Packet = new PacketWriter(InteroperabilityOperationCode.RegistrationRequest))
             {
                 Packet.WriteByte((byte)ServerType.Login);
                 Packet.WriteString((string)args[0]);
@@ -71,41 +38,37 @@ namespace RazzleServer.Login
             }
         }
 
-        protected override void Terminate()
+        public override void Receive(PacketReader packet)
         {
-            WvsLogin.Stop();
-        }
-
-        protected override void Dispatch(PacketReader inPacket)
-        {
-            switch ((InteroperabilityOperationCode)inPacket.OperationCode)
+            var header = (InteroperabilityOperationCode)packet.ReadUShort();
+            switch (header)
             {
                 case InteroperabilityOperationCode.RegistrationResponse:
-                    this.Register(inPacket);
+                    this.Register(packet);
                     break;
 
                 case InteroperabilityOperationCode.UpdateChannel:
-                    this.UpdateChannel(inPacket);
+                    this.UpdateChannel(packet);
                     break;
 
                 case InteroperabilityOperationCode.UpdateChannelPopulation:
-                    this.UpdateChannelPopulation(inPacket);
+                    this.UpdateChannelPopulation(packet);
                     break;
 
                 case InteroperabilityOperationCode.CharacterNameCheckResponse:
-                    this.CheckCharacterName(inPacket);
+                    this.CheckCharacterName(packet);
                     break;
 
                 case InteroperabilityOperationCode.CharacterEntriesResponse:
-                    this.GetCharacters(inPacket);
+                    this.GetCharacters(packet);
                     break;
 
                 case InteroperabilityOperationCode.CharacterCreationResponse:
-                    this.CreateCharacter(inPacket);
+                    this.CreateCharacter(packet);
                     break;
 
                 case InteroperabilityOperationCode.MigrationRegisterResponse:
-                    this.Migrate(inPacket);
+                    this.Migrate(packet);
                     break;
             }
         }
@@ -239,9 +202,13 @@ namespace RazzleServer.Login
 
         private PendingKeyedQueue<string, bool> MigrationPool = new PendingKeyedQueue<string, bool>();
 
+        public LoginCenterClient(Socket session) : base(session)
+        {
+        }
+
         public bool Migrate(string host, int accountID, int characterID)
         {
-            using (PacketReader outPacket = new Packet(InteroperabilityOperationCode.MigrationRegisterRequest))
+            using (var outPacket = new PacketWriter(InteroperabilityOperationCode.MigrationRegisterRequest))
             {
                 outPacket
                     .WriteString(host)

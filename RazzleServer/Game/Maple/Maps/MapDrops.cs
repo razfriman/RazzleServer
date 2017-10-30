@@ -1,4 +1,6 @@
-﻿namespace RazzleServer.Game.Maple.Maps
+﻿using RazzleServer.Game.Maple.Characters;
+
+namespace RazzleServer.Game.Maple.Maps
 {
     public sealed class MapDrops : MapObjects<Drop>
     {
@@ -27,7 +29,7 @@
             {
                 foreach (Character character in this.Map.Characters)
                 {
-                    using (PacketReader oPacket = item.GetCreatePacket(item.Owner == null ? character : null))
+                    using (var oPacket = item.GetCreatePacket(item.Owner == null ? character : null))
                     {
                         character.Client.Send(oPacket);
                     }
@@ -44,11 +46,7 @@
                 item.Expiry.Dispose();
             }
 
-            using (PacketReader oPacket = item.GetDestroyPacket())
-            {
-                this.Map.Broadcast(oPacket);
-            }
-
+            this.Map.Broadcast(item.GetDestroyPacket());
             base.RemoveItem(index);
         }
     }

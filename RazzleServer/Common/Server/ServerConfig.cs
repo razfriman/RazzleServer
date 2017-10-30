@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using RazzleServer.Util;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using RazzleServer.Common.Server;
 
 namespace RazzleServer.Server
 {
@@ -23,7 +24,7 @@ namespace RazzleServer.Server
 		public bool LoginCreatesNewAccount { get; set; } = true;
         public string CommandIndicator { get; set; } = "!";
         public ushort CenterPort { get; set; } = 8181;
-        public IEnumerable<World> Worlds { get; set; }
+        public IEnumerable<WorldConfig> Worlds { get; set; }
 
         private static ILogger Log = LogManager.Log;
 

@@ -35,7 +35,7 @@ namespace RazzleServer.Game.Maple.Life
                 movements = Movements.Decode(iPacket);
             }
 
-            using (PacketReader oPacket = new Packet(ServerOperationCode.NpcMove))
+            using (var oPacket = new PacketWriter(ServerOperationCode.NpcMove))
             {
                 oPacket
                     .WriteInt(this.ObjectID)

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Reflection;
-using RazzleServer.Common.PacketLib;
+using RazzleServer.Common.Network;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Packet;
 using RazzleServer.Server;

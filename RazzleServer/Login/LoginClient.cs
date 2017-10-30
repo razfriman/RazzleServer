@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Reflection;
-using RazzleServer.Common.PacketLib;
+using RazzleServer.Common.Network;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Packet;
 using RazzleServer.Login.Maple;
@@ -96,7 +96,7 @@ namespace RazzleServer.Login
 
         //private void SendLoginResult(LoginResult result)
         //{
-        //    using (PacketReader oPacket = new Packet(ServerOperationCode.CheckPasswordResult))
+        //    using (var oPacket = new PacketWriter(ServerOperationCode.CheckPasswordResult))
         //    {
         //        oPacket
         //            .WriteInt((int)result)
@@ -219,7 +219,7 @@ namespace RazzleServer.Login
         //        result = PinResult.Error;
         //    }
 
-        //    using (PacketReader oPacket = new Packet(ServerOperationCode.CheckPinCodeResult))
+        //    using (var oPacket = new PacketWriter(ServerOperationCode.CheckPinCodeResult))
         //    {
         //        oPacket.WriteByte((byte)result);
 
@@ -242,7 +242,7 @@ namespace RazzleServer.Login
 
         //        datum.Update("ID = {0}", this.Account.ID);
 
-        //        using (PacketReader oPacket = new Packet(ServerOperationCode.UpdatePinCodeResult))
+        //        using (var oPacket = new PacketWriter(ServerOperationCode.UpdatePinCodeResult))
         //        {
         //            oPacket.WriteByte(); // NOTE: All the other result types end up in a "trouble logging into the game" message.
 
@@ -255,7 +255,7 @@ namespace RazzleServer.Login
         //{
         //    foreach (World world in WvsLogin.Worlds)
         //    {
-        //        using (PacketReader oPacket = new Packet(ServerOperationCode.WorldInformation))
+        //        using (var oPacket = new PacketWriter(ServerOperationCode.WorldInformation))
         //        {
         //            oPacket
         //                .WriteByte(world.ID)
@@ -290,7 +290,7 @@ namespace RazzleServer.Login
         //            this.Send(oPacket);
         //        }
 
-        //        using (PacketReader oPacket = new Packet(ServerOperationCode.WorldInformation))
+        //        using (var oPacket = new PacketWriter(ServerOperationCode.WorldInformation))
         //        {
         //            oPacket.WriteByte(byte.MaxValue);
 
@@ -298,7 +298,7 @@ namespace RazzleServer.Login
         //        }
 
         //        // TODO: Last connected world. Get this from the database. Set the last connected world once you succesfully load a character.
-        //        using (PacketReader oPacket = new Packet(ServerOperationCode.LastConnectedWorld))
+        //        using (var oPacket = new PacketWriter(ServerOperationCode.LastConnectedWorld))
         //        {
         //            oPacket.WriteInt(); // NOTE: World ID.
 
@@ -306,7 +306,7 @@ namespace RazzleServer.Login
         //        }
 
         //        // TODO: Recommended worlds. Get this from configuration.
-        //        using (PacketReader oPacket = new Packet(ServerOperationCode.RecommendedWorldMessage))
+        //        using (var oPacket = new PacketWriter(ServerOperationCode.RecommendedWorldMessage))
         //        {
         //            oPacket
         //                .WriteByte(1) // NOTE: Count.
@@ -333,7 +333,7 @@ namespace RazzleServer.Login
         //        return;
         //    }
 
-        //    using (PacketReader oPacket = new Packet(ServerOperationCode.CheckUserLimitResult))
+        //    using (var oPacket = new PacketWriter(ServerOperationCode.CheckUserLimitResult))
         //    {
         //        oPacket.WriteShort((short)world.Status);
 
@@ -350,7 +350,7 @@ namespace RazzleServer.Login
 
         //    List<byte[]> characters = WvsLogin.CenterConnection.GetCharacters(this.World, this.Account.ID);
 
-        //    using (PacketReader oPacket = new Packet(ServerOperationCode.SelectWorldResult))
+        //    using (var oPacket = new PacketWriter(ServerOperationCode.SelectWorldResult))
         //    {
         //        oPacket
         //            .WriteBool(false)
@@ -373,7 +373,7 @@ namespace RazzleServer.Login
         //{
             //if (this.IsInViewAllChar)
             //{
-            //    using (PacketReader oPacket = new Packet(ServerOperationCode.ViewAllCharResult))
+            //    using (var oPacket = new PacketWriter(ServerOperationCode.ViewAllCharResult))
             //    {
             //        oPacket
             //            .WriteByte((byte)VACResult.UnknownError)
@@ -398,7 +398,7 @@ namespace RazzleServer.Login
             //    characters.Add(character);
             //}
 
-            //using (PacketReader oPacket = new Packet(ServerOperationCode.ViewAllCharResult))
+            //using (var oPacket = new PacketWriter(ServerOperationCode.ViewAllCharResult))
             //{
             //    if (characters.Count == 0)
             //    {
@@ -418,7 +418,7 @@ namespace RazzleServer.Login
 
             //foreach (WorldServer world in MasterServer.Worlds)
             //{
-            //    using (PacketReader oPacket = new Packet(ServerOperationCode.ViewAllCharResult))
+            //    using (var oPacket = new PacketWriter(ServerOperationCode.ViewAllCharResult))
             //    {
             //        IEnumerable<Character> worldChars = characters.Where(x => x.WorldID == world.ID);
 
@@ -447,7 +447,7 @@ namespace RazzleServer.Login
         //    string name = iPacket.ReadString();
         //    bool unusable = WvsLogin.CenterConnection.IsNameTaken(name);
 
-        //    using (PacketReader oPacket = new Packet(ServerOperationCode.CheckDuplicatedIDResult))
+        //    using (var oPacket = new PacketWriter(ServerOperationCode.CheckDuplicatedIDResult))
         //    {
         //        oPacket
         //            .WriteString(name)
@@ -490,7 +490,7 @@ namespace RazzleServer.Login
         //        result = CharacterDeletionResult.InvalidPic;
         //    }
 
-        //    using (PacketReader oPacket = new Packet(ServerOperationCode.DeleteCharacterResult))
+        //    using (var oPacket = new PacketWriter(ServerOperationCode.DeleteCharacterResult))
         //    {
         //        oPacket
         //            .WriteInt(characterID)
@@ -549,7 +549,7 @@ namespace RazzleServer.Login
         //            return;
         //        }
 
-        //        using (PacketReader oPacket = new Packet(ServerOperationCode.SelectCharacterResult))
+        //        using (var oPacket = new PacketWriter(ServerOperationCode.SelectCharacterResult))
         //        {
         //            oPacket
         //                .WriteByte()
@@ -565,7 +565,7 @@ namespace RazzleServer.Login
         //    }
         //    else
         //    {
-        //        using (PacketReader oPacket = new Packet(ServerOperationCode.CheckSPWResult))
+        //        using (var oPacket = new PacketWriter(ServerOperationCode.CheckSPWResult))
         //        {
         //            oPacket.WriteByte();
 

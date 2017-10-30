@@ -6,7 +6,7 @@ namespace RazzleServer.Login
 {
     public class LoginServer : MapleServer<LoginClient>
     {
-        public CenterServer CenterConnection { get; set; }
+        public LoginCenterClient CenterConnection { get; set; }
         public Worlds Worlds { get; private set; }
 
         public LoginServer()

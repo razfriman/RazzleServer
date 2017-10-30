@@ -1,5 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using RazzleServer.Common.Constants;
+using RazzleServer.Common.Data;
+using RazzleServer.Common.Packet;
 
 namespace RazzleServer.Game.Maple.Characters
 {
@@ -11,26 +13,26 @@ namespace RazzleServer.Game.Maple.Characters
 
         public CharacterKeymap(Character parent)
         {
-            this.Parent = parent;
+            Parent = parent;
         }
 
         public void Load()
         {
-            foreach (Datum datum in new Datums("keymaps").Populate("CharacterID = {0}", this.Parent.ID))
+            foreach (Datum datum in new Datums("keymaps").Populate("CharacterID = {0}", Parent.ID))
             {
-                this.Add(new Shortcut(datum));
+                Add(new Shortcut(datum));
             }
         }
 
         public void Save()
         {
-            this.Delete();
+            Delete();
 
             foreach (Shortcut entry in this)
             {
                 Datum datum = new Datum("keymaps");
 
-                datum["CharacterID"] = this.Parent.ID;
+                datum["CharacterID"] = Parent.ID;
                 datum["Key"] = (int)entry.Key;
                 datum["Type"] = (byte)entry.Type;
                 datum["Action"] = (int)entry.Action;
@@ -41,12 +43,12 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Delete()
         {
-            Database.Delete("keymaps", "CharacterID = {0}", this.Parent.ID);
+            //Database.Delete("keymaps", "CharacterID = {0}", Parent.ID);
         }
 
         public void Send()
         {
-            using (PacketReader oPacket = new Packet(ServerOperationCode.FuncKeyMappedInit))
+            using (var oPacket = new PacketWriter(ServerOperationCode.FuncKeyMappedInit))
             {
                 oPacket.WriteBool(false);
 
@@ -54,23 +56,21 @@ namespace RazzleServer.Game.Maple.Characters
                 {
                     KeymapKey key = (KeymapKey)i;
 
-                    if (this.Contains(key))
+                    if (Contains(key))
                     {
                         Shortcut shortcut = this[key];
 
-                        oPacket
-                            .WriteByte((byte)shortcut.Type)
-                            .WriteInt((int)shortcut.Action);
+                        oPacket.WriteByte((byte)shortcut.Type);
+                        oPacket.WriteInt((int)shortcut.Action);
                     }
                     else
                     {
-                        oPacket
-                            .WriteByte()
-                            .WriteInt();
+                        oPacket.WriteByte(0);
+                        oPacket.WriteInt(0);
                     }
                 }
 
-                this.Parent.Client.Send(oPacket);
+                Parent.Client.Send(oPacket);
             }
         }
 
@@ -92,11 +92,11 @@ namespace RazzleServer.Game.Maple.Characters
                     KeymapType type = (KeymapType)iPacket.ReadByte();
                     KeymapAction action = (KeymapAction)iPacket.ReadInt();
 
-                    if (this.Contains(key))
+                    if (Contains(key))
                     {
                         if (type == KeymapType.None)
                         {
-                            this.Remove(key);
+                            Remove(key);
                         }
                         else
                         {
@@ -106,7 +106,7 @@ namespace RazzleServer.Game.Maple.Characters
                     }
                     else
                     {
-                        this.Add(new Shortcut(key, action, type));
+                        Add(new Shortcut(key, action, type));
                     }
                 }
             }
