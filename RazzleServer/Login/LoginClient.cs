@@ -7,7 +7,7 @@ using RazzleServer.Common.Network;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Packet;
 using RazzleServer.Login.Maple;
-using RazzleServer.Util;
+using RazzleServer.Common.Util;
 
 namespace RazzleServer.Login
 {
@@ -461,7 +461,7 @@ namespace RazzleServer.Login
         //{
         //    byte[] characterData = iPacket.ReadBytes();
 
-        //    using (PacketReader outPacket = new Packet(ServerOperationCode.CreateNewCharacterResult))
+        //    using (var outPacket = new PacketWriter(ServerOperationCode.CreateNewCharacterResult))
         //    {
         //        outPacket.WriteByte(); // NOTE: 1 for failure. Could be implemented as anti-packet editing.
         //        outPacket.WriteBytes(WvsLogin.CenterConnection.CreateCharacter(this.World, this.Account.ID, characterData));

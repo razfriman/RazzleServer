@@ -6,7 +6,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using Microsoft.Extensions.Logging;
-using RazzleServer.Util;
+using RazzleServer.Common.Util;
 
 namespace RazzleServer.Common.WzLib.WzProperties
 {

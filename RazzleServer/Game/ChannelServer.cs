@@ -5,7 +5,7 @@ using System.Threading;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Server;
-using RazzleServer.Util;
+using RazzleServer.Common.Util;
 
 namespace RazzleServer.Game
 {

@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace RazzleServer.Util
+namespace RazzleServer.Common.Util
 {
     public static class Functions
     {

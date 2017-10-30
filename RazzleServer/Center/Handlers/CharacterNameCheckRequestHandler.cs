@@ -11,7 +11,7 @@ namespace RazzleServer.Center.Handlers
         //{
         //    string name = inPacket.ReadString();
 
-        //    using (PacketReader outPacket = new Packet(InteroperabilityOperationCode.CharacterNameCheckRequest))
+        //    using (var outPacket = new PacketWriter(InteroperabilityOperationCode.CharacterNameCheckRequest))
         //    {
         //        outPacket.WriteString(name);
 

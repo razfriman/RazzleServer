@@ -2,6 +2,7 @@
 {
     public enum InteroperabilityOperationCode : ushort
     {
+        Unknown,
         RegistrationRequest,
         RegistrationResponse,
         UpdateChannel,

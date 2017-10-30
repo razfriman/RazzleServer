@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace RazzleServer.Util
+namespace RazzleServer.Common.Util
 {
     public static class LogManager
     {

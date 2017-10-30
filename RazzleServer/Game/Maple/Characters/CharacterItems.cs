@@ -8,7 +8,7 @@ using RazzleServer.Common.Packet;
 using RazzleServer.Common.Exceptions;
 using RazzleServer.Game.Maple.Life;
 using RazzleServer.Game.Maple.Data;
-using RazzleServer.Util;
+using RazzleServer.Common.Util;
 using RazzleServer.Common.Data;
 
 namespace RazzleServer.Game.Maple.Characters

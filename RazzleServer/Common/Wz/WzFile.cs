@@ -5,7 +5,7 @@ using System;
 using RazzleServer.Common.WzLib.Util;
 using RazzleServer.Common.WzLib.WzProperties;
 using Microsoft.Extensions.Logging;
-using RazzleServer.Util;
+using RazzleServer.Common.Util;
 
 namespace RazzleServer.Common.WzLib
 {

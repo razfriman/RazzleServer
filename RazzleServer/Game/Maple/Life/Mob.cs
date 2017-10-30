@@ -308,7 +308,7 @@ namespace RazzleServer.Game.Maple.Life
 
             Delay.Execute(() =>
             {
-                using (PacketReader Packet = new Packet(ServerOperationCode.MobStatReset))
+                using (PacketReader Packet = new PacketWriter(ServerOperationCode.MobStatReset))
                 {
                     Packet
                         .WriteInt(this.ObjectID)

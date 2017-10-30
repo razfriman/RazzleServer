@@ -1,5 +1,7 @@
 ﻿using System;
 using RazzleServer.Common.Data;
+using RazzleServer.Common.Packet;
+using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
 
@@ -160,9 +162,8 @@ namespace RazzleServer.Game.Maple
                 {
                     using (var oPacket = new PacketWriter(ServerOperationCode.Cooldown))
                     {
-                        oPacket
-                            .WriteInt(this.MapleID)
-                            .WriteShort((short)this.RemainingCooldownSeconds);
+                        oPacket.WriteInt(this.MapleID);
+                        oPacket.WriteShort((short)this.RemainingCooldownSeconds);
 
                         this.Character.Client.Send(oPacket);
                     }

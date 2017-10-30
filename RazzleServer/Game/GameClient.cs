@@ -7,7 +7,7 @@ using RazzleServer.Common.Network;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Packet;
 using RazzleServer.Server;
-using RazzleServer.Util;
+using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple;
 using RazzleServer.Game.Maple.Characters;
 

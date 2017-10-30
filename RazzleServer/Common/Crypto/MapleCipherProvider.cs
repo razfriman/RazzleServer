@@ -2,7 +2,8 @@
 using System.Linq;
 using RazzleServer.Common.Network;
 using Microsoft.Extensions.Logging;
-using RazzleServer.Util;
+using RazzleServer.Common.Util;
+using RazzleServer.Common.Packet;
 
 namespace RazzleServer.Common.MapleCryptoLib
 {
@@ -178,7 +179,7 @@ namespace RazzleServer.Common.MapleCryptoLib
 			if (!RecvCipher.Handshaken)
 			{
 				RecvCipher.Handshake(ref data);
-				PacketReader pr = new PacketReader(data);
+				var pr = new PacketReader(data);
 				var version = pr.ReadShort();
 				var subVersion = pr.ReadString();
 

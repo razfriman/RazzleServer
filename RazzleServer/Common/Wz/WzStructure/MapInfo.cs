@@ -4,7 +4,7 @@ using RazzleServer.Common.WzLib.WzProperties;
 using RazzleServer.Common.WzLib.WzStructure.Data;
 using System.Drawing;
 using Microsoft.Extensions.Logging;
-using RazzleServer.Util;
+using RazzleServer.Common.Util;
 
 namespace RazzleServer.Common.WzLib.WzStructure
 {

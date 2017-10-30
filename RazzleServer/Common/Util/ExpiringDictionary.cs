@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace RazzleServer.Util
+namespace RazzleServer.Common.Util
 {
     public class ExpiringDictionary<TKey, TValue> : IDictionary<TKey, TValue>
     {

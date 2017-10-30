@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Text;
 using RazzleServer.Game.Maple;
-using RazzleServer.Util;
+using RazzleServer.Common.Util;
 
 namespace RazzleServer.Common.Packet
 {
@@ -165,7 +165,7 @@ namespace RazzleServer.Common.Packet
             WriteInt(box.LT.X);
             WriteInt(box.LT.Y);
             WriteInt(box.RB.X);
-            WriteInt(box.R.Y);
+            WriteInt(box.RB.Y);
         }
 
         public string ToPacketString() => Functions.ByteArrayToStr(ToArray());

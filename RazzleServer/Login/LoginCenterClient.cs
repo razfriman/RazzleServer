@@ -3,7 +3,7 @@ using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Network;
 using RazzleServer.Login.Maple;
-using RazzleServer.Util;
+using RazzleServer.Common.Util;
 using System.Net.Sockets;
 
 namespace RazzleServer.Login
@@ -151,7 +151,7 @@ namespace RazzleServer.Login
 
         public List<byte[]> GetCharacters(byte worldID, int accountID)
         {
-            using (PacketReader outPacket = new Packet(InteroperabilityOperationCode.CharacterEntriesRequest))
+            using (var outPacket = new PacketWriter(InteroperabilityOperationCode.CharacterEntriesRequest))
             {
                 outPacket.WriteByte(worldID);
                 outPacket.WriteInt(accountID);
@@ -166,7 +166,7 @@ namespace RazzleServer.Login
 
         public bool IsNameTaken(string name)
         {
-            using (PacketReader outPacket = new Packet(InteroperabilityOperationCode.CharacterNameCheckRequest))
+            using (var outPacket = new PacketWriter(InteroperabilityOperationCode.CharacterNameCheckRequest))
             {
                 outPacket.WriteString(name);
 
@@ -188,7 +188,7 @@ namespace RazzleServer.Login
 
         public byte[] CreateCharacter(byte worldID, int accountID, byte[] characterData)
         {
-            using (PacketReader outPacket = new Packet(InteroperabilityOperationCode.CharacterCreationRequest))
+            using (var outPacket = new PacketWriter(InteroperabilityOperationCode.CharacterCreationRequest))
             {
                 outPacket.WriteByte(worldID);
                 outPacket.WriteInt(accountID);

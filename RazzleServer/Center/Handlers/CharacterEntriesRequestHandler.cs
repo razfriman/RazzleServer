@@ -8,7 +8,7 @@ namespace RazzleServer.Center.Handlers
         //    byte worldID = inPacket.ReadByte();
         //    int accountID = inPacket.ReadInt();
 
-        //    using (PacketReader outPacket = new Packet(InteroperabilityOperationCode.CharacterEntriesRequest))
+        //    using (var outPacket = new PacketWriter(InteroperabilityOperationCode.CharacterEntriesRequest))
         //    {
         //        outPacket.WriteInt(accountID);
 

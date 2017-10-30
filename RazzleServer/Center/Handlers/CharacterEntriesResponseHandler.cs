@@ -12,7 +12,7 @@
         //        entires.Add(inPacket.ReadBytes(inPacket.ReadByte()));
         //    }
 
-        //    using (PacketReader outPacket = new Packet(InteroperabilityOperationCode.CharacterEntriesResponse))
+        //    using (var outPacket = new PacketWriter(InteroperabilityOperationCode.CharacterEntriesResponse))
         //    {
         //        outPacket.WriteInt(accountID);
 

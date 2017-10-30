@@ -1,4 +1,4 @@
-namespace RazzleServer.Util
+namespace RazzleServer.Common.Util
 {
     public class AutoIncrement
     {

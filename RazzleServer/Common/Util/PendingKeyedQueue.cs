@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 
-namespace RazzleServer.Util
+namespace RazzleServer.Common.Util
 {
     public class PendingKeyedQueue<TKey, TValue> : Dictionary<TKey, TValue>, IDisposable
     {

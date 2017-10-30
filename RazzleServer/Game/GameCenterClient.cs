@@ -6,14 +6,18 @@ using RazzleServer.Common.Network;
 using RazzleServer.Game.Maple;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
-using RazzleServer.Util;
+using RazzleServer.Common.Util;
+using System.Linq;
+using System.Net;
 
 namespace RazzleServer.Game
 {
     public class GameCenterClient : AClient
     {
-        public GameCenterClient(Socket session) : base(session)
+        ChannelServer Server { get; set; }
+        public GameCenterClient(ChannelServer server, Socket session) : base(session)
         {
+            Server = server;
         }
 
         public override void Receive(PacketReader packet)
@@ -69,29 +73,23 @@ namespace RazzleServer.Game
             {
                 case ServerRegistrationResponse.Valid:
                     {
-                        WvsGame.WorldID = inPacket.ReadByte();
-                        WvsGame.WorldName = inPacket.ReadString();
-                        WvsGame.TickerMessage = inPacket.ReadString();
-                        WvsGame.ChannelID = inPacket.ReadByte();
-                        WvsGame.RemoteEndPoint = new IPEndPoint(IPAddress.Loopback, inPacket.ReadUShort());
-                        WvsGame.Listen();
+                        Server.WorldID = inPacket.ReadByte();
+                        Server.WorldName = inPacket.ReadString();
+                        Server.TickerMessage = inPacket.ReadString();
+                        Server.ChannelID = inPacket.ReadByte();
+                        Server.RemoteEndPoint = new IPEndPoint(IPAddress.Loopback, inPacket.ReadUShort());
+                        Server.Listen();
+                        Server.AllowMultiLeveling = inPacket.ReadBool();
 
-                        WvsGame.AllowMultiLeveling = inPacket.ReadBool();
-                        Log.Inform("Characters will {0}be able to continuously level-up.", WvsGame.AllowMultiLeveling ? "" : "not ");
+                        Log.Inform("Characters will {0}be able to continuously level-up.", Server.AllowMultiLeveling ? "" : "not ");
 
-                        WvsGame.ExperienceRate = inPacket.ReadInt();
-                        WvsGame.QuestExperienceRate = inPacket.ReadInt();
-                        WvsGame.PartyQuestExperienceRate = inPacket.ReadInt();
-                        WvsGame.MesoRate = inPacket.ReadInt();
-                        WvsGame.DropRate = inPacket.ReadInt();
-                        Log.Inform("Rates: {0}x / {1}x / {2}x / {3}x / {4}x.",
-                            WvsGame.ExperienceRate,
-                            WvsGame.QuestExperienceRate,
-                            WvsGame.PartyQuestExperienceRate,
-                            WvsGame.MesoRate,
-                            WvsGame.DropRate);
+                        Server.ExperienceRate = inPacket.ReadInt();
+                        Server.QuestExperienceRate = inPacket.ReadInt();
+                        Server.PartyQuestExperienceRate = inPacket.ReadInt();
+                        Server.MesoRate = inPacket.ReadInt();
+                        Server.DropRate = inPacket.ReadInt();
 
-                        Log.Success("Registered Channel Server ({0} [{1}]-{2}).", WvsGame.WorldName, WvsGame.WorldID, WvsGame.ChannelID);
+                        Log.Success("Registered Channel Server ({0} [{1}]-{2}).", Server.WorldName, Server.WorldID, Server.ChannelID);
                     }
                     break;
 
@@ -99,17 +97,17 @@ namespace RazzleServer.Game
                     {
                         Log.Error("Unable to register as Channel Server: {0}", ServerRegistrationResponseResolver.Explain(response));
 
-                        WvsGame.Stop();
+                        Server.Stop();
                     }
                     break;
             }
 
-            WvsGame.CenterConnectionDone.Set();
+            Server.CenterConnectionDone.Set();
         }
 
         private void UpdateChannelID(PacketReader inPacket)
         {
-            WvsGame.ChannelID = inPacket.ReadByte();
+            Server.ChannelID = inPacket.ReadByte();
         }
 
         private void CheckCharacterName(PacketReader inPacket)
@@ -119,9 +117,8 @@ namespace RazzleServer.Game
 
             using (var outPacket = new PacketWriter(InteroperabilityOperationCode.CharacterNameCheckResponse))
             {
-                outPacket
-                    .WriteString(name)
-                    .WriteBool(unusable);
+                outPacket.WriteString(name);
+                outPacket.WriteBool(unusable);
 
                 Send(outPacket);
             }
@@ -135,7 +132,7 @@ namespace RazzleServer.Game
             {
                 outPacket.WriteInt(accountID);
 
-                foreach (Datum datum in new Datums("characters").PopulateWith("ID", "AccountID = {0} AND WorldID = {1}", accountID, WvsGame.WorldID))
+                foreach (Datum datum in new Datums("characters").PopulateWith("ID", "AccountID = {0} AND WorldID = {1}", accountID, Server.WorldID))
                 {
                     Character character = new Character((int)datum["ID"]);
                     character.Load();
@@ -211,7 +208,7 @@ namespace RazzleServer.Game
             Character character = new Character();
 
             character.AccountID = accountID;
-            character.WorldID = WvsGame.WorldID;
+            character.WorldID = Server.WorldID;
             character.Name = name;
             character.Gender = gender;
             character.Skin = skin;

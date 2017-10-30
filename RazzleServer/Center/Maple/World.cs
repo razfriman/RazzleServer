@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
-using RazzleServer.Util;
+using RazzleServer.Common.Util;
 using RazzleServer.Common.Packet;
 
 namespace RazzleServer.Center.Maple

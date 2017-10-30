@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using RazzleServer.Common.Data;
 
 namespace RazzleServer.Game.Maple.Characters
 {

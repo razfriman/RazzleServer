@@ -15,7 +15,7 @@ namespace RazzleServer.Center.Handlers
 
         //    bool valid = true;
 
-        //    using (PacketReader Packet = new Packet(InteroperabilityOperationCode.RegistrationResponse))
+        //    using (PacketReader Packet = new PacketWriter(InteroperabilityOperationCode.RegistrationResponse))
         //    {
         //        if (!Enum.IsDefined(typeof(ServerType), type))
         //        {
@@ -130,7 +130,7 @@ namespace RazzleServer.Center.Handlers
         //                    {
         //                        foreach (CenterClient loopChannel in loopWorld)
         //                        {
-        //                            using (PacketReader Packet = new Packet(InteroperabilityOperationCode.UpdateChannel))
+        //                            using (PacketReader Packet = new PacketWriter(InteroperabilityOperationCode.UpdateChannel))
         //                            {
         //                                Packet.WriteByte(loopChannel.World.ID);
         //                                Packet.WriteBool(true);
@@ -149,7 +149,7 @@ namespace RazzleServer.Center.Handlers
 
         //            case ServerType.Channel:
         //                {
-        //                    using (PacketReader Packet = new Packet(InteroperabilityOperationCode.UpdateChannel))
+        //                    using (PacketReader Packet = new PacketWriter(InteroperabilityOperationCode.UpdateChannel))
         //                    {
         //                        Packet.WriteByte(World.ID);
         //                        Packet.WriteBool(true);

@@ -12,7 +12,7 @@ namespace RazzleServer.Center.Handlers
         //    string name = inPacket.ReadString();
         //    bool unusable = inPacket.ReadBool();
 
-        //    using (PacketReader outPacket = new Packet(InteroperabilityOperationCode.CharacterNameCheckResponse))
+        //    using (var outPacket = new PacketWriter(InteroperabilityOperationCode.CharacterNameCheckResponse))
         //    {
         //        outPacket
         //            .WriteString(name)

@@ -2,7 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 using Microsoft.Extensions.Logging;
-using RazzleServer.Util;
+using RazzleServer.Common.Util;
 using RazzleServer.Common.MapleCryptoLib;
 using RazzleServer.Common.Packet;
 

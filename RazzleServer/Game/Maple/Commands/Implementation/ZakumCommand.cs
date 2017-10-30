@@ -1,4 +1,5 @@
 ﻿using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Game.Maple.Life;
 
 namespace RazzleServer.Game.Maple.Commands.Implementation
 {

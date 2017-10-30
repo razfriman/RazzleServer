@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Packet;
-using RazzleServer.Util;
+using RazzleServer.Common.Util;
 
 namespace RazzleServer.Login.Handlers
 {

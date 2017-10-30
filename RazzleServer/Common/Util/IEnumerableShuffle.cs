@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace RazzleServer.Util
+namespace RazzleServer.Common.Util
 {
     public static class ListExtensions
     {

@@ -30,7 +30,7 @@ namespace RazzleServer
                     writer.WriteEndElement();
                 }
 
-                foreach (var value in Enum.GetValues(typeof(SMSGHeader)))
+                foreach (var value in Enum.GetValues(typeof(ServerOperationCode)))
                 {
                     writer.WriteStartElement("Definition");
 

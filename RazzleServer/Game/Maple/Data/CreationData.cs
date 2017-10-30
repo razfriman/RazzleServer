@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using RazzleServer.Common.Constants;
+using RazzleServer.Common.Data;
 
 namespace RazzleServer.Game.Maple.Data
 {

@@ -1,4 +1,4 @@
-﻿using RazzleServer.Util;
+﻿using RazzleServer.Common.Util;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,18 +27,10 @@ namespace RazzleServer.Server
 
 		public static void LoadMaps()
 		{
-			var sw = Stopwatch.StartNew();
-			int count = DataProvider.LoadMaps(Path.Combine(ServerConfig.Instance.WzFilePath, "Map.wz"));
-			Log.LogInformation($"{count} Maps loaded in {sw.ElapsedMilliseconds} ms");
-			sw.Stop();
 		}
 
 		public static void LoadMobs()
 		{
-			var sw = Stopwatch.StartNew();
-			int count = DataProvider.LoadMobs(Path.Combine(ServerConfig.Instance.WzFilePath, "Mob.wz"));
-			Log.LogInformation($"{count} Mobs loaded in {sw.ElapsedMilliseconds} ms");
-			sw.Stop();
 		}
 
 		private static void InitializeDatabase()

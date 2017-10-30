@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using RazzleServer.Common.Constants;
 using RazzleServer.Common.Data;
 using RazzleServer.Game.Maple.Characters;
 
