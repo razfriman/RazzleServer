@@ -5,9 +5,9 @@ using RazzleServer.Common.Packet;
 using RazzleServer.Server;
 using RazzleServer.Util;
 
-namespace MapleLib.PacketLib
+namespace RazzleServer.Common.PacketLib
 {
-    public abstract class AClient
+    public abstract class AClient : IDisposable
     {
         public string Host { get; set; }
         public ushort Port { get; set; }
@@ -87,6 +87,10 @@ namespace MapleLib.PacketLib
             writer.WriteUInt(sIV);
             writer.WriteByte(ServerConfig.Instance.ServerType);
             Socket.SendRawPacket(writer.ToArray());
+        }
+
+        public void Dispose()
+        {
         }
     }
 }

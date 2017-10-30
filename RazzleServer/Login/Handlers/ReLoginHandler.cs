@@ -1,13 +1,11 @@
-﻿using MapleLib.PacketLib;
-using RazzleServer.Common.Packet;
-using RazzleServer.Player;
+﻿using RazzleServer.Common.Packet;
 
-namespace RazzleServer.Handlers
+namespace RazzleServer.Login.Handlers
 {
     [PacketHandler(ClientOperationCode.RELOG)]
-    public class ReLoginHandler : APacketHandler
+    public class ReLoginHandler : LoginPacketHandler
     {
-        public override void HandlePacket(PacketReader packet, MapleClient client)
+        public override void HandlePacket(PacketReader packet, LoginClient client)
         {
             var pw = new PacketWriter(ServerOperationCode.RELOG_RESPONSE);
             pw.WriteByte(1);

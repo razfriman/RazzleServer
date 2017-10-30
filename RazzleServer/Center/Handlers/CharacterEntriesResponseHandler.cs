@@ -1,13 +1,7 @@
-﻿using System;
-namespace RazzleServer.Center.Handlers
+﻿namespace RazzleServer.Center.Handlers
 {
     public class CharacterEntriesResponseHandler
     {
-        public CharacterEntriesResponseHandler()
-        {
-            
-        }
-
         //private void CharacterEntriesResponse(PacketReader inPacket)
         //{
         //    int accountID = inPacket.ReadInt();

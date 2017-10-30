@@ -1,4 +1,9 @@
-﻿namespace RazzleServer.Game.Maple.Maps
+﻿using RazzleServer.Common.Packet;
+using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Game.Maple.Data;
+using RazzleServer.Game.Maple.Life;
+
+namespace RazzleServer.Game.Maple.Maps
 {
     public sealed class MapReactors : MapObjects<Reactor>
     {
@@ -12,10 +17,8 @@
 
                 if (DataProvider.IsInitialized)
                 {
-                    using (PacketReader oPacket = item.GetCreatePacket())
-                    {
-                        this.Map.Broadcast(oPacket);
-                    }
+                    var oPacket = item.GetCreatePacket();
+                    this.Map.Broadcast(oPacket);
                 }
             }
         }
@@ -69,7 +72,7 @@
 
         public void Touch(PacketReader iPacket, Character character)
         {
-            
+
         }
     }
 }

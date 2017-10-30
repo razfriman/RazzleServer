@@ -3,7 +3,10 @@ using System.Net;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple;
+using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Game.Maple.Data;
 using RazzleServer.Server;
+using RazzleServer.Util;
 
 namespace RazzleServer.Game
 {
@@ -13,12 +16,10 @@ namespace RazzleServer.Game
         public void Initialize(params object[] args)
         {
                 var pw = new PacketWriter(InteroperabilityOperationCode.RegistrationRequest);
-                pw.WriteByte(ServerType.Channel);
+                pw.WriteByte((int)ServerType.Channel);
                 pw.WriteString((string)args[0]);
                 Send(pw);
         }
-
-
 
         public override void Receive(PacketReader inPacket)
         {
@@ -57,11 +58,11 @@ namespace RazzleServer.Game
 
         private void Register(PacketReader inPacket)
         {
-            ServerRegsitrationResponse response = (ServerRegsitrationResponse)inPacket.ReadByte();
+            var response = (ServerRegistrationResponse)inPacket.ReadByte();
 
             switch (response)
             {
-                case ServerRegsitrationResponse.Valid:
+                case ServerRegistrationResponse.Valid:
                     {
                         WvsGame.WorldID = inPacket.ReadByte();
                         WvsGame.WorldName = inPacket.ReadString();

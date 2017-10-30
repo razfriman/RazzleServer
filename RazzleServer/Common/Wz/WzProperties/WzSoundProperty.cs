@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using System;
-using MapleLib.WzLib.Util;
+using RazzleServer.Common.WzLib.Util;
 using NAudio.Wave;
 using System.Text;
 using System.Runtime.InteropServices;
@@ -8,7 +8,7 @@ using System.Runtime.Serialization;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Util;
 
-namespace MapleLib.WzLib.WzProperties
+namespace RazzleServer.Common.WzLib.WzProperties
 {
     /// <summary>
     /// A property that contains data for an MP3 file

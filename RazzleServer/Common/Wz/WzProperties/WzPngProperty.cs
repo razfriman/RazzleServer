@@ -4,11 +4,11 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.IO.Compression;
 using System.Runtime.InteropServices;
-using MapleLib.WzLib.Util;
+using RazzleServer.Common.WzLib.Util;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Util;
 
-namespace MapleLib.WzLib.WzProperties
+namespace RazzleServer.Common.WzLib.WzProperties
 {
     /// <summary>
     /// A property that contains the information for a bitmap

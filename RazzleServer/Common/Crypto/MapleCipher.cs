@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MapleLib.MapleCryptoLib
+namespace RazzleServer.Common.MapleCryptoLib
 {
 	/// <summary>
 	/// Cipher class used for encrypting and decrypting maple packet data

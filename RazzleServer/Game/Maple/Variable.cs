@@ -1,4 +1,6 @@
-﻿namespace RazzleServer.Game.Maple
+﻿using RazzleServer.Common.Data;
+
+namespace RazzleServer.Game.Maple
 {
     public sealed class Variable
     {

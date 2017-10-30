@@ -1,12 +1,6 @@
 {
-  "ExpRate": 1,
-  "MesoRate": 1,
-  "DropRate": 1,
-  "QuestExpRate": 1,
   "LoginPort": 8484,
-  "ChannelStartPort": 8585,
-  "Channels": 3,
-  "EventMessage": "Welcome to RazzleMS",
+  "CenterPort":  8181,
   "DefaultMapID": 100000000,
   "DatabaseName": "MapleServer.db",
   "Version": 83,
@@ -15,7 +9,25 @@
   "AESKey": 5923094546581162003,
   "PingTimeout": 30,
   "PrintPackets": true,
-  "IsLocalHost": true,
   "LoginCreatesNewAccount": true,
-  "WzFilePath":  "/Users/razfriman/Desktop/WZ"
+  "WzFilePath": "/Users/razfriman/Desktop/WZ",
+  "Worlds": [
+    {
+      "ID": 1,
+      "Port": 8585,
+      "ShopPort": 9090,
+      "ChannelCount": 3,
+      "Flag": "",
+      "EventMessage": "",
+      "TickerMessage": "",
+      "DefaultCreationSlots": 3,
+      "EnableCharacterCreation": true,
+      "EnableMultiLeveling": true,
+      "ExperienceRate": 1,
+      "QuestExperienceRate": 1,
+      "PartyQuestExperienceRate": 1,
+      "MesoRate": 1,
+      "DropRate": 1
+    }
+  ]
 }

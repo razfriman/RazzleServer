@@ -1,5 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using RazzleServer.Common.Constants;
+using RazzleServer.Common.Data;
+using RazzleServer.Common.Packet;
+using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Game.Maple.Data;
+using RazzleServer.Game.Maple.Maps;
 
 namespace RazzleServer.Game.Maple.Life
 {
@@ -238,7 +244,7 @@ namespace RazzleServer.Game.Maple.Life
             byte skillID = 0;
             byte skillLevel = 0;
             MobSkill skill = null;
-            
+
             if (skill != null)
             {
                 if (this.Health * 100 / this.MaxHealth > skill.PercentageLimitHP ||
@@ -322,7 +328,7 @@ namespace RazzleServer.Game.Maple.Life
         {
             this.Health = Math.Min(this.MaxHealth, (uint)(this.Health + hp + Application.Random.Next(-range / 2, range / 2)));
 
-            using (PacketReader Packet = new Packet(ServerOperationCode.MobDamaged))
+            using (PacketReader Packet = new PacketWriter(ServerOperationCode.MobDamaged))
             {
                 Packet
                     .WriteInt(this.ObjectID)
@@ -381,84 +387,79 @@ namespace RazzleServer.Game.Maple.Life
             }
         }
 
-        public Packet GetCreatePacket()
+        public PacketWriter GetCreatePacket()
         {
             return this.GetInternalPacket(false, true);
         }
 
-        public Packet GetSpawnPacket()
+        public PacketWriter GetSpawnPacket()
         {
             return this.GetInternalPacket(false, false);
         }
 
-        public Packet GetControlRequestPacket()
+        public PacketWriter GetControlRequestPacket()
         {
             return this.GetInternalPacket(true, false);
         }
 
-        private Packet GetInternalPacket(bool requestControl, bool newSpawn)
+        private PacketWriter GetInternalPacket(bool requestControl, bool newSpawn)
         {
-            Packet oPacket = new Packet(requestControl ? ServerOperationCode.MobChangeController : ServerOperationCode.MobEnterField);
+            var oPacket = new PacketWriter(requestControl ? ServerOperationCode.MobChangeController : ServerOperationCode.MobEnterField);
 
             if (requestControl)
             {
                 oPacket.WriteByte((byte)(this.IsProvoked ? 2 : 1));
             }
 
-            oPacket
-                .WriteInt(this.ObjectID)
-                .WriteByte((byte)(this.Controller == null ? 5 : 1))
-                .WriteInt(this.MapleID)
-                .Skip(15) // NOTE: Unknown.
-                .WriteByte(0x88) // NOTE: Unknown.
-                .Skip(6) // NOTE: Unknown.
-                .WriteShort(this.Position.X)
-                .WriteShort(this.Position.Y)
-                .WriteByte((byte)(0x02 | (this.IsFacingLeft ? 0x01 : 0x00)))
-                .WriteShort(this.Foothold)
-                .WriteShort(this.Foothold);
+            oPacket.WriteInt(this.ObjectID);
+            oPacket.WriteByte((byte)(this.Controller == null ? 5 : 1));
+            oPacket.WriteInt(this.MapleID);
+            oPacket.WriteZeroBytes(15); // NOTE: Unknown.
+            oPacket.WriteByte(0x88); // NOTE: Unknown.
+            oPacket.WriteZeroBytes(6); // NOTE: Unknown.
+            oPacket.WriteShort(this.Position.X);
+            oPacket.WriteShort(this.Position.Y);
+            oPacket.WriteByte((byte)(0x02 | (this.IsFacingLeft ? 0x01 : 0x00)));
+            oPacket.WriteShort(this.Foothold);
+            oPacket.WriteShort(this.Foothold);
 
             if (this.SpawnEffect > 0)
             {
-                oPacket
-                    .WriteByte((byte)this.SpawnEffect)
-                    .WriteByte()
-                    .WriteShort();
+                oPacket.WriteByte((byte)this.SpawnEffect);
+                oPacket.WriteByte(0);
+                oPacket.WriteShort(0);
 
                 if (this.SpawnEffect == 15)
                 {
-                    oPacket.WriteByte();
+                    oPacket.WriteByte(0);
                 }
             }
 
-            oPacket
-                .WriteByte((byte)(newSpawn ? -2 : -1))
-                .WriteByte()
-                .WriteByte(byte.MaxValue) // NOTE: Carnival team.
-                .WriteInt(); // NOTE: Unknown.
+            oPacket.WriteByte((byte)(newSpawn ? -2 : -1));
+            oPacket.WriteByte(0);
+            oPacket.WriteByte(byte.MaxValue); // NOTE: Carnival team.
+            oPacket.WriteInt(0); // NOTE: Unknown.
 
             return oPacket;
         }
 
-        public Packet GetControlCancelPacket()
+        public PacketWriter GetControlCancelPacket()
         {
-            Packet oPacket = new Packet(ServerOperationCode.MobChangeController);
+            var oPacket = new PacketWriter(ServerOperationCode.MobChangeController);
 
-            oPacket
-                .WriteBool(false)
-                .WriteInt(this.ObjectID);
+            oPacket.WriteBool(false);
+            oPacket.WriteInt(this.ObjectID);
 
             return oPacket;
         }
 
-        public Packet GetDestroyPacket()
+        public PacketWriter GetDestroyPacket()
         {
-            Packet oPacket = new Packet(ServerOperationCode.MobLeaveField);
+            var oPacket = new PacketWriter(ServerOperationCode.MobLeaveField);
 
-            oPacket
-                .WriteInt(this.ObjectID)
-                .WriteByte(1)
-                .WriteByte(1); // TODO: Death effects.
+            oPacket.WriteInt(this.ObjectID);
+            oPacket.WriteByte(1);
+            oPacket.WriteByte(1); // TODO: Death effects.
 
             return oPacket;
         }

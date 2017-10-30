@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using RazzleServer.Common.Packet;
+using RazzleServer.Game.Maple.Characters;
 
 namespace RazzleServer.Game.Maple.Commands.Implementation
 {
@@ -51,7 +53,7 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
             }
             else
             {
-                using (PacketReader oPacket = new Packet(ServerOperationCode.AdminShop))
+                using (var oPacket = new PacketWriter(ServerOperationCode.AdminShop))
                 {
                     oPacket
                         .WriteInt(Npc)

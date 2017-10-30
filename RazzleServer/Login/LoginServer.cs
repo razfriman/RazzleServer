@@ -6,13 +6,8 @@ namespace RazzleServer.Login
 {
     public class LoginServer : MapleServer<LoginClient>
     {
-        public static CenterServer CenterConnection { get; set; }
-        public static Worlds Worlds { get; private set; }
-        public static bool AutoRegister { get; private set; }
-        public static bool RequestPin { get; private set; }
-        public static bool RequestPic { get; private set; }
-        public static bool RequireStaffIP { get; private set; }
-        public static int MaxCharacters { get; private set; }
+        public CenterServer CenterConnection { get; set; }
+        public Worlds Worlds { get; private set; }
 
         public LoginServer()
         {
@@ -20,6 +15,8 @@ namespace RazzleServer.Login
             {
                 Worlds.Add(new World(i));
             }
+
+            // start center server connection
 
             byte[] loginIp = { 0, 0, 0, 0 };
             Start(new IPAddress(loginIp), ServerConfig.Instance.LoginPort);

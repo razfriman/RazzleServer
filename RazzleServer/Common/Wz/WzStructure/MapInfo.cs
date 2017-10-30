@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using MapleLib.WzLib.WzProperties;
-using MapleLib.WzLib.WzStructure.Data;
+using RazzleServer.Common.WzLib.WzProperties;
+using RazzleServer.Common.WzLib.WzStructure.Data;
 using System.Drawing;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Util;
 
-namespace MapleLib.WzLib.WzStructure
+namespace RazzleServer.Common.WzLib.WzStructure
 {
     public class MapInfo //Credits to Bui for some of the info
     {

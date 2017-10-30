@@ -1,7 +1,7 @@
 ﻿using System.IO;
-using MapleLib.WzLib.Util;
+using RazzleServer.Common.WzLib.Util;
 
-namespace MapleLib.WzLib.WzProperties
+namespace RazzleServer.Common.WzLib.WzProperties
 {
 	/// <summary>
 	/// A property that contains an x and a y value
@@ -53,7 +53,7 @@ namespace MapleLib.WzLib.WzProperties
 		/// The WzPropertyType of the property
 		/// </summary>
 		public override WzPropertyType PropertyType { get { return WzPropertyType.Vector; } }
-		public override void WriteValue(MapleLib.WzLib.Util.WzBinaryWriter writer)
+		public override void WriteValue(RazzleServer.Common.WzLib.Util.WzBinaryWriter writer)
 		{
 			writer.WriteStringValue("Shape2D#Vector2D", 0x73, 0x1B);
 			writer.WriteCompressedInt(X.Value);

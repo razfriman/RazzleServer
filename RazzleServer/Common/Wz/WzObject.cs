@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-namespace MapleLib.WzLib
+namespace RazzleServer.Common.WzLib
 {
 	/// <summary>
 	/// An abstract class for wz objects

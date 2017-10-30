@@ -1,12 +1,10 @@
 ﻿using RazzleServer.Data.WZ;
-using RazzleServer.Map.Monster;
-using RazzleServer.Player;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using RazzleServer.Inventory;
 using RazzleServer.Util;
 using RazzleServer.Constants;
+using RazzleServer.Common.Constants;
 
 namespace RazzleServer.Data
 {
@@ -126,11 +124,6 @@ namespace RazzleServer.Data
 
         public static WzMakeCharInfo GetCharCreationInfo(JobType jobType)
         {
-            if (jobType == JobType.Cannonneer)
-            {
-                jobType = JobType.Explorer;
-            }
-
             return CharCreationInfo.TryGetValue(jobType, out WzMakeCharInfo info) ? info : null;
         }
 
@@ -139,8 +132,6 @@ namespace RazzleServer.Data
         public static ushort GetRandomPotential(MaplePotentialState grade, byte reqLevel, int itemIdFor, bool bonusPotential = false)
         {
             int gradeBaseNum = (int)grade;
-            if (grade >= MaplePotentialState.Rare)
-                gradeBaseNum -= 16;
             if (gradeBaseNum < 1 || gradeBaseNum > 4) return 0;
             gradeBaseNum *= 10000;
             int limit = gradeBaseNum + 10000;

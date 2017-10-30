@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MapleLib.WzLib
+namespace RazzleServer.Common.WzLib
 {
     public class WzImageResource : IDisposable
     {

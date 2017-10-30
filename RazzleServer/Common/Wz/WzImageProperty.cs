@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using MapleLib.WzLib.Util;
-using MapleLib.WzLib.WzProperties;
+using RazzleServer.Common.WzLib.Util;
+using RazzleServer.Common.WzLib.WzProperties;
 
-namespace MapleLib.WzLib
+namespace RazzleServer.Common.WzLib
 {
     /// <summary>
     /// An interface for wz img properties

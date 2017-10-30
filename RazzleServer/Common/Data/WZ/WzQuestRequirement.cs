@@ -1,9 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
-using RazzleServer.Player;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using RazzleServer.Util;
+using RazzleServer.Game.Maple;
+using RazzleServer.Game.Maple.Characters;
 
 namespace RazzleServer.Data.WZ
 {
@@ -16,7 +17,7 @@ namespace RazzleServer.Data.WZ
             Type = type;
         }
 
-        public virtual bool Check(MapleCharacter chr, int npcId, MapleQuest quest) { return false; }
+        public virtual bool Check(Character chr, int npcId, Quest quest) { return false; }
     }
 
     public class WzQuestStringRequirement : WzQuestRequirement
@@ -29,7 +30,7 @@ namespace RazzleServer.Data.WZ
             Data = data;
         }
 
-        public override bool Check(MapleCharacter chr, int npcId, MapleQuest quest)
+        public override bool Check(Character chr, int npcId, Quest quest)
         {
             //TODO: run quest script
             return true;
@@ -48,7 +49,7 @@ namespace RazzleServer.Data.WZ
             Data = data;
         }
 
-        public override bool Check(MapleCharacter chr, int npcId, MapleQuest quest)
+        public override bool Check(Character chr, int npcId, Quest quest)
         {
             switch (Type)
             {
@@ -63,7 +64,7 @@ namespace RazzleServer.Data.WZ
                 case QuestRequirementType.pettamenessmin:
                     return true; //todo: chr.GetPet(0).Tameness >= Data;
                 case QuestRequirementType.questComplete: //amount of quests completed
-                    return chr.CompletedQuestCount >= Data;
+                    return chr.Quests.Completed.Count() >= Data;
                 case QuestRequirementType.pop: //fame
                     return chr.Fame >= Data;
                 default:
@@ -87,7 +88,7 @@ namespace RazzleServer.Data.WZ
             Data = data;
         }
 
-        public override bool Check(MapleCharacter chr, int npcId, MapleQuest quest)
+        public override bool Check(Character chr, int npcId, Quest quest)
         {
             switch (Type)
             {
@@ -101,14 +102,14 @@ namespace RazzleServer.Data.WZ
                 case QuestRequirementType.mob:
                     foreach (var mobPair in Data)
                     {
-                        if (!quest.MonsterKills.ContainsKey(mobPair.Key) || quest.MonsterKills[mobPair.Key] < mobPair.Value)
+                        if (!quest.PostRequiredKills.ContainsKey(mobPair.Key) || quest.PostRequiredKills[mobPair.Key] < mobPair.Value)
                             return false;
                     }
                     return true;
                 case QuestRequirementType.quest:
                     foreach (var questPair in Data)
                     {
-                        if (!chr.HasCompletedQuest(questPair.Key))
+                        if (!chr.Quests.Completed.ContainsKey(questPair.Key))
                             return false;
                     }
                     return true;
@@ -133,14 +134,14 @@ namespace RazzleServer.Data.WZ
             Data = data;
         }
 
-        public override bool Check(MapleCharacter chr, int npcId, MapleQuest quest)
+        public override bool Check(Character chr, int npcId, Quest quest)
         {
             switch (Type)
             {
                 case QuestRequirementType.job:
                     return Data.Any(i => i == chr.Job);
                 case QuestRequirementType.fieldEnter:
-                    return Data.Any(i => i == chr.MapID);
+                    return Data.Any(i => i == chr.map);
                 case QuestRequirementType.pet:
                     return true; //todo: 
                                  /*
@@ -166,7 +167,7 @@ namespace RazzleServer.Data.WZ
             Date = date;
         }
 
-        public override bool Check(MapleCharacter chr, int npcId, MapleQuest quest)
+        public override bool Check(Character chr, int npcId, MapleQuest quest)
         {
             switch (Type)
             {

@@ -1,5 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using RazzleServer.Common.Constants;
+using RazzleServer.Common.Exceptions;
+using RazzleServer.Common.Packet;
+using RazzleServer.Game.Maple.Data;
+using RazzleServer.Game.Maple.Interaction;
+using RazzleServer.Game.Maple.Life;
+using RazzleServer.Game.Maple.Maps;
+using RazzleServer.Server;
 
 namespace RazzleServer.Game.Maple.Characters
 {
@@ -70,14 +78,11 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 gender = value;
 
-                if (this.IsInitialized)
+                if (IsInitialized)
                 {
-                    using (PacketReader oPacket = new Packet(ServerOperationCode.SetGender))
-                    {
-                        oPacket.WriteByte((byte)this.Gender);
-
-                        this.Client.Send(oPacket);
-                    }
+                    var oPacket = new PacketWriter(ServerOperationCode.SetGender);
+                    oPacket.WriteByte((byte)Gender);
+                    Client.Send(oPacket);
                 }
             }
         }
@@ -97,10 +102,10 @@ namespace RazzleServer.Game.Maple.Characters
 
                 skin = value;
 
-                if (this.IsInitialized)
+                if (IsInitialized)
                 {
-                    this.Update(StatisticType.Skin);
-                    this.UpdateApperance();
+                    Update(StatisticType.Skin);
+                    UpdateApperance();
                 }
             }
         }
@@ -113,18 +118,18 @@ namespace RazzleServer.Game.Maple.Characters
             }
             set
             {
-                if ((this.Gender == Gender.Male && !DataProvider.Styles.MaleFaces.Contains(value)) ||
-                    this.Gender == Gender.Female && !DataProvider.Styles.FemaleFaces.Contains(value))
+                if ((Gender == Gender.Male && !DataProvider.Styles.MaleFaces.Contains(value)) ||
+                    Gender == Gender.Female && !DataProvider.Styles.FemaleFaces.Contains(value))
                 {
                     throw new StyleUnavailableException();
                 }
 
                 face = value;
 
-                if (this.IsInitialized)
+                if (IsInitialized)
                 {
-                    this.Update(StatisticType.Face);
-                    this.UpdateApperance();
+                    Update(StatisticType.Face);
+                    UpdateApperance();
                 }
             }
         }
@@ -137,18 +142,18 @@ namespace RazzleServer.Game.Maple.Characters
             }
             set
             {
-                if ((this.Gender == Gender.Male && !DataProvider.Styles.MaleHairs.Contains(value)) ||
-                    this.Gender == Gender.Female && !DataProvider.Styles.FemaleHairs.Contains(value))
+                if ((Gender == Gender.Male && !DataProvider.Styles.MaleHairs.Contains(value)) ||
+                    Gender == Gender.Female && !DataProvider.Styles.FemaleHairs.Contains(value))
                 {
                     throw new StyleUnavailableException();
                 }
 
                 hair = value;
 
-                if (this.IsInitialized)
+                if (IsInitialized)
                 {
-                    this.Update(StatisticType.Hair);
-                    this.UpdateApperance();
+                    Update(StatisticType.Hair);
+                    UpdateApperance();
                 }
             }
         }
@@ -157,7 +162,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             get
             {
-                return (this.Hair / 10) * 10;
+                return (Hair / 10) * 10;
             }
         }
 
@@ -165,7 +170,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             get
             {
-                return (this.Face - (10 * (this.Face / 10))) + (this.Gender == Gender.Male ? 20000 : 21000);
+                return (Face - (10 * (Face / 10))) + (Gender == Gender.Male ? 20000 : 21000);
             }
         }
 
@@ -173,7 +178,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             get
             {
-                return this.Hair - (10 * (this.Hair / 10));
+                return Hair - (10 * (Hair / 10));
             }
         }
 
@@ -181,7 +186,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             get
             {
-                return ((this.Face / 100) - (10 * (this.Face / 1000))) * 100;
+                return ((Face / 100) - (10 * (Face / 1000))) * 100;
             }
         }
 
@@ -199,9 +204,9 @@ namespace RazzleServer.Game.Maple.Characters
                     throw new ArgumentException("Level cannot exceed 200.");
                 }
 
-                int delta = value - this.Level;
+                int delta = value - Level;
 
-                if (!this.IsInitialized)
+                if (!IsInitialized)
                 {
                     level = value;
                 }
@@ -211,7 +216,7 @@ namespace RazzleServer.Game.Maple.Characters
                     {
                         level = value;
 
-                        this.Update(StatisticType.Level);
+                        Update(StatisticType.Level);
                     }
                     else
                     {
@@ -221,27 +226,27 @@ namespace RazzleServer.Game.Maple.Characters
 
                             level++;
 
-                            if (this.IsCygnus)
+                            if (IsCygnus)
                             {
-                                this.AbilityPoints += 6;
+                                AbilityPoints += 6;
                             }
                             else
                             {
-                                this.AbilityPoints += 5;
+                                AbilityPoints += 5;
                             }
 
-                            if (this.Job != Job.Beginner && this.Job != Job.Noblesse && this.Job != Job.Legend)
+                            if (Job != Job.Beginner && Job != Job.Noblesse && Job != Job.Legend)
                             {
-                                this.SkillPoints += 3;
+                                SkillPoints += 3;
                             }
 
-                            this.Update(StatisticType.Level);
+                            Update(StatisticType.Level);
 
-                            this.ShowRemoteUserEffect(UserEffect.LevelUp);
+                            ShowRemoteUserEffect(UserEffect.LevelUp);
                         }
 
-                        this.Health = this.MaxHealth;
-                        this.Mana = this.MaxMana;
+                        Health = MaxHealth;
+                        Mana = MaxMana;
                     }
                 }
             }
@@ -258,11 +263,11 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 job = value;
 
-                if (this.IsInitialized)
+                if (IsInitialized)
                 {
-                    this.Update(StatisticType.Job);
+                    Update(StatisticType.Job);
 
-                    this.ShowRemoteUserEffect(UserEffect.JobChanged);
+                    ShowRemoteUserEffect(UserEffect.JobChanged);
                 }
             }
         }
@@ -277,9 +282,9 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 strength = value;
 
-                if (this.IsInitialized)
+                if (IsInitialized)
                 {
-                    this.Update(StatisticType.Strength);
+                    Update(StatisticType.Strength);
                 }
             }
         }
@@ -294,9 +299,9 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 dexterity = value;
 
-                if (this.IsInitialized)
+                if (IsInitialized)
                 {
-                    this.Update(StatisticType.Dexterity);
+                    Update(StatisticType.Dexterity);
                 }
             }
         }
@@ -311,9 +316,9 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 intelligence = value;
 
-                if (this.IsInitialized)
+                if (IsInitialized)
                 {
-                    this.Update(StatisticType.Intelligence);
+                    Update(StatisticType.Intelligence);
                 }
             }
         }
@@ -328,9 +333,9 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 luck = value;
 
-                if (this.IsInitialized)
+                if (IsInitialized)
                 {
-                    this.Update(StatisticType.Luck);
+                    Update(StatisticType.Luck);
                 }
             }
         }
@@ -347,18 +352,18 @@ namespace RazzleServer.Game.Maple.Characters
                 {
                     health = 0;
                 }
-                else if (value > this.MaxHealth)
+                else if (value > MaxHealth)
                 {
-                    health = this.MaxHealth;
+                    health = MaxHealth;
                 }
                 else
                 {
                     health = value;
                 }
 
-                if (this.IsInitialized)
+                if (IsInitialized)
                 {
-                    this.Update(StatisticType.Health);
+                    Update(StatisticType.Health);
                 }
             }
         }
@@ -373,9 +378,9 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 maxHealth = value;
 
-                if (this.IsInitialized)
+                if (IsInitialized)
                 {
-                    this.Update(StatisticType.MaxHealth);
+                    Update(StatisticType.MaxHealth);
                 }
             }
         }
@@ -392,18 +397,18 @@ namespace RazzleServer.Game.Maple.Characters
                 {
                     mana = 0;
                 }
-                else if (value > this.MaxMana)
+                else if (value > MaxMana)
                 {
-                    mana = this.MaxMana;
+                    mana = MaxMana;
                 }
                 else
                 {
                     mana = value;
                 }
 
-                if (this.IsInitialized)
+                if (IsInitialized)
                 {
-                    this.Update(StatisticType.Mana);
+                    Update(StatisticType.Mana);
                 }
             }
         }
@@ -418,9 +423,9 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 maxMana = value;
 
-                if (this.IsInitialized)
+                if (IsInitialized)
                 {
-                    this.Update(StatisticType.MaxMana);
+                    Update(StatisticType.MaxMana);
                 }
             }
         }
@@ -435,9 +440,9 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 abilityPoints = value;
 
-                if (this.IsInitialized)
+                if (IsInitialized)
                 {
-                    this.Update(StatisticType.AbilityPoints);
+                    Update(StatisticType.AbilityPoints);
                 }
             }
         }
@@ -452,9 +457,9 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 skillPoints = value;
 
-                if (this.IsInitialized)
+                if (IsInitialized)
                 {
-                    this.Update(StatisticType.SkillPoints);
+                    Update(StatisticType.SkillPoints);
                 }
             }
         }
@@ -471,102 +476,77 @@ namespace RazzleServer.Game.Maple.Characters
 
                 experience = value;
 
-                if (true) // NOTE: A server setting for multi-leveling.
+                if (ServerConfig.Instance.MultiLeveling)
                 {
-                    while (experience >= ExperienceTables.CharacterLevel[this.Level])
+                    while (experience >= ExperienceTables.CharacterLevel[Level])
                     {
-                        experience -= ExperienceTables.CharacterLevel[this.Level];
+                        experience -= ExperienceTables.CharacterLevel[Level];
 
-                        this.Level++;
+                        Level++;
                     }
                 }
                 else
                 {
-                    if (experience >= ExperienceTables.CharacterLevel[this.Level])
+                    if (experience >= ExperienceTables.CharacterLevel[Level])
                     {
-                        experience -= ExperienceTables.CharacterLevel[this.Level];
+                        experience -= ExperienceTables.CharacterLevel[Level];
 
-                        this.Level++;
+                        Level++;
                     }
 
-                    if (experience >= ExperienceTables.CharacterLevel[this.Level])
+                    if (experience >= ExperienceTables.CharacterLevel[Level])
                     {
-                        experience = ExperienceTables.CharacterLevel[this.Level] - 1;
+                        experience = ExperienceTables.CharacterLevel[Level] - 1;
                     }
                 }
 
-                if (this.IsInitialized && delta != 0)
+                if (IsInitialized && delta != 0)
                 {
-                    this.Update(StatisticType.Experience);
+                    Update(StatisticType.Experience);
                 }
             }
         }
 
         public short Fame
         {
-            get
-            {
-                return fame;
-            }
+            get => fame;
             set
             {
                 fame = value;
 
-                if (this.IsInitialized)
+                if (IsInitialized)
                 {
-                    this.Update(StatisticType.Fame);
+                    Update(StatisticType.Fame);
                 }
             }
         }
 
         public int Meso
         {
-            get
-            {
-                return meso;
-            }
+            get => meso;
             set
             {
                 meso = value;
 
-                if (this.IsInitialized)
+                if (IsInitialized)
                 {
-                    this.Update(StatisticType.Mesos);
+                    Update(StatisticType.Mesos);
                 }
             }
         }
 
-        public bool IsAlive
-        {
-            get
-            {
-                return this.Health > 0;
-            }
-        }
+        public bool IsAlive => Health > 0;
 
-        public bool IsMaster
-        {
-            get
-            {
-                //TODO: Add GM levels and/or character-specific GM rank
-                return Client.Account != null ? Client.Account.IsMaster : false;
-            }
-        }
+        public bool IsMaster => Client.Account?.IsMaster;
 
         // TODO: Improve this check.
-        public bool IsCygnus
-        {
-            get
-            {
-                return (short)this.Job >= 1000 && (short)this.Job <= 2000;
-            }
-        }
+        public bool IsCygnus => (short)Job >= 1000 && (short)Job <= 2000;
 
         public bool FacesLeft
         {
             get
             {
-                return this.Stance % 2 == 0;
+                return Stance % 2 == 0;
             }
         }
 
@@ -574,7 +554,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             get
             {
-                return this.Level >= 30;
+                return Level >= 30;
             }
         }
 
@@ -625,11 +605,11 @@ namespace RazzleServer.Game.Maple.Characters
                 using (PacketReader oPacket = new Packet(ServerOperationCode.Chalkboard))
                 {
                     oPacket
-                        .WriteInt(this.ID)
-                        .WriteBool(!string.IsNullOrEmpty(this.Chalkboard))
-                        .WriteString(this.Chalkboard);
+                        .WriteInt(ID)
+                        .WriteBool(!string.IsNullOrEmpty(Chalkboard))
+                        .WriteString(Chalkboard);
 
-                    this.Map.Broadcast(oPacket);
+                    Map.Broadcast(oPacket);
                 }
             }
         }
@@ -641,9 +621,9 @@ namespace RazzleServer.Game.Maple.Characters
                 Portal closestPortal = null;
                 double shortestDistance = double.PositiveInfinity;
 
-                foreach (Portal loopPortal in this.Map.Portals)
+                foreach (Portal loopPortal in Map.Portals)
                 {
-                    double distance = loopPortal.Position.DistanceFrom(this.Position);
+                    double distance = loopPortal.Position.DistanceFrom(Position);
 
                     if (distance < shortestDistance)
                     {
@@ -663,11 +643,11 @@ namespace RazzleServer.Game.Maple.Characters
                 Portal closestPortal = null;
                 double shortestDistance = double.PositiveInfinity;
 
-                foreach (Portal loopPortal in this.Map.Portals)
+                foreach (Portal loopPortal in Map.Portals)
                 {
                     if (loopPortal.IsSpawnPoint)
                     {
-                        double distance = loopPortal.Position.DistanceFrom(this.Position);
+                        double distance = loopPortal.Position.DistanceFrom(Position);
 
                         if (distance < shortestDistance)
                         {
@@ -685,133 +665,133 @@ namespace RazzleServer.Game.Maple.Characters
 
         public Character(int id = 0, GameClient client = null)
         {
-            this.ID = id;
-            this.Client = client;
+            ID = id;
+            Client = client;
 
-            this.Items = new CharacterItems(this, 24, 24, 24, 24, 48);
-            this.Skills = new CharacterSkills(this);
-            this.Quests = new CharacterQuests(this);
-            this.Buffs = new CharacterBuffs(this);
-            this.Keymap = new CharacterKeymap(this);
-            this.Trocks = new CharacterTrocks(this);
-            this.Memos = new CharacterMemos(this);
-            this.Storage = new CharacterStorage(this);
-            this.Variables = new CharacterVariables(this);
+            Items = new CharacterItems(this, 24, 24, 24, 24, 48);
+            Skills = new CharacterSkills(this);
+            Quests = new CharacterQuests(this);
+            Buffs = new CharacterBuffs(this);
+            Keymap = new CharacterKeymap(this);
+            Trocks = new CharacterTrocks(this);
+            Memos = new CharacterMemos(this);
+            Storage = new CharacterStorage(this);
+            Variables = new CharacterVariables(this);
 
-            this.Position = new Point(0, 0);
-            this.ControlledMobs = new ControlledMobs(this);
-            this.ControlledNpcs = new ControlledNpcs(this);
+            Position = new Point(0, 0);
+            ControlledMobs = new ControlledMobs(this);
+            ControlledNpcs = new ControlledNpcs(this);
         }
 
         public void Load()
         {
             Datum datum = new Datum("characters");
 
-            datum.Populate("ID = {0}", this.ID);
+            datum.Populate("ID = {0}", ID);
 
-            this.ID = (int)datum["ID"];
-            this.Assigned = true;
+            ID = (int)datum["ID"];
+            Assigned = true;
 
-            this.AccountID = (int)datum["AccountID"];
-            this.WorldID = (byte)datum["WorldID"];
-            this.Name = (string)datum["Name"];
-            this.Gender = (Gender)datum["Gender"];
-            this.Skin = (byte)datum["Skin"];
-            this.Face = (int)datum["Face"];
-            this.Hair = (int)datum["Hair"];
-            this.Level = (byte)datum["Level"];
-            this.Job = (Job)datum["Job"];
-            this.Strength = (short)datum["Strength"];
-            this.Dexterity = (short)datum["Dexterity"];
-            this.Intelligence = (short)datum["Intelligence"];
-            this.Luck = (short)datum["Luck"];
-            this.MaxHealth = (short)datum["MaxHealth"];
-            this.MaxMana = (short)datum["MaxMana"];
-            this.Health = (short)datum["Health"];
-            this.Mana = (short)datum["Mana"];
-            this.AbilityPoints = (short)datum["AbilityPoints"];
-            this.SkillPoints = (short)datum["SkillPoints"];
-            this.Experience = (int)datum["Experience"];
-            this.Fame = (short)datum["Fame"];
-            this.Map = DataProvider.Maps[(int)datum["MapID"]];
-            this.SpawnPoint = (byte)datum["SpawnPoint"];
-            this.Meso = (int)datum["Meso"];
+            AccountID = (int)datum["AccountID"];
+            WorldID = (byte)datum["WorldID"];
+            Name = (string)datum["Name"];
+            Gender = (Gender)datum["Gender"];
+            Skin = (byte)datum["Skin"];
+            Face = (int)datum["Face"];
+            Hair = (int)datum["Hair"];
+            Level = (byte)datum["Level"];
+            Job = (Job)datum["Job"];
+            Strength = (short)datum["Strength"];
+            Dexterity = (short)datum["Dexterity"];
+            Intelligence = (short)datum["Intelligence"];
+            Luck = (short)datum["Luck"];
+            MaxHealth = (short)datum["MaxHealth"];
+            MaxMana = (short)datum["MaxMana"];
+            Health = (short)datum["Health"];
+            Mana = (short)datum["Mana"];
+            AbilityPoints = (short)datum["AbilityPoints"];
+            SkillPoints = (short)datum["SkillPoints"];
+            Experience = (int)datum["Experience"];
+            Fame = (short)datum["Fame"];
+            Map = DataProvider.Maps[(int)datum["MapID"]];
+            SpawnPoint = (byte)datum["SpawnPoint"];
+            Meso = (int)datum["Meso"];
 
-            this.Items.MaxSlots[ItemType.Equipment] = (byte)datum["EquipmentSlots"];
-            this.Items.MaxSlots[ItemType.Usable] = (byte)datum["UsableSlots"];
-            this.Items.MaxSlots[ItemType.Setup] = (byte)datum["SetupSlots"];
-            this.Items.MaxSlots[ItemType.Etcetera] = (byte)datum["EtceteraSlots"];
-            this.Items.MaxSlots[ItemType.Cash] = (byte)datum["CashSlots"];
+            Items.MaxSlots[ItemType.Equipment] = (byte)datum["EquipmentSlots"];
+            Items.MaxSlots[ItemType.Usable] = (byte)datum["UsableSlots"];
+            Items.MaxSlots[ItemType.Setup] = (byte)datum["SetupSlots"];
+            Items.MaxSlots[ItemType.Etcetera] = (byte)datum["EtceteraSlots"];
+            Items.MaxSlots[ItemType.Cash] = (byte)datum["CashSlots"];
 
-            this.Items.Load();
-            this.Skills.Load();
-            this.Quests.Load();
-            this.Buffs.Load();
-            this.Keymap.Load();
-            this.Trocks.Load();
-            this.Memos.Load();
-            this.Variables.Load();
+            Items.Load();
+            Skills.Load();
+            Quests.Load();
+            Buffs.Load();
+            Keymap.Load();
+            Trocks.Load();
+            Memos.Load();
+            Variables.Load();
         }
 
         public void Save()
         {
-            if (this.IsInitialized)
+            if (IsInitialized)
             {
-                this.SpawnPoint = this.ClosestSpawnPoint.ID;
+                SpawnPoint = ClosestSpawnPoint.ID;
             }
 
             Datum datum = new Datum("characters");
 
-            datum["AccountID"] = this.AccountID;
-            datum["WorldID"] = this.WorldID;
-            datum["Name"] = this.Name;
-            datum["Gender"] = (byte)this.Gender;
-            datum["Skin"] = this.Skin;
-            datum["Face"] = this.Face;
-            datum["Hair"] = this.Hair;
-            datum["Level"] = this.Level;
-            datum["Job"] = (short)this.Job;
-            datum["Strength"] = this.Strength;
-            datum["Dexterity"] = this.Dexterity;
-            datum["Intelligence"] = this.Intelligence;
-            datum["Luck"] = this.Luck;
-            datum["Health"] = this.Health;
-            datum["MaxHealth"] = this.MaxHealth;
-            datum["Mana"] = this.Mana;
-            datum["MaxMana"] = this.MaxMana;
-            datum["AbilityPoints"] = this.AbilityPoints;
-            datum["SkillPoints"] = this.SkillPoints;
-            datum["Experience"] = this.Experience;
-            datum["Fame"] = this.Fame;
-            datum["MapID"] = this.Map.MapleID;
-            datum["SpawnPoint"] = this.SpawnPoint;
-            datum["Meso"] = this.Meso;
+            datum["AccountID"] = AccountID;
+            datum["WorldID"] = WorldID;
+            datum["Name"] = Name;
+            datum["Gender"] = (byte)Gender;
+            datum["Skin"] = Skin;
+            datum["Face"] = Face;
+            datum["Hair"] = Hair;
+            datum["Level"] = Level;
+            datum["Job"] = (short)Job;
+            datum["Strength"] = Strength;
+            datum["Dexterity"] = Dexterity;
+            datum["Intelligence"] = Intelligence;
+            datum["Luck"] = Luck;
+            datum["Health"] = Health;
+            datum["MaxHealth"] = MaxHealth;
+            datum["Mana"] = Mana;
+            datum["MaxMana"] = MaxMana;
+            datum["AbilityPoints"] = AbilityPoints;
+            datum["SkillPoints"] = SkillPoints;
+            datum["Experience"] = Experience;
+            datum["Fame"] = Fame;
+            datum["MapID"] = Map.MapleID;
+            datum["SpawnPoint"] = SpawnPoint;
+            datum["Meso"] = Meso;
 
-            datum["EquipmentSlots"] = this.Items.MaxSlots[ItemType.Equipment];
-            datum["UsableSlots"] = this.Items.MaxSlots[ItemType.Usable];
-            datum["SetupSlots"] = this.Items.MaxSlots[ItemType.Setup];
-            datum["EtceteraSlots"] = this.Items.MaxSlots[ItemType.Etcetera];
-            datum["CashSlots"] = this.Items.MaxSlots[ItemType.Cash];
+            datum["EquipmentSlots"] = Items.MaxSlots[ItemType.Equipment];
+            datum["UsableSlots"] = Items.MaxSlots[ItemType.Usable];
+            datum["SetupSlots"] = Items.MaxSlots[ItemType.Setup];
+            datum["EtceteraSlots"] = Items.MaxSlots[ItemType.Etcetera];
+            datum["CashSlots"] = Items.MaxSlots[ItemType.Cash];
 
-            if (this.Assigned)
+            if (Assigned)
             {
-                datum.Update("ID = {0}", this.ID);
+                datum.Update("ID = {0}", ID);
             }
             else
             {
-                this.ID = datum.InsertAndReturnID();
-                this.Assigned = true;
+                ID = datum.InsertAndReturnID();
+                Assigned = true;
             }
 
-            this.Items.Save();
-            this.Skills.Save();
-            this.Quests.Save();
-            this.Buffs.Save();
-            this.Keymap.Save();
-            this.Trocks.Save();
-            this.Variables.Save();
+            Items.Save();
+            Skills.Save();
+            Quests.Save();
+            Buffs.Save();
+            Keymap.Save();
+            Trocks.Save();
+            Variables.Save();
 
-            Log.Inform("Saved character '{0}' to database.", this.Name);
+            Log.Inform("Saved character '{0}' to database.", Name);
         }
 
         public void Initialize()
@@ -820,7 +800,7 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 oPacket
                     .WriteInt(WvsGame.ChannelID)
-                    .WriteByte(++this.Portals)
+                    .WriteByte(++Portals)
                     .WriteBool(true)
                     .WriteShort(); // NOTE: Floating messages at top corner.
 
@@ -830,125 +810,123 @@ namespace RazzleServer.Game.Maple.Characters
                 }
 
                 oPacket
-                    .WriteBytes(this.DataToByteArray())
+                    .WriteBytes(DataToByteArray())
                     .WriteDateTime(DateTime.UtcNow);
 
-                this.Client.Send(oPacket);
+                Client.Send(oPacket);
             }
 
             using (PacketReader oPacket = new Packet(ServerOperationCode.ClaimSvrStatusChanged))
             {
                 oPacket.WriteBool(true);
 
-                this.Client.Send(oPacket);
+                Client.Send(oPacket);
             }
 
-            this.IsInitialized = true;
+            IsInitialized = true;
 
-            this.Map.Characters.Add(this);
+            Map.Characters.Add(this);
 
-            this.Keymap.Send();
+            Keymap.Send();
 
-            this.Memos.Send();
+            Memos.Send();
         }
 
         public void Update(params StatisticType[] statistics)
         {
-            using (PacketReader oPacket = new Packet(ServerOperationCode.StatChanged))
+            var oPacket = new PacketWriter(ServerOperationCode.StatChanged);
+            oPacket.WriteBool(true); // TODO: bOnExclRequest.
+
+            int flag = 0;
+
+            foreach (StatisticType statistic in statistics)
             {
-                oPacket.WriteBool(true); // TODO: bOnExclRequest.
-
-                int flag = 0;
-
-                foreach (StatisticType statistic in statistics)
-                {
-                    flag |= (int)statistic;
-                }
-
-                oPacket.WriteInt(flag);
-
-                Array.Sort(statistics);
-
-                foreach (StatisticType statistic in statistics)
-                {
-                    switch (statistic)
-                    {
-                        case StatisticType.Skin:
-                            oPacket.WriteByte(this.Skin);
-                            break;
-
-                        case StatisticType.Face:
-                            oPacket.WriteInt(this.Face);
-                            break;
-
-                        case StatisticType.Hair:
-                            oPacket.WriteInt(this.Hair);
-                            break;
-
-                        case StatisticType.Level:
-                            oPacket.WriteByte(this.Level);
-                            break;
-
-                        case StatisticType.Job:
-                            oPacket.WriteShort((short)this.Job);
-                            break;
-
-                        case StatisticType.Strength:
-                            oPacket.WriteShort(this.Strength);
-                            break;
-
-                        case StatisticType.Dexterity:
-                            oPacket.WriteShort(this.Dexterity);
-                            break;
-
-                        case StatisticType.Intelligence:
-                            oPacket.WriteShort(this.Intelligence);
-                            break;
-
-                        case StatisticType.Luck:
-                            oPacket.WriteShort(this.Luck);
-                            break;
-
-                        case StatisticType.Health:
-                            oPacket.WriteShort(this.Health);
-                            break;
-
-                        case StatisticType.MaxHealth:
-                            oPacket.WriteShort(this.MaxHealth);
-                            break;
-
-                        case StatisticType.Mana:
-                            oPacket.WriteShort(this.Mana);
-                            break;
-
-                        case StatisticType.MaxMana:
-                            oPacket.WriteShort(this.MaxMana);
-                            break;
-
-                        case StatisticType.AbilityPoints:
-                            oPacket.WriteShort(this.AbilityPoints);
-                            break;
-
-                        case StatisticType.SkillPoints:
-                            oPacket.WriteShort(this.SkillPoints);
-                            break;
-
-                        case StatisticType.Experience:
-                            oPacket.WriteInt(this.Experience);
-                            break;
-
-                        case StatisticType.Fame:
-                            oPacket.WriteShort(this.Fame);
-                            break;
-
-                        case StatisticType.Mesos:
-                            oPacket.WriteInt(this.Meso);
-                            break;
-                    }
-                }
-
-                this.Client.Send(oPacket);
+                flag |= (int)statistic;
             }
+
+            oPacket.WriteInt(flag);
+
+            Array.Sort(statistics);
+
+            foreach (StatisticType statistic in statistics)
+            {
+                switch (statistic)
+                {
+                    case StatisticType.Skin:
+                        oPacket.WriteByte(Skin);
+                        break;
+
+                    case StatisticType.Face:
+                        oPacket.WriteInt(Face);
+                        break;
+
+                    case StatisticType.Hair:
+                        oPacket.WriteInt(Hair);
+                        break;
+
+                    case StatisticType.Level:
+                        oPacket.WriteByte(Level);
+                        break;
+
+                    case StatisticType.Job:
+                        oPacket.WriteShort((short)Job);
+                        break;
+
+                    case StatisticType.Strength:
+                        oPacket.WriteShort(Strength);
+                        break;
+
+                    case StatisticType.Dexterity:
+                        oPacket.WriteShort(Dexterity);
+                        break;
+
+                    case StatisticType.Intelligence:
+                        oPacket.WriteShort(Intelligence);
+                        break;
+
+                    case StatisticType.Luck:
+                        oPacket.WriteShort(Luck);
+                        break;
+
+                    case StatisticType.Health:
+                        oPacket.WriteShort(Health);
+                        break;
+
+                    case StatisticType.MaxHealth:
+                        oPacket.WriteShort(MaxHealth);
+                        break;
+
+                    case StatisticType.Mana:
+                        oPacket.WriteShort(Mana);
+                        break;
+
+                    case StatisticType.MaxMana:
+                        oPacket.WriteShort(MaxMana);
+                        break;
+
+                    case StatisticType.AbilityPoints:
+                        oPacket.WriteShort(AbilityPoints);
+                        break;
+
+                    case StatisticType.SkillPoints:
+                        oPacket.WriteShort(SkillPoints);
+                        break;
+
+                    case StatisticType.Experience:
+                        oPacket.WriteInt(Experience);
+                        break;
+
+                    case StatisticType.Fame:
+                        oPacket.WriteShort(Fame);
+                        break;
+
+                    case StatisticType.Mesos:
+                        oPacket.WriteInt(Meso);
+                        break;
+                }
+            }
+
+            Client.Send(oPacket);
         }
 
         public void UpdateApperance()
@@ -956,19 +934,19 @@ namespace RazzleServer.Game.Maple.Characters
             using (PacketReader oPacket = new Packet(ServerOperationCode.AvatarModified))
             {
                 oPacket
-                    .WriteInt(this.ID)
+                    .WriteInt(ID)
                     .WriteBool(true)
-                    .WriteBytes(this.AppearanceToByteArray())
+                    .WriteBytes(AppearanceToByteArray())
                     .WriteByte()
                     .WriteShort();
 
-                this.Map.Broadcast(oPacket, this);
+                Map.Broadcast(oPacket, this);
             }
         }
 
         public void Release()
         {
-            this.Update();
+            Update();
         }
 
         public void Notify(string message, NoticeType type = NoticeType.Pink)
@@ -984,7 +962,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                 oPacket.WriteString(message);
 
-                this.Client.Send(oPacket);
+                Client.Send(oPacket);
             }
         }
 
@@ -992,7 +970,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             byte portals = iPacket.ReadByte();
 
-            if (portals != this.Portals)
+            if (portals != Portals)
             {
                 return;
             }
@@ -1006,13 +984,12 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 case 0: // NOTE: Death.
                     {
-                        if (this.IsAlive)
+                        if (IsAlive)
                         {
                             return;
                         }
 
-                        this.Health = 50;
-                        this.ChangeMap(this.Map.ReturnMapID);
+                        Revive();
                     }
                     break;
 
@@ -1022,7 +999,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                         try
                         {
-                            portal = this.Map.Portals[portalLabel];
+                            portal = Map.Portals[portalLabel];
                         }
                         catch (KeyNotFoundException)
                         {
@@ -1038,23 +1015,29 @@ namespace RazzleServer.Game.Maple.Characters
                             return;
                         }*/
 
-                        this.ChangeMap(portal.DestinationMapID, portal.Link.ID);
+                        ChangeMap(portal.DestinationMapID, portal.Link.ID);
                     }
                     break;
 
                 default: // NOTE: Admin '/m' command.
                     {
-                        if (!this.IsMaster)
+                        if (!IsMaster)
                         {
                             return;
                         }
 
                         // TODO: Validate map ID.
 
-                        this.ChangeMap(mapID);
+                        ChangeMap(mapID);
                     }
                     break;
             }
+        }
+
+        public void Revive()
+        {
+            Health = 50;
+            ChangeMap(Map.ReturnMapID);
         }
 
         public void ChangeMap(int mapID, string portalLabel)
@@ -1064,19 +1047,19 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void ChangeMap(int mapID, byte portalID = 0, bool fromPosition = false, Point position = null)
         {
-            this.Map.Characters.Remove(this);
+            Map.Characters.Remove(this);
 
             using (PacketReader oPacket = new Packet(ServerOperationCode.SetField))
             {
                 oPacket
                     .WriteInt(WvsGame.ChannelID)
-                    .WriteByte(++this.Portals)
+                    .WriteByte(++Portals)
                     .WriteBool(false)
                     .WriteShort()
                     .WriteByte()
                     .WriteInt(mapID)
-                    .WriteByte(this.SpawnPoint)
-                    .WriteShort(this.Health)
+                    .WriteByte(SpawnPoint)
+                    .WriteShort(Health)
                     .WriteBool(fromPosition);
 
                 if (fromPosition)
@@ -1088,7 +1071,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                 oPacket.WriteDateTime(DateTime.Now);
 
-                this.Client.Send(oPacket);
+                Client.Send(oPacket);
             }
 
             DataProvider.Maps[mapID].Characters.Add(this);
@@ -1104,39 +1087,39 @@ namespace RazzleServer.Game.Maple.Characters
                 switch (statistic)
                 {
                     case StatisticType.Strength:
-                        if (this.Strength >= maxStat)
+                        if (Strength >= maxStat)
                         {
                             return;
                         }
 
-                        this.Strength += mod;
+                        Strength += mod;
                         break;
 
                     case StatisticType.Dexterity:
-                        if (this.Dexterity >= maxStat)
+                        if (Dexterity >= maxStat)
                         {
                             return;
                         }
 
-                        this.Dexterity += mod;
+                        Dexterity += mod;
                         break;
 
                     case StatisticType.Intelligence:
-                        if (this.Intelligence >= maxStat)
+                        if (Intelligence >= maxStat)
                         {
                             return;
                         }
 
-                        this.Intelligence += mod;
+                        Intelligence += mod;
                         break;
 
                     case StatisticType.Luck:
-                        if (this.Luck >= maxStat)
+                        if (Luck >= maxStat)
                         {
                             return;
                         }
 
-                        this.Luck += mod;
+                        Luck += mod;
                         break;
 
                     case StatisticType.MaxHealth:
@@ -1149,7 +1132,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                 if (!isReset)
                 {
-                    this.AbilityPoints -= mod;
+                    AbilityPoints -= mod;
                 }
 
                 // TODO: Update bonuses.
@@ -1160,7 +1143,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             byte portals = iPacket.ReadByte();
 
-            if (portals != this.Portals)
+            if (portals != Portals)
             {
                 return;
             }
@@ -1169,20 +1152,20 @@ namespace RazzleServer.Game.Maple.Characters
 
             Movements movements = Movements.Decode(iPacket);
 
-            this.Position = movements.Position;
-            this.Foothold = movements.Foothold;
-            this.Stance = movements.Stance;
+            Position = movements.Position;
+            Foothold = movements.Foothold;
+            Stance = movements.Stance;
 
             using (PacketReader oPacket = new Packet(ServerOperationCode.Move))
             {
                 oPacket
-                    .WriteInt(this.ID)
+                    .WriteInt(ID)
                     .WriteBytes(movements.ToByteArray());
 
-                this.Map.Broadcast(oPacket, this);
+                Map.Broadcast(oPacket, this);
             }
 
-            if (this.Foothold == 0)
+            if (Foothold == 0)
             {
                 // NOTE: Player is floating in the air.
                 // GMs might be legitmately in this state due to GM fly.
@@ -1200,20 +1183,20 @@ namespace RazzleServer.Game.Maple.Characters
 
             if (seatID == -1)
             {
-                this.Chair = 0;
+                Chair = 0;
 
                 using (PacketReader oPacket = new Packet(ServerOperationCode.SetActiveRemoteChair))
                 {
                     oPacket
-                        .WriteInt(this.ID)
+                        .WriteInt(ID)
                         .WriteInt();
 
-                    this.Map.Broadcast(oPacket, this);
+                    Map.Broadcast(oPacket, this);
                 }
             }
             else
             {
-                this.Chair = seatID;
+                Chair = seatID;
             }
 
             using (PacketReader oPacket = new Packet(ServerOperationCode.Sit))
@@ -1225,7 +1208,7 @@ namespace RazzleServer.Game.Maple.Characters
                     oPacket.WriteShort(seatID);
                 }
 
-                this.Client.Send(oPacket);
+                Client.Send(oPacket);
             }
         }
 
@@ -1233,20 +1216,20 @@ namespace RazzleServer.Game.Maple.Characters
         {
             int mapleID = iPacket.ReadInt();
 
-            if (!this.Items.Contains(mapleID))
+            if (!Items.Contains(mapleID))
             {
                 return;
             }
 
-            this.Chair = mapleID;
+            Chair = mapleID;
 
             using (PacketReader oPacket = new Packet(ServerOperationCode.SetActiveRemoteChair))
             {
                 oPacket
-                    .WriteInt(this.ID)
+                    .WriteInt(ID)
                     .WriteInt(mapleID);
 
-                this.Map.Broadcast(oPacket, this);
+                Map.Broadcast(oPacket, this);
             }
         }
 
@@ -1254,7 +1237,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             Attack attack = new Attack(iPacket, type);
 
-            if (attack.Portals != this.Portals)
+            if (attack.Portals != Portals)
             {
                 return;
             }
@@ -1263,7 +1246,7 @@ namespace RazzleServer.Game.Maple.Characters
 
             if (attack.SkillID > 0)
             {
-                skill = this.Skills[attack.SkillID];
+                skill = Skills[attack.SkillID];
 
                 skill.Cast();
             }
@@ -1272,7 +1255,7 @@ namespace RazzleServer.Game.Maple.Characters
             using (PacketReader oPacket = new Packet(ServerOperationCode.CloseRangeAttack))
             {
                 oPacket
-                    .WriteInt(this.ID)
+                    .WriteInt(ID)
                     .WriteByte((byte)((attack.Targets * 0x10) + attack.Hits))
                     .WriteByte() // NOTE: Unknown.
                     .WriteByte((byte)(attack.SkillID != 0 ? skill.CurrentLevel : 0)); // NOTE: Skill level.
@@ -1302,7 +1285,7 @@ namespace RazzleServer.Game.Maple.Characters
                     }
                 }
 
-                this.Map.Broadcast(oPacket, this);
+                Map.Broadcast(oPacket, this);
             }
 
             foreach (KeyValuePair<int, List<uint>> target in attack.Damages)
@@ -1311,7 +1294,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                 try
                 {
-                    mob = this.Map.Mobs[target.Key];
+                    mob = Map.Mobs[target.Key];
                 }
                 catch (KeyNotFoundException)
                 {
@@ -1360,7 +1343,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                 try
                 {
-                    mob = this.Map.Mobs[mobObjectID];
+                    mob = Map.Mobs[mobObjectID];
                 }
                 catch (KeyNotFoundException)
                 {
@@ -1427,12 +1410,12 @@ namespace RazzleServer.Game.Maple.Characters
                     }
                     else
                     {
-                        this.Health -= (short)damage;
+                        Health -= (short)damage;
                     }
 
                     if (mpBurn > 0)
                     {
-                        this.Mana -= (short)mpBurn;
+                        Mana -= (short)mpBurn;
                     }
                 }
 
@@ -1442,7 +1425,7 @@ namespace RazzleServer.Game.Maple.Characters
             using (PacketReader oPacket = new Packet(ServerOperationCode.Hit))
             {
                 oPacket
-                    .WriteInt(this.ID)
+                    .WriteInt(ID)
                     .WriteSByte(type);
 
                 switch (type)
@@ -1480,7 +1463,7 @@ namespace RazzleServer.Game.Maple.Characters
                         break;
                 }
 
-                this.Map.Broadcast(oPacket, this);
+                Map.Broadcast(oPacket, this);
             }
         }
 
@@ -1498,12 +1481,12 @@ namespace RazzleServer.Game.Maple.Characters
                 using (PacketReader oPacket = new Packet(ServerOperationCode.UserChat))
                 {
                     oPacket
-                        .WriteInt(this.ID)
-                        .WriteBool(this.IsMaster)
+                        .WriteInt(ID)
+                        .WriteBool(IsMaster)
                         .WriteString(text)
                         .WriteBool(shout);
 
-                    this.Map.Broadcast(oPacket);
+                    Map.Broadcast(oPacket);
                 }
             }
         }
@@ -1522,10 +1505,10 @@ namespace RazzleServer.Game.Maple.Characters
             using (PacketReader oPacket = new Packet(ServerOperationCode.Emotion))
             {
                 oPacket
-                    .WriteInt(this.ID)
+                    .WriteInt(ID)
                     .WriteInt(expressionID);
 
-                this.Map.Broadcast(oPacket, this);
+                Map.Broadcast(oPacket, this);
             }
         }
 
@@ -1535,7 +1518,7 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 oPacket.WriteByte((byte)effect);
 
-                this.Client.Send(oPacket);
+                Client.Send(oPacket);
             }
         }
 
@@ -1544,10 +1527,10 @@ namespace RazzleServer.Game.Maple.Characters
             using (PacketReader oPacket = new Packet(ServerOperationCode.RemoteEffect))
             {
                 oPacket
-                    .WriteInt(this.ID)
+                    .WriteInt(ID)
                     .WriteByte((byte)effect);
 
-                this.Map.Broadcast(oPacket, skipSelf ? this : null);
+                Map.Broadcast(oPacket, skipSelf ? this : null);
             }
         }
 
@@ -1560,15 +1543,15 @@ namespace RazzleServer.Game.Maple.Characters
         {
             int objectID = iPacket.ReadInt();
 
-            this.Converse(this.Map.Npcs[objectID]);
+            this.Converse(Map.Npcs[objectID]);
         }
 
         public void Converse(Npc npc, Quest quest = null)
         {
-            this.LastNpc = npc;
-            this.LastQuest = quest;
+            LastNpc = npc;
+            LastQuest = quest;
 
-            this.LastNpc.Converse(this);
+            LastNpc.Converse(this);
         }
 
         public void DistributeAP(StatisticType type, short amount = 1)
@@ -1576,19 +1559,19 @@ namespace RazzleServer.Game.Maple.Characters
             switch (type)
             {
                 case StatisticType.Strength:
-                    this.Strength += amount;
+                    Strength += amount;
                     break;
 
                 case StatisticType.Dexterity:
-                    this.Dexterity += amount;
+                    Dexterity += amount;
                     break;
 
                 case StatisticType.Intelligence:
-                    this.Intelligence += amount;
+                    Intelligence += amount;
                     break;
 
                 case StatisticType.Luck:
-                    this.Luck += amount;
+                    Luck += amount;
                     break;
 
                 case StatisticType.MaxHealth:
@@ -1603,7 +1586,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void DistributeAP(PacketReader iPacket)
         {
-            if (this.AbilityPoints == 0)
+            if (AbilityPoints == 0)
             {
                 return;
             }
@@ -1611,8 +1594,8 @@ namespace RazzleServer.Game.Maple.Characters
             iPacket.ReadInt(); // NOTE: Ticks.
             StatisticType type = (StatisticType)iPacket.ReadInt();
 
-            this.DistributeAP(type);
-            this.AbilityPoints--;
+            DistributeAP(type);
+            AbilityPoints--;
         }
 
         public void AutoDistributeAP(PacketReader iPacket)
@@ -1627,17 +1610,17 @@ namespace RazzleServer.Game.Maple.Characters
                 StatisticType type = (StatisticType)iPacket.ReadInt();
                 int amount = iPacket.ReadInt();
 
-                if (amount > this.AbilityPoints || amount < 0)
+                if (amount > AbilityPoints || amount < 0)
                 {
                     return;
                 }
 
-                this.DistributeAP(type, (short)amount);
+                DistributeAP(type, (short)amount);
 
                 total += amount;
             }
 
-            this.AbilityPoints -= (short)total;
+            AbilityPoints -= (short)total;
         }
 
         public void HealOverTime(PacketReader iPacket)
@@ -1649,34 +1632,34 @@ namespace RazzleServer.Game.Maple.Characters
 
             if (healthAmount != 0)
             {
-                if ((DateTime.Now - this.LastHealthHealOverTime).TotalSeconds < 2)
+                if ((DateTime.Now - LastHealthHealOverTime).TotalSeconds < 2)
                 {
                     return;
                 }
                 else
                 {
-                    this.Health += healthAmount;
-                    this.LastHealthHealOverTime = DateTime.Now;
+                    Health += healthAmount;
+                    LastHealthHealOverTime = DateTime.Now;
                 }
             }
 
             if (manaAmount != 0)
             {
-                if ((DateTime.Now - this.LastManaHealOverTime).TotalSeconds < 2)
+                if ((DateTime.Now - LastManaHealOverTime).TotalSeconds < 2)
                 {
                     return;
                 }
                 else
                 {
-                    this.Mana += manaAmount;
-                    this.LastManaHealOverTime = DateTime.Now;
+                    Mana += manaAmount;
+                    LastManaHealOverTime = DateTime.Now;
                 }
             }
         }
 
         public void DistributeSP(PacketReader iPacket)
         {
-            if (this.SkillPoints == 0)
+            if (SkillPoints == 0)
             {
                 return;
             }
@@ -1684,12 +1667,12 @@ namespace RazzleServer.Game.Maple.Characters
             iPacket.ReadInt(); // NOTE: Ticks.
             int mapleID = iPacket.ReadInt();
 
-            if (!this.Skills.Contains(mapleID))
+            if (!Skills.Contains(mapleID))
             {
-                this.Skills.Add(new Skill(mapleID));
+                Skills.Add(new Skill(mapleID));
             }
 
-            Skill skill = this.Skills[mapleID];
+            Skill skill = Skills[mapleID];
 
             // TODO: Check for skill requirements.
 
@@ -1702,10 +1685,10 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 if (!skill.IsFromBeginner)
                 {
-                    this.SkillPoints--;
+                    SkillPoints--;
                 }
 
-                this.Release();
+                Release();
 
                 skill.CurrentLevel++;
             }
@@ -1716,12 +1699,12 @@ namespace RazzleServer.Game.Maple.Characters
             iPacket.Skip(4); // NOTE: tRequestTime (ticks).
             int amount = iPacket.ReadInt();
 
-            if (amount > this.Meso || amount < 10 || amount > 50000)
+            if (amount > Meso || amount < 10 || amount > 50000)
             {
                 return;
             }
 
-            this.Meso -= amount;
+            Meso -= amount;
 
             Meso meso = new Meso(amount)
             {
@@ -1729,7 +1712,7 @@ namespace RazzleServer.Game.Maple.Characters
                 Owner = null
             };
 
-            this.Map.Drops.Add(meso);
+            Map.Drops.Add(meso);
         }
 
         public void InformOnCharacter(PacketReader iPacket)
@@ -1741,14 +1724,14 @@ namespace RazzleServer.Game.Maple.Characters
 
             try
             {
-                target = this.Map.Characters[characterID];
+                target = Map.Characters[characterID];
             }
             catch (KeyNotFoundException)
             {
                 return;
             }
 
-            if (target.IsMaster && !this.IsMaster)
+            if (target.IsMaster && !IsMaster)
             {
                 return;
             }
@@ -1775,7 +1758,7 @@ namespace RazzleServer.Game.Maple.Characters
                     .WriteInt() // NOTE: Medal ID.
                     .WriteShort(); // NOTE: Medal quests.
 
-                this.Client.Send(oPacket);
+                Client.Send(oPacket);
             }
         }
 
@@ -1836,7 +1819,7 @@ namespace RazzleServer.Game.Maple.Characters
                 {
                     oPacket
                         .WriteByte((byte)type)
-                        .WriteString(this.Name)
+                        .WriteString(Name)
                         .WriteString(text);
 
                     foreach (int recipient in recipients)
@@ -1944,9 +1927,9 @@ namespace RazzleServer.Game.Maple.Characters
 
                             case InteractionType.Trade:
                                 {
-                                    if (this.Trade == null)
+                                    if (Trade == null)
                                     {
-                                        this.Trade = new Trade(this);
+                                        Trade = new Trade(this);
                                     }
                                 }
                                 break;
@@ -1955,9 +1938,9 @@ namespace RazzleServer.Game.Maple.Characters
                                 {
                                     string description = iPacket.ReadString();
 
-                                    if (this.PlayerShop == null)
+                                    if (PlayerShop == null)
                                     {
-                                        this.PlayerShop = new PlayerShop(this, description);
+                                        PlayerShop = new PlayerShop(this, description);
                                     }
                                 }
                                 break;
@@ -1973,13 +1956,13 @@ namespace RazzleServer.Game.Maple.Characters
 
                 case InteractionCode.Visit:
                     {
-                        if (this.PlayerShop == null)
+                        if (PlayerShop == null)
                         {
                             int objectID = iPacket.ReadInt();
 
-                            if (this.Map.PlayerShops.Contains(objectID))
+                            if (Map.PlayerShops.Contains(objectID))
                             {
-                                this.Map.PlayerShops[objectID].AddVisitor(this);
+                                Map.PlayerShops[objectID].AddVisitor(this);
                             }
                         }
                     }
@@ -1987,13 +1970,13 @@ namespace RazzleServer.Game.Maple.Characters
 
                 default:
                     {
-                        if (this.Trade != null)
+                        if (Trade != null)
                         {
-                            this.Trade.Handle(this, code, iPacket);
+                            Trade.Handle(this, code, iPacket);
                         }
-                        else if (this.PlayerShop != null)
+                        else if (PlayerShop != null)
                         {
-                            this.PlayerShop.Handle(this, code, iPacket);
+                            PlayerShop.Handle(this, code, iPacket);
                         }
                     }
                     break;
@@ -2002,7 +1985,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void UseAdminCommand(PacketReader iPacket)
         {
-            if (!this.IsMaster)
+            if (!IsMaster)
             {
                 return;
             }
@@ -2045,7 +2028,7 @@ namespace RazzleServer.Game.Maple.Characters
                                     .WriteByte(6)
                                     .WriteByte(1);
 
-                                this.Client.Send(oPacket);
+                                Client.Send(oPacket);
                             }
                         }
                     }
@@ -2060,12 +2043,12 @@ namespace RazzleServer.Game.Maple.Characters
                         {
                             for (int i = 0; i < count; i++)
                             {
-                                this.Map.Mobs.Add(new Mob(mobID, this.Position));
+                                Map.Mobs.Add(new Mob(mobID, Position));
                             }
                         }
                         else
                         {
-                            this.Notify("invalid mob: " + mobID); // TODO: Actual message.
+                            Notify("invalid mob: " + mobID); // TODO: Actual message.
                         }
                     }
                     break;
@@ -2074,7 +2057,7 @@ namespace RazzleServer.Game.Maple.Characters
                     {
                         int itemID = iPacket.ReadInt();
 
-                        this.Items.Add(new Item(itemID));
+                        Items.Add(new Item(itemID));
                     }
                     break;
 
@@ -2088,7 +2071,7 @@ namespace RazzleServer.Game.Maple.Characters
                     {
                         int amount = iPacket.ReadInt();
 
-                        this.Experience += amount;
+                        Experience += amount;
                     }
                     break;
 
@@ -2110,7 +2093,7 @@ namespace RazzleServer.Game.Maple.Characters
                                     .WriteByte(6)
                                     .WriteByte(1);
 
-                                this.Client.Send(oPacket);
+                                Client.Send(oPacket);
                             }
                         }
                     }
@@ -2158,7 +2141,7 @@ namespace RazzleServer.Game.Maple.Characters
                                 .WriteByte(29)
                                 .WriteBool(target != null);
 
-                            this.Client.Send(oPacket);
+                            Client.Send(oPacket);
                         }
                     }
                     break;
@@ -2169,7 +2152,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             byte portals = iPacket.ReadByte();
 
-            if (portals != this.Portals)
+            if (portals != Portals)
             {
                 return;
             }
@@ -2180,7 +2163,7 @@ namespace RazzleServer.Game.Maple.Characters
 
             try
             {
-                portal = this.Map.Portals[label];
+                portal = Map.Portals[label];
             }
             catch (KeyNotFoundException)
             {
@@ -2260,7 +2243,7 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 oPacket.WriteByte((byte)result);
 
-                this.Client.Send(oPacket);
+                Client.Send(oPacket);
             }
         }
 
@@ -2269,17 +2252,17 @@ namespace RazzleServer.Game.Maple.Characters
             using (ByteBuffer oPacket = new ByteBuffer())
             {
                 oPacket
-                    .WriteBytes(this.StatisticsToByteArray())
-                    .WriteBytes(this.AppearanceToByteArray());
+                    .WriteBytes(StatisticsToByteArray())
+                    .WriteBytes(AppearanceToByteArray());
 
                 if (!viewAllCharacters)
                 {
                     oPacket.WriteByte(); // NOTE: Family
                 }
 
-                oPacket.WriteBool(this.IsRanked);
+                oPacket.WriteBool(IsRanked);
 
-                if (this.IsRanked)
+                if (IsRanked)
                 {
                     oPacket
                         .WriteInt()
@@ -2298,32 +2281,32 @@ namespace RazzleServer.Game.Maple.Characters
             using (ByteBuffer oPacket = new ByteBuffer())
             {
                 oPacket
-                    .WriteInt(this.ID)
-                    .WriteStringFixed(this.Name, 13)
-                    .WriteByte((byte)this.Gender)
-                    .WriteByte(this.Skin)
-                    .WriteInt(this.Face)
-                    .WriteInt(this.Hair)
+                    .WriteInt(ID)
+                    .WriteStringFixed(Name, 13)
+                    .WriteByte((byte)Gender)
+                    .WriteByte(Skin)
+                    .WriteInt(Face)
+                    .WriteInt(Hair)
                     .WriteLong()
                     .WriteLong()
                     .WriteLong()
-                    .WriteByte(this.Level)
-                    .WriteShort((short)this.Job)
-                    .WriteShort(this.Strength)
-                    .WriteShort(this.Dexterity)
-                    .WriteShort(this.Intelligence)
-                    .WriteShort(this.Luck)
-                    .WriteShort(this.Health)
-                    .WriteShort(this.MaxHealth)
-                    .WriteShort(this.Mana)
-                    .WriteShort(this.MaxMana)
-                    .WriteShort(this.AbilityPoints)
-                    .WriteShort(this.SkillPoints)
-                    .WriteInt(this.Experience)
-                    .WriteShort(this.Fame)
+                    .WriteByte(Level)
+                    .WriteShort((short)Job)
+                    .WriteShort(Strength)
+                    .WriteShort(Dexterity)
+                    .WriteShort(Intelligence)
+                    .WriteShort(Luck)
+                    .WriteShort(Health)
+                    .WriteShort(MaxHealth)
+                    .WriteShort(Mana)
+                    .WriteShort(MaxMana)
+                    .WriteShort(AbilityPoints)
+                    .WriteShort(SkillPoints)
+                    .WriteInt(Experience)
+                    .WriteShort(Fame)
                     .WriteInt()
-                    .WriteInt(this.Map.MapleID)
-                    .WriteByte(this.SpawnPoint)
+                    .WriteInt(Map.MapleID)
+                    .WriteByte(SpawnPoint)
                     .WriteInt();
 
                 oPacket.Flip();
@@ -2336,16 +2319,16 @@ namespace RazzleServer.Game.Maple.Characters
             using (ByteBuffer oPacket = new ByteBuffer())
             {
                 oPacket
-                    .WriteByte((byte)this.Gender)
-                    .WriteByte(this.Skin)
-                    .WriteInt(this.Face)
+                    .WriteByte((byte)Gender)
+                    .WriteByte(Skin)
+                    .WriteInt(Face)
                     .WriteBool(true)
-                    .WriteInt(this.Hair);
+                    .WriteInt(Hair);
 
                 Dictionary<byte, int> visibleLayer = new Dictionary<byte, int>();
                 Dictionary<byte, int> hiddenLayer = new Dictionary<byte, int>();
 
-                foreach (Item item in this.Items.GetEquipped())
+                foreach (Item item in Items.GetEquipped())
                 {
                     byte slot = item.AbsoluteSlot;
 
@@ -2388,7 +2371,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                 oPacket.WriteByte(byte.MaxValue);
 
-                Item cashWeapon = this.Items[EquipmentSlot.CashWeapon];
+                Item cashWeapon = Items[EquipmentSlot.CashWeapon];
 
                 oPacket.WriteInt(cashWeapon != null ? cashWeapon.MapleID : 0);
 
@@ -2404,49 +2387,41 @@ namespace RazzleServer.Game.Maple.Characters
 
         public byte[] DataToByteArray(long flag = long.MaxValue)
         {
-            using (ByteBuffer oPacket = new ByteBuffer())
-            {
-                oPacket
-                    .WriteLong(flag)
-                    .WriteByte() // NOTE: Unknown.
-                    .WriteBytes(this.StatisticsToByteArray())
-                    .WriteByte(20) // NOTE: Max buddylist size.
-                    .WriteBool(false) // NOTE: Blessing of Fairy.
-                    .WriteInt(this.Meso)
-                    .WriteBytes(this.Items.ToByteArray())
-                    .WriteBytes(this.Skills.ToByteArray())
-                    .WriteBytes(this.Quests.ToByteArray())
-                    .WriteShort() // NOTE: Mini games record.
-                    .WriteShort() // NOTE: Rings (1).
-                    .WriteShort() // NOTE: Rings (2). 
-                    .WriteShort() // NOTE: Rings (3).
-                    .WriteBytes(this.Trocks.RegularToByteArray())
-                    .WriteBytes(this.Trocks.VIPToByteArray())
-                    .WriteInt() // NOTE: Monster Book cover ID.
-                    .WriteByte() // NOTE: Monster Book cards.
-                    .WriteShort() // NOTE: New Year Cards.
-                    .WriteShort() // NOTE: QuestRecordEX.
-                    .WriteShort() // NOTE: AdminShop.
-                    .WriteShort(); // NOTE: Unknown.
-
-                oPacket.Flip();
-                return oPacket.GetContent();
-            }
+            var pw = new PacketWriter();
+            pw.WriteLong(flag);
+            pw.WriteByte(0); // NOTE: Unknown.
+            pw.WriteBytes(StatisticsToByteArray());
+            pw.WriteByte(20); // NOTE: Max buddylist size.
+            pw.WriteBool(false); // NOTE: Blessing of Fairy.
+            pw.WriteInt(Meso);
+            pw.WriteBytes(Items.ToByteArray());
+            pw.WriteBytes(Skills.ToByteArray());
+            pw.WriteBytes(Quests.ToByteArray());
+            pw.WriteShort(0);// NOTE: Mini games record.
+            pw.WriteShort(0);// NOTE: Rings (1).
+            pw.WriteShort(0);// NOTE: Rings (2). 
+            pw.WriteShort(0);// NOTE: Rings (3).
+            pw.WriteBytes(Tocks.RegularToByteArray());
+            pw.WriteBytes(Tocks.VIPToByteArray());
+            pw.WriteInt(0); // NOTE: Monster Book cover ID.
+            pw.WriteByte(0); // NOTE: Monster Book cards.
+            pw.WriteShort(0);// NOTE: New Year Cards.
+            pw.WriteShort(0);// NOTE: QuestRecordEX.
+            pw.WriteShort(0);// NOTE: AdminShop.
+            pw.WriteShort(0); // NOTE: Unknown.
+            return pw.ToArray();
         }
 
-        public Packet GetCreatePacket()
-        {
-            return this.GetSpawnPacket();
-        }
+        public PacketWriter GetCreatePacket() => GetSpawnPacket();
 
-        public Packet GetSpawnPacket()
+        public PacketWriter GetSpawnPacket()
         {
-            Packet oPacket = new Packet(ServerOperationCode.UserEnterField);
+            var oPacket = new PacketWriter(ServerOperationCode.UserEnterField);
 
             oPacket
-                .WriteInt(this.ID)
-                .WriteByte(this.Level)
-                .WriteString(this.Name);
+                .WriteInt(ID)
+                .WriteByte(Level)
+                .WriteString(Name);
 
             if (false)
             {
@@ -2463,31 +2438,31 @@ namespace RazzleServer.Game.Maple.Characters
             }
 
             oPacket
-                .WriteBytes(this.Buffs.ToByteArray())
-                .WriteShort((short)this.Job)
-                .WriteBytes(this.AppearanceToByteArray())
-                .WriteInt(this.Items.Available(5110000))
+                .WriteBytes(Buffs.ToByteArray())
+                .WriteShort((short)Job)
+                .WriteBytes(AppearanceToByteArray())
+                .WriteInt(Items.Available(5110000))
                 .WriteInt() // NOTE: Item effect.
-                .WriteInt((int)(Item.GetType(this.Chair) == ItemType.Setup ? this.Chair : 0))
-                .WriteShort(this.Position.X)
-                .WriteShort(this.Position.Y)
-                .WriteByte(this.Stance)
-                .WriteShort(this.Foothold)
+                .WriteInt((int)(Item.GetType(Chair) == ItemType.Setup ? Chair : 0))
+                .WriteShort(Position.X)
+                .WriteShort(Position.Y)
+                .WriteByte(Stance)
+                .WriteShort(Foothold)
                 .WriteByte()
                 .WriteByte()
                 .WriteInt(1)
                 .WriteLong();
 
-            if (this.PlayerShop != null && this.PlayerShop.Owner == this)
+            if (PlayerShop != null && PlayerShop.Owner == this)
             {
                 oPacket
                     .WriteByte(4)
-                    .WriteInt(this.PlayerShop.ObjectID)
-                    .WriteString(this.PlayerShop.Description)
+                    .WriteInt(PlayerShop.ObjectID)
+                    .WriteString(PlayerShop.Description)
                     .WriteByte()
                     .WriteByte()
                     .WriteByte(1)
-                    .WriteByte((byte)(this.PlayerShop.IsFull ? 1 : 2)) // NOTE: Visitor availability.
+                    .WriteByte((byte)(PlayerShop.IsFull ? 1 : 2)) // NOTE: Visitor availability.
                     .WriteByte();
             }
             else
@@ -2495,13 +2470,13 @@ namespace RazzleServer.Game.Maple.Characters
                 oPacket.WriteByte();
             }
 
-            bool hasChalkboard = !string.IsNullOrEmpty(this.Chalkboard);
+            bool hasChalkboard = !string.IsNullOrEmpty(Chalkboard);
 
             oPacket.WriteBool(hasChalkboard);
 
             if (hasChalkboard)
             {
-                oPacket.WriteString(this.Chalkboard);
+                oPacket.WriteString(Chalkboard);
             }
 
             oPacket
@@ -2514,12 +2489,10 @@ namespace RazzleServer.Game.Maple.Characters
             return oPacket;
         }
 
-        public Packet GetDestroyPacket()
+        public PacketWriter GetDestroyPacket()
         {
-            Packet oPacket = new Packet(ServerOperationCode.UserLeaveField);
-
-            oPacket.WriteInt(this.ID);
-
+            var oPacket = new PacketWriter(ServerOperationCode.UserLeaveField);
+            oPacket.WriteInt(ID);
             return oPacket;
         }
     }

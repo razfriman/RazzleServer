@@ -1,18 +1,17 @@
 ﻿using RazzleServer.Common.Packet;
-using RazzleServer.Game;
-using RazzleServer.Player;
+using RazzleServer.Game.Maple.Characters;
 
-namespace RazzleServer.Handlers
+namespace RazzleServer.Game.Handlers
 {
     [PacketHandler(ClientOperationCode.CHANGE_MAP)]
     public class ChangeMapHandler : GamePacketHandler
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
-            MapleCharacter chr = client.Account.Character;
-            if (chr.HP <= 0 || chr.ActionState == ActionState.DEAD)
+            Character chr = client.Character;
+            if (chr.HP <= 0)
             {
-                chr.Revive(true);
+                chr.re(true);
                 return;
             }
 

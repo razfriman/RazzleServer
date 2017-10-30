@@ -7,21 +7,21 @@ namespace RazzleServer.Data
 
     public class MapleDbContext : DbContext
     {
-        public DbSet<Account> Accounts { get; set; }
-        public DbSet<Buddy> Buddies { get; set; }
-        public DbSet<Character> Characters { get; set; }
-        public DbSet<Guild> Guilds { get; set; }
-        public DbSet<InventoryItem> InventoryItems { get; set; }
-        public DbSet<InventoryEquip> InventoryEquips { get; set; }
-        public DbSet<InventorySlot> InventorySlots { get; set; }
-        public DbSet<KeyMap> KeyMaps { get; set; }
-        public DbSet<QuickSlotKeyMap> QuickSlotKeyMaps { get; set; }
-        public DbSet<QuestStatus> QuestStatus { get; set; }
-        public DbSet<QuestMobStatus> QuestStatusMobs { get; set; }
-        public DbSet<QuestCustomData> QuestCustomData { get; set; }
-        public DbSet<Skill> Skills { get; set; }
-        public DbSet<SkillCooldown> SkillCooldowns { get; set; }
-        public DbSet<DbSkillMacro> SkillMacros { get; set; }
+        public DbSet<AccountEntity> Accounts { get; set; }
+        public DbSet<BuddyEntity> Buddies { get; set; }
+        public DbSet<CharacterEntity> Characters { get; set; }
+        public DbSet<GuildEntity> Guilds { get; set; }
+        public DbSet<InventoryItemEntity> InventoryItems { get; set; }
+        public DbSet<InventoryEquipEntity> InventoryEquips { get; set; }
+        public DbSet<InventorySlotEntity> InventorySlots { get; set; }
+        public DbSet<KeyMapEntity> KeyMaps { get; set; }
+        public DbSet<QuickSlotKeyMapEntity> QuickSlotKeyMaps { get; set; }
+        public DbSet<QuestStatusEntity> QuestStatus { get; set; }
+        public DbSet<QuestMobStatusEntity> QuestStatusMobs { get; set; }
+        public DbSet<QuestCustomDataEntity> QuestCustomData { get; set; }
+        public DbSet<SkillEntity> Skills { get; set; }
+        public DbSet<SkillCooldownEntity> SkillCooldowns { get; set; }
+        public DbSet<SkillMacroEntity> SkillMacros { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

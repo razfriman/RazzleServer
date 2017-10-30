@@ -3,10 +3,6 @@ namespace RazzleServer.Center.Handlers
 {
     public class CharacterEntriesRequestHandler
     {
-        public CharacterEntriesRequestHandler()
-        {
-        }
-
         //private void CharacterEntriesRequest(PacketReader inPacket)
         //{
         //    byte worldID = inPacket.ReadByte();

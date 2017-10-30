@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using RazzleServer.Common.Constants;
+using RazzleServer.Common.Data;
+using RazzleServer.Game.Maple.Data;
 
 namespace RazzleServer.Game.Maple
 {

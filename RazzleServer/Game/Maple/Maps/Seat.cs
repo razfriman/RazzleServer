@@ -1,4 +1,6 @@
-﻿namespace RazzleServer.Game.Maple.Maps
+﻿using RazzleServer.Common.Data;
+
+namespace RazzleServer.Game.Maple.Maps
 {
     public sealed class Seat : MapObject
     {

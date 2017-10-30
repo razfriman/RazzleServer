@@ -1,4 +1,9 @@
 ﻿using System;
+using RazzleServer.Common.Constants;
+using RazzleServer.Common.Data;
+using RazzleServer.Common.Packet;
+using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Game.Maple.Data;
 
 namespace RazzleServer.Game.Maple.Maps
 {
@@ -63,29 +68,21 @@ namespace RazzleServer.Game.Maple.Maps
 
         public void ShowBalloonMessage(Character character, string text, short width, short height)
         {
-            using (PacketReader oPacket = new Packet(ServerOperationCode.BalloonMsg))
-            {
-                oPacket
-                    .WriteString(text)
-                    .WriteShort(width)
-                    .WriteShort(height)
-                    .WriteByte(1);
-
-                character.Client.Send(oPacket);
-            }
+            var oPacket = new PacketWriter(ServerOperationCode.BalloonMsg);
+            oPacket.WriteString(text);
+            oPacket.WriteShort(width);
+            oPacket.WriteShort(height);
+            oPacket.WriteByte(1);
+            character.Client.Send(oPacket);
         }
+    }
 
-        public void ShowTutorialMessage(Character character, string dataPath)
-        {
-            using (PacketReader oPacket = new Packet(ServerOperationCode.Effect))
-            {
-                oPacket
-                    .WriteByte((byte)UserEffect.AvatarOriented)
-                    .WriteString(dataPath)
-                    .WriteInt(1);
-
-                character.Client.Send(oPacket);
-            }
-        }
+    public void ShowTutorialMessage(Character character, string dataPath)
+    {
+        var oPacket = new PacketWriter(ServerOperationCode.Effect);
+        oPacket.WriteByte((byte)UserEffect.AvatarOriented);
+        oPacket.WriteString(dataPath);
+        oPacket.WriteInt(1);
+        character.Client.Send(oPacket);
     }
 }

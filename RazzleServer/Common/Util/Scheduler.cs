@@ -1,9 +1,8 @@
-﻿using RazzleServer.Map.Monster;
-using RazzleServer.Player;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using RazzleServer.Game.Maple.Characters;
 
 namespace RazzleServer.Util
 {
@@ -52,7 +51,7 @@ namespace RazzleServer.Util
         /// <param name="source"></param>
         /// <param name="skillId"></param>
         /// <param name="delay"></param>
-        public static Task ScheduleRemoveCooldown(MapleCharacter source, int skillId, int delay, CancellationToken cancellationToken = default(CancellationToken))
+        public static Task ScheduleRemoveCooldown(Character source, int skillId, int delay, CancellationToken cancellationToken = default(CancellationToken))
         {
             return ScheduleDelayedAction(new Action(() =>
             {
@@ -67,7 +66,7 @@ namespace RazzleServer.Util
         /// <param name="source"></param>
         /// <param name="skillIds"></param>
         /// <param name="delay"></param>
-        public static Task ScheduleRemoveCooldowns(MapleCharacter source, List<int> skillIds, int delay, CancellationToken cancellationToken = default(CancellationToken))
+        public static Task ScheduleRemoveCooldowns(Character source, List<int> skillIds, int delay, CancellationToken cancellationToken = default(CancellationToken))
         {
             return ScheduleDelayedAction(new Action(() =>
             {
@@ -86,21 +85,21 @@ namespace RazzleServer.Util
         /// <param name="skillId"></param>
         /// <param name="delay"></param>
         /// <returns></returns>
-        public static Task ScheduleRemoveBuff(MapleCharacter source, int skillId, int delay, CancellationToken cancellationToken = default(CancellationToken))
+        public static Task ScheduleRemoveBuff(Character source, int skillId, int delay, CancellationToken cancellationToken = default(CancellationToken))
         {
             return ScheduleDelayedAction(new Action(() =>
             {
                 if (source != null && source.Client != null)
-                    source.CancelBuff(skillId);
+                    source.Buffs.Remove(skillId);
             }), delay, cancellationToken);
         }
 
-        public static Task ScheduleRemoveSummon(MapleCharacter source, int summonSkillId, int delay, CancellationToken cancellationToken = default(CancellationToken))
+        public static Task ScheduleRemoveSummon(Character source, int summonSkillId, int delay, CancellationToken cancellationToken = default(CancellationToken))
         {
             return ScheduleDelayedAction(new Action(() =>
             {
                 if (source != null && source.Client != null)
-                    source.RemoveSummon(summonSkillId);
+                    source.Summons(summonSkillId);
             }), delay, cancellationToken);
         }
 

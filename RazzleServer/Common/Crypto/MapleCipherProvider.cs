@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
-using MapleLib.PacketLib;
+using RazzleServer.Common.PacketLib;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Util;
 
-namespace MapleLib.MapleCryptoLib
+namespace RazzleServer.Common.MapleCryptoLib
 {
 	/// <summary>
 	/// Helper class for Cipher related functionality

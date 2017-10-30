@@ -1,4 +1,6 @@
 ﻿using System.Collections.ObjectModel;
+using RazzleServer.Common.Data;
+using RazzleServer.Game.Maple.Life;
 
 namespace RazzleServer.Game.Maple.Data
 {

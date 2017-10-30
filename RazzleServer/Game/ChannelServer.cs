@@ -1,67 +1,46 @@
 ﻿using System;
-using System.Linq;
 using System.Net;
-using RazzleServer.Common.Packet;
-using RazzleServer.Player;
-using RazzleServer.Map;
+using System.Net.Sockets;
+using System.Threading;
 using Microsoft.Extensions.Logging;
-using RazzleServer.Handlers;
-using System.Collections.Generic;
-using RazzleServer.Data.WZ;
-using RazzleServer.Data;
+using RazzleServer.Server;
 using RazzleServer.Util;
 
-namespace RazzleServer.Server
+namespace RazzleServer.Game
 {
-    public class ChannelServer : MapleServer
+    public class WvsGame : MapleServer<GameClient>
     {
-        private Dictionary<int, MapleMap> _maps { get; set; } = new Dictionary<int, MapleMap>();
-        public DateTime LastPing { get; set; }
+        public CenterServer CenterConnection { get; set; }
 
-        private static ILogger Log = LogManager.Log;
+        public byte ChannelID { get; set; }
+        public byte WorldID { get; set; }
+        public string WorldName { get; set; }
+        public string TickerMessage { get; set; }
+        public int ExperienceRate { get; set; }
+        public int QuestExperienceRate { get; set; }
+        public int PartyQuestExperienceRate { get; set; }
+        public int MesoRate { get; set; }
+        public int DropRate { get; set; }
 
-        public ChannelServer(ushort port) {
+        private static readonly ILogger Log = LogManager.Log;
 
-            _maps = new Dictionary<int, MapleMap>();
-            foreach (KeyValuePair<int, WzMap> kvp in DataBuffer.MapBuffer)
-            {
-                var map = new MapleMap(kvp.Key, kvp.Value);
-                _maps.Add(kvp.Key, map);
-            }
+        public WvsGame(ushort port)
+        {
+            DataProvider.Initialize();
 
+            new Thread(new ThreadStart(CenterServer.Main)).Start();
+
+            WvsGame.CenterConnectionDone.WaitOne();
 
             byte[] channelIp = { 0, 0, 0, 0 };
             Start(new IPAddress(channelIp), port);
         }
 
-        public void BroadCastPacket(PacketWriter pw)
+        public override void Dispose()
         {
-            foreach (var client in Clients.Values)
-            {
-                client.Send(pw);
-            }
-        }
-
-        public MapleMap GetMap(int mapID) => _maps.TryGetValue(mapID, out var ret) ? ret : null;
-
-        private void PingClients()
-        {
-            TimeSpan LastCheck = DateTime.UtcNow.Subtract(LastPing);
-            foreach (var c in Clients.Values.Where(x => x.Account != null).ToList())
-            {
-                c.Send(PongHandler.PingPacket());
-                if (c.LastPong == DateTime.MinValue)
-                {
-                    c.LastPong = DateTime.UtcNow;
-                }
-                else
-                {
-                    TimeSpan timePassed = DateTime.UtcNow.Subtract(c.LastPong);
-                    if (timePassed.TotalSeconds > ServerConfig.Instance.PingTimeout + LastCheck.TotalSeconds)
-                        c.Disconnect("Ping timeout");
-                }
-            }
-            LastPing = DateTime.UtcNow;
+            CenterConnection?.Dispose();
+            ShutDown();
+            Log.LogInformation($"Server disposed from thread {Thread.CurrentThread.ManagedThreadId}");
         }
     }
 }

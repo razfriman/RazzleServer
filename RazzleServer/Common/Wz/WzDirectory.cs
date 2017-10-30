@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using MapleLib.WzLib.Util;
+using RazzleServer.Common.WzLib.Util;
 using System;
 
-namespace MapleLib.WzLib
+namespace RazzleServer.Common.WzLib
 {
 	/// <summary>
 	/// A directory in the wz file, which may contain sub directories or wz images

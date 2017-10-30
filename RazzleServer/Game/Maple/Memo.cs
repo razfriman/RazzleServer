@@ -1,4 +1,5 @@
 ﻿using System;
+using RazzleServer.Common.Data;
 
 namespace RazzleServer.Game.Maple
 {

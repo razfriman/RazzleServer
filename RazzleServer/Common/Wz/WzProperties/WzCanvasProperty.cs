@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using MapleLib.WzLib.Util;
+using RazzleServer.Common.WzLib.Util;
 using System;
 using System.Drawing;
 
-namespace MapleLib.WzLib.WzProperties
+namespace RazzleServer.Common.WzLib.WzProperties
 {
     /// <summary>
     /// A property that can contain sub properties and has one png image
@@ -131,7 +131,7 @@ namespace MapleLib.WzLib.WzProperties
             }
             return ret;
         }
-        public override void WriteValue(MapleLib.WzLib.Util.WzBinaryWriter writer)
+        public override void WriteValue(RazzleServer.Common.WzLib.Util.WzBinaryWriter writer)
         {
             writer.WriteStringValue("Canvas", 0x73, 0x1B);
             writer.Write((byte)0);

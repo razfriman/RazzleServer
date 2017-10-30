@@ -1,4 +1,6 @@
-﻿namespace RazzleServer.Game.Maple.Maps
+﻿using RazzleServer.Game.Maple.Interaction;
+
+namespace RazzleServer.Game.Maple.Maps
 {
     public sealed class MapPlayerShops : MapObjects<PlayerShop>
     {
@@ -9,11 +11,7 @@
             lock (this)
             {
                 base.InsertItem(index, item);
-
-                using (PacketReader oPacket = item.GetCreatePacket())
-                {
-                    this.Map.Broadcast(oPacket);
-                }
+                Map.Broadcast(item.GetCreatePacket());
             }
         }
 
@@ -22,12 +20,7 @@
             lock (this)
             {
                 PlayerShop item = base.Items[index];
-
-                using (PacketReader oPacket = item.GetDestroyPacket())
-                {
-                    this.Map.Broadcast(oPacket);
-                }
-
+                this.Map.Broadcast(item.GetDestroyPacket());
                 base.RemoveItem(index);
             }
         }

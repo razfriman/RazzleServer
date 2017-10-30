@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using MapleLib.WzLib.Util;
+using RazzleServer.Common.WzLib.Util;
 
-namespace MapleLib.WzLib.WzProperties
+namespace RazzleServer.Common.WzLib.WzProperties
 {
     /// <summary>
     /// A property that contains a set of properties
@@ -114,7 +114,7 @@ namespace MapleLib.WzLib.WzProperties
             }
             return ret;
         }
-        public override void WriteValue(MapleLib.WzLib.Util.WzBinaryWriter writer)
+        public override void WriteValue(RazzleServer.Common.WzLib.Util.WzBinaryWriter writer)
         {
             writer.WriteStringValue("Property", 0x73, 0x1B);
             WzImageProperty.WritePropertyList(writer, properties);

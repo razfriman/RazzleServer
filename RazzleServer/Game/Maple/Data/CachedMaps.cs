@@ -1,4 +1,7 @@
 ﻿using System.Collections.ObjectModel;
+using RazzleServer.Common.Data;
+using RazzleServer.Game.Maple.Life;
+using RazzleServer.Game.Maple.Maps;
 
 namespace RazzleServer.Game.Maple.Data
 {
@@ -19,8 +22,6 @@ namespace RazzleServer.Game.Maple.Data
             {
                 if (!base.Contains(key))
                 {
-                    using (Database.TemporarySchema(Database.SchemaMCDB))
-                    {
                         foreach (Datum datum in new Datums("map_data", Database.SchemaMCDB).Populate("mapid = {0}", key))
                         {
                             this.Add(new Map(datum));
@@ -63,7 +64,6 @@ namespace RazzleServer.Game.Maple.Data
                     }
 
                     this[key].SpawnPoints.Spawn();
-                }
 
                 return base[key];
             }

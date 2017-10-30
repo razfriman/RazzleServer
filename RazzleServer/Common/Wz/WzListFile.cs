@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using MapleLib.WzLib.Util;
+using RazzleServer.Common.WzLib.Util;
 
-namespace MapleLib.WzLib
+namespace RazzleServer.Common.WzLib
 {
     /// <summary>
     /// A class that parses and contains the data of a wz list file

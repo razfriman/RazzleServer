@@ -1,6 +1,6 @@
-﻿using MapleLib.WzLib.WzProperties;
+﻿using RazzleServer.Common.WzLib.WzProperties;
 
-namespace MapleLib.WzLib.WzStructure
+namespace RazzleServer.Common.WzLib.WzStructure
 {
     public static class InfoTool
     {

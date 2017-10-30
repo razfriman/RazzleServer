@@ -1,4 +1,7 @@
-﻿namespace RazzleServer.Game.Maple.Commands
+﻿using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Server;
+
+namespace RazzleServer.Game.Maple.Commands
 {
     public abstract class Command
     {
@@ -34,7 +37,7 @@
 
         public void ShowSyntax(Character caller)
         {
-            caller.Notify(string.Format("[Syntax] {0}{1} {2}", Application.CommandIndicator, this.Name, this.Parameters.ClearFormatters()));
+            caller.Notify($"[Syntax] {ServerConfig.Instance.CommandIndicator}{Name}");
         }
     }
 }

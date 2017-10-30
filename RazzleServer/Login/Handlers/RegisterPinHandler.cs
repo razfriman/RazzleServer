@@ -1,13 +1,11 @@
-﻿using MapleLib.PacketLib;
-using RazzleServer.Common.Packet;
-using RazzleServer.Player;
+﻿using RazzleServer.Common.Packet;
 
-namespace RazzleServer.Handlers
+namespace RazzleServer.Login.Handlers
 {
     [PacketHandler(ClientOperationCode.REGISTER_PIN)]
-    public class RegisterPinHandler : APacketHandler
+    public class RegisterPinHandler : LoginPacketHandler
     {
-        public override void HandlePacket(PacketReader packet, MapleClient client)
+        public override void HandlePacket(PacketReader packet, LoginClient client)
         {
             var status = packet.ReadByte();
 

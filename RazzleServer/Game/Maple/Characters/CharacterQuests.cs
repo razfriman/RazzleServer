@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using RazzleServer.Common.Constants;
+using RazzleServer.Common.Packet;
+using RazzleServer.Game.Maple.Data;
+using RazzleServer.Game.Maple.Life;
 
 namespace RazzleServer.Game.Maple.Characters
 {
@@ -112,7 +116,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Handle(PacketReader iPacket)
         {
-            QuestAction action = (QuestAction)iPacket.ReadByte();
+            var action = (QuestAction)iPacket.ReadByte();
             ushort questID = iPacket.ReadUShort();
 
             if (!DataProvider.Quests.Contains(questID))

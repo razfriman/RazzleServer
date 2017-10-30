@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using System.IO;
-using MapleLib.MapleCryptoLib;
+using RazzleServer.Common.MapleCryptoLib;
 
-namespace MapleLib.WzLib.Util
+namespace RazzleServer.Common.WzLib.Util
 {
     /*
 	   TODO : Maybe WzBinaryReader/Writer should read and contain the hash (this is probably what's going to happen)

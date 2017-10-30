@@ -1,4 +1,4 @@
-﻿namespace MapleLib.WzLib.WzStructure
+﻿namespace RazzleServer.Common.WzLib.WzStructure
 {
     public struct Foothold
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace MapleLib.WzLib.WzStructure
+namespace RazzleServer.Common.WzLib.WzStructure
 {
     [DataContract]
     public struct MapleBool //I know I could have used the nullable bool.

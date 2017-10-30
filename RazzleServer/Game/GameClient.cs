@@ -3,23 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Reflection;
-using MapleLib.PacketLib;
+using RazzleServer.Common.PacketLib;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Packet;
-using RazzleServer.Player;
-using RazzleServer.Scripts;
 using RazzleServer.Server;
 using RazzleServer.Util;
+using RazzleServer.Game.Maple;
+using RazzleServer.Game.Maple.Characters;
 
 namespace RazzleServer.Game
 {
     public sealed class GameClient : AClient
     {
         public static Dictionary<ClientOperationCode, List<GamePacketHandler>> PacketHandlers = new Dictionary<ClientOperationCode, List<GamePacketHandler>>();
-        public MapleAccount Account { get; set; }
-        public byte Channel { get; set; }
+        public Account Account { get; set; }
         public ChannelServer Server { get; set; }
-        public NpcEngine NpcEngine { get; set; }
+        public Character Character { get; set; }
 
         private static ILogger Log = LogManager.Log;
 
@@ -29,7 +28,6 @@ namespace RazzleServer.Game
             Server = server;
             Host = Socket.Host;
             Port = Socket.Port;
-            Channel = 0;
             Connected = true;
         }
 
@@ -98,71 +96,57 @@ namespace RazzleServer.Game
 
         public override void Disconnected()
         {
-            var save = Account?.Character; ;
+            var save = Character;
             try
             {
-                Account?.Release();
                 Connected = false;
                 Server.RemoveClient(this);
-                save?.LoggedOut();
-                NpcEngine?.Dispose();
                 Socket?.Dispose();
             }
             catch (Exception e)
             {
-                Log.LogError(e, $"Error while disconnecting. Account [{Account?.Name}] Character [{save?.Name}]");
+                Log.LogError(e, $"Error while disconnecting. Account [{Account?.Username}] Character [{save?.Name}]");
             }
         }
 
 
-        public long ID { get; private set; }
-
-        public Account Account { get; set; }
-        public Character Character { get; set; }
-
-        public GameClient(Socket socket)
-            : base(socket)
-        {
-            this.ID = Application.Random.Next();
-        }
 
         private void Initialize(PacketReader inPacket)
         {
             int accountID;
             int characterID = inPacket.ReadInt();
 
-            if ((accountID = WvsGame.CenterConnection.ValidateMigration(this.RemoteEndPoint.Address.ToString(), characterID)) == 0)
+            if ((accountID = WvsGame.CenterConnection.ValidateMigration(Socket.Host, characterID)) == 0)
             {
-                this.Stop();
-
+                Terminate("Invalid migration");
                 return;
             }
 
-            this.Character = new Character(characterID, this);
-            this.Character.Load();
-            this.Character.Initialize();
-
-            this.Title = this.Character.Name;
+            Character = new Character(characterID, this);
+            Character.Load();
+            Character.Initialize();
         }
 
-        protected override void Register()
+        public override void Register()
         {
-            WvsGame.Clients.Add(this);
+            //WvsGame.CenterConnection.UpdatePopulation(0);
+            base.Register();
         }
 
-        protected override void Terminate()
+        public override void Unregister()
         {
-            if (this.Character != null)
+            //WvsGame.CenterConnection.UpdatePopulation(0);
+            base.Unregister();
+        }
+
+        public override void Terminate(string message = null)
+        {
+            if (Character != null)
             {
-                this.Character.Save();
-                this.Character.LastNpc = null;
-                this.Character.Map.Characters.Remove(this.Character);
+                Character.Save();
+                Character.LastNpc = null;
+                Character.Map.Characters.Remove(Character);
             }
-        }
-
-        protected override void Unregister()
-        {
-            WvsGame.Clients.Remove(this);
         }
 
         private void ChangeChannel(PacketReader inPacket)
@@ -176,5 +160,4 @@ namespace RazzleServer.Game
             Send(outPacket);
         }
     }
-}
 }

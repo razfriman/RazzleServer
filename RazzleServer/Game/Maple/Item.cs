@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using RazzleServer.Common.Constants;
+using RazzleServer.Common.Data;
+using RazzleServer.Common.Packet;
+using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Maps;
 
 namespace RazzleServer.Game.Maple
@@ -1151,9 +1155,9 @@ namespace RazzleServer.Game.Maple
             return (EquipmentSlot)slot;
         }
 
-        public override Packet GetShowGainPacket()
+        public override PacketWriter GetShowGainPacket()
         {
-            Packet oPacket = new Packet(ServerOperationCode.Message);
+            var oPacket = new PacketWriter(ServerOperationCode.Message);
 
             oPacket
                 .WriteByte((byte)MessageType.DropPickup)

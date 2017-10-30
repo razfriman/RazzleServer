@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using RazzleServer.Common.Constants;
+using RazzleServer.Common.Packet;
+using RazzleServer.Login.Maple;
 using RazzleServer.Server;
 using RazzleServer.Util;
 
@@ -109,11 +112,11 @@ namespace RazzleServer.Login
 
         private void Register(PacketReader inPacket)
         {
-            ServerRegsitrationResponse response = (ServerRegsitrationResponse)inPacket.ReadByte();
+            var response = (ServerRegistrationResponse)inPacket.ReadByte();
 
             switch (response)
             {
-                case ServerRegsitrationResponse.Valid:
+                case ServerRegistrationResponse.Valid:
                     {
                         WvsLogin.Listen();
                         WvsLogin.CenterConnectionDone.Set();
@@ -125,7 +128,6 @@ namespace RazzleServer.Login
                 default:
                     {
                         Log.Error(ServerRegistrationResponseResolver.Explain(response));
-
                         WvsLogin.Stop();
                     }
                     break;
@@ -134,10 +136,10 @@ namespace RazzleServer.Login
 
         private void UpdateChannel(PacketReader inPacket)
         {
-            byte worldID = inPacket.ReadByte();
-            bool add = inPacket.ReadBool();
+            var worldID = inPacket.ReadByte();
+            var add = inPacket.ReadBool();
 
-            World world = WvsLogin.Worlds[worldID];
+            var world = WvsLogin.Worlds[worldID];
 
             if (add)
             {
@@ -216,7 +218,7 @@ namespace RazzleServer.Login
         private void CreateCharacter(PacketReader inPacket)
         {
             int accountID = inPacket.ReadInt();
-            byte[] characterData = inPacket.ReadBytes(inPacket.Remaining);
+            byte[] characterData = inPacket.ReadBytes(inPacket.Available);
 
             this.CharacterCreationPool.Enqueue(accountID, characterData);
         }

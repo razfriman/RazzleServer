@@ -1,4 +1,8 @@
-﻿namespace RazzleServer.Game.Maple.Maps
+﻿using RazzleServer.Common.Constants;
+using RazzleServer.Common.Packet;
+using RazzleServer.Game.Maple.Characters;
+
+namespace RazzleServer.Game.Maple.Maps
 {
     public sealed class Map
     {
@@ -36,44 +40,44 @@
 
         public Map(Datum datum)
         {
-            this.MapleID = (int)datum["mapid"];
-            this.ReturnMapID = (int)datum["return_map"];
-            this.ForcedReturnMapID = (int)datum["forced_return_map"];
+            MapleID = (int)datum["mapid"];
+            ReturnMapID = (int)datum["return_map"];
+            ForcedReturnMapID = (int)datum["forced_return_map"];
 
-            this.RegenerationRate = (sbyte)datum["regen_rate"];
-            this.DecreaseHP = (byte)datum["decrease_hp"];
-            this.DamagePerSecond = (ushort)datum["damage_per_second"];
-            this.ProtectorItemID = (int)datum["protect_item"];
-            this.ShipKind = (sbyte)datum["ship_kind"];
-            this.SpawnRate = (double)datum["mob_rate"];
-            this.RequiredLevel = (byte)datum["min_level_limit"];
-            this.TimeLimit = (int)datum["time_limit"];
+            RegenerationRate = (sbyte)datum["regen_rate"];
+            DecreaseHP = (byte)datum["decrease_hp"];
+            DamagePerSecond = (ushort)datum["damage_per_second"];
+            ProtectorItemID = (int)datum["protect_item"];
+            ShipKind = (sbyte)datum["ship_kind"];
+            SpawnRate = (double)datum["mob_rate"];
+            RequiredLevel = (byte)datum["min_level_limit"];
+            TimeLimit = (int)datum["time_limit"];
 
-            this.IsTown = ((string)datum["flags"]).Contains("town");
-            this.HasClock = ((string)datum["flags"]).Contains("clock");
-            this.IsEverlasting = ((string)datum["flags"]).Contains("everlast");
-            this.DisablesTownScroll = ((string)datum["flags"]).Contains("scroll_disable");
-            this.IsSwim = ((string)datum["flags"]).Contains("swim");
-            this.ShufflesReactors = ((string)datum["flags"]).Contains("shuffle_reactors");
-            this.UniqueShuffledReactor = (string)datum["shuffle_name"];
-            this.IsShop = ((string)datum["flags"]).Contains("shop");
-            this.NoPartyLeaderPass = ((string)datum["flags"]).Contains("no_party_leader_pass");
+            IsTown = ((string)datum["flags"]).Contains("town");
+            HasClock = ((string)datum["flags"]).Contains("clock");
+            IsEverlasting = ((string)datum["flags"]).Contains("everlast");
+            DisablesTownScroll = ((string)datum["flags"]).Contains("scroll_disable");
+            IsSwim = ((string)datum["flags"]).Contains("swim");
+            ShufflesReactors = ((string)datum["flags"]).Contains("shuffle_reactors");
+            UniqueShuffledReactor = (string)datum["shuffle_name"];
+            IsShop = ((string)datum["flags"]).Contains("shop");
+            NoPartyLeaderPass = ((string)datum["flags"]).Contains("no_party_leader_pass");
 
-            this.Characters = new MapCharacters(this);
-            this.Drops = new MapDrops(this);
-            this.Mobs = new MapMobs(this);
-            this.Npcs = new MapNpcs(this);
-            this.Footholds = new MapFootholds(this);
-            this.Seats = new MapSeats(this);
-            this.Reactors = new MapReactors(this);
-            this.Portals = new MapPortals(this);
-            this.SpawnPoints = new MapSpawnPoints(this);
-            this.PlayerShops = new MapPlayerShops(this);
+            Characters = new MapCharacters(this);
+            Drops = new MapDrops(this);
+            Mobs = new MapMobs(this);
+            Npcs = new MapNpcs(this);
+            Footholds = new MapFootholds(this);
+            Seats = new MapSeats(this);
+            Reactors = new MapReactors(this);
+            Portals = new MapPortals(this);
+            SpawnPoints = new MapSpawnPoints(this);
+            PlayerShops = new MapPlayerShops(this);
         }
 
-        public void Broadcast(PacketReader oPacket, Character ignored = null)
+        public void Broadcast(PacketWriter oPacket, Character ignored = null)
         {
-            foreach (Character character in this.Characters)
+            foreach (Character character in Characters)
             {
                 if (character != ignored)
                 {
@@ -84,7 +88,7 @@
 
         public void Notify(string text, NoticeType type = NoticeType.Popup)
         {
-            foreach (Character character in this.Characters)
+            foreach (Character character in Characters)
             {
                 character.Notify(text, type);
             }

@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System;
-using MapleLib.WzLib.Util;
-using MapleLib.WzLib.WzProperties;
+using RazzleServer.Common.WzLib.Util;
+using RazzleServer.Common.WzLib.WzProperties;
 
-namespace MapleLib.WzLib
+namespace RazzleServer.Common.WzLib
 {
     /// <summary>
     /// A .img contained in a wz directory

@@ -1,5 +1,5 @@
-﻿using RazzleServer.Map.Monster;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using RazzleServer.Game.Maple.Life;
 
 namespace RazzleServer.Data.WZ
 {

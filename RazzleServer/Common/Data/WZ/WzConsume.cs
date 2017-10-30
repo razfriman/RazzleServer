@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RazzleServer.Data.WZ
+﻿namespace RazzleServer.Data.WZ
 {
     public class WzConsume : WzItem
     {

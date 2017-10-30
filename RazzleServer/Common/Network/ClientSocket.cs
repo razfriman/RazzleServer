@@ -3,15 +3,16 @@ using System.Net;
 using System.Net.Sockets;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Util;
-using MapleLib.MapleCryptoLib;
+using RazzleServer.Common.MapleCryptoLib;
 using RazzleServer.Common.Packet;
 
-namespace MapleLib.PacketLib
+namespace RazzleServer.Common.PacketLib
 {
 	public class ClientSocket : IDisposable
 	{
 		private readonly Socket _socket;
 		private readonly byte[] _socketBuffer;
+        private readonly IPEndPoint _endpoint;
 		private readonly string _host;
         private readonly byte[] _hostBytes;
 		private readonly ushort _port;
@@ -23,6 +24,7 @@ namespace MapleLib.PacketLib
 
 		public MapleCipherProvider Crypto { get; private set; }
 		public bool Connected => !disposed;
+        public IPEndPoint Endpoint => _endpoint;
 		public string Host => _host;
         public byte[] HostBytes => _hostBytes;
 		public ushort Port => _port;
@@ -31,8 +33,9 @@ namespace MapleLib.PacketLib
 		{
 			_socket = socket;
 			_socketBuffer = new byte[1024];
-			_host = ((IPEndPoint)socket.RemoteEndPoint).Address.ToString();
-            _hostBytes = ((IPEndPoint)socket.RemoteEndPoint).Address.GetAddressBytes();
+            _endpoint = socket.RemoteEndPoint as IPEndPoint;
+            _host = _endpoint.Address.ToString();
+            _hostBytes = _endpoint.Address.GetAddressBytes();
 			_port = (ushort)((IPEndPoint)socket.LocalEndPoint).Port;
 			_disposeSync = new object();
 			_client = client;

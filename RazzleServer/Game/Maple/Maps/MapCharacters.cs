@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Game.Maple.Life;
 
 namespace RazzleServer.Game.Maple.Maps
 {
@@ -28,20 +30,17 @@ namespace RazzleServer.Game.Maple.Maps
             {
                 foreach (Character character in this)
                 {
-                    using (PacketReader oPacket = character.GetSpawnPacket())
-                    {
-                        item.Client.Send(oPacket);
-                    }
+                    item.Client.Send(character.GetSpawnPacket());
                 }
             }
 
-            item.Position = this.Map.Portals.Count > 0 ? this.Map.Portals[item.SpawnPoint].Position : new Point(0, 0);
+            item.Position = Map.Portals.Count > 0 ? Map.Portals[item.SpawnPoint].Position : new Point(0, 0);
 
             base.InsertItem(index, item);
 
-            lock (this.Map.Drops)
+            lock (Map.Drops)
             {
-                foreach (Drop drop in this.Map.Drops)
+                foreach (Drop drop in Map.Drops)
                 {
                     if (drop.Owner == null)
                     {
@@ -60,9 +59,9 @@ namespace RazzleServer.Game.Maple.Maps
                 }
             }
 
-            lock (this.Map.Mobs)
+            lock (Map.Mobs)
             {
-                foreach (Mob mob in this.Map.Mobs)
+                foreach (Mob mob in Map.Mobs)
                 {
                     using (PacketReader oPacket = mob.GetSpawnPacket())
                     {
@@ -71,9 +70,9 @@ namespace RazzleServer.Game.Maple.Maps
                 }
             }
 
-            lock (this.Map.Npcs)
+            lock (Map.Npcs)
             {
-                foreach (Npc npc in this.Map.Npcs)
+                foreach (Npc npc in Map.Npcs)
                 {
                     using (PacketReader oPacket = npc.GetSpawnPacket())
                     {
@@ -82,9 +81,9 @@ namespace RazzleServer.Game.Maple.Maps
                 }
             }
 
-            lock (this.Map.Reactors)
+            lock (Map.Reactors)
             {
-                foreach (Reactor reactor in this.Map.Reactors)
+                foreach (Reactor reactor in Map.Reactors)
                 {
                     using (PacketReader oPacket = reactor.GetSpawnPacket())
                     {
@@ -93,17 +92,17 @@ namespace RazzleServer.Game.Maple.Maps
                 }
             }
 
-            lock (this.Map.Mobs)
+            lock (Map.Mobs)
             {
-                foreach (Mob mob in this.Map.Mobs)
+                foreach (Mob mob in Map.Mobs)
                 {
                     mob.AssignController();
                 }
             }
 
-            lock (this.Map.Npcs)
+            lock (Map.Npcs)
             {
-                foreach (Npc npc in this.Map.Npcs)
+                foreach (Npc npc in Map.Npcs)
                 {
                     npc.AssignController();
                 }
@@ -111,7 +110,7 @@ namespace RazzleServer.Game.Maple.Maps
 
             using (PacketReader oPacket = item.GetCreatePacket())
             {
-                this.Map.Broadcast(oPacket, item);
+                Map.Broadcast(oPacket, item);
             }
         }
 
@@ -126,23 +125,23 @@ namespace RazzleServer.Game.Maple.Maps
 
                 using (PacketReader oPacket = item.GetDestroyPacket())
                 {
-                    this.Map.Broadcast(oPacket, item);
+                    Map.Broadcast(oPacket, item);
                 }
             }
 
             base.RemoveItem(index);
 
-            lock (this.Map.Mobs)
+            lock (Map.Mobs)
             {
-                foreach (Mob mob in this.Map.Mobs)
+                foreach (Mob mob in Map.Mobs)
                 {
                     mob.AssignController();
                 }
             }
 
-            lock (this.Map.Npcs)
+            lock (Map.Npcs)
             {
-                foreach (Npc npc in this.Map.Npcs)
+                foreach (Npc npc in Map.Npcs)
                 {
                     npc.AssignController();
                 }

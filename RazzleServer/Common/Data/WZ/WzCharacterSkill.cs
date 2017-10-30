@@ -1,10 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using RazzleServer.Constants;
-using RazzleServer.Handlers;
-using RazzleServer.Map;
-using RazzleServer.Map.Monster;
 using RazzleServer.Common.Packet;
-using RazzleServer.Player;
 using RazzleServer.Server;
 using RazzleServer.Util;
 using System;
@@ -12,7 +8,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using static RazzleServer.Data.WZ.WzMap;
-using MapleLib.PacketLib;
+using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Game.Maple.Maps;
 
 namespace RazzleServer.Data.WZ
 {
@@ -101,7 +98,7 @@ namespace RazzleServer.Data.WZ
             MonsterBuffs = new List<MonsterBuffApplication>();
         }
 
-        public static bool CheckAndApplySkillEffect(MapleCharacter chr, int skillId, WzCharacterSkill wzCharacterSkill, int skillLevel = -1, int numTargets = 0, int numAttacks = 0)
+        public static bool CheckAndApplySkillEffect(Character chr, int skillId, WzCharacterSkill wzCharacterSkill, int skillLevel = -1, int numTargets = 0, int numAttacks = 0)
         {            
             if (skillLevel == -1)
                 skillLevel = chr.GetSkillLevel(skillId);
@@ -248,11 +245,11 @@ namespace RazzleServer.Data.WZ
             if (wzCharacterSkill.IsPartySkill)
             {
                 if (chr.Party != null) {
-                    List<MapleCharacter> partyMembersOnSameMap = chr.Party.GetCharactersOnMap(chr.Map, chr.ID);
+                    List<Character> partyMembersOnSameMap = chr.Party.GetCharactersOnMap(chr.Map, chr.ID);
                     if (partyMembersOnSameMap.Count > 0)
                     {
-                        List<MapleCharacter> partyMembersInRange = chr.Map.GetCharactersInRange(effect.CalculateBoundingBox(chr.Position, chr.IsFacingLeft), partyMembersOnSameMap);
-                        foreach (MapleCharacter partyMember in partyMembersInRange)
+                        List<Character> partyMembersInRange = chr.Map.GetCharactersInRange(effect.CalculateBoundingBox(chr.Position, chr.IsFacingLeft), partyMembersOnSameMap);
+                        foreach (Character partyMember in partyMembersInRange)
                         {
                             effect.ApplyEffect(chr, partyMember);
                             if (wzCharacterSkill.IsBuff)
@@ -263,7 +260,7 @@ namespace RazzleServer.Data.WZ
                 else if (wzCharacterSkill.IsGmSkill && chr.IsAdmin)
                 {
                     var targets = chr.Map.GetCharactersInRange(effect.CalculateBoundingBox(chr.Position, chr.IsFacingLeft));
-                    foreach (MapleCharacter target in targets.Where(x => x.ID != chr.ID))
+                    foreach (Character target in targets.Where(x => x.ID != chr.ID))
                     {
                         effect.ApplyEffect(chr, target);
                         if (wzCharacterSkill.IsBuff)
@@ -274,7 +271,7 @@ namespace RazzleServer.Data.WZ
             return true;
         }
 
-        public void ApplyEffect(MapleCharacter source, MapleCharacter target)
+        public void ApplyEffect(Character source, Character target)
         {
             int value;
             if (SkillConstants.IsHealSkill(Parent.SkillId) && Info.TryGetValue(CharacterSkillStat.hp, out value))
@@ -300,7 +297,7 @@ namespace RazzleServer.Data.WZ
                 Point fromMapPosition = source.Map.GetDropPositionBelow(source.Position, source.Position);
                 int time = Info[CharacterSkillStat.time] * 1000;
                 
-                MapleMap toMap = ServerManager.GetChannelServer(source.Client.Channel).GetMap(source.Map.ReturnMap);
+                Map toMap = ServerManager.GetChannelServer(source.Client.Channel).GetMap(source.Map.ReturnMap);
                 if (toMap != null)
                 {                    
                     Portal toPortal = toMap.TownPortal;
@@ -343,7 +340,7 @@ namespace RazzleServer.Data.WZ
             }
         }
 
-        public void ApplyBuffEffect(MapleCharacter target)
+        public void ApplyBuffEffect(Character target)
         {
             if (Parent.SkillId == Priest.HOLY_MAGIC_SHELL && target.HasSkillOnCooldown(Priest.HOLY_MAGIC_SHELL + 1000))
                 return;

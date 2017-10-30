@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MapleLib.MapleCryptoLib
+namespace RazzleServer.Common.MapleCryptoLib
 {
     /// <summary>
     /// Initialization vector used by the Cipher class

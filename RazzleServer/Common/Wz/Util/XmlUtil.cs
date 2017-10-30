@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MapleLib.WzLib.Util
+namespace RazzleServer.Common.WzLib.Util
 {
     public static class XmlUtil
     {

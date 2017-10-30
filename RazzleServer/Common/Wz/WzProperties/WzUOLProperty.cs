@@ -2,12 +2,12 @@
 
 using System.IO;
 using System.Collections.Generic;
-using MapleLib.WzLib.Util;
+using RazzleServer.Common.WzLib.Util;
 using System.Drawing;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Util;
 
-namespace MapleLib.WzLib.WzProperties
+namespace RazzleServer.Common.WzLib.WzProperties
 {
     /// <summary>
     /// A property that's value is a string
@@ -92,7 +92,7 @@ namespace MapleLib.WzLib.WzProperties
         /// </summary>
         public override WzPropertyType PropertyType { get { return WzPropertyType.UOL; } }
 
-        public override void WriteValue(MapleLib.WzLib.Util.WzBinaryWriter writer)
+        public override void WriteValue(RazzleServer.Common.WzLib.Util.WzBinaryWriter writer)
         {
             writer.WriteStringValue("UOL", 0x73, 0x1B);
             writer.Write((byte)0);

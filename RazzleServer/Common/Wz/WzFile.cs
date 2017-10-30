@@ -2,12 +2,12 @@
 using System.IO;
 using System.Text.RegularExpressions;
 using System;
-using MapleLib.WzLib.Util;
-using MapleLib.WzLib.WzProperties;
+using RazzleServer.Common.WzLib.Util;
+using RazzleServer.Common.WzLib.WzProperties;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Util;
 
-namespace MapleLib.WzLib
+namespace RazzleServer.Common.WzLib
 {
     /// <summary>
     /// A class that contains all the information of a wz file

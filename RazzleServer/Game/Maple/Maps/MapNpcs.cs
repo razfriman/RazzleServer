@@ -1,4 +1,7 @@
-﻿namespace RazzleServer.Game.Maple.Maps
+﻿using RazzleServer.Game.Maple.Data;
+using RazzleServer.Game.Maple.Life;
+
+namespace RazzleServer.Game.Maple.Maps
 {
     public sealed class MapNpcs : MapObjects<Npc>
     {
@@ -10,11 +13,7 @@
 
             if (DataProvider.IsInitialized)
             {
-                using (PacketReader oPacket = item.GetCreatePacket())
-                {
-                    this.Map.Broadcast(oPacket);
-                }
-
+                this.Map.Broadcast(item.GetCreatePacket());
                 item.AssignController();
             }
         }
@@ -26,11 +25,7 @@
                 Npc item = base.Items[index];
 
                 item.Controller.ControlledNpcs.Remove(index);
-
-                using (PacketReader oPacket = item.GetDestroyPacket())
-                {
-                    this.Map.Broadcast(oPacket);
-                }
+                    this.Map.Broadcast(item.GetDestroyPacket());
             }
 
             base.RemoveItem(index);

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.IO;
-using MapleLib.MapleCryptoLib;
+using RazzleServer.Common.MapleCryptoLib;
 
-namespace MapleLib.WzLib.Util
+namespace RazzleServer.Common.WzLib.Util
 {
     public static class WzTool
     {

@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using RazzleServer.Constants;
-using RazzleServer.Player;
 
 namespace RazzleServer.Data.WZ
 {

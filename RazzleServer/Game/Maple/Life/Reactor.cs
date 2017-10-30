@@ -1,4 +1,11 @@
-﻿namespace RazzleServer.Game.Maple.Life
+﻿using RazzleServer.Common.Constants;
+using RazzleServer.Common.Data;
+using RazzleServer.Common.Packet;
+using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Game.Maple.Data;
+using RazzleServer.Game.Maple.Maps;
+
+namespace RazzleServer.Game.Maple.Life
 {
     public sealed class Reactor : MapObject, ISpawnable
     {
@@ -75,14 +82,14 @@
             }
         }
 
-        public Packet GetCreatePacket()
+        public PacketWriter GetCreatePacket()
         {
             return this.GetSpawnPacket();
         }
 
-        public Packet GetSpawnPacket()
+        public PacketWriter GetSpawnPacket()
         {
-            Packet oPacket = new Packet(ServerOperationCode.ReactorEnterField);
+            var oPacket = new PacketWriter(ServerOperationCode.ReactorEnterField);
 
             oPacket
                 .WriteInt(this.ObjectID)
@@ -97,9 +104,9 @@
             return oPacket;
         }
 
-        public Packet GetDestroyPacket()
+        public PacketWriter GetDestroyPacket()
         {
-            Packet oPacket = new Packet(ServerOperationCode.ReactorLeaveField);
+            var oPacket = new PacketWriter(ServerOperationCode.ReactorLeaveField);
 
             oPacket
                 .WriteInt(this.ObjectID)

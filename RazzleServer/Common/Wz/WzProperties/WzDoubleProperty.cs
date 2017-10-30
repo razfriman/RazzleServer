@@ -1,7 +1,7 @@
 ﻿using System.IO;
-using MapleLib.WzLib.Util;
+using RazzleServer.Common.WzLib.Util;
 
-namespace MapleLib.WzLib.WzProperties
+namespace RazzleServer.Common.WzLib.WzProperties
 {
 	/// <summary>
 	/// A property that has the value of a double
@@ -44,7 +44,7 @@ namespace MapleLib.WzLib.WzProperties
 		/// The name of this property
 		/// </summary>
 		public override string Name { get { return name; } set { name = value; } }
-		public override void WriteValue(MapleLib.WzLib.Util.WzBinaryWriter writer)
+		public override void WriteValue(RazzleServer.Common.WzLib.Util.WzBinaryWriter writer)
 		{
 			writer.Write((byte)5);
 			writer.Write(Value);

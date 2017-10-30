@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Linq;
+using RazzleServer.Common.Constants;
 
 namespace RazzleServer.Game.Maple.Characters
 {

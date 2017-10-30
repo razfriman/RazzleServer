@@ -1,6 +1,6 @@
 ﻿using System.Security;
 
-namespace MapleLib.MapleCryptoLib
+namespace RazzleServer.Common.MapleCryptoLib
 {
     /// <summary>
     /// FastAES based on the AesFastEngine from bouncy castle

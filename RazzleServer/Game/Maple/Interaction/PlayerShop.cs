@@ -1,4 +1,8 @@
 ﻿using System.Collections.Generic;
+using RazzleServer.Common.Constants;
+using RazzleServer.Common.Packet;
+using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Game.Maple.Maps;
 
 namespace RazzleServer.Game.Maple.Interaction
 {
@@ -34,7 +38,7 @@ namespace RazzleServer.Game.Maple.Interaction
             this.Items = new List<PlayerShopItem>();
             this.Opened = false;
 
-            using (PacketReader oPacket = new Packet(ServerOperationCode.PlayerInteraction))
+            using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
             {
                 oPacket
                     .WriteByte((byte)InteractionCode.Room)
@@ -53,7 +57,7 @@ namespace RazzleServer.Game.Maple.Interaction
             }
         }
 
-        public void Handle(Character character, InteractionCode code, Packet iPacket)
+        public void Handle(Character character, InteractionCode code, PacketReader iPacket)
         {
             switch (code)
             {
@@ -254,7 +258,7 @@ namespace RazzleServer.Game.Maple.Interaction
                 {
                     if (this.Visitors[i] != null)
                     {
-                        using (PacketReader oPacket = new Packet(ServerOperationCode.PlayerInteraction))
+                        using (PacketReader oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                         {
                             oPacket
                                 .WriteByte((byte)InteractionCode.Exit)
@@ -274,7 +278,7 @@ namespace RazzleServer.Game.Maple.Interaction
 
         public void UpdateItems()
         {
-            using (PacketReader oPacket = new Packet(ServerOperationCode.PlayerInteraction))
+            using (PacketReader oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
             {
                 oPacket
                     .WriteByte((byte)InteractionCode.UpdateItems)
@@ -293,7 +297,7 @@ namespace RazzleServer.Game.Maple.Interaction
             }
         }
 
-        public void Broadcast(PacketReader oPacket, bool includeOwner = true)
+        public void Broadcast(PacketWriter oPacket, bool includeOwner = true)
         {
             if (includeOwner)
             {
@@ -315,7 +319,7 @@ namespace RazzleServer.Game.Maple.Interaction
             {
                 if (this.Visitors[i] == null)
                 {
-                    using (PacketReader oPacket = new Packet(ServerOperationCode.PlayerInteraction))
+                    using (PacketReader oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                     {
                         oPacket
                             .WriteByte((byte)InteractionCode.Visit)
@@ -329,7 +333,7 @@ namespace RazzleServer.Game.Maple.Interaction
                     visitor.PlayerShop = this;
                     this.Visitors[i] = visitor;
 
-                    using (PacketReader oPacket = new Packet(ServerOperationCode.PlayerInteraction))
+                    using (PacketReader oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                     {
                         oPacket
                             .WriteByte((byte)InteractionCode.Room)

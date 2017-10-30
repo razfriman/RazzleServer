@@ -1,4 +1,4 @@
-﻿namespace MapleLib.WzLib
+﻿namespace RazzleServer.Common.WzLib
 {
 	public enum WzMapleVersion
 	{

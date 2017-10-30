@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using MapleLib.WzLib.Util;
+using RazzleServer.Common.WzLib.Util;
 
-namespace MapleLib.WzLib.WzProperties
+namespace RazzleServer.Common.WzLib.WzProperties
 {
     /// <summary>
     /// A property that contains several WzExtendedPropertys
@@ -114,7 +114,7 @@ namespace MapleLib.WzLib.WzProperties
             }
             return ret;
         }
-        public override void WriteValue(MapleLib.WzLib.Util.WzBinaryWriter writer)
+        public override void WriteValue(RazzleServer.Common.WzLib.Util.WzBinaryWriter writer)
         {
             List<WzExtended> extendedProps = new List<WzExtended>(properties.Count);
             foreach (WzImageProperty prop in properties) if (prop is WzExtended) extendedProps.Add((WzExtended)prop);

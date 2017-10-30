@@ -1,11 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Packet;
-using RazzleServer.Player;
 using RazzleServer.Util;
-using MapleLib.PacketLib;
-using RazzleServer.Game;
 
-namespace RazzleServer.Handlers
+namespace RazzleServer.Game.Handlers
 {
     [PacketHandler(ClientOperationCode.GENERAL_CHAT)]
     public class PlayerChatHandler : GamePacketHandler
@@ -16,8 +13,8 @@ namespace RazzleServer.Handlers
         {
             string message = packet.ReadString();
             byte show = packet.ReadByte();
-            var pw = PlayerChatPacket(client.Account.Character.ID, message, show, client.Account.IsGM);
-            client.Account.Character.Map.BroadcastPacket(pw);
+            var pw = PlayerChatPacket(client.Character.ID, message, show, client.Account.IsMaster);
+            client.Character.Map.Broadcast(pw);
         }
 
         public static PacketWriter PlayerChatPacket(int characterId, string message, byte show, bool whiteBackground)

@@ -1,4 +1,4 @@
-﻿using MapleLib.PacketLib;
+﻿using RazzleServer.Common.Packet;
 
 namespace RazzleServer.Login.Maple
 {

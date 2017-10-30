@@ -1,7 +1,7 @@
 ﻿using System.IO;
-using MapleLib.WzLib.Util;
+using RazzleServer.Common.WzLib.Util;
 
-namespace MapleLib.WzLib.WzProperties
+namespace RazzleServer.Common.WzLib.WzProperties
 {
     /// <summary>
     /// A property that is stored in the wz file with a signed byte and possibly followed by an int. If the 
@@ -45,7 +45,7 @@ namespace MapleLib.WzLib.WzProperties
         /// The name of the property
         /// </summary>
         public override string Name { get { return name; } set { name = value; } }
-        public override void WriteValue(MapleLib.WzLib.Util.WzBinaryWriter writer)
+        public override void WriteValue(RazzleServer.Common.WzLib.Util.WzBinaryWriter writer)
         {
             writer.Write((byte)3);
             writer.WriteCompressedInt(Value);

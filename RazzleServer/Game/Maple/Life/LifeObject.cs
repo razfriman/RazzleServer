@@ -1,4 +1,7 @@
-﻿namespace RazzleServer.Game.Maple.Life
+﻿using RazzleServer.Common.Data;
+using RazzleServer.Game.Maple.Maps;
+
+namespace RazzleServer.Game.Maple.Life
 {
     public abstract class LifeObject : MapObject
     {

@@ -1,4 +1,9 @@
 ﻿using System.Collections.Generic;
+using RazzleServer.Common.Constants;
+using RazzleServer.Common.Data;
+using RazzleServer.Common.Packet;
+using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Game.Maple.Life;
 
 namespace RazzleServer.Game.Maple.Shops
 {
@@ -74,9 +79,9 @@ namespace RazzleServer.Game.Maple.Shops
             }
         }
 
-        public void Handle(Character customer, Packet iPacket)
+        public void Handle(Character customer, PacketReader iPacket)
         {
-            ShopAction action = (ShopAction)iPacket.ReadByte();
+            var action = (ShopAction)iPacket.ReadByte();
 
             switch (action)
             {

@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace MapleLib.WzLib.WzStructure.Data
+namespace RazzleServer.Common.WzLib.WzStructure.Data
 {
     [Flags]
     public enum ItemTypes

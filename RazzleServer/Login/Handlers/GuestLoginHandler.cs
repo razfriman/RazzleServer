@@ -1,15 +1,13 @@
 ﻿using RazzleServer.Common.Packet;
-using RazzleServer.Player;
 using RazzleServer.Util;
 using System;
-using MapleLib.PacketLib;
 
-namespace RazzleServer.Handlers
+namespace RazzleServer.Login.Handlers
 {
     [PacketHandler(ClientOperationCode.GUEST_LOGIN_REQUEST)]
-    public class GuestLoginHandler : APacketHandler
+    public class GuestLoginHandler : LoginPacketHandler
     {
-        public override void HandlePacket(PacketReader packet, MapleClient client)
+        public override void HandlePacket(PacketReader packet, LoginClient client)
         {
             var pw = new PacketWriter(ServerOperationCode.SEND_LINK);
             pw.WriteShort(0x100);

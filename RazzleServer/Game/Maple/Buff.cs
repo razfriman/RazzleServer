@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using RazzleServer.Common.Constants;
+using RazzleServer.Common.Data;
+using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple.Characters;
 
 namespace RazzleServer.Game.Maple
@@ -122,7 +124,7 @@ namespace RazzleServer.Game.Maple
             {
                 default:
                     {
-                        using (PacketReader oPacket = new Packet(ServerOperationCode.TemporaryStatSet))
+                        using (PacketReader oPacket = new PacketWriter(ServerOperationCode.TemporaryStatSet))
                         {
                             oPacket
                                 .WriteLong(this.PrimaryBuffMask)
@@ -153,7 +155,7 @@ namespace RazzleServer.Game.Maple
                             this.Character.Client.Send(oPacket);
                         }
 
-                        using (PacketReader oPacket = new Packet(ServerOperationCode.SetTemporaryStat))
+                        using (PacketReader oPacket = new PacketWriter(ServerOperationCode.SetTemporaryStat))
                         {
                             oPacket
                                 .WriteInt(this.Character.ID)
@@ -183,7 +185,7 @@ namespace RazzleServer.Game.Maple
 
         public void Cancel()
         {
-            using (PacketReader oPacket = new Packet(ServerOperationCode.TemporaryStatReset))
+            using (PacketReader oPacket = new PacketWriter(ServerOperationCode.TemporaryStatReset))
             {
                 oPacket
                     .WriteLong(this.PrimaryBuffMask)
@@ -193,7 +195,7 @@ namespace RazzleServer.Game.Maple
                 this.Character.Client.Send(oPacket);
             }
 
-            using (PacketReader oPacket = new Packet(ServerOperationCode.ResetTemporaryStat))
+            using (PacketReader oPacket = new PacketWriter(ServerOperationCode.ResetTemporaryStat))
             {
                 oPacket
                     .WriteInt(this.Character.ID)

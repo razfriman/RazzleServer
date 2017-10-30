@@ -1,4 +1,6 @@
-﻿namespace RazzleServer.Game.Maple.Commands.Implementation
+﻿using RazzleServer.Game.Maple.Characters;
+
+namespace RazzleServer.Game.Maple.Commands.Implementation
 {
     public sealed class NoticeCommand : Command
     {

@@ -1,7 +1,6 @@
 ﻿using RazzleServer.Constants;
-using RazzleServer.Inventory;
-using RazzleServer.Player;
 using System.Collections.Generic;
+using RazzleServer.Game.Maple.Characters;
 
 namespace RazzleServer.Data.WZ
 {
@@ -14,7 +13,7 @@ namespace RazzleServer.Data.WZ
             Type = type;
         }
 
-        public virtual void Act(MapleCharacter chr, int questId) 
+        public virtual void Act(Character chr, int questId) 
         {
 
         }
@@ -29,7 +28,7 @@ namespace RazzleServer.Data.WZ
             Data = data;
         }
 
-        public override void Act(MapleCharacter chr, int questId)
+        public override void Act(Character chr, int questId)
         {
             switch (Type)
             {
@@ -61,7 +60,7 @@ namespace RazzleServer.Data.WZ
             Data = data;
         }
 
-        public override void Act(MapleCharacter chr, int questId)
+        public override void Act(Character chr, int questId)
         {
             switch (Type)
             {
@@ -86,7 +85,7 @@ namespace RazzleServer.Data.WZ
             rewards = data;
         }
 
-        public override void Act(MapleCharacter chr, int questId)
+        public override void Act(Character chr, int questId)
         {
 
         }
@@ -110,7 +109,7 @@ namespace RazzleServer.Data.WZ
             Rewards = data;           
         }
 
-        public override void Act(MapleCharacter chr, int questId)
+        public override void Act(Character chr, int questId)
         {
             foreach (WzQuestItemReward reward in Rewards)
             {
@@ -226,7 +225,7 @@ namespace RazzleServer.Data.WZ
             rewards = data;
         }
 
-        public override void Act(MapleCharacter chr, int questId)
+        public override void Act(Character chr, int questId)
         {
             //We don't use this
         }
