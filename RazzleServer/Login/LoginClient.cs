@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using MapleLib.PacketLib;
 using RazzleServer.Common.Packet;
 using RazzleServer.Login.Maple;
+using RazzleServer.Util;
 
 namespace RazzleServer.Login
 {
@@ -21,16 +22,8 @@ namespace RazzleServer.Login
         public LoginClient(Socket socket, LoginServer server)
             : base(socket)
         {
-            ID = Application.Random.Next();
+            ID = Functions.Random();
             Server = server;
-        }
-
-        protected override bool IsServerAlive
-        {
-            get
-            {
-                return WvsLogin.IsAlive;
-            }
         }
 
         protected override void Dispatch(PacketReader iPacket)

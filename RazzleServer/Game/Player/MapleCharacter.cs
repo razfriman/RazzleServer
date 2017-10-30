@@ -16,13 +16,15 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
-using MapleLib.PacketLib;
 using RazzleServer.Player.Trade;
+using RazzleServer.Player;
 
-namespace RazzleServer.Player
+namespace RazzleServer.Game.Player
 {
     public class MapleCharacter : Character
     {
+        public const string SAVED_LOCATION = "MAPSAVE_";
+
         private bool _keybindsChanged;
         private bool _quickSlotKeyBindsChanged;
         private readonly List<SpecialPortal> _doors = new List<SpecialPortal>();
@@ -60,7 +62,7 @@ namespace RazzleServer.Player
         public MapleMessengerRoom ChatRoom { get; set; }
         public DateTime LastAttackTime { get; set; }
         public ActionState ActionState { get; private set; } = ActionState.DISABLED;
-        public static MapleCharacter GetDefaultCharacter(MapleClient client)
+        public static MapleCharacter GetDefaultCharacter(GameClient client)
         {
             MapleCharacter newCharacter = new MapleCharacter
             {

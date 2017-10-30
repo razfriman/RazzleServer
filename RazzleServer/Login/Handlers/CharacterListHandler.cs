@@ -1,14 +1,14 @@
-﻿using MapleLib.PacketLib;
-using RazzleServer.Common.Packet;
-using RazzleServer.Common.Packet;
+﻿using RazzleServer.Common.Packet;
+using RazzleServer.Game.Player;
+using RazzleServer.Login;
 using RazzleServer.Player;
 
 namespace RazzleServer.Handlers
 {
     [PacketHandler(ClientOperationCode.CHARLIST_REQUEST)]
-    public class CharacterListHandler : APacketHandler<MapleClient>
+    public class CharacterListHandler : LoginPacketHandler
     {
-        public override void HandlePacket(PacketReader packet, MapleClient client)
+        public override void HandlePacket(PacketReader packet, LoginClient client)
         {
             packet.Skip(1);
             var worldID = packet.ReadByte();

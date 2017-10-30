@@ -6,9 +6,9 @@ namespace RazzleServer.Center
 {
     public class CenterServer : MapleServer<CenterClient>
     {
-        public static CenterClient Login { get; set; }
-        public static Worlds Worlds { get; private set; }
-        public static Maple.Migrations Migrations { get; private set; }
+        public CenterClient Login { get; set; }
+        public Worlds Worlds { get; private set; }
+        public Maple.Migrations Migrations { get; private set; }
 
         public CenterServer()
         {

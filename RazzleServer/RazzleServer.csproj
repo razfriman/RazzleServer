@@ -7,9 +7,11 @@
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <LangVersion>Latest</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <LangVersion>Latest</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Logging" Version="2.0.0" />
@@ -44,19 +46,19 @@
     <Folder Include="Game\Player\" />
     <Folder Include="Game\Trade\" />
     <Folder Include="Game\Map\" />
+    <Folder Include="Game\Commands\" />
+    <Folder Include="Game\Scripts\" />
+    <Folder Include="Center\Maple\" />
+    <Folder Include="Login\Maple\" />
+    <Folder Include="Center\Handlers\" />
     <Folder Include="Common\" />
     <Folder Include="Common\Constants\" />
+    <Folder Include="Common\Crypto\" />
     <Folder Include="Common\Data\" />
+    <Folder Include="Common\Network\" />
+    <Folder Include="Common\Packet\" />
     <Folder Include="Common\Server\" />
     <Folder Include="Common\Util\" />
     <Folder Include="Common\Wz\" />
-    <Folder Include="Game\Commands\" />
-    <Folder Include="Common\Crypto\" />
-    <Folder Include="Game\Scripts\" />
-    <Folder Include="Common\Packet\" />
-    <Folder Include="Center\Maple\" />
-    <Folder Include="Common\Network\" />
-    <Folder Include="Login\Maple\" />
-    <Folder Include="Center\Handlers\" />
   </ItemGroup>
 </Project>

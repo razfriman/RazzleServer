@@ -1,23 +1,18 @@
-﻿using System;
+﻿using RazzleServer.Common.Packet;
+
 namespace RazzleServer.Center.Handlers
 {
-    public class UpdateChannelPopulationHandler
+    public class UpdateChannelPopulationHandler : CenterPacketHandler
     {
-        public UpdateChannelPopulationHandler()
+        public override void HandlePacket(PacketReader packet, CenterClient client)
         {
+            int population = packet.ReadInt();
+
+            var pw = new PacketWriter(InteroperabilityOperationCode.UpdateChannelPopulation);
+            pw.WriteByte(client.World.ID);
+            pw.WriteByte(client.ID);
+            pw.WriteInt(population);
+            client.Server.Login.Send(pw);
         }
-        //private void UpdateChannelPopulation(PacketReader inPacket)
-        //{
-        //    int population = inPacket.ReadInt();
-
-        //    using (PacketReader outPacket = new Packet(InteroperabilityOperationCode.UpdateChannelPopulation))
-        //    {
-        //        outPacket.WriteByte(World.ID);
-        //        outPacket.WriteByte(ID);
-        //        outPacket.WriteInt(population);
-
-        //        WvsCenter.Login.Send(outPacket);
-        //    }
-        //}
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Sockets;
+using System.Reflection;
 using MapleLib.PacketLib;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Center.Maple;
@@ -12,11 +14,11 @@ namespace RazzleServer.Center
 {
     public sealed class CenterClient : AClient
     {
-        public static string SecurityCode { get; set; }
-        private static ILogger Log = LogManager.Log;
+        private static readonly ILogger Log = LogManager.Log;
+
+        public static Dictionary<InteroperabilityOperationCode, List<CenterPacketHandler>> PacketHandlers = new Dictionary<InteroperabilityOperationCode, List<CenterPacketHandler>>();
 
         public ServerType Type { get; private set; }
-
         public World World { get; private set; }
         public byte ID { get; set; }
         public int Population { get; private set; }
@@ -27,10 +29,9 @@ namespace RazzleServer.Center
             Server = server;
         }
 
-        public override void Register()
-        {
-            Server.AddClient(this);
-        }
+        public override void Register() => Server.AddClient(this);
+
+        public override void Unregister() => Server.RemoveClient(this);
 
         public override void Terminate(string message = null)
         {
@@ -38,8 +39,7 @@ namespace RazzleServer.Center
             {
                 case ServerType.Login:
                     {
-                        WvsCenter.Login = null;
-
+                        Server.Login = null;
                         Log.LogWarning("Unregistered Login Server.");
                     }
                     break;
@@ -48,14 +48,11 @@ namespace RazzleServer.Center
                     {
                         World.Remove(this);
 
-                        using (PacketReader Packet = new Packet(InteroperabilityOperationCode.UpdateChannel))
-                        {
-                            Packet.WriteByte(World.ID);
-                            Packet.WriteBool(false);
-                            Packet.WriteByte(ID);
-
-                            WvsCenter.Login?.Send(Packet);
-                        }
+                        var pw = new PacketWriter(InteroperabilityOperationCode.UpdateChannel);
+                        pw.WriteByte(World.ID);
+                        pw.WriteBool(false);
+                        pw.WriteByte(ID);
+                        Server.Login?.Send(pw);
 
                         Log.LogWarning("Unregistered Channel Server ({0}-{1}).", World.Name, ID);
                     }
@@ -71,11 +68,6 @@ namespace RazzleServer.Center
             }
         }
 
-        public override void Unregister()
-        {
-            Server.RemoveClient(this);
-        }
-
         private void Migrate(PacketReader inPacket)
         {
             string host = inPacket.ReadString();
@@ -84,10 +76,10 @@ namespace RazzleServer.Center
 
             var valid = false;
 
-            if (!WvsCenter.Migrations.Contains(host))
+            if (!Server.Migrations.Contains(host))
             {
                 valid = true;
-                WvsCenter.Migrations.Add(new Migration(host, accountID, characterID));
+                Server.Migrations.Add(new Migration(host, accountID, characterID));
             }
 
             var outPacket = new PacketWriter(InteroperabilityOperationCode.MigrationRegisterResponse);
@@ -96,11 +88,67 @@ namespace RazzleServer.Center
             Send(outPacket);
         }
 
-       
+        public static void RegisterPacketHandlers()
+        {
+            var types = Assembly.GetEntryAssembly().GetTypes();
+
+            var handlerCount = 0;
+
+            foreach (var type in types)
+            {
+                var attributes = type.GetTypeInfo().GetCustomAttributes()
+                                     .OfType<InteroperabilityPacketHandlerAttribute>()
+                                     .ToList();
+
+                foreach (var attribute in attributes)
+                {
+                    var header = attribute.Header;
+
+                    if (!PacketHandlers.ContainsKey(header))
+                    {
+                        PacketHandlers[header] = new List<CenterPacketHandler>();
+                    }
+
+                    handlerCount++;
+                    var handler = (CenterPacketHandler)Activator.CreateInstance(type);
+                    PacketHandlers[header].Add(handler);
+                    Log.LogDebug($"Registered Packet Handler [{attribute.Header}] to [{type.Name}]");
+                }
+            }
+
+            Log.LogInformation($"Registered {handlerCount} packet handlers");
+        }
+
         public override void Receive(PacketReader packet)
         {
-            var header = packet.ReadUShort();
-            // look for handlers
+            var header = InteroperabilityOperationCode.Unknown;
+
+            try
+            {
+                if (packet.Available >= 2)
+                {
+                    header = (InteroperabilityOperationCode)packet.ReadUShort();
+
+                    if (PacketHandlers.ContainsKey(header))
+                    {
+                        Log.LogInformation($"Recevied [{header.ToString()}] {Functions.ByteArrayToStr(packet.ToArray())}");
+
+                        foreach (var handler in PacketHandlers[header])
+                        {
+                            handler.HandlePacket(packet, this);
+                        }
+                    }
+                    else
+                    {
+                        Log.LogWarning($"Unhandled Packet [{header.ToString()}] {Functions.ByteArrayToStr(packet.ToArray())}");
+                    }
+
+                }
+            }
+            catch (Exception e)
+            {
+                Log.LogError(e, $"Packet Processing Error [{header.ToString()}] - {e.Message} - {e.StackTrace}");
+            }
         }
     }
 }

@@ -1,72 +1,29 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
+using RazzleServer.Common.Constants;
+using RazzleServer.Common.Packet;
+using RazzleServer.Game.Maple;
 using RazzleServer.Server;
 
 namespace RazzleServer.Game
 {
-    public class CenterServer : MapleServer
+    public class CenterServer : MapleServer<Center.CenterClient>
     {
-        public CenterServer(IPEndPoint remoteEP, string code)
+        
+        public void Initialize(params object[] args)
         {
-
+                var pw = new PacketWriter(InteroperabilityOperationCode.RegistrationRequest);
+                pw.WriteByte(ServerType.Channel);
+                pw.WriteString((string)args[0]);
+                Send(pw);
         }
 
-        protected override bool IsServerAlive
+
+
+        public override void Receive(PacketReader inPacket)
         {
-            get
-            {
-                return WvsGame.IsAlive;
-            }
-        }
-
-        protected override void StopServer()
-        {
-            WvsGame.Stop();
-        }
-
-        public static void Main()
-        {
-            try
-            {
-                WvsGame.CenterConnection = new CenterServer(new IPEndPoint(
-                        Settings.GetIPAddress("Center/IP"),
-                        Settings.GetInt("Center/Port")),
-                        Settings.GetString("Center/SecurityCode"));
-
-                WvsGame.CenterConnection.Loop();
-            }
-            catch (Exception e)
-            {
-                Log.Error("Server connection failed: \n{0}", e.Message);
-
-                WvsGame.Stop();
-            }
-            finally
-            {
-                WvsGame.CenterConnectionDone.Set();
-            }
-        }
-
-        protected override void Initialize(params object[] args)
-        {
-            using (PacketReader Packet = new Packet(InteroperabilityOperationCode.RegistrationRequest))
-            {
-                Packet.WriteByte((byte)ServerType.Channel);
-                Packet.WriteString((string)args[0]);
-
-                this.Send(Packet);
-            }
-        }
-
-        protected override void Terminate()
-        {
-            WvsGame.Stop();
-        }
-
-        protected override void Dispatch(PacketReader inPacket)
-        {
-            switch ((InteroperabilityOperationCode)inPacket.OperationCode)
+            var header = (InteroperabilityOperationCode)inPacket.ReadUShort();
+            switch (header)
             {
                 case InteroperabilityOperationCode.RegistrationResponse:
                     this.Register(inPacket);
