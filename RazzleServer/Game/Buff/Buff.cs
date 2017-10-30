@@ -1,12 +1,10 @@
 ﻿using RazzleServer.Constants;
 using RazzleServer.Data.WZ;
 using RazzleServer.Common.Packet;
-using RazzleServer.Server;
 using RazzleServer.Util;
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using MapleLib.PacketLib;
 
 namespace RazzleServer.Player
 {

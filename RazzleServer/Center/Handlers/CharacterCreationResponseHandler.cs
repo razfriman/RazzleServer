@@ -1,23 +1,19 @@
-﻿using System;
+﻿using RazzleServer.Common.Packet;
+
 namespace RazzleServer.Center.Handlers
 {
-    public class CharacterCreationResponseHandler
+    [InteroperabilityPacketHandler(InteroperabilityOperationCode.CharacterCreationResponse)]
+    public class CharacterCreationResponseHandler : CenterPacketHandler
     {
-        public CharacterCreationResponseHandler()
+        public override void HandlePacket(PacketReader packet, CenterClient client)
         {
-            //private void CharacterCreationResponse(PacketReader inPacket)
-            //{
-            //    int accountID = inPacket.ReadInt();
-            //    byte[] characterData = inPacket.ReadBytes(inPacket.Remaining);
+            int accountID = packet.ReadInt();
+            byte[] characterData = packet.ReadBytes((int)packet.Available);
 
-            //    using (PacketReader outPacket = new Packet(InteroperabilityOperationCode.CharacterCreationResponse))
-            //    {
-            //        outPacket.WriteInt(accountID);
-            //        outPacket.WriteBytes(characterData);
-
-            //        WvsCenter.Login.Send(outPacket);
-            //    }
-            //}
+            var pw = new PacketWriter(InteroperabilityOperationCode.CharacterCreationResponse);
+            pw.WriteInt(accountID);
+            pw.WriteBytes(characterData);
+            client.Server.Login.Send(pw);
         }
     }
 }

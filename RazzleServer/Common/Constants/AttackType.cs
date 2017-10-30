@@ -1,10 +1,10 @@
-﻿using System;
-namespace RazzleServer.Common.Constants
+﻿namespace RazzleServer.Common.Constants
 {
-    public class AttackType
+    public enum AttackType
     {
-        public AttackType()
-        {
-        }
+        Melee,
+        Range,
+        Magic,
+        Summon
     }
 }

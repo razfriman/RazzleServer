@@ -1,10 +1,8 @@
-﻿using System;
-namespace RazzleServer.Common.Constants
+﻿namespace RazzleServer.Common.Constants
 {
-    public class CommandType
+    public enum CommandType : byte
     {
-        public CommandType()
-        {
-        }
+        Find = 5,
+        Whisper = 6
     }
 }

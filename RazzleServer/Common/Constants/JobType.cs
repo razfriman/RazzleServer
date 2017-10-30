@@ -1,10 +1,10 @@
 ﻿using System;
 namespace RazzleServer.Common.Constants
 {
-    public class JobType
+    public enum JobType
     {
-        public JobType()
-        {
-        }
+        Cygnus = 0,
+        Explorer = 1,
+        Aran = 2
     }
 }
