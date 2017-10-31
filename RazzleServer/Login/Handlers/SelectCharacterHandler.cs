@@ -1,5 +1,4 @@
 ﻿using RazzleServer.Common.Packet;
-using RazzleServer.Server;
 
 namespace RazzleServer.Login.Handlers
 {
@@ -8,21 +7,26 @@ namespace RazzleServer.Login.Handlers
     {
         public override void HandlePacket(PacketReader packet, LoginClient client)
         {
-            var pic = packet.ReadString();
-            var characterId = packet.ReadInt();
-            var macs = packet.ReadString();
-        }
+            var characterID = packet.ReadInt();
+            client.MacAddresses = packet.ReadString().Split(new char[] { ',', ' ' });
 
-        public static PacketWriter ChannelIpPacket(ushort port, int characterId, byte[] host)
-        {
-            
-            var pw = new PacketWriter(ServerOperationCode.SERVER_IP);
-            pw.WriteShort(0);
-            pw.WriteBytes(host);
-            pw.WriteUShort(port);
-            pw.WriteInt(characterId);
-            pw.WriteZeroBytes(5);
-            return pw;
+            if (!client.Server.CenterConnection.Migrate(client.Host, client.Account.ID, characterID))
+            {
+                client.Terminate();
+                return;
+            }
+
+            using (var oPacket = new PacketWriter(ServerOperationCode.SelectCharacterResult))
+            {
+                oPacket.WriteByte(0);
+                oPacket.WriteByte(0);
+                oPacket.WriteBytes(client.Socket.HostBytes);
+                oPacket.WriteUShort(client.Server.Worlds[client.World][client.Channel].Port);
+                oPacket.WriteInt(characterID);
+                oPacket.WriteInt(0);
+                oPacket.WriteByte(0);
+                client.Send(oPacket);
+            }
         }
     }
 }

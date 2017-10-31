@@ -12,8 +12,9 @@ namespace RazzleServer.Login.Handlers
         {
             var accountName = packet.ReadString();
             var accountPassword = packet.ReadString();
+            var result = Account.CheckPassword(accountName, accountPassword);
 
-            client.Send(SendLoginResult(LoginResult.Valid, client.Account));
+            client.Send(SendLoginResult(result, client.Account));
         }
 
         private PacketWriter SendLoginResult(LoginResult result, Account acc)
@@ -37,7 +38,6 @@ namespace RazzleServer.Login.Handlers
                     pw.WriteLong(0); // NOTE: Quiet ban lift date.
                     pw.WriteDateTime(acc.Creation);
                     pw.WriteByte((byte)(ServerConfig.Instance.RequestPin ? 0 : 2)); // NOTE: 1 seems to not do anything.
-                    pw.WriteByte((byte)(ServerConfig.Instance.RequestPic ? (string.IsNullOrEmpty(acc.Pic) ? 0 : 1) : 2));
                 }
 
                 return pw;

@@ -160,8 +160,7 @@ namespace RazzleServer.Common.Constants
     #region Login
     public enum CharacterDeletionResult : byte
     {
-        Valid = 0,
-        InvalidPic = 20
+        Valid = 0
     }
 
     public enum LoginResult

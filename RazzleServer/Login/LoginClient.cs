@@ -15,13 +15,13 @@ namespace RazzleServer.Login
     {
         public static Dictionary<ClientOperationCode, List<LoginPacketHandler>> PacketHandlers = new Dictionary<ClientOperationCode, List<LoginPacketHandler>>();
 
-        public byte World { get; private set; }
-        public byte Channel { get; private set; }
-        public Account Account { get; private set; }
-        public string LastUsername { get; private set; }
-        public string LastPassword { get; private set; }
-        public string[] MacAddresses { get; private set; }
-        public LoginServer Server { get; private set; }
+        public byte World { get; internal set; }
+        public byte Channel { get; internal set; }
+        public Account Account { get; internal set; }
+        public string LastUsername { get; internal set; }
+        public string LastPassword { get; internal set; }
+        public string[] MacAddresses { get; internal set; }
+        public LoginServer Server { get; internal set; }
 
         public LoginClient(Socket socket, LoginServer server)
             : base(socket)
@@ -427,78 +427,5 @@ namespace RazzleServer.Login
 
 
 
-        //private void SelectCharacter(PacketReader iPacket, bool fromViewAll = false, bool requestPic = false, bool registerPic = false)
-        //{
-        //    string pic = string.Empty;
-
-        //    if (requestPic)
-        //    {
-        //        pic = iPacket.ReadString();
-        //    }
-        //    else if (registerPic)
-        //    {
-        //        iPacket.ReadByte();
-        //    }
-
-        //    int characterID = iPacket.ReadInt();
-
-        //    //if (this.IsInViewAllChar)
-        //    //{
-        //    //    this.WorldID = (byte)iPacket.ReadInt();
-        //    //    this.ChannelID = 0; // TODO: Least loaded channel.
-        //    //}
-
-        //    this.MacAddresses = iPacket.ReadString().Split(new char[] { ',', ' ' });
-
-        //    if (registerPic)
-        //    {
-        //        iPacket.ReadString();
-        //        pic = iPacket.ReadString();
-
-        //        if (string.IsNullOrEmpty(this.Account.Pic))
-        //        {
-        //            this.Account.Pic = SHACryptograph.Encrypt(SHAMode.SHA256, pic);
-
-        //            Datum datum = new Datum("accounts");
-
-        //            datum["Pic"] = this.Account.Pic;
-
-        //            datum.Update("ID = {0}", this.Account.ID);
-        //        }
-        //    }
-
-        //    if (!requestPic || SHACryptograph.Encrypt(SHAMode.SHA256, pic) == this.Account.Pic)
-        //    {
-        //        if (!WvsLogin.CenterConnection.Migrate(this.RemoteEndPoint.Address.ToString(), this.Account.ID, characterID))
-        //        {
-        //            this.Stop();
-
-        //            return;
-        //        }
-
-        //        using (var oPacket = new PacketWriter(ServerOperationCode.SelectCharacterResult))
-        //        {
-        //            oPacket
-        //                .WriteByte()
-        //                .WriteByte()
-        //                .WriteBytes(127, 0, 0, 1)
-        //                .WriteUShort(WvsLogin.Worlds[this.World][this.Channel].Port)
-        //                .WriteInt(characterID)
-        //                .WriteInt()
-        //                .WriteByte();
-
-        //            this.Send(oPacket);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        using (var oPacket = new PacketWriter(ServerOperationCode.CheckSPWResult))
-        //        {
-        //            oPacket.WriteByte();
-
-        //            this.Send(oPacket);
-        //        }
-        //    }
-        //}
     }
 }

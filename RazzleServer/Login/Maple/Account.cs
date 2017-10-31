@@ -15,8 +15,13 @@ namespace RazzleServer.Login.Maple
         public bool EULA { get; set; }
         public Gender Gender { get; set; }
         public string Pin { get; set; }
-        public string Pic { get; set; }
         public bool IsBanned { get; set; }
+
+        internal static LoginResult CheckPassword(string accountName, string accountPassword)
+        {
+            return LoginResult.Valid;
+        }
+
         public bool IsMaster { get; set; }
         public DateTime Birthday { get; set; }
         public DateTime Creation { get; set; }

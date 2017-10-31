@@ -1,5 +1,4 @@
 ﻿using RazzleServer.Common.Packet;
-using RazzleServer.Server;
 
 namespace RazzleServer.Login.Handlers
 {

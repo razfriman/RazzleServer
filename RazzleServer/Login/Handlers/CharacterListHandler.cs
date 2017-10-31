@@ -1,6 +1,4 @@
 ﻿using RazzleServer.Common.Packet;
-using RazzleServer.Login;
-using RazzleServer.Login.Maple;
 
 namespace RazzleServer.Login.Handlers
 {
@@ -9,25 +7,26 @@ namespace RazzleServer.Login.Handlers
     {
         public override void HandlePacket(PacketReader packet, LoginClient client)
         {
-            packet.Skip(1);
-            var worldID = packet.ReadByte();
-            byte channel = packet.ReadByte();
+            packet.ReadByte(); // NOTE: Connection kind (GameLaunching, WebStart, etc.).
+            client.World = packet.ReadByte();
+            client.Channel = packet.ReadByte();
+            var ip = packet.ReadBytes(4);
 
-            //client.Send(ShowCharacters(client.Account));
-            //client.SendPacket(CreateCharacterOptions());
+            var characters = client.Server.CenterConnection.GetCharacters(client.World, client.Account.ID);
+
+            using (var oPacket = new PacketWriter(ServerOperationCode.SelectWorldResult))
+            {
+                oPacket.WriteBool(false);
+                oPacket.WriteByte((byte)characters.Count);
+
+                foreach (byte[] characterBytes in characters)
+                {
+                    oPacket.WriteBytes(characterBytes);
+                }
+
+                oPacket.WriteInt(client.Account.MaxCharacters);
+                client.Send(oPacket);
+            }
         }
-
-        //public static PacketWriter ShowCharacters(Account acc)
-        //{
-        //    var chars = acc.GetCharsFromDatabase();
-
-        //    var pw = new PacketWriter(); pw.WriteHeader(ServerOperationCode.CHARLIST);
-        //    pw.WriteByte(0);
-        //    pw.WriteByte((byte)chars.Count);
-        //    chars.ForEach(chr => Character.AddCharEntry(pw, chr));
-        //    pw.WriteByte(1);
-        //    pw.WriteInt(acc.MaxCharacters);
-        //    return pw;
-        //}
     }
 }
