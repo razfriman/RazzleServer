@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Data;
 using RazzleServer.Common.Util;
+using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Life;
 using RazzleServer.Game.Maple.Maps;
 
