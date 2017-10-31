@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Data;
 using RazzleServer.Common.Exceptions;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
+using RazzleServer.Data;
 using RazzleServer.Game.Maple.Commands;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Interaction;
@@ -19,6 +21,8 @@ namespace RazzleServer.Game.Maple.Characters
     public sealed class Character : MapObject, IMoveable, ISpawnable
     {
         public GameClient Client { get; private set; }
+
+
 
         public int ID { get; set; }
         public int AccountID { get; set; }
@@ -2467,6 +2471,27 @@ namespace RazzleServer.Game.Maple.Characters
             var oPacket = new PacketWriter(ServerOperationCode.UserLeaveField);
             oPacket.WriteInt(ID);
             return oPacket;
+        }
+
+        internal static bool CharacterExists(string name)
+        {
+            using (var dbContext = new MapleDbContext())
+            {
+                return dbContext.Characters.Any(x => x.Name == name);
+            }
+        }
+
+        internal static void Delete(int characterID)
+        {
+            using (var dbContext = new MapleDbContext())
+            {
+                var entity = dbContext.Characters.Find(characterID);
+                if (entity != null)
+                {
+                    dbContext.Characters.Remove(entity);
+                }
+                dbContext.SaveChanges();
+            }
         }
     }
 }

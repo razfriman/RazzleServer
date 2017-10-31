@@ -1,5 +1,7 @@
-﻿using RazzleServer.Common.Packet;
+﻿using RazzleServer.Common.Constants;
+using RazzleServer.Common.Packet;
 using RazzleServer.Login.Maple;
+using RazzleServer.Server;
 
 namespace RazzleServer.Login.Handlers
 {
@@ -10,37 +12,36 @@ namespace RazzleServer.Login.Handlers
         {
             var accountName = packet.ReadString();
             var accountPassword = packet.ReadString();
+
+            client.Send(SendLoginResult(LoginResult.Valid, client.Account));
         }
 
-        public static PacketWriter LoginAccountSuccess(Account acc)
+        private PacketWriter SendLoginResult(LoginResult result, Account acc)
         {
-            var pw = new PacketWriter(ServerOperationCode.LOGIN_RESPONSE);
+            using (var pw = new PacketWriter(ServerOperationCode.CheckPasswordResult))
+            {
+                pw.WriteInt((int)result);
+                pw.WriteByte(0);
+                pw.WriteByte(0);
 
-            pw.WriteByte(0);
-            pw.WriteByte(0);
-            pw.WriteInt(0);
-            pw.WriteInt(acc.ID);
-            pw.WriteByte((int)acc.Gender);
-            pw.WriteBool(acc.IsMaster);
-            pw.WriteByte(0);
-            pw.WriteByte(0);
-            pw.WriteMapleString(acc.Username);
-            pw.WriteByte(0);
-            pw.WriteByte(0);
-            pw.WriteLong(0);
-            pw.WriteLong(0); // Creation Time
-            pw.WriteInt(0);
-            pw.WriteShort(2);
-            return pw;
-        }
+                if (result == LoginResult.Valid)
+                {
+                    pw.WriteInt(acc.ID);
+                    pw.WriteByte((int)acc.Gender);
+                    pw.WriteBool(acc.IsMaster);
+                    pw.WriteByte(0);
+                    pw.WriteByte(0);
+                    pw.WriteMapleString(acc.Username);
+                    pw.WriteByte(0);
+                    pw.WriteByte(0); // NOTE: Quiet ban reason. 
+                    pw.WriteLong(0); // NOTE: Quiet ban lift date.
+                    pw.WriteDateTime(acc.Creation);
+                    pw.WriteByte((byte)(ServerConfig.Instance.RequestPin ? 0 : 2)); // NOTE: 1 seems to not do anything.
+                    pw.WriteByte((byte)(ServerConfig.Instance.RequestPic ? (string.IsNullOrEmpty(acc.Pic) ? 0 : 1) : 2));
+                }
 
-        static PacketWriter LoginAccountFailed(byte reason)
-        {
-            var pw = new PacketWriter(ServerOperationCode.LOGIN_RESPONSE);
-            pw.WriteByte(reason);
-            pw.WriteByte(0);
-            pw.WriteInt(0);
-            return pw;
+                return pw;
+            }
         }
     }
 }

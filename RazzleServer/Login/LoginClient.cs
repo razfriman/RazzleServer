@@ -95,37 +95,6 @@ namespace RazzleServer.Login
             }
         }
 
-        //private void SendLoginResult(LoginResult result)
-        //{
-        //    using (var oPacket = new PacketWriter(ServerOperationCode.CheckPasswordResult))
-        //    {
-        //        oPacket
-        //            .WriteInt((int)result)
-        //            .WriteByte()
-        //            .WriteByte();
-
-        //        if (result == LoginResult.Valid)
-        //        {
-        //            oPacket
-        //                .WriteInt(this.Account.ID)
-        //                .WriteByte((byte)this.Account.Gender)
-        //                .WriteByte() // NOTE: Grade code.
-        //                .WriteByte() // NOTE: Subgrade code.
-        //                .WriteByte() // NOTE: Country code.
-        //                .WriteString(this.Account.Username)
-        //                .WriteByte() // NOTE: Unknown.
-        //                .WriteByte() // NOTE: Quiet ban reason. 
-        //                .WriteLong() // NOTE: Quiet ban lift date.
-        //                .WriteDateTime(this.Account.Creation)
-        //                .WriteInt() // NOTE: Unknown.
-        //                .WriteByte((byte)(WvsLogin.RequestPin ? 0 : 2)) // NOTE: 1 seems to not do anything.
-        //                .WriteByte((byte)(WvsLogin.RequestPic ? (string.IsNullOrEmpty(this.Account.Pic) ? 0 : 1) : 2));
-        //        }
-
-        //        this.Send(oPacket);
-        //    }
-        //}
-
         //private void EULA(PacketReader iPacket)
         //{
         //    bool accepted = iPacket.ReadBool();
@@ -443,21 +412,6 @@ namespace RazzleServer.Login
         //    this.IsInViewAllChar = iPacket.ReadBool();
         //}
 
-        //private void CheckCharacterName(PacketReader iPacket)
-        //{
-        //    string name = iPacket.ReadString();
-        //    bool unusable = WvsLogin.CenterConnection.IsNameTaken(name);
-
-        //    using (var oPacket = new PacketWriter(ServerOperationCode.CheckDuplicatedIDResult))
-        //    {
-        //        oPacket
-        //            .WriteString(name)
-        //            .WriteBool(unusable);
-
-        //        this.Send(oPacket);
-        //    }
-        //}
-
         //private void CreateCharacter(PacketReader iPacket)
         //{
         //    byte[] characterData = iPacket.ReadBytes();
@@ -471,35 +425,7 @@ namespace RazzleServer.Login
         //    }
         //}
 
-        //// TODO: Proper character deletion with all the necessary checks (cash items, guilds, etcetera). 
-        //private void DeleteCharacter(PacketReader iPacket)
-        //{
-        //    string pic = iPacket.ReadString();
-        //    int characterID = iPacket.ReadInt();
 
-        //    CharacterDeletionResult result;
-
-        //    if (SHACryptograph.Encrypt(SHAMode.SHA256, pic) == this.Account.Pic || !WvsLogin.RequestPic)
-        //    {
-        //        //NOTE: As long as foreign keys are set to cascade, all child entries related to this CharacterID will also be deleted.
-        //        Database.Delete("characters", "ID = {0}", characterID);
-
-        //        result = CharacterDeletionResult.Valid;
-        //    }
-        //    else
-        //    {
-        //        result = CharacterDeletionResult.InvalidPic;
-        //    }
-
-        //    using (var oPacket = new PacketWriter(ServerOperationCode.DeleteCharacterResult))
-        //    {
-        //        oPacket
-        //            .WriteInt(characterID)
-        //            .WriteByte((byte)result);
-
-        //        this.Send(oPacket);
-        //    }
-        //}
 
         //private void SelectCharacter(PacketReader iPacket, bool fromViewAll = false, bool requestPic = false, bool registerPic = false)
         //{

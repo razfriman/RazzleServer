@@ -178,12 +178,12 @@ namespace RazzleServer.Common.Util
         /// </summary>
         /// <param name="value">Value to be hashed</param>
         /// <returns>The SHA1 equivelant of value</returns>
-        public static string GetSha1(string value)
+        public static string GetSha512(string value)
         {
             byte[] data = Encoding.ASCII.GetBytes(value);
             byte[] hashData;
 
-            using (var sha = SHA1.Create())
+            using (var sha = SHA512.Create())
             {
                 hashData = sha.ComputeHash(data);
             }
