@@ -1061,7 +1061,6 @@ namespace RazzleServer.Game.Maple.Characters
                 }
 
                 oPacket.WriteShort(0);
-                oPacket.WriteShort(0); // TODO: Evan inventory.
 
                 foreach (Item item in this[ItemType.Usable])
                 {

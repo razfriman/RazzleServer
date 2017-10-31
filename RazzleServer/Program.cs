@@ -13,11 +13,12 @@ namespace RazzleServer
         {
             await ServerManager.Configure();
 
-            Task.Factory.StartNew(() => new CenterServer());
-            Task.Factory.StartNew(() => new LoginServer());
+            var center = new CenterServer();
+            var login = new LoginServer();
 
-            ServerConfig.Instance.Worlds.ForEach(x => {
-                Task.Factory.StartNew(() => new GameServer(x));
+            ServerConfig.Instance.Worlds.ForEach(x =>
+            {
+                var game = new GameServer(x);
             });
 
             Thread.Sleep(Timeout.Infinite);

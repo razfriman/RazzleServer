@@ -15,7 +15,7 @@ namespace RazzleServer.Server
 		public int DefaultMapID { get; set; } = 100000000;
 		public string DatabaseName { get; set; } = "MapleServer.db";
         public string WzFilePath { get; set; } = string.Empty;
-		public ushort Version { get; set; } = 83;
+		public ushort Version { get; set; } = 55;
 		public byte SubVersion { get; set; } = 1;
 		public byte ServerType { get; set; } = 8;
 		public int PingTimeout { get; set; } = 30;

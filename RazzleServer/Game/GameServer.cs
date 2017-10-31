@@ -28,11 +28,13 @@ namespace RazzleServer.Game
         public override void ServerRegistered()
         {
             Log.LogInformation($"Registered Game Server ({World.Name} [{World.ID}]-{ChannelID}).");
-            Start(IPAddress.Loopback, Port);
+            Start(new IPAddress(new byte[] {0,0,0,0}), Port);
         }
 
         public override void CenterServerConnected()
         {
+            CenterConnection = new GameCenterClient(this, _centerSocket);
+
             var pw = new PacketWriter(InteroperabilityOperationCode.RegistrationRequest);
             pw.WriteByte((int)ServerType.Channel);
             CenterConnection.Send(pw);

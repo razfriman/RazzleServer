@@ -37,7 +37,7 @@ namespace RazzleServer.Login
                     Packet.WriteUShort(loopWorld.ShopPort);
                     Packet.WriteByte(loopWorld.Count);
                     Packet.WriteString(loopWorld.TickerMessage);
-                    Packet.WriteBool(loopWorld.AllowMultiLeveling);
+                    Packet.WriteBool(loopWorld.EnableMultiLeveling);
                     Packet.WriteInt(loopWorld.ExperienceRate);
                     Packet.WriteInt(loopWorld.QuestExperienceRate);
                     Packet.WriteInt(loopWorld.PartyQuestExperienceRate);

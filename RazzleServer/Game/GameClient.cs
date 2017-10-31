@@ -20,8 +20,6 @@ namespace RazzleServer.Game
         public GameServer Server { get; set; }
         public Character Character { get; set; }
 
-        private static readonly ILogger Log = LogManager.Log;
-
         public GameClient(Socket session, GameServer server) : base(session)
         {
             Socket = new ClientSocket(session, this, ServerConfig.Instance.Version, ServerConfig.Instance.AESKey);
@@ -34,7 +32,9 @@ namespace RazzleServer.Game
         public static void RegisterPacketHandlers()
         {
 
-            var types = Assembly.GetEntryAssembly().GetTypes();
+            var types = Assembly.GetEntryAssembly()
+                                .GetTypes()
+                                .Where(x => x.IsSubclassOf(typeof(GamePacketHandler)));
 
             var handlerCount = 0;
 

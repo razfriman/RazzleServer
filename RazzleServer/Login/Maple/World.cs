@@ -17,7 +17,6 @@ namespace RazzleServer.Login.Maple
         public WorldStatusFlag Flag { get; private set; }
         public string EventMessage { get; private set; }
         public string TickerMessage { get; private set; }
-        public bool AllowMultiLeveling { get; private set; }
         public int DefaultCreationSlots { get; private set; }
         public bool EnableCharacterCreation { get; private set; }
         public bool EnableMultiLeveling { get; private set; }

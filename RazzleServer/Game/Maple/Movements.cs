@@ -77,7 +77,6 @@ namespace RazzleServer.Game.Maple
                     case MovementType.FlashJump:
                     case MovementType.ExcessiveKnockback:
                     case MovementType.RecoilShot:
-                    case MovementType.Aran:
                         {
                             movement.Velocity = new Point(iPacket.ReadShort(), iPacket.ReadShort());
                             movement.Stance = iPacket.ReadByte();
@@ -189,7 +188,6 @@ namespace RazzleServer.Game.Maple
                         case MovementType.FlashJump:
                         case MovementType.ExcessiveKnockback:
                         case MovementType.RecoilShot:
-                        case MovementType.Aran:
                             {
                                 oPacket.WriteShort(movement.Velocity.X);
                                 oPacket.WriteShort(movement.Velocity.Y);
@@ -205,7 +203,6 @@ namespace RazzleServer.Game.Maple
                         case MovementType.Rush:
                         case MovementType.Chair:
                             {
-
                                 oPacket.WritePoint(movement.Position);
                                 oPacket.WriteShort(movement.Foothold);
                                 oPacket.WriteByte(movement.Stance);

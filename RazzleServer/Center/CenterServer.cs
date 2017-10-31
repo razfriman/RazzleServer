@@ -14,8 +14,8 @@ namespace RazzleServer.Center
         {
             Worlds = new Worlds();
             Migrations = new Maple.Migrations();
-            byte[] listenIp = { 0, 0, 0, 0 };
-            Start(new IPAddress(listenIp), ServerConfig.Instance.CenterPort);
+
+            Start(IPAddress.Loopback, ServerConfig.Instance.CenterPort);
         }
     }
 }

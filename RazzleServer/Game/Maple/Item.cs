@@ -153,9 +153,6 @@ namespace RazzleServer.Game.Maple
                     case 48:
                         return WeaponType.Knuckle;
 
-                    case 49:
-                        return WeaponType.Gun;
-
                     default:
                         return WeaponType.NotAWeapon;
                 }
@@ -367,7 +364,6 @@ namespace RazzleServer.Game.Maple
                     case WeaponType.Crossbow:
                     case WeaponType.Claw:
                     case WeaponType.Knuckle:
-                    case WeaponType.Gun:
                         return true;
 
                     default:

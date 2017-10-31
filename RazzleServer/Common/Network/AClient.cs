@@ -18,7 +18,7 @@ namespace RazzleServer.Common.Network
 
         protected static readonly ILogger Log = LogManager.Log;
 
-        public AClient(Socket session)
+        protected AClient(Socket session)
         {
             Socket = new ClientSocket(session, this, ServerConfig.Instance.Version, ServerConfig.Instance.AESKey);
             Host = Socket.Host;
@@ -34,9 +34,7 @@ namespace RazzleServer.Common.Network
                 Log.LogInformation($"Sending: {packet.ToPacketString()}");
             }
 
-            if (Socket == null) return;
-
-            Socket.Send(packet);
+            Socket?.Send(packet);
         }
 
         public virtual void Terminate(string message = null)
@@ -72,7 +70,10 @@ namespace RazzleServer.Common.Network
        
         public void SendHandshake()
         {
-            if (Socket == null) return;
+            if (Socket == null)
+            {
+                return;
+            }
 
             var sIV = Functions.RandomUInt();
             var rIV = Functions.RandomUInt();
@@ -91,6 +92,7 @@ namespace RazzleServer.Common.Network
 
         public void Dispose()
         {
+            Socket?.Dispose();
         }
     }
 }

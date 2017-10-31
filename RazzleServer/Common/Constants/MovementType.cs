@@ -22,6 +22,5 @@
         WingsFalling = 17,
         Unknown2 = 18,
         Unknown3 = 19,
-        Aran = 20,
     }
 }

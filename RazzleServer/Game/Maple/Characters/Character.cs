@@ -242,7 +242,7 @@ namespace RazzleServer.Game.Maple.Characters
                                 AbilityPoints += 5;
                             }
 
-                            if (Job != Job.Beginner && Job != Job.Noblesse && Job != Job.Legend)
+                            if (Job != Job.Beginner)
                             {
                                 SkillPoints += 3;
                             }

@@ -47,7 +47,6 @@ namespace RazzleServer.Common.Constants
         Staff,
         Wand,
         Knuckle,
-        Gun
     }
     #endregion
 

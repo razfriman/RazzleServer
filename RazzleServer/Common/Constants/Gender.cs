@@ -1,5 +1,4 @@
-﻿using System;
-namespace RazzleServer.Common.Constants
+﻿namespace RazzleServer.Common.Constants
 {
     public enum Gender : byte
     {

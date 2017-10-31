@@ -14,12 +14,10 @@ namespace RazzleServer.Center
 {
     public sealed class CenterClient : AClient
     {
-        private static readonly ILogger Log = LogManager.Log;
-
         public static Dictionary<InteroperabilityOperationCode, List<CenterPacketHandler>> PacketHandlers = new Dictionary<InteroperabilityOperationCode, List<CenterPacketHandler>>();
 
-        public ServerType Type { get; private set; }
-        public World World { get; private set; }
+        public ServerType Type { get; internal set; }
+        public World World { get; internal set; }
         public byte ID { get; set; }
         public int Population { get; private set; }
         public CenterServer Server { get; private set; }

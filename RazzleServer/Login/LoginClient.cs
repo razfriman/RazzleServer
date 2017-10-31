@@ -23,8 +23,6 @@ namespace RazzleServer.Login
         public string[] MacAddresses { get; private set; }
         public LoginServer Server { get; private set; }
 
-        private static readonly ILogger Log = LogManager.Log;
-
         public LoginClient(Socket socket, LoginServer server)
             : base(socket)
         {
@@ -34,13 +32,16 @@ namespace RazzleServer.Login
         public static void RegisterPacketHandlers()
         {
 
-            var types = Assembly.GetEntryAssembly().GetTypes();
+            var types = Assembly.GetEntryAssembly()
+                                .GetTypes()
+                                .Where(x => x.IsSubclassOf(typeof(LoginPacketHandler)));
 
             var handlerCount = 0;
 
             foreach (var type in types)
             {
-                var attributes = type.GetTypeInfo().GetCustomAttributes()
+                var attributes = type.GetTypeInfo()
+                                     .GetCustomAttributes()
                                      .OfType<PacketHandlerAttribute>()
                                      .ToList();
 

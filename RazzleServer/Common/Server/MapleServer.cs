@@ -1,12 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using Microsoft.Extensions.Logging;
-using RazzleServer.Common.Util;
-using RazzleServer.Common.Network;
 using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using RazzleServer.Common.Network;
+using RazzleServer.Common.Util;
 
 namespace RazzleServer.Server
 {
@@ -16,11 +16,11 @@ namespace RazzleServer.Server
         public ushort Port;
 
         private TcpListener _listener;
-        private Socket _centerSocket;
-        private const int BACKLOG_SIZE = 50;
+        protected Socket _centerSocket;
         private bool _disposed;
+        private const int BACKLOG_SIZE = 50;
 
-        private static ILogger Log = LogManager.Log;
+        protected static readonly ILogger Log = LogManager.Log;
 
         public virtual void RemoveClient(T client)
         {
@@ -58,12 +58,12 @@ namespace RazzleServer.Server
 
         public virtual void CenterServerConnected()
         {
-            
+
         }
 
-        public virtual void ServerRegistered() 
+        public virtual void ServerRegistered()
         {
-            
+
         }
 
 
@@ -122,9 +122,6 @@ namespace RazzleServer.Server
 
         public void StartCenterConnection(IPAddress ip, ushort port)
         {
-            _centerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            _centerSocket.Connect(ip, port);
-
             bool connected = false;
             int tries = 0;
 
@@ -132,24 +129,30 @@ namespace RazzleServer.Server
             {
                 try
                 {
+                    _centerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                     _centerSocket.Connect(ip, port);
                     connected = true;
+
+                    Log.LogInformation("Connected");
                 }
-                catch
+                catch (Exception e)
                 {
-                    Log.LogWarning($"Could not connect to Center Server at {ip}:{port}");
+                    Log.LogWarning(e, $"Could not connect to Center Server at {ip}:{port}");
                     tries++;
-                    Thread.Sleep(2000);
+                    Thread.Sleep(5000);
                 }
             }
 
-            if (!connected)
+            if (connected)
+            {
+                CenterServerConnected();
+
+            }
+            else
             {
                 Log.LogCritical($"Connection to Center Server failed at {ip}:{port}");
-                return;
-            }
 
-            CenterServerConnected();
+            }
         }
 
         public void Start(IPAddress ip, ushort port)

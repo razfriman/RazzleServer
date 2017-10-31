@@ -121,7 +121,6 @@ namespace RazzleServer.Game
         {
             int accountID = inPacket.ReadInt();
             string name = inPacket.ReadString();
-            JobType jobType = (JobType)inPacket.ReadInt();
             int face = inPacket.ReadInt();
             int hair = inPacket.ReadInt();
             int hairColor = inPacket.ReadInt();
@@ -143,25 +142,25 @@ namespace RazzleServer.Game
 
             if (gender == Gender.Male)
             {
-                error |= (!DataProvider.CreationData.MaleSkins.Any(x => x.Item1 == jobType && x.Item2 == skin)
-                    || !DataProvider.CreationData.MaleFaces.Any(x => x.Item1 == jobType && x.Item2 == face)
-                    || !DataProvider.CreationData.MaleHairs.Any(x => x.Item1 == jobType && x.Item2 == hair)
-                    || !DataProvider.CreationData.MaleHairColors.Any(x => x.Item1 == jobType && x.Item2 == hairColor)
-                    || !DataProvider.CreationData.MaleTops.Any(x => x.Item1 == jobType && x.Item2 == topID)
-                    || !DataProvider.CreationData.MaleBottoms.Any(x => x.Item1 == jobType && x.Item2 == bottomID)
-                    || !DataProvider.CreationData.MaleShoes.Any(x => x.Item1 == jobType && x.Item2 == shoesID)
-                    || !DataProvider.CreationData.MaleWeapons.Any(x => x.Item1 == jobType && x.Item2 == weaponID));
+                error |= (!DataProvider.CreationData.MaleSkins.Any(x => x == skin)
+                    || !DataProvider.CreationData.MaleFaces.Any(x => x == face)
+                    || !DataProvider.CreationData.MaleHairs.Any(x => x == hair)
+                    || !DataProvider.CreationData.MaleHairColors.Any(x => x == hairColor)
+                    || !DataProvider.CreationData.MaleTops.Any(x => x == topID)
+                    || !DataProvider.CreationData.MaleBottoms.Any(x => x == bottomID)
+                    || !DataProvider.CreationData.MaleShoes.Any(x => x == shoesID)
+                    || !DataProvider.CreationData.MaleWeapons.Any(x => x == weaponID));
             }
             else if (gender == Gender.Female)
             {
-                error |= (!DataProvider.CreationData.FemaleSkins.Any(x => x.Item1 == jobType && x.Item2 == skin)
-                    || !DataProvider.CreationData.FemaleFaces.Any(x => x.Item1 == jobType && x.Item2 == face)
-                    || !DataProvider.CreationData.FemaleHairs.Any(x => x.Item1 == jobType && x.Item2 == hair)
-                    || !DataProvider.CreationData.FemaleHairColors.Any(x => x.Item1 == jobType && x.Item2 == hairColor)
-                    || !DataProvider.CreationData.FemaleTops.Any(x => x.Item1 == jobType && x.Item2 == topID)
-                    || !DataProvider.CreationData.FemaleBottoms.Any(x => x.Item1 == jobType && x.Item2 == bottomID)
-                    || !DataProvider.CreationData.FemaleShoes.Any(x => x.Item1 == jobType && x.Item2 == shoesID)
-                    || !DataProvider.CreationData.FemaleWeapons.Any(x => x.Item1 == jobType && x.Item2 == weaponID));
+                error |= (!DataProvider.CreationData.FemaleSkins.Any(x => x == skin)
+                    || !DataProvider.CreationData.FemaleFaces.Any(x => x == face)
+                    || !DataProvider.CreationData.FemaleHairs.Any(x => x == hair)
+                    || !DataProvider.CreationData.FemaleHairColors.Any(x => x == hairColor)
+                    || !DataProvider.CreationData.FemaleTops.Any(x => x == topID)
+                    || !DataProvider.CreationData.FemaleBottoms.Any(x => x == bottomID)
+                    || !DataProvider.CreationData.FemaleShoes.Any(x => x == shoesID)
+                    || !DataProvider.CreationData.FemaleWeapons.Any(x => x == weaponID));
             }
             else // NOTE: Not allowed to choose "both" genders at character creation.
             {
@@ -178,7 +177,7 @@ namespace RazzleServer.Game
                 Face = face,
                 Hair = hair + hairColor,
                 Level = 1,
-                Job = jobType == JobType.Cygnus ? Job.Noblesse : jobType == JobType.Explorer ? Job.Beginner : Job.Legend,
+                Job =Job.Beginner,
                 Strength = 12,
                 Dexterity = 5,
                 Intelligence = 4,
@@ -191,7 +190,7 @@ namespace RazzleServer.Game
                 SkillPoints = 0,
                 Experience = 0,
                 Fame = 0,
-                Map = DataProvider.Maps[jobType == JobType.Cygnus ? 130030000 : jobType == JobType.Explorer ? 10000 : 914000000],
+                Map = DataProvider.Maps[10000],
                 SpawnPoint = 0,
                 Meso = 0
             };
@@ -199,7 +198,7 @@ namespace RazzleServer.Game
             character.Items.Add(new Item(bottomID, equipped: true));
             character.Items.Add(new Item(shoesID, equipped: true));
             character.Items.Add(new Item(weaponID, equipped: true));
-            character.Items.Add(new Item(jobType == JobType.Cygnus ? 4161047 : jobType == JobType.Explorer ? 4161001 : 4161048), forceGetSlot: true);
+            character.Items.Add(new Item(4161001), forceGetSlot: true);
 
             character.Keymap.Add(new Shortcut(KeymapKey.One, KeymapAction.AllChat));
             character.Keymap.Add(new Shortcut(KeymapKey.Two, KeymapAction.PartyChat));

@@ -42,39 +42,7 @@
         ChiefBandit,
         Shadower,
 
-        Pirate = 500,
-        Brawler = 510,
-        Marauder,
-        Buccaneer,
-        Gunslinger = 520,
-        Outlaw,
-        Corsair,
-
         GM = 900,
-        SuperGM = 910,
-
-        Noblesse = 1000,
-
-        DawnWarrior1 = 1100,
-        DawnWarrior2 = 1110,
-        DawnWarrior3 = 1111,
-
-        BlazeWizard1 = 1200,
-        BlazeWizard2 = 1210,
-        BlazeWizard3 = 1211,
-
-        WindArcher1 = 1300,
-        WindArcher2 = 1310,
-        WindArcher3 = 1311,
-
-        NightWalker1 = 1400,
-        NightWalker2 = 1410,
-        NightWalker3 = 1411,
-
-        ThunderBreaker1 = 1500,
-        ThunderBreaker2 = 1510,
-        ThunderBreaker3 = 1511,
-
-        Legend = 2000
+        SuperGM = 910
     }
 }

@@ -73,7 +73,6 @@ namespace RazzleServer.Game.Maple.Life
                 }
                 catch (Exception ex)
                 {
-
                 }
             }
         }
