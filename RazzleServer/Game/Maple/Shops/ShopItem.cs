@@ -1,5 +1,6 @@
 ﻿using System;
 using RazzleServer.Common.Data;
+using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple.Data;
 
 namespace RazzleServer.Game.Maple.Shops
@@ -13,37 +14,13 @@ namespace RazzleServer.Game.Maple.Shops
         public int PurchasePrice { get; private set; }
         public int Sort { get; private set; }
 
-        public short MaxPerStack
-        {
-            get
-            {
-                return DataProvider.Items[this.MapleID].MaxPerStack;
-            }
-        }
+        public short MaxPerStack => DataProvider.Items[this.MapleID].MaxPerStack;
 
-        public int SalePrice
-        {
-            get
-            {
-                return DataProvider.Items[this.MapleID].SalePrice;
-            }
-        }
+        public int SalePrice => DataProvider.Items[this.MapleID].SalePrice;
 
-        public double UnitPrice
-        {
-            get
-            {
-                return this.Parent.UnitPrices[this.MapleID];
-            }
-        }
+        public double UnitPrice => Parent.UnitPrices[this.MapleID];
 
-        public bool IsRecharageable
-        {
-            get
-            {
-                return DataProvider.Items[this.MapleID].IsRechargeable;
-            }
-        }
+        public bool IsRecharageable => DataProvider.Items[this.MapleID].IsRechargeable;
 
         public ShopItem(Shop parent, Datum datum)
         {
@@ -66,32 +43,30 @@ namespace RazzleServer.Game.Maple.Shops
 
         public byte[] ToByteArray()
         {
-            using (ByteBuffer oPacket = new ByteBuffer())
+            using (var oPacket = new PacketWriter())
             {
-                oPacket
-                    .WriteInt(this.MapleID)
-                    .WriteInt(this.PurchasePrice)
-                    .WriteInt() // NOTE: Perfect Pitch.
-                    .WriteInt() // NOTE: Time limit.
-                    .WriteInt(); // NOTE: Unknown.
+                oPacket.WriteInt(this.MapleID);
+                oPacket.WriteInt(this.PurchasePrice);
+                oPacket.WriteInt(0); // NOTE: Perfect Pitch.
+                oPacket.WriteInt(0); // NOTE: Time limit.
+                oPacket.WriteInt(0); // NOTE: Unknown.
 
                 if (this.IsRecharageable)
                 {
-                    oPacket
-                        .WriteShort()
-                        .WriteInt()
-                        .WriteShort((short)(BitConverter.DoubleToInt64Bits(this.UnitPrice) >> 48))
-                        .WriteShort(this.MaxPerStack);
+
+                    oPacket.WriteShort(0);
+                    oPacket.WriteInt(0);
+                    oPacket.WriteShort((short)(BitConverter.DoubleToInt64Bits(this.UnitPrice) >> 48));
+                    oPacket.WriteShort(this.MaxPerStack);
                 }
                 else
                 {
-                    oPacket
-                        .WriteShort(this.Quantity)
-                        .WriteShort(this.MaxPerStack);
+
+                    oPacket.WriteShort(this.Quantity);
+                    oPacket.WriteShort(this.MaxPerStack);
                 }
 
-                oPacket.Flip();
-                return oPacket.GetContent();
+                return oPacket.ToArray();
             }
         }
     }

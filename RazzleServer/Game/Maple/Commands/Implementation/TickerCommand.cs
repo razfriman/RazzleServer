@@ -32,8 +32,8 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
         public override void Execute(Character caller, string[] args)
         {
             string message = args.Length > 0 ? args[0] : string.Empty;
-            caller.Client.Server.TickerMessage = message;
-            caller.Client.World.Notify(message, NoticeType.Ticker);
+            caller.Client.Server.World.TickerMessage = message;
+            //caller.Client.World.Notify(message, NoticeType.Ticker);
         }
     }
 }

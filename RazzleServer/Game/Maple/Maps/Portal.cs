@@ -1,6 +1,8 @@
-﻿using RazzleServer.Common.Constants;
+﻿using Microsoft.Extensions.Logging;
+using RazzleServer.Common.Constants;
 using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
+using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
 
@@ -8,6 +10,8 @@ namespace RazzleServer.Game.Maple.Maps
 {
     public class Portal : MapObject
     {
+        private static readonly ILogger Log = LogManager.Log;
+
         public byte ID { get; private set; }
         public string Label { get; private set; }
         public int DestinationMapID { get; private set; }
@@ -32,7 +36,7 @@ namespace RazzleServer.Game.Maple.Maps
 
         public virtual void Enter(Character character)
         {
-            Log.Warn("'{0}' attempted to enter an unimplemented portal '{1}'.", character.Name, Script);
+            Log.LogWarning($"'{character.Name}' attempted to enter an unimplemented portal '{Script}'");
 
             using (var oPacket = new PacketWriter(ServerOperationCode.TransferFieldReqInogred))
             {

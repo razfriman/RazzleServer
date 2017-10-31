@@ -46,7 +46,7 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
                     return;
                 }
 
-                target.Client.Stop();
+                target.Client.Terminate();
             }
         }
     }

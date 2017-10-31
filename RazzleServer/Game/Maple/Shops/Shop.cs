@@ -66,9 +66,9 @@ namespace RazzleServer.Game.Maple.Shops
         {
             using (var oPacket = new PacketWriter(ServerOperationCode.OpenNpcShop))
             {
-                oPacket
-                    .WriteInt(this.ID)
-                    .WriteShort((short)this.Items.Count);
+
+                oPacket.WriteInt(this.ID);
+                oPacket.WriteShort((short)this.Items.Count);
 
                 foreach (ShopItem loopShopItem in this.Items)
                 {

@@ -101,7 +101,7 @@ namespace RazzleServer.Game
             {
                 outPacket.WriteInt(accountID);
 
-                foreach (Datum datum in new Datums("characters").PopulateWith("ID", "AccountID = {0} AND WorldID = {1}", accountID, Server.WorldID))
+                foreach (Datum datum in new Datums("characters").PopulateWith("ID", "AccountID = {0} AND WorldID = {1}", accountID, Server.World.ID))
                 {
                     Character character = new Character((int)datum["ID"]);
                     character.Load();
@@ -171,7 +171,7 @@ namespace RazzleServer.Game
             Character character = new Character
             {
                 AccountID = accountID,
-                WorldID = Server.WorldID,
+                WorldID = Server.World.ID,
                 Name = name,
                 Gender = gender,
                 Skin = skin,
@@ -253,7 +253,9 @@ namespace RazzleServer.Game
 
                     Send(outPacket);
                 }
-            } else {
+            }
+            else
+            {
                 Log.LogError("Error when trying to create character");
             }
         }

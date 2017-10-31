@@ -40,18 +40,18 @@ namespace RazzleServer.Game.Maple.Interaction
 
             using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
             {
-                oPacket
-                    .WriteByte((byte)InteractionCode.Room)
-                    .WriteByte(4)
-                    .WriteByte(4)
-                    .WriteByte(0)
-                    .WriteByte(0)
-                    .WriteBytes(this.Owner.AppearanceToByteArray())
-                    .WriteString(this.Owner.Name)
-                    .WriteByte(byte.MaxValue)
-                    .WriteString(this.Description)
-                    .WriteByte(16)
-                    .WriteByte(0);
+
+                oPacket.WriteByte((byte)InteractionCode.Room);
+                oPacket.WriteByte(4);
+                oPacket.WriteByte(4);
+                oPacket.WriteByte(0);
+                oPacket.WriteByte(0);
+                oPacket.WriteBytes(this.Owner.AppearanceToByteArray());
+                oPacket.WriteString(this.Owner.Name);
+                oPacket.WriteByte(byte.MaxValue);
+                oPacket.WriteString(this.Description);
+                oPacket.WriteByte(16);
+                oPacket.WriteByte(0);
 
                 this.Owner.Client.Send(oPacket);
             }
@@ -215,9 +215,9 @@ namespace RazzleServer.Game.Maple.Interaction
 
                         using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                         {
-                            oPacket
-                                .WriteByte((byte)InteractionCode.Chat)
-                                .WriteByte(8);
+
+                            oPacket.WriteByte((byte)InteractionCode.Chat);
+                            oPacket.WriteByte(8);
 
                             byte sender = 0;
 
@@ -229,9 +229,9 @@ namespace RazzleServer.Game.Maple.Interaction
                                 }
                             }
 
-                            oPacket
-                                .WriteByte(sender)
-                                .WriteString("{0} : {1}", character.Name, text);
+
+                            oPacket.WriteByte(sender);
+                            oPacket.WriteString($"{character.Name} : {text}");
 
                             this.Broadcast(oPacket);
                         }
@@ -260,10 +260,10 @@ namespace RazzleServer.Game.Maple.Interaction
                     {
                         using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                         {
-                            oPacket
-                                .WriteByte((byte)InteractionCode.Exit)
-                                .WriteByte(1)
-                                .WriteByte(10);
+
+                            oPacket.WriteByte((byte)InteractionCode.Exit);
+                            oPacket.WriteByte(1);
+                            oPacket.WriteByte(10);
 
                             this.Visitors[i].Client.Send(oPacket);
                         }
@@ -280,17 +280,17 @@ namespace RazzleServer.Game.Maple.Interaction
         {
             using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
             {
-                oPacket
-                    .WriteByte((byte)InteractionCode.UpdateItems)
-                    .WriteByte((byte)this.Items.Count);
+
+                oPacket.WriteByte((byte)InteractionCode.UpdateItems);
+                oPacket.WriteByte((byte)this.Items.Count);
 
                 foreach (PlayerShopItem loopShopItem in this.Items)
                 {
-                    oPacket
-                        .WriteShort(loopShopItem.Bundles)
-                        .WriteShort(loopShopItem.Quantity)
-                        .WriteInt(loopShopItem.MerchantPrice)
-                        .WriteBytes(loopShopItem.ToByteArray(true, true));
+
+                    oPacket.WriteShort(loopShopItem.Bundles);
+                    oPacket.WriteShort(loopShopItem.Quantity);
+                    oPacket.WriteInt(loopShopItem.MerchantPrice);
+                    oPacket.WriteBytes(loopShopItem.ToByteArray(true, true));
                 }
 
                 this.Broadcast(oPacket);
@@ -321,11 +321,11 @@ namespace RazzleServer.Game.Maple.Interaction
                 {
                     using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                     {
-                        oPacket
-                            .WriteByte((byte)InteractionCode.Visit)
-                            .WriteByte((byte)(i + 1))
-                            .WriteBytes(visitor.AppearanceToByteArray())
-                            .WriteString(visitor.Name);
+
+                        oPacket.WriteByte((byte)InteractionCode.Visit);
+                        oPacket.WriteByte((byte)(i + 1));
+                        oPacket.WriteBytes(visitor.AppearanceToByteArray());
+                        oPacket.WriteString(visitor.Name);
 
                         this.Broadcast(oPacket);
                     }
@@ -335,39 +335,39 @@ namespace RazzleServer.Game.Maple.Interaction
 
                     using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                     {
-                        oPacket
-                            .WriteByte((byte)InteractionCode.Room)
-                            .WriteByte(4)
-                            .WriteByte(4)
-                            .WriteBool(true)
-                            .WriteByte(0)
-                            .WriteBytes(this.Owner.AppearanceToByteArray())
-                            .WriteString(this.Owner.Name);
+
+                        oPacket.WriteByte((byte)InteractionCode.Room);
+                        oPacket.WriteByte(4);
+                        oPacket.WriteByte(4);
+                        oPacket.WriteBool(true);
+                        oPacket.WriteByte(0);
+                        oPacket.WriteBytes(this.Owner.AppearanceToByteArray());
+                        oPacket.WriteString(this.Owner.Name);
 
                         for (int slot = 0; slot < 3; slot++)
                         {
                             if (this.Visitors[slot] != null)
                             {
-                                oPacket
-                                    .WriteByte((byte)(slot + 1))
-                                    .WriteBytes(this.Visitors[slot].AppearanceToByteArray())
-                                    .WriteString(this.Visitors[slot].Name);
+
+                                oPacket.WriteByte((byte)(slot + 1));
+                                oPacket.WriteBytes(this.Visitors[slot].AppearanceToByteArray());
+                                oPacket.WriteString(this.Visitors[slot].Name);
                             }
                         }
 
-                        oPacket
-                            .WriteByte(byte.MaxValue)
-                            .WriteString(this.Description)
-                            .WriteByte(0x10)
-                            .WriteByte((byte)this.Items.Count);
+
+                        oPacket.WriteByte(byte.MaxValue);
+                        oPacket.WriteString(this.Description);
+                        oPacket.WriteByte(0x10);
+                        oPacket.WriteByte((byte)this.Items.Count);
 
                         foreach (PlayerShopItem loopShopItem in this.Items)
                         {
-                            oPacket
-                                .WriteShort(loopShopItem.Bundles)
-                                .WriteShort(loopShopItem.Quantity)
-                                .WriteInt(loopShopItem.MerchantPrice)
-                                .WriteBytes(loopShopItem.ToByteArray(true, true));
+
+                            oPacket.WriteShort(loopShopItem.Bundles);
+                            oPacket.WriteShort(loopShopItem.Quantity);
+                            oPacket.WriteInt(loopShopItem.MerchantPrice);
+                            oPacket.WriteBytes(loopShopItem.ToByteArray(true, true));
                         }
 
                         visitor.Client.Send(oPacket);
@@ -401,9 +401,8 @@ namespace RazzleServer.Game.Maple.Interaction
 
                     using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                     {
-                        oPacket
-                            .WriteByte((byte)InteractionCode.Exit)
-                            .WriteByte((byte)(i + 1));
+                        oPacket.WriteByte((byte)InteractionCode.Exit);
+                        oPacket.WriteByte((byte)(i + 1));
 
                         this.Owner.Client.Send(oPacket);
                     }
@@ -422,16 +421,16 @@ namespace RazzleServer.Game.Maple.Interaction
         {
             var oPacket = new PacketWriter(ServerOperationCode.AnnounceBox);
 
-            oPacket
-                .WriteInt(this.Owner.ID)
-                .WriteByte(4)
-                .WriteInt(this.ObjectID)
-                .WriteString(this.Description)
-                .WriteByte(0)
-                .WriteByte(0)
-                .WriteByte(1)
-                .WriteByte(4)
-                .WriteByte(0);
+
+            oPacket.WriteInt(this.Owner.ID);
+            oPacket.WriteByte(4);
+            oPacket.WriteInt(this.ObjectID);
+            oPacket.WriteString(this.Description);
+            oPacket.WriteByte(0);
+            oPacket.WriteByte(0);
+            oPacket.WriteByte(1);
+            oPacket.WriteByte(4);
+            oPacket.WriteByte(0);
 
             return oPacket;
         }
@@ -440,9 +439,8 @@ namespace RazzleServer.Game.Maple.Interaction
         {
             var oPacket = new PacketWriter(ServerOperationCode.AnnounceBox);
 
-            oPacket
-                .WriteInt(this.Owner.ID)
-                .WriteByte(0);
+            oPacket.WriteInt(this.Owner.ID);
+            oPacket.WriteByte(0);
 
             return oPacket;
         }

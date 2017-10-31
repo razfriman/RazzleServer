@@ -1,41 +1,33 @@
-﻿using System;
-using System.Net;
-using System.Net.Sockets;
-using System.Threading;
+﻿using System.Net;
 using Microsoft.Extensions.Logging;
-using RazzleServer.Game.Maple.Data;
 using RazzleServer.Server;
 using RazzleServer.Common.Util;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Constants;
+using RazzleServer.Common.Server;
 
 namespace RazzleServer.Game
 {
     public class GameServer : MapleServer<GameClient>
     {
         public GameCenterClient CenterConnection { get; set; }
-
         public byte ChannelID { get; set; }
-        public byte WorldID { get; set; }
-        public string WorldName { get; set; }
-        public string TickerMessage { get; set; }
-        public int ExperienceRate { get; set; }
-        public int QuestExperienceRate { get; set; }
-        public int PartyQuestExperienceRate { get; set; }
-        public int MesoRate { get; set; }
-        public int DropRate { get; set; }
+        public WorldConfig World { get; set; }
 
+        public static GameServer CurrentInstance { get; private set; }
         private static readonly ILogger Log = LogManager.Log;
 
-        public GameServer(ushort port)
+        public GameServer(WorldConfig world)
         {
-            Port = port;
+            World = world;
+            Port = world.Port;
             StartCenterConnection(IPAddress.Loopback, ServerConfig.Instance.CenterPort);
+            CurrentInstance = this;
         }
 
         public override void ServerRegistered()
         {
-            Log.LogInformation($"Registered Game Server ({WorldName} [{WorldID}]-{ChannelID}).");
+            Log.LogInformation($"Registered Game Server ({World.Name} [{World.ID}]-{ChannelID}).");
             Start(IPAddress.Loopback, Port);
         }
 

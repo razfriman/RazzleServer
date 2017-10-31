@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Reflection;
+using Microsoft.Extensions.Logging;
+using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Server;
 
@@ -8,6 +10,8 @@ namespace RazzleServer.Game.Maple.Commands
     public static class CommandFactory
     {
         public static Commands Commands { get; private set; }
+
+        private static readonly ILogger Log = LogManager.Log;
 
         public static void Initialize()
         {
@@ -50,7 +54,7 @@ namespace RazzleServer.Game.Maple.Commands
                     catch (Exception e)
                     {
                         caller.Notify("[Command] Unknown error: " + e.Message);
-                        Log.Error("{0} error by {1}: ", e, command.GetType().Name, caller.Name);
+                        Log.LogError($"{command.GetType().Name} error by {caller.Name}", e);
                     }
                 }
                 else

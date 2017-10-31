@@ -241,7 +241,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public byte[] RegularToByteArray()
         {
-            using (var oPacket = new ByteBuffer())
+            using (var oPacket = new PacketWriter())
             {
                 int remaining = 1;
 
@@ -259,14 +259,13 @@ namespace RazzleServer.Game.Maple.Characters
                     remaining++;
                 }
 
-                oPacket.Flip();
-                return oPacket.GetContent();
+                return oPacket.ToArray();
             }
         }
 
         public byte[] VIPToByteArray()
         {
-            using (var oPacket = new ByteBuffer())
+            using (var oPacket = new PacketWriter())
             {
                 int remaining = 1;
 
@@ -284,8 +283,7 @@ namespace RazzleServer.Game.Maple.Characters
                     remaining++;
                 }
 
-                oPacket.Flip();
-                return oPacket.GetContent();
+                return oPacket.ToArray();
             }
         }
     }

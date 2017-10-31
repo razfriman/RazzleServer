@@ -1,5 +1,7 @@
 ﻿using System.Collections.ObjectModel;
+using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Data;
+using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Life;
 using RazzleServer.Game.Maple.Maps;
 
@@ -7,13 +9,12 @@ namespace RazzleServer.Game.Maple.Data
 {
     public sealed class CachedMaps : KeyedCollection<int, Map>
     {
+        private static readonly ILogger Log = LogManager.Log;
+
         public CachedMaps()
             : base()
         {
-            using (Log.Load("Maps"))
-            {
-
-            }
+            Log.LogInformation("Loading Maps");
         }
 
         public new Map this[int key]

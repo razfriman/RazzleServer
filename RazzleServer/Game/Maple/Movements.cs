@@ -152,12 +152,11 @@ namespace RazzleServer.Game.Maple
 
         public byte[] ToByteArray()
         {
-            using (ByteBuffer oPacket = new ByteBuffer())
+            using (var oPacket = new PacketWriter())
             {
-                oPacket
-                    .WriteShort(this.Origin.X)
-                    .WriteShort(this.Origin.Y)
-                    .WriteByte((byte)this.Count);
+
+                oPacket.WritePoint(Origin);
+                oPacket.WriteByte(Count);
 
                 foreach (Movement movement in this)
                 {
@@ -170,21 +169,18 @@ namespace RazzleServer.Game.Maple
                         case MovementType.JumpDown:
                         case MovementType.WingsFalling:
                             {
-                                oPacket
-                                    .WriteShort(movement.Position.X)
-                                    .WriteShort(movement.Position.Y)
-                                    .WriteShort(movement.Velocity.X)
-                                    .WriteShort(movement.Velocity.Y)
-                                    .WriteShort(movement.Foothold);
+
+                                oPacket.WritePoint(movement.Position);
+                                oPacket.WritePoint(movement.Velocity);
+                                oPacket.WriteShort(movement.Foothold);
 
                                 if (movement.Type == MovementType.JumpDown)
                                 {
                                     oPacket.WriteShort(movement.FallStart);
                                 }
 
-                                oPacket
-                                    .WriteByte(movement.Stance)
-                                    .WriteShort(movement.Duration);
+                                oPacket.WriteByte(movement.Stance);
+                                oPacket.WriteShort(movement.Duration);
                             }
                             break;
 
@@ -195,11 +191,10 @@ namespace RazzleServer.Game.Maple
                         case MovementType.RecoilShot:
                         case MovementType.Aran:
                             {
-                                oPacket
-                                    .WriteShort(movement.Velocity.X)
-                                    .WriteShort(movement.Velocity.Y)
-                                    .WriteByte(movement.Stance)
-                                    .WriteShort(movement.Duration);
+                                oPacket.WriteShort(movement.Velocity.X);
+                                oPacket.WriteShort(movement.Velocity.Y);
+                                oPacket.WriteByte(movement.Stance);
+                                oPacket.WriteShort(movement.Duration);
                             }
                             break;
 
@@ -210,12 +205,11 @@ namespace RazzleServer.Game.Maple
                         case MovementType.Rush:
                         case MovementType.Chair:
                             {
-                                oPacket
-                                    .WriteShort(movement.Position.X)
-                                    .WriteShort(movement.Position.Y)
-                                    .WriteShort(movement.Foothold)
-                                    .WriteByte(movement.Stance)
-                                    .WriteShort(movement.Duration);
+
+                                oPacket.WritePoint(movement.Position);
+                                oPacket.WriteShort(movement.Foothold);
+                                oPacket.WriteByte(movement.Stance);
+                                oPacket.WriteShort(movement.Duration);
                             }
                             break;
 
@@ -227,29 +221,26 @@ namespace RazzleServer.Game.Maple
 
                         case MovementType.Unknown:
                             {
-                                oPacket
-                                    .WriteShort(movement.Velocity.X)
-                                    .WriteShort(movement.Velocity.Y)
-                                    .WriteShort(movement.FallStart)
-                                    .WriteByte(movement.Stance)
-                                    .WriteShort(movement.Duration);
+
+                                oPacket.WritePoint(movement.Velocity);
+                                oPacket.WriteShort(movement.FallStart);
+                                oPacket.WriteByte(movement.Stance);
+                                oPacket.WriteShort(movement.Duration);
                             }
                             break;
 
                         default:
                             {
-                                oPacket
-                                    .WriteByte(movement.Stance)
-                                    .WriteShort(movement.Duration);
+
+                                oPacket.WriteByte(movement.Stance);
+                                oPacket.WriteShort(movement.Duration);
                             }
                             break;
                     }
                 }
 
                 // NOTE: Keypad and boundary values are not read on the client side.
-
-                oPacket.Flip();
-                return oPacket.GetContent();
+                return oPacket.ToArray();
             }
         }
     }

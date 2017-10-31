@@ -1,15 +1,19 @@
 ﻿using System.Collections.ObjectModel;
+using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Data;
+using RazzleServer.Common.Util;
 
 namespace RazzleServer.Game.Maple.Data
 {
     public sealed class CachedQuests : KeyedCollection<ushort, Quest>
     {
+        private static readonly ILogger Log = LogManager.Log;
+
         public CachedQuests()
             : base()
         {
-            using (Log.Load("Quests"))
+            Log.LogInformation("Loading Quests");
             {
                 foreach (Datum datum in new Datums("quest_data").Populate())
                 {

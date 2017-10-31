@@ -55,18 +55,18 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
             {
                 using (var oPacket = new PacketWriter(ServerOperationCode.AdminShop))
                 {
-                    oPacket
-                        .WriteInt(Npc)
-                        .WriteShort((short)AdminShopCommand.Items.Count);
+
+                    oPacket.WriteInt(Npc);
+                    oPacket.WriteShort((short)AdminShopCommand.Items.Count);
 
                     foreach (var item in AdminShopCommand.Items)
                     {
-                        oPacket
-                            .WriteInt(item.Item1)
-                            .WriteInt(item.Item2)
-                            .WriteInt(item.Item3)
-                            .WriteByte() // NOTE: Unknown.
-                            .WriteShort(item.Item4);
+
+                        oPacket.WriteInt(item.Item1);
+                        oPacket.WriteInt(item.Item2);
+                        oPacket.WriteInt(item.Item3);
+                        oPacket.WriteByte(0); // NOTE: Unknown.
+                        oPacket.WriteShort(item.Item4);
                     }
 
                     // NOTE: If enabled, when you exit the shop the NPC will ask you if you were looking for something that was missing.

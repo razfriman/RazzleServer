@@ -1,5 +1,7 @@
 ﻿using System;
 using RazzleServer.Common.Data;
+using RazzleServer.Common.Packet;
+using RazzleServer.Data;
 
 namespace RazzleServer.Game.Maple
 {
@@ -20,22 +22,29 @@ namespace RazzleServer.Game.Maple
 
         public void Delete()
         {
-            Database.Delete("memos", "ID = {0}", this.ID);
+            using (var dbContext = new MapleDbContext())
+            {
+                var item = dbContext.MemoEntities.Find(ID);
+                if (item != null)
+                {
+                    dbContext.Remove(item);
+                    dbContext.SaveChanges();
+                }
+            }
         }
 
         public byte[] ToByteArray()
         {
-            using (ByteBuffer oPacket = new ByteBuffer())
+            using (var oPacket = new PacketWriter())
             {
-                oPacket
-                    .WriteInt(this.ID)
-                    .WriteString(this.Sender + " ") // NOTE: Space is intentional.
-                    .WriteString(this.Message)
-                    .WriteDateTime(this.Received)
-                    .WriteByte(3); // TODO: Memo kind (0 - None, 1 - Fame, 2 - Gift).
 
-                oPacket.Flip();
-                return oPacket.GetContent();
+                oPacket.WriteInt(this.ID);
+                oPacket.WriteString(this.Sender + " "); // NOTE: Space is intentional.
+                oPacket.WriteString(this.Message);
+                oPacket.WriteDateTime(this.Received);
+                oPacket.WriteByte(3); // TODO: Memo kind (0 - None, 1 - Fame, 2 - Gift).
+
+                return oPacket.ToArray();
             }
         }
     }

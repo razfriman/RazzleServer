@@ -206,7 +206,7 @@ namespace RazzleServer.Game.Maple.Life
                     using (var oPacket = new PacketWriter(ServerOperationCode.TemporaryStatSet))
                     {
                         oPacket.WriteLong(0);
-                        oPacket.WriteLong(disease);
+                        oPacket.WriteLong((long)disease);
 
                         oPacket.WriteShort((short)ParameterA);
                         oPacket.WriteShort(MapleID);

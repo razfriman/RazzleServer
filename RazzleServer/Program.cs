@@ -17,7 +17,7 @@ namespace RazzleServer
             Task.Factory.StartNew(() => new LoginServer());
 
             ServerConfig.Instance.Worlds.ForEach(x => {
-                Task.Factory.StartNew(() => new GameServer(x.Port));
+                Task.Factory.StartNew(() => new GameServer(x));
             });
 
             Thread.Sleep(Timeout.Infinite);

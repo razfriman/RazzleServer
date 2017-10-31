@@ -15,5 +15,10 @@ namespace RazzleServer.Game.Maple.Scripting
             Character = character;
             Name = name;
         }
+
+        public virtual void Execute()
+        {
+            
+        }
     }
 }

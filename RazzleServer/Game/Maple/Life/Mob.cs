@@ -263,26 +263,26 @@ namespace RazzleServer.Game.Maple.Life
 
             using (var oPacket = new PacketWriter(ServerOperationCode.MobCtrlAck))
             {
-                oPacket
-                    .WriteInt(ObjectID)
-                    .WriteShort(moveAction)
-                    .WriteBool(cheatResult)
-                    .WriteShort((short)Mana)
-                    .WriteByte(skillID)
-                    .WriteByte(skillLevel);
+
+                oPacket.WriteInt(ObjectID);
+                oPacket.WriteShort(moveAction);
+                oPacket.WriteBool(cheatResult);
+                oPacket.WriteShort((short)Mana);
+                oPacket.WriteByte(skillID);
+                oPacket.WriteByte(skillLevel);
 
                 Controller.Client.Send(oPacket);
             }
 
             using (var oPacket = new PacketWriter(ServerOperationCode.MobMove))
             {
-                oPacket
-                    .WriteInt(ObjectID)
-                    .WriteBool(false)
-                    .WriteBool(cheatResult)
-                    .WriteByte(centerSplit)
-                    .WriteInt(illegalVelocity)
-                    .WriteBytes(movements.ToByteArray());
+
+                oPacket.WriteInt(ObjectID);
+                oPacket.WriteBool(false);
+                oPacket.WriteBool(cheatResult);
+                oPacket.WriteByte(centerSplit);
+                oPacket.WriteInt(illegalVelocity);
+                oPacket.WriteBytes(movements.ToByteArray());
 
                 Map.Broadcast(oPacket, Controller);
             }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Data;
 using RazzleServer.Common.Exceptions;
@@ -71,6 +72,8 @@ namespace RazzleServer.Game.Maple.Characters
         private Npc lastNpc;
         private Quest lastQuest;
         private string chalkboard;
+
+        private static readonly ILogger Log = LogManager.Log;
 
         public Gender Gender
         {
@@ -480,7 +483,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                 experience = value;
 
-                if (ServerConfig.Instance.MultiLeveling)
+                if (Client.Server.World.AllowMultiLeveling)
                 {
                     while (experience >= ExperienceTables.CharacterLevel[Level])
                     {
@@ -541,7 +544,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public bool IsAlive => Health > 0;
 
-        public bool IsMaster => Client.Account?.IsMaster;
+        public bool IsMaster => Client.Account?.IsMaster ?? false;
 
         // TODO: Improve this check.
         public bool IsCygnus => (short)Job >= 1000 && (short)Job <= 2000;
@@ -794,18 +797,18 @@ namespace RazzleServer.Game.Maple.Characters
             Trocks.Save();
             Variables.Save();
 
-            Log.Inform("Saved character '{0}' to database.", Name);
+            Log.LogInformation($"Saved character '{Name}' to database.");
         }
 
         public void Initialize()
         {
             using (var oPacket = new PacketWriter(ServerOperationCode.SetField))
             {
-                oPacket
-                    .WriteInt(Client.Server.ChannelID)
-                    .WriteByte(++Portals)
-                    .WriteBool(true)
-                    .WriteShort(); // NOTE: Floating messages at top corner.
+
+                oPacket.WriteInt(Client.Server.ChannelID);
+                oPacket.WriteByte(++Portals);
+                oPacket.WriteBool(true);
+                oPacket.WriteShort(0); // NOTE: Floating messages at top corner.
 
                 for (int i = 0; i < 3; i++)
                 {
@@ -935,12 +938,11 @@ namespace RazzleServer.Game.Maple.Characters
         {
             using (var oPacket = new PacketWriter(ServerOperationCode.AvatarModified))
             {
-                oPacket
-                    .WriteInt(ID)
-                    .WriteBool(true)
-                    .WriteBytes(AppearanceToByteArray())
-                    .WriteByte()
-                    .WriteShort();
+                oPacket.WriteInt(ID);
+                oPacket.WriteBool(true);
+                oPacket.WriteBytes(AppearanceToByteArray());
+                oPacket.WriteByte(0);
+                oPacket.WriteShort(0);
 
                 Map.Broadcast(oPacket, this);
             }
@@ -1053,22 +1055,19 @@ namespace RazzleServer.Game.Maple.Characters
 
             using (var oPacket = new PacketWriter(ServerOperationCode.SetField))
             {
-                oPacket
-                    .WriteInt(Client.Server.ChannelID)
-                    .WriteByte(++Portals)
-                    .WriteBool(false)
-                    .WriteShort()
-                    .WriteByte()
-                    .WriteInt(mapID)
-                    .WriteByte(SpawnPoint)
-                    .WriteShort(Health)
-                    .WriteBool(fromPosition);
+                oPacket.WriteInt(Client.Server.ChannelID);
+                oPacket.WriteByte(++Portals);
+                oPacket.WriteBool(false);
+                oPacket.WriteShort(0);
+                oPacket.WriteByte(0);
+                oPacket.WriteInt(mapID);
+                oPacket.WriteByte(SpawnPoint);
+                oPacket.WriteShort(Health);
+                oPacket.WriteBool(fromPosition);
 
                 if (fromPosition)
                 {
-                    oPacket
-                        .WriteShort(position.X)
-                        .WriteShort(position.Y);
+                    oPacket.WritePoint(position);
                 }
 
                 oPacket.WriteDateTime(DateTime.Now);
@@ -1160,9 +1159,9 @@ namespace RazzleServer.Game.Maple.Characters
 
             using (var oPacket = new PacketWriter(ServerOperationCode.Move))
             {
-                oPacket
-                    .WriteInt(ID)
-                    .WriteBytes(movements.ToByteArray());
+
+                oPacket.WriteInt(ID);
+                oPacket.WriteBytes(movements.ToByteArray());
 
                 Map.Broadcast(oPacket, this);
             }
@@ -1189,9 +1188,9 @@ namespace RazzleServer.Game.Maple.Characters
 
                 using (var oPacket = new PacketWriter(ServerOperationCode.SetActiveRemoteChair))
                 {
-                    oPacket
-                        .WriteInt(ID)
-                        .WriteInt();
+
+                    oPacket.WriteInt(ID);
+                    oPacket.WriteInt(0);
 
                     Map.Broadcast(oPacket, this);
                 }
@@ -1227,9 +1226,9 @@ namespace RazzleServer.Game.Maple.Characters
 
             using (var oPacket = new PacketWriter(ServerOperationCode.SetActiveRemoteChair))
             {
-                oPacket
-                    .WriteInt(ID)
-                    .WriteInt(mapleID);
+
+                oPacket.WriteInt(ID);
+                oPacket.WriteInt(mapleID);
 
                 Map.Broadcast(oPacket, this);
             }
@@ -1256,11 +1255,10 @@ namespace RazzleServer.Game.Maple.Characters
             // TODO: Modify packet based on attack type.
             using (var oPacket = new PacketWriter(ServerOperationCode.CloseRangeAttack))
             {
-                oPacket
-                    .WriteInt(ID)
-                    .WriteByte((byte)((attack.Targets * 0x10) + attack.Hits))
-                    .WriteByte() // NOTE: Unknown.
-                    .WriteByte((byte)(attack.SkillID != 0 ? skill.CurrentLevel : 0)); // NOTE: Skill level.
+                oPacket.WriteInt(ID);
+                oPacket.WriteByte((byte)((attack.Targets * 0x10) + attack.Hits));
+                oPacket.WriteByte(0); // NOTE: Unknown.
+                oPacket.WriteByte((byte)(attack.SkillID != 0 ? skill.CurrentLevel : 0)); // NOTE: Skill level.
 
                 if (attack.SkillID != 0)
                 {
@@ -1276,9 +1274,8 @@ namespace RazzleServer.Game.Maple.Characters
 
                 foreach (var target in attack.Damages)
                 {
-                    oPacket
-                        .WriteInt(target.Key)
-                        .WriteByte(6);
+                    oPacket.WriteInt(target.Key);
+                    oPacket.WriteByte(6);
 
                     foreach (uint hit in target.Value)
                     {
@@ -1425,36 +1422,32 @@ namespace RazzleServer.Game.Maple.Characters
 
             using (var oPacket = new PacketWriter(ServerOperationCode.Hit))
             {
-                oPacket
-                    .WriteInt(ID)
-                    .WriteSByte(type);
+                oPacket.WriteInt(ID);
+                oPacket.WriteByte(type);
 
                 switch (type)
                 {
                     case MapDamage:
                         {
-                            oPacket
-                                .WriteInt(damage)
-                                .WriteInt(damage);
+                            oPacket.WriteInt(damage);
+                            oPacket.WriteInt(damage);
                         }
                         break;
 
                     default:
                         {
-                            oPacket
-                                .WriteInt(damage) // TODO: ... or PGMR damage.
-                                .WriteInt(mobID)
-                                .WriteByte(hit)
-                                .WriteByte(reduction);
+                            oPacket.WriteInt(damage); // TODO: ... or PGMR damage.
+                            oPacket.WriteInt(mobID);
+                            oPacket.WriteByte(hit);
+                            oPacket.WriteByte(reduction);
 
                             if (reduction > 0)
                             {
                                 // TODO: PGMR stuff.
                             }
 
-                            oPacket
-                                .WriteByte(stance)
-                                .WriteInt(damage);
+                            oPacket.WriteByte(stance);
+                            oPacket.WriteInt(damage);
 
                             if (noDamageSkillID > 0)
                             {
@@ -1481,11 +1474,10 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 using (var oPacket = new PacketWriter(ServerOperationCode.UserChat))
                 {
-                    oPacket
-                        .WriteInt(ID)
-                        .WriteBool(IsMaster)
-                        .WriteString(text)
-                        .WriteBool(shout);
+                    oPacket.WriteInt(ID);
+                    oPacket.WriteBool(IsMaster);
+                    oPacket.WriteString(text);
+                    oPacket.WriteBool(shout);
 
                     Map.Broadcast(oPacket);
                 }
@@ -1505,9 +1497,8 @@ namespace RazzleServer.Game.Maple.Characters
 
             using (var oPacket = new PacketWriter(ServerOperationCode.Emotion))
             {
-                oPacket
-                    .WriteInt(ID)
-                    .WriteInt(expressionID);
+                oPacket.WriteInt(ID);
+                oPacket.WriteInt(expressionID);
 
                 Map.Broadcast(oPacket, this);
             }
@@ -1527,9 +1518,8 @@ namespace RazzleServer.Game.Maple.Characters
         {
             using (var oPacket = new PacketWriter(ServerOperationCode.RemoteEffect))
             {
-                oPacket
-                    .WriteInt(ID)
-                    .WriteByte(effect);
+                oPacket.WriteInt(ID);
+                oPacket.WriteByte((int)effect);
 
                 Map.Broadcast(oPacket, skipSelf ? this : null);
             }
@@ -1739,25 +1729,24 @@ namespace RazzleServer.Game.Maple.Characters
 
             using (var oPacket = new PacketWriter(ServerOperationCode.CharacterInformation))
             {
-                oPacket
-                    .WriteInt(target.ID)
-                    .WriteByte(target.Level)
-                    .WriteShort(target.Job)
-                    .WriteShort(target.Fame)
-                    .WriteBool(false) // NOTE: Marriage.
-                    .WriteString("-") // NOTE: Guild name.
-                    .WriteString("-") // NOTE: Alliance name.
-                    .WriteByte() // NOTE: Unknown.
-                    .WriteByte() // NOTE: Pets.
-                    .WriteByte() // NOTE: Mount.
-                    .WriteByte() // NOTE: Wishlist.
-                    .WriteInt() // NOTE: Monster Book level.
-                    .WriteInt() // NOTE: Monster Book normal cards. 
-                    .WriteInt() // NOTE: Monster Book special cards.
-                    .WriteInt() // NOTE: Monster Book total cards.
-                    .WriteInt() // NOTE: Monster Book cover.
-                    .WriteInt() // NOTE: Medal ID.
-                    .WriteShort(); // NOTE: Medal quests.
+                oPacket.WriteInt(target.ID);
+                oPacket.WriteByte(target.Level);
+                oPacket.WriteShort((int)target.Job);
+                oPacket.WriteShort(target.Fame);
+                oPacket.WriteBool(false); // NOTE: Marriage.
+                oPacket.WriteString("-"); // NOTE: Guild name.
+                oPacket.WriteString("-"); // NOTE: Alliance name.
+                oPacket.WriteByte(0); // NOTE: Unknown.
+                oPacket.WriteByte(0); // NOTE: Pets.
+                oPacket.WriteByte(0); // NOTE: Mount.
+                oPacket.WriteByte(0); // NOTE: Wishlist.
+                oPacket.WriteInt(0); // NOTE: Monster Book level.
+                oPacket.WriteInt(0); // NOTE: Monster Book normal cards. 
+                oPacket.WriteInt(0); // NOTE: Monster Book special cards.
+                oPacket.WriteInt(0); // NOTE: Monster Book total cards.
+                oPacket.WriteInt(0); // NOTE: Monster Book cover.
+                oPacket.WriteInt(0); // NOTE: Medal ID.
+                oPacket.WriteShort(0); // NOTE: Medal quests.
 
                 Client.Send(oPacket);
             }
@@ -1847,9 +1836,9 @@ namespace RazzleServer.Game.Maple.Characters
                             using (var oPacket = new PacketWriter(ServerOperationCode.Whisper))
                             {
                                 oPacket
-                                    .WriteByte(0x0A)
-                                    .WriteString(targetName)
-                                    .WriteBool(false);
+                                    oPacket.WriteByte(0x0A)
+                                    oPacket.WriteString(targetName)
+                                    oPacket.WriteBool(false);
 
                                 this.Client.Send(oPacket);
                             }
@@ -1861,12 +1850,12 @@ namespace RazzleServer.Game.Maple.Characters
                             using (var oPacket = new PacketWriter(ServerOperationCode.Whisper))
                             {
                                 oPacket
-                                    .WriteByte(0x09)
-                                    .WriteString(targetName)
-                                    .WriteByte((byte)(isInSameChannel ? 1 : 3))
-                                    .WriteInt(isInSameChannel ? target.Map.MapleID : target.Client.ChannelID)
-                                    .WriteInt() // NOTE: Unknown.
-                                    .WriteInt(); // NOTE: Unknown.
+                                    oPacket.WriteByte(0x09)
+                                    oPacket.WriteString(targetName)
+                                    oPacket.WriteByte((byte)(isInSameChannel ? 1 : 3))
+                                    oPacket.WriteInt(isInSameChannel ? target.Map.MapleID : target.Client.ChannelID)
+                                    oPacket.WriteInt() // NOTE: Unknown.
+                                    oPacket.WriteInt(); // NOTE: Unknown.
 
                                 this.Client.Send(oPacket);
                             }
@@ -1881,9 +1870,9 @@ namespace RazzleServer.Game.Maple.Characters
                         using (var oPacket = new PacketWriter(ServerOperationCode.Whisper))
                         {
                             oPacket
-                                .WriteByte(10)
-                                .WriteString(targetName)
-                                .WriteBool(target != null);
+                                oPacket.WriteByte(10)
+                                oPacket.WriteString(targetName)
+                                oPacket.WriteBool(target != null);
 
                             this.Client.Send(oPacket);
                         }
@@ -1893,11 +1882,11 @@ namespace RazzleServer.Game.Maple.Characters
                             using (var oPacket = new PacketWriter(ServerOperationCode.Whisper))
                             {
                                 oPacket
-                                    .WriteByte(18)
-                                    .WriteString(this.Name)
-                                    .WriteByte(this.Client.ChannelID)
-                                    .WriteByte() // NOTE: Unknown.
-                                    .WriteString(text);
+                                    oPacket.WriteByte(18)
+                                    oPacket.WriteString(this.Name)
+                                    oPacket.WriteByte(this.Client.ChannelID)
+                                    oPacket.WriteByte() // NOTE: Unknown.
+                                    oPacket.WriteString(text);
 
                                 target.Client.Send(oPacket);
                             }
@@ -2024,9 +2013,9 @@ namespace RazzleServer.Game.Maple.Characters
                         {
                             using (var oPacket = new PacketWriter(ServerOperationCode.AdminResult))
                             {
-                                oPacket
-                                    .WriteByte(6)
-                                    .WriteByte(1);
+
+                                oPacket.WriteByte(6);
+                                oPacket.WriteByte(1);
 
                                 Client.Send(oPacket);
                             }
@@ -2083,15 +2072,14 @@ namespace RazzleServer.Game.Maple.Characters
 
                         if (target != null)
                         {
-                            target.Client.Stop();
+                            target.Client.Terminate();
                         }
                         else
                         {
                             using (var oPacket = new PacketWriter(ServerOperationCode.AdminResult))
                             {
-                                oPacket
-                                    .WriteByte(6)
-                                    .WriteByte(1);
+                                oPacket.WriteByte(6);
+                                oPacket.WriteByte(1);
 
                                 Client.Send(oPacket);
                             }
@@ -2137,9 +2125,8 @@ namespace RazzleServer.Game.Maple.Characters
 
                         using (var oPacket = new PacketWriter(ServerOperationCode.AdminResult))
                         {
-                            oPacket
-                                .WriteByte(29)
-                                .WriteBool(target != null);
+                            oPacket.WriteByte(29);
+                            oPacket.WriteBool(target != null);
 
                             Client.Send(oPacket);
                         }
@@ -2183,7 +2170,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
             catch (Exception ex)
             {
-                Log.Error("Script error: {0}", ex.ToString());
+                Log.LogError($"Script error: {ex}");
             }
         }
 
@@ -2249,81 +2236,77 @@ namespace RazzleServer.Game.Maple.Characters
 
         public byte[] ToByteArray(bool viewAllCharacters = false)
         {
-            using (ByteBuffer oPacket = new ByteBuffer())
+            using (var oPacket = new PacketWriter())
             {
-                oPacket
-                    .WriteBytes(StatisticsToByteArray())
-                    .WriteBytes(AppearanceToByteArray());
+                oPacket.WriteBytes(StatisticsToByteArray());
+                oPacket.WriteBytes(AppearanceToByteArray());
 
                 if (!viewAllCharacters)
                 {
-                    oPacket.WriteByte(); // NOTE: Family
+                    oPacket.WriteByte(0); // NOTE: Family
                 }
 
                 oPacket.WriteBool(IsRanked);
 
                 if (IsRanked)
                 {
-                    oPacket
-                        .WriteInt()
-                        .WriteInt()
-                        .WriteInt()
-                        .WriteInt();
+                    oPacket.WriteInt(0);
+                    oPacket.WriteInt(0);
+                    oPacket.WriteInt(0);
+                    oPacket.WriteInt(0);
                 }
 
-                oPacket.Flip();
-                return oPacket.GetContent();
+                return oPacket.ToArray();
             }
         }
 
         public byte[] StatisticsToByteArray()
         {
-            using (ByteBuffer oPacket = new ByteBuffer())
+            using (var oPacket = new PacketWriter())
             {
-                oPacket
-                    .WriteInt(ID)
-                    .WriteStringFixed(Name, 13)
-                    .WriteByte(Gender)
-                    .WriteByte(Skin)
-                    .WriteInt(Face)
-                    .WriteInt(Hair)
-                    .WriteLong()
-                    .WriteLong()
-                    .WriteLong()
-                    .WriteByte(Level)
-                    .WriteShort(Job)
-                    .WriteShort(Strength)
-                    .WriteShort(Dexterity)
-                    .WriteShort(Intelligence)
-                    .WriteShort(Luck)
-                    .WriteShort(Health)
-                    .WriteShort(MaxHealth)
-                    .WriteShort(Mana)
-                    .WriteShort(MaxMana)
-                    .WriteShort(AbilityPoints)
-                    .WriteShort(SkillPoints)
-                    .WriteInt(Experience)
-                    .WriteShort(Fame)
-                    .WriteInt()
-                    .WriteInt(Map.MapleID)
-                    .WriteByte(SpawnPoint)
-                    .WriteInt();
 
-                oPacket.Flip();
-                return oPacket.GetContent();
+                oPacket.WriteInt(ID);
+                oPacket.WriteString(Name, 13);
+                oPacket.WriteByte((byte)Gender);
+                oPacket.WriteByte(Skin);
+                oPacket.WriteInt(Face);
+                oPacket.WriteInt(Hair);
+                oPacket.WriteLong(0);
+                oPacket.WriteLong(0);
+                oPacket.WriteLong(0);
+                oPacket.WriteByte(Level);
+                oPacket.WriteShort((short)Job);
+                oPacket.WriteShort(Strength);
+                oPacket.WriteShort(Dexterity);
+                oPacket.WriteShort(Intelligence);
+                oPacket.WriteShort(Luck);
+                oPacket.WriteShort(Health);
+                oPacket.WriteShort(MaxHealth);
+                oPacket.WriteShort(Mana);
+                oPacket.WriteShort(MaxMana);
+                oPacket.WriteShort(AbilityPoints);
+                oPacket.WriteShort(SkillPoints);
+                oPacket.WriteInt(Experience);
+                oPacket.WriteShort(Fame);
+                oPacket.WriteInt(0);
+                oPacket.WriteInt(Map.MapleID);
+                oPacket.WriteByte(SpawnPoint);
+                oPacket.WriteInt(0);
+
+                return oPacket.ToArray();
             }
         }
 
         public byte[] AppearanceToByteArray()
         {
-            using (ByteBuffer oPacket = new ByteBuffer())
+            using (var oPacket = new PacketWriter())
             {
-                oPacket
-                    .WriteByte(Gender)
-                    .WriteByte(Skin)
-                    .WriteInt(Face)
-                    .WriteBool(true)
-                    .WriteInt(Hair);
+
+                oPacket.WriteByte((int)Gender);
+                oPacket.WriteByte(Skin);
+                oPacket.WriteInt(Face);
+                oPacket.WriteBool(true);
+                oPacket.WriteInt(Hair);
 
                 Dictionary<byte, int> visibleLayer = new Dictionary<byte, int>();
                 Dictionary<byte, int> hiddenLayer = new Dictionary<byte, int>();
@@ -2355,18 +2338,18 @@ namespace RazzleServer.Game.Maple.Characters
 
                 foreach (KeyValuePair<byte, int> entry in visibleLayer)
                 {
-                    oPacket
-                        .WriteByte(entry.Key)
-                        .WriteInt(entry.Value);
+
+                    oPacket.WriteByte(entry.Key);
+                    oPacket.WriteInt(entry.Value);
                 }
 
                 oPacket.WriteByte(byte.MaxValue);
 
                 foreach (KeyValuePair<byte, int> entry in hiddenLayer)
                 {
-                    oPacket
-                        .WriteByte(entry.Key)
-                        .WriteInt(entry.Value);
+
+                    oPacket.WriteByte(entry.Key);
+                    oPacket.WriteInt(entry.Value);
                 }
 
                 oPacket.WriteByte(byte.MaxValue);
@@ -2375,13 +2358,12 @@ namespace RazzleServer.Game.Maple.Characters
 
                 oPacket.WriteInt(cashWeapon != null ? cashWeapon.MapleID : 0);
 
-                oPacket
-                    .WriteInt()
-                    .WriteInt()
-                    .WriteInt();
 
-                oPacket.Flip();
-                return oPacket.GetContent();
+                oPacket.WriteInt(0);
+                oPacket.WriteInt(0);
+                oPacket.WriteInt(0);
+
+                return oPacket.ToArray();
             }
         }
 
@@ -2446,15 +2428,15 @@ namespace RazzleServer.Game.Maple.Characters
 
             if (PlayerShop != null && PlayerShop.Owner == this)
             {
-                oPacket
-                    .WriteByte(4)
-                    .WriteInt(PlayerShop.ObjectID)
-                    .WriteString(PlayerShop.Description)
-                    .WriteByte()
-                    .WriteByte()
-                    .WriteByte(1)
-                    .WriteByte((byte)(PlayerShop.IsFull ? 1 : 2)) // NOTE: Visitor availability.
-                    .WriteByte();
+
+                oPacket.WriteByte(4);
+                oPacket.WriteInt(PlayerShop.ObjectID);
+                oPacket.WriteString(PlayerShop.Description);
+                oPacket.WriteByte(0);
+                oPacket.WriteByte(0);
+                oPacket.WriteByte(1);
+                oPacket.WriteByte((byte)(PlayerShop.IsFull ? 1 : 2)); // NOTE: Visitor availability.
+                oPacket.WriteByte(0);
             }
             else
             {

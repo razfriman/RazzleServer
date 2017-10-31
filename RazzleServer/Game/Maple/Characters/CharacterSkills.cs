@@ -80,7 +80,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public byte[] ToByteArray()
         {
-            using (ByteBuffer oPacket = new ByteBuffer())
+            using (var oPacket = new PacketWriter())
             {
                 oPacket.WriteShort((short)this.Count);
 
@@ -100,13 +100,12 @@ namespace RazzleServer.Game.Maple.Characters
 
                 foreach (Skill loopCooldown in cooldownSkills)
                 {
-                    oPacket
-                        .WriteInt(loopCooldown.MapleID)
-                        .WriteShort((short)loopCooldown.RemainingCooldownSeconds);
+
+                    oPacket.WriteInt(loopCooldown.MapleID);
+                    oPacket.WriteShort((short)loopCooldown.RemainingCooldownSeconds);
                 }
 
-                oPacket.Flip();
-                return oPacket.GetContent();
+                return oPacket.ToArray();
             }
         }
 

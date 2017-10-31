@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using Microsoft.Extensions.Logging;
+using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Commands;
 
 namespace RazzleServer.Game.Maple.Data
@@ -16,71 +18,69 @@ namespace RazzleServer.Game.Maple.Data
         public static CreationData CreationData { get; private set; }
         public static CachedMaps Maps { get; private set; }
 
+        private static readonly ILogger Log = LogManager.Log;
+
+
         public static void Initialize()
         {
-            using (Database.TemporarySchema(Database.SchemaMCDB))
+            IsInitialized = false;
+
+            if (Styles != null)
             {
-                DataProvider.IsInitialized = false;
-
-                if (DataProvider.Styles != null)
-                {
-                    DataProvider.Styles.Skins.Clear();
-                    DataProvider.Styles.MaleHairs.Clear();
-                    DataProvider.Styles.MaleFaces.Clear();
-                    DataProvider.Styles.FemaleHairs.Clear();
-                    DataProvider.Styles.FemaleFaces.Clear();
-                }
-
-                if (DataProvider.Items != null)
-                {
-                    DataProvider.Items.Clear();
-                }
-
-                if (DataProvider.Skills != null)
-                {
-                    DataProvider.Skills.Clear();
-                }
-
-                if (DataProvider.Mobs != null)
-                {
-                    DataProvider.Mobs.Clear();
-                }
-
-                if (DataProvider.Maps != null)
-                {
-                    DataProvider.Maps.Clear();
-                }
-
-                if (DataProvider.Quests != null)
-                {
-                    DataProvider.Quests.Clear();
-                }
-
-                Database.Test();
-
-                Stopwatch sw = new Stopwatch();
-
-                sw.Start();
-
-                Log.Inform("Loading data...");
-
-                DataProvider.Styles = new AvailableStyles();
-                DataProvider.Items = new CachedItems();
-                DataProvider.Skills = new CachedSkills();
-                DataProvider.Mobs = new CachedMobs();
-                DataProvider.Reactors = new CachedReactors();
-                DataProvider.Quests = new CachedQuests();
-                DataProvider.CreationData = new CreationData();
-                DataProvider.Maps = new CachedMaps();
-
-                CommandFactory.Initialize();
-
-                sw.Stop();
-
-                Log.Success("Maple data loaded in {0}ms.", sw.ElapsedMilliseconds);
-
-                DataProvider.IsInitialized = true;
+                Styles.Skins.Clear();
+                Styles.MaleHairs.Clear();
+                Styles.MaleFaces.Clear();
+                Styles.FemaleHairs.Clear();
+                Styles.FemaleFaces.Clear();
             }
+
+            if (Items != null)
+            {
+                Items.Clear();
+            }
+
+            if (Skills != null)
+            {
+                Skills.Clear();
+            }
+
+            if (Mobs != null)
+            {
+                Mobs.Clear();
+            }
+
+            if (Maps != null)
+            {
+                Maps.Clear();
+            }
+
+            if (Quests != null)
+            {
+                Quests.Clear();
+            }
+
+            var sw = new Stopwatch();
+
+            sw.Start();
+
+            Log.LogInformation("Loading data...");
+
+            Styles = new AvailableStyles();
+            Items = new CachedItems();
+            Skills = new CachedSkills();
+            Mobs = new CachedMobs();
+            Reactors = new CachedReactors();
+            Quests = new CachedQuests();
+            CreationData = new CreationData();
+            Maps = new CachedMaps();
+
+            CommandFactory.Initialize();
+
+            sw.Stop();
+
+            Log.LogInformation("Maple data loaded in {0}ms.", sw.ElapsedMilliseconds);
+
+            IsInitialized = true;
         }
     }
 }

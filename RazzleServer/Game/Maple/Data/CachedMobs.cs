@@ -2,15 +2,19 @@
 using System.Collections.Generic;
 using RazzleServer.Game.Maple.Life;
 using RazzleServer.Common.Data;
+using Microsoft.Extensions.Logging;
+using RazzleServer.Common.Util;
 
 namespace RazzleServer.Game.Maple.Data
 {
     public sealed class CachedMobs : KeyedCollection<int, Mob>
     {
+        private static readonly ILogger Log = LogManager.Log;
+
         public CachedMobs()
             : base()
         {
-            using (Log.Load("Mobs"))
+            Log.LogInformation("Loading Mobs");
             {
                 foreach (Datum datum in new Datums("mob_data").Populate())
                 {
@@ -60,7 +64,7 @@ namespace RazzleServer.Game.Maple.Data
                 }
             }
 
-            using (Log.Load("Loots"))
+            Log.LogInformation("Loading Loots");
             {
                 foreach (Datum datum in new Datums("drop_data").Populate())
                 {

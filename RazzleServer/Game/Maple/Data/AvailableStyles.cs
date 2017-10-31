@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Data;
+using RazzleServer.Common.Util;
 
 namespace RazzleServer.Game.Maple.Data
 {
@@ -11,6 +13,8 @@ namespace RazzleServer.Game.Maple.Data
         public List<int> MaleFaces { get; private set; }
         public List<int> FemaleFaces { get; private set; }
 
+        private static readonly ILogger Log = LogManager.Log;
+
         public AvailableStyles()
         {
             this.Skins = new List<byte>();
@@ -19,39 +23,37 @@ namespace RazzleServer.Game.Maple.Data
             this.MaleFaces = new List<int>();
             this.FemaleFaces = new List<int>();
 
-            using (Log.Load("Styles"))
+            Log.LogInformation("Loading Styles");
+            foreach (Datum datum in new Datums("character_skin_data", Database.SchemaMCDB).Populate())
             {
-                foreach (Datum datum in new Datums("character_skin_data", Database.SchemaMCDB).Populate())
+                this.Skins.Add((byte)(sbyte)datum["skinid"]);
+            }
+
+            foreach (Datum datum in new Datums("character_hair_data", Database.SchemaMCDB).Populate())
+            {
+                switch ((string)datum["gender"])
                 {
-                    this.Skins.Add((byte)(sbyte)datum["skinid"]);
+                    case "male":
+                        this.MaleHairs.Add((int)datum["hairid"]);
+                        break;
+
+                    case "female":
+                        this.FemaleHairs.Add((int)datum["hairid"]);
+                        break;
                 }
+            }
 
-                foreach (Datum datum in new Datums("character_hair_data", Database.SchemaMCDB).Populate())
+            foreach (Datum datum in new Datums("character_face_data", Database.SchemaMCDB).Populate())
+            {
+                switch ((string)datum["gender"])
                 {
-                    switch ((string)datum["gender"])
-                    {
-                        case "male":
-                            this.MaleHairs.Add((int)datum["hairid"]);
-                            break;
+                    case "male":
+                        this.MaleFaces.Add((int)datum["faceid"]);
+                        break;
 
-                        case "female":
-                            this.FemaleHairs.Add((int)datum["hairid"]);
-                            break;
-                    }
-                }
-
-                foreach (Datum datum in new Datums("character_face_data", Database.SchemaMCDB).Populate())
-                {
-                    switch ((string)datum["gender"])
-                    {
-                        case "male":
-                            this.MaleFaces.Add((int)datum["faceid"]);
-                            break;
-
-                        case "female":
-                            this.FemaleFaces.Add((int)datum["faceid"]);
-                            break;
-                    }
+                    case "female":
+                        this.FemaleFaces.Add((int)datum["faceid"]);
+                        break;
                 }
             }
         }

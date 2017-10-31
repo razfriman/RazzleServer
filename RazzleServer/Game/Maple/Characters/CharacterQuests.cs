@@ -156,7 +156,7 @@ namespace RazzleServer.Game.Maple.Characters
                     {
                         npcId = iPacket.ReadInt();
                         iPacket.ReadInt(); // NOTE: Unknown
-                        int selection = iPacket.Remaining >= 4 ? iPacket.ReadInt() : 0;
+                        int selection = iPacket.Available >= 4 ? iPacket.ReadInt() : 0;
 
                         this.Complete(quest, selection);
                     }
@@ -207,7 +207,7 @@ namespace RazzleServer.Game.Maple.Characters
 
             this.Parent.Experience += quest.ExperienceReward[0];
             this.Parent.Fame += (short)quest.FameReward[0];
-            this.Parent.Meso += quest.MesoReward[0] * Parent.Client.Server.MesoRate;
+            this.Parent.Meso += quest.MesoReward[0] * Parent.Client.Server.World.MesoRate;
 
             // TODO: Skill and pet rewards.
 
@@ -227,11 +227,10 @@ namespace RazzleServer.Game.Maple.Characters
 
             using (var oPacket = new PacketWriter(ServerOperationCode.QuestResult))
             {
-                oPacket
-                    .WriteByte((byte)QuestResult.Complete)
-                    .WriteUShort(quest.MapleID)
-                    .WriteInt(npcID)
-                    .WriteInt();
+                oPacket.WriteByte((byte)QuestResult.Complete);
+                oPacket.WriteUShort(quest.MapleID);
+                oPacket.WriteInt(npcID);
+                oPacket.WriteInt(0);
 
                 this.Parent.Client.Send(oPacket);
             }
@@ -248,20 +247,19 @@ namespace RazzleServer.Game.Maple.Characters
 
             using (var oPacket = new PacketWriter(ServerOperationCode.Message))
             {
-                oPacket
-                    .WriteByte((byte)MessageType.IncreaseEXP)
-                    .WriteBool(true)
-                    .WriteInt(quest.ExperienceReward[1])
-                    .WriteBool(true)
-                    .WriteInt() // NOTE: Monster Book bonus.
-                    .WriteShort() // NOTE: Unknown.
-                    .WriteInt() // NOTE: Wedding bonus.
-                    .WriteByte() // NOTE: Party bonus.
-                    .WriteInt() // NOTE: Party bonus.
-                    .WriteInt() // NOTE: Equip bonus.
-                    .WriteInt() // NOTE: Internet Cafe bonus.
-                    .WriteInt() // NOTE: Rainbow Week bonus.
-                    .WriteByte(); // NOTE: Unknown.
+                oPacket.WriteByte((byte)MessageType.IncreaseEXP);
+                oPacket.WriteBool(true);
+                oPacket.WriteInt(quest.ExperienceReward[1]);
+                oPacket.WriteBool(true);
+                oPacket.WriteInt(0); // NOTE: Monster Book bonus.
+                oPacket.WriteShort(0); // NOTE: Unknown.
+                oPacket.WriteInt(0); // NOTE: Wedding bonus.
+                oPacket.WriteByte(0); // NOTE: Party bonus.
+                oPacket.WriteInt(0); // NOTE: Party bonus.
+                oPacket.WriteInt(0); // NOTE: Equip bonus.
+                oPacket.WriteInt(0); // NOTE: Internet Cafe bonus.
+                oPacket.WriteInt(0); // NOTE: Rainbow Week bonus.
+                oPacket.WriteByte(0); // NOTE: Unknown.
 
                 this.Parent.Client.Send(oPacket);
             }
@@ -270,7 +268,7 @@ namespace RazzleServer.Game.Maple.Characters
 
             // TODO: Fame gain packet in chat.
 
-            this.Parent.Meso += quest.MesoReward[1] * Parent.Client.Server.MesoRate;
+            this.Parent.Meso += quest.MesoReward[1] * Parent.Client.Server.World.MesoRate;
 
             // TODO: Meso gain packet in chat.
 
@@ -297,10 +295,10 @@ namespace RazzleServer.Game.Maple.Characters
                 //    using (var oPacket = new PacketWriter(ServerOperationCode.Effect))
                 //    {
                 //        oPacket
-                //            .WriteByte((byte)UserEffect.Quest)
-                //            .WriteByte(1)
-                //            .WriteInt(item.Key)
-                //            .WriteInt(item.Value);
+                //            oPacket.WriteByte((byte)UserEffect.Quest)
+                //            oPacket.WriteByte(1)
+                //            oPacket.WriteInt(item.Key)
+                //            oPacket.WriteInt(item.Value);
 
                 //        this.Parent.Client.Send(oPacket);
                 //    }
@@ -325,11 +323,10 @@ namespace RazzleServer.Game.Maple.Characters
 
                     using (var oPacket = new PacketWriter(ServerOperationCode.Effect))
                     {
-                        oPacket
-                            .WriteByte((byte)UserEffect.Quest)
-                            .WriteByte(1)
-                            .WriteInt(item.Key)
-                            .WriteInt(item.Value);
+                        oPacket.WriteByte((byte)UserEffect.Quest);
+                        oPacket.WriteByte(1);
+                        oPacket.WriteInt(item.Key);
+                        oPacket.WriteInt(item.Value);
 
                         this.Parent.Client.Send(oPacket);
                     }
@@ -357,10 +354,9 @@ namespace RazzleServer.Game.Maple.Characters
         {
             using (var oPacket = new PacketWriter(ServerOperationCode.Message))
             {
-                oPacket
-                    .WriteByte((byte)MessageType.QuestRecord)
-                    .WriteUShort(questID)
-                    .WriteByte((byte)status);
+                oPacket.WriteByte((byte)MessageType.QuestRecord);
+                oPacket.WriteUShort(questID);
+                oPacket.WriteByte((byte)status);
 
                 if (status == QuestStatus.InProgress)
                 {
@@ -428,7 +424,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public byte[] ToByteArray()
         {
-            using (ByteBuffer oPacket = new ByteBuffer())
+            using (var oPacket = new PacketWriter())
             {
                 oPacket.WriteShort((short)this.Started.Count);
 
@@ -450,13 +446,11 @@ namespace RazzleServer.Game.Maple.Characters
 
                 foreach (KeyValuePair<ushort, DateTime> quest in this.Completed)
                 {
-                    oPacket
-                        .WriteUShort(quest.Key)
-                        .WriteDateTime(quest.Value);
+                    oPacket.WriteUShort(quest.Key);
+                        oPacket.WriteDateTime(quest.Value);
                 }
 
-                oPacket.Flip();
-                return oPacket.GetContent();
+                return oPacket.ToArray();
             }
         }
     }

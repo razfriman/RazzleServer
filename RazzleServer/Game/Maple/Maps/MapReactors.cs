@@ -32,10 +32,7 @@ namespace RazzleServer.Game.Maple.Maps
 
                 if (DataProvider.IsInitialized)
                 {
-                    using (PacketReader oPacket = item.GetDestroyPacket())
-                    {
-                        this.Map.Broadcast(oPacket);
-                    }
+                    this.Map.Broadcast(item.GetDestroyPacket());
                 }
 
                 base.RemoveItem(index);

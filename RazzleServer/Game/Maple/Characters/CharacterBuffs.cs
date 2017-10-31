@@ -152,14 +152,14 @@ namespace RazzleServer.Game.Maple.Characters
         // For now, we use the default mask until we learn more about how buffs work.
         public byte[] ToByteArray()
         {
-            using (ByteBuffer oPacket = new ByteBuffer())
+            using (var oPacket = new PacketWriter())
             {
-                oPacket
-                    .WriteInt()
-                    .WriteShort()
-                    .WriteByte(0xFC)
-                    .WriteByte(1)
-                    .WriteInt();
+
+                oPacket.WriteInt(0);
+                oPacket.WriteShort(0);
+                oPacket.WriteByte(0xFC);
+                oPacket.WriteByte(1);
+                oPacket.WriteInt(0);
 
                 long mask = 0;
                 int value = 0;
@@ -196,30 +196,29 @@ namespace RazzleServer.Game.Maple.Characters
 
                 int magic = Functions.Random();
 
-                oPacket
-                    .Skip(6)
-                    .WriteInt(magic)
-                    .Skip(11)
-                    .WriteInt(magic)
-                    .Skip(11)
-                    .WriteInt(magic)
-                    .WriteShort()
-                    .WriteByte()
-                    .WriteLong()
-                    .WriteInt(magic)
-                    .Skip(9)
-                    .WriteInt(magic)
-                    .WriteShort()
-                    .WriteInt()
-                    .Skip(10)
-                    .WriteInt(magic)
-                    .Skip(13)
-                    .WriteInt(magic)
-                    .WriteShort()
-                    .WriteByte();
 
-                oPacket.Flip();
-                return oPacket.GetContent();
+                oPacket.WriteZeroBytes(6);
+                oPacket.WriteInt(magic);
+                oPacket.WriteZeroBytes(11);
+                oPacket.WriteInt(magic);
+                oPacket.WriteZeroBytes(11);
+                oPacket.WriteInt(magic);
+                oPacket.WriteShort(0);
+                oPacket.WriteByte(0);
+                oPacket.WriteLong(0);
+                oPacket.WriteInt(magic);
+                oPacket.WriteZeroBytes(9);
+                oPacket.WriteInt(magic);
+                oPacket.WriteShort(0);
+                oPacket.WriteInt(0);
+                oPacket.WriteZeroBytes(10);
+                oPacket.WriteInt(magic);
+                oPacket.WriteZeroBytes(13);
+                oPacket.WriteInt(magic);
+                oPacket.WriteShort(0);
+                oPacket.WriteByte(0);
+
+                return oPacket.ToArray();
             }
         }
     }

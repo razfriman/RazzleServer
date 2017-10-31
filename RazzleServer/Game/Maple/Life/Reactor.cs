@@ -65,14 +65,12 @@ namespace RazzleServer.Game.Maple.Life
                         {
                             using (var oPacket = new PacketWriter(ServerOperationCode.ReactorChangeState))
                             {
-                                oPacket
-                                    .WriteInt(this.ObjectID)
-                                    .WriteByte(this.State)
-                                    .WriteShort(this.Position.X)
-                                    .WriteShort(this.Position.Y)
-                                    .WriteShort(actionDelay)
-                                    .WriteByte() // NOTE: Event index.
-                                    .WriteByte(4); // NOTE: Delay.
+                                oPacket.WriteInt(this.ObjectID);
+                                oPacket.WriteByte(this.State);
+                                oPacket.WritePoint(this.Position);
+                                oPacket.WriteShort(actionDelay);
+                                oPacket.WriteByte(0); // NOTE: Event index.
+                                oPacket.WriteByte(4); // NOTE: Delay.
 
                                 this.Map.Broadcast(oPacket);
                             }
@@ -91,15 +89,14 @@ namespace RazzleServer.Game.Maple.Life
         {
             var oPacket = new PacketWriter(ServerOperationCode.ReactorEnterField);
 
-            oPacket
-                .WriteInt(this.ObjectID)
-                .WriteInt(this.MapleID)
-                .WriteByte(this.State)
-                .WriteShort(this.Position.X)
-                .WriteShort(this.Position.Y)
-                .WriteShort() // NOTE: Flags (not sure).
-                .WriteBool(false) // NOTE: Unknown
-                .WriteString(this.Label);
+
+            oPacket.WriteInt(this.ObjectID);
+            oPacket.WriteInt(this.MapleID);
+            oPacket.WriteByte(this.State);
+            oPacket.WritePoint(this.Position);
+            oPacket.WriteShort(0); // NOTE: Flags (not sure).
+            oPacket.WriteBool(false); // NOTE: Unknown
+            oPacket.WriteString(this.Label);
 
             return oPacket;
         }
@@ -108,11 +105,10 @@ namespace RazzleServer.Game.Maple.Life
         {
             var oPacket = new PacketWriter(ServerOperationCode.ReactorLeaveField);
 
-            oPacket
-                .WriteInt(this.ObjectID)
-                .WriteByte(this.State)
-                .WriteShort(this.Position.X)
-                .WriteShort(this.Position.Y);
+
+            oPacket.WriteInt(this.ObjectID);
+            oPacket.WriteByte(this.State);
+            oPacket.WritePoint(this.Position);
 
             return oPacket;
         }

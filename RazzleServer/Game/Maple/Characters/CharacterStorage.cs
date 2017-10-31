@@ -80,16 +80,15 @@ namespace RazzleServer.Game.Maple.Characters
 
             using (var oPacket = new PacketWriter(ServerOperationCode.Storage))
             {
-                oPacket
-                    .WriteByte(22)
-                    .WriteInt(npc.MapleID)
-                    .WriteByte(this.Slots)
-                    .WriteShort(126)
-                    .WriteShort()
-                    .WriteInt()
-                    .WriteInt(this.Meso)
-                    .WriteShort()
-                    .WriteByte((byte)this.Items.Count);
+                oPacket.WriteByte(22);
+                oPacket.WriteInt(npc.MapleID);
+                oPacket.WriteByte(this.Slots);
+                oPacket.WriteShort(126);
+                oPacket.WriteShort(0);
+                oPacket.WriteInt(0);
+                oPacket.WriteInt(this.Meso);
+                oPacket.WriteShort(0);
+                oPacket.WriteByte((byte)this.Items.Count);
 
                 foreach (Item item in this.Items)
                 {
@@ -140,13 +139,13 @@ namespace RazzleServer.Game.Maple.Characters
 
                         using (var oPacket = new PacketWriter(ServerOperationCode.Storage))
                         {
-                            oPacket
-                                .WriteByte(13)
-                                .WriteByte(this.Slots)
-                                .WriteShort((short)(2 << (byte)item.Type))
-                                .WriteShort()
-                                .WriteInt()
-                                .WriteByte((byte)itemsByType.Count);
+
+                            oPacket.WriteByte(13);
+                            oPacket.WriteByte(this.Slots);
+                            oPacket.WriteShort((short)(2 << (byte)item.Type));
+                            oPacket.WriteShort(0);
+                            oPacket.WriteInt(0);
+                            oPacket.WriteByte((byte)itemsByType.Count);
 
                             foreach (Item loopItem in itemsByType)
                             {
@@ -207,13 +206,13 @@ namespace RazzleServer.Game.Maple.Characters
 
                         using (var oPacket = new PacketWriter(ServerOperationCode.Storage))
                         {
-                            oPacket
-                                .WriteByte(13)
-                                .WriteByte(this.Slots)
-                                .WriteShort((short)(2 << (byte)item.Type))
-                                .WriteShort()
-                                .WriteInt()
-                                .WriteByte((byte)itemsByType.Count);
+
+                            oPacket.WriteByte(13);
+                            oPacket.WriteByte(this.Slots);
+                            oPacket.WriteShort((short)(2 << (byte)item.Type));
+                            oPacket.WriteShort(0);
+                            oPacket.WriteInt(0);
+                            oPacket.WriteByte((byte)itemsByType.Count);
 
                             foreach (Item loopItem in itemsByType)
                             {
@@ -243,13 +242,13 @@ namespace RazzleServer.Game.Maple.Characters
 
                         using (var oPacket = new PacketWriter(ServerOperationCode.Storage))
                         {
-                            oPacket
-                                .WriteByte(19)
-                                .WriteByte(this.Slots)
-                                .WriteShort(2)
-                                .WriteShort()
-                                .WriteInt()
-                                .WriteInt(this.Meso);
+
+                            oPacket.WriteByte(19);
+                            oPacket.WriteByte(this.Slots);
+                            oPacket.WriteShort(2);
+                            oPacket.WriteShort(0);
+                            oPacket.WriteInt(0);
+                            oPacket.WriteInt(this.Meso);
 
                             this.Parent.Client.Send(oPacket);
                         }

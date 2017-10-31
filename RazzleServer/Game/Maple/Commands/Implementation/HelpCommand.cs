@@ -1,4 +1,5 @@
 ﻿using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Server;
 
 namespace RazzleServer.Game.Maple.Commands.Implementation
 {
@@ -42,7 +43,7 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
                 {
                     if ((command.IsRestricted && caller.IsMaster) || !command.IsRestricted && !(command is HelpCommand))
                     {
-                        caller.Notify(string.Format("    !{0} {1}", command.Name, command.Parameters.ClearFormatters()));
+                        caller.Notify($"{ServerConfig.Instance.CommandIndicator} {command.Name} {command.Parameters}");
                     }
                 }
             }

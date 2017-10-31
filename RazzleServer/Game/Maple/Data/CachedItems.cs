@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Data;
+using RazzleServer.Common.Util;
 
 namespace RazzleServer.Game.Maple.Data
 {
@@ -9,52 +11,43 @@ namespace RazzleServer.Game.Maple.Data
     {
         public List<int> WizetItemIDs { get; private set; }
 
+        private static readonly ILogger Log = LogManager.Log;
+
         public CachedItems()
-            : base()
         {
-            using (Log.Load("Items"))
+            Log.LogInformation("Loading Items");
+            foreach (Datum datum in new Datums("item_data").Populate())
             {
-                foreach (Datum datum in new Datums("item_data").Populate())
-                {
-                    this.Add(new Item(datum));
-                }
+                Add(new Item(datum));
             }
 
-            using (Log.Load("Consumables"))
+            Log.LogInformation("Loading Consumables");
+            foreach (Datum datum in new Datums("item_consume_data").Populate())
             {
-                foreach (Datum datum in new Datums("item_consume_data").Populate())
-                {
-                    this[(int)datum["itemid"]].LoadConsumeData(datum);
-                }
+                this[(int)datum["itemid"]].LoadConsumeData(datum);
             }
 
-            using (Log.Load("Equips"))
+            Log.LogInformation("Loading Equips");
+            foreach (Datum datum in new Datums("item_equip_data").Populate())
             {
-                foreach (Datum datum in new Datums("item_equip_data").Populate())
-                {
-                    this[(int)datum["itemid"]].LoadEquipmentData(datum);
-                }
+                this[(int)datum["itemid"]].LoadEquipmentData(datum);
             }
 
-            using (Log.Load("Summons"))
+            Log.LogInformation("Loading Summons");
+            foreach (Datum datum in new Datums("item_summons").Populate())
             {
-                foreach (Datum datum in new Datums("item_summons").Populate())
-                {
-                    this[(int)datum["itemid"]].Summons.Add(new Tuple<int, short>((int)datum["mobid"], (short)datum["chance"]));
-                }
+                this[(int)datum["itemid"]].Summons.Add(new Tuple<int, short>((int)datum["mobid"], (short)datum["chance"]));
             }
 
-            this.WizetItemIDs = new List<int>(4);
-
-            this.WizetItemIDs.Add(1002140);
-            this.WizetItemIDs.Add(1322013);
-            this.WizetItemIDs.Add(1042003);
-            this.WizetItemIDs.Add(1062007);
+            WizetItemIDs = new List<int>(4)
+            {
+                1002140,
+                1322013,
+                1042003,
+                1062007
+            };
         }
 
-        protected override int GetKeyForItem(Item item)
-        {
-            return item.MapleID;
-        }
+        protected override int GetKeyForItem(Item item) => item.MapleID;
     }
 }

@@ -5,7 +5,7 @@ using RazzleServer.Game.Maple.Life;
 
 namespace RazzleServer.Game.Maple.Scripting
 {
-    public sealed class NpcScript : ScriptBase
+    public class NpcScript : ScriptBase
     {
         private Npc Npc;
         private string Text;
