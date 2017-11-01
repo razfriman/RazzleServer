@@ -185,6 +185,8 @@ namespace RazzleServer.Common.MapleCryptoLib
         {
             if (!RecvCipher.Handshaken)
             {
+                Log.LogError("READING HANDSHAKE");
+
                 RecvCipher.Handshake(ref data);
                 var pr = new PacketReader(data);
                 var version = pr.ReadShort();

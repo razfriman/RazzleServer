@@ -44,7 +44,6 @@ namespace RazzleServer.Common.Network
 
             Crypto = new MapleCipherProvider(currentGameVersion, aesKey);
             Crypto.PacketFinished += (data) => _client.Receive(new PacketReader(data));
-
 			WaitForData();
 		}
 		private void WaitForData()
@@ -92,7 +91,7 @@ namespace RazzleServer.Common.Network
 
 		public void SendRawPacket(byte[] final)
 		{
-			if (!disposed)
+            if (!disposed)
 			{
 				int offset = 0;
 

@@ -6,8 +6,6 @@ using RazzleServer.Login.Maple;
 using RazzleServer.Common.Util;
 using System.Net.Sockets;
 using Microsoft.Extensions.Logging;
-using System.Net;
-using RazzleServer.Server;
 
 namespace RazzleServer.Login
 {
@@ -86,7 +84,7 @@ namespace RazzleServer.Login
             }
             else
             {
-                Log.LogError($"Unable to register as Channel Server: {response}");
+                Log.LogError($"Unable to register as Login Server: {response}");
                 Server.ShutDown();
             }
         }

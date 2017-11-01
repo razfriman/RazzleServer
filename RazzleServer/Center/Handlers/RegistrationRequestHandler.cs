@@ -15,15 +15,14 @@ namespace RazzleServer.Center.Handlers
         public override void HandlePacket(PacketReader packet, CenterClient client)
         {
             var type = (ServerType)packet.ReadByte();
-            string securityCode = packet.ReadString();
 
             bool valid = true;
 
-            using (var Packet = new PacketWriter(InteroperabilityOperationCode.RegistrationResponse))
+            using (var oPacket = new PacketWriter(InteroperabilityOperationCode.RegistrationResponse))
             {
                 if (!Enum.IsDefined(typeof(ServerType), type))
                 {
-                    Packet.WriteByte((byte)ServerRegistrationResponse.InvalidType);
+                    oPacket.WriteByte((byte)ServerRegistrationResponse.InvalidType);
                     valid = false;
                 }
                 else
@@ -34,13 +33,13 @@ namespace RazzleServer.Center.Handlers
                             {
                                 if (client.Server.Login != null)
                                 {
-                                    Packet.WriteByte((byte)ServerRegistrationResponse.Full);
+                                    oPacket.WriteByte((byte)ServerRegistrationResponse.Full);
 
                                     valid = false;
                                 }
                                 else
                                 {
-                                    Packet.WriteByte((byte)ServerRegistrationResponse.Valid);
+                                    oPacket.WriteByte((byte)ServerRegistrationResponse.Valid);
 
                                     client.Server.Login = client;
                                 }
@@ -54,7 +53,7 @@ namespace RazzleServer.Center.Handlers
 
                                 if (world == null)
                                 {
-                                    Packet.WriteByte((byte)ServerRegistrationResponse.Full);
+                                    oPacket.WriteByte((byte)ServerRegistrationResponse.Full);
 
                                     valid = false;
                                 }
@@ -73,26 +72,26 @@ namespace RazzleServer.Center.Handlers
                                             break;
                                     }
 
-                                    Packet.WriteByte((byte)ServerRegistrationResponse.Valid);
-                                    Packet.WriteByte(client.World.ID);
-                                    Packet.WriteString(client.World.Name);
+                                    oPacket.WriteByte((byte)ServerRegistrationResponse.Valid);
+                                    oPacket.WriteByte(client.World.ID);
+                                    oPacket.WriteString(client.World.Name);
 
                                     if (type == ServerType.Channel)
                                     {
-                                        Packet.WriteString(client.World.TickerMessage);
-                                        Packet.WriteByte(client.ID);
+                                        oPacket.WriteString(client.World.TickerMessage);
+                                        oPacket.WriteByte(client.ID);
                                     }
 
-                                    Packet.WriteUShort(client.Port);
+                                    oPacket.WriteUShort(client.Port);
 
                                     if (type == ServerType.Channel)
                                     {
-                                        Packet.WriteBool(client.World.EnableMultiLeveling);
-                                        Packet.WriteInt(client.World.ExperienceRate);
-                                        Packet.WriteInt(client.World.QuestExperienceRate);
-                                        Packet.WriteInt(client.World.PartyQuestExperienceRate);
-                                        Packet.WriteInt(client.World.MesoRate);
-                                        Packet.WriteInt(client.World.DropRate);
+                                        oPacket.WriteBool(client.World.EnableMultiLeveling);
+                                        oPacket.WriteInt(client.World.ExperienceRate);
+                                        oPacket.WriteInt(client.World.QuestExperienceRate);
+                                        oPacket.WriteInt(client.World.PartyQuestExperienceRate);
+                                        oPacket.WriteInt(client.World.MesoRate);
+                                        oPacket.WriteInt(client.World.DropRate);
                                     }
                                 }
                             }
@@ -100,7 +99,7 @@ namespace RazzleServer.Center.Handlers
                     }
                 }
 
-                client.Send(Packet);
+                client.Send(oPacket);
             }
 
             if (valid)

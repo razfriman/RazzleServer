@@ -83,7 +83,7 @@ namespace RazzleServer.Common.Network
             var writer = new PacketWriter();
             writer.WriteUShort(0x0D);
             writer.WriteUShort(ServerConfig.Instance.Version);
-            writer.WriteMapleString(ServerConfig.Instance.SubVersion.ToString());
+            writer.WriteString(ServerConfig.Instance.SubVersion.ToString());
             writer.WriteUInt(rIV);
             writer.WriteUInt(sIV);
             writer.WriteByte(ServerConfig.Instance.ServerType);

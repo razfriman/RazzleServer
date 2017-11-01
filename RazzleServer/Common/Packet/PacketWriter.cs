@@ -114,10 +114,16 @@ namespace RazzleServer.Common.Packet
         public void WriteULong(ulong writeValue) => _binWriter.Write(writeValue);
 
         /// <summary>
-        /// Writes a string to the stream
+        /// Writes a string prefixed with a [short] length before it, to the stream
         /// </summary>
         /// <param name="writeValue">The string to write</param>
-        public void WriteString(string writeValue) => _binWriter.Write(writeValue.ToCharArray());
+        public void WriteString(string writeValue)
+        {
+            writeValue = writeValue ?? string.Empty;
+
+            WriteShort(writeValue.Length);
+            WriteString(writeValue, writeValue.Length);
+        }
 
         /// <summary>
         /// Writes a string to the stream. Pads it with 0 until the specified length
@@ -125,22 +131,12 @@ namespace RazzleServer.Common.Packet
         /// <param name="writeValue">The string to write</param>
         public void WriteString(string writeValue, int length)
         {
-            WriteString(writeValue);
+            _binWriter.Write(writeValue.ToCharArray());
 
             if (writeValue.Length < length)
             {
                 WriteZeroBytes(length - writeValue.Length);
             }
-        }
-
-        /// <summary>
-        /// Writes a string prefixed with a [short] length before it, to the stream
-        /// </summary>
-        /// <param name="writeValue">The string to write</param>
-        public void WriteMapleString(string writeValue)
-        {
-            WriteShort((short)writeValue.Length);
-            WriteString(writeValue);
         }
 
         /// <summary>
@@ -153,8 +149,8 @@ namespace RazzleServer.Common.Packet
 
         public void WritePoint(Point writeValue)
         {
-            WriteShort((short)writeValue.X);
-            WriteShort((short)writeValue.Y);
+            WriteShort(writeValue.X);
+            WriteShort(writeValue.Y);
         }
 
         public void WriteHeader(InteroperabilityOperationCode header) => WriteUShort((ushort)header);

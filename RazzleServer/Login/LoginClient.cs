@@ -78,7 +78,7 @@ namespace RazzleServer.Login
 
                     if (PacketHandlers.ContainsKey(header))
                     {
-                        Log.LogInformation($"Recevied [{header.ToString()}] {Functions.ByteArrayToStr(packet.ToArray())}");
+                        Log.LogInformation($"Received [{header.ToString()}] {Functions.ByteArrayToStr(packet.ToArray())}");
 
                         foreach (var handler in PacketHandlers[header])
                         {
@@ -100,17 +100,17 @@ namespace RazzleServer.Login
 
         public LoginResult Login(string username, string password)
         {
-            this.Account = new Account(this);
+            Account = new Account(this);
 
             try
             {
-                this.Account.Load(username);
+                Account.Load(username);
 
-                if (Functions.GetSha512(password + this.Account.Salt) != this.Account.Password)
+                if (Functions.GetSha512(password + Account.Salt) != Account.Password)
                 {
                     return LoginResult.InvalidPassword;
                 }
-                else if (this.Account.IsBanned)
+                else if (Account.IsBanned)
                 {
                     return LoginResult.Banned;
                 }
@@ -121,24 +121,24 @@ namespace RazzleServer.Login
             }
             catch (NoAccountException)
             {
-                if (ServerConfig.Instance.LoginCreatesNewAccount && username == this.LastUsername && password == this.LastPassword)
+                if (ServerConfig.Instance.LoginCreatesNewAccount && username == LastUsername && password == LastPassword)
                 {
-                    this.Account.Username = username;
-                    this.Account.Salt = Functions.RandomString();
-                    this.Account.Password = Functions.GetSha512(password + Account.Salt);
-                    this.Account.Gender = Gender.Unset;
-                    this.Account.Pin = string.Empty;
-                    this.Account.IsBanned = false;
-                    this.Account.IsMaster = false;
-                    this.Account.Birthday = DateTime.UtcNow;
-                    this.Account.Creation = DateTime.UtcNow;
-                    this.Account.MaxCharacters = this.Server.Worlds[World].DefaultCreationSlots;
-                    this.Account.Save();
+                    Account.Username = username;
+                    Account.Salt = Functions.RandomString();
+                    Account.Password = Functions.GetSha512(password + Account.Salt);
+                    Account.Gender = Gender.Unset;
+                    Account.Pin = string.Empty;
+                    Account.IsBanned = false;
+                    Account.IsMaster = false;
+                    Account.Birthday = DateTime.UtcNow;
+                    Account.Creation = DateTime.UtcNow;
+                    Account.MaxCharacters = Server.Worlds[World].DefaultCreationSlots;
+                    Account.Save();
                 }
                 else
                 {
-                    this.LastUsername = username;
-                    this.LastPassword = password;
+                    LastUsername = username;
+                    LastPassword = password;
                     return LoginResult.InvalidUsername;
                 }
             }

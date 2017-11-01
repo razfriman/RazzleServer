@@ -23,7 +23,7 @@ namespace RazzleServer.Game.Handlers
             var pw = new PacketWriter(ServerOperationCode.PLAYER_CHAT);
             pw.WriteInt(characterId);
             pw.WriteBool(whiteBackground);
-            pw.WriteMapleString(message);
+            pw.WriteString(message);
             pw.WriteByte(show);
             pw.WriteBool(false);//isWorldMessage
             pw.WriteByte(0xFF);//if isWorldMessage, this is worldID

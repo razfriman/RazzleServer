@@ -14,6 +14,7 @@
   "Worlds": [
     {
       "ID": 1,
+      "Name": "Scania",
       "Port": 8585,
       "ShopPort": 9090,
       "Channels": 3,

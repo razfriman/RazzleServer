@@ -13,9 +13,9 @@ namespace RazzleServer.Login.Handlers
             foreach (var world in client.Server.Worlds)
             {
                 pw.WriteByte(world.ID);
-                pw.WriteMapleString(world.Name);
+                pw.WriteString(world.Name);
                 pw.WriteByte((byte)world.Status);
-                pw.WriteMapleString(world.EventMessage);
+                pw.WriteString(world.EventMessage);
                 pw.WriteShort(100);// Event EXP Rate
                 pw.WriteShort(100); // Event Drop Rate
                 pw.WriteBool(!world.EnableCharacterCreation);
@@ -23,7 +23,7 @@ namespace RazzleServer.Login.Handlers
 
                 for (short i = 0; i < world.Count; i++)
                 {
-                    pw.WriteMapleString($"{world.Name}-{i}");
+                    pw.WriteString($"{world.Name}-{i}");
                     pw.WriteInt(world.Population);
                     pw.WriteByte(world.ID);
                     pw.WriteShort(i);

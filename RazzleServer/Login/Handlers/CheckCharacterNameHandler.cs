@@ -10,7 +10,7 @@ namespace RazzleServer.Login.Handlers
         {
             var name = packet.ReadString();
             var pw = new PacketWriter(ServerOperationCode.CHAR_NAME_RESPONSE);
-            pw.WriteMapleString(name);
+            pw.WriteString(name);
             pw.WriteBool(Character.CharacterExists(name));
 
             client.Send(pw);

@@ -31,7 +31,7 @@ namespace RazzleServer.Login.Handlers
                     pw.WriteBool(acc.IsMaster);
                     pw.WriteByte(0);
                     pw.WriteByte(0);
-                    pw.WriteMapleString(acc.Username);
+                    pw.WriteString(acc.Username);
                     pw.WriteByte(0);
                     pw.WriteByte(0); // NOTE: Quiet ban reason. 
                     pw.WriteLong(0); // NOTE: Quiet ban lift date.

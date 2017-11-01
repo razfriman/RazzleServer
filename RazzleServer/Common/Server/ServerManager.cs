@@ -1,13 +1,11 @@
 ﻿using RazzleServer.Common.Util;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using RazzleServer.Data;
-using System.Diagnostics;
 using Microsoft.Extensions.Logging;
-using System.IO;
 using RazzleServer.Game;
 using RazzleServer.Login;
+using RazzleServer.Center;
 
 namespace RazzleServer.Server
 {
@@ -18,8 +16,10 @@ namespace RazzleServer.Server
         public static async Task Configure()
         {
 			await ServerConfig.LoadFromFile("ServerConfig.json");
+            CenterClient.RegisterPacketHandlers();
 			LoginClient.RegisterPacketHandlers();
             GameClient.RegisterPacketHandlers();
+            InitializeDatabase();
         }
 
 		private static void InitializeDatabase()
