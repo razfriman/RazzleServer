@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace RazzleServer.Game.Maple.Maps
 {
@@ -21,6 +22,8 @@ namespace RazzleServer.Game.Maple.Maps
                 throw new KeyNotFoundException();
             }
         }
+
+        public bool ContainsPortal(string label) => this.Any(x => x.Label.Equals(label, System.StringComparison.InvariantCultureIgnoreCase));
 
         protected override int GetKeyForItem(Portal item)
         {

@@ -136,15 +136,15 @@ namespace RazzleServer.Common.Util
         /// </summary>
         public static byte RandomByte() => (byte)Math.Floor((double)(r.Next() / 0x1010101));
 
-		/// <summary>
-		/// Creates a random array of bytes
-		/// </summary>
-		public static byte[] RandomBytes(int length)
-		{
-			byte[] randomBytes = new byte[length];
-			r.NextBytes(randomBytes);
+        /// <summary>
+        /// Creates a random array of bytes
+        /// </summary>
+        public static byte[] RandomBytes(int length)
+        {
+            byte[] randomBytes = new byte[length];
+            r.NextBytes(randomBytes);
             return randomBytes;
-		}
+        }
 
         /// <summary>
         /// Creates a boolean that is randomly true or false
@@ -173,6 +173,26 @@ namespace RazzleServer.Common.Util
         /// <param name="max">Highest value in range</param>
         public static int Random(int min, int max) => r.Next(min, max + 1);
 
+        public static string RandomString(int length = 20)
+        {
+            char[] chars = new char[62];
+            chars =
+            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".ToCharArray();
+            byte[] data = new byte[1];
+            using (RNGCryptoServiceProvider crypto = new RNGCryptoServiceProvider())
+            {
+                crypto.GetNonZeroBytes(data);
+                data = new byte[length];
+                crypto.GetNonZeroBytes(data);
+            }
+            StringBuilder result = new StringBuilder(length);
+            foreach (byte b in data)
+            {
+                result.Append(chars[b % (chars.Length)]);
+            }
+            return result.ToString();
+        }
+
         /// <summary>
         /// Creates a SHA1 string
         /// </summary>
@@ -195,6 +215,14 @@ namespace RazzleServer.Common.Util
 
             return hash.ToString();
         }
+
+        /// <summary>
+        /// Creates a HMACSHA512 string
+        /// </summary>
+        /// <param name="value">Value to be hashed</param>
+        /// <param name="key">Key used for the hash</param>
+        /// <returns>The HMACSHA512 equivalent of value</returns>
+        public static string GetHMACSha512(string value, string key) => GetHMACSha512(value, Encoding.ASCII.GetBytes(key));
 
         /// <summary>
         /// Creates a HMACSHA512 string

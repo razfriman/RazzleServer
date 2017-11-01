@@ -1,5 +1,6 @@
 ﻿using System;
 using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Game.Maple.Data;
 
 namespace RazzleServer.Game.Maple.Commands.Implementation
 {
@@ -63,12 +64,9 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
                             mapID = (int)val;
                     }
 
-                    if (mapID > -1)
+                    if (DataProvider.Maps.Contains(mapID))
                     {
-                        if (true) // TODO: Check if map exists.
-                            caller.ChangeMap(mapID, portalID);
-                        else
-                            caller.Notify(string.Format("[Command] Invalid map ID {0}.", mapID));
+                        caller.ChangeMap(mapID, portalID);
                     }
                     else
                     {

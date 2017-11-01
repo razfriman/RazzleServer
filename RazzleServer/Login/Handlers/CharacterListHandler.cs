@@ -18,12 +18,7 @@ namespace RazzleServer.Login.Handlers
             {
                 oPacket.WriteBool(false);
                 oPacket.WriteByte((byte)characters.Count);
-
-                foreach (byte[] characterBytes in characters)
-                {
-                    oPacket.WriteBytes(characterBytes);
-                }
-
+                characters.ForEach(x => oPacket.WriteBytes(x));
                 oPacket.WriteInt(client.Account.MaxCharacters);
                 client.Send(oPacket);
             }

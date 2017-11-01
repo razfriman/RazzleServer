@@ -976,70 +976,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void ChangeMap(PacketReader iPacket)
         {
-            byte portals = iPacket.ReadByte();
-
-            if (portals != Portals)
-            {
-                return;
-            }
-
-            int mapID = iPacket.ReadInt();
-            string portalLabel = iPacket.ReadString();
-            iPacket.ReadByte(); // NOTE: Unknown.
-            bool wheel = iPacket.ReadBool();
-
-            switch (mapID)
-            {
-                case 0: // NOTE: Death.
-                    {
-                        if (IsAlive)
-                        {
-                            return;
-                        }
-
-                        Revive();
-                    }
-                    break;
-
-                case -1: // NOTE: Portal.
-                    {
-                        Portal portal;
-
-                        try
-                        {
-                            portal = Map.Portals[portalLabel];
-                        }
-                        catch (KeyNotFoundException)
-                        {
-                            return;
-                        }
-
-                        // TODO: Validate player and portal position.
-
-                        /*if (this.Level < this.Client.Channel.Maps[portal.DestinationMapID].RequiredLevel)
-                        {
-                            // TODO: Send a force of ground portal message.
-
-                            return;
-                        }*/
-
-                        ChangeMap(portal.DestinationMapID, portal.Link.ID);
-                    }
-                    break;
-
-                default: // NOTE: Admin '/m' command.
-                    {
-                        if (!IsMaster)
-                        {
-                            return;
-                        }
-
-                        // TODO: Validate map ID.
-
-                        ChangeMap(mapID);
-                    }
-                    break;
-            }
+           
         }
 
         public void Revive()
@@ -1179,62 +1116,6 @@ namespace RazzleServer.Game.Maple.Characters
                 // TODO: Attempt to find foothold.
                 // If none found, check the player fall counter.
                 // If it's over 3, reset the player's map.
-            }
-        }
-
-        public void Sit(PacketReader iPacket)
-        {
-            short seatID = iPacket.ReadShort();
-
-            if (seatID == -1)
-            {
-                Chair = 0;
-
-                using (var oPacket = new PacketWriter(ServerOperationCode.SetActiveRemoteChair))
-                {
-
-                    oPacket.WriteInt(ID);
-                    oPacket.WriteInt(0);
-
-                    Map.Broadcast(oPacket, this);
-                }
-            }
-            else
-            {
-                Chair = seatID;
-            }
-
-            using (var oPacket = new PacketWriter(ServerOperationCode.Sit))
-            {
-                oPacket.WriteBool(seatID != -1);
-
-                if (seatID != -1)
-                {
-                    oPacket.WriteShort(seatID);
-                }
-
-                Client.Send(oPacket);
-            }
-        }
-
-        public void SitChair(PacketReader iPacket)
-        {
-            int mapleID = iPacket.ReadInt();
-
-            if (!Items.Contains(mapleID))
-            {
-                return;
-            }
-
-            Chair = mapleID;
-
-            using (var oPacket = new PacketWriter(ServerOperationCode.SetActiveRemoteChair))
-            {
-
-                oPacket.WriteInt(ID);
-                oPacket.WriteInt(mapleID);
-
-                Map.Broadcast(oPacket, this);
             }
         }
 

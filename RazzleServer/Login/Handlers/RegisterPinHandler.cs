@@ -1,4 +1,5 @@
 ﻿using RazzleServer.Common.Packet;
+using RazzleServer.Common.Util;
 
 namespace RazzleServer.Login.Handlers
 {
@@ -7,17 +8,19 @@ namespace RazzleServer.Login.Handlers
     {
         public override void HandlePacket(PacketReader packet, LoginClient client)
         {
-            var status = packet.ReadByte();
+            var proceed = packet.ReadBool();
 
-            if (status == 0)
-            {
-                // c.updateLoginState(MapleClient.LOGIN_NOTLOGGEDIN);
-            }
-            else
+            if (proceed)
             {
                 var pin = packet.ReadString();
-                // SET PIN
-                // c.updateLoginState(MapleClient.LOGIN_NOTLOGGEDIN);
+                client.Account.Pin = Functions.GetSha512(pin);
+                client.Account.Save();
+
+                using (var oPacket = new PacketWriter(ServerOperationCode.UpdatePinCodeResult))
+                {
+                    oPacket.WriteByte(0);
+                    client.Send(oPacket);
+                }
             }
         }
     }

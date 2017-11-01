@@ -5,19 +5,18 @@ using RazzleServer.Server;
 
 namespace RazzleServer.Login.Handlers
 {
-    [PacketHandler(ClientOperationCode.LOGIN_REQUEST)]
+    [PacketHandler(ClientOperationCode.AccountLogin)]
     public class LoginHandler : LoginPacketHandler
     {
         public override void HandlePacket(PacketReader packet, LoginClient client)
         {
             var accountName = packet.ReadString();
             var accountPassword = packet.ReadString();
-            var result = Account.CheckPassword(accountName, accountPassword);
-
+            var result = client.Login(accountName, accountPassword);
             client.Send(SendLoginResult(result, client.Account));
         }
 
-        private PacketWriter SendLoginResult(LoginResult result, Account acc)
+        public static PacketWriter SendLoginResult(LoginResult result, Account acc)
         {
             using (var pw = new PacketWriter(ServerOperationCode.CheckPasswordResult))
             {

@@ -2,6 +2,7 @@
 
 namespace RazzleServer.Center.Handlers
 {
+    [InteroperabilityPacketHandler(InteroperabilityOperationCode.UpdateChannelPopulation)]
     public class UpdateChannelPopulationHandler : CenterPacketHandler
     {
         public override void HandlePacket(PacketReader packet, CenterClient client)

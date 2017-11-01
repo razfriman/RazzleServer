@@ -31,7 +31,6 @@ namespace RazzleServer.Game
 
         public static void RegisterPacketHandlers()
         {
-
             var types = Assembly.GetEntryAssembly()
                                 .GetTypes()
                                 .Where(x => x.IsSubclassOf(typeof(GamePacketHandler)));
@@ -109,50 +108,26 @@ namespace RazzleServer.Game
             }
         }
 
-
-
-        private void Initialize(PacketReader inPacket)
-        {
-            int accountID;
-            int characterID = inPacket.ReadInt();
-
-            if ((accountID = Server.CenterConnection.ValidateMigration(Socket.Host, characterID)) == 0)
-            {
-                Terminate("Invalid migration");
-                return;
-            }
-
-            Character = new Character(characterID, this);
-            Character.Load();
-            Character.Initialize();
-        }
-
         public override void Register()
         {
-            //WvsGame.CenterConnection.UpdatePopulation(0);
             base.Register();
+            Server.CenterConnection.UpdatePopulation(Server.Clients.Count());
         }
 
         public override void Unregister()
         {
-            //WvsGame.CenterConnection.UpdatePopulation(0);
             base.Unregister();
+            Server.CenterConnection.UpdatePopulation(Server.Clients.Count());
         }
 
         public override void Terminate(string message = null)
         {
-            if (Character != null)
-            {
-                Character.Save();
-                Character.LastNpc = null;
-                Character.Map.Characters.Remove(Character);
-            }
+            Character?.Save();
+            Character?.Map?.Characters?.Remove(Character);
         }
 
-        private void ChangeChannel(PacketReader inPacket)
+        public void ChangeChannel(byte channelID)
         {
-            byte channelID = inPacket.ReadByte();
-
             var outPacket = new PacketWriter(ServerOperationCode.MigrateCommand);
             outPacket.WriteBool(true);
             outPacket.WriteBytes(Socket.HostBytes);

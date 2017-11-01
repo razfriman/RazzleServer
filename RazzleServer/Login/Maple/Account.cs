@@ -12,16 +12,9 @@ namespace RazzleServer.Login.Maple
         public string Username { get; set; }
         public string Password { get; set; }
         public string Salt { get; set; }
-        public bool EULA { get; set; }
         public Gender Gender { get; set; }
         public string Pin { get; set; }
         public bool IsBanned { get; set; }
-
-        internal static LoginResult CheckPassword(string accountName, string accountPassword)
-        {
-            return LoginResult.Valid;
-        }
-
         public bool IsMaster { get; set; }
         public DateTime Birthday { get; set; }
         public DateTime Creation { get; set; }
@@ -53,7 +46,6 @@ namespace RazzleServer.Login.Maple
             //Username = (string)datum["Username"];
             //Password = (string)datum["Password"];
             //Salt = (string)datum["Salt"];
-            //EULA = (bool)datum["EULA"];
             //Gender = (Gender)datum["Gender"];
             //Pin = (string)datum["Pin"];
             //Pic = (string)datum["Pic"];
@@ -71,7 +63,6 @@ namespace RazzleServer.Login.Maple
             //datum["Username"] = Username;
             //datum["Password"] = Password;
             //datum["Salt"] = Salt;
-            //datum["EULA"] = EULA;
             //datum["Gender"] = (byte)Gender;
             //datum["Pin"] = Pin;
             //datum["Pic"] = Pic;

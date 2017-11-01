@@ -4,7 +4,7 @@ using RazzleServer.Game.Maple.Characters;
 
 namespace RazzleServer.Login.Handlers
 {
-    [PacketHandler(ClientOperationCode.DELETE_CHAR)]
+    [PacketHandler(ClientOperationCode.CharacterDelete)]
     public class DeleteCharacterHandler : LoginPacketHandler
     {
         public override void HandlePacket(PacketReader packet, LoginClient client)

@@ -7,6 +7,7 @@ using RazzleServer.Common.Util;
 
 namespace RazzleServer.Center.Handlers
 {
+    [InteroperabilityPacketHandler(InteroperabilityOperationCode.RegistrationRequest)]
     public class RegistrationRequestHandler : CenterPacketHandler
     {
         private static readonly ILogger Log = LogManager.Log;

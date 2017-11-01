@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Server;
-using RazzleServer.Common.Util;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Server;
@@ -15,7 +14,6 @@ namespace RazzleServer.Game
         public WorldConfig World { get; set; }
 
         public static GameServer CurrentInstance { get; private set; }
-        private static readonly ILogger Log = LogManager.Log;
 
         public GameServer(WorldConfig world)
         {

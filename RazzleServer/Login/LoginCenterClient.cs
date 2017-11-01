@@ -66,16 +66,8 @@ namespace RazzleServer.Login
                     UpdateChannelPopulation(packet);
                     break;
 
-                case InteroperabilityOperationCode.CharacterNameCheckResponse:
-                    CheckCharacterName(packet);
-                    break;
-
                 case InteroperabilityOperationCode.CharacterEntriesResponse:
                     GetCharacters(packet);
-                    break;
-
-                case InteroperabilityOperationCode.CharacterCreationResponse:
-                    CreateCharacter(packet);
                     break;
 
                 case InteroperabilityOperationCode.MigrationRegisterResponse:
@@ -174,18 +166,6 @@ namespace RazzleServer.Login
 
         private PendingKeyedQueue<string, bool> NameCheckPool = new PendingKeyedQueue<string, bool>();
 
-        public bool IsNameTaken(string name)
-        {
-            using (var outPacket = new PacketWriter(InteroperabilityOperationCode.CharacterNameCheckRequest))
-            {
-                outPacket.WriteString(name);
-
-                Send(outPacket);
-            }
-
-            return NameCheckPool.Dequeue(name);
-        }
-
         private PendingKeyedQueue<int, byte[]> CharacterCreationPool = new PendingKeyedQueue<int, byte[]>();
 
         private void CreateCharacter(PacketReader inPacket)
@@ -194,20 +174,6 @@ namespace RazzleServer.Login
             byte[] characterData = inPacket.ReadBytes((int)inPacket.Available);
 
             CharacterCreationPool.Enqueue(accountID, characterData);
-        }
-
-        public byte[] CreateCharacter(byte worldID, int accountID, byte[] characterData)
-        {
-            using (var outPacket = new PacketWriter(InteroperabilityOperationCode.CharacterCreationRequest))
-            {
-                outPacket.WriteByte(worldID);
-                outPacket.WriteInt(accountID);
-                outPacket.WriteBytes(characterData);
-
-                Send(outPacket);
-            }
-
-            return CharacterCreationPool.Dequeue(accountID);
         }
 
         public bool Migrate(string host, int accountID, int characterID)

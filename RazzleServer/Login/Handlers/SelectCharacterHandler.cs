@@ -2,7 +2,8 @@
 
 namespace RazzleServer.Login.Handlers
 {
-    [PacketHandler(ClientOperationCode.CHAR_SELECT)]
+    [PacketHandler(ClientOperationCode.CharacterSelect)]
+    [PacketHandler(ClientOperationCode.SelectCharacterByVAC)]
     public class SelectCharacterHandler : LoginPacketHandler
     {
         public override void HandlePacket(PacketReader packet, LoginClient client)

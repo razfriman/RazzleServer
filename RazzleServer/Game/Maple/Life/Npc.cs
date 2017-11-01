@@ -6,11 +6,16 @@ using RazzleServer.Common.Constants;
 using RazzleServer.Game.Maple.Scripting;
 using RazzleServer.Common.Data;
 using RazzleServer.Game.Maple.Shops;
+using Microsoft.Extensions.Logging;
+using RazzleServer.Common.Util;
 
 namespace RazzleServer.Game.Maple.Life
 {
     public class Npc : LifeObject, ISpawnable, IControllable
     {
+        private static readonly ILogger Log = LogManager.Log;
+
+
         public Npc(Datum datum)
             : base(datum)
         {
@@ -73,6 +78,7 @@ namespace RazzleServer.Game.Maple.Life
                 }
                 catch (Exception ex)
                 {
+                    Log.LogError(ex, "Error executing NPC script");
                 }
             }
         }

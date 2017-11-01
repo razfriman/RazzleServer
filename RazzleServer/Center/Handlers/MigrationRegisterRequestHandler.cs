@@ -1,20 +1,21 @@
-﻿using System;
+﻿using RazzleServer.Common.Packet;
+
 namespace RazzleServer.Center.Handlers
 {
-    public class MigrationRegisterRequestHandler
+    [InteroperabilityPacketHandler(InteroperabilityOperationCode.MigrationRegisterRequest)]
+    public class MigrationRegisterRequestHandler : CenterPacketHandler
     {
-        //private void MigrateRequest(PacketReader inPacket)
-        //{
-        //    string host = inPacket.ReadString();
-        //    int characterID = inPacket.ReadInt();
+        public override void HandlePacket(PacketReader packet, CenterClient client)
+        {
+            string host = packet.ReadString();
+            int characterID = packet.ReadInt();
 
-        //    int accountID = WvsCenter.Migrations.Validate(host, characterID);
+            int accountID = client.Server.Migrations.Validate(host, characterID);
 
-        //    var outPacket = new PacketWriter(InteroperabilityOperationCode.MigrationResponse);
-        //    outPacket.WriteString(host);
-        //    outPacket.WriteInt(accountID);
-        //    Send(outPacket);
-        //}
-
+            var outPacket = new PacketWriter(InteroperabilityOperationCode.MigrationResponse);
+            outPacket.WriteString(host);
+            outPacket.WriteInt(accountID);
+            client.Send(outPacket);
+        }
     }
 }

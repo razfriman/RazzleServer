@@ -9,7 +9,6 @@ namespace RazzleServer.DB.Models
         public byte AccountType { get; set; }
         public string Name { get; set; }
         public string Password { get; set; }
-        public string Pic { get; set; }
         public byte Gender { get; set; }
         public int CharacterSlots { get; set; }
     }

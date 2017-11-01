@@ -169,8 +169,7 @@ namespace RazzleServer.Common.Constants
         Banned = 3,
         InvalidPassword = 4,
         InvalidUsername = 5,
-        LoggedIn = 7,
-        EULA = 23
+        LoggedIn = 7
     }
 
     public enum PinResult : byte
