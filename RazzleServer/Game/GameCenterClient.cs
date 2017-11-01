@@ -3,11 +3,8 @@ using RazzleServer.Common.Constants;
 using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Network;
-using RazzleServer.Game.Maple;
 using RazzleServer.Game.Maple.Characters;
-using RazzleServer.Game.Maple.Data;
 using RazzleServer.Common.Util;
-using System.Linq;
 using Microsoft.Extensions.Logging;
 
 namespace RazzleServer.Game
@@ -19,7 +16,7 @@ namespace RazzleServer.Game
         private readonly PendingKeyedQueue<string, int> MigrationValidationPool = new PendingKeyedQueue<string, int>();
 
 
-        public GameCenterClient(GameServer server, Socket session) : base(session)
+        public GameCenterClient(GameServer server, Socket session) : base(session, false)
         {
             Server = server;
         }

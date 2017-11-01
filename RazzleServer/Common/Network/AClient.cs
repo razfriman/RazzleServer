@@ -18,9 +18,9 @@ namespace RazzleServer.Common.Network
 
         protected static readonly ILogger Log = LogManager.Log;
 
-        protected AClient(Socket session)
+        protected AClient(Socket session, bool toClient = true)
         {
-            Socket = new ClientSocket(session, this, ServerConfig.Instance.Version, ServerConfig.Instance.AESKey);
+            Socket = new ClientSocket(session, this, ServerConfig.Instance.Version, ServerConfig.Instance.AESKey, toClient);
             Host = Socket.Host;
             Port = Socket.Port;
             Connected = true;

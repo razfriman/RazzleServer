@@ -18,6 +18,7 @@ namespace RazzleServer.Common.Network
 		private readonly ushort _port;
 		private readonly object _disposeSync;
         private readonly AClient _client;
+        private readonly bool _toClient;
 		private bool disposed;
 
 		private static ILogger Log = LogManager.Log;
@@ -29,7 +30,7 @@ namespace RazzleServer.Common.Network
         public byte[] HostBytes => _hostBytes;
 		public ushort Port => _port;
 
-        public ClientSocket(Socket socket, AClient client, ushort currentGameVersion, ulong aesKey)
+        public ClientSocket(Socket socket, AClient client, ushort currentGameVersion, ulong aesKey, bool toClient)
 		{
 			_socket = socket;
 			_socketBuffer = new byte[1024];
@@ -39,6 +40,7 @@ namespace RazzleServer.Common.Network
 			_port = (ushort)((IPEndPoint)socket.LocalEndPoint).Port;
 			_disposeSync = new object();
 			_client = client;
+            _toClient = toClient;
 
             Crypto = new MapleCipherProvider(currentGameVersion, aesKey);
             Crypto.PacketFinished += (data) => _client.Receive(new PacketReader(data));
@@ -47,7 +49,7 @@ namespace RazzleServer.Common.Network
 		}
 		private void WaitForData()
 		{
-			if (!disposed)
+            if (!disposed)
 			{
 				SocketError error = SocketError.Success;
 
@@ -73,10 +75,13 @@ namespace RazzleServer.Common.Network
 			{
 				int size = e.BytesTransferred;
 
-				if (size == 0 || e.SocketError != SocketError.Success)
+
+
+
+                if (size == 0 || e.SocketError != SocketError.Success)
 				{
 					Disconnect();
-				}
+                }
 				else
 				{
 					Crypto.AddData(_socketBuffer, 0, size);
@@ -112,7 +117,7 @@ namespace RazzleServer.Common.Network
 			if (!disposed)
 			{
 				var buffer = data.ToArray();
-				Crypto.Encrypt(ref buffer, true);
+				Crypto.Encrypt(ref buffer, _toClient);
 				SendRawPacket(buffer);
 			}
 		}

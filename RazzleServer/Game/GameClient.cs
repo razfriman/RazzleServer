@@ -22,7 +22,6 @@ namespace RazzleServer.Game
 
         public GameClient(Socket session, GameServer server) : base(session)
         {
-            Socket = new ClientSocket(session, this, ServerConfig.Instance.Version, ServerConfig.Instance.AESKey);
             Server = server;
             Host = Socket.Host;
             Port = Socket.Port;

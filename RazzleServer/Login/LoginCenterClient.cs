@@ -16,7 +16,7 @@ namespace RazzleServer.Login
         public LoginServer Server { get; set; }
         private readonly PendingKeyedQueue<string, bool> MigrationPool = new PendingKeyedQueue<string, bool>();
 
-        public LoginCenterClient(LoginServer server, Socket session) : base(session)
+        public LoginCenterClient(LoginServer server, Socket session) : base(session, false)
         {
             Server = server;
         }
@@ -80,22 +80,14 @@ namespace RazzleServer.Login
         {
             var response = (ServerRegistrationResponse)inPacket.ReadByte();
 
-            switch (response)
+            if (response == ServerRegistrationResponse.Valid)
             {
-                case ServerRegistrationResponse.Valid:
-                    {
-                        byte[] loginIp = { 0, 0, 0, 0 };
-                        Server.Start(new IPAddress(loginIp), ServerConfig.Instance.LoginPort);
-                        Log.LogInformation("Registered Login Server.");
-                    }
-                    break;
-
-                default:
-                    {
-                        Log.LogError(response.ToString());
-                        Server.ShutDown();
-                    }
-                    break;
+                Server.ServerRegistered();
+            }
+            else
+            {
+                Log.LogError($"Unable to register as Channel Server: {response}");
+                Server.ShutDown();
             }
         }
 

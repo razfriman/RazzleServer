@@ -14,7 +14,6 @@ namespace RazzleServer.Center
         {
             Worlds = new Worlds();
             Migrations = new Maple.Migrations();
-
             Start(IPAddress.Loopback, ServerConfig.Instance.CenterPort);
         }
     }

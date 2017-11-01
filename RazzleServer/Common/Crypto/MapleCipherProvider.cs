@@ -12,9 +12,9 @@ namespace RazzleServer.Common.MapleCryptoLib
     public class MapleCipherProvider
     {
         /// <summary>
-		/// Packet crypto, Incomming
-		/// </summary>
-		private MapleCipher RecvCipher { get; set; }
+        /// Packet crypto, Incomming
+        /// </summary>
+        private MapleCipher RecvCipher { get; set; }
 
         /// <summary>
         /// Packet crypto, Outgoing
@@ -41,6 +41,8 @@ namespace RazzleServer.Common.MapleCryptoLib
         /// </summary>
         private int WaitForData { get; set; }
 
+        private bool ToClient { get; set; }
+
         /// <summary>
         /// General locker for adding data
         /// </summary>
@@ -48,7 +50,7 @@ namespace RazzleServer.Common.MapleCryptoLib
 
         private static ILogger Log = LogManager.Log;
 
-        public MapleCipherProvider(ushort currentGameVersion, ulong aesKey, ushort initialBufferSize = 0x100)
+        public MapleCipherProvider(ushort currentGameVersion, ulong aesKey, ushort initialBufferSize = 0x100, bool toClient = true)
         {
             RecvCipher = new MapleCipher(currentGameVersion, aesKey);
             SendCipher = new MapleCipher(currentGameVersion, aesKey);
@@ -57,6 +59,7 @@ namespace RazzleServer.Common.MapleCryptoLib
             AvailableData = 0;
             WaitForData = 0;
             IsWaiting = true;
+            ToClient = toClient;
         }
 
         /// <summary>
@@ -90,6 +93,11 @@ namespace RazzleServer.Common.MapleCryptoLib
                 Buffer.BlockCopy(data, offset, DataBuffer, AvailableData, length);
                 AvailableData += length;
             }
+            //if(!RecvCipher.Handshaken) 
+            //{
+            //    Decrypt(data);
+            //}
+
             if (WaitForData != 0)
             {
                 if (WaitForData <= AvailableData)

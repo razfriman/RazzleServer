@@ -113,6 +113,8 @@ namespace RazzleServer.Server
                 _disposed = true;
                 _listener.Stop();
                 _listener.Server.Shutdown(SocketShutdown.Both);
+                _centerSocket?.Disconnect(false);
+                _centerSocket?.Dispose();
             }
             catch (Exception e)
             {
@@ -157,10 +159,16 @@ namespace RazzleServer.Server
 
         public void Start(IPAddress ip, ushort port)
         {
-            Log.LogInformation($"Starting server on port [{port}]");
-            Port = port;
-            _listener = new TcpListener(ip, port);
-            _listener.Start(BACKLOG_SIZE);
+            try
+            {
+                Log.LogInformation($"Starting server on port [{port}]");
+                Port = port;
+                _listener = new TcpListener(ip, port);
+                _listener.Start(BACKLOG_SIZE);
+            } catch (Exception e) {
+                Log.LogCritical(e, $"Error starting server on port [{port}]");
+                ShutDown();
+            }
 
             Task.Factory.StartNew(ListenLoop);
         }
