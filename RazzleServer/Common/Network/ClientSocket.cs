@@ -74,8 +74,7 @@ namespace RazzleServer.Common.Network
 			{
 				int size = e.BytesTransferred;
 
-
-
+                Console.WriteLine("RECV: " + e.BytesTransferred);
 
                 if (size == 0 || e.SocketError != SocketError.Success)
 				{
@@ -95,7 +94,9 @@ namespace RazzleServer.Common.Network
 			{
 				int offset = 0;
 
-				while (offset < final.Length)
+                Console.WriteLine("SEND RAW: " + final.ByteArrayToString());
+
+                while (offset < final.Length)
 				{
 					SocketError outError = SocketError.Success;
 					int sent = _socket.Send(final, offset, final.Length - offset, SocketFlags.None, out outError);

@@ -93,10 +93,6 @@ namespace RazzleServer.Common.MapleCryptoLib
                 Buffer.BlockCopy(data, offset, DataBuffer, AvailableData, length);
                 AvailableData += length;
             }
-            //if(!RecvCipher.Handshaken) 
-            //{
-            //    Decrypt(data);
-            //}
 
             if (WaitForData != 0)
             {
@@ -185,14 +181,15 @@ namespace RazzleServer.Common.MapleCryptoLib
         {
             if (!RecvCipher.Handshaken)
             {
-                Log.LogError("READING HANDSHAKE");
-
                 RecvCipher.Handshake(ref data);
                 var pr = new PacketReader(data);
+
+                Console.WriteLine(data.ByteArrayToString());
                 var version = pr.ReadShort();
                 var subVersion = pr.ReadString();
                 var siv = pr.ReadUInt();
                 var riv = pr.ReadUInt();
+                var serverType = pr.ReadByte();
                 SendCipher.SetIV(siv);
                 RecvCipher.SetIV(riv);
 

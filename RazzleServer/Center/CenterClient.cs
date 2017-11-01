@@ -129,7 +129,7 @@ namespace RazzleServer.Center
 
                     if (PacketHandlers.ContainsKey(header))
                     {
-                        Log.LogInformation($"Recevied [{header.ToString()}] {Functions.ByteArrayToStr(packet.ToArray())}");
+                        Log.LogInformation($"Received [{header.ToString()}] {Functions.ByteArrayToStr(packet.ToArray())}");
 
                         foreach (var handler in PacketHandlers[header])
                         {

@@ -81,7 +81,7 @@ namespace RazzleServer.Common.Network
             Socket.Crypto.SetVectors(sIV, rIV);
 
             var writer = new PacketWriter();
-            writer.WriteUShort(0x0D);
+            writer.WriteUShort(0x0E);
             writer.WriteUShort(ServerConfig.Instance.Version);
             writer.WriteString(ServerConfig.Instance.SubVersion.ToString());
             writer.WriteUInt(rIV);

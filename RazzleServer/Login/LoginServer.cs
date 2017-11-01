@@ -19,7 +19,7 @@ namespace RazzleServer.Login
             {
                 Worlds.Add(new World(ServerConfig.Instance.Worlds[i]));
             }
-
+            Port = ServerConfig.Instance.LoginPort;
             StartCenterConnection(IPAddress.Loopback, ServerConfig.Instance.CenterPort);
         }
 
