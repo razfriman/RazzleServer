@@ -2,12 +2,12 @@
 {
     public static class SkillNames
     {
-        public enum All : int
+        public enum All
         {
             RegularAttack = 0
         }
 
-        public enum Beginner : int
+        public enum Beginner
         {
             BlessingOfTheFairy = 12,
             EchoOfHero = 1005,
@@ -17,13 +17,13 @@
             Recovery = 1001
         }
 
-        public enum Swordsman : int
+        public enum Swordsman
         {
             ImprovedMaxHpIncrease = 1000001,
             IronBody = 1001003
         }
 
-        public enum Fighter : int
+        public enum Fighter
         {
             AxeBooster = 1101005,
             AxeMastery = 1100001,
@@ -33,7 +33,7 @@
             SwordMastery = 1100000
         }
 
-        public enum Crusader : int
+        public enum Crusader
         {
             ArmorCrash = 1111007,
             AxeComa = 1111006,
@@ -44,7 +44,7 @@
             SwordPanic = 1111003
         }
 
-        public enum Hero : int
+        public enum Hero
         {
             Achilles = 1120004,
             AdvancedComboAttack = 1120003,
@@ -56,7 +56,7 @@
             PowerStance = 1121002
         }
 
-        public enum Page : int
+        public enum Page
         {
             BwBooster = 1201005,
             BwMastery = 1200001,
@@ -66,7 +66,7 @@
             Threaten = 1201006
         }
 
-        public enum WhiteKnight : int
+        public enum WhiteKnight
         {
             BwFireCharge = 1211004,
             BwIceCharge = 1211006,
@@ -78,7 +78,7 @@
             SwordLitCharge = 1211007
         }
 
-        public enum Paladin : int
+        public enum Paladin
         {
             Achilles = 1220005,
             AdvancedCharge = 1220010,
@@ -92,7 +92,7 @@
             SwordHolyCharge = 1221003
         }
 
-        public enum Spearman : int
+        public enum Spearman
         {
             HyperBody = 1301007,
             IronWill = 1301006,
@@ -102,7 +102,7 @@
             SpearMastery = 1300000
         }
 
-        public enum DragonKnight : int
+        public enum DragonKnight
         {
             DragonBlood = 1311008,
             DragonRoar = 1311006,
@@ -111,7 +111,7 @@
             Sacrifice = 1311005
         }
 
-        public enum DarkKnight : int
+        public enum DarkKnight
         {
             Achilles = 1320005,
             AuraOfBeholder = 1320008,
@@ -124,14 +124,14 @@
             PowerStance = 1321002
         }
 
-        public enum Magician : int
+        public enum Magician
         {
             ImprovedMaxMpIncrease = 2000001,
             MagicArmor = 2001003,
             MagicGuard = 2001002
         }
 
-        public enum FirePoisonWizard : int
+        public enum FirePoisonWizard
         {
             Meditation = 2101001,
             MpEater = 2100000,
@@ -139,7 +139,7 @@
             Slow = 2101003
         }
 
-        public enum FirePoisonMage : int
+        public enum FirePoisonMage
         {
             ElementAmplification = 2110001,
             ElementComposition = 2111006,
@@ -149,7 +149,7 @@
             SpellBooster = 2111005
         }
 
-        public enum FirePoisonArchMage : int
+        public enum FirePoisonArchMage
         {
             BigBang = 2121001,
             Elquines = 2121005,
@@ -161,7 +161,7 @@
             Paralyze = 2121006
         }
 
-        public enum IceLightningWizard : int
+        public enum IceLightningWizard
         {
             ColdBeam = 2201004,
             Meditation = 2201001,
@@ -169,7 +169,7 @@
             Slow = 2201003
         }
 
-        public enum IceLightningMage : int
+        public enum IceLightningMage
         {
             ElementAmplification = 2210001,
             ElementComposition = 2211006,
@@ -179,7 +179,7 @@
             SpellBooster = 2211005
         }
 
-        public enum IceLightningArchMage : int
+        public enum IceLightningArchMage
         {
             BigBang = 2221001,
             Blizzard = 2221007,
@@ -191,7 +191,7 @@
             MapleWarrior = 2221000
         }
 
-        public enum Cleric : int
+        public enum Cleric
         {
             Bless = 2301004,
             Heal = 2301002,
@@ -199,7 +199,7 @@
             MpEater = 2300000
         }
 
-        public enum Priest : int
+        public enum Priest
         {
             Dispel = 2311001,
             Doom = 2311005,
@@ -209,7 +209,7 @@
             SummonDragon = 2311006
         }
 
-        public enum Bishop : int
+        public enum Bishop
         {
             Bahamut = 2321003,
             BigBang = 2321001,
@@ -221,13 +221,13 @@
             Resurrection = 2321006
         }
 
-        public enum Archer : int
+        public enum Archer
         {
             CriticalShot = 3000001,
             Focus = 3001003
         }
 
-        public enum Hunter : int
+        public enum Hunter
         {
             ArrowBomb = 3101005,
             BowBooster = 3101002,
@@ -235,14 +235,14 @@
             SoulArrow = 3101004
         }
 
-        public enum Ranger : int
+        public enum Ranger
         {
             MortalBlow = 3110001,
             Puppet = 3111002,
             SilverHawk = 3111005
         }
 
-        public enum Bowmaster : int
+        public enum Bowmaster
         {
             Concentrate = 3121008,
             Hamstring = 3121007,
@@ -253,14 +253,14 @@
             SharpEyes = 3121002
         }
 
-        public enum Crossbowman : int
+        public enum Crossbowman
         {
             CrossbowBooster = 3201002,
             CrossbowMastery = 3200000,
             SoulArrow = 3201004
         }
 
-        public enum Sniper : int
+        public enum Sniper
         {
             Blizzard = 3211003,
             GoldenEagle = 3211005,
@@ -268,7 +268,7 @@
             Puppet = 3211002
         }
 
-        public enum Marksman : int
+        public enum Marksman
         {
             Blind = 3221006,
             Frostprey = 3221005,
@@ -279,7 +279,7 @@
             Snipe = 3221007
         }
 
-        public enum Rogue : int
+        public enum Rogue
         {
             DarkSight = 4001003,
             Disorder = 4001002,
@@ -287,7 +287,7 @@
             LuckySeven = 4001344
         }
 
-        public enum Assassin : int
+        public enum Assassin
         {
 
             ClawBooster = 4101003,
@@ -297,7 +297,7 @@
             Haste = 4101004
         }
 
-        public enum Hermit : int
+        public enum Hermit
         {
             Alchemist = 4110000,
             Avenger = 4111005,
@@ -307,7 +307,7 @@
             ShadowWeb = 4111003
         }
 
-        public enum NightLord : int
+        public enum NightLord
         {
             HerosWill = 4121009,
             MapleWarrior = 4121000,
@@ -320,7 +320,7 @@
             VenomousStar = 4120005
         }
 
-        public enum Bandit : int
+        public enum Bandit
         {
             DaggerBooster = 4201002,
             DaggerMastery = 4200000,
@@ -329,7 +329,7 @@
             Steal = 4201004
         }
 
-        public enum ChiefBandit : int
+        public enum ChiefBandit
         {
             Assaulter = 4211002,
             BandOfThieves = 4211004,
@@ -339,7 +339,7 @@
             Pickpocket = 4211003
         }
 
-        public enum Shadower : int
+        public enum Shadower
         {
             Assassinate = 4221001,
             BoomerangStep = 4221007,
@@ -352,24 +352,23 @@
             VenomousStab = 4220005
         }
 
-        public enum GM : int
+        public enum GM
         {
-            Haste = 9001000,
-            SuperDragonRoar = 9001001,
-            Teleport = 9001007
+            Haste = 5001000,
+            SuperDragonRoar = 5001001,
+            Teleport = 5001007
         }
 
-        public enum SuperGM : int
+        public enum SuperGM
         {
-            HealPlusDispel = 9101000,
-            Haste = 9101001,
-            HolySymbol = 9101002,
-            Bless = 9101003,
-            Hide = 9101004,
-            Resurrection = 9101005,
-            SuperDragonRoar = 9101006,
-            Teleport = 9101007,
-            HyperBody = 9101008,
+            HealPlusDispel = 5101000,
+            Haste = 5101001,
+            HolySymbol = 5101002,
+            Bless = 5101003,
+            Hide = 5101004,
+            Resurrection = 5101005,
+            SuperDragonRoar = 5101006,
+            Teleport = 5101007,
         }
     }
 }

@@ -249,11 +249,6 @@ namespace RazzleServer.Game.Maple
 
             switch (MapleID)
             {
-                case (int)SkillNames.SuperGM.HyperBody:
-                    SecondaryStatups.Add(SecondaryBuffStat.HyperBodyHP, skill.ParameterA);
-                    SecondaryStatups.Add(SecondaryBuffStat.HyperBodyMP, skill.ParameterB);
-                    break;
-
                 case (int)SkillNames.SuperGM.HolySymbol:
                     SecondaryStatups.Add(SecondaryBuffStat.HolySymbol, skill.ParameterA);
                     break;

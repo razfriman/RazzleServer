@@ -3,7 +3,6 @@
     public enum ClientOperationCode : ushort
     {
         AccountLogin = 1,
-        GuestLogin = 2,
         AccountInfo = 3,
         WorldRelist = 4,
         WorldSelect = 5,
@@ -58,7 +57,6 @@
         //54
         //55
         //56
-        //MonsterBookCover? = 57
         NpcConverse = 58,
         //RemoteStore? = 59
         NpcResult = 60,
@@ -114,7 +112,6 @@
         //106
         QuestAction = 107,
         //108
-        SkillMacro = 0x6D,
         SpouseChat = 0x6E,
         UseFishingItem = 0x6F,
         MakerSkill = 0x70,
@@ -202,7 +199,6 @@
 
         //// ORIGINAL
         LOGIN_REQUEST = 0x01,
-        GUEST_LOGIN_REQUEST = 0x02,
         SERVERLIST_REREQUEST = 0x04,
         CHARLIST_REQUEST = 0x05,
         SERVERSTATUS_REQUEST = 0x06,
@@ -287,7 +283,6 @@
         REPORT = 0x69FF,
         TROCK_ADD_MAP = 0x65FF,
         QUEST_ACTION = 0x6B,
-        SKILL_MACRO = 0x6E,
         SPOUSE_CHAT = 0x6EFF,
         USE_FISHING_ITEM = 0x6FFF,
 

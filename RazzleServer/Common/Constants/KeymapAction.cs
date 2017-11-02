@@ -24,7 +24,6 @@
         PartyList = 19,
         QuestHelper = 20,
         SpouseChat = 21,
-        MonsterBook = 22,
         CashShop = 23,
         AllianceChat = 24,
         PartySearch = 25,

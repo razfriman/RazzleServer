@@ -16,7 +16,6 @@ namespace RazzleServer.Common.Constants
         IncDecHPEffect = 10,
         BuffItemEffect = 11,
         SquibEffect = 12,
-        MonsterBookCardGet = 13,
         LotteryUse = 14,
         ItemLevelUp = 15,
         ItemMaker = 16,

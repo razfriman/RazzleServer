@@ -117,7 +117,6 @@ namespace RazzleServer.Login.Handlers
             character.Keymap.Add(new Shortcut(KeymapKey.Z, KeymapAction.PickUp));
             character.Keymap.Add(new Shortcut(KeymapKey.X, KeymapAction.Sit));
             character.Keymap.Add(new Shortcut(KeymapKey.C, KeymapAction.Messenger));
-            character.Keymap.Add(new Shortcut(KeymapKey.B, KeymapAction.MonsterBook));
             character.Keymap.Add(new Shortcut(KeymapKey.M, KeymapAction.MiniMap));
             character.Keymap.Add(new Shortcut(KeymapKey.LeftAlt, KeymapAction.Jump));
             character.Keymap.Add(new Shortcut(KeymapKey.Space, KeymapAction.NpcChat));

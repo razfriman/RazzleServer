@@ -75,7 +75,6 @@ namespace RazzleServer.Game.Maple
                 case KeymapAction.PartyList:
                 case KeymapAction.QuestHelper:
                 case KeymapAction.SpouseChat:
-                case KeymapAction.MonsterBook:
                 case KeymapAction.CashShop:
                 case KeymapAction.AllianceChat:
                 case KeymapAction.PartySearch:

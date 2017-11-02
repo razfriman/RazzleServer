@@ -4,7 +4,6 @@
     {
         /*CLogin::OnPacket*/
         CheckPasswordResult = 0,
-        GuestIDLoginResult = 1,
         AccountInfoResult = 2,
         CheckUserLimitResult = 3,
         SetAccountResult = 4,
@@ -89,8 +88,6 @@
         ImitatedNPCResult = 80,
         NpcImitateData = 81,
         NpcUpdateLimitedDisableInfo = 82,
-        MonsterBookSetCard = 83,
-        MonsteBookSetCover = 84,
         HourChanged = 85,
         MiniMapOnOff = 86,
         ConsultAuthkeyUpdate = 87,
@@ -498,7 +495,6 @@
         SILVER_BOX = 0x6D,
         UNKNOWN_MESSAGE2 = 0x6E,
 
-        SKILL_MACRO = 0x7C,
         ENTER_MAP = 0x7D,
         MTS_OPEN = 0x73,
         ENTER_CASH_SHOP = 0x7F,
