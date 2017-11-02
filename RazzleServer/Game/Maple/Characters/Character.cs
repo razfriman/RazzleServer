@@ -1320,18 +1320,6 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public void Converse(int mapleID)
-        {
-            // TODO.
-        }
-
-        public void Converse(PacketReader iPacket)
-        {
-            int objectID = iPacket.ReadInt();
-
-            this.Converse(Map.Npcs[objectID]);
-        }
-
         public void Converse(Npc npc, Quest quest = null)
         {
             LastNpc = npc;
@@ -1534,11 +1522,6 @@ namespace RazzleServer.Game.Maple.Characters
                 oPacket.WriteByte(0); // NOTE: Pets.
                 oPacket.WriteByte(0); // NOTE: Mount.
                 oPacket.WriteByte(0); // NOTE: Wishlist.
-                oPacket.WriteInt(0); // NOTE: Monster Book level.
-                oPacket.WriteInt(0); // NOTE: Monster Book normal cards. 
-                oPacket.WriteInt(0); // NOTE: Monster Book special cards.
-                oPacket.WriteInt(0); // NOTE: Monster Book total cards.
-                oPacket.WriteInt(0); // NOTE: Monster Book cover.
                 oPacket.WriteInt(0); // NOTE: Medal ID.
                 oPacket.WriteShort(0); // NOTE: Medal quests.
 
@@ -2004,8 +1987,6 @@ namespace RazzleServer.Game.Maple.Characters
             pw.WriteShort(0);// NOTE: Rings (3).
             pw.WriteBytes(Trocks.RegularToByteArray());
             pw.WriteBytes(Trocks.VIPToByteArray());
-            pw.WriteInt(0); // NOTE: Monster Book cover ID.
-            pw.WriteByte(0); // NOTE: Monster Book cards.
             pw.WriteShort(0);// NOTE: New Year Cards.
             pw.WriteShort(0);// NOTE: QuestRecordEX.
             pw.WriteShort(0);// NOTE: AdminShop.

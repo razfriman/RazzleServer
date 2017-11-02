@@ -28,9 +28,6 @@ namespace RazzleServer.Common.Constants
         IncubatorUse = 24,
         PlaySoundWithMuteBGM = 25,
         SoulStoneUse = 26,
-        IncDecHPEffect_EX = 27,
-        DeliveryQuestItemUse = 28, // NOTE: Post big bang update.
-        RepeatEffectRemove = 29, // NOTE: Post big bang update.
-        EvolRing = 30 // NOTE: Post big bang update.
+        IncDecHPEffect_EX = 27
     }
 }

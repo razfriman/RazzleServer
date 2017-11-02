@@ -34,7 +34,7 @@ namespace RazzleServer.Login
 
         public override void Receive(PacketReader packet)
         {
-            ClientOperationCode header = ClientOperationCode.UNKNOWN;
+            ClientOperationCode header = ClientOperationCode.Unknown;
             try
             {
                 if (packet.Available >= 2)
@@ -69,7 +69,7 @@ namespace RazzleServer.Login
 
             try
             {
-                Account.LoadByKey(username);
+                Account.Load(username);
 
                 if (Functions.GetSha512(password + Account.Salt) != Account.Password)
                 {

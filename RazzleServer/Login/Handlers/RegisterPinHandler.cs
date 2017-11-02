@@ -3,7 +3,7 @@ using RazzleServer.Common.Util;
 
 namespace RazzleServer.Login.Handlers
 {
-    [PacketHandler(ClientOperationCode.REGISTER_PIN)]
+    [PacketHandler(ClientOperationCode.RegisterPin)]
     public class RegisterPinHandler : LoginPacketHandler
     {
         public override void HandlePacket(PacketReader packet, LoginClient client)

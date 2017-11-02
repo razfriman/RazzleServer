@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using RazzleServer.Common.Constants;
 using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple.Life;
@@ -9,24 +8,16 @@ namespace RazzleServer.Game.Maple.Characters
     public sealed class CharacterStorage
     {
         public Character Parent { get; private set; }
-
         public Npc Npc { get; private set; }
         public byte Slots { get; private set; }
         public int Meso { get; private set; }
+        public List<Item> Items { get; set; }
 
-        private List<Item> Items { get; set; }
-
-        public bool IsFull
-        {
-            get
-            {
-                return this.Items.Count == this.Slots;
-            }
-        }
+        public bool IsFull => Items.Count == Slots;
 
         public CharacterStorage(Character parent)
         {
-            this.Parent = parent;
+            Parent = parent;
         }
 
         public void Load()
@@ -99,167 +90,6 @@ namespace RazzleServer.Game.Maple.Characters
                 oPacket.WriteByte(0);
 
                 this.Parent.Client.Send(oPacket);
-            }
-        }
-
-        public void Handle(PacketReader iPacket)
-        {
-            StorageAction action = (StorageAction)iPacket.ReadByte();
-
-            switch (action)
-            {
-                case StorageAction.Withdraw:
-                    {
-                        ItemType type = (ItemType)iPacket.ReadByte();
-                        byte slot = iPacket.ReadByte();
-
-                        Item item = this.Items[slot];
-
-                        if (item == null)
-                        {
-                            return;
-                        }
-
-                        this.Items.Remove(item);
-                        item.Delete();
-
-                        item.IsStored = false;
-
-                        this.Parent.Items.Add(item, forceGetSlot: true);
-
-                        List<Item> itemsByType = new List<Item>();
-
-                        foreach (Item loopItem in this.Items)
-                        {
-                            if (loopItem.Type == item.Type)
-                            {
-                                itemsByType.Add(loopItem);
-                            }
-                        }
-
-                        using (var oPacket = new PacketWriter(ServerOperationCode.Storage))
-                        {
-
-                            oPacket.WriteByte(13);
-                            oPacket.WriteByte(this.Slots);
-                            oPacket.WriteShort((short)(2 << (byte)item.Type));
-                            oPacket.WriteShort(0);
-                            oPacket.WriteInt(0);
-                            oPacket.WriteByte((byte)itemsByType.Count);
-
-                            foreach (Item loopItem in itemsByType)
-                            {
-                                oPacket.WriteBytes(loopItem.ToByteArray(true, true));
-                            }
-
-                            this.Parent.Client.Send(oPacket);
-                        }
-                    }
-                    break;
-
-                case StorageAction.Deposit:
-                    {
-                        short slot = iPacket.ReadShort();
-                        int itemID = iPacket.ReadInt();
-                        short quantity = iPacket.ReadShort();
-
-                        Item item = this.Parent.Items[itemID, slot];
-
-                        if (this.IsFull)
-                        {
-                            using (var oPacket = new PacketWriter(ServerOperationCode.Storage))
-                            {
-                                oPacket.WriteByte(17);
-
-                                this.Parent.Client.Send(oPacket);
-                            }
-
-                            return;
-                        }
-
-                        if (this.Parent.Meso <= this.Npc.StorageCost)
-                        {
-                            this.Parent.Notify("You don't have enough meso to store the item.", NoticeType.Popup); // TOOD: Is there a packet for this?
-
-                            return;
-                        }
-
-                        this.Parent.Meso -= this.Npc.StorageCost;
-
-                        this.Parent.Items.Remove(item, true);
-
-                        item.Parent = this.Parent.Items; // NOTE: This is needed because when we remove the item is sets parent to none.
-                        item.Slot = (short)this.Items.Count;
-                        item.IsStored = true;
-
-                        this.Items.Add(item);
-
-                        List<Item> itemsByType = new List<Item>();
-
-                        foreach (Item loopItem in this.Items)
-                        {
-                            if (loopItem.Type == item.Type)
-                            {
-                                itemsByType.Add(loopItem);
-                            }
-                        }
-
-                        using (var oPacket = new PacketWriter(ServerOperationCode.Storage))
-                        {
-
-                            oPacket.WriteByte(13);
-                            oPacket.WriteByte(this.Slots);
-                            oPacket.WriteShort((short)(2 << (byte)item.Type));
-                            oPacket.WriteShort(0);
-                            oPacket.WriteInt(0);
-                            oPacket.WriteByte((byte)itemsByType.Count);
-
-                            foreach (Item loopItem in itemsByType)
-                            {
-                                oPacket.WriteBytes(loopItem.ToByteArray(true, true));
-                            }
-
-                            this.Parent.Client.Send(oPacket);
-                        }
-                    }
-                    break;
-
-                case StorageAction.ModifyMeso:
-                    {
-                        int meso = iPacket.ReadInt();
-
-                        if (meso > 0) // NOTE: Withdraw meso.
-                        {
-                            // TODO: Meso checks.
-                        }
-                        else // NOTE: Deposit meso.
-                        {
-                            // TODO: Meso checks.
-                        }
-
-                        this.Meso -= meso;
-                        this.Parent.Meso += meso;
-
-                        using (var oPacket = new PacketWriter(ServerOperationCode.Storage))
-                        {
-
-                            oPacket.WriteByte(19);
-                            oPacket.WriteByte(this.Slots);
-                            oPacket.WriteShort(2);
-                            oPacket.WriteShort(0);
-                            oPacket.WriteInt(0);
-                            oPacket.WriteInt(this.Meso);
-
-                            this.Parent.Client.Send(oPacket);
-                        }
-                    }
-                    break;
-
-                case StorageAction.Leave:
-                    {
-                        this.Save();
-                    }
-                    break;
             }
         }
     }

@@ -26,7 +26,7 @@ namespace RazzleServer.Game
 
         public override void Receive(PacketReader packet)
         {
-            ClientOperationCode header = ClientOperationCode.UNKNOWN;
+            ClientOperationCode header = ClientOperationCode.Unknown;
             try
             {
                 if (packet.Available >= 2)

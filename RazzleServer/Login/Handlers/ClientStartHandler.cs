@@ -4,10 +4,10 @@ using RazzleServer.Common.Util;
 
 namespace RazzleServer.Login.Handlers
 {
-    [PacketHandler(ClientOperationCode.CLIENT_START)]
+    [PacketHandler(ClientOperationCode.ClientStart)]
     public class ClientStartHandler : LoginPacketHandler
     {
-        private ILogger Log = LogManager.Log;
+        private readonly ILogger Log = LogManager.Log;
 
         public override void HandlePacket(PacketReader packet, LoginClient client)
         {

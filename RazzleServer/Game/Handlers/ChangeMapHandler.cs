@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using RazzleServer.Common.Packet;
-using RazzleServer.Game.Maple.Maps;
+﻿using RazzleServer.Common.Packet;
 
 namespace RazzleServer.Game.Handlers
 {
-    [PacketHandler(ClientOperationCode.CHANGE_MAP)]
+    [PacketHandler(ClientOperationCode.MapChange)]
     public class ChangeMapHandler : GamePacketHandler
     {
         public override void HandlePacket(PacketReader packet, GameClient client)

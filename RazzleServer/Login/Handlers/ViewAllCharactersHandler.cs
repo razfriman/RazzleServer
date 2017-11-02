@@ -2,7 +2,7 @@
 
 namespace RazzleServer.Login.Handlers
 {
-    [PacketHandler(ClientOperationCode.VIEW_ALL_CHAR)]
+    [PacketHandler(ClientOperationCode.ViewAllChar)]
     public class ViewAllCharactersHandler : LoginPacketHandler
     {
         public override void HandlePacket(PacketReader packet, LoginClient client)

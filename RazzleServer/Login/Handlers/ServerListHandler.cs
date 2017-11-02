@@ -2,13 +2,13 @@
 
 namespace RazzleServer.Login.Handlers
 {
-    [PacketHandler(ClientOperationCode.SERVERLIST_REQUEST)]
-    [PacketHandler(ClientOperationCode.SERVERLIST_REREQUEST)]
+    [PacketHandler(ClientOperationCode.WorldList)]
+    [PacketHandler(ClientOperationCode.WorldRelist)]
     public class ServerListHandler : LoginPacketHandler
     {
         public override void HandlePacket(PacketReader packet, LoginClient client)
         {
-            var pw = new PacketWriter(ServerOperationCode.SERVERLIST);
+            var pw = new PacketWriter(ServerOperationCode.WorldInformation);
 
             foreach (var world in client.Server.Worlds)
             {
@@ -34,7 +34,7 @@ namespace RazzleServer.Login.Handlers
 
             client.Send(pw);
 
-            pw = new PacketWriter(ServerOperationCode.SERVERLIST);
+            pw = new PacketWriter(ServerOperationCode.WorldInformation);
             pw.WriteByte(0xFF);
             pw.WriteByte(0);
             client.Send(pw);

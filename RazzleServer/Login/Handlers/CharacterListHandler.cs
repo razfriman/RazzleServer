@@ -2,7 +2,7 @@
 
 namespace RazzleServer.Login.Handlers
 {
-    [PacketHandler(ClientOperationCode.CHARLIST_REQUEST)]
+    [PacketHandler(ClientOperationCode.WorldSelect)]
     public class CharacterListHandler : LoginPacketHandler
     {
         public override void HandlePacket(PacketReader packet, LoginClient client)

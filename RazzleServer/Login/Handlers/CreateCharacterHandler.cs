@@ -7,7 +7,7 @@ using RazzleServer.Game.Maple.Data;
 
 namespace RazzleServer.Login.Handlers
 {
-    [PacketHandler(ClientOperationCode.CREATE_CHAR)]
+    [PacketHandler(ClientOperationCode.CharacterCreate)]
     public class CreateCharacterHandler : LoginPacketHandler
     {
         public override void HandlePacket(PacketReader packet, LoginClient client)

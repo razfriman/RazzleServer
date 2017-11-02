@@ -3,13 +3,13 @@ using RazzleServer.Game.Maple.Characters;
 
 namespace RazzleServer.Login.Handlers
 {
-    [PacketHandler(ClientOperationCode.CHECK_CHAR_NAME)]
+    [PacketHandler(ClientOperationCode.CharacterNameCheck)]
     public class CheckCharacterNameHandler : LoginPacketHandler
     {
         public override void HandlePacket(PacketReader packet, LoginClient client)
         {
             var name = packet.ReadString();
-            var pw = new PacketWriter(ServerOperationCode.CHAR_NAME_RESPONSE);
+            var pw = new PacketWriter(ServerOperationCode.CheckCharacterNameResult);
             pw.WriteString(name);
             pw.WriteBool(Character.CharacterExists(name));
 

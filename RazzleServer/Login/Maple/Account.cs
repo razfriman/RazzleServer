@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Data;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Data;
 using RazzleServer.Common.Util;
 using RazzleServer.Data;
-using RazzleServer.DB.Models;
 
 namespace RazzleServer.Login.Maple
 {
-    public sealed class Account : MapleSavable<AccountEntity>
+    public sealed class Account : IMapleSavable
     {
         public LoginClient Client { get; private set; }
 
@@ -33,11 +31,13 @@ namespace RazzleServer.Login.Maple
             Client = client;
         }
 
-        public override void LoadByKey(string key)
+        public void Load(object key)
         {
+            var username = key as string;
+
             using (var dbContext = new MapleDbContext())
             {
-                var account = dbContext.Accounts.FirstOrDefault(x => x.Username == key);
+                var account = dbContext.Accounts.FirstOrDefault(x => x.Username == username);
 
                 if (account == null)
                 {
@@ -55,7 +55,7 @@ namespace RazzleServer.Login.Maple
         }
 
 
-        public override void Save()
+        public void Save()
         {
             using (var dbContext = new MapleDbContext())
             {
@@ -72,6 +72,16 @@ namespace RazzleServer.Login.Maple
             //    ID = datum.InsertAndReturnID();
             //    Assigned = true;
             //}
+        }
+
+        public int Create()
+        {
+            using (var dbContext = new MapleDbContext())
+            {
+                var account = dbContext.Accounts.FirstOrDefault(x => x.Username == Username);
+                dbContext.SaveChanges();
+                return account.ID;
+            }
         }
     }
 }

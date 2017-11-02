@@ -3,7 +3,7 @@ using RazzleServer.Game.Maple;
 
 namespace RazzleServer.Game.Handlers
 {
-    [PacketHandler(ClientOperationCode.MOVE_PLAYER)]
+    [PacketHandler(ClientOperationCode.PlayerMovement)]
     public class PlayerMovementHandler : GamePacketHandler
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
