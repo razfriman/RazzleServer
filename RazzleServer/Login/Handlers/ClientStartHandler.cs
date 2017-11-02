@@ -7,7 +7,7 @@ namespace RazzleServer.Login.Handlers
     [PacketHandler(ClientOperationCode.CLIENT_START)]
     public class ClientStartHandler : LoginPacketHandler
     {
-        private static ILogger Log = LogManager.Log;
+        private ILogger Log = LogManager.Log;
 
         public override void HandlePacket(PacketReader packet, LoginClient client)
         {

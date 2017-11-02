@@ -1,34 +1,25 @@
-﻿using Microsoft.Extensions.Logging;
-using RazzleServer.Common.Packet;
-using RazzleServer.Common.Util;
+﻿using RazzleServer.Common.Packet;
+using RazzleServer.Game.Maple.Commands;
+using RazzleServer.Server;
 
 namespace RazzleServer.Game.Handlers
 {
-    [PacketHandler(ClientOperationCode.GENERAL_CHAT)]
+    [PacketHandler(ClientOperationCode.PlayerChat)]
     public class PlayerChatHandler : GamePacketHandler
     {
-        private static ILogger Log = LogManager.Log;
-
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
-            string message = packet.ReadString();
-            byte show = packet.ReadByte();
-            var pw = PlayerChatPacket(client.Character.ID, message, show, client.Account.IsMaster);
-            client.Character.Map.Broadcast(pw);
-        }
+            string text = packet.ReadString();
+            bool shout = packet.ReadBool();
 
-        public static PacketWriter PlayerChatPacket(int characterId, string message, byte show, bool whiteBackground)
-        {
-            
-            var pw = new PacketWriter(ServerOperationCode.PLAYER_CHAT);
-            pw.WriteInt(characterId);
-            pw.WriteBool(whiteBackground);
-            pw.WriteString(message);
-            pw.WriteByte(show);
-            pw.WriteBool(false);//isWorldMessage
-            pw.WriteByte(0xFF);//if isWorldMessage, this is worldID
-
-            return pw;
+            if (text.StartsWith(ServerConfig.Instance.CommandIndicator))
+            {
+                CommandFactory.Execute(client.Character, text);
+            }
+            else
+            {
+                client.Character.Talk(text, shout);
+            }
         }
     }
 }

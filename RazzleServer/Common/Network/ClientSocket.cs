@@ -21,7 +21,7 @@ namespace RazzleServer.Common.Network
         private readonly bool _toClient;
 		private bool disposed;
 
-		private static ILogger Log = LogManager.Log;
+		private ILogger Log = LogManager.Log;
 
 		public MapleCipherProvider Crypto { get; private set; }
 		public bool Connected => !disposed;
@@ -74,8 +74,6 @@ namespace RazzleServer.Common.Network
 			{
 				int size = e.BytesTransferred;
 
-                Console.WriteLine("RECV: " + e.BytesTransferred);
-
                 if (size == 0 || e.SocketError != SocketError.Success)
 				{
 					Disconnect();
@@ -93,8 +91,6 @@ namespace RazzleServer.Common.Network
             if (!disposed)
 			{
 				int offset = 0;
-
-                Console.WriteLine("SEND RAW: " + final.ByteArrayToString());
 
                 while (offset < final.Length)
 				{
@@ -141,6 +137,7 @@ namespace RazzleServer.Common.Network
 				try
 				{
 					_socket.Shutdown(SocketShutdown.Both);
+                    _socket.Close();
 				}
 				finally
 				{

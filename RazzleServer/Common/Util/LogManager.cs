@@ -10,5 +10,7 @@ namespace RazzleServer.Common.Util
             .AddDebug();
 
         public static ILogger Log => factory.CreateLogger(new StackFrame(1, false).GetMethod().DeclaringType.FullName);
+
+        public static ILogger LogByName(string fullName) => factory.CreateLogger(fullName);
     }
 }

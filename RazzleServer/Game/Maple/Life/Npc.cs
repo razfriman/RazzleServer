@@ -13,7 +13,7 @@ namespace RazzleServer.Game.Maple.Life
 {
     public class Npc : LifeObject, ISpawnable, IControllable
     {
-        private static readonly ILogger Log = LogManager.Log;
+        private readonly ILogger Log = LogManager.Log;
 
 
         public Npc(Datum datum)

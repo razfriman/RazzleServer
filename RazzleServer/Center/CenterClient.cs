@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
-using System.Reflection;
 using RazzleServer.Common.Network;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Center.Maple;
@@ -14,8 +12,6 @@ namespace RazzleServer.Center
 {
     public sealed class CenterClient : AClient
     {
-        public static Dictionary<InteroperabilityOperationCode, List<CenterPacketHandler>> PacketHandlers = new Dictionary<InteroperabilityOperationCode, List<CenterPacketHandler>>();
-
         public ServerType Type { get; internal set; }
         public World World { get; internal set; }
         public byte ID { get; set; }
@@ -86,36 +82,7 @@ namespace RazzleServer.Center
             Send(outPacket);
         }
 
-        public static void RegisterPacketHandlers()
-        {
-            var types = Assembly.GetEntryAssembly().GetTypes();
 
-            var handlerCount = 0;
-
-            foreach (var type in types)
-            {
-                var attributes = type.GetTypeInfo().GetCustomAttributes()
-                                     .OfType<InteroperabilityPacketHandlerAttribute>()
-                                     .ToList();
-
-                foreach (var attribute in attributes)
-                {
-                    var header = attribute.Header;
-
-                    if (!PacketHandlers.ContainsKey(header))
-                    {
-                        PacketHandlers[header] = new List<CenterPacketHandler>();
-                    }
-
-                    handlerCount++;
-                    var handler = (CenterPacketHandler)Activator.CreateInstance(type);
-                    PacketHandlers[header].Add(handler);
-                    Log.LogDebug($"Registered Packet Handler [{attribute.Header}] to [{type.Name}]");
-                }
-            }
-
-            Log.LogInformation($"Registered {handlerCount} packet handlers");
-        }
 
         public override void Receive(PacketReader packet)
         {
@@ -127,11 +94,11 @@ namespace RazzleServer.Center
                 {
                     header = (InteroperabilityOperationCode)packet.ReadUShort();
 
-                    if (PacketHandlers.ContainsKey(header))
+                    if (Server.PacketHandlers.ContainsKey(header))
                     {
                         Log.LogInformation($"Received [{header.ToString()}] {Functions.ByteArrayToStr(packet.ToArray())}");
 
-                        foreach (var handler in PacketHandlers[header])
+                        foreach (var handler in Server.PacketHandlers[header])
                         {
                             handler.HandlePacket(packet, this);
                         }

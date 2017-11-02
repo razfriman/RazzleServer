@@ -10,7 +10,7 @@ namespace RazzleServer.Center.Handlers
     [InteroperabilityPacketHandler(InteroperabilityOperationCode.RegistrationRequest)]
     public class RegistrationRequestHandler : CenterPacketHandler
     {
-        private static readonly ILogger Log = LogManager.Log;
+        private readonly ILogger Log = LogManager.Log;
 
         public override void HandlePacket(PacketReader packet, CenterClient client)
         {

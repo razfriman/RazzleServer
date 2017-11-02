@@ -10,7 +10,7 @@ namespace RazzleServer.Game.Maple.Maps
 {
     public class Portal : MapObject
     {
-        private static readonly ILogger Log = LogManager.Log;
+        private readonly ILogger Log = LogManager.Log;
 
         public byte ID { get; private set; }
         public string Label { get; private set; }

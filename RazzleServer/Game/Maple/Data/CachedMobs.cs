@@ -9,7 +9,7 @@ namespace RazzleServer.Game.Maple.Data
 {
     public sealed class CachedMobs : KeyedCollection<int, Mob>
     {
-        private static readonly ILogger Log = LogManager.Log;
+        private readonly ILogger Log = LogManager.Log;
 
         public CachedMobs()
             : base()

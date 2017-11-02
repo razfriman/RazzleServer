@@ -8,7 +8,7 @@ namespace RazzleServer.Game.Maple.Data
 {
     public sealed class CreationData
     {
-        private static readonly ILogger Log = LogManager.Log;
+        private readonly ILogger Log = LogManager.Log;
 
         public List<string> ForbiddenNames { get; private set; } = new List<string>();
         public List<byte> MaleSkins { get; private set; } = new List<byte>();

@@ -4,6 +4,11 @@ using RazzleServer.Server;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Server;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Linq;
+using System;
+using RazzleServer.Game.Maple.Characters;
 
 namespace RazzleServer.Game
 {
@@ -12,6 +17,7 @@ namespace RazzleServer.Game
         public GameCenterClient CenterConnection { get; set; }
         public byte ChannelID { get; set; }
         public WorldConfig World { get; set; }
+        public Dictionary<ClientOperationCode, List<GamePacketHandler>> PacketHandlers { get; private set; } = new Dictionary<ClientOperationCode, List<GamePacketHandler>>();
 
         public static GameServer CurrentInstance { get; private set; }
 
@@ -43,5 +49,40 @@ namespace RazzleServer.Game
             CenterConnection?.Dispose();
             ShutDown();
         }
+
+        public override void RegisterPacketHandlers()
+        {
+            var types = Assembly.GetEntryAssembly()
+                                .GetTypes()
+                                .Where(x => x.IsSubclassOf(typeof(GamePacketHandler)));
+
+            var handlerCount = 0;
+
+            foreach (var type in types)
+            {
+                var attributes = type.GetTypeInfo().GetCustomAttributes()
+                                     .OfType<PacketHandlerAttribute>()
+                                     .ToList();
+
+                foreach (var attribute in attributes)
+                {
+                    var header = attribute.Header;
+
+                    if (!PacketHandlers.ContainsKey(header))
+                    {
+                        PacketHandlers[header] = new List<GamePacketHandler>();
+                    }
+
+                    handlerCount++;
+                    var handler = (GamePacketHandler)Activator.CreateInstance(type);
+                    PacketHandlers[header].Add(handler);
+                    Log.LogDebug($"Registered Packet Handler [{attribute.Header}] to [{type.Name}]");
+                }
+            }
+
+            Log.LogInformation($"Registered {handlerCount} packet handlers");
+        }
+
+        public Character GetCharacterByName(string name) => Clients.Values.Select(x => x.Character).FirstOrDefault(x => x.Name == name);   
     }
 }

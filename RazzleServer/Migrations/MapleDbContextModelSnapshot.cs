@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore.Storage.Internal;
 using RazzleServer.Data;
 using System;
 
@@ -18,7 +19,7 @@ namespace RazzleServer.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.0.0-rtm-26452");
 
-            modelBuilder.Entity("RazzleServer.DB.Models.Account", b =>
+            modelBuilder.Entity("RazzleServer.DB.Models.AccountEntity", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
@@ -39,14 +40,12 @@ namespace RazzleServer.Migrations
 
                     b.Property<string>("Password");
 
-                    b.Property<string>("Pic");
-
                     b.HasKey("ID");
 
                     b.ToTable("Accounts");
                 });
 
-            modelBuilder.Entity("RazzleServer.DB.Models.Buddy", b =>
+            modelBuilder.Entity("RazzleServer.DB.Models.BuddyEntity", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
@@ -75,7 +74,7 @@ namespace RazzleServer.Migrations
                     b.ToTable("Buddies");
                 });
 
-            modelBuilder.Entity("RazzleServer.DB.Models.Character", b =>
+            modelBuilder.Entity("RazzleServer.DB.Models.CharacterEntity", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
@@ -145,31 +144,7 @@ namespace RazzleServer.Migrations
                     b.ToTable("Characters");
                 });
 
-            modelBuilder.Entity("RazzleServer.DB.Models.DbSkillMacro", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("CharacterID");
-
-                    b.Property<byte>("Index");
-
-                    b.Property<string>("Name");
-
-                    b.Property<bool>("ShoutName");
-
-                    b.Property<int>("Skill1");
-
-                    b.Property<int>("Skill2");
-
-                    b.Property<int>("Skill3");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("SkillMacros");
-                });
-
-            modelBuilder.Entity("RazzleServer.DB.Models.Guild", b =>
+            modelBuilder.Entity("RazzleServer.DB.Models.GuildEntity", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
@@ -218,7 +193,7 @@ namespace RazzleServer.Migrations
                     b.ToTable("Guilds");
                 });
 
-            modelBuilder.Entity("RazzleServer.DB.Models.InventoryEquip", b =>
+            modelBuilder.Entity("RazzleServer.DB.Models.InventoryEquipEntity", b =>
                 {
                     b.Property<long>("ID")
                         .ValueGeneratedOnAdd();
@@ -292,7 +267,7 @@ namespace RazzleServer.Migrations
                     b.ToTable("InventoryEquips");
                 });
 
-            modelBuilder.Entity("RazzleServer.DB.Models.InventoryItem", b =>
+            modelBuilder.Entity("RazzleServer.DB.Models.InventoryItemEntity", b =>
                 {
                     b.Property<long>("ID")
                         .ValueGeneratedOnAdd();
@@ -317,7 +292,7 @@ namespace RazzleServer.Migrations
                     b.ToTable("InventoryItems");
                 });
 
-            modelBuilder.Entity("RazzleServer.DB.Models.InventorySlot", b =>
+            modelBuilder.Entity("RazzleServer.DB.Models.InventorySlotEntity", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
@@ -339,7 +314,7 @@ namespace RazzleServer.Migrations
                     b.ToTable("InventorySlots");
                 });
 
-            modelBuilder.Entity("RazzleServer.DB.Models.KeyMap", b =>
+            modelBuilder.Entity("RazzleServer.DB.Models.KeyMapEntity", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
@@ -357,7 +332,23 @@ namespace RazzleServer.Migrations
                     b.ToTable("KeyMaps");
                 });
 
-            modelBuilder.Entity("RazzleServer.DB.Models.QuestCustomData", b =>
+            modelBuilder.Entity("RazzleServer.DB.Models.MemoEntity", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Message");
+
+                    b.Property<DateTime>("Received");
+
+                    b.Property<string>("Sender");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("MemoEntities");
+                });
+
+            modelBuilder.Entity("RazzleServer.DB.Models.QuestCustomDataEntity", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
@@ -373,7 +364,7 @@ namespace RazzleServer.Migrations
                     b.ToTable("QuestCustomData");
                 });
 
-            modelBuilder.Entity("RazzleServer.DB.Models.QuestMobStatus", b =>
+            modelBuilder.Entity("RazzleServer.DB.Models.QuestMobStatusEntity", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
@@ -389,7 +380,7 @@ namespace RazzleServer.Migrations
                     b.ToTable("QuestStatusMobs");
                 });
 
-            modelBuilder.Entity("RazzleServer.DB.Models.QuestStatus", b =>
+            modelBuilder.Entity("RazzleServer.DB.Models.QuestStatusEntity", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
@@ -410,7 +401,7 @@ namespace RazzleServer.Migrations
                     b.ToTable("QuestStatus");
                 });
 
-            modelBuilder.Entity("RazzleServer.DB.Models.QuickSlotKeyMap", b =>
+            modelBuilder.Entity("RazzleServer.DB.Models.QuickSlotKeyMapEntity", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
@@ -426,7 +417,25 @@ namespace RazzleServer.Migrations
                     b.ToTable("QuickSlotKeyMaps");
                 });
 
-            modelBuilder.Entity("RazzleServer.DB.Models.Skill", b =>
+            modelBuilder.Entity("RazzleServer.DB.Models.SkillCooldownEntity", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("CharacterID");
+
+                    b.Property<int>("Length");
+
+                    b.Property<int>("SkillID");
+
+                    b.Property<long>("StartTime");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("SkillCooldowns");
+                });
+
+            modelBuilder.Entity("RazzleServer.DB.Models.SkillEntity", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
@@ -448,22 +457,28 @@ namespace RazzleServer.Migrations
                     b.ToTable("Skills");
                 });
 
-            modelBuilder.Entity("RazzleServer.DB.Models.SkillCooldown", b =>
+            modelBuilder.Entity("RazzleServer.DB.Models.SkillMacroEntity", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("CharacterID");
 
-                    b.Property<int>("Length");
+                    b.Property<byte>("Index");
 
-                    b.Property<int>("SkillID");
+                    b.Property<string>("Name");
 
-                    b.Property<long>("StartTime");
+                    b.Property<bool>("ShoutName");
+
+                    b.Property<int>("Skill1");
+
+                    b.Property<int>("Skill2");
+
+                    b.Property<int>("Skill3");
 
                     b.HasKey("ID");
 
-                    b.ToTable("SkillCooldowns");
+                    b.ToTable("SkillMacros");
                 });
 #pragma warning restore 612, 618
         }

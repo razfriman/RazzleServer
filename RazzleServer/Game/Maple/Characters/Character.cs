@@ -77,7 +77,7 @@ namespace RazzleServer.Game.Maple.Characters
         private Quest lastQuest;
         private string chalkboard;
 
-        private static readonly ILogger Log = LogManager.Log;
+        private readonly ILogger Log = LogManager.Log;
 
         public Gender Gender
         {
@@ -233,18 +233,9 @@ namespace RazzleServer.Game.Maple.Characters
                     {
                         for (int i = 0; i < delta; i++)
                         {
-                            // TODO: Health/Mana improvement.
-
                             level++;
 
-                            if (IsCygnus)
-                            {
-                                AbilityPoints += 6;
-                            }
-                            else
-                            {
-                                AbilityPoints += 5;
-                            }
+                            AbilityPoints += 5;
 
                             if (Job != Job.Beginner)
                             {
@@ -381,10 +372,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public short MaxHealth
         {
-            get
-            {
-                return maxHealth;
-            }
+            get => maxHealth;
             set
             {
                 maxHealth = value;
@@ -398,10 +386,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public short Mana
         {
-            get
-            {
-                return mana;
-            }
+            get => mana;
             set
             {
                 if (value < 0)
@@ -426,10 +411,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public short MaxMana
         {
-            get
-            {
-                return maxMana;
-            }
+            get => maxMana;
             set
             {
                 maxMana = value;
@@ -443,10 +425,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public short AbilityPoints
         {
-            get
-            {
-                return abilityPoints;
-            }
+            get => abilityPoints;
             set
             {
                 abilityPoints = value;
@@ -460,10 +439,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public short SkillPoints
         {
-            get
-            {
-                return skillPoints;
-            }
+            get => skillPoints;
             set
             {
                 skillPoints = value;
@@ -477,10 +453,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public int Experience
         {
-            get
-            {
-                return experience;
-            }
+            get => experience;
             set
             {
                 int delta = value - experience;
@@ -550,31 +523,13 @@ namespace RazzleServer.Game.Maple.Characters
 
         public bool IsMaster => Client.Account?.IsMaster ?? false;
 
-        // TODO: Improve this check.
-        public bool IsCygnus => (short)Job >= 1000 && (short)Job <= 2000;
+        public bool FacesLeft => Stance % 2 == 0;
 
-        public bool FacesLeft
-        {
-            get
-            {
-                return Stance % 2 == 0;
-            }
-        }
-
-        public bool IsRanked
-        {
-            get
-            {
-                return Level >= 30;
-            }
-        }
+        public bool IsRanked => Level >= 30;
 
         public Npc LastNpc
         {
-            get
-            {
-                return lastNpc;
-            }
+            get => lastNpc;
             set
             {
                 if (value == null)
@@ -591,24 +546,13 @@ namespace RazzleServer.Game.Maple.Characters
 
         public Quest LastQuest
         {
-            get
-            {
-                return lastQuest;
-            }
-            set
-            {
-                lastQuest = value;
-
-                // TODO: Add checks.
-            }
+            get => lastQuest;
+            set => lastQuest = value;
         }
 
         public string Chalkboard
         {
-            get
-            {
-                return chalkboard;
-            }
+            get => chalkboard;
             set
             {
                 chalkboard = value;
@@ -618,7 +562,6 @@ namespace RazzleServer.Game.Maple.Characters
                     oPacket.WriteInt(ID);
                     oPacket.WriteBool(!string.IsNullOrEmpty(Chalkboard));
                     oPacket.WriteString(Chalkboard);
-
                     Map.Broadcast(oPacket);
                 }
             }
@@ -976,7 +919,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void ChangeMap(PacketReader iPacket)
         {
-           
+
         }
 
         public void Revive()
@@ -1173,20 +1116,13 @@ namespace RazzleServer.Game.Maple.Characters
 
             foreach (KeyValuePair<int, List<uint>> target in attack.Damages)
             {
-                Mob mob;
-
-                try
-                {
-                    mob = Map.Mobs[target.Key];
-                }
-                catch (KeyNotFoundException)
+                if (!Map.Mobs.Contains(target.Key))
                 {
                     continue;
                 }
-
+                var mob = Map.Mobs[target.Key];
                 mob.IsProvoked = true;
                 mob.SwitchController(this);
-
                 foreach (uint hit in target.Value)
                 {
                     if (mob.Damage(this, hit))
@@ -1222,16 +1158,11 @@ namespace RazzleServer.Game.Maple.Characters
                 mobID = iPacket.ReadInt();
                 mobObjectID = iPacket.ReadInt();
 
-                Mob mob;
-
-                try
-                {
-                    mob = Map.Mobs[mobObjectID];
-                }
-                catch (KeyNotFoundException)
+                if (!Map.Mobs.Contains(mobObjectID))
                 {
                     return;
                 }
+                var mob = Map.Mobs[mobObjectID];
 
                 if (mobID != mob.MapleID)
                 {
@@ -1346,45 +1277,24 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public void Talk(PacketReader iPacket)
+        public void Talk(string text, bool isShout)
         {
-            string text = iPacket.ReadString();
-            bool shout = iPacket.ReadBool(); // NOTE: Used for skill macros.
-
-            if (text.StartsWith(ServerConfig.Instance.CommandIndicator.ToString()))
+            using (var oPacket = new PacketWriter(ServerOperationCode.UserChat))
             {
-                CommandFactory.Execute(this, text);
-            }
-            else
-            {
-                using (var oPacket = new PacketWriter(ServerOperationCode.UserChat))
-                {
-                    oPacket.WriteInt(ID);
-                    oPacket.WriteBool(IsMaster);
-                    oPacket.WriteString(text);
-                    oPacket.WriteBool(shout);
-
-                    Map.Broadcast(oPacket);
-                }
+                oPacket.WriteInt(ID);
+                oPacket.WriteBool(IsMaster);
+                oPacket.WriteString(text);
+                oPacket.WriteBool(isShout);
+                Map.Broadcast(oPacket);
             }
         }
 
-        public void Express(PacketReader iPacket)
+        public void PerformFacialExpression(int expressionID)
         {
-            int expressionID = iPacket.ReadInt();
-
-            if (expressionID > 7) // NOTE: Cash facial expression.
-            {
-                int mapleID = 5159992 + expressionID;
-
-                // TODO: Validate if item exists.
-            }
-
             using (var oPacket = new PacketWriter(ServerOperationCode.Emotion))
             {
                 oPacket.WriteInt(ID);
                 oPacket.WriteInt(expressionID);
-
                 Map.Broadcast(oPacket, this);
             }
         }
@@ -1851,169 +1761,6 @@ namespace RazzleServer.Game.Maple.Characters
                         else if (PlayerShop != null)
                         {
                             PlayerShop.Handle(this, code, iPacket);
-                        }
-                    }
-                    break;
-            }
-        }
-
-        public void UseAdminCommand(PacketReader iPacket)
-        {
-            if (!IsMaster)
-            {
-                return;
-            }
-
-            AdminCommandType type = (AdminCommandType)iPacket.ReadByte();
-
-            switch (type)
-            {
-                case AdminCommandType.Hide:
-                    {
-                        bool hide = iPacket.ReadBool();
-
-                        if (hide)
-                        {
-                            // TODO: Add SuperGM's hide buff.
-                        }
-                        else
-                        {
-                            // TOOD: Remove SuperGM's hide buff.
-                        }
-                    }
-                    break;
-
-                case AdminCommandType.Send:
-                    {
-                        string name = iPacket.ReadString();
-                        int destinationID = iPacket.ReadInt();
-
-                        Character target = null;// this.Client.World.GetCharacter(name);
-
-                        if (target != null)
-                        {
-                            target.ChangeMap(destinationID);
-                        }
-                        else
-                        {
-                            using (var oPacket = new PacketWriter(ServerOperationCode.AdminResult))
-                            {
-
-                                oPacket.WriteByte(6);
-                                oPacket.WriteByte(1);
-
-                                Client.Send(oPacket);
-                            }
-                        }
-                    }
-                    break;
-
-                case AdminCommandType.Summon:
-                    {
-                        int mobID = iPacket.ReadInt();
-                        int count = iPacket.ReadInt();
-
-                        if (DataProvider.Mobs.Contains(mobID))
-                        {
-                            for (int i = 0; i < count; i++)
-                            {
-                                Map.Mobs.Add(new Mob(mobID, Position));
-                            }
-                        }
-                        else
-                        {
-                            Notify("invalid mob: " + mobID); // TODO: Actual message.
-                        }
-                    }
-                    break;
-
-                case AdminCommandType.CreateItem:
-                    {
-                        int itemID = iPacket.ReadInt();
-
-                        Items.Add(new Item(itemID));
-                    }
-                    break;
-
-                case AdminCommandType.DestroyFirstITem:
-                    {
-                        // TODO: What does this do?
-                    }
-                    break;
-
-                case AdminCommandType.GiveExperience:
-                    {
-                        int amount = iPacket.ReadInt();
-
-                        Experience += amount;
-                    }
-                    break;
-
-                case AdminCommandType.Ban:
-                    {
-                        string name = iPacket.ReadString();
-
-                        Character target = null;//this.Client.World.GetCharacter(name);
-
-                        if (target != null)
-                        {
-                            target.Client.Terminate();
-                        }
-                        else
-                        {
-                            using (var oPacket = new PacketWriter(ServerOperationCode.AdminResult))
-                            {
-                                oPacket.WriteByte(6);
-                                oPacket.WriteByte(1);
-
-                                Client.Send(oPacket);
-                            }
-                        }
-                    }
-                    break;
-
-                case AdminCommandType.Block:
-                    {
-                        // TODO: Ban.
-                    }
-                    break;
-
-                case AdminCommandType.ShowMessageMap:
-                    {
-                        // TODO: What does this do?
-                    }
-                    break;
-
-                case AdminCommandType.Snow:
-                    {
-                        // TODO: We have yet to implement map weather.
-                    }
-                    break;
-
-                case AdminCommandType.VarSetGet:
-                    {
-                        // TODO: This seems useless. Should we implement this?
-                    }
-                    break;
-
-                case AdminCommandType.Warn:
-                    {
-                        string name = iPacket.ReadString();
-                        string text = iPacket.ReadString();
-
-                        Character target = null;// this.Client.World.GetCharacter(name);
-
-                        if (target != null)
-                        {
-                            target.Notify(text, NoticeType.Popup);
-                        }
-
-                        using (var oPacket = new PacketWriter(ServerOperationCode.AdminResult))
-                        {
-                            oPacket.WriteByte(29);
-                            oPacket.WriteBool(target != null);
-
-                            Client.Send(oPacket);
                         }
                     }
                     break;

@@ -16,8 +16,6 @@ namespace RazzleServer.Login
 {
     public sealed class LoginClient : AClient
     {
-        public static Dictionary<ClientOperationCode, List<LoginPacketHandler>> PacketHandlers = new Dictionary<ClientOperationCode, List<LoginPacketHandler>>();
-
         public byte World { get; internal set; }
         public byte Channel { get; internal set; }
         public Account Account { get; internal set; }
@@ -32,40 +30,7 @@ namespace RazzleServer.Login
             Server = server;
         }
 
-        public static void RegisterPacketHandlers()
-        {
 
-            var types = Assembly.GetEntryAssembly()
-                                .GetTypes()
-                                .Where(x => x.IsSubclassOf(typeof(LoginPacketHandler)));
-
-            var handlerCount = 0;
-
-            foreach (var type in types)
-            {
-                var attributes = type.GetTypeInfo()
-                                     .GetCustomAttributes()
-                                     .OfType<PacketHandlerAttribute>()
-                                     .ToList();
-
-                foreach (var attribute in attributes)
-                {
-                    var header = attribute.Header;
-
-                    if (!PacketHandlers.ContainsKey(header))
-                    {
-                        PacketHandlers[header] = new List<LoginPacketHandler>();
-                    }
-
-                    handlerCount++;
-                    var handler = (LoginPacketHandler)Activator.CreateInstance(type);
-                    PacketHandlers[header].Add(handler);
-                    Log.LogDebug($"Registered Packet Handler [{attribute.Header}] to [{type.Name}]");
-                }
-            }
-
-            Log.LogInformation($"Registered {handlerCount} packet handlers");
-        }
 
         public override void Receive(PacketReader packet)
         {
@@ -76,11 +41,11 @@ namespace RazzleServer.Login
                 {
                     header = (ClientOperationCode)packet.ReadUShort();
 
-                    if (PacketHandlers.ContainsKey(header))
+                    if (Server.PacketHandlers.ContainsKey(header))
                     {
                         Log.LogInformation($"Received [{header.ToString()}] {Functions.ByteArrayToStr(packet.ToArray())}");
 
-                        foreach (var handler in PacketHandlers[header])
+                        foreach (var handler in Server.PacketHandlers[header])
                         {
                             handler.HandlePacket(packet, this);
                         }
@@ -104,7 +69,7 @@ namespace RazzleServer.Login
 
             try
             {
-                Account.Load(username);
+                Account.LoadByKey(username);
 
                 if (Functions.GetSha512(password + Account.Salt) != Account.Password)
                 {

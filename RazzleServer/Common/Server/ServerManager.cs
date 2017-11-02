@@ -3,26 +3,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using RazzleServer.Data;
 using Microsoft.Extensions.Logging;
-using RazzleServer.Game;
-using RazzleServer.Login;
-using RazzleServer.Center;
 
 namespace RazzleServer.Server
 {
-    public static class ServerManager
+    public class ServerManager
     {
-        private static readonly ILogger Log = LogManager.Log;
+        private readonly ILogger Log = LogManager.Log;
 
-        public static async Task Configure()
+        public async Task Configure()
         {
 			await ServerConfig.LoadFromFile("ServerConfig.json");
-            CenterClient.RegisterPacketHandlers();
-			LoginClient.RegisterPacketHandlers();
-            GameClient.RegisterPacketHandlers();
             InitializeDatabase();
         }
 
-		private static void InitializeDatabase()
+		private void InitializeDatabase()
 		{
 			Log.LogInformation("Initializing Database");
 

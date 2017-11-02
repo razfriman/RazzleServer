@@ -48,7 +48,7 @@ namespace RazzleServer.Common.MapleCryptoLib
         /// </summary>
         private object AddLocker = new object();
 
-        private static ILogger Log = LogManager.Log;
+        private ILogger Log = LogManager.Log;
 
         public MapleCipherProvider(ushort currentGameVersion, ulong aesKey, ushort initialBufferSize = 0x100, bool toClient = true)
         {
@@ -183,8 +183,6 @@ namespace RazzleServer.Common.MapleCryptoLib
             {
                 RecvCipher.Handshake(ref data);
                 var pr = new PacketReader(data);
-
-                Console.WriteLine(data.ByteArrayToString());
                 var version = pr.ReadShort();
                 var subVersion = pr.ReadString();
                 var siv = pr.ReadUInt();

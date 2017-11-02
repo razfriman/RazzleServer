@@ -1,5 +1,8 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
@@ -12,6 +15,7 @@ namespace RazzleServer.Login
     {
         public LoginCenterClient CenterConnection { get; set; }
         public Worlds Worlds { get; private set; } = new Worlds();
+        public Dictionary<ClientOperationCode, List<LoginPacketHandler>> PacketHandlers { get; private set; } = new Dictionary<ClientOperationCode, List<LoginPacketHandler>>();
 
         public LoginServer()
         {
@@ -54,6 +58,41 @@ namespace RazzleServer.Login
             }
 
             CenterConnection?.Send(pw);
+        }
+
+        public override void RegisterPacketHandlers()
+        {
+
+            var types = Assembly.GetEntryAssembly()
+                                .GetTypes()
+                                .Where(x => x.IsSubclassOf(typeof(LoginPacketHandler)));
+
+            var handlerCount = 0;
+
+            foreach (var type in types)
+            {
+                var attributes = type.GetTypeInfo()
+                                     .GetCustomAttributes()
+                                     .OfType<PacketHandlerAttribute>()
+                                     .ToList();
+
+                foreach (var attribute in attributes)
+                {
+                    var header = attribute.Header;
+
+                    if (!PacketHandlers.ContainsKey(header))
+                    {
+                        PacketHandlers[header] = new List<LoginPacketHandler>();
+                    }
+
+                    handlerCount++;
+                    var handler = (LoginPacketHandler)Activator.CreateInstance(type);
+                    PacketHandlers[header].Add(handler);
+                    Log.LogDebug($"Registered Packet Handler [{attribute.Header}] to [{type.Name}]");
+                }
+            }
+
+            Log.LogInformation($"Registered {handlerCount} packet handlers");
         }
     }
 }

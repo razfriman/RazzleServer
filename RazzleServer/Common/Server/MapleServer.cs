@@ -19,8 +19,12 @@ namespace RazzleServer.Server
         protected Socket _centerSocket;
         private bool _disposed;
         private const int BACKLOG_SIZE = 50;
+        public ILogger Log { get; protected set; }
 
-        protected static readonly ILogger Log = LogManager.Log;
+        protected MapleServer()
+        {
+            Log = LogManager.LogByName(GetType().FullName);
+        }
 
         public virtual void RemoveClient(T client)
         {
@@ -66,6 +70,10 @@ namespace RazzleServer.Server
 
         }
 
+        public virtual void RegisterPacketHandlers()
+        {
+
+        }
 
         public virtual bool AllowConnection(string address) => true;
 
@@ -161,17 +169,22 @@ namespace RazzleServer.Server
         {
             try
             {
+                ConfigureForStartup();
                 Log.LogInformation($"Starting server on port [{port}]");
                 Port = port;
                 _listener = new TcpListener(ip, port);
                 _listener.Start(BACKLOG_SIZE);
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 Log.LogCritical(e, $"Error starting server on port [{port}]");
                 ShutDown();
             }
 
             Task.Factory.StartNew(ListenLoop);
         }
+
+        private void ConfigureForStartup() => RegisterPacketHandlers();
 
         private async Task ListenLoop()
         {

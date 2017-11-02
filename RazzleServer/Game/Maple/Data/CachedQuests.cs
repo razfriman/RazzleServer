@@ -8,7 +8,7 @@ namespace RazzleServer.Game.Maple.Data
 {
     public sealed class CachedQuests : KeyedCollection<ushort, Quest>
     {
-        private static readonly ILogger Log = LogManager.Log;
+        private readonly ILogger Log = LogManager.Log;
 
         public CachedQuests()
             : base()

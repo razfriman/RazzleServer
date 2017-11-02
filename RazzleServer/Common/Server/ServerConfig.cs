@@ -28,7 +28,7 @@ namespace RazzleServer.Server
         public bool RequestPic { get; set; }
         public List<WorldConfig> Worlds { get; set; }
 
-        private static ILogger Log = LogManager.Log;
+        private static readonly ILogger Log = LogManager.Log;
 
 		public static async Task LoadFromFile(string path)
 		{

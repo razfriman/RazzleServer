@@ -14,7 +14,7 @@ namespace RazzleServer.Game.Maple.Data
         public List<int> MaleFaces { get; private set; }
         public List<int> FemaleFaces { get; private set; }
 
-        private static readonly ILogger Log = LogManager.Log;
+        private readonly ILogger Log = LogManager.Log;
 
         public AvailableStyles()
         {

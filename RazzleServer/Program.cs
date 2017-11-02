@@ -11,23 +11,11 @@ namespace RazzleServer
     {
         public static async Task Main(string[] args)
         {
-            await ServerManager.Configure();
+            var manager = new ServerManager();
+            await manager.Configure();
 
-            System.Console.WriteLine("ARGS: " + string.Join(", ", args));
-
-            if (args.Length == 0)
-            {
-                var center = new CenterServer();
-                var login = new LoginServer();
-            }
-            if (args[0] == "C")
-            {
-                var center = new CenterServer();
-            }
-            else if (args[0] == "L")
-            {
-                var login = new LoginServer();
-            }
+            var center = new CenterServer();
+            var login = new LoginServer();
 
             ServerConfig.Instance.Worlds.ForEach(x =>
             {

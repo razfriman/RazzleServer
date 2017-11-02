@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace RazzleServer.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -21,8 +21,7 @@ namespace RazzleServer.Migrations
                     NXCredit = table.Column<int>(type: "INTEGER", nullable: false),
                     NXPrepaid = table.Column<int>(type: "INTEGER", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: true),
-                    Password = table.Column<string>(type: "TEXT", nullable: true),
-                    Pic = table.Column<string>(type: "TEXT", nullable: true)
+                    Password = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -217,6 +216,21 @@ namespace RazzleServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "MemoEntities",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Message = table.Column<string>(type: "TEXT", nullable: true),
+                    Received = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Sender = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MemoEntities", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "QuestCustomData",
                 columns: table => new
                 {
@@ -357,6 +371,9 @@ namespace RazzleServer.Migrations
 
             migrationBuilder.DropTable(
                 name: "KeyMaps");
+
+            migrationBuilder.DropTable(
+                name: "MemoEntities");
 
             migrationBuilder.DropTable(
                 name: "QuestCustomData");

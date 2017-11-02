@@ -1,10 +1,16 @@
 ﻿using System;
 using System.Data;
+using System.Linq;
+using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Constants;
+using RazzleServer.Common.Data;
+using RazzleServer.Common.Util;
+using RazzleServer.Data;
+using RazzleServer.DB.Models;
 
 namespace RazzleServer.Login.Maple
 {
-    public sealed class Account
+    public sealed class Account : MapleSavable<AccountEntity>
     {
         public LoginClient Client { get; private set; }
 
@@ -19,59 +25,44 @@ namespace RazzleServer.Login.Maple
         public DateTime Birthday { get; set; }
         public DateTime Creation { get; set; }
         public int MaxCharacters { get; set; }
-
         private bool Assigned { get; set; }
+        private ILogger Log = LogManager.Log;
 
         public Account(LoginClient client)
         {
             Client = client;
         }
 
-        public void Load(string username)
+        public override void LoadByKey(string key)
         {
-            //Datum datum = new Datum("accounts");
+            using (var dbContext = new MapleDbContext())
+            {
+                var account = dbContext.Accounts.FirstOrDefault(x => x.Username == key);
 
-            //try
-            //{
-            //    datum.Populate("Username = {0}", username);
-            //}
-            //catch (RowNotInTableException)
-            //{
-            //    throw new NoAccountException();
-            //}
+                if (account == null)
+                {
+                    Log.LogError($"Cannot find account with Username: [{key}");
+                    return;
+                }
 
-            //ID = (int)datum["ID"];
-            //Assigned = true;
-
-            //Username = (string)datum["Username"];
-            //Password = (string)datum["Password"];
-            //Salt = (string)datum["Salt"];
-            //Gender = (Gender)datum["Gender"];
-            //Pin = (string)datum["Pin"];
-            //Pic = (string)datum["Pic"];
-            //IsBanned = (bool)datum["IsBanned"];
-            //IsMaster = (bool)datum["IsMaster"];
-            //Birthday = (DateTime)datum["Birthday"];
-            //Creation = (DateTime)datum["Creation"];
-            //MaxCharacters = (int)datum["MaxCharacters"];
+                this.ID = account.ID;
+                this.Username = account.Username;
+                this.Gender = (Gender)account.Gender;
+                this.Password = account.Password;
+                this.Salt = account.Salt;
+                this.MaxCharacters = account.MaxCharacters;
+            }
         }
 
-        public void Save()
+
+        public override void Save()
         {
-            //Datum datum = new Datum("accounts");
-
-            //datum["Username"] = Username;
-            //datum["Password"] = Password;
-            //datum["Salt"] = Salt;
-            //datum["Gender"] = (byte)Gender;
-            //datum["Pin"] = Pin;
-            //datum["Pic"] = Pic;
-            //datum["IsBanned"] = IsBanned;
-            //datum["IsMaster"] = IsMaster;
-            //datum["Birthday"] = Birthday;
-            //datum["Creation"] = Creation;
-            //datum["MaxCharacters"] = MaxCharacters;
-
+            using (var dbContext = new MapleDbContext())
+            {
+                var account = dbContext.Accounts.FirstOrDefault(x => x.Username == Username);
+                dbContext.SaveChanges();
+            }
+        
             //if (Assigned)
             //{
             //    datum.Update("ID = {0}", ID);
@@ -81,8 +72,6 @@ namespace RazzleServer.Login.Maple
             //    ID = datum.InsertAndReturnID();
             //    Assigned = true;
             //}
-
-            //Log.Inform("Saved account '{0}' to database.", Username);
         }
     }
 }
