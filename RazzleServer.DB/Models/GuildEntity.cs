@@ -10,7 +10,6 @@ namespace RazzleServer.DB.Models
         public int LogoBG { get; set; }
         public int Capacity { get; set; }
         public int GP { get; set; }
-        public int AllianceID { get; set; }
         public int Signature { get; set; }
         public short LogoColor { get; set; }
         public short LogoBGColor { get; set; }

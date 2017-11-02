@@ -32,7 +32,6 @@
         public short Socket3 { get; set; }
         public int Durability { get; set; }
         public short CustomExp { get; set; }
-        public byte HammerApplied { get; set; }
         public byte Enhancements { get; set; }
         public byte CustomLevel { get; set; }
     }

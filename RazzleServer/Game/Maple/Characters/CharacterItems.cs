@@ -717,12 +717,6 @@ namespace RazzleServer.Game.Maple.Characters
                     }
                     break;
 
-                case 5570000: // NOTE: Vicious Hammer.
-                    {
-
-                    }
-                    break;
-
                 case 5090000: // NOTE: Note (Memo).
                     {
                         //string targetName = iPacket.ReadString();

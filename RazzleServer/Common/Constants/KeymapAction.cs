@@ -24,17 +24,13 @@
         PartyList = 19,
         QuestHelper = 20,
         SpouseChat = 21,
-        CashShop = 23,
-        AllianceChat = 24,
         PartySearch = 25,
-        FamilyList = 26,
         Medal = 27,
 
         PickUp = 50,
         Sit = 51,
         Attack = 52,
         Jump = 53,
-        NpcChat = 54,
 
         Cockeyed = 100,
         Happy = 101,

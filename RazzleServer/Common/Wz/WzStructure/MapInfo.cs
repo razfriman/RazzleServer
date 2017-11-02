@@ -171,18 +171,6 @@ namespace RazzleServer.Common.WzLib.WzStructure
                     case "decInterval":
                         decInterval = InfoTool.GetInt(prop);
                         break;
-                    case "autoLieDetector":
-                        startHour = InfoTool.GetOptionalInt(prop["startHour"]);
-                        endHour = InfoTool.GetOptionalInt(prop["endHour"]);
-                        int? interval = InfoTool.GetOptionalInt(prop["interval"]);
-                        int? propInt = InfoTool.GetOptionalInt(prop["prop"]);
-                        if (startHour == null || endHour == null || interval == null || propInt == null)
-                        {
-                            Log.LogError($"Invalid structure: {autoLieDetector}");
-                        }
-                        else
-                            autoLieDetector = new AutoLieDetector((int)startHour, (int)endHour, (int)interval, (int)propInt);
-                        break;
                     case "expeditionOnly":
                         expeditionOnly = InfoTool.GetBool(prop);
                         break;
@@ -313,15 +301,6 @@ namespace RazzleServer.Common.WzLib.WzStructure
             info["dropExpire"] = InfoTool.SetOptionalInt(dropExpire);
             info["decHP"] = InfoTool.SetOptionalInt(decHP);
             info["decInterval"] = InfoTool.SetOptionalInt(decInterval);
-            if (autoLieDetector != null)
-            {
-                WzSubProperty prop = new WzSubProperty();
-                prop["startHour"] = InfoTool.SetOptionalInt(autoLieDetector.Value.startHour);
-                prop["endHour"] = InfoTool.SetOptionalInt(autoLieDetector.Value.endHour);
-                prop["interval"] = InfoTool.SetOptionalInt(autoLieDetector.Value.interval);
-                prop["prop"] = InfoTool.SetOptionalInt(autoLieDetector.Value.prop);
-                info["autoLieDetector"] = prop;
-            }
             info["expeditionOnly"] = InfoTool.SetOptionalBool(expeditionOnly);
             info["fs"] = InfoTool.SetOptionalFloat(fs);
             info["protectItem"] = InfoTool.SetOptionalInt(protectItem);
@@ -401,7 +380,6 @@ namespace RazzleServer.Common.WzLib.WzStructure
         public int? dropExpire; //in seconds
         public int? decHP;
         public int? decInterval;
-        public AutoLieDetector? autoLieDetector;
         public MapleBool expeditionOnly = null;
         public float? fs; //slip on ice speed, default 0.2
         public int? protectItem; //ID, item protecting from cold
@@ -457,19 +435,6 @@ namespace RazzleServer.Common.WzLib.WzStructure
                 this.endHour = endHour;
                 this.id = id;
                 this.message = message;
-            }
-        }
-
-        public struct AutoLieDetector
-        {
-            public int startHour, endHour, interval, prop; //interval in mins, prop default = 80
-
-            public AutoLieDetector(int startHour, int endHour, int interval, int prop)
-            {
-                this.startHour = startHour;
-                this.endHour = endHour;
-                this.interval = interval;
-                this.prop = prop;
             }
         }
     }

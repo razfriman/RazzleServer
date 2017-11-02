@@ -114,7 +114,6 @@
         //108
         SpouseChat = 0x6E,
         UseFishingItem = 0x6F,
-        MakerSkill = 0x70,
         //113
         //114
         UseRemote = 0x73,
@@ -141,8 +140,6 @@
         NoteAction = 131,
         UseDoor = 132,
         ChangeKeymap = 135,
-        FamilyPedigree = 145,
-        FamilyOpen = 146,
         BbsOperation = 155,
         MovePet = 167,
         MobAutomaticProvoke = 189,
@@ -150,11 +147,6 @@
 
         #region QUESTIONABLE
         RingAction = 136,
-        OpenFamily = 0x90,
-        AddFamily = 0x91,
-        AcceptFamily = 0x94,
-        UseFamily = 0x95,
-        AllianceOperation = 0x96,
         MtsMigration = 0x9A,
         PetTalk = 0x9B,
         UseSolomonItem = 0x9C,
@@ -186,7 +178,6 @@
         UseItemInterface = 0xE3,
         MtsOperation = 0xF1,
         UseMapleLife = 0xF4,
-        UseHammer = 0xF8,
         MapleTV = 0x222,
         #endregion QUESTIONABLE
 
@@ -286,7 +277,6 @@
         SPOUSE_CHAT = 0x6EFF,
         USE_FISHING_ITEM = 0x6FFF,
 
-        MAKER_SKILL = 0x70,
         USE_REMOTE = 0x73,
         PARTYCHAT = 0x77,
         WHISPER = 0x78,
@@ -304,11 +294,6 @@
         USE_DOOR = 0x5BFF,
         RING_ACTION = 0x87FF,
 
-        ADD_FAMILY = 0x91,
-        OPEN_FAMILY = 0x92,
-        ACCEPT_FAMILY = 0x94FF,
-        USE_FAMILY = 0x95FF,
-        ALLIANCE_OPERATION = 0x96FF,
         BBS_OPERATION = 0x99FF,
         ENTER_MTS = 0x9C,
         PET_TALK = 0x9BFF,
@@ -355,6 +340,5 @@
 
         MTS_OP = 0xF1FF,
         USE_MAPLELIFE = 0xF4FF,
-        USE_HAMMER = 0xF8FF,
     }
 }

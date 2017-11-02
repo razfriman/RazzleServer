@@ -50,7 +50,6 @@ namespace RazzleServer.Game.Maple
                 case KeymapAction.Sit:
                 case KeymapAction.Attack:
                 case KeymapAction.Jump:
-                case KeymapAction.NpcChat:
                     return KeymapType.BasicAction;
 
                 case KeymapAction.EquipmentMenu:
@@ -75,10 +74,7 @@ namespace RazzleServer.Game.Maple
                 case KeymapAction.PartyList:
                 case KeymapAction.QuestHelper:
                 case KeymapAction.SpouseChat:
-                case KeymapAction.CashShop:
-                case KeymapAction.AllianceChat:
                 case KeymapAction.PartySearch:
-                case KeymapAction.FamilyList:
                 case KeymapAction.Medal:
                     return KeymapType.Menu;
             }

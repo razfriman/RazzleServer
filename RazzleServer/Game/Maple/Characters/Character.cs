@@ -1530,7 +1530,6 @@ namespace RazzleServer.Game.Maple.Characters
                 oPacket.WriteShort(target.Fame);
                 oPacket.WriteBool(false); // NOTE: Marriage.
                 oPacket.WriteString("-"); // NOTE: Guild name.
-                oPacket.WriteString("-"); // NOTE: Alliance name.
                 oPacket.WriteByte(0); // NOTE: Unknown.
                 oPacket.WriteByte(0); // NOTE: Pets.
                 oPacket.WriteByte(0); // NOTE: Mount.
@@ -1580,12 +1579,6 @@ namespace RazzleServer.Game.Maple.Characters
                     break;
 
                 case MultiChatType.Guild:
-                    {
-
-                    }
-                    break;
-
-                case MultiChatType.Alliance:
                     {
 
                     }
@@ -1872,12 +1865,6 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 oPacket.WriteBytes(StatisticsToByteArray());
                 oPacket.WriteBytes(AppearanceToByteArray());
-
-                if (!viewAllCharacters)
-                {
-                    oPacket.WriteByte(0); // NOTE: Family
-                }
-
                 oPacket.WriteBool(IsRanked);
 
                 if (IsRanked)

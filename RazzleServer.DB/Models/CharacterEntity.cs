@@ -31,7 +31,6 @@ namespace RazzleServer.DB.Models
         public byte Gender { get; set; }
         public byte Skin { get; set; }
         public byte GuildRank { get; set; }
-        public byte AllianceRank { get; set; }
         public byte Fatigue { get; set; }
     }
 }

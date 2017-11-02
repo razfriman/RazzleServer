@@ -391,8 +391,7 @@ namespace RazzleServer.Common.Constants
     {
         Buddy = 0,
         Party = 1,
-        Guild = 2,
-        Alliance = 3
+        Guild = 2
     }
 
     public enum PartyAction : byte

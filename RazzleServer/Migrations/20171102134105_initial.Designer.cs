@@ -84,7 +84,6 @@ namespace RazzleServer.Migrations
 
                     b.Property<int>("AccountID");
 
-                    b.Property<byte>("AllianceRank");
 
                     b.Property<byte>("BuddyCapacity");
 
@@ -150,7 +149,6 @@ namespace RazzleServer.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("AllianceID");
 
                     b.Property<int>("Capacity");
 
@@ -218,8 +216,6 @@ namespace RazzleServer.Migrations
                     b.Property<byte>("Enhancements");
 
                     b.Property<short>("Eva");
-
-                    b.Property<byte>("HammerApplied");
 
                     b.Property<short>("IncMaxHP");
 

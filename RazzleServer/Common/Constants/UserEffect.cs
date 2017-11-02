@@ -18,7 +18,6 @@ namespace RazzleServer.Common.Constants
         SquibEffect = 12,
         LotteryUse = 14,
         ItemLevelUp = 15,
-        ItemMaker = 16,
         ExpItemConsumed = 17,
         ReservedEffect = 18,
         Buff = 19,

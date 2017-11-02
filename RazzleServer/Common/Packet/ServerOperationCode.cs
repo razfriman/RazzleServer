@@ -7,7 +7,6 @@
         AccountInfoResult = 2,
         CheckUserLimitResult = 3,
         SetAccountResult = 4,
-        ConfirmEULAResult = 5,
         CheckPinCodeResult = 6,
         UpdatePinCodeResult = 7,
         ViewAllCharResult = 8,
@@ -71,7 +70,6 @@
         FriendResult = 63,
         //64
         GuildResult = 65,
-        AllianceResult = 66,
         TownPortal = 67,
         BroadcastMsg = 68,
         IncubatorResult = 69,
@@ -97,17 +95,6 @@
         PartyValue = 91,
         FieldSetVariable = 92,
         BonusExpRateChanged = 93,
-        FamilyChartResult = 94,
-        FamilyInfoResult = 95,
-        FamilyResult = 96,
-        FamilyJoinRequest = 97,
-        FamilyJoinRequestResult = 98,
-        FamilyJoinAccepted = 99,
-        FamilyPrivilegeList = 100,
-        FamilyFamousPointIncResult = 101,
-        FamilyNotifyLoginOrLogout = 102,
-        FamilySetPrivilege = 103,
-        FamilySummonRequest = 104,
         NotifyLevelUp = 105,
         NotifyWedding = 106,
         NotifyJobChange = 107,
@@ -236,7 +223,6 @@
         BalloonMsg = 214,
         PlayEventSound = 215,
         PlayMinigameSound = 216,
-        MakerResult = 2176,
         //218
         OpenCLassCompetetionPage = 219,
         OpenUI = 220,
@@ -409,7 +395,6 @@
         //351
         //352
         //353
-        ViciousHammer = 354,
 
         /// ORIGINAL
         LOGIN_RESPONSE = 0x00,
@@ -466,27 +451,16 @@
         BUDDYLIST = 0x3F,
 
         GUILD_OPERATION = 0x41,
-        ALLIANCE_OPERATION = 0x42,
         SPAWN_PORTAL = 0x41,
         SERVER_NOTICE = 0x44,
-        FAMILY_ACTION = 0x45,
         YELLOW_TIP = 0x4D,
         PLAYER_NPC = 0x4E,
 
         MONSTERBOOK_ADD = 0x53,
         MONSTER_BOOK_CHANGE_COVER = 0x54,
         ENERGY = 0x55,
-        SHOW_PEDIGREE = 0x57,
-        OPEN_FAMILY = 0x58,
-        FAMILY_MESSAGE = 0x59,
-        FAMILY_INVITE = 0x5A,
-        FAMILY_MESSAGE2 = 0x5B,
-        FAMILY_SENIOR_MESSAGE = 0x5C,
-        FAMILY_GAIN_REP = 0x5E,
 
-        FAMILY_USE_REQUEST = 0x61,
         CREATE_CYGNUS = 0x62,
-        LOAD_FAMILY = 0x64,
         BLANK_MESSAGE = 0x65,
         AVATAR_MEGA = 0x6F,
         NAME_CHANGE_MESSAGE = 0x69,
@@ -628,7 +602,6 @@
         OPEN_STORAGE = 0x135,
         MTS_OPERATION2 = 0x136,
         MTS_OPERATION = 0x137,
-        VICIOUS_HAMMER = 0x13D,
         MESSENGER = 0x139,
         PLAYER_INTERACTION = 0x13A,
 

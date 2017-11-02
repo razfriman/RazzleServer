@@ -56,7 +56,6 @@ namespace RazzleServer.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     AP = table.Column<short>(type: "INTEGER", nullable: false),
                     AccountID = table.Column<int>(type: "INTEGER", nullable: false),
-                    AllianceRank = table.Column<byte>(type: "INTEGER", nullable: false),
                     BuddyCapacity = table.Column<byte>(type: "INTEGER", nullable: false),
                     Dex = table.Column<short>(type: "INTEGER", nullable: false),
                     Exp = table.Column<int>(type: "INTEGER", nullable: false),
@@ -96,7 +95,6 @@ namespace RazzleServer.Migrations
                 {
                     ID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    AllianceID = table.Column<int>(type: "INTEGER", nullable: false),
                     Capacity = table.Column<int>(type: "INTEGER", nullable: false),
                     GP = table.Column<int>(type: "INTEGER", nullable: false),
                     Leader = table.Column<int>(type: "INTEGER", nullable: false),
@@ -134,7 +132,6 @@ namespace RazzleServer.Migrations
                     Durability = table.Column<int>(type: "INTEGER", nullable: false),
                     Enhancements = table.Column<byte>(type: "INTEGER", nullable: false),
                     Eva = table.Column<short>(type: "INTEGER", nullable: false),
-                    HammerApplied = table.Column<byte>(type: "INTEGER", nullable: false),
                     IncMaxHP = table.Column<short>(type: "INTEGER", nullable: false),
                     IncMaxMP = table.Column<short>(type: "INTEGER", nullable: false),
                     Int = table.Column<short>(type: "INTEGER", nullable: false),

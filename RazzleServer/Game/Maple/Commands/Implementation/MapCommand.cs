@@ -109,7 +109,6 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
             MinigameChallenge = 109070000,
             CoconutHarvest = 109080000,
             FlorinaBeach = 110000000,
-            NautilusHarbor = 120000000,
             Ereve = 130000000,
             Rien = 140000000,
             GM = 180000000,
