@@ -7,12 +7,24 @@ namespace RazzleServer.Login.Handlers
     {
         public override void HandlePacket(PacketReader packet, LoginClient client)
         {
-            packet.ReadByte(); // NOTE: Connection kind (GameLaunching, WebStart, etc.).
             client.World = packet.ReadByte();
             client.Channel = packet.ReadByte();
-            var ip = packet.ReadBytes(4);
 
-            var characters = client.Server.CenterConnection.GetCharacters(client.World, client.Account.ID);
+            var characters = client.Server.GetCharacters(client.World, client.Account.ID);
+            /*
+             outPacket.WriteInt(accountID);
+
+                foreach (Datum datum in new Datums("characters").PopulateWith("ID", "AccountID = {0} AND WorldID = {1}", accountID, WvsGame.WorldID))
+                {
+                    Character character = new Character((int)datum["ID"]);
+                    character.Load();
+
+                    byte[] entry = character.ToByteArray();
+
+                    outPacket.WriteByte((byte)entry.Length);
+                    outPacket.WriteBytes(entry);
+                }
+             */
 
             using (var oPacket = new PacketWriter(ServerOperationCode.SelectWorldResult))
             {

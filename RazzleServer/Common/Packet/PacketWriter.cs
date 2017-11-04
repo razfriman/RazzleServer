@@ -45,8 +45,6 @@ namespace RazzleServer.Common.Packet
         /// <summary>
         /// Creates a new instance of PacketWriter
         /// </summary>
-        public PacketWriter(InteroperabilityOperationCode header) : this() => WriteHeader(header);
-
         public PacketWriter(byte[] data)
         {
             _buffer = new MemoryStream(data);
@@ -152,8 +150,6 @@ namespace RazzleServer.Common.Packet
             WriteShort(writeValue.X);
             WriteShort(writeValue.Y);
         }
-
-        public void WriteHeader(InteroperabilityOperationCode header) => WriteUShort((ushort)header);
 
         public void WriteHeader(ServerOperationCode header) => WriteUShort((ushort)header);
 

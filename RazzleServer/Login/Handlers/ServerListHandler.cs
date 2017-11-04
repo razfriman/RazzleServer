@@ -10,11 +10,11 @@ namespace RazzleServer.Login.Handlers
         {
             var pw = new PacketWriter(ServerOperationCode.WorldInformation);
 
-            foreach (var world in client.Server.Worlds)
+            foreach (var world in client.Server.Manager.Worlds)
             {
                 pw.WriteByte(world.ID);
                 pw.WriteString(world.Name);
-                pw.WriteByte((byte)world.Status);
+                pw.WriteByte((byte)world.Flag);
                 pw.WriteString(world.EventMessage);
                 pw.WriteShort(100);// Event EXP Rate
                 pw.WriteShort(100); // Event Drop Rate

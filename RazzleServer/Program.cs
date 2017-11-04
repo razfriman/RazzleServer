@@ -2,8 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using RazzleServer.Center;
-using RazzleServer.Login;
-using RazzleServer.Game;
 
 namespace RazzleServer
 {
@@ -11,18 +9,9 @@ namespace RazzleServer
     {
         public static async Task Main(string[] args)
         {
-            var manager = new ServerManager();
+            var manager = ServerManager.Instance;
             await manager.Configure();
-
-            var center = new CenterServer();
-            var login = new LoginServer();
-
-
-            Thread.Sleep(5000);
-            ServerConfig.Instance.Worlds.ForEach(x =>
-            {
-                var game = new GameServer(x);
-            });
+            manager.Start();
 
             Thread.Sleep(Timeout.Infinite);
         }

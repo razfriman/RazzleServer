@@ -1,6 +1,6 @@
 {
   "LoginPort": 8484,
-  "CenterPort":  8181,
+  "ChannelPort":  8585,
   "DefaultMapID": 100000000,
   "DatabaseName": "MapleServer.db",
   "Version": 55,
@@ -16,8 +16,6 @@
     {
       "ID": 0,
       "Name": "Scania",
-      "Port": 8585,
-      "ShopPort": 9090,
       "Channels": 3,
       "Flag": "None",
       "EventMessage": "",

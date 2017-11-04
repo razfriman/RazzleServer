@@ -17,10 +17,6 @@ namespace RazzleServer.Center.Maple
                     {
                         continue;
                     }
-                    else if (type == ServerType.Shop && loopWorld.HasShop)
-                    {
-                        continue;
-                    }
 
                     return loopWorld;
                 }

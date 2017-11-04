@@ -20,8 +20,8 @@
         ViewAllChar = 0x06,
         CharacterNameCheck = 0x09,
         Pong = 0x0A,
-        CharacterCreate = 0x0D,
-        CharacterDelete = 0x0E,
+        CharacterCreate = 0x0E,
+        CharacterDelete = 0x0F,
 
         //0x11 = 11 00 01 34 41 02 A4 
         WorldStatus = 0x13,

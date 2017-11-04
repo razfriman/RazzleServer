@@ -31,13 +31,6 @@ namespace RazzleServer.Game.Maple.Data
         public CreationData()
         {
             Log.LogInformation("Loading Character Creation Data");
-            this.ForbiddenNames = new Datums("character_forbidden_names").Populate().Select(x => (string)x["forbidden_name"]).ToList();
-
-            foreach (Datum datum in new Datums("character_creation_data").Populate())
-            {
-                string gender = (string)datum["gender"];
-                string charType = (string)datum["character_type"];
-            }
         }
     }
 }

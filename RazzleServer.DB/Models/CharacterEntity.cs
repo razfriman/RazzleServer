@@ -3,6 +3,7 @@ namespace RazzleServer.DB.Models
     public class CharacterEntity
     {
         public int ID { get; set; }
+        public int WorldID { get; set; }
         public int AccountID { get; set; }
         public string Name { get; set; }
         public byte Level { get; set; }

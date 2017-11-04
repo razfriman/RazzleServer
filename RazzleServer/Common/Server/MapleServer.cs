@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using RazzleServer.Center;
 using RazzleServer.Common.Network;
 using RazzleServer.Common.Util;
 
@@ -14,15 +15,15 @@ namespace RazzleServer.Server
     {
         public Dictionary<string, T> Clients { get; set; } = new Dictionary<string, T>();
         public ushort Port;
-
+        public ServerManager Manager { get; set; }
         private TcpListener _listener;
-        protected Socket _centerSocket;
         private bool _disposed;
         private const int BACKLOG_SIZE = 50;
         public ILogger Log { get; protected set; }
 
-        protected MapleServer()
+        protected MapleServer(ServerManager manager)
         {
+            Manager = manager;
             Log = LogManager.LogByName(GetType().FullName);
         }
 
@@ -60,21 +61,6 @@ namespace RazzleServer.Server
             GC.SuppressFinalize(this);
         }
 
-        public virtual void CenterServerConnected()
-        {
-
-        }
-
-        public virtual void ServerRegistered()
-        {
-
-        }
-
-        public virtual void RegisterPacketHandlers()
-        {
-
-        }
-
         public virtual bool AllowConnection(string address) => true;
 
         public T GenerateClient(Socket socket)
@@ -96,7 +82,6 @@ namespace RazzleServer.Server
                 client.SendHandshake();
                 client.Key = ip + Functions.Random();
                 AddClient(client);
-                Log.LogInformation("SENDING HANDSHAKE");
                 return client;
             }
             catch (Exception e)
@@ -107,8 +92,6 @@ namespace RazzleServer.Server
                 return null;
             }
         }
-
-
 
         public virtual void ShutDown()
         {
@@ -122,8 +105,6 @@ namespace RazzleServer.Server
                 _disposed = true;
                 _listener.Stop();
                 _listener.Server.Shutdown(SocketShutdown.Both);
-                _centerSocket?.Disconnect(false);
-                _centerSocket?.Dispose();
             }
             catch (Exception e)
             {
@@ -131,43 +112,11 @@ namespace RazzleServer.Server
             }
         }
 
-        public void StartCenterConnection(IPAddress ip, ushort port)
-        {
-            bool connected = false;
-            int tries = 0;
-
-            while (!connected && tries < 5)
-            {
-                try
-                {
-                    _centerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                    _centerSocket.Connect(ip, port);
-                    connected = true;
-                }
-                catch (Exception e)
-                {
-                    Log.LogWarning(e, $"Could not connect to Center Server at {ip}:{port}");
-                    tries++;
-                    Thread.Sleep(5000);
-                }
-            }
-
-            if (connected)
-            {
-                CenterServerConnected();
-            }
-            else
-            {
-                Log.LogCritical($"Connection to Center Server failed at {ip}:{port}");
-            }
-        }
-
         public void Start(IPAddress ip, ushort port)
         {
             try
             {
-                ConfigureForStartup();
-                Log.LogInformation($"Starting server on port [{port}]");
+                Log.LogInformation($"Starting {GetType().Name} on port [{port}]");
                 Port = port;
                 _listener = new TcpListener(ip, port);
                 _listener.Start(BACKLOG_SIZE);
@@ -180,8 +129,6 @@ namespace RazzleServer.Server
 
             Task.Factory.StartNew(ListenLoop);
         }
-
-        private void ConfigureForStartup() => RegisterPacketHandlers();
 
         private async Task ListenLoop()
         {

@@ -2,57 +2,35 @@
 using Microsoft.Extensions.Logging;
 using RazzleServer.Server;
 using RazzleServer.Common.Packet;
-using RazzleServer.Common.Constants;
-using RazzleServer.Common.Server;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
 using System;
 using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Center;
+using RazzleServer.Center.Maple;
 
 namespace RazzleServer.Game
 {
     public class GameServer : MapleServer<GameClient>
     {
-        public GameCenterClient CenterConnection { get; set; }
         public byte ChannelID { get; set; }
-        public WorldConfig World { get; set; }
-        public Dictionary<ClientOperationCode, List<GamePacketHandler>> PacketHandlers { get; private set; } = new Dictionary<ClientOperationCode, List<GamePacketHandler>>();
+        public int Population { get; set; }
+        public World World { get; set; }
 
-        public static GameServer CurrentInstance { get; private set; }
+        public static Dictionary<ClientOperationCode, List<GamePacketHandler>> PacketHandlers { get; private set; } = new Dictionary<ClientOperationCode, List<GamePacketHandler>>();
 
-        public GameServer(WorldConfig world)
+        public GameServer(ServerManager manager, World world, ushort port, byte channelId) : base(manager)
         {
             World = world;
-            Port = world.Port;
-            StartCenterConnection(IPAddress.Loopback, ServerConfig.Instance.CenterPort);
-            CurrentInstance = this;
+            Port = port;
+            ChannelID = channelId;
+            Start(new IPAddress(new byte[] { 0, 0, 0, 0 }), Port);
         }
 
-        public override void ServerRegistered() => Start(new IPAddress(new byte[] { 0, 0, 0, 0 }), Port);
+        public override void Dispose() => ShutDown();
 
-        public override void CenterServerConnected()
-        {
-            Log.LogInformation("CENTER CONNECTED");
-            CenterConnection = new GameCenterClient(this, _centerSocket);
-            CenterConnection.Socket.Crypto.HandshakeFinished += (SIV, RIV) => SendRegistrationRequest();
-        }
-
-        public void SendRegistrationRequest()
-        {
-            Log.LogInformation("GAME SENDING REG REQUEST");
-            var pw = new PacketWriter(InteroperabilityOperationCode.RegistrationRequest);
-            pw.WriteByte((int)ServerType.Channel);
-            CenterConnection?.Send(pw);
-        }
-
-        public override void Dispose()
-        {
-            CenterConnection?.Dispose();
-            ShutDown();
-        }
-
-        public override void RegisterPacketHandlers()
+        public static void RegisterPacketHandlers()
         {
             var types = Assembly.GetEntryAssembly()
                                 .GetTypes()
@@ -78,11 +56,8 @@ namespace RazzleServer.Game
                     handlerCount++;
                     var handler = (GamePacketHandler)Activator.CreateInstance(type);
                     PacketHandlers[header].Add(handler);
-                    Log.LogDebug($"Registered Packet Handler [{attribute.Header}] to [{type.Name}]");
                 }
             }
-
-            Log.LogInformation($"Registered {handlerCount} packet handlers");
         }
 
         public Character GetCharacterByName(string name) => Clients.Values.Select(x => x.Character).FirstOrDefault(x => x.Name == name);   

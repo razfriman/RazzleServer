@@ -452,7 +452,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                 experience = value;
 
-                if (Client.Server.World.AllowMultiLeveling)
+                if (Client.Server.World.EnableMultiLeveling)
                 {
                     while (experience >= ExperienceTables.CharacterLevel[Level])
                     {
@@ -1882,10 +1882,8 @@ namespace RazzleServer.Game.Maple.Characters
                 oPacket.WriteShort(SkillPoints);
                 oPacket.WriteInt(Experience);
                 oPacket.WriteShort(Fame);
-                oPacket.WriteInt(0);
                 oPacket.WriteInt(Map.MapleID);
                 oPacket.WriteByte(SpawnPoint);
-                oPacket.WriteInt(0);
 
                 return oPacket.ToArray();
             }
@@ -1895,11 +1893,12 @@ namespace RazzleServer.Game.Maple.Characters
         {
             using (var oPacket = new PacketWriter())
             {
+                var megaphone = true;
 
                 oPacket.WriteByte((int)Gender);
                 oPacket.WriteByte(Skin);
                 oPacket.WriteInt(Face);
-                oPacket.WriteBool(true);
+                oPacket.WriteBool(megaphone);
                 oPacket.WriteInt(Hair);
 
                 Dictionary<byte, int> visibleLayer = new Dictionary<byte, int>();
@@ -1952,10 +1951,9 @@ namespace RazzleServer.Game.Maple.Characters
 
                 oPacket.WriteInt(cashWeapon != null ? cashWeapon.MapleID : 0);
 
-
-                oPacket.WriteInt(0);
-                oPacket.WriteInt(0);
-                oPacket.WriteInt(0);
+                oPacket.WriteInt(0); // pet id
+                oPacket.WriteInt(0); // pet id
+                oPacket.WriteInt(0); // pet id
 
                 return oPacket.ToArray();
             }

@@ -1,4 +1,5 @@
-﻿using RazzleServer.Common.Packet;
+﻿using RazzleServer.Center;
+using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple.Characters;
 
 namespace RazzleServer.Game.Handlers
@@ -11,7 +12,7 @@ namespace RazzleServer.Game.Handlers
             int accountID;
             int characterID = packet.ReadInt();
 
-            if ((accountID = client.Server.CenterConnection.ValidateMigration(client.Socket.Host, characterID)) == 0)
+            if ((accountID = ServerManager.Instance.ValidateMigration(client.Socket.Host, characterID)) == 0)
             {
                 client.Terminate("Invalid migration");
                 return;

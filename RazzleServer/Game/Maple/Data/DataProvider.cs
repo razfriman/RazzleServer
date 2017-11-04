@@ -78,7 +78,7 @@ namespace RazzleServer.Game.Maple.Data
 
             sw.Stop();
 
-            Log.LogInformation("Maple data loaded in {0}ms.", sw.ElapsedMilliseconds);
+            Log.LogInformation("Data loaded in {0}ms.", sw.ElapsedMilliseconds);
 
             IsInitialized = true;
         }

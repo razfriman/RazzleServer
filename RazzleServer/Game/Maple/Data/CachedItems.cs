@@ -16,29 +16,6 @@ namespace RazzleServer.Game.Maple.Data
         public CachedItems()
         {
             Log.LogInformation("Loading Items");
-            foreach (Datum datum in new Datums("item_data").Populate())
-            {
-                Add(new Item(datum));
-            }
-
-            Log.LogInformation("Loading Consumables");
-            foreach (Datum datum in new Datums("item_consume_data").Populate())
-            {
-                this[(int)datum["itemid"]].LoadConsumeData(datum);
-            }
-
-            Log.LogInformation("Loading Equips");
-            foreach (Datum datum in new Datums("item_equip_data").Populate())
-            {
-                this[(int)datum["itemid"]].LoadEquipmentData(datum);
-            }
-
-            Log.LogInformation("Loading Summons");
-            foreach (Datum datum in new Datums("item_summons").Populate())
-            {
-                this[(int)datum["itemid"]].Summons.Add(new Tuple<int, short>((int)datum["mobid"], (short)datum["chance"]));
-            }
-
             WizetItemIDs = new List<int>(4)
             {
                 1002140,

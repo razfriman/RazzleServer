@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using RazzleServer.Center;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
@@ -40,7 +41,7 @@ namespace RazzleServer.Game.Maple.Maps
                         owner = attacker.Key;
                     }
 
-                    attacker.Key.Experience += (int)Math.Min(item.Experience, (attacker.Value * item.Experience) / item.MaxHealth) * GameServer.CurrentInstance.World.ExperienceRate;
+                    attacker.Key.Experience += (int)Math.Min(item.Experience, (attacker.Value * item.Experience) / item.MaxHealth) * ServerManager.Instance.Worlds[0].ExperienceRate;
                 }
             }
 
@@ -52,11 +53,11 @@ namespace RazzleServer.Game.Maple.Maps
 
                 foreach (Loot loopLoot in item.Loots)
                 {
-                    if ((Functions.Random(1000000) / GameServer.CurrentInstance.World.DropRate) <= loopLoot.Chance)
+                    if ((Functions.Random(1000000) / ServerManager.Instance.Worlds[0].DropRate) <= loopLoot.Chance)
                     {
                         if (loopLoot.IsMeso)
                         {
-                            drops.Add(new Meso((short)(Functions.Random(loopLoot.MinimumQuantity, loopLoot.MaximumQuantity) * GameServer.CurrentInstance.World.MesoRate))
+                            drops.Add(new Meso((short)(Functions.Random(loopLoot.MinimumQuantity, loopLoot.MaximumQuantity) * ServerManager.Instance.Worlds[0].MesoRate))
                             {
                                 Dropper = item,
                                 Owner = owner

@@ -10,12 +10,12 @@ namespace RazzleServer.Login.Handlers
         {
             byte worldID = packet.ReadByte();
 
-            if (client.Server.Worlds.Contains(worldID))
+            if (client.Server.Manager.Worlds.Contains(worldID))
             {
-                var world = client.Server.Worlds[worldID];
+                var world = client.Server.Manager.Worlds[worldID];
                 using (var oPacket = new PacketWriter(ServerOperationCode.CheckUserLimitResult))
                 {
-                    oPacket.WriteShort((short)world.Status);
+                    oPacket.WriteShort((short)world.Flag);
                     client.Send(oPacket);
                 }
             }

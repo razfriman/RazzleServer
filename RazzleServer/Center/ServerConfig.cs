@@ -5,13 +5,15 @@ using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Util;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using RazzleServer.Common.Server;
+using RazzleServer.Center.Maple;
+using RazzleServer.Center;
 
 namespace RazzleServer.Server
 {
 	public class ServerConfig
 	{
 		public ushort LoginPort { get; set; } = 8484;
+        public ushort ChannelPort { get; set; } = 8585;
 		public int DefaultMapID { get; set; } = 100000000;
 		public string DatabaseName { get; set; } = "MapleServer.db";
         public string WzFilePath { get; set; } = string.Empty;
@@ -23,7 +25,6 @@ namespace RazzleServer.Server
 		public ulong AESKey { get; set; } = 0x52330F1BB4060813;
 		public bool LoginCreatesNewAccount { get; set; } = true;
         public string CommandIndicator { get; set; } = "!";
-        public ushort CenterPort { get; set; } = 8181;
         public int DefaultCreationSlots { get; set; } = 3;
         public bool RequestPin { get; set; }
         public bool RequestPic { get; set; }

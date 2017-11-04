@@ -40,7 +40,6 @@
     <Folder Include="Game\Handlers\" />
     <Folder Include="Center\Maple\" />
     <Folder Include="Login\Maple\" />
-    <Folder Include="Center\Handlers\" />
     <Folder Include="Common\" />
     <Folder Include="Common\Constants\" />
     <Folder Include="Common\Crypto\" />

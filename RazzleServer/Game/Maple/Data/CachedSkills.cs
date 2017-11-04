@@ -13,15 +13,6 @@ namespace RazzleServer.Game.Maple.Data
             : base()
         {
             Log.LogInformation("Loading Skills");
-            foreach (Datum datum in new Datums("skill_player_data").Populate())
-            {
-                this.Add((int)datum["skillid"], new Dictionary<byte, Skill>());
-            }
-
-            foreach (Datum datum in new Datums("skill_player_level_data").Populate())
-            {
-                this[(int)datum["skillid"]].Add((byte)(short)datum["skill_level"], new Skill(datum));
-            }
         }
     }
 }

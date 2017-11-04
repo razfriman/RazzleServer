@@ -1,89 +1,50 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
-using RazzleServer.Common.Util;
-using RazzleServer.Common.Packet;
+using RazzleServer.Game;
+using RazzleServer.Common.Constants;
+using Newtonsoft.Json;
 
 namespace RazzleServer.Center.Maple
 {
-    public sealed class World : KeyedCollection<byte, CenterClient>
+    public sealed class World : KeyedCollection<byte, GameServer>
     {
-        public byte ID { get; private set; }
-        public string Name { get; private set; }
-        public ushort Port { get; private set; }
-        public ushort ShopPort { get; private set; }
-        public byte Channels { get; private set; }
-        public string TickerMessage { get; private set; }
-        public bool EnableMultiLeveling { get; private set; }
-        public int ExperienceRate { get; private set; }
-        public int QuestExperienceRate { get; private set; }
-        public int PartyQuestExperienceRate { get; private set; }
-        public int MesoRate { get; private set; }
-        public int DropRate { get; private set; }
+        public byte ID { get; set; }
+        public string Name { get; set; }
+        public byte Channels { get; set; }
+        public WorldStatusFlag Flag { get; set; }
+        public string EventMessage { get; set; }
+        public string TickerMessage { get; set; }
+        public bool EnableCharacterCreation { get; set; }
+        public bool EnableMultiLeveling { get; set; }
+        public int ExperienceRate { get; set; }
+        public int QuestExperienceRate { get; set; }
+        public int PartyQuestExperienceRate { get; set; }
+        public int MesoRate { get; set; }
+        public int DropRate { get; set; }
 
-        private CenterClient shop;
-
-        public CenterClient Shop
+        public World(WorldConfig config)
         {
-            get => shop;
-            set
-            {
-                shop = value;
-
-                if (value != null)
-                {
-                    Shop.Port = ShopPort;
-                }
-            }
+            ID = config.ID;
+            Name = config.Name;
+            Channels = config.Channels;
+            Flag = config.Flag;
+            EventMessage = config.EventMessage;
+            TickerMessage = config.TickerMessage;
+            EnableCharacterCreation = config.EnableCharacterCreation;
+            EnableMultiLeveling = config.EnableMultiLeveling;
+            ExperienceRate = config.ExperienceRate;
+            QuestExperienceRate = config.QuestExperienceRate;
+            PartyQuestExperienceRate = config.PartyQuestExperienceRate;
+            MesoRate = config.MesoRate;
+            DropRate = config.DropRate;
         }
 
-        public CenterClient RandomChannel => this[Functions.Random(this.Count())];
-
+        [JsonIgnore]
         public bool IsFull => Count == Channels;
 
-        public bool HasShop => Shop != null;
+        [JsonIgnore]
+        public int Population => this.Sum(x => x.Population);
 
-        internal World(PacketReader inPacket)
-        {
-            ID = inPacket.ReadByte();
-            Name = inPacket.ReadString();
-            Port = inPacket.ReadUShort();
-            ShopPort = inPacket.ReadUShort();
-            Channels = inPacket.ReadByte();
-            TickerMessage = inPacket.ReadString();
-            EnableMultiLeveling = inPacket.ReadBool();
-            ExperienceRate = inPacket.ReadInt();
-            QuestExperienceRate = inPacket.ReadInt();
-            PartyQuestExperienceRate = inPacket.ReadInt();
-            MesoRate = inPacket.ReadInt();
-            DropRate = inPacket.ReadInt();
-        }
-
-        protected override void InsertItem(int index, CenterClient item)
-        {
-            item.ID = (byte)index;
-            item.Port = (ushort)(Port + index);
-
-            base.InsertItem(index, item);
-        }
-
-        protected override void RemoveItem(int index)
-        {
-            base.RemoveItem(index);
-
-            foreach (CenterClient loopChannel in this)
-            {
-                if (loopChannel.ID > index)
-                {
-                    loopChannel.ID--;
-
-                    var pw = new PacketWriter();
-                    pw.WriteHeader(InteroperabilityOperationCode.UpdateChannelID);
-                    pw.WriteByte(loopChannel.ID);
-                    loopChannel.Send(pw);
-                }
-            }
-        }
-
-        protected override byte GetKeyForItem(CenterClient item) => item.ID;
+        protected override byte GetKeyForItem(GameServer item) => item.ChannelID;
     }
 }

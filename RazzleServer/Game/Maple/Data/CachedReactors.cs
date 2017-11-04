@@ -14,17 +14,6 @@ namespace RazzleServer.Game.Maple.Data
             : base()
         {
             Log.LogInformation("Loading Reactors");
-            {
-                foreach (Datum datum in new Datums("reactor_data").Populate())
-                {
-                    this.Add(new Reactor(datum));
-                }
-
-                foreach (Datum datum in new Datums("reactor_events").Populate())
-                {
-                    this[(int)datum["reactorid"]].States[(sbyte)datum["state"]] = new ReactorState(datum);
-                }
-            }
         }
 
         protected override int GetKeyForItem(Reactor item)

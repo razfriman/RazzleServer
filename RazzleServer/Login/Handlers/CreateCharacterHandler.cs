@@ -12,7 +12,6 @@ namespace RazzleServer.Login.Handlers
     {
         public override void HandlePacket(PacketReader packet, LoginClient client)
         {
-            int accountID = packet.ReadInt();
             string name = packet.ReadString();
             int face = packet.ReadInt();
             int hair = packet.ReadInt();
@@ -22,42 +21,48 @@ namespace RazzleServer.Login.Handlers
             int bottomID = packet.ReadInt();
             int shoesID = packet.ReadInt();
             int weaponID = packet.ReadInt();
+            var strength = packet.ReadByte();
+            var dexterity = packet.ReadByte();
+            var intelligence = packet.ReadByte();
+            var luck = packet.ReadByte();
             Gender gender = (Gender)packet.ReadByte();
 
-            bool error = name.Length < 4 || name.Length > 12
-                || Character.CharacterExists(name)
-                             || DataProvider.CreationData.ForbiddenNames.Any(forbiddenWord => name.ToLowerInvariant().Contains(forbiddenWord));
+            bool error = name.Length < 4
+                             || name.Length > 12
+                             || Character.CharacterExists(name)
+                             || DataProvider.CreationData.ForbiddenNames.Any(name.Contains);
 
             if (gender == Gender.Male)
             {
-                error |= (!DataProvider.CreationData.MaleSkins.Any(x => x == skin)
-                    || !DataProvider.CreationData.MaleFaces.Any(x => x == face)
-                    || !DataProvider.CreationData.MaleHairs.Any(x => x == hair)
-                    || !DataProvider.CreationData.MaleHairColors.Any(x => x == hairColor)
-                    || !DataProvider.CreationData.MaleTops.Any(x => x == topID)
-                    || !DataProvider.CreationData.MaleBottoms.Any(x => x == bottomID)
-                    || !DataProvider.CreationData.MaleShoes.Any(x => x == shoesID)
-                    || !DataProvider.CreationData.MaleWeapons.Any(x => x == weaponID));
+                //error |= (!DataProvider.CreationData.MaleSkins.Any(x => x == skin)
+                    //|| !DataProvider.CreationData.MaleFaces.Any(x => x == face)
+                    //|| !DataProvider.CreationData.MaleHairs.Any(x => x == hair)
+                    //|| !DataProvider.CreationData.MaleHairColors.Any(x => x == hairColor)
+                    //|| !DataProvider.CreationData.MaleTops.Any(x => x == topID)
+                    //|| !DataProvider.CreationData.MaleBottoms.Any(x => x == bottomID)
+                    //|| !DataProvider.CreationData.MaleShoes.Any(x => x == shoesID)
+                    //|| !DataProvider.CreationData.MaleWeapons.Any(x => x == weaponID));
             }
             else if (gender == Gender.Female)
             {
-                error |= (!DataProvider.CreationData.FemaleSkins.Any(x => x == skin)
-                    || !DataProvider.CreationData.FemaleFaces.Any(x => x == face)
-                    || !DataProvider.CreationData.FemaleHairs.Any(x => x == hair)
-                    || !DataProvider.CreationData.FemaleHairColors.Any(x => x == hairColor)
-                    || !DataProvider.CreationData.FemaleTops.Any(x => x == topID)
-                    || !DataProvider.CreationData.FemaleBottoms.Any(x => x == bottomID)
-                    || !DataProvider.CreationData.FemaleShoes.Any(x => x == shoesID)
-                    || !DataProvider.CreationData.FemaleWeapons.Any(x => x == weaponID));
+                //error |= (!DataProvider.CreationData.FemaleSkins.Any(x => x == skin)
+                    //|| !DataProvider.CreationData.FemaleFaces.Any(x => x == face)
+                    //|| !DataProvider.CreationData.FemaleHairs.Any(x => x == hair)
+                    //|| !DataProvider.CreationData.FemaleHairColors.Any(x => x == hairColor)
+                    //|| !DataProvider.CreationData.FemaleTops.Any(x => x == topID)
+                    //|| !DataProvider.CreationData.FemaleBottoms.Any(x => x == bottomID)
+                    //|| !DataProvider.CreationData.FemaleShoes.Any(x => x == shoesID)
+                    //|| !DataProvider.CreationData.FemaleWeapons.Any(x => x == weaponID));
             }
-            else // NOTE: Not allowed to choose "both" genders at character creation.
+            else 
             {
+                // Not allowed to choose "both" genders at character creation.
                 error = true;
             }
 
             Character character = new Character
             {
-                AccountID = accountID,
+                AccountID = client.Account.ID,
                 WorldID = client.World,
                 Name = name,
                 Gender = gender,
@@ -66,10 +71,10 @@ namespace RazzleServer.Login.Handlers
                 Hair = hair + hairColor,
                 Level = 1,
                 Job = Job.Beginner,
-                Strength = 12,
-                Dexterity = 5,
-                Intelligence = 4,
-                Luck = 4,
+                Strength = strength,
+                Dexterity = dexterity,
+                Intelligence = intelligence,
+                Luck = luck,
                 MaxHealth = 50,
                 MaxMana = 5,
                 Health = 50,
@@ -124,14 +129,10 @@ namespace RazzleServer.Login.Handlers
             character.Keymap.Add(new Shortcut(KeymapKey.F6, KeymapAction.Shocked));
             character.Keymap.Add(new Shortcut(KeymapKey.F7, KeymapAction.Annoyed));
 
-            if (!error)
+            using (var outPacket = new PacketWriter(ServerOperationCode.CreateNewCharacterResult))
             {
-                using (var outPacket = new PacketWriter(ServerOperationCode.CreateNewCharacterResult))
-                {
-                    outPacket.WriteInt(accountID);
-                    outPacket.WriteBytes(character.ToByteArray());
-                    client.Send(outPacket);
-                }
+                outPacket.WriteBool(error);
+                outPacket.WriteBytes(character.ToByteArray());
             }
         }
     }

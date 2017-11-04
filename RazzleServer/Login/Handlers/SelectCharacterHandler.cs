@@ -11,7 +11,7 @@ namespace RazzleServer.Login.Handlers
             var characterID = packet.ReadInt();
             client.MacAddresses = packet.ReadString().Split(new char[] { ',', ' ' });
 
-            if (!client.Server.CenterConnection.Migrate(client.Host, client.Account.ID, characterID))
+            if (!client.Server.Manager.Migrate(client.Host, client.Account.ID, characterID))
             {
                 client.Terminate();
                 return;
@@ -22,7 +22,7 @@ namespace RazzleServer.Login.Handlers
                 oPacket.WriteByte(0);
                 oPacket.WriteByte(0);
                 oPacket.WriteBytes(client.Socket.HostBytes);
-                oPacket.WriteUShort(client.Server.Worlds[client.World][client.Channel].Port);
+                oPacket.WriteUShort(client.Server.Manager.Worlds[client.World][client.Channel].Port);
                 oPacket.WriteInt(characterID);
                 oPacket.WriteInt(0);
                 oPacket.WriteByte(0);

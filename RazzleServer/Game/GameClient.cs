@@ -7,6 +7,7 @@ using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple;
 using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Center;
 
 namespace RazzleServer.Game
 {
@@ -33,11 +34,11 @@ namespace RazzleServer.Game
                 {
                     header = (ClientOperationCode)packet.ReadUShort();
 
-                    if (Server.PacketHandlers.ContainsKey(header))
+                    if (GameServer.PacketHandlers.ContainsKey(header))
                     {
                         Log.LogInformation($"Received [{header.ToString()}] {Functions.ByteArrayToStr(packet.ToArray())}");
 
-                        foreach (var handler in Server.PacketHandlers[header])
+                        foreach (var handler in GameServer.PacketHandlers[header])
                         {
                             handler.HandlePacket(packet, this);
                         }
@@ -70,18 +71,6 @@ namespace RazzleServer.Game
             }
         }
 
-        public override void Register()
-        {
-            base.Register();
-            Server.CenterConnection.UpdatePopulation(Server.Clients.Count());
-        }
-
-        public override void Unregister()
-        {
-            base.Unregister();
-            Server.CenterConnection.UpdatePopulation(Server.Clients.Count());
-        }
-
         public override void Terminate(string message = null)
         {
             Character?.Save();
@@ -93,7 +82,7 @@ namespace RazzleServer.Game
             var outPacket = new PacketWriter(ServerOperationCode.MigrateCommand);
             outPacket.WriteBool(true);
             outPacket.WriteBytes(Socket.HostBytes);
-            outPacket.WriteUShort(Server.CenterConnection.GetChannelPort(channelID));
+            outPacket.WriteUShort(Server.World[channelID].Port);
             Send(outPacket);
         }
     }
