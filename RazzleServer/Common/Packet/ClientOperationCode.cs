@@ -2,11 +2,7 @@
 {
     public enum ClientOperationCode : ushort
     {
-        AccountGender = 0,
-        PinCheck = 0,
-        RegisterPin = 0,
         LeaveCharacterSelect = 0,
-        ViewAllChar = 0,
         SelectCharacterByVAC = 0,
         VACFlagSet = 0,
         ClientError = 0,
@@ -15,16 +11,21 @@
         RegisterPicFromVAC = 0,
         RequestPicFromVAC = 0,
         ClientStart = 0,
+        AccountInfo = 0,
 
-        Unknown = 0,
-        AccountInfo = 0x03,
+        Unknown = 0x00,
+        PinCheck = 0x03,
         WorldRelist = 0x04,
+        RegisterPin = 0x05,
+        ViewAllChar = 0x06,
         CharacterNameCheck = 0x09,
         Pong = 0x0A,
         CharacterCreate = 0x0D,
         CharacterDelete = 0x0E,
 
+        //0x11 = 11 00 01 34 41 02 A4 
         WorldStatus = 0x13,
+        AccountGender = 0x17,
         CharacterLoad = 0x1D,
         CharacterSelect = 0x1E,
         WorldList = 0x18,

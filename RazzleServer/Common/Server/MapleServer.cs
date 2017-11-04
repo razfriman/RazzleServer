@@ -96,6 +96,7 @@ namespace RazzleServer.Server
                 client.SendHandshake();
                 client.Key = ip + Functions.Random();
                 AddClient(client);
+                Log.LogInformation("SENDING HANDSHAKE");
                 return client;
             }
             catch (Exception e)
@@ -142,8 +143,6 @@ namespace RazzleServer.Server
                     _centerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                     _centerSocket.Connect(ip, port);
                     connected = true;
-
-                    Log.LogInformation("Connected");
                 }
                 catch (Exception e)
                 {
@@ -156,12 +155,10 @@ namespace RazzleServer.Server
             if (connected)
             {
                 CenterServerConnected();
-
             }
             else
             {
                 Log.LogCritical($"Connection to Center Server failed at {ip}:{port}");
-
             }
         }
 

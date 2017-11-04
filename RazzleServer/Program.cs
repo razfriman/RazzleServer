@@ -17,9 +17,11 @@ namespace RazzleServer
             var center = new CenterServer();
             var login = new LoginServer();
 
+
+            Thread.Sleep(5000);
             ServerConfig.Instance.Worlds.ForEach(x =>
             {
-                //var game = new GameServer(x);
+                var game = new GameServer(x);
             });
 
             Thread.Sleep(Timeout.Infinite);

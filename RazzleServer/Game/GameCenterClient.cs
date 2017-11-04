@@ -14,6 +14,7 @@ namespace RazzleServer.Game
         public GameServer Server { get; set; }
 
         private readonly PendingKeyedQueue<string, int> MigrationValidationPool = new PendingKeyedQueue<string, int>();
+        private PendingKeyedQueue<byte, ushort> ChannelPortPool = new PendingKeyedQueue<byte, ushort>();
 
 
         public GameCenterClient(GameServer server, Socket session) : base(session, false)
@@ -108,7 +109,6 @@ namespace RazzleServer.Game
             }
         }
 
-        private PendingKeyedQueue<byte, ushort> ChannelPortPool = new PendingKeyedQueue<byte, ushort>();
 
         public ushort GetChannelPort(byte channelID)
         {

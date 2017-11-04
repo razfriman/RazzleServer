@@ -12,39 +12,16 @@ namespace RazzleServer.Login
     public class LoginCenterClient : AClient
     {
         public LoginServer Server { get; set; }
+
         private readonly PendingKeyedQueue<string, bool> MigrationPool = new PendingKeyedQueue<string, bool>();
+        private PendingKeyedQueue<string, bool> NameCheckPool = new PendingKeyedQueue<string, bool>();
+        private PendingKeyedQueue<int, List<byte[]>> CharacterEntriesPool = new PendingKeyedQueue<int, List<byte[]>>();
+
+        private PendingKeyedQueue<int, byte[]> CharacterCreationPool = new PendingKeyedQueue<int, byte[]>();
 
         public LoginCenterClient(LoginServer server, Socket session) : base(session, false)
         {
             Server = server;
-        }
-
-        public void Initialize(params object[] args)
-        {
-            using (var Packet = new PacketWriter(InteroperabilityOperationCode.RegistrationRequest))
-            {
-                Packet.WriteByte((byte)ServerType.Login);
-                Packet.WriteString((string)args[0]);
-                Packet.WriteByte((byte)Server.Worlds.Count);
-
-                foreach (World loopWorld in Server.Worlds)
-                {
-                    Packet.WriteByte(loopWorld.ID);
-                    Packet.WriteString(loopWorld.Name);
-                    Packet.WriteUShort(loopWorld.Port);
-                    Packet.WriteUShort(loopWorld.ShopPort);
-                    Packet.WriteByte(loopWorld.Count);
-                    Packet.WriteString(loopWorld.TickerMessage);
-                    Packet.WriteBool(loopWorld.EnableMultiLeveling);
-                    Packet.WriteInt(loopWorld.ExperienceRate);
-                    Packet.WriteInt(loopWorld.QuestExperienceRate);
-                    Packet.WriteInt(loopWorld.PartyQuestExperienceRate);
-                    Packet.WriteInt(loopWorld.MesoRate);
-                    Packet.WriteInt(loopWorld.DropRate);
-                }
-
-                Send(Packet);
-            }
         }
 
         public override void Receive(PacketReader packet)
@@ -125,7 +102,6 @@ namespace RazzleServer.Login
             NameCheckPool.Enqueue(name, unusable);
         }
 
-        private PendingKeyedQueue<int, List<byte[]>> CharacterEntriesPool = new PendingKeyedQueue<int, List<byte[]>>();
 
         private void GetCharacters(PacketReader inPacket)
         {
@@ -154,9 +130,6 @@ namespace RazzleServer.Login
             return CharacterEntriesPool.Dequeue(accountID);
         }
 
-        private PendingKeyedQueue<string, bool> NameCheckPool = new PendingKeyedQueue<string, bool>();
-
-        private PendingKeyedQueue<int, byte[]> CharacterCreationPool = new PendingKeyedQueue<int, byte[]>();
 
         private void CreateCharacter(PacketReader inPacket)
         {

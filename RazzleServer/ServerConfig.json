@@ -14,7 +14,7 @@
   "WzFilePath": "/Users/razfriman/Desktop/WZ",
   "Worlds": [
     {
-      "ID": 1,
+      "ID": 0,
       "Name": "Scania",
       "Port": 8585,
       "ShopPort": 9090,

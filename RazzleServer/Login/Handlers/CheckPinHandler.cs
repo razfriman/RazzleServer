@@ -16,6 +16,7 @@ namespace RazzleServer.Login.Handlers
 
             if (b == 0)
             {
+                packet.ReadInt();
                 string pin = packet.ReadString();
 
                 if (Functions.GetSha512(pin) != client.Account.Pin)

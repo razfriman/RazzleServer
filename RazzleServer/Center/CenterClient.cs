@@ -82,8 +82,6 @@ namespace RazzleServer.Center
             Send(outPacket);
         }
 
-
-
         public override void Receive(PacketReader packet)
         {
             var header = InteroperabilityOperationCode.Unknown;

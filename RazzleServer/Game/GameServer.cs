@@ -29,19 +29,21 @@ namespace RazzleServer.Game
             CurrentInstance = this;
         }
 
-        public override void ServerRegistered()
-        {
-            Log.LogInformation($"Registered Game Server ({World.Name} [{World.ID}]-{ChannelID}).");
-            Start(new IPAddress(new byte[] {0,0,0,0}), Port);
-        }
+        public override void ServerRegistered() => Start(new IPAddress(new byte[] { 0, 0, 0, 0 }), Port);
 
         public override void CenterServerConnected()
         {
+            Log.LogInformation("CENTER CONNECTED");
             CenterConnection = new GameCenterClient(this, _centerSocket);
+            CenterConnection.Socket.Crypto.HandshakeFinished += (SIV, RIV) => SendRegistrationRequest();
+        }
 
+        public void SendRegistrationRequest()
+        {
+            Log.LogInformation("GAME SENDING REG REQUEST");
             var pw = new PacketWriter(InteroperabilityOperationCode.RegistrationRequest);
             pw.WriteByte((int)ServerType.Channel);
-            CenterConnection.Send(pw);
+            CenterConnection?.Send(pw);
         }
 
         public override void Dispose()

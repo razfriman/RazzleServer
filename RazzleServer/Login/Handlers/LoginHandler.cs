@@ -29,17 +29,15 @@ namespace RazzleServer.Login.Handlers
                     pw.WriteInt(acc.ID);
                     pw.WriteByte((int)acc.Gender);
                     pw.WriteBool(acc.IsMaster);
-                    pw.WriteByte(0);
-                    pw.WriteByte(0);
                     pw.WriteByte(0x4E); // ??
                     pw.WriteString(acc.Username);
-                    pw.WriteByte(0x03); // ??
-                    pw.WriteByte(0);
+                    pw.WriteByte((byte)(ServerConfig.Instance.RequestPin ? 0 : 2)); // NOTE: 1 seems to not do anything.
+                    pw.WriteByte((byte)(ServerConfig.Instance.RequestPin ? 0 : 2)); // NOTE: 1 seems to not do anything.
                     pw.WriteByte(0); // NOTE: Quiet ban reason. 
                     pw.WriteLong(0); // NOTE: Quiet ban lift date.
                     pw.WriteDateTime(acc.Creation);
-                    pw.WriteByte(0); // ??
-                    pw.WriteByte(0); // ??
+                    pw.WriteByte((byte)(ServerConfig.Instance.RequestPin ? 0 : 2)); // NOTE: 1 seems to not do anything.
+                    pw.WriteByte((byte)(ServerConfig.Instance.RequestPin ? 0 : 2)); // NOTE: 1 seems to not do anything.
                     pw.WriteByte((byte)(ServerConfig.Instance.RequestPin ? 0 : 2)); // NOTE: 1 seems to not do anything.
                 }
 
