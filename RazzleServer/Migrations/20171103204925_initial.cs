@@ -14,14 +14,16 @@ namespace RazzleServer.Migrations
                 {
                     ID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    AccountType = table.Column<byte>(type: "INTEGER", nullable: false),
-                    CharacterSlots = table.Column<int>(type: "INTEGER", nullable: false),
+                    Birthday = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Creation = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Gender = table.Column<byte>(type: "INTEGER", nullable: false),
-                    MaplePoints = table.Column<int>(type: "INTEGER", nullable: false),
-                    NXCredit = table.Column<int>(type: "INTEGER", nullable: false),
-                    NXPrepaid = table.Column<int>(type: "INTEGER", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: true),
-                    Password = table.Column<string>(type: "TEXT", nullable: true)
+                    IsBanned = table.Column<bool>(type: "INTEGER", nullable: false),
+                    IsMaster = table.Column<bool>(type: "INTEGER", nullable: false),
+                    MaxCharacters = table.Column<int>(type: "INTEGER", nullable: false),
+                    Password = table.Column<string>(type: "TEXT", nullable: true),
+                    Pin = table.Column<string>(type: "TEXT", nullable: true),
+                    Salt = table.Column<string>(type: "TEXT", nullable: true),
+                    Username = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -306,25 +308,6 @@ namespace RazzleServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SkillMacros",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    CharacterID = table.Column<int>(type: "INTEGER", nullable: false),
-                    Index = table.Column<byte>(type: "INTEGER", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: true),
-                    ShoutName = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Skill1 = table.Column<int>(type: "INTEGER", nullable: false),
-                    Skill2 = table.Column<int>(type: "INTEGER", nullable: false),
-                    Skill3 = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SkillMacros", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Skills",
                 columns: table => new
                 {
@@ -386,9 +369,6 @@ namespace RazzleServer.Migrations
 
             migrationBuilder.DropTable(
                 name: "SkillCooldowns");
-
-            migrationBuilder.DropTable(
-                name: "SkillMacros");
 
             migrationBuilder.DropTable(
                 name: "Skills");

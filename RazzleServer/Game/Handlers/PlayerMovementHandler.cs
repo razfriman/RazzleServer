@@ -17,7 +17,7 @@ namespace RazzleServer.Game.Handlers
 
             packet.ReadInt(); // NOE: Unknown.
 
-            var movements = Movements.Decode(packet);
+            var movements = new Movements(packet);
 
             client.Character.Position = movements.Position;
             client.Character.Foothold = movements.Foothold;

@@ -10,6 +10,7 @@
   "PingTimeout": 30,
   "PrintPackets": true,
   "LoginCreatesNewAccount": true,
+  "DefaultCreationSlots": 3,
   "WzFilePath": "/Users/razfriman/Desktop/WZ",
   "Worlds": [
     {
@@ -21,7 +22,6 @@
       "Flag": "None",
       "EventMessage": "",
       "TickerMessage": "",
-      "DefaultCreationSlots": 3,
       "EnableCharacterCreation": true,
       "EnableMultiLeveling": true,
       "ExperienceRate": 1,

@@ -14,7 +14,6 @@ namespace RazzleServer.Common.Server
         public string EventMessage { get; set; }
         public string TickerMessage { get; set; }
         public bool AllowMultiLeveling { get; set; }
-        public int DefaultCreationSlots { get; set; }
         public bool EnableCharacterCreation { get; set; }
         public bool EnableMultiLeveling { get; set; }
         public int ExperienceRate { get; set; }

@@ -97,8 +97,8 @@ namespace RazzleServer.Login
                     Account.IsMaster = false;
                     Account.Birthday = DateTime.UtcNow;
                     Account.Creation = DateTime.UtcNow;
-                    Account.MaxCharacters = Server.Worlds[World].DefaultCreationSlots;
-                    Account.Save();
+                    Account.MaxCharacters = ServerConfig.Instance.DefaultCreationSlots;
+                    Account.Create();
                 }
                 else
                 {

@@ -3,8 +3,10 @@ using System.Linq;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Data;
+using RazzleServer.Common.Exceptions;
 using RazzleServer.Common.Util;
 using RazzleServer.Data;
+using RazzleServer.DB.Models;
 
 namespace RazzleServer.Login.Maple
 {
@@ -24,7 +26,7 @@ namespace RazzleServer.Login.Maple
         public DateTime Creation { get; set; }
         public int MaxCharacters { get; set; }
         private bool Assigned { get; set; }
-        private ILogger Log = LogManager.Log;
+        private readonly ILogger Log = LogManager.Log;
 
         public Account(LoginClient client)
         {
@@ -41,16 +43,20 @@ namespace RazzleServer.Login.Maple
 
                 if (account == null)
                 {
-                    Log.LogError($"Cannot find account with Username: [{key}");
-                    return;
+                    throw new NoAccountException();
                 }
 
-                this.ID = account.ID;
-                this.Username = account.Username;
-                this.Gender = (Gender)account.Gender;
-                this.Password = account.Password;
-                this.Salt = account.Salt;
-                this.MaxCharacters = account.MaxCharacters;
+                ID = account.ID;
+                Username = account.Username;
+                Gender = (Gender)account.Gender;
+                Password = account.Password;
+                Salt = account.Salt;
+                MaxCharacters = account.MaxCharacters;
+                Birthday = account.Birthday;
+                Creation = account.Creation;
+                Pin = account.Pin;
+                IsBanned = account.IsBanned;
+                IsMaster = account.IsMaster;
             }
         }
 
@@ -59,19 +65,26 @@ namespace RazzleServer.Login.Maple
         {
             using (var dbContext = new MapleDbContext())
             {
-                var account = dbContext.Accounts.FirstOrDefault(x => x.Username == Username);
+                var account = dbContext.Accounts.Find(ID);
+
+                if (account == null)
+                {
+                    Log.LogError($"Account does not exists with ID [{ID}]");
+                }
+
+                account.Username = Username;
+                account.Salt = Salt;
+                account.Password = Password;
+                account.Gender = (byte)Gender;
+                account.Pin = Pin;
+                account.Birthday = Birthday;
+                account.Creation = Creation;
+                account.IsBanned = IsBanned;
+                account.IsMaster = IsMaster;
+                account.MaxCharacters = MaxCharacters;
+
                 dbContext.SaveChanges();
             }
-        
-            //if (Assigned)
-            //{
-            //    datum.Update("ID = {0}", ID);
-            //}
-            //else
-            //{
-            //    ID = datum.InsertAndReturnID();
-            //    Assigned = true;
-            //}
         }
 
         public int Create()
@@ -79,6 +92,28 @@ namespace RazzleServer.Login.Maple
             using (var dbContext = new MapleDbContext())
             {
                 var account = dbContext.Accounts.FirstOrDefault(x => x.Username == Username);
+
+                if (account != null)
+                {
+                    Log.LogError($"Error creating acconut - account already exists with username [{Username}]");
+                    return -1;
+                }
+
+                account = new AccountEntity
+                {
+                    Username = Username,
+                    Salt = Salt,
+                    Password = Password,
+                    Gender = (byte)Gender,
+                    Pin = Pin,
+                    Birthday = Birthday,
+                    Creation = Creation,
+                    IsBanned = IsBanned,
+                    IsMaster = IsMaster,
+                    MaxCharacters = MaxCharacters
+                };
+
+                dbContext.Accounts.Add(account);
                 dbContext.SaveChanges();
                 return account.ID;
             }

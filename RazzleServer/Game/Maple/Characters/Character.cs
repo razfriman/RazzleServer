@@ -21,22 +21,17 @@ namespace RazzleServer.Game.Maple.Characters
     public sealed class Character : MapObject, IMoveable, ISpawnable
     {
         public GameClient Client { get; private set; }
-
-
-
         public int ID { get; set; }
         public int AccountID { get; set; }
         public byte WorldID { get; set; }
         public string Name { get; set; }
         public bool IsInitialized { get; private set; }
-
         public byte SpawnPoint { get; set; }
         public byte Stance { get; set; }
         public short Foothold { get; set; }
         public byte Portals { get; set; }
         public int Chair { get; set; }
         public int? GuildRank { get; set; }
-
         public CharacterItems Items { get; private set; }
         public CharacterSkills Skills { get; private set; }
         public CharacterQuests Quests { get; private set; }
@@ -100,10 +95,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public byte Skin
         {
-            get
-            {
-                return skin;
-            }
+            get => skin;
             set
             {
                 if (!DataProvider.Styles.Skins.Contains(value))
@@ -1035,7 +1027,7 @@ namespace RazzleServer.Game.Maple.Characters
 
             iPacket.ReadInt(); // NOE: Unknown.
 
-            Movements movements = Movements.Decode(iPacket);
+            var movements = new Movements(iPacket);
 
             Position = movements.Position;
             Foothold = movements.Foothold;

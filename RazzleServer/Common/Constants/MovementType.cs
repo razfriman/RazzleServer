@@ -16,11 +16,6 @@
         Chair = 11,
         ExcessiveKnockback = 12,
         RecoilShot = 13,
-        Unknown = 14,
-        JumpDown = 15,
-        Wings = 16,
-        WingsFalling = 17,
-        Unknown2 = 18,
-        Unknown3 = 19,
+        Unknown = 14
     }
 }

@@ -17,7 +17,6 @@ namespace RazzleServer.Login.Maple
         public WorldStatusFlag Flag { get; private set; }
         public string EventMessage { get; private set; }
         public string TickerMessage { get; private set; }
-        public int DefaultCreationSlots { get; private set; }
         public bool EnableCharacterCreation { get; private set; }
         public bool EnableMultiLeveling { get; private set; }
         public int ExperienceRate { get; private set; }
@@ -47,7 +46,6 @@ namespace RazzleServer.Login.Maple
             Flag = config.Flag;
             EventMessage = config.EventMessage;
             TickerMessage = config.TickerMessage;
-            DefaultCreationSlots = config.DefaultCreationSlots;
             EnableCharacterCreation = config.EnableCharacterCreation;
             EnableMultiLeveling = config.EnableMultiLeveling;
             ExperienceRate = config.ExperienceRate;

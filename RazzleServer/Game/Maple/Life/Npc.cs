@@ -37,7 +37,7 @@ namespace RazzleServer.Game.Maple.Life
 
             if (iPacket.Available > 0)
             {
-                movements = Movements.Decode(iPacket);
+                movements = new Movements(iPacket);
             }
 
             using (var oPacket = new PacketWriter(ServerOperationCode.NpcMove))

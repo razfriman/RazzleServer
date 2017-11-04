@@ -24,21 +24,25 @@ namespace RazzleServer.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<byte>("AccountType");
+                    b.Property<DateTime>("Birthday");
 
-                    b.Property<int>("CharacterSlots");
+                    b.Property<DateTime>("Creation");
 
                     b.Property<byte>("Gender");
 
-                    b.Property<int>("MaplePoints");
+                    b.Property<bool>("IsBanned");
 
-                    b.Property<int>("NXCredit");
+                    b.Property<bool>("IsMaster");
 
-                    b.Property<int>("NXPrepaid");
-
-                    b.Property<string>("Name");
+                    b.Property<int>("MaxCharacters");
 
                     b.Property<string>("Password");
+
+                    b.Property<string>("Pin");
+
+                    b.Property<string>("Salt");
+
+                    b.Property<string>("Username");
 
                     b.HasKey("ID");
 
@@ -449,30 +453,6 @@ namespace RazzleServer.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Skills");
-                });
-
-            modelBuilder.Entity("RazzleServer.DB.Models.SkillMacroEntity", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("CharacterID");
-
-                    b.Property<byte>("Index");
-
-                    b.Property<string>("Name");
-
-                    b.Property<bool>("ShoutName");
-
-                    b.Property<int>("Skill1");
-
-                    b.Property<int>("Skill2");
-
-                    b.Property<int>("Skill3");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("SkillMacros");
                 });
 #pragma warning restore 612, 618
         }

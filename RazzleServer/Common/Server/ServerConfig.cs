@@ -24,6 +24,7 @@ namespace RazzleServer.Server
 		public bool LoginCreatesNewAccount { get; set; } = true;
         public string CommandIndicator { get; set; } = "!";
         public ushort CenterPort { get; set; } = 8181;
+        public int DefaultCreationSlots { get; set; } = 3;
         public bool RequestPin { get; set; }
         public bool RequestPic { get; set; }
         public List<WorldConfig> Worlds { get; set; }

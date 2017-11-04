@@ -2,8 +2,12 @@
 {
     public enum ServerOperationCode : ushort
     {
+
+        Ping = 0x09,
+        CheckPasswordResult = 0x00,
+
+
         /*CLogin::OnPacket*/
-        CheckPasswordResult = 0,
         AccountInfoResult = 2,
         CheckUserLimitResult = 3,
         SetAccountResult = 4,
@@ -19,7 +23,6 @@
         DeleteCharacterResult = 15,
         /*CClientSocket::ProcessPacket*/
         MigrateCommand = 16,
-        Ping = 17,
         AuthenCodeChanged = 18,
         AuthenMessage = 19,
         ChannelSelected = 20,

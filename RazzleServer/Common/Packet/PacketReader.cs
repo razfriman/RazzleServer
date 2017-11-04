@@ -1,6 +1,6 @@
-﻿using System.Drawing;
-using System.IO;
+﻿using System.IO;
 using System.Text;
+using RazzleServer.Game.Maple;
 
 namespace RazzleServer.Common.Packet
 {

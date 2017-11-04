@@ -236,7 +236,7 @@ namespace RazzleServer.Game.Maple.Life
             iPacket.ReadByte();
             iPacket.ReadInt();
 
-            Movements movements = Movements.Decode(iPacket);
+            Movements movements = new Movements(iPacket);
 
             Position = movements.Position;
             Foothold = movements.Foothold;

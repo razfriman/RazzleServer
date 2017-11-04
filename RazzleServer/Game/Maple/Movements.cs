@@ -19,24 +19,18 @@ namespace RazzleServer.Game.Maple
 
     public sealed class Movements : List<Movement>
     {
-        public static Movements Decode(PacketReader iPacket)
-        {
-            return new Movements(iPacket);
-        }
-
         public Point Origin { get; private set; }
         public Point Position { get; private set; }
         public short Foothold { get; private set; }
         public byte Stance { get; private set; }
 
         public Movements(PacketReader iPacket)
-            : base()
         {
             short foothold = 0;
             byte stance = 0;
-            Point position = new Point(iPacket.ReadShort(), iPacket.ReadShort());
+            Point position = iPacket.ReadPoint();
 
-            this.Origin = position;
+            Origin = position;
 
             byte count = iPacket.ReadByte();
 
@@ -44,46 +38,35 @@ namespace RazzleServer.Game.Maple
             {
                 MovementType type = (MovementType)iPacket.ReadByte();
 
-                Movement movement = new Movement();
-
-                movement.Type = type;
-                movement.Foothold = foothold;
-                movement.Position = position;
-                movement.Stance = stance;
-
+                Movement movement = new Movement
+                {
+                    Type = type,
+                    Foothold = foothold,
+                    Position = position,
+                    Stance = stance
+                };
                 switch (type)
                 {
                     case MovementType.Normal:
                     case MovementType.Normal2:
-                    case MovementType.JumpDown:
-                    case MovementType.WingsFalling:
                         {
-                            movement.Position = new Point(iPacket.ReadShort(), iPacket.ReadShort());
-                            movement.Velocity = new Point(iPacket.ReadShort(), iPacket.ReadShort());
+                            movement.Position = iPacket.ReadPoint();
+                            movement.Velocity = iPacket.ReadPoint();
                             movement.Foothold = iPacket.ReadShort();
-
-                            if (movement.Type == MovementType.JumpDown)
-                            {
-                                movement.FallStart = iPacket.ReadShort();
-                            }
-
                             movement.Stance = iPacket.ReadByte();
                             movement.Duration = iPacket.ReadShort();
                         }
                         break;
-
                     case MovementType.Jump:
                     case MovementType.JumpKnockback:
                     case MovementType.FlashJump:
                     case MovementType.ExcessiveKnockback:
-                    case MovementType.RecoilShot:
                         {
-                            movement.Velocity = new Point(iPacket.ReadShort(), iPacket.ReadShort());
+                            movement.Velocity = iPacket.ReadPoint();
                             movement.Stance = iPacket.ReadByte();
                             movement.Duration = iPacket.ReadShort();
                         }
                         break;
-
                     case MovementType.Immediate:
                     case MovementType.Teleport:
                     case MovementType.Assaulter:
@@ -91,28 +74,25 @@ namespace RazzleServer.Game.Maple
                     case MovementType.Rush:
                     case MovementType.Chair:
                         {
-                            movement.Position = new Point(iPacket.ReadShort(), iPacket.ReadShort());
+                            movement.Position = iPacket.ReadPoint();
                             movement.Foothold = iPacket.ReadShort();
                             movement.Stance = iPacket.ReadByte();
                             movement.Duration = iPacket.ReadShort();
                         }
                         break;
-
                     case MovementType.Falling:
                         {
                             movement.Statistic = iPacket.ReadByte();
                         }
                         break;
-
                     case MovementType.Unknown:
                         {
-                            movement.Velocity = new Point(iPacket.ReadShort(), iPacket.ReadShort());
+                            movement.Velocity = iPacket.ReadPoint();
                             movement.FallStart = iPacket.ReadShort();
                             movement.Stance = iPacket.ReadByte();
                             movement.Duration = iPacket.ReadShort();
                         }
                         break;
-
                     default:
                         {
                             movement.Stance = iPacket.ReadByte();
@@ -125,7 +105,7 @@ namespace RazzleServer.Game.Maple
                 foothold = movement.Foothold;
                 stance = movement.Stance;
 
-                this.Add(movement);
+                Add(movement);
             }
 
             byte keypadStates = iPacket.ReadByte();
@@ -144,9 +124,9 @@ namespace RazzleServer.Game.Maple
             iPacket.ReadShort(); // NOTE: Right.
             iPacket.ReadShort(); // NOTE: Bottom.
 
-            this.Position = position;
-            this.Stance = stance;
-            this.Foothold = foothold;
+            Position = position;
+            Stance = stance;
+            Foothold = foothold;
         }
 
         public byte[] ToByteArray()
@@ -165,19 +145,10 @@ namespace RazzleServer.Game.Maple
                     {
                         case MovementType.Normal:
                         case MovementType.Normal2:
-                        case MovementType.JumpDown:
-                        case MovementType.WingsFalling:
                             {
-
                                 oPacket.WritePoint(movement.Position);
                                 oPacket.WritePoint(movement.Velocity);
                                 oPacket.WriteShort(movement.Foothold);
-
-                                if (movement.Type == MovementType.JumpDown)
-                                {
-                                    oPacket.WriteShort(movement.FallStart);
-                                }
-
                                 oPacket.WriteByte(movement.Stance);
                                 oPacket.WriteShort(movement.Duration);
                             }
