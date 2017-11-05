@@ -1,5 +1,4 @@
-﻿using RazzleServer.Server;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using RazzleServer.Center;
 
@@ -11,8 +10,7 @@ namespace RazzleServer
         {
             var manager = ServerManager.Instance;
             await manager.Configure();
-
-            //manager.Start();
+            manager.Start();
 
             Thread.Sleep(Timeout.Infinite);
         }
