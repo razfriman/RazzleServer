@@ -48,9 +48,6 @@ namespace RazzleServer.Game.Maple.Data
                 LoadEquipment(file.WzDirectory.GetDirectoryByName("Weapon"));
             }
 
-
-            System.Console.WriteLine("Items: " + this.Count());
-
             LoadWizetItemIDs();
         }
 
