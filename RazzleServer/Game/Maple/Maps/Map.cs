@@ -1,6 +1,7 @@
 ﻿using RazzleServer.Common.Constants;
 using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
+using RazzleServer.Common.WzLib;
 using RazzleServer.Game.Maple.Characters;
 
 namespace RazzleServer.Game.Maple.Maps
@@ -39,9 +40,14 @@ namespace RazzleServer.Game.Maple.Maps
         public MapSpawnPoints SpawnPoints { get; private set; }
         public MapPlayerShops PlayerShops { get; private set; }
 
-        public Map(int key)
+        public Map(WzImage img)
         {
-            MapleID = key;
+            var name = img.Name.Remove(9);
+            if (!int.TryParse(name, out var id))
+            {
+                return;
+            }
+            MapleID = id;
             Characters = new MapCharacters(this);
             Drops = new MapDrops(this);
             Mobs = new MapMobs(this);
@@ -52,6 +58,43 @@ namespace RazzleServer.Game.Maple.Maps
             Portals = new MapPortals(this);
             SpawnPoints = new MapSpawnPoints(this);
             PlayerShops = new MapPlayerShops(this);
+
+            //foreach (Datum datum in new Datums("map_footholds", Database.SchemaMCDB).Populate("mapid = {0}", key))
+            //{
+            //    this[key].Footholds.Add(new Foothold(datum));
+            //}
+
+            //foreach (Datum datum in new Datums("map_seats", Database.SchemaMCDB).Populate("mapid = {0}", key))
+            //{
+            //    this[key].Seats.Add(new Seat(datum));
+            //}
+
+            //foreach (Datum datum in new Datums("map_portals", Database.SchemaMCDB).Populate("mapid = {0}", key))
+            //{
+            //    this[key].Portals.Add(new Portal(datum));
+            //}
+
+            //foreach (Datum datum in new Datums("map_life", Database.SchemaMCDB).Populate("mapid = {0}", key))
+            //{
+            //    switch ((string)datum["life_type"])
+            //    {
+            //        case "npc":
+            //            {
+            //                this[key].Npcs.Add(new Npc(datum));
+            //            }
+            //            break;
+
+            //        case "mob":
+            //            this[key].SpawnPoints.Add(new SpawnPoint(datum, true));
+            //            break;
+
+            //        case "reactor":
+            //            this[key].SpawnPoints.Add(new SpawnPoint(datum, false));
+            //            break;
+            //    }
+            //}
+
+            //this[key].SpawnPoints.Spawn();
         }
 
         public void Broadcast(PacketWriter oPacket, Character ignored = null)

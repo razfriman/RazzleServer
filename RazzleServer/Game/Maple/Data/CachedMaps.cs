@@ -1,10 +1,11 @@
 ﻿using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
 using Microsoft.Extensions.Logging;
-using RazzleServer.Common.Data;
 using RazzleServer.Common.Util;
-using RazzleServer.Game.Maple.Characters;
-using RazzleServer.Game.Maple.Life;
+using RazzleServer.Common.WzLib;
 using RazzleServer.Game.Maple.Maps;
+using RazzleServer.Server;
 
 namespace RazzleServer.Game.Maple.Data
 {
@@ -15,21 +16,16 @@ namespace RazzleServer.Game.Maple.Data
         public CachedMaps()
         {
             Log.LogInformation("Loading Maps");
-        }
 
-        public new Map this[int key]
-        {
-            get
+            using (var file = new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, "Map.wz"), WzMapleVersion.CLASSIC))
             {
-                if (!Contains(key))
-                {
-                    // Load map by key
-                    Add(new Map(key));
-                }
-
-                //this[key].SpawnPoints.Spawn();
-
-                return base[key];
+                file.ParseWzFile();
+                file.WzDirectory
+                    .GetDirectoryByName("Map")
+                    .WzDirectories
+                    .SelectMany(dir => dir.WzImages)
+                    .ToList()
+                    .ForEach(img => Add(new Map(img)));
             }
         }
 
