@@ -23,7 +23,8 @@ namespace RazzleServer.Server
 		public int PingTimeout { get; set; } = 30;
 		public bool PrintPackets { get; set; } = true;
 		public ulong AESKey { get; set; } = 0x52330F1BB4060813;
-		public bool LoginCreatesNewAccount { get; set; } = true;
+		public bool EnableAutoRegister { get; set; } = true;
+        public bool EnableMultiLeveling { get; set; }
         public string CommandIndicator { get; set; } = "!";
         public int DefaultCreationSlots { get; set; } = 3;
         public bool RequestPin { get; set; }

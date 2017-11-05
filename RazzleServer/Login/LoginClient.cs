@@ -86,7 +86,7 @@ namespace RazzleServer.Login
             }
             catch (NoAccountException)
             {
-                if (ServerConfig.Instance.LoginCreatesNewAccount && username == LastUsername && password == LastPassword)
+                if (ServerConfig.Instance.EnableAutoRegister && username == LastUsername && password == LastPassword)
                 {
                     Account.Username = username;
                     Account.Salt = Functions.RandomString();

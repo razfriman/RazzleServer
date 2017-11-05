@@ -15,7 +15,6 @@ namespace RazzleServer.Center.Maple
         public string EventMessage { get; set; }
         public string TickerMessage { get; set; }
         public bool EnableCharacterCreation { get; set; }
-        public bool EnableMultiLeveling { get; set; }
         public int ExperienceRate { get; set; }
         public int QuestExperienceRate { get; set; }
         public int PartyQuestExperienceRate { get; set; }
@@ -31,7 +30,6 @@ namespace RazzleServer.Center.Maple
             EventMessage = config.EventMessage;
             TickerMessage = config.TickerMessage;
             EnableCharacterCreation = config.EnableCharacterCreation;
-            EnableMultiLeveling = config.EnableMultiLeveling;
             ExperienceRate = config.ExperienceRate;
             QuestExperienceRate = config.QuestExperienceRate;
             PartyQuestExperienceRate = config.PartyQuestExperienceRate;

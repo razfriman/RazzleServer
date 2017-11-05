@@ -12,10 +12,7 @@ namespace RazzleServer.Game.Maple
 {
     public class Item : Drop
     {
-        public static ItemType GetType(int mapleID)
-        {
-            return (ItemType)(mapleID / 1000000);
-        }
+        public static ItemType GetType(int mapleID) => (ItemType)(mapleID / 1000000);
 
         public CharacterItems Parent { get; set; }
 
@@ -93,14 +90,7 @@ namespace RazzleServer.Game.Maple
 
         public List<Tuple<int, short>> Summons { get; private set; }
 
-
-        public ItemType Type
-        {
-            get
-            {
-                return Item.GetType(MapleID);
-            }
-        }
+        public ItemType Type => Item.GetType(MapleID);
 
         public WeaponType WeaponType
         {
@@ -159,21 +149,9 @@ namespace RazzleServer.Game.Maple
             }
         }
 
-        public Item CachedReference
-        {
-            get
-            {
-                return DataProvider.Items[MapleID];
-            }
-        }
+        public Item CachedReference => DataProvider.Items[MapleID];
 
-        public Character Character
-        {
-            get
-            {
-                return Parent.Parent;
-            }
-        }
+        public Character Character => Parent.Parent;
 
         public short MaxPerStack
         {
@@ -196,10 +174,7 @@ namespace RazzleServer.Game.Maple
 
         public short Quantity
         {
-            get
-            {
-                return quantity;
-            }
+            get => quantity;
             set
             {
                 if (value > MaxPerStack)
@@ -213,13 +188,7 @@ namespace RazzleServer.Game.Maple
             }
         }
 
-        public bool IsSealed
-        {
-            get
-            {
-                return DataProvider.Items.WizetItemIDs.Contains(MapleID);
-            }
-        }
+        public bool IsSealed => DataProvider.Items.WizetItemIDs.Contains(MapleID);
 
         public byte Flags
         {
@@ -237,117 +206,33 @@ namespace RazzleServer.Game.Maple
             }
         }
 
-        public bool IsEquipped
-        {
-            get
-            {
-                return Slot < 0;
-            }
-        }
+        public bool IsEquipped => Slot < 0;
 
-        public bool IsEquippedCash
-        {
-            get
-            {
-                return Slot < -100;
-            }
-        }
+        public bool IsEquippedCash => Slot < -100;
 
-        public bool IsConsumable
-        {
-            get
-            {
-                return MapleID / 10000 >= 200 && MapleID / 10000 < 204;
-            }
-        }
+        public bool IsConsumable => MapleID / 10000 >= 200 && MapleID / 10000 < 204;
 
-        public bool IsRechargeable
-        {
-            get
-            {
-                return IsThrowingStar || IsBullet;
-            }
-        }
+        public bool IsRechargeable => IsThrowingStar || IsBullet;
 
-        public bool IsThrowingStar
-        {
-            get
-            {
-                return MapleID / 10000 == 207;
-            }
-        }
+        public bool IsThrowingStar => MapleID / 10000 == 207;
 
-        public bool IsBullet
-        {
-            get
-            {
-                return MapleID / 10000 == 233;
-            }
-        }
+        public bool IsBullet => MapleID / 10000 == 233;
 
-        public bool IsArrow
-        {
-            get
-            {
-                return IsArrowForBow || IsArrowForCrossbow;
-            }
-        }
+        public bool IsArrow => IsArrowForBow || IsArrowForCrossbow;
 
-        public bool IsArrowForBow
-        {
-            get
-            {
-                return MapleID >= 2060000 && MapleID < 2061000;
-            }
-        }
+        public bool IsArrowForBow => MapleID >= 2060000 && MapleID < 2061000;
 
-        public bool IsArrowForCrossbow
-        {
-            get
-            {
-                return MapleID >= 2061000 && MapleID < 2062000;
-            }
-        }
+        public bool IsArrowForCrossbow => MapleID >= 2061000 && MapleID < 2062000;
 
-        public bool IsOverall
-        {
-            get
-            {
-                return MapleID / 10000 == 105;
-            }
-        }
+        public bool IsOverall => MapleID / 10000 == 105;
 
-        public bool IsWeapon
-        {
-            get
-            {
-                return WeaponType != WeaponType.NotAWeapon;
-            }
-        }
+        public bool IsWeapon => WeaponType != WeaponType.NotAWeapon;
 
-        public bool IsShield
-        {
-            get
-            {
-                return MapleID / 10000 % 100 == 9;
-            }
-        }
+        public bool IsShield => MapleID / 10000 % 100 == 9;
 
-        public bool IsPet
-        {
-            get
-            {
-                return MapleID >= 5000000 && MapleID <= 5000100;
-            }
-        }
+        public bool IsPet => MapleID >= 5000000 && MapleID <= 5000100;
 
-        public bool IsTownScroll
-        {
-            get
-            {
-                return MapleID >= 2030000 && MapleID < 2030020;
-            }
-        }
+        public bool IsTownScroll => MapleID >= 2030000 && MapleID < 2030020;
 
         public bool IsTwoHanded
         {
@@ -372,13 +257,7 @@ namespace RazzleServer.Game.Maple
             }
         }
 
-        public bool IsBlocked
-        {
-            get
-            {
-                return IsCash || IsSealed || (IsTradeBlocked && !IsScissored);
-            }
-        }
+        public bool IsBlocked => IsCash || IsSealed || (IsTradeBlocked && !IsScissored);
 
         public byte AbsoluteSlot
         {

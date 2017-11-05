@@ -244,10 +244,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public short Dexterity
         {
-            get
-            {
-                return dexterity;
-            }
+            get => dexterity;
             set
             {
                 dexterity = value;
@@ -261,10 +258,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public short Intelligence
         {
-            get
-            {
-                return intelligence;
-            }
+            get => intelligence;
             set
             {
                 intelligence = value;
@@ -278,10 +272,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public short Luck
         {
-            get
-            {
-                return luck;
-            }
+            get => luck;
             set
             {
                 luck = value;
@@ -295,10 +286,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public short Health
         {
-            get
-            {
-                return health;
-            }
+            get => health;
             set
             {
                 if (value < 0)
@@ -411,7 +399,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                 experience = value;
 
-                if (Client.Server.World.EnableMultiLeveling)
+                if (ServerConfig.Instance.EnableMultiLeveling)
                 {
                     while (experience >= ExperienceTables.CharacterLevel[Level])
                     {

@@ -11,7 +11,8 @@ namespace RazzleServer
         {
             var manager = ServerManager.Instance;
             await manager.Configure();
-            manager.Start();
+
+            //manager.Start();
 
             Thread.Sleep(Timeout.Infinite);
         }
