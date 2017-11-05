@@ -25,12 +25,13 @@
 
         StrangeData = 0x11,
         WorldStatus = 0x13,
+        CharacterSelect = 0x16,
         AccountGender = 0x17,
-        CharacterLoad = 0x1D,
-        CharacterSelect = 0x1E,
         WorldList = 0x18,
         WorldSelect = 0x19,
         AccountLogin = 0x1B,
+        CharacterLoad = 0x1D,
+
 
         Storage = 0x20,
         NpcConverse = 0x21,
