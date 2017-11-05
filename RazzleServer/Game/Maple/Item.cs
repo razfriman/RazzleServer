@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
+using RazzleServer.Common.WzLib;
 using RazzleServer.Data;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
@@ -90,7 +91,7 @@ namespace RazzleServer.Game.Maple
 
         public List<Tuple<int, short>> Summons { get; private set; }
 
-        public ItemType Type => Item.GetType(MapleID);
+        public ItemType Type => GetType(MapleID);
 
         public WeaponType WeaponType
         {
@@ -378,102 +379,116 @@ namespace RazzleServer.Game.Maple
             Summons = CachedReference.Summons;
         }
 
+        public Item(WzImage img, ItemType type)
+        {
+            var name = img.Name.Remove(8);
+            if (!int.TryParse(name, out var id))
+            {
+                MapleID = Common.Util.Functions.Random();
+                return;
+            }
+
+            MapleID = id;
+            Summons = new List<Tuple<int, short>>();
+        }
+        public Item(WzImageProperty img, ItemType type)
+        {
+            var name = img.Name;
+            if (!int.TryParse(name, out var id))
+            {
+                return;
+            }
+
+            MapleID = id;
+            Summons = new List<Tuple<int, short>>();
+            //MaxPerStack = (short)datum["max_slot_quantity"];
+            //IsCash = ((string)datum["flags"]).Contains("cash_item");
+            //OnlyOne = (sbyte)datum["max_possession_count"] > 0;
+            //IsTradeBlocked = ((string)datum["flags"]).Contains("no_trade");
+            //IsScissored = false;
+            //SalePrice = (int)datum["price"];
+            //RequiredLevel = (byte)datum["min_level"];
+            //Meso = (int)datum["money"];
+        }
+
         public Item(Datum datum)
         {
-            if (DataProvider.IsInitialized)
+            ID = (int)datum["ID"];
+            Assigned = true;
+
+            AccountID = (int)datum["AccountID"];
+            MapleID = (int)datum["MapleID"];
+            MaxPerStack = CachedReference.MaxPerStack;
+            Quantity = (short)datum["Quantity"];
+            Slot = (short)datum["Slot"];
+            Creator = (string)datum["Creator"];
+            Expiration = (DateTime)datum["Expiration"];
+            PetID = (int?)datum["PetID"];
+
+            IsCash = CachedReference.IsCash;
+            OnlyOne = CachedReference.OnlyOne;
+            IsTradeBlocked = CachedReference.IsTradeBlocked;
+            IsScissored = false;
+            IsStored = (bool)datum["IsStored"];
+            SalePrice = CachedReference.SalePrice;
+            RequiredLevel = CachedReference.RequiredLevel;
+            Meso = CachedReference.Meso;
+
+            if (Type == ItemType.Equipment)
             {
-                ID = (int)datum["ID"];
-                Assigned = true;
+                AttackSpeed = CachedReference.AttackSpeed;
+                RecoveryRate = CachedReference.RecoveryRate;
+                KnockBackChance = CachedReference.KnockBackChance;
 
-                AccountID = (int)datum["AccountID"];
-                MapleID = (int)datum["MapleID"];
-                MaxPerStack = CachedReference.MaxPerStack;
-                Quantity = (short)datum["Quantity"];
-                Slot = (short)datum["Slot"];
-                Creator = (string)datum["Creator"];
-                Expiration = (DateTime)datum["Expiration"];
-                PetID = (int?)datum["PetID"];
+                RequiredStrength = CachedReference.RequiredStrength;
+                RequiredDexterity = CachedReference.RequiredDexterity;
+                RequiredIntelligence = CachedReference.RequiredIntelligence;
+                RequiredLuck = CachedReference.RequiredLuck;
+                RequiredFame = CachedReference.RequiredFame;
+                RequiredJob = CachedReference.RequiredJob;
 
-                IsCash = CachedReference.IsCash;
-                OnlyOne = CachedReference.OnlyOne;
-                IsTradeBlocked = CachedReference.IsTradeBlocked;
-                IsScissored = false;
-                IsStored = (bool)datum["IsStored"];
-                SalePrice = CachedReference.SalePrice;
-                RequiredLevel = CachedReference.RequiredLevel;
-                Meso = CachedReference.Meso;
-
-                if (Type == ItemType.Equipment)
-                {
-                    AttackSpeed = CachedReference.AttackSpeed;
-                    RecoveryRate = CachedReference.RecoveryRate;
-                    KnockBackChance = CachedReference.KnockBackChance;
-
-                    RequiredStrength = CachedReference.RequiredStrength;
-                    RequiredDexterity = CachedReference.RequiredDexterity;
-                    RequiredIntelligence = CachedReference.RequiredIntelligence;
-                    RequiredLuck = CachedReference.RequiredLuck;
-                    RequiredFame = CachedReference.RequiredFame;
-                    RequiredJob = CachedReference.RequiredJob;
-
-                    UpgradesAvailable = (byte)datum["UpgradesAvailable"];
-                    UpgradesApplied = (byte)datum["UpgradesApplied"];
-                    Strength = (short)datum["Strength"];
-                    Dexterity = (short)datum["Dexterity"];
-                    Intelligence = (short)datum["Intelligence"];
-                    Luck = (short)datum["Luck"];
-                    Health = (short)datum["Health"];
-                    Mana = (short)datum["Mana"];
-                    WeaponAttack = (short)datum["WeaponAttack"];
-                    MagicAttack = (short)datum["MagicAttack"];
-                    WeaponDefense = (short)datum["WeaponDefense"];
-                    MagicDefense = (short)datum["MagicDefense"];
-                    Accuracy = (short)datum["Accuracy"];
-                    Avoidability = (short)datum["Avoidability"];
-                    Agility = (short)datum["Agility"];
-                    Speed = (short)datum["Speed"];
-                    Jump = (short)datum["Jump"];
-                }
-                else if (IsConsumable)
-                {
-                    CFlags = CachedReference.CFlags;
-                    CCureAilments = CachedReference.CCureAilments;
-                    CEffect = CachedReference.CEffect;
-                    CHealth = CachedReference.CHealth;
-                    CMana = CachedReference.CMana;
-                    CHealthPercentage = CachedReference.CHealthPercentage;
-                    CManaPercentage = CachedReference.CManaPercentage;
-                    CMoveTo = CachedReference.CMoveTo;
-                    CProb = CachedReference.CProb;
-                    CBuffTime = CachedReference.CBuffTime;
-                    CWeaponAttack = CachedReference.CWeaponAttack;
-                    CMagicAttack = CachedReference.CMagicAttack;
-                    CWeaponDefense = CachedReference.CWeaponDefense;
-                    CMagicDefense = CachedReference.CMagicDefense;
-                    CAccuracy = CachedReference.CAccuracy;
-                    CAvoid = CachedReference.CAvoid;
-                    CSpeed = CachedReference.CSpeed;
-                    CJump = CachedReference.CJump;
-                    CMorph = CachedReference.CMorph;
-                }
-
-                Summons = CachedReference.Summons;
+                UpgradesAvailable = (byte)datum["UpgradesAvailable"];
+                UpgradesApplied = (byte)datum["UpgradesApplied"];
+                Strength = (short)datum["Strength"];
+                Dexterity = (short)datum["Dexterity"];
+                Intelligence = (short)datum["Intelligence"];
+                Luck = (short)datum["Luck"];
+                Health = (short)datum["Health"];
+                Mana = (short)datum["Mana"];
+                WeaponAttack = (short)datum["WeaponAttack"];
+                MagicAttack = (short)datum["MagicAttack"];
+                WeaponDefense = (short)datum["WeaponDefense"];
+                MagicDefense = (short)datum["MagicDefense"];
+                Accuracy = (short)datum["Accuracy"];
+                Avoidability = (short)datum["Avoidability"];
+                Agility = (short)datum["Agility"];
+                Speed = (short)datum["Speed"];
+                Jump = (short)datum["Jump"];
             }
-            else
+            else if (IsConsumable)
             {
-                MapleID = (int)datum["itemid"];
-                MaxPerStack = (short)datum["max_slot_quantity"];
-
-                IsCash = ((string)datum["flags"]).Contains("cash_item");
-                OnlyOne = (sbyte)datum["max_possession_count"] > 0;
-                IsTradeBlocked = ((string)datum["flags"]).Contains("no_trade");
-                IsScissored = false;
-                SalePrice = (int)datum["price"];
-                RequiredLevel = (byte)datum["min_level"];
-                Meso = (int)datum["money"];
-
-                Summons = new List<Tuple<int, short>>();
+                CFlags = CachedReference.CFlags;
+                CCureAilments = CachedReference.CCureAilments;
+                CEffect = CachedReference.CEffect;
+                CHealth = CachedReference.CHealth;
+                CMana = CachedReference.CMana;
+                CHealthPercentage = CachedReference.CHealthPercentage;
+                CManaPercentage = CachedReference.CManaPercentage;
+                CMoveTo = CachedReference.CMoveTo;
+                CProb = CachedReference.CProb;
+                CBuffTime = CachedReference.CBuffTime;
+                CWeaponAttack = CachedReference.CWeaponAttack;
+                CMagicAttack = CachedReference.CMagicAttack;
+                CWeaponDefense = CachedReference.CWeaponDefense;
+                CMagicDefense = CachedReference.CMagicDefense;
+                CAccuracy = CachedReference.CAccuracy;
+                CAvoid = CachedReference.CAvoid;
+                CSpeed = CachedReference.CSpeed;
+                CJump = CachedReference.CJump;
+                CMorph = CachedReference.CMorph;
             }
+
+            Summons = CachedReference.Summons;
         }
 
         public void LoadConsumeData(Datum datum)

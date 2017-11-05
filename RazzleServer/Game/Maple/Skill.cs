@@ -3,6 +3,7 @@ using System.Linq;
 using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
+using RazzleServer.Common.WzLib;
 using RazzleServer.Data;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
@@ -55,31 +56,22 @@ namespace RazzleServer.Game.Maple
         public Point RB { get; private set; }
         public int Cooldown { get; set; }
 
-        public bool HasBuff
-        {
-            get
-            {
-                return this.BuffTime > 0;
-            }
-        }
+        public bool HasBuff => BuffTime > 0;
 
         public byte CurrentLevel
         {
-            get
-            {
-                return currentLevel;
-            }
+            get => currentLevel;
             set
             {
                 currentLevel = value;
 
-                if (this.Parent != null)
+                if (Parent != null)
                 {
-                    this.Recalculate();
+                    Recalculate();
 
-                    if (this.Character.IsInitialized)
+                    if (Character.IsInitialized)
                     {
-                        this.Update();
+                        Update();
                     }
                 }
             }
@@ -87,99 +79,63 @@ namespace RazzleServer.Game.Maple
 
         public byte MaxLevel
         {
-            get
-            {
-                return maxLevel;
-            }
+            get => maxLevel;
             set
             {
                 maxLevel = value;
 
-                if (this.Parent != null && this.Character.IsInitialized)
+                if (Parent != null && Character.IsInitialized)
                 {
-                    this.Update();
+                    Update();
                 }
             }
         }
 
-        public Skill CachedReference
-        {
-            get
-            {
-                return DataProvider.Skills[this.MapleID][this.CurrentLevel];
-            }
-        }
+        public Skill CachedReference => DataProvider.Skills[MapleID][CurrentLevel];
 
-        public Character Character
-        {
-            get
-            {
-                return this.Parent.Parent;
-            }
-        }
+        public Character Character => Parent.Parent;
 
-        public bool IsFromFourthJob
-        {
-            get
-            {
-                return this.MapleID > 1000000 && (this.MapleID / 10000).ToString()[2] == '2'; // TODO: Redo that.
-            }
-        }
+        public bool IsFromFourthJob => MapleID > 1000000 && (MapleID / 10000).ToString()[2] == '2'; // TODO: Redo that.
 
         public bool IsFromBeginner
         {
             get
             {
-                return this.MapleID % 10000000 > 999 && this.MapleID % 10000000 < 1003;
+                return MapleID % 10000000 > 999 && MapleID % 10000000 < 1003;
             }
         }
 
-        public bool IsCoolingDown
-        {
-            get
-            {
-                return DateTime.Now < this.CooldownEnd;
-            }
-        }
+        public bool IsCoolingDown => DateTime.Now < CooldownEnd;
 
-        public int RemainingCooldownSeconds
-        {
-            get
-            {
-                return Math.Min(0, (int)(this.CooldownEnd - DateTime.Now).TotalSeconds);
-            }
-        }
+        public int RemainingCooldownSeconds => Math.Min(0, (int)(CooldownEnd - DateTime.Now).TotalSeconds);
 
         public DateTime CooldownEnd
         {
-            get
-            {
-                return cooldownEnd;
-            }
+            get => cooldownEnd;
             set
             {
                 cooldownEnd = value;
 
-                if (this.IsCoolingDown)
+                if (IsCoolingDown)
                 {
                     using (var oPacket = new PacketWriter(ServerOperationCode.Cooldown))
                     {
-                        oPacket.WriteInt(this.MapleID);
-                        oPacket.WriteShort((short)this.RemainingCooldownSeconds);
+                        oPacket.WriteInt(MapleID);
+                        oPacket.WriteShort((short)RemainingCooldownSeconds);
 
-                        this.Character.Client.Send(oPacket);
+                        Character.Client.Send(oPacket);
                     }
 
                     Delay.Execute(() =>
                     {
                         using (var oPacket = new PacketWriter(ServerOperationCode.Cooldown))
                         {
-                            oPacket.WriteInt(this.MapleID);
+                            oPacket.WriteInt(MapleID);
                             oPacket.WriteShort(0);
 
-                            this.Character.Client.Send(oPacket);
+                            Character.Client.Send(oPacket);
                         }
-                    }, (this.RemainingCooldownSeconds * 1000));
+                    }, (RemainingCooldownSeconds * 1000));
                 }
             }
         }
@@ -188,104 +144,101 @@ namespace RazzleServer.Game.Maple
 
         public Skill(int mapleID, DateTime? expiration = null)
         {
-            this.MapleID = mapleID;
-            this.CurrentLevel = 0;
-            this.MaxLevel = (byte)DataProvider.Skills[this.MapleID].Count;
+            MapleID = mapleID;
+            CurrentLevel = 0;
+            MaxLevel = (byte)DataProvider.Skills[MapleID].Count;
 
             if (!expiration.HasValue)
             {
                 expiration = new DateTime(2079, 1, 1, 12, 0, 0); // NOTE: Default expiration time (permanent).
             }
 
-            this.Expiration = (DateTime)expiration;
+            Expiration = (DateTime)expiration;
         }
 
         public Skill(int mapleID, byte currentLevel, byte maxLevel, DateTime? expiration = null)
         {
-            this.MapleID = mapleID;
-            this.CurrentLevel = currentLevel;
-            this.MaxLevel = maxLevel;
+            MapleID = mapleID;
+            CurrentLevel = currentLevel;
+            MaxLevel = maxLevel;
 
             if (!expiration.HasValue)
             {
                 expiration = new DateTime(2079, 1, 1, 12, 0, 0); // NOTE: Default expiration time (permanent).
             }
 
-            this.Expiration = (DateTime)expiration;
+            Expiration = (DateTime)expiration;
         }
 
+        public Skill(WzImageProperty img)
+        {
+            //MapleID = (int)datum["skillid"];
+            //CurrentLevel = (byte)(short)datum["skill_level"];
+            //MobCount = (sbyte)datum["mob_count"];
+            //HitCount = (sbyte)datum["hit_count"];
+            //Range = (short)datum["range"];
+            //BuffTime = (int)datum["buff_time"];
+            //CostHP = (short)datum["hp_cost"];
+            //CostMP = (short)datum["mp_cost"];
+            //Damage = (short)datum["damage"];
+            //FixedDamage = (int)datum["fixed_damage"];
+            //CriticalDamage = (byte)datum["critical_damage"];
+            //Mastery = (sbyte)datum["mastery"];
+            //OptionalItemCost = (int)datum["optional_item_cost"];
+            //CostItem = (int)datum["item_cost"];
+            //ItemCount = (short)datum["item_count"];
+            //CostBullet = (short)datum["bullet_cost"];
+            //CostMeso = (short)datum["money_cost"];
+            //ParameterA = (short)datum["x_property"];
+            //ParameterB = (short)datum["y_property"];
+            //Speed = (short)datum["speed"];
+            //Jump = (short)datum["jump"];
+            //Strength = (short)datum["str"];
+            //WeaponAttack = (short)datum["weapon_atk"];
+            //MagicAttack = (short)datum["magic_atk"];
+            //WeaponDefense = (short)datum["weapon_def"];
+            //MagicDefense = (short)datum["magic_def"];
+            //Accuracy = (short)datum["accuracy"];
+            //Avoidability = (short)datum["avoid"];
+            //HP = (short)datum["hp"];
+            //MP = (short)datum["mp"];
+            //Probability = (short)datum["prop"];
+            //Morph = (short)datum["morph"];
+            //LT = new Point((short)datum["ltx"], (short)datum["lty"]);
+            //RB = new Point((short)datum["rbx"], (short)datum["rby"]);
+            //Cooldown = (int)datum["cooldown_time"];
+        }
         public Skill(Datum datum)
         {
-            if (DataProvider.IsInitialized)
-            {
-                this.ID = (int)datum["ID"];
-                this.Assigned = true;
+            ID = (int)datum["ID"];
+            Assigned = true;
 
-                this.MapleID = (int)datum["MapleID"];
-                this.CurrentLevel = (byte)datum["CurrentLevel"];
-                this.MaxLevel = (byte)datum["MaxLevel"];
-                this.Expiration = (DateTime)datum["Expiration"];
-                this.CooldownEnd = (DateTime)datum["CooldownEnd"];
-            }
-            else
-            {
-                this.MapleID = (int)datum["skillid"];
-                this.CurrentLevel = (byte)(short)datum["skill_level"];
-                this.MobCount = (sbyte)datum["mob_count"];
-                this.HitCount = (sbyte)datum["hit_count"];
-                this.Range = (short)datum["range"];
-                this.BuffTime = (int)datum["buff_time"];
-                this.CostHP = (short)datum["hp_cost"];
-                this.CostMP = (short)datum["mp_cost"];
-                this.Damage = (short)datum["damage"];
-                this.FixedDamage = (int)datum["fixed_damage"];
-                this.CriticalDamage = (byte)datum["critical_damage"];
-                this.Mastery = (sbyte)datum["mastery"];
-                this.OptionalItemCost = (int)datum["optional_item_cost"];
-                this.CostItem = (int)datum["item_cost"];
-                this.ItemCount = (short)datum["item_count"];
-                this.CostBullet = (short)datum["bullet_cost"];
-                this.CostMeso = (short)datum["money_cost"];
-                this.ParameterA = (short)datum["x_property"];
-                this.ParameterB = (short)datum["y_property"];
-                this.Speed = (short)datum["speed"];
-                this.Jump = (short)datum["jump"];
-                this.Strength = (short)datum["str"];
-                this.WeaponAttack = (short)datum["weapon_atk"];
-                this.MagicAttack = (short)datum["magic_atk"];
-                this.WeaponDefense = (short)datum["weapon_def"];
-                this.MagicDefense = (short)datum["magic_def"];
-                this.Accuracy = (short)datum["accuracy"];
-                this.Avoidability = (short)datum["avoid"];
-                this.HP = (short)datum["hp"];
-                this.MP = (short)datum["mp"];
-                this.Probability = (short)datum["prop"];
-                this.Morph = (short)datum["morph"];
-                this.LT = new Point((short)datum["ltx"], (short)datum["lty"]);
-                this.RB = new Point((short)datum["rbx"], (short)datum["rby"]);
-                this.Cooldown = (int)datum["cooldown_time"];
-            }
+            MapleID = (int)datum["MapleID"];
+            CurrentLevel = (byte)datum["CurrentLevel"];
+            MaxLevel = (byte)datum["MaxLevel"];
+            Expiration = (DateTime)datum["Expiration"];
+            CooldownEnd = (DateTime)datum["CooldownEnd"];
         }
 
         public void Save()
         {
             Datum datum = new Datum("skills");
 
-            datum["CharacterID"] = this.Character.ID;
-            datum["MapleID"] = this.MapleID;
-            datum["CurrentLevel"] = this.CurrentLevel;
-            datum["MaxLevel"] = this.MaxLevel;
-            datum["Expiration"] = this.Expiration;
-            datum["CooldownEnd"] = this.CooldownEnd;
+            datum["CharacterID"] = Character.ID;
+            datum["MapleID"] = MapleID;
+            datum["CurrentLevel"] = CurrentLevel;
+            datum["MaxLevel"] = MaxLevel;
+            datum["Expiration"] = Expiration;
+            datum["CooldownEnd"] = CooldownEnd;
 
-            if (this.Assigned)
+            if (Assigned)
             {
-                datum.Update("ID = {0}", this.ID);
+                datum.Update("ID = {0}", ID);
             }
             else
             {
-                this.ID = datum.InsertAndReturnID();
-                this.Assigned = true;
+                ID = datum.InsertAndReturnID();
+                Assigned = true;
             }
         }
 
@@ -309,81 +262,81 @@ namespace RazzleServer.Game.Maple
             {
                 oPacket.WriteByte(1);
                 oPacket.WriteShort(1);
-                oPacket.WriteInt(this.MapleID);
-                oPacket.WriteInt(this.CurrentLevel);
-                oPacket.WriteInt(this.MaxLevel);
-                oPacket.WriteDateTime(this.Expiration);
+                oPacket.WriteInt(MapleID);
+                oPacket.WriteInt(CurrentLevel);
+                oPacket.WriteInt(MaxLevel);
+                oPacket.WriteDateTime(Expiration);
                 oPacket.WriteByte(4);
 
-                this.Character.Client.Send(oPacket);
+                Character.Client.Send(oPacket);
             }
         }
 
         public void Recalculate()
         {
-            this.MobCount = this.CachedReference.MobCount;
-            this.HitCount = this.CachedReference.HitCount;
-            this.Range = this.CachedReference.Range;
-            this.BuffTime = this.CachedReference.BuffTime;
-            this.CostMP = this.CachedReference.CostMP;
-            this.CostHP = this.CachedReference.CostHP;
-            this.Damage = this.CachedReference.Damage;
-            this.FixedDamage = this.CachedReference.FixedDamage;
-            this.CriticalDamage = this.CachedReference.CriticalDamage;
-            this.Mastery = this.CachedReference.Mastery;
-            this.OptionalItemCost = this.CachedReference.OptionalItemCost;
-            this.CostItem = this.CachedReference.CostItem;
-            this.ItemCount = this.CachedReference.ItemCount;
-            this.CostBullet = this.CachedReference.CostBullet;
-            this.CostMeso = this.CachedReference.CostMeso;
-            this.ParameterA = this.CachedReference.ParameterA;
-            this.ParameterB = this.CachedReference.ParameterB;
-            this.Speed = this.CachedReference.Speed;
-            this.Jump = this.CachedReference.Jump;
-            this.Strength = this.CachedReference.Strength;
-            this.WeaponAttack = this.CachedReference.WeaponAttack;
-            this.WeaponDefense = this.CachedReference.WeaponDefense;
-            this.MagicAttack = this.CachedReference.MagicAttack;
-            this.MagicDefense = this.CachedReference.MagicDefense;
-            this.Accuracy = this.CachedReference.Accuracy;
-            this.Avoidability = this.CachedReference.Avoidability;
-            this.HP = this.CachedReference.HP;
-            this.MP = this.CachedReference.MP;
-            this.Probability = this.CachedReference.Probability;
-            this.Morph = this.CachedReference.Morph;
-            this.LT = this.CachedReference.LT;
-            this.RB = this.CachedReference.RB;
-            this.Cooldown = this.CachedReference.Cooldown;
+            MobCount = CachedReference.MobCount;
+            HitCount = CachedReference.HitCount;
+            Range = CachedReference.Range;
+            BuffTime = CachedReference.BuffTime;
+            CostMP = CachedReference.CostMP;
+            CostHP = CachedReference.CostHP;
+            Damage = CachedReference.Damage;
+            FixedDamage = CachedReference.FixedDamage;
+            CriticalDamage = CachedReference.CriticalDamage;
+            Mastery = CachedReference.Mastery;
+            OptionalItemCost = CachedReference.OptionalItemCost;
+            CostItem = CachedReference.CostItem;
+            ItemCount = CachedReference.ItemCount;
+            CostBullet = CachedReference.CostBullet;
+            CostMeso = CachedReference.CostMeso;
+            ParameterA = CachedReference.ParameterA;
+            ParameterB = CachedReference.ParameterB;
+            Speed = CachedReference.Speed;
+            Jump = CachedReference.Jump;
+            Strength = CachedReference.Strength;
+            WeaponAttack = CachedReference.WeaponAttack;
+            WeaponDefense = CachedReference.WeaponDefense;
+            MagicAttack = CachedReference.MagicAttack;
+            MagicDefense = CachedReference.MagicDefense;
+            Accuracy = CachedReference.Accuracy;
+            Avoidability = CachedReference.Avoidability;
+            HP = CachedReference.HP;
+            MP = CachedReference.MP;
+            Probability = CachedReference.Probability;
+            Morph = CachedReference.Morph;
+            LT = CachedReference.LT;
+            RB = CachedReference.RB;
+            Cooldown = CachedReference.Cooldown;
         }
 
         public void Cast()
         {
-            if (this.IsCoolingDown)
+            if (IsCoolingDown)
             {
                 return;
             }
 
-            this.Character.Health -= this.CostHP;
-            this.Character.Mana -= this.CostMP;
+            Character.Health -= CostHP;
+            Character.Mana -= CostMP;
 
-            if (this.CostItem > 0)
+            if (CostItem > 0)
             {
 
             }
 
-            if (this.CostBullet > 0)
+            if (CostBullet > 0)
             {
 
             }
 
-            if (this.CostMeso > 0)
+            if (CostMeso > 0)
             {
 
             }
 
-            if (this.Cooldown > 0)
+            if (Cooldown > 0)
             {
-                this.CooldownEnd = DateTime.Now.AddSeconds(this.Cooldown);
+                CooldownEnd = DateTime.Now.AddSeconds(Cooldown);
             }
         }
 
@@ -853,13 +806,13 @@ namespace RazzleServer.Game.Maple
         {
             using (var oPacket = new PacketWriter())
             {
-                oPacket.WriteInt(this.MapleID);
-                oPacket.WriteInt(this.CurrentLevel);
-                oPacket.WriteDateTime(this.Expiration);
+                oPacket.WriteInt(MapleID);
+                oPacket.WriteInt(CurrentLevel);
+                oPacket.WriteDateTime(Expiration);
 
-                if (this.IsFromFourthJob)
+                if (IsFromFourthJob)
                 {
-                    oPacket.WriteInt(this.MaxLevel);
+                    oPacket.WriteInt(MaxLevel);
                 }
 
                 return oPacket.ToArray();

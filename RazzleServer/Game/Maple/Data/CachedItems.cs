@@ -1,9 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
 using Microsoft.Extensions.Logging;
-using RazzleServer.Common.Data;
+using RazzleServer.Common.Constants;
 using RazzleServer.Common.Util;
+using RazzleServer.Common.WzLib;
+using RazzleServer.Server;
 
 namespace RazzleServer.Game.Maple.Data
 {
@@ -16,6 +19,63 @@ namespace RazzleServer.Game.Maple.Data
         public CachedItems()
         {
             Log.LogInformation("Loading Items");
+
+            using (var file = new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, "Item.wz"), WzMapleVersion.CLASSIC))
+            {
+                file.ParseWzFile();
+
+                LoadItems(file.WzDirectory.GetDirectoryByName("Cash"), ItemType.Cash);
+                LoadItems(file.WzDirectory.GetDirectoryByName("Consume"), ItemType.Usable);
+                LoadItems(file.WzDirectory.GetDirectoryByName("Etc"), ItemType.Etcetera);
+                LoadItems(file.WzDirectory.GetDirectoryByName("Install"), ItemType.Setup);
+            }
+
+            using (var file = new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, "Character.wz"), WzMapleVersion.CLASSIC))
+            {
+                file.ParseWzFile();
+                LoadEquipment(file.WzDirectory.GetDirectoryByName("Accessory"));
+                LoadEquipment(file.WzDirectory.GetDirectoryByName("Cap"));
+                LoadEquipment(file.WzDirectory.GetDirectoryByName("Cape"));
+                LoadEquipment(file.WzDirectory.GetDirectoryByName("Coat"));
+                LoadEquipment(file.WzDirectory.GetDirectoryByName("Glove"));
+                LoadEquipment(file.WzDirectory.GetDirectoryByName("Longcoat"));
+                LoadEquipment(file.WzDirectory.GetDirectoryByName("Pants"));
+                LoadEquipment(file.WzDirectory.GetDirectoryByName("PetEquip"));
+                LoadEquipment(file.WzDirectory.GetDirectoryByName("Ring"));
+                LoadEquipment(file.WzDirectory.GetDirectoryByName("Shield"));
+                LoadEquipment(file.WzDirectory.GetDirectoryByName("TamingMob"));
+                LoadEquipment(file.WzDirectory.GetDirectoryByName("Weapon"));
+            }
+
+
+            System.Console.WriteLine("Items: " + this.Count());
+
+            LoadWizetItemIDs();
+        }
+
+        private void LoadItems(WzDirectory dir, ItemType type)
+        {
+            dir.WzImages
+               .SelectMany(x => x.WzProperties)
+               .ToList()
+               .ForEach(item => Add(new Item(item, type)));
+        }
+
+        private void LoadEquipment(WzDirectory dir)
+        {
+            dir.WzImages.ForEach(item =>
+            {
+                var i = new Item(item, ItemType.Equipment);
+
+                if (!Contains(i.MapleID))
+                {
+                    Add(i);
+                }
+            });
+        }
+
+        private void LoadWizetItemIDs()
+        {
             WizetItemIDs = new List<int>(4)
             {
                 1002140,

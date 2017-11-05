@@ -1,8 +1,10 @@
 ﻿using System.Collections.ObjectModel;
+using System.IO;
 using Microsoft.Extensions.Logging;
-using RazzleServer.Common.Data;
 using RazzleServer.Common.Util;
+using RazzleServer.Common.WzLib;
 using RazzleServer.Game.Maple.Life;
+using RazzleServer.Server;
 
 namespace RazzleServer.Game.Maple.Data
 {
@@ -11,14 +13,16 @@ namespace RazzleServer.Game.Maple.Data
         private readonly ILogger Log = LogManager.Log;
 
         public CachedReactors()
-            : base()
         {
             Log.LogInformation("Loading Reactors");
+
+            using (var file = new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, "Reactor.wz"), WzMapleVersion.CLASSIC))
+            {
+                file.ParseWzFile();
+                file.WzDirectory.WzImages.ForEach(x => Add(new Reactor(x)));
+            }
         }
 
-        protected override int GetKeyForItem(Reactor item)
-        {
-            return item.MapleID;
-        }
+        protected override int GetKeyForItem(Reactor item) => item.MapleID;
     }
 }

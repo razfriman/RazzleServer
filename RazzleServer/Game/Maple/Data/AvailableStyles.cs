@@ -42,8 +42,12 @@ namespace RazzleServer.Game.Maple.Data
         {
             foreach (var i in wzDirectory.WzImages)
             {
+                
                 var name = i.Name.Remove(8);
-                int.TryParse(name, out var id);
+                if (!int.TryParse(name, out var id))
+                {
+                    continue;
+                }
 
                 if ((id / 1000) % 10 == 0)
                 {
@@ -61,7 +65,10 @@ namespace RazzleServer.Game.Maple.Data
             foreach (var i in wzDirectory.WzImages)
             {
                 var name = i.Name.Remove(8);
-                int.TryParse(name, out var id);
+                if (!int.TryParse(name, out var id))
+                {
+                    continue;
+                }
 
                 if ((id / 1000) % 10 == 0)
                 {

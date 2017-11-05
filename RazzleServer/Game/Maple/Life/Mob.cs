@@ -4,6 +4,7 @@ using RazzleServer.Common.Constants;
 using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
+using RazzleServer.Common.WzLib;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Maps;
@@ -57,65 +58,53 @@ namespace RazzleServer.Game.Maple.Life
         public short Speed { get; private set; }
         public short ChaseSpeed { get; private set; }
 
-        public bool IsFacingLeft
-        {
-            get
-            {
-                return Stance % 2 == 0;
-            }
-        }
+        public bool IsFacingLeft => Stance % 2 == 0;
 
-        public bool CanRespawn
-        {
-            get
-            {
-                return true; // TODO.
-            }
-        }
+        public bool CanRespawn => true;
 
         public int SpawnEffect { get; set; }
 
-        public Mob CachedReference
+        public Mob CachedReference => DataProvider.Mobs[MapleID];
+
+        public Mob(WzImage img)
         {
-            get
+            var name = img.Name.Remove(7);
+            if (!int.TryParse(name, out var id))
             {
-                return DataProvider.Mobs[MapleID];
+                return;
             }
-        }
+            MapleID = id;
 
-        public Mob(Datum datum)
-            : base()
-        {
-            MapleID = (int)datum["mobid"];
+            //MapleID = (int)datum["mobid"];
 
-            Level = (short)datum["mob_level"];
-            Health = MaxHealth = (uint)datum["hp"];
-            Mana = MaxMana = (uint)datum["mp"];
-            HealthRecovery = (uint)datum["hp_recovery"];
-            ManaRecovery = (uint)datum["mp_recovery"];
-            ExplodeHealth = (int)datum["explode_hp"];
-            Experience = (uint)datum["experience"];
-            Link = (int)datum["link"];
-            SummonType = (short)datum["summon_type"];
-            KnockBack = (int)datum["knockback"];
-            FixedDamage = (int)datum["fixed_damage"];
-            DeathBuff = (int)datum["death_buff"];
-            DeathAfter = (int)datum["death_after"];
-            Traction = (double)datum["traction"];
-            DamagedBySkillOnly = (int)datum["damaged_by_skill_only"];
-            DamagedByMobOnly = (int)datum["damaged_by_mob_only"];
-            DropItemPeriod = (int)datum["drop_item_period"];
-            HpBarForeColor = (byte)(sbyte)datum["hp_bar_color"];
-            HpBarBackColor = (byte)(sbyte)datum["hp_bar_bg_color"];
-            CarnivalPoints = (byte)(sbyte)datum["carnival_points"];
-            WeaponAttack = (int)datum["physical_attack"];
-            WeaponDefense = (int)datum["physical_defense"];
-            MagicAttack = (int)datum["magical_attack"];
-            MagicDefense = (int)datum["magical_defense"];
-            Accuracy = (short)datum["accuracy"];
-            Avoidability = (short)datum["avoidability"];
-            Speed = (short)datum["speed"];
-            ChaseSpeed = (short)datum["chase_speed"];
+            //Level = (short)datum["mob_level"];
+            //Health = MaxHealth = (uint)datum["hp"];
+            //Mana = MaxMana = (uint)datum["mp"];
+            //HealthRecovery = (uint)datum["hp_recovery"];
+            //ManaRecovery = (uint)datum["mp_recovery"];
+            //ExplodeHealth = (int)datum["explode_hp"];
+            //Experience = (uint)datum["experience"];
+            //Link = (int)datum["link"];
+            //SummonType = (short)datum["summon_type"];
+            //KnockBack = (int)datum["knockback"];
+            //FixedDamage = (int)datum["fixed_damage"];
+            //DeathBuff = (int)datum["death_buff"];
+            //DeathAfter = (int)datum["death_after"];
+            //Traction = (double)datum["traction"];
+            //DamagedBySkillOnly = (int)datum["damaged_by_skill_only"];
+            //DamagedByMobOnly = (int)datum["damaged_by_mob_only"];
+            //DropItemPeriod = (int)datum["drop_item_period"];
+            //HpBarForeColor = (byte)(sbyte)datum["hp_bar_color"];
+            //HpBarBackColor = (byte)(sbyte)datum["hp_bar_bg_color"];
+            //CarnivalPoints = (byte)(sbyte)datum["carnival_points"];
+            //WeaponAttack = (int)datum["physical_attack"];
+            //WeaponDefense = (int)datum["physical_defense"];
+            //MagicAttack = (int)datum["magical_attack"];
+            //MagicDefense = (int)datum["magical_defense"];
+            //Accuracy = (short)datum["accuracy"];
+            //Avoidability = (short)datum["avoidability"];
+            //Speed = (short)datum["speed"];
+            //ChaseSpeed = (short)datum["chase_speed"];
 
             Loots = new List<Loot>();
             Skills = new MobSkills(this);
