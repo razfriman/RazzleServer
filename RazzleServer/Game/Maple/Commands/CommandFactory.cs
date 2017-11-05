@@ -15,13 +15,13 @@ namespace RazzleServer.Game.Maple.Commands
 
         public static void Initialize()
         {
-            CommandFactory.Commands = new Commands();
+            Commands = new Commands();
 
             foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
             {
                 if (type.IsSubclassOf(typeof(Command)))
                 {
-                    CommandFactory.Commands.Add((Command)Activator.CreateInstance(type));
+                    Commands.Add((Command)Activator.CreateInstance(type));
                 }
             }
         }
@@ -41,9 +41,9 @@ namespace RazzleServer.Game.Maple.Commands
                 args[i - 1] = splitted[i];
             }
 
-            if (CommandFactory.Commands.Contains(commandName))
+            if (Commands.Contains(commandName))
             {
-                Command command = CommandFactory.Commands[commandName];
+                var command = Commands[commandName];
 
                 if (!command.IsRestricted || caller.IsMaster)
                 {

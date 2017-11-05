@@ -2,7 +2,7 @@
 {
     public interface IMapleSavable
     {
-        int Create();
+        void Create();
         void Save();
         void Load(object key);
     }

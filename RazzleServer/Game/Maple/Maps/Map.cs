@@ -39,31 +39,9 @@ namespace RazzleServer.Game.Maple.Maps
         public MapSpawnPoints SpawnPoints { get; private set; }
         public MapPlayerShops PlayerShops { get; private set; }
 
-        public Map(Datum datum)
+        public Map(int key)
         {
-            MapleID = (int)datum["mapid"];
-            ReturnMapID = (int)datum["return_map"];
-            ForcedReturnMapID = (int)datum["forced_return_map"];
-
-            RegenerationRate = (sbyte)datum["regen_rate"];
-            DecreaseHP = (byte)datum["decrease_hp"];
-            DamagePerSecond = (ushort)datum["damage_per_second"];
-            ProtectorItemID = (int)datum["protect_item"];
-            ShipKind = (sbyte)datum["ship_kind"];
-            SpawnRate = (double)datum["mob_rate"];
-            RequiredLevel = (byte)datum["min_level_limit"];
-            TimeLimit = (int)datum["time_limit"];
-
-            IsTown = ((string)datum["flags"]).Contains("town");
-            HasClock = ((string)datum["flags"]).Contains("clock");
-            IsEverlasting = ((string)datum["flags"]).Contains("everlast");
-            DisablesTownScroll = ((string)datum["flags"]).Contains("scroll_disable");
-            IsSwim = ((string)datum["flags"]).Contains("swim");
-            ShufflesReactors = ((string)datum["flags"]).Contains("shuffle_reactors");
-            UniqueShuffledReactor = (string)datum["shuffle_name"];
-            IsShop = ((string)datum["flags"]).Contains("shop");
-            NoPartyLeaderPass = ((string)datum["flags"]).Contains("no_party_leader_pass");
-
+            MapleID = key;
             Characters = new MapCharacters(this);
             Drops = new MapDrops(this);
             Mobs = new MapMobs(this);

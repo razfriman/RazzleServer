@@ -12,7 +12,7 @@ namespace RazzleServer.DB.Models
         public short Dex { get; set; }
         public short Luk { get; set; }
         public short Int { get; set; }
-        public short SP { get; set; }        
+        public short SP { get; set; }
         public short AP { get; set; }
         public int GuildID { get; set; }
         public int Exp { get; set; }
@@ -26,12 +26,14 @@ namespace RazzleServer.DB.Models
         public short Fame { get; set; }
         public int Hair { get; set; }
         public int Face { get; set; }
-        public int FaceMark { get; set; }
         public int GuildContribution { get; set; }
-        public byte BuddyCapacity { get; set; }
         public byte Gender { get; set; }
         public byte Skin { get; set; }
-        public byte GuildRank { get; set; }
-        public byte Fatigue { get; set; }
+        public int? GuildRank { get; set; }
+        public int EquipmentSlots { get; set; }
+        public int UsableSlots { get; set; }
+        public int SetupSlots { get; set; }
+        public int EtceteraSlots { get; set; }
+        public int CashSlots { get; set; }
     }
 }

@@ -87,19 +87,19 @@ namespace RazzleServer.Migrations
 
                     b.Property<int>("AccountID");
 
-                    b.Property<byte>("BuddyCapacity");
+                    b.Property<int>("CashSlots");
 
                     b.Property<short>("Dex");
+
+                    b.Property<int>("EquipmentSlots");
+
+                    b.Property<int>("EtceteraSlots");
 
                     b.Property<int>("Exp");
 
                     b.Property<int>("Face");
 
-                    b.Property<int>("FaceMark");
-
                     b.Property<short>("Fame");
-
-                    b.Property<byte>("Fatigue");
 
                     b.Property<byte>("Gender");
 
@@ -107,7 +107,7 @@ namespace RazzleServer.Migrations
 
                     b.Property<int>("GuildID");
 
-                    b.Property<byte>("GuildRank");
+                    b.Property<int?>("GuildRank");
 
                     b.Property<short>("HP");
 
@@ -135,11 +135,17 @@ namespace RazzleServer.Migrations
 
                     b.Property<short>("SP");
 
+                    b.Property<int>("SetupSlots");
+
                     b.Property<byte>("Skin");
 
                     b.Property<byte>("SpawnPoint");
 
                     b.Property<short>("Str");
+
+                    b.Property<int>("UsableSlots");
+
+                    b.Property<int>("WorldID");
 
                     b.HasKey("ID");
 

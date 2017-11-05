@@ -24,8 +24,7 @@ namespace RazzleServer.Center
         public ServerManager() {
             Worlds = new Worlds();
             Migrations = new Maple.Migrations();
-            LoginServer.RegisterPacketHandlers();
-            GameServer.RegisterPacketHandlers();
+
         }
 
         public async Task Configure()
@@ -33,6 +32,8 @@ namespace RazzleServer.Center
             await ServerConfig.LoadFromFile("ServerConfig.json");
             DataProvider.Initialize();
             InitializeDatabase();
+            LoginServer.RegisterPacketHandlers();
+            GameServer.RegisterPacketHandlers();
         }
 
         public void Start()

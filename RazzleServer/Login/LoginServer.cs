@@ -6,6 +6,8 @@ using System.Reflection;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Center;
 using RazzleServer.Common.Packet;
+using RazzleServer.Data;
+using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Server;
 
 namespace RazzleServer.Login
@@ -14,10 +16,26 @@ namespace RazzleServer.Login
     {
         public static Dictionary<ClientOperationCode, List<LoginPacketHandler>> PacketHandlers { get; private set; } = new Dictionary<ClientOperationCode, List<LoginPacketHandler>>();
 
-        internal List<byte[]> GetCharacters(byte world, int iD)
+        internal List<Character> GetCharacters(byte worldID, int accountID)
         {
-            // load from db
-            return new List<byte[]>();
+            using (var dbContext = new MapleDbContext())
+            {
+                var result = new List<Character>();
+
+                var characters = dbContext.Characters
+                                          .Where(x => x.AccountID == accountID)
+                                          .Where(x => x.WorldID == worldID);
+
+                characters.ToList()
+                          .ForEach(x =>
+                          {
+                              var c = new Character();
+                              c.Load(x.ID);
+                              result.Add(c);
+                          });
+
+                return result;
+            }
         }
 
         public LoginServer(ServerManager manager) : base(manager)

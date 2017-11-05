@@ -4,6 +4,7 @@ using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
+using RazzleServer.Server;
 
 namespace RazzleServer.Login.Handlers
 {
@@ -54,11 +55,6 @@ namespace RazzleServer.Login.Handlers
                     //|| !DataProvider.CreationData.FemaleShoes.Any(x => x == shoesID)
                     //|| !DataProvider.CreationData.FemaleWeapons.Any(x => x == weaponID));
             }
-            else 
-            {
-                // Not allowed to choose "both" genders at character creation.
-                error = true;
-            }
 
             Character character = new Character
             {
@@ -83,7 +79,7 @@ namespace RazzleServer.Login.Handlers
                 SkillPoints = 0,
                 Experience = 0,
                 Fame = 0,
-                Map = DataProvider.Maps[10000],
+                Map = DataProvider.Maps[ServerConfig.Instance.DefaultMapID],
                 SpawnPoint = 0,
                 Meso = 0
             };
@@ -128,6 +124,8 @@ namespace RazzleServer.Login.Handlers
             character.Keymap.Add(new Shortcut(KeymapKey.F5, KeymapAction.Outraged));
             character.Keymap.Add(new Shortcut(KeymapKey.F6, KeymapAction.Shocked));
             character.Keymap.Add(new Shortcut(KeymapKey.F7, KeymapAction.Annoyed));
+
+            character.Create();
 
             using (var outPacket = new PacketWriter(ServerOperationCode.CreateNewCharacterResult))
             {

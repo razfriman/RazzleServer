@@ -23,7 +23,7 @@
         CharacterCreate = 0x0E,
         CharacterDelete = 0x0F,
 
-        //0x11 = 11 00 01 34 41 02 A4 
+        StrangeData = 0x11,
         WorldStatus = 0x13,
         AccountGender = 0x17,
         CharacterLoad = 0x1D,

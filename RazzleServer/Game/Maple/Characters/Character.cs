@@ -8,6 +8,7 @@ using RazzleServer.Common.Exceptions;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
 using RazzleServer.Data;
+using RazzleServer.DB.Models;
 using RazzleServer.Game.Maple.Commands;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Interaction;
@@ -18,7 +19,7 @@ using RazzleServer.Server;
 
 namespace RazzleServer.Game.Maple.Characters
 {
-    public sealed class Character : MapObject, IMoveable, ISpawnable
+    public sealed class Character : MapObject, IMoveable, ISpawnable, IMapleSavable
     {
         public GameClient Client { get; private set; }
         public int ID { get; set; }
@@ -76,10 +77,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public Gender Gender
         {
-            get
-            {
-                return gender;
-            }
+            get => gender;
             set
             {
                 gender = value;
@@ -100,7 +98,7 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 if (!DataProvider.Styles.Skins.Contains(value))
                 {
-                    throw new StyleUnavailableException();
+                    //throw new StyleUnavailableException();
                 }
 
                 skin = value;
@@ -115,16 +113,13 @@ namespace RazzleServer.Game.Maple.Characters
 
         public int Face
         {
-            get
-            {
-                return face;
-            }
+            get => face;
             set
             {
                 if ((Gender == Gender.Male && !DataProvider.Styles.MaleFaces.Contains(value)) ||
                     Gender == Gender.Female && !DataProvider.Styles.FemaleFaces.Contains(value))
                 {
-                    throw new StyleUnavailableException();
+                    //throw new StyleUnavailableException();
                 }
 
                 face = value;
@@ -139,16 +134,13 @@ namespace RazzleServer.Game.Maple.Characters
 
         public int Hair
         {
-            get
-            {
-                return hair;
-            }
+            get => hair;
             set
             {
                 if ((Gender == Gender.Male && !DataProvider.Styles.MaleHairs.Contains(value)) ||
                     Gender == Gender.Female && !DataProvider.Styles.FemaleHairs.Contains(value))
                 {
-                    throw new StyleUnavailableException();
+                    //throw new StyleUnavailableException();
                 }
 
                 hair = value;
@@ -161,45 +153,18 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public int HairStyleOffset
-        {
-            get
-            {
-                return (Hair / 10) * 10;
-            }
-        }
+        public int HairStyleOffset => (Hair / 10) * 10;
 
-        public int FaceStyleOffset
-        {
-            get
-            {
-                return (Face - (10 * (Face / 10))) + (Gender == Gender.Male ? 20000 : 21000);
-            }
-        }
+        public int FaceStyleOffset => (Face - (10 * (Face / 10))) + (Gender == Gender.Male ? 20000 : 21000);
 
-        public int HairColorOffset
-        {
-            get
-            {
-                return Hair - (10 * (Hair / 10));
-            }
-        }
+        public int HairColorOffset => Hair - (10 * (Hair / 10));
 
-        public int FaceColorOffset
-        {
-            get
-            {
-                return ((Face / 100) - (10 * (Face / 1000))) * 100;
-            }
-        }
+        public int FaceColorOffset => ((Face / 100) - (10 * (Face / 1000))) * 100;
 
         // TODO: Update party's properties.
         public byte Level
         {
-            get
-            {
-                return level;
-            }
+            get => level;
             set
             {
                 if (value > 200)
@@ -249,10 +214,7 @@ namespace RazzleServer.Game.Maple.Characters
         // TODO: Update party's properties.
         public Job Job
         {
-            get
-            {
-                return job;
-            }
+            get => job;
             set
             {
                 job = value;
@@ -268,10 +230,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public short Strength
         {
-            get
-            {
-                return strength;
-            }
+            get => strength;
             set
             {
                 strength = value;
@@ -678,72 +637,10 @@ namespace RazzleServer.Game.Maple.Characters
             Variables.Load();
         }
 
-        public void Save()
-        {
-            if (IsInitialized)
-            {
-                SpawnPoint = ClosestSpawnPoint.ID;
-            }
-
-            Datum datum = new Datum("characters");
-
-            datum["AccountID"] = AccountID;
-            datum["WorldID"] = WorldID;
-            datum["Name"] = Name;
-            datum["Gender"] = (byte)Gender;
-            datum["Skin"] = Skin;
-            datum["Face"] = Face;
-            datum["Hair"] = Hair;
-            datum["Level"] = Level;
-            datum["Job"] = (short)Job;
-            datum["Strength"] = Strength;
-            datum["Dexterity"] = Dexterity;
-            datum["Intelligence"] = Intelligence;
-            datum["Luck"] = Luck;
-            datum["Health"] = Health;
-            datum["MaxHealth"] = MaxHealth;
-            datum["Mana"] = Mana;
-            datum["MaxMana"] = MaxMana;
-            datum["AbilityPoints"] = AbilityPoints;
-            datum["SkillPoints"] = SkillPoints;
-            datum["Experience"] = Experience;
-            datum["Fame"] = Fame;
-            datum["MapID"] = Map.MapleID;
-            datum["SpawnPoint"] = SpawnPoint;
-            datum["Meso"] = Meso;
-
-            datum["EquipmentSlots"] = Items.MaxSlots[ItemType.Equipment];
-            datum["UsableSlots"] = Items.MaxSlots[ItemType.Usable];
-            datum["SetupSlots"] = Items.MaxSlots[ItemType.Setup];
-            datum["EtceteraSlots"] = Items.MaxSlots[ItemType.Etcetera];
-            datum["CashSlots"] = Items.MaxSlots[ItemType.Cash];
-
-            if (Assigned)
-            {
-                datum.Update("ID = {0}", ID);
-            }
-            else
-            {
-                ID = datum.InsertAndReturnID();
-                Assigned = true;
-            }
-
-            Items.Save();
-            Skills.Save();
-            Quests.Save();
-            Buffs.Save();
-            Keymap.Save();
-            Trocks.Save();
-            Variables.Save();
-
-            Log.LogInformation($"Saved character '{Name}' to database.");
-        }
-
         public void Initialize()
         {
             using (var oPacket = new PacketWriter(ServerOperationCode.SetField))
             {
-
                 oPacket.WriteInt(Client.Server.ChannelID);
                 oPacket.WriteByte(++Portals);
                 oPacket.WriteBool(true);
@@ -887,10 +784,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public void Release()
-        {
-            Update();
-        }
+        public void Release() => Update();
 
         public void Notify(string message, NoticeType type = NoticeType.Pink)
         {
@@ -909,11 +803,6 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public void ChangeMap(PacketReader iPacket)
-        {
-
-        }
-
         public void Revive()
         {
             Health = 50;
@@ -922,7 +811,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void ChangeMap(int mapID, string portalLabel)
         {
-            this.ChangeMap(mapID, DataProvider.Maps[mapID].Portals[portalLabel].ID);
+            ChangeMap(mapID, DataProvider.Maps[mapID].Portals[portalLabel].ID);
         }
 
         public void ChangeMap(int mapID, byte portalID = 0, bool fromPosition = false, Point position = null)
@@ -1472,13 +1361,13 @@ namespace RazzleServer.Game.Maple.Characters
 
             Meso -= amount;
 
-            Meso meso = new Meso(amount)
+            var mesoDrop = new Meso(amount)
             {
                 Dropper = this,
                 Owner = null
             };
 
-            Map.Drops.Add(meso);
+            Map.Drops.Add(mesoDrop);
         }
 
         public void InformOnCharacter(PacketReader iPacket)
@@ -2077,6 +1966,139 @@ namespace RazzleServer.Game.Maple.Characters
                     dbContext.Characters.Remove(entity);
                 }
                 dbContext.SaveChanges();
+            }
+        }
+
+        public void Save()
+        {
+            if (IsInitialized)
+            {
+                SpawnPoint = ClosestSpawnPoint.ID;
+            }
+
+            using (var dbContext = new MapleDbContext())
+            {
+                var character = dbContext.Characters
+                                       .Where(x => x.Name == Name)
+                                       .FirstOrDefault(x => x.WorldID == WorldID);
+
+                if (character == null)
+                {
+                    Log.LogError($"Cannot find account [{Name}] in World [{WorldID}]");
+                    return;
+                }
+
+                character.AccountID = AccountID;
+                character.AP = AbilityPoints;
+                character.Dex = Dexterity;
+                character.Exp = Experience;
+                character.Face = Face;
+                character.Fame = Fame;
+                character.Gender = (byte)gender;
+                character.Hair = Hair;
+                character.HP = Health;
+                character.Int = intelligence;
+                character.Job = (short)Job;
+                character.Level = Level;
+                character.Luk = Luck;
+                character.MapID = Map?.MapleID ?? ServerConfig.Instance.DefaultMapID;
+                character.MaxHP = MaxHealth;
+                character.MaxMP = MaxMana;
+                character.Mesos = Meso;
+                character.MP = Mana;
+                character.Skin = Skin;
+                character.SP = SkillPoints;
+                character.SpawnPoint = SpawnPoint;
+                character.WorldID = WorldID;
+                character.Str = Strength;
+                character.Name = Name;
+                character.GuildRank = GuildRank;
+                character.EquipmentSlots = Items.MaxSlots[ItemType.Equipment];
+                character.UsableSlots = Items.MaxSlots[ItemType.Usable];
+                character.SetupSlots = Items.MaxSlots[ItemType.Setup];
+                character.EtceteraSlots = Items.MaxSlots[ItemType.Etcetera];
+                character.CashSlots = Items.MaxSlots[ItemType.Cash];
+
+                dbContext.SaveChanges();
+            }
+
+            Items.Save();
+            Skills.Save();
+            Quests.Save();
+            Buffs.Save();
+            Keymap.Save();
+            Trocks.Save();
+            Variables.Save();
+
+            Log.LogInformation($"Saved character '{Name}' to database.");
+        }
+
+        public void Create()
+        {
+            using (var dbContext = new MapleDbContext())
+            {
+                var character = dbContext.Characters
+                                       .Where(x => x.Name == Name)
+                                       .FirstOrDefault(x => x.WorldID == WorldID);
+
+                if (character != null)
+                {
+                    Log.LogError($"Error creating acconut - [{Name}] already exists in World [{WorldID}]");
+                    return;
+                }
+
+                character = new CharacterEntity
+                {
+                    AccountID = AccountID,
+                    AP = AbilityPoints,
+                    Dex = Dexterity,
+                    Exp = Experience,
+                    Face = Face,
+                    Fame = Fame,
+                    Gender = (byte)gender,
+                    Hair = Hair,
+                    HP = Health,
+                    Int = intelligence,
+                    Job = (short)Job,
+                    Level = Level,
+                    Luk = Luck,
+                    MapID = Map?.MapleID ?? ServerConfig.Instance.DefaultMapID,
+                    MaxHP = MaxHealth,
+                    MaxMP = MaxMana,
+                    Mesos = Meso,
+                    MP = Mana,
+                    Skin = Skin,
+                    SP = SkillPoints,
+                    SpawnPoint = SpawnPoint,
+                    WorldID = WorldID,
+                    Str = Strength,
+                    Name = Name,
+                    GuildRank = GuildRank,
+                    EquipmentSlots = Items.MaxSlots[ItemType.Equipment],
+                    UsableSlots = Items.MaxSlots[ItemType.Usable],
+                    SetupSlots = Items.MaxSlots[ItemType.Setup],
+                    EtceteraSlots = Items.MaxSlots[ItemType.Etcetera],
+                    CashSlots = Items.MaxSlots[ItemType.Cash]
+                };
+
+                dbContext.Characters.Add(character);
+                dbContext.SaveChanges();
+                ID = character.ID;
+
+                Items.Save();
+                Skills.Save();
+                Quests.Save();
+                Buffs.Save();
+                Keymap.Save();
+                Trocks.Save();
+                Variables.Save();
+            }
+        }
+
+        public void Load(object key)
+        {
+            using (var dbContext = new MapleDbContext()) {
+                
             }
         }
     }

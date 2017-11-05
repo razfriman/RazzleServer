@@ -87,7 +87,7 @@ namespace RazzleServer.Login.Maple
             }
         }
 
-        public int Create()
+        public void Create()
         {
             using (var dbContext = new MapleDbContext())
             {
@@ -96,7 +96,7 @@ namespace RazzleServer.Login.Maple
                 if (account != null)
                 {
                     Log.LogError($"Error creating acconut - account already exists with username [{Username}]");
-                    return -1;
+                    return;
                 }
 
                 account = new AccountEntity
@@ -115,7 +115,7 @@ namespace RazzleServer.Login.Maple
 
                 dbContext.Accounts.Add(account);
                 dbContext.SaveChanges();
-                return account.ID;
+                ID = account.ID;
             }
         }
     }
