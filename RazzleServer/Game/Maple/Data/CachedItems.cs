@@ -43,6 +43,7 @@ namespace RazzleServer.Game.Maple.Data
                 LoadEquipment(file.WzDirectory.GetDirectoryByName("PetEquip"));
                 LoadEquipment(file.WzDirectory.GetDirectoryByName("Ring"));
                 LoadEquipment(file.WzDirectory.GetDirectoryByName("Shield"));
+                LoadEquipment(file.WzDirectory.GetDirectoryByName("Shoes"));
                 LoadEquipment(file.WzDirectory.GetDirectoryByName("TamingMob"));
                 LoadEquipment(file.WzDirectory.GetDirectoryByName("Weapon"));
             }

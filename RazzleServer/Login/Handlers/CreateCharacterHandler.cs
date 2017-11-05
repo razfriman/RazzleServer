@@ -35,25 +35,25 @@ namespace RazzleServer.Login.Handlers
 
             if (gender == Gender.Male)
             {
-                //error |= (!DataProvider.CreationData.MaleSkins.Any(x => x == skin)
-                    //|| !DataProvider.CreationData.MaleFaces.Any(x => x == face)
-                    //|| !DataProvider.CreationData.MaleHairs.Any(x => x == hair)
-                    //|| !DataProvider.CreationData.MaleHairColors.Any(x => x == hairColor)
-                    //|| !DataProvider.CreationData.MaleTops.Any(x => x == topID)
-                    //|| !DataProvider.CreationData.MaleBottoms.Any(x => x == bottomID)
-                    //|| !DataProvider.CreationData.MaleShoes.Any(x => x == shoesID)
-                    //|| !DataProvider.CreationData.MaleWeapons.Any(x => x == weaponID));
+                error |= (!DataProvider.CreationData.MaleSkins.Any(x => x == skin)
+                    || !DataProvider.CreationData.MaleFaces.Any(x => x == face)
+                    || !DataProvider.CreationData.MaleHairs.Any(x => x == hair)
+                    || !DataProvider.CreationData.MaleHairColors.Any(x => x == hairColor)
+                    || !DataProvider.CreationData.MaleTops.Any(x => x == topID)
+                    || !DataProvider.CreationData.MaleBottoms.Any(x => x == bottomID)
+                    || !DataProvider.CreationData.MaleShoes.Any(x => x == shoesID)
+                    || !DataProvider.CreationData.MaleWeapons.Any(x => x == weaponID));
             }
             else if (gender == Gender.Female)
             {
-                //error |= (!DataProvider.CreationData.FemaleSkins.Any(x => x == skin)
-                    //|| !DataProvider.CreationData.FemaleFaces.Any(x => x == face)
-                    //|| !DataProvider.CreationData.FemaleHairs.Any(x => x == hair)
-                    //|| !DataProvider.CreationData.FemaleHairColors.Any(x => x == hairColor)
-                    //|| !DataProvider.CreationData.FemaleTops.Any(x => x == topID)
-                    //|| !DataProvider.CreationData.FemaleBottoms.Any(x => x == bottomID)
-                    //|| !DataProvider.CreationData.FemaleShoes.Any(x => x == shoesID)
-                    //|| !DataProvider.CreationData.FemaleWeapons.Any(x => x == weaponID));
+                error |= (!DataProvider.CreationData.FemaleSkins.Any(x => x == skin)
+                    || !DataProvider.CreationData.FemaleFaces.Any(x => x == face)
+                    || !DataProvider.CreationData.FemaleHairs.Any(x => x == hair)
+                    || !DataProvider.CreationData.FemaleHairColors.Any(x => x == hairColor)
+                    || !DataProvider.CreationData.FemaleTops.Any(x => x == topID)
+                    || !DataProvider.CreationData.FemaleBottoms.Any(x => x == bottomID)
+                    || !DataProvider.CreationData.FemaleShoes.Any(x => x == shoesID)
+                    || !DataProvider.CreationData.FemaleWeapons.Any(x => x == weaponID));
             }
 
             Character character = new Character
@@ -131,6 +131,7 @@ namespace RazzleServer.Login.Handlers
             {
                 outPacket.WriteBool(error);
                 outPacket.WriteBytes(character.ToByteArray());
+                client.Send(outPacket);
             }
         }
     }

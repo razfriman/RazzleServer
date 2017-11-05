@@ -92,35 +92,17 @@ namespace RazzleServer.Common.WzLib.WzProperties
         #endregion
 
         #region Cast Values
-        public override float GetFloat()
-        {
-            return val;
-        }
+        public override float GetFloat() => val;
 
-        public override double GetDouble()
-        {
-            return val;
-        }
+        public override double GetDouble() => val;
 
-        public override int GetInt()
-        {
-            return val;
-        }
+        public override int GetInt() => val;
 
-        public override short GetShort()
-        {
-            return val;
-        }
+        public override short GetShort() => val;
 
-        public override long GetLong()
-        {
-            return val;
-        }
+        public override long GetLong() => val;
 
-        public override string ToString()
-        {
-            return val.ToString();
-        }
+        public override string ToString() => val.ToString();
         #endregion
     }
 }

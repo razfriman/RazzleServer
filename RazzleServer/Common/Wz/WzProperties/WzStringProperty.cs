@@ -92,9 +92,17 @@ namespace RazzleServer.Common.WzLib.WzProperties
         #endregion
 
         #region Cast Values
-        public override string GetString() => val;
+        public override float GetFloat() => float.TryParse(val, out var result) ? result : 0;
+
+        public override double GetDouble() => double.TryParse(val, out var result) ? result : 0;
 
         public override int GetInt() => int.TryParse(val, out var result) ? result : 0;
+
+        public override short GetShort() => short.TryParse(val, out var result) ? result : (short)0;
+
+        public override long GetLong() => long.TryParse(val, out var result) ? result : 0;
+
+        public override string GetString() => val;
 
         public override string ToString() => val;
         #endregion

@@ -58,7 +58,6 @@ namespace RazzleServer.Common.Constants
         AddPreventSlipping = 0x02,
         AddPreventColdness = 0x04,
         Untradeable = 0x08,
-        Scissored = 0x10
     }
 
     public enum ItemType : byte

@@ -32,7 +32,6 @@ namespace RazzleServer.Game.Maple
         public bool PreventsSlipping { get; private set; }
         public bool PreventsColdness { get; private set; }
         public bool IsTradeBlocked { get; private set; }
-        public bool IsScissored { get; private set; }
         public bool IsStored { get; set; }
         public int SalePrice { get; private set; }
         public int Meso { get; private set; }
@@ -200,7 +199,6 @@ namespace RazzleServer.Game.Maple
                 if (IsSealed) flags |= (byte)ItemFlags.Sealed;
                 if (PreventsSlipping) flags |= (byte)ItemFlags.AddPreventSlipping;
                 if (PreventsColdness) flags |= (byte)ItemFlags.AddPreventColdness;
-                if (IsScissored) flags |= (byte)ItemFlags.Scissored;
                 if (IsTradeBlocked) flags |= (byte)ItemFlags.Untradeable;
 
                 return flags;
@@ -258,7 +256,7 @@ namespace RazzleServer.Game.Maple
             }
         }
 
-        public bool IsBlocked => IsCash || IsSealed || (IsTradeBlocked && !IsScissored);
+        public bool IsBlocked => IsCash || IsSealed || IsTradeBlocked;
 
         public byte AbsoluteSlot
         {
@@ -313,7 +311,6 @@ namespace RazzleServer.Game.Maple
             IsCash = CachedReference.IsCash;
             OnlyOne = CachedReference.OnlyOne;
             IsTradeBlocked = CachedReference.IsTradeBlocked;
-            IsScissored = CachedReference.IsScissored;
             SalePrice = CachedReference.SalePrice;
             RequiredLevel = CachedReference.RequiredLevel;
             Meso = CachedReference.Meso;
@@ -382,18 +379,44 @@ namespace RazzleServer.Game.Maple
         public Item(WzImage img, ItemType type)
         {
             var name = img.Name.Remove(8);
+            var info = img["info"];
+
             if (!int.TryParse(name, out var id))
             {
-                MapleID = Common.Util.Functions.Random();
                 return;
             }
 
             MapleID = id;
             Summons = new List<Tuple<int, short>>();
+            MaxPerStack = info["slotMax"]?.GetShort() ?? 1;
+            IsCash = (info["cash"]?.GetInt() ?? 0) > 0;
+            Mana = info["recoveryMP"]?.GetShort() ?? 0;
+            Health = info["recoveryHP"]?.GetShort() ?? 0;
+            IsTradeBlocked = (info["tradeBlock"]?.GetInt() ?? 0) > 0;
+            SalePrice = info["price"]?.GetInt() ?? 0;
+            OnlyOne = (info["only"]?.GetInt() ?? 0) > 0;
+            RequiredJob = Job.Beginner;
+            RequiredLevel = info["reqLevel"]?.GetShort() ?? 0;
+            RequiredStrength = info["reqSTR"]?.GetShort() ?? 0;
+            RequiredDexterity = info["reqDEX"]?.GetShort() ?? 0;
+            RequiredIntelligence = info["reqINT"]?.GetShort() ?? 0;
+            RequiredLuck = info["reqLUK"]?.GetShort() ?? 0;
+            RequiredFame = info["reqLevel"]?.GetShort() ?? 0;
+            AttackSpeed = (byte)(info["reqLevel"]?.GetInt() ?? 0);
+            //<string name="islot" value="Wp"/>
+            //<string name="vslot" value="Wp"/>
+            //<int name="walk" value="1"/>
+            //<int name="stand" value="1"/>
+            //<short name="attack" value="1"/>
+            //<string name="afterImage" value="swordOL"/>
+            //<string name="sfx" value="swordL"/>
+            //<int name="incPAD" value="17"/>
+            //<int name="tuc" value="7"/>
         }
         public Item(WzImageProperty img, ItemType type)
         {
             var name = img.Name;
+            var info = img["info"];
             if (!int.TryParse(name, out var id))
             {
                 return;
@@ -401,14 +424,14 @@ namespace RazzleServer.Game.Maple
 
             MapleID = id;
             Summons = new List<Tuple<int, short>>();
-            //MaxPerStack = (short)datum["max_slot_quantity"];
-            //IsCash = ((string)datum["flags"]).Contains("cash_item");
-            //OnlyOne = (sbyte)datum["max_possession_count"] > 0;
-            //IsTradeBlocked = ((string)datum["flags"]).Contains("no_trade");
-            //IsScissored = false;
-            //SalePrice = (int)datum["price"];
-            //RequiredLevel = (byte)datum["min_level"];
-            //Meso = (int)datum["money"];
+            MaxPerStack = info["slotMax"]?.GetShort() ?? 1;
+            IsCash = (info["cash"]?.GetInt() ?? 0) > 0;
+            Mana = info["recoveryMP"]?.GetShort() ?? 0;
+            Health = info["recoveryHP"]?.GetShort() ?? 0;
+            RequiredLevel = info["reqLevel"]?.GetShort() ?? 0;
+            IsTradeBlocked = (info["tradeBlock"]?.GetInt() ?? 0) > 0;
+            SalePrice = info["price"]?.GetInt() ?? 0;
+            OnlyOne = (info["only"]?.GetInt() ?? 0) > 0;
         }
 
         public Item(Datum datum)
@@ -428,7 +451,6 @@ namespace RazzleServer.Game.Maple
             IsCash = CachedReference.IsCash;
             OnlyOne = CachedReference.OnlyOne;
             IsTradeBlocked = CachedReference.IsTradeBlocked;
-            IsScissored = false;
             IsStored = (bool)datum["IsStored"];
             SalePrice = CachedReference.SalePrice;
             RequiredLevel = CachedReference.RequiredLevel;
@@ -569,7 +591,6 @@ namespace RazzleServer.Game.Maple
             datum["Agility"] = Agility;
             datum["Speed"] = Speed;
             datum["Jump"] = Jump;
-            datum["IsScissored"] = IsScissored;
             datum["IsStored"] = IsStored;
             datum["PreventsSlipping"] = PreventsSlipping;
             datum["PreventsColdness"] = PreventsColdness;
