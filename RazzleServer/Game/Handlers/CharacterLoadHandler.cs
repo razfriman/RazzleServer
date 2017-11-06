@@ -12,14 +12,14 @@ namespace RazzleServer.Game.Handlers
             int accountID;
             int characterID = packet.ReadInt();
 
-            if ((accountID = ServerManager.Instance.ValidateMigration(client.Socket.Host, characterID)) == 0)
-            {
-                client.Terminate("Invalid migration");
-                return;
-            }
+            //if ((accountID = ServerManager.Instance.ValidateMigration(client.Socket.Host, characterID)) == 0)
+            //{
+            //    client.Terminate("Invalid migration");
+            //    return;
+            //}
 
             client.Character = new Character(characterID, client);
-            client.Character.Load();
+            client.Character.Load(characterID);
             client.Character.Initialize();
         }
     }

@@ -37,18 +37,18 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Load()
         {
-            // TODO: Use JOIN with the pets table.
-            foreach (Datum datum in new Datums("items").Populate("CharacterID = {0} AND IsStored = 0", Parent.ID))
-            {
-                Item item = new Item(datum);
+            //// TODO: Use JOIN with the pets table.
+            //foreach (Datum datum in new Datums("items").Populate("CharacterID = {0} AND IsStored = 0", Parent.ID))
+            //{
+            //    Item item = new Item(datum);
 
-                Add(item);
+            //    Add(item);
 
-                if (item.PetID != null)
-                {
-                    //this.Parent.Pets.Add(new Pet(item));
-                }
-            }
+            //    if (item.PetID != null)
+            //    {
+            //        //this.Parent.Pets.Add(new Pet(item));
+            //    }
+            //}
         }
 
         public void Save()
@@ -1033,28 +1033,28 @@ namespace RazzleServer.Game.Maple.Characters
                 oPacket.WriteByte(MaxSlots[ItemType.Setup]);
                 oPacket.WriteByte(MaxSlots[ItemType.Etcetera]);
                 oPacket.WriteByte(MaxSlots[ItemType.Cash]);
-                oPacket.WriteLong(0); // NOTE: Unknown.
+
 
                 foreach (Item item in GetEquipped(EquippedQueryMode.Normal))
                 {
                     oPacket.WriteBytes(item.ToByteArray());
                 }
 
-                oPacket.WriteShort(0);
+                oPacket.WriteByte(0);
 
                 foreach (Item item in GetEquipped(EquippedQueryMode.Cash))
                 {
                     oPacket.WriteBytes(item.ToByteArray());
                 }
 
-                oPacket.WriteShort(0);
+                oPacket.WriteByte(0);
 
                 foreach (Item item in this[ItemType.Equipment])
                 {
                     oPacket.WriteBytes(item.ToByteArray());
                 }
 
-                oPacket.WriteShort(0);
+                oPacket.WriteByte(0);
 
                 foreach (Item item in this[ItemType.Usable])
                 {

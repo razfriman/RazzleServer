@@ -46,6 +46,8 @@ namespace RazzleServer.Game.Maple.Characters
         public ControlledNpcs ControlledNpcs { get; private set; }
         public Trade Trade { get; set; }
         public PlayerShop PlayerShop { get; set; }
+        private bool Assigned { get; set; }
+        public int BuddyListSize { get; private set; } = 20;
 
         private DateTime LastHealthHealOverTime = new DateTime();
         private DateTime LastManaHealOverTime = new DateTime();
@@ -553,13 +555,12 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        private bool Assigned { get; set; }
+
 
         public Character(int id = 0, GameClient client = null)
         {
             ID = id;
             Client = client;
-
             Items = new CharacterItems(this, 24, 24, 24, 24, 48);
             Skills = new CharacterSkills(this);
             Quests = new CharacterQuests(this);
@@ -569,75 +570,25 @@ namespace RazzleServer.Game.Maple.Characters
             Memos = new CharacterMemos(this);
             Storage = new CharacterStorage(this);
             Variables = new CharacterVariables(this);
-
             Position = new Point(0, 0);
             ControlledMobs = new ControlledMobs(this);
             ControlledNpcs = new ControlledNpcs(this);
-        }
-
-        public void Load()
-        {
-            Datum datum = new Datum("characters");
-
-            datum.Populate("ID = {0}", ID);
-
-            ID = (int)datum["ID"];
-            Assigned = true;
-
-            AccountID = (int)datum["AccountID"];
-            WorldID = (byte)datum["WorldID"];
-            Name = (string)datum["Name"];
-            Gender = (Gender)datum["Gender"];
-            Skin = (byte)datum["Skin"];
-            Face = (int)datum["Face"];
-            Hair = (int)datum["Hair"];
-            Level = (byte)datum["Level"];
-            Job = (Job)datum["Job"];
-            Strength = (short)datum["Strength"];
-            Dexterity = (short)datum["Dexterity"];
-            Intelligence = (short)datum["Intelligence"];
-            Luck = (short)datum["Luck"];
-            MaxHealth = (short)datum["MaxHealth"];
-            MaxMana = (short)datum["MaxMana"];
-            Health = (short)datum["Health"];
-            Mana = (short)datum["Mana"];
-            AbilityPoints = (short)datum["AbilityPoints"];
-            SkillPoints = (short)datum["SkillPoints"];
-            Experience = (int)datum["Experience"];
-            Fame = (short)datum["Fame"];
-            Map = DataProvider.Maps[(int)datum["MapID"]];
-            SpawnPoint = (byte)datum["SpawnPoint"];
-            Meso = (int)datum["Meso"];
-
-            Items.MaxSlots[ItemType.Equipment] = (byte)datum["EquipmentSlots"];
-            Items.MaxSlots[ItemType.Usable] = (byte)datum["UsableSlots"];
-            Items.MaxSlots[ItemType.Setup] = (byte)datum["SetupSlots"];
-            Items.MaxSlots[ItemType.Etcetera] = (byte)datum["EtceteraSlots"];
-            Items.MaxSlots[ItemType.Cash] = (byte)datum["CashSlots"];
-
-            Items.Load();
-            Skills.Load();
-            Quests.Load();
-            Buffs.Load();
-            Keymap.Load();
-            Trocks.Load();
-            Memos.Load();
-            Variables.Load();
         }
 
         public void Initialize()
         {
             using (var oPacket = new PacketWriter(ServerOperationCode.SetField))
             {
+               
                 oPacket.WriteInt(Client.Server.ChannelID);
                 oPacket.WriteByte(++Portals);
                 oPacket.WriteBool(true);
-                oPacket.WriteShort(0); // NOTE: Floating messages at top corner.
 
                 for (int i = 0; i < 3; i++)
                 {
                     oPacket.WriteInt(Functions.Random());
                 }
+                oPacket.WriteShort(-1);
 
                 oPacket.WriteBytes(DataToByteArray());
                 oPacket.WriteDateTime(DateTime.UtcNow);
@@ -645,20 +596,100 @@ namespace RazzleServer.Game.Maple.Characters
                 Client.Send(oPacket);
             }
 
-            using (var oPacket = new PacketWriter(ServerOperationCode.ClaimSvrStatusChanged))
-            {
-                oPacket.WriteBool(true);
 
-                Client.Send(oPacket);
+            /*
+
+        mplew.write(chr.getBuddylist().getCapacity()); // buddylist capacity
+
+        mplew.writeInt(chr.getMeso()); // mesos
+             * mplew.write(100); // equip slots
+
+        mplew.write(100); // use slots
+
+        mplew.write(100); // set-up slots
+
+        mplew.write(100); // etc slots
+
+        mplew.write(100); // cash slots
+
+        MapleInventory iv = chr.getInventory(MapleInventoryType.EQUIPPED);
+        Collection<IItem> equippedC = iv.list();
+        List<Item> equipped = new ArrayList<Item>(equippedC.size());
+        for (IItem item : equippedC) {
+            equipped.add((Item) item);
+        }
+        Collections.sort(equipped);
+
+        for (Item item : equipped) {
+            addItemInfo(mplew, item);
+        }
+        mplew.writeShort(0); // start of equip inventory
+
+        iv = chr.getInventory(MapleInventoryType.EQUIP);
+        for (IItem item : iv.list()) {
+            addItemInfo(mplew, item);
+        }
+        mplew.write(0); // start of use inventory
+        // addItemInfo(mplew, new Item(2020028, (byte) 8, (short) 1));
+
+        iv = chr.getInventory(MapleInventoryType.USE);
+        for (IItem item : iv.list()) {
+            addItemInfo(mplew, item);
+        }
+        mplew.write(0); // start of set-up inventory
+
+        iv = chr.getInventory(MapleInventoryType.SETUP);
+        for (IItem item : iv.list()) {
+            addItemInfo(mplew, item);
+        }
+        mplew.write(0); // start of etc inventory
+
+        iv = chr.getInventory(MapleInventoryType.ETC);
+        for (IItem item : iv.list()) {
+            addItemInfo(mplew, item);
+        }
+        mplew.write(0); // start of cash inventory
+
+        iv = chr.getInventory(MapleInventoryType.CASH);
+        for (IItem item : iv.list()) {
+            addItemInfo(mplew, item);
+        }
+        mplew.write(0); // start of skills
+
+        Map<ISkill, MapleCharacter.SkillEntry> skills = chr.getSkills();
+        mplew.writeShort(skills.size());
+        for (Entry<ISkill, MapleCharacter.SkillEntry> skill : skills.entrySet()) {
+            mplew.writeInt(skill.getKey().getId());
+            mplew.writeInt(skill.getValue().skillevel);
+            if (skill.getKey().isFourthJob()) {
+                mplew.writeInt(skill.getValue().masterlevel);
             }
+        }
+
+        mplew.writeShort(0);
+        addQuestInfo(mplew, chr);
+
+        mplew.write(new byte[8]);
+        for (int x = 0; x < 15; x++) {
+            mplew.write(CHAR_INFO_MAGIC);
+        }
+        mplew.write(HexTool.getByteArrayFromHexString("90 63 3A 0D C5 5D C8 01"));
+
+        return mplew.getPacket();*/
+
+            //using (var oPacket = new PacketWriter(ServerOperationCode.ClaimSvrStatusChanged))
+            //{
+            //    oPacket.WriteBool(true);
+            //    Client.Send(oPacket);
+            //}
 
             IsInitialized = true;
 
             Map.Characters.Add(this);
 
-            Keymap.Send();
+            //Keymap.Send();
 
-            Memos.Send();
+            //Memos.Send();
         }
 
         public void Update(params StatisticType[] statistics)
@@ -897,10 +928,10 @@ namespace RazzleServer.Game.Maple.Characters
         {
             byte portals = iPacket.ReadByte();
 
-            if (portals != Portals)
-            {
-                return;
-            }
+            //if (portals != Portals)
+            //{
+            //    return;
+            //}
 
             iPacket.ReadInt(); // NOE: Unknown.
 
@@ -912,7 +943,6 @@ namespace RazzleServer.Game.Maple.Characters
 
             using (var oPacket = new PacketWriter(ServerOperationCode.Move))
             {
-
                 oPacket.WriteInt(ID);
                 oPacket.WriteBytes(movements.ToByteArray());
 
@@ -935,10 +965,10 @@ namespace RazzleServer.Game.Maple.Characters
         {
             Attack attack = new Attack(iPacket, type);
 
-            if (attack.Portals != Portals)
-            {
-                return;
-            }
+            //if (attack.Portals != Portals)
+            //{
+            //    return;
+            //}
 
             Skill skill = null;
 
@@ -1735,7 +1765,6 @@ namespace RazzleServer.Game.Maple.Characters
         {
             using (var oPacket = new PacketWriter())
             {
-
                 oPacket.WriteInt(ID);
                 oPacket.WriteString(Name, 13);
                 oPacket.WriteByte((byte)Gender);
@@ -1836,14 +1865,11 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public byte[] DataToByteArray(long flag = long.MaxValue)
+        public byte[] DataToByteArray()
         {
             var pw = new PacketWriter();
-            pw.WriteLong(flag);
-            pw.WriteByte(0); // NOTE: Unknown.
             pw.WriteBytes(StatisticsToByteArray());
-            pw.WriteByte(20); // NOTE: Max buddylist size.
-            pw.WriteBool(false); // NOTE: Blessing of Fairy.
+            pw.WriteByte(BuddyListSize);
             pw.WriteInt(Meso);
             pw.WriteBytes(Items.ToByteArray());
             pw.WriteBytes(Skills.ToByteArray());
@@ -1854,10 +1880,6 @@ namespace RazzleServer.Game.Maple.Characters
             pw.WriteShort(0);// NOTE: Rings (3).
             pw.WriteBytes(Trocks.RegularToByteArray());
             pw.WriteBytes(Trocks.VIPToByteArray());
-            pw.WriteShort(0);// NOTE: New Year Cards.
-            pw.WriteShort(0);// NOTE: QuestRecordEX.
-            pw.WriteShort(0);// NOTE: AdminShop.
-            pw.WriteShort(0); // NOTE: Unknown.
             return pw.ToArray();
         }
 
@@ -1867,25 +1889,22 @@ namespace RazzleServer.Game.Maple.Characters
         {
             var oPacket = new PacketWriter(ServerOperationCode.UserEnterField);
 
+          
             oPacket.WriteInt(ID);
             oPacket.WriteByte(Level);
             oPacket.WriteString(Name);
-
-            oPacket.WriteString("");
-            oPacket.WriteShort(0);
-            oPacket.WriteByte(0);
-            oPacket.WriteShort(0);
-            oPacket.WriteByte(0);
-
-
+            oPacket.WriteString(""); //Guild
+            oPacket.WriteShort(0); //Guild
+            oPacket.WriteByte(0); //Guild
+            oPacket.WriteShort(0); //Guild
+            oPacket.WriteByte(0); //Guild
             oPacket.WriteBytes(Buffs.ToByteArray());
             oPacket.WriteShort((short)Job);
             oPacket.WriteBytes(AppearanceToByteArray());
             oPacket.WriteInt(Items.Available(5110000));
             oPacket.WriteInt(0); // NOTE: Item effect.
             oPacket.WriteInt(Item.GetType(Chair) == ItemType.Setup ? Chair : 0);
-            oPacket.WriteShort(Position.X);
-            oPacket.WriteShort(Position.Y);
+            oPacket.WritePoint(Position);
             oPacket.WriteByte(Stance);
             oPacket.WriteShort(Foothold);
             oPacket.WriteByte(0);
@@ -1919,12 +1938,10 @@ namespace RazzleServer.Game.Maple.Characters
                 oPacket.WriteString(Chalkboard);
             }
 
-
             oPacket.WriteByte(0); // NOTE: Couple ring.
             oPacket.WriteByte(0); // NOTE: Friendship ring.
             oPacket.WriteByte(0); // NOTE: Marriage ring.
-            oPacket.WriteZeroBytes(3); // NOTE: Unknown.
-            oPacket.WriteByte(byte.MaxValue); // NOTE: Team.
+            oPacket.WriteByte(0);
 
             return oPacket;
         }
@@ -1977,28 +1994,28 @@ namespace RazzleServer.Game.Maple.Characters
                 }
 
                 character.AccountID = AccountID;
-                character.AP = AbilityPoints;
-                character.Dex = Dexterity;
-                character.Exp = Experience;
+                character.AbilityPoints = AbilityPoints;
+                character.Dexterity = Dexterity;
+                character.Experience = Experience;
                 character.Face = Face;
                 character.Fame = Fame;
                 character.Gender = (byte)gender;
                 character.Hair = Hair;
-                character.HP = Health;
-                character.Int = intelligence;
+                character.Health = Health;
+                character.Intelligence = intelligence;
                 character.Job = (short)Job;
                 character.Level = Level;
-                character.Luk = Luck;
+                character.Luck = Luck;
                 character.MapID = Map?.MapleID ?? ServerConfig.Instance.DefaultMapID;
-                character.MaxHP = MaxHealth;
-                character.MaxMP = MaxMana;
-                character.Mesos = Meso;
-                character.MP = Mana;
+                character.MaxHealth = MaxHealth;
+                character.MaxMana = MaxMana;
+                character.Meso = Meso;
+                character.Mana = Mana;
                 character.Skin = Skin;
-                character.SP = SkillPoints;
+                character.SkillPoints = SkillPoints;
                 character.SpawnPoint = SpawnPoint;
                 character.WorldID = WorldID;
-                character.Str = Strength;
+                character.Strength = Strength;
                 character.Name = Name;
                 character.GuildRank = GuildRank;
                 character.EquipmentSlots = Items.MaxSlots[ItemType.Equipment];
@@ -2038,28 +2055,28 @@ namespace RazzleServer.Game.Maple.Characters
                 character = new CharacterEntity
                 {
                     AccountID = AccountID,
-                    AP = AbilityPoints,
-                    Dex = Dexterity,
-                    Exp = Experience,
+                    AbilityPoints = AbilityPoints,
+                    Dexterity = Dexterity,
+                    Experience = Experience,
                     Face = Face,
                     Fame = Fame,
                     Gender = (byte)gender,
                     Hair = Hair,
-                    HP = Health,
-                    Int = intelligence,
+                    Health = Health,
+                    Intelligence = intelligence,
                     Job = (short)Job,
                     Level = Level,
-                    Luk = Luck,
+                    Luck = Luck,
                     MapID = Map?.MapleID ?? ServerConfig.Instance.DefaultMapID,
-                    MaxHP = MaxHealth,
-                    MaxMP = MaxMana,
-                    Mesos = Meso,
-                    MP = Mana,
+                    MaxHealth = MaxHealth,
+                    MaxMana = MaxMana,
+                    Meso = Meso,
+                    Mana = Mana,
                     Skin = Skin,
-                    SP = SkillPoints,
+                    SkillPoints = SkillPoints,
                     SpawnPoint = SpawnPoint,
                     WorldID = WorldID,
-                    Str = Strength,
+                    Strength = Strength,
                     Name = Name,
                     GuildRank = GuildRank,
                     EquipmentSlots = Items.MaxSlots[ItemType.Equipment],
@@ -2085,9 +2102,57 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Load(object key)
         {
-            using (var dbContext = new MapleDbContext()) {
-                
+            using (var dbContext = new MapleDbContext())
+            {
+                var character = dbContext.Characters.Find(ID);
+
+                if (character == null)
+                {
+                    Log.LogError($"Cannot find character [{ID}]");
+                    return;
+                }
+
+                Assigned = true;
+                Name = character.Name;
+                AccountID = character.AccountID;
+                AbilityPoints = character.AbilityPoints;
+                Dexterity = character.Dexterity;
+                Experience = character.Experience;
+                Face = character.Face;
+                Fame = character.Fame;
+                Gender = (Gender)character.Gender;
+                Hair = character.Hair;
+                Health = character.Health;
+                Intelligence = character.Intelligence;
+                Job = (Job)character.Job;
+                Level = character.Level;
+                Luck = character.Luck;
+                Map = DataProvider.Maps[character.MapID];
+                MaxHealth = character.MaxHealth;
+                MaxMana = character.MaxMana;
+                Meso = character.Meso;
+                Mana = character.Mana;
+                Skin = character.Skin;
+                SkillPoints = character.SkillPoints;
+                SpawnPoint = character.SpawnPoint;
+                WorldID = character.WorldID;
+                Strength = character.Strength;
+                GuildRank = character.GuildRank;
+                Items.MaxSlots[ItemType.Equipment] = character.EquipmentSlots;
+                Items.MaxSlots[ItemType.Usable] = character.UsableSlots;
+                Items.MaxSlots[ItemType.Setup] = character.SetupSlots;
+                Items.MaxSlots[ItemType.Etcetera] = character.EtceteraSlots;
+                Items.MaxSlots[ItemType.Cash] = character.CashSlots;
             }
+           
+            Items.Load();
+            Skills.Load();
+            Quests.Load();
+            Buffs.Load();
+            Keymap.Load();
+            Trocks.Load();
+            Memos.Load();
+            Variables.Load();
         }
     }
 }

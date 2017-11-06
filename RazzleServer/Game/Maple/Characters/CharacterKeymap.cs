@@ -1,7 +1,9 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
 using RazzleServer.Common.Constants;
-using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
+using RazzleServer.Data;
+using RazzleServer.DB.Models;
 
 namespace RazzleServer.Game.Maple.Characters
 {
@@ -18,9 +20,14 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Load()
         {
-            foreach (Datum datum in new Datums("keymaps").Populate("CharacterID = {0}", Parent.ID))
+            using (var dbContext = new MapleDbContext())
             {
-                Add(new Shortcut(datum));
+                var entities = dbContext.KeyMaps.Where(x => x.CharacterID == Parent.ID);
+
+                foreach (var entity in entities)
+                {
+                    Add(new Shortcut(entity));
+                }
             }
         }
 
@@ -28,22 +35,32 @@ namespace RazzleServer.Game.Maple.Characters
         {
             Delete();
 
-            foreach (Shortcut entry in this)
+            using (var dbContext = new MapleDbContext())
             {
-                Datum datum = new Datum("keymaps");
+                foreach (Shortcut entry in this)
+                {
+                    dbContext.KeyMaps.Add(new KeyMapEntity
+                    {
+                        CharacterID = Parent.ID,
+                        Action = (byte)entry.Action,
+                        Key = (byte)entry.Key,
+                        Type = (byte)entry.Type
+                    });
+                }
 
-                datum["CharacterID"] = Parent.ID;
-                datum["Key"] = (int)entry.Key;
-                datum["Type"] = (byte)entry.Type;
-                datum["Action"] = (int)entry.Action;
-
-                datum.Insert();
+                dbContext.SaveChanges();
             }
         }
 
         public void Delete()
         {
-            //Database.Delete("keymaps", "CharacterID = {0}", Parent.ID);
+            using (var dbContext = new MapleDbContext())
+            {
+                var entities = dbContext.KeyMaps.Where(x => x.CharacterID == Parent.ID);
+
+                dbContext.KeyMaps.RemoveRange(entities);
+                dbContext.SaveChanges();
+            }
         }
 
         public void Send()
@@ -52,7 +69,7 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 oPacket.WriteBool(false);
 
-                for (int i = 0; i < CharacterKeymap.KeyCount; i++)
+                for (int i = 0; i < KeyCount; i++)
                 {
                     KeymapKey key = (KeymapKey)i;
 
@@ -120,9 +137,6 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        protected override KeymapKey GetKeyForItem(Shortcut item)
-        {
-            return item.Key;
-        }
+        protected override KeymapKey GetKeyForItem(Shortcut item) => item.Key;
     }
 }

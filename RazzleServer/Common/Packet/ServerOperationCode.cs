@@ -2,71 +2,21 @@
 
 
 # CHANNEL
-MODIFY_INVENTORY_ITEM = 0x18
-SHOW_QUEST_COMPLETION = 0x1F
-UPDATE_STATS = 0x23
-CANCEL_BUFF = UPDATE_STATS 1
-SPAWN_PORTAL = 0x29
-SERVERMESSAGE = 0x2D
-UPDATE_SKILLS = SERVERMESSAGE 2
-FAME_RESPONSE = UPDATE_SKILLS 2
-SHOW_STATUS_INFO = FAME_RESPONSE 1
-SHOW_MESO_GAIN = SHOW_STATUS_INFO 1
+
 CHAR_INFO = SPAWN_PORTAL 1
 BUDDYLIST = CHAR_INFO 1
 PARTY_OPERATION = 0x39
-GIVE_BUFF = PARTY_OPERATION 2
-WARP_TO_MAP = 0x4E
-BOSS_ENV = 0x54
-MULTICHAT = 0x56
-WHISPER = 0x5F
-CLOCK = 0x62
-SPAWN_PLAYER = 0x66
 CANCEL_CHAIR = SPAWN_PLAYER 1
-UPDATE_QUEST_INFO = 0x6d
-REMOVE_PLAYER_FROM_MAP = 0x71
-CHATTEXT = REMOVE_PLAYER_FROM_MAP 1
-SPAWN_SPECIAL_MAPOBJECT = CHATTEXT 1
-REMOVE_SPECIAL_MAPOBJECT = SPAWN_SPECIAL_MAPOBJECT 1
-MOVE_SUMMON = REMOVE_SPECIAL_MAPOBJECT 1
-SUMMON_ATTACK = MOVE_SUMMON 1
-DAMAGE_SUMMON = SUMMON_ATTACK 2
-SHOW_SCROLL_EFFECT = 0x7B
-MOVE_PLAYER = 0x85
-SHOW_FOREIGN_EFFECT = MOVE_PLAYER 1
-CLOSE_RANGE_ATTACK = 0x88
-RANGED_ATTACK = 0x8E
-DAMAGE_PLAYER = 0x8A
-MAGIC_ATTACK = 0x94
-CANCEL_FOREIGN_BUFF = DAMAGE_PLAYER 1
-UPDATE_PARTYMEMBER_HP = CANCEL_FOREIGN_BUFF 1
-FACIAL_EXPRESSION = UPDATE_PARTYMEMBER_HP 1
-UPDATE_CHAR_LOOK = 0x93
 GIVE_FOREIGN_BUFF = SHOW_FOREIGN_EFFECT 1
-SHOW_ITEM_GAIN_INCHAT = 0x68
-SHOW_ITEM_EFFECT = 0x8F
-SHOW_CHAIR = 0x92
-SPAWN_MONSTER = 0x97
-MOVE_MONSTER = 0x98
+
 SHOW_MONSTER_HP = MOVE_MONSTER 1
-APPLY_MONSTER_STATUS = 0x9B
 CANCEL_MONSTER_STATUS = APPLY_MONSTER_STATUS 1
-MOVE_MONSTER_RESPONSE = 0x9D
 DAMAGE_MONSTER = MOVE_MONSTER_RESPONSE 1
-COOLDOWN = 0x70
-SPAWN_MONSTER_CONTROL = 0xA5
 KILL_MONSTER = SPAWN_MONSTER_CONTROL 1
-SPAWN_NPC = 0xA8
 SPAWN_NPC_REQUEST_CONTROLLER = SPAWN_NPC 5
-REACTOR_SPAWN = 0xB3
 REACTOR_HIT = REACTOR_SPAWN 1
 REACTOR_DESTROY = REACTOR_HIT 1
-DROP_ITEM_FROM_MAPOBJECT = 0xB9
 REMOVE_ITEM_FROM_MAP = DROP_ITEM_FROM_MAPOBJECT 1
-SPAWN_MIST = 0xBE
-REMOVE_MIST = SPAWN_MIST 1
-SPAWN_DOOR = REMOVE_MIST 1
-REMOVE_DOOR = SPAWN_DOOR 1
 NPC_TALK = 0xC3
 OPEN_NPC_SHOP = 0xD7
 CONFIRM_SHOP_TRANSACTION = OPEN_NPC_SHOP 1
@@ -112,17 +62,74 @@ namespace RazzleServer.Common.Packet
         MigrateCommand = 0x10,
         CheckUserLimitResult = 0x12,
         SelectWorldResult = 0x13,
+        //MODIFY_INVENTORY_ITEM = 0x18
         AvatarMegaphoneRes = 0x19,
+        //SHOW_QUEST_COMPLETION = 0x1F
 
+        //UPDATE_STATS = 0x23
+        //CANCEL_BUFF = 0x24
+        //SPAWN_PORTAL = 0x29
+        //SERVERMESSAGE = 0x2D
+        //UPDATE_SKILLS = 0x2F
+
+        //FAME_RESPONSE = 0x31
+        //SHOW_STATUS_INFO = 0x32
+        //SHOW_MESO_GAIN = 0x33
+        //GIVE_BUFF = 0x3B
+
+        SetField = 0x4E,
+
+        //BOSS_ENV = 0x54
+        //MULTICHAT = 0x56
         Whisper = 0x5F,
 
+        //CLOCK = 0x62
+        //SPAWN_PLAYER = 0x66
+        //SHOW_ITEM_GAIN_INCHAT = 0x68
+        //UPDATE_QUEST_INFO = 0x6d
+
+        //COOLDOWN = 0x70
+        //REMOVE_PLAYER_FROM_MAP = 0x71
+        //CHATTEXT = 0x72
+        //SPAWN_SPECIAL_MAPOBJECT = 0x73
+        //REMOVE_SPECIAL_MAPOBJECT = 0x74
+        //MOVE_SUMMON = 0x75
+        //SUMMON_ATTACK = 0x76
+        //DAMAGE_SUMMON = 0x78
+        //SHOW_SCROLL_EFFECT = 0x7B
+
         Move = 0x85,
+        //SHOW_FOREIGN_EFFECT = 0x86
         CloseRangeAttack = 0x88,
         Hit = 0x8A,
+        //CANCEL_FOREIGN_BUFF = 0x8B
+        //UPDATE_PARTYMEMBER_HP = 0x8C
         Emotion = 0x8D,
         RangedAttack = 0x8E,
+        //SHOW_ITEM_EFFECT = 0x8F
 
+        //SHOW_CHAIR = 0x92
+        //UPDATE_CHAR_LOOK = 0x93
         MagicAttack = 0x94,
+        //SPAWN_MONSTER = 0x97
+        //MOVE_MONSTER = 0x98
+        //APPLY_MONSTER_STATUS = 0x9B
+        //MOVE_MONSTER_RESPONSE = 0x9D
+
+        //SPAWN_MONSTER_CONTROL = 0xA5
+        //SPAWN_NPC = 0xA8
+
+        //REACTOR_SPAWN = 0xB3
+        //DROP_ITEM_FROM_MAPOBJECT = 0xB9
+        //SPAWN_MIST = 0xBE
+        //REMOVE_MIST = 0xBF
+
+        //SPAWN_DOOR = 0xC0
+        //REMOVE_DOOR = 0xC1
+
+        FuncKeyMappedInit = 0xF7,
+        FuncKeyMappedPetConsumeItemInit = 0xF8,
+        FuncKeyMappedPetConsumeMPItemInit = 0xF9,
 
         EnergyAttack = 189,
         SkillPrepare = 190,
@@ -201,7 +208,6 @@ namespace RazzleServer.Common.Packet
         ScriptProgressMessage = 122,
         DataCRCCheckFailed = 123,
         MacroSysDataInit = 124,
-        SetField = 125,
         SetITC = 126,
         SetCashShop = 127,
         SetBackEffect = 128,
@@ -325,7 +331,6 @@ namespace RazzleServer.Common.Packet
         TownPortalCreated = 275,
         TownPortalRemoved = 276,
         ReactorChangeState = 277,
-        ReactorMove = 278, // NOTE: May not be implemented in v83 client.
         ReactorEnterField = 279,
         ReactorLeaveField = 280,
         SnowballState = 281,
@@ -354,8 +359,8 @@ namespace RazzleServer.Common.Packet
         AdminShopMessage = 307,
         AdminShop = 308,
         Storage = 309,
-        StoreBankDlgMessage = 310, // TODO: Correct naming.
-        StoreBankDlgSet = 311, // TODO: Correct naming.
+        StoreBankDlgMessage = 310,
+        StoreBankDlgSet = 311,
         RPSGame = 312,
         Messenger = 313,
         PlayerInteraction = 314,
@@ -368,9 +373,7 @@ namespace RazzleServer.Common.Packet
         ChangeParamResult = 323,
         QuestCashResult = 324,
         CashShopOperation = 325,
-        FuncKeyMappedInit = 335,
-        FuncKeyMappedPetConsumeItemInit = 336,
-        FuncKeyMappedPetConsumeMPItemInit = 337,
+
         MapleTVSetMessage = 341,
         MapleTVClearMessage = 342,
         MapleTVSendMessageResult = 343,

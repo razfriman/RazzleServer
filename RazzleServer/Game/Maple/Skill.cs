@@ -808,7 +808,6 @@ namespace RazzleServer.Game.Maple
             {
                 oPacket.WriteInt(MapleID);
                 oPacket.WriteInt(CurrentLevel);
-                oPacket.WriteDateTime(Expiration);
 
                 if (IsFromFourthJob)
                 {

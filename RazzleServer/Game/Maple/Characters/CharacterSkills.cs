@@ -13,14 +13,14 @@ namespace RazzleServer.Game.Maple.Characters
         public CharacterSkills(Character parent)
              : base()
         {
-            this.Parent = parent;
+            Parent = parent;
         }
 
         public void Load()
         {
-            foreach (Datum datum in new Datums("skills").Populate("CharacterID = {0}", this.Parent.ID))
+            foreach (Datum datum in new Datums("skills").Populate("CharacterID = {0}", Parent.ID))
             {
-                this.Add(new Skill(datum));
+                Add(new Skill(datum));
             }
         }
 
@@ -66,7 +66,7 @@ namespace RazzleServer.Game.Maple.Characters
                         {
                             int targetID = iPacket.ReadInt();
 
-                            Character target = this.Parent.Map.Characters[targetID];
+                            Character target = Parent.Map.Characters[targetID];
 
                             if (!target.IsAlive)
                             {
@@ -82,7 +82,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             using (var oPacket = new PacketWriter())
             {
-                oPacket.WriteShort((short)this.Count);
+                oPacket.WriteShort((short)Count);
 
                 List<Skill> cooldownSkills = new List<Skill>();
 

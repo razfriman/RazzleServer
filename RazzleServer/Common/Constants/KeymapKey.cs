@@ -1,6 +1,6 @@
 ﻿namespace RazzleServer.Common.Constants
 {
-    public enum KeymapKey : int
+    public enum KeymapKey
     {
         None = 0,
         Escape = 1,

@@ -412,29 +412,39 @@ public class MaplePacketCreator {
      * @param chr The character to add the stats of.
      */
     private static void addCharStats(MaplePacketLittleEndianWriter mplew, MapleCharacter chr) {
-        mplew.writeInt(chr.getId()); // character id
 
-        mplew.writeAsciiString(chr.getName());
-        for (int x = chr.getName().length(); x < 13; x++) { // fill to maximum
-            // name length
 
-            mplew.write(0);
-        }
 
-        mplew.write(chr.getGender()); // gender (0 = male, 1 = female)
 
-        mplew.write(chr.getSkinColor().getId()); // skin color
+         01 00 00 00
+         72 61 7A 7A 6C 65 00 00 00 00 00 00 00
+         05 -- gender = 5?
+         00 -- skin color
+         20 4E 00 00 -- face
+         47 75 00 00 -- hair
 
-        mplew.writeInt(chr.getFace()); // face
+         00 00 00 00 00 00 00 00 -- zeroes
+         00 00 00 00 00 00 00 00
+         00 00 00 00 00 00 00 00
 
-        mplew.writeInt(chr.getHair()); // hair
-                
-                mplew.writeInt(0);
-                mplew.writeInt(0);
-                mplew.writeLong(0);
-                mplew.writeLong(0);
+         01 --level
 
-        mplew.write(chr.getLevel()); // level
+         00 00
+         00 00
+
+         04 00
+         07 00
+         09 00
+
+         00 00
+         32 00
+         05 00
+         05 00
+         00 00 00 00
+         00 00
+         00 00 00 00 00 E1 F5 05 00 14 00 00 00 00 18 18 18 18 30 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+
+
 
         mplew.writeShort(chr.getJob().getId()); // job
         // mplew.writeShort(422);
@@ -612,6 +622,50 @@ public class MaplePacketCreator {
      * @return The character info packet.
      */
     public static MaplePacket getCharInfo(MapleCharacter chr) {
+
+
+
+
+    4E 00
+    01 00 00 00 - character
+    01
+    01
+
+
+      00 00???????????[BAD!]
+
+     4E AA 59 0D - rng
+     76 2A 35 12
+     A7 35 A7 4E
+
+
+     FF FF
+
+     01 00 00 00 72 61 7A 7A 6C 65 00 00 00 00 00 00 00 05 00 20 4E 00 00 47 75 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 00 00 00 00 04 00 07 00 09 00 00 00 32 00 05 00 05 00 00 00 00 00 00 00 00 00 00 00 00 E1 F5 05 00 14 00 00 00 00 18 18 18 18 30 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+
+     00 00 -- quest
+
+     FF C9 9A 3B -- trocks
+     FF C9 9A 3B
+     FF C9 9A 3B
+     FF C9 9A 3B
+     FF C9 9A 3B
+
+     FF C9 9A 3B -- trocks
+     FF C9 9A 3B
+     FF C9 9A 3B
+     FF C9 9A 3B
+     FF C9 9A 3B
+
+     FF C9 9A 3B -- trocks
+     FF C9 9A 3B
+     FF C9 9A 3B
+     FF C9 9A 3B
+     FF C9 9A 3B
+
+     E9 53 FC 8E 5F 01 00 00 -- time
+
+
         MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
         mplew.writeShort(SendPacketOpcode.WARP_TO_MAP.getValue()); // 0x49
@@ -698,7 +752,7 @@ public class MaplePacketCreator {
 
         mplew.write(new byte[8]);
         for (int x = 0; x < 15; x++) {
-            mplew.write(CHAR_INFO_MAGIC);
+            mplew.write(CHAR_INFO_MAGIC); // 4 * 15
         }
         mplew.write(HexTool.getByteArrayFromHexString("90 63 3A 0D C5 5D C8 01"));
 

@@ -83,19 +83,19 @@ namespace RazzleServer.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<short>("AP");
+                    b.Property<short>("AbilityPoints");
 
                     b.Property<int>("AccountID");
 
-                    b.Property<int>("CashSlots");
+                    b.Property<byte>("CashSlots");
 
-                    b.Property<short>("Dex");
+                    b.Property<short>("Dexterity");
 
-                    b.Property<int>("EquipmentSlots");
+                    b.Property<byte>("EquipmentSlots");
 
-                    b.Property<int>("EtceteraSlots");
+                    b.Property<byte>("EtceteraSlots");
 
-                    b.Property<int>("Exp");
+                    b.Property<int>("Experience");
 
                     b.Property<int>("Face");
 
@@ -109,43 +109,43 @@ namespace RazzleServer.Migrations
 
                     b.Property<int?>("GuildRank");
 
-                    b.Property<short>("HP");
-
                     b.Property<int>("Hair");
 
-                    b.Property<short>("Int");
+                    b.Property<short>("Health");
+
+                    b.Property<short>("Intelligence");
 
                     b.Property<short>("Job");
 
                     b.Property<byte>("Level");
 
-                    b.Property<short>("Luk");
+                    b.Property<short>("Luck");
 
-                    b.Property<short>("MP");
+                    b.Property<short>("Mana");
 
                     b.Property<int>("MapID");
 
-                    b.Property<short>("MaxHP");
+                    b.Property<short>("MaxHealth");
 
-                    b.Property<short>("MaxMP");
+                    b.Property<short>("MaxMana");
 
-                    b.Property<int>("Mesos");
+                    b.Property<int>("Meso");
 
                     b.Property<string>("Name");
 
-                    b.Property<short>("SP");
+                    b.Property<byte>("SetupSlots");
 
-                    b.Property<int>("SetupSlots");
+                    b.Property<short>("SkillPoints");
 
                     b.Property<byte>("Skin");
 
                     b.Property<byte>("SpawnPoint");
 
-                    b.Property<short>("Str");
+                    b.Property<short>("Strength");
 
-                    b.Property<int>("UsableSlots");
+                    b.Property<byte>("UsableSlots");
 
-                    b.Property<int>("WorldID");
+                    b.Property<byte>("WorldID");
 
                     b.HasKey("ID");
 

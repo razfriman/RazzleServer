@@ -65,10 +65,7 @@ namespace RazzleServer.Center
 
         public int ValidateMigration(string host, int characterID) => Migrations.Validate(host, characterID);
 
-        internal bool Migrate(string host, int iD, int characterID)
-        {
-            return false;
-        }
+        internal bool Migrate(string host, int iD, int characterID) => true;
 
         public static ServerManager Instance
         {

@@ -80,7 +80,7 @@ namespace RazzleServer.Server
             try
             {
                 client.SendHandshake();
-                client.Key = ip + Functions.Random();
+                client.Key = $"{ip}-{Functions.Random()}";
                 AddClient(client);
                 return client;
             }

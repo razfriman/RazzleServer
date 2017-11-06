@@ -148,19 +148,10 @@ namespace RazzleServer.Game.Maple.Characters
             return ((IEnumerable)Buffs).GetEnumerator();
         }
 
-        // TODO: Refactor this to use actual TwoStateTemporaryStat and not some random values.
-        // For now, we use the default mask until we learn more about how buffs work.
         public byte[] ToByteArray()
         {
             using (var oPacket = new PacketWriter())
             {
-
-                oPacket.WriteInt(0);
-                oPacket.WriteShort(0);
-                oPacket.WriteByte(0xFC);
-                oPacket.WriteByte(1);
-                oPacket.WriteInt(0);
-
                 long mask = 0;
                 int value = 0;
 
@@ -185,14 +176,13 @@ namespace RazzleServer.Game.Maple.Characters
                     mask |= (long)SecondaryBuffStat.SoulArrow;
                 }
 
-                oPacket.WriteInt((int)((mask >> 32) & 0xFFFFFFFFL));
-
+                
+                oPacket.WriteLong(mask);
                 if (value != 0)
                 {
                     oPacket.WriteByte((byte)value);
                 }
 
-                oPacket.WriteInt((int)(mask & 0xFFFFFFFFL));
 
                 int magic = Functions.Random();
 

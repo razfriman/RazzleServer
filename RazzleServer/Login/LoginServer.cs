@@ -30,7 +30,9 @@ namespace RazzleServer.Login
                           .ForEach(x =>
                           {
                               var c = new Character();
-                              c.Load(x.ID);
+                              c.ID = x.ID;
+                              c.WorldID = worldID;
+                              c.Load(null);
                               result.Add(c);
                           });
 

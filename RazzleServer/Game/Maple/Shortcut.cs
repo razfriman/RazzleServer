@@ -1,6 +1,5 @@
-﻿
-using RazzleServer.Common.Constants;
-using RazzleServer.Common.Data;
+﻿using RazzleServer.Common.Constants;
+using RazzleServer.DB.Models;
 
 namespace RazzleServer.Game.Maple
 {
@@ -10,27 +9,27 @@ namespace RazzleServer.Game.Maple
         public KeymapType Type { get; set; }
         public KeymapAction Action { get; set; }
 
-        public Shortcut(Datum datum)
+        public Shortcut(KeyMapEntity entity)
         {
-            this.Key = (KeymapKey)datum["Key"];
-            this.Type = (KeymapType)datum["Type"];
-            this.Action = (KeymapAction)datum["Action"];
+            Key = (KeymapKey)entity.Key;
+            Type = (KeymapType)entity.Type;
+            Action = (KeymapAction)entity.Action;
         }
 
         public Shortcut(KeymapKey key, KeymapAction action, KeymapType type = KeymapType.None)
         {
-            this.Key = key;
+            Key = key;
 
             if (type == KeymapType.None)
             {
-                this.Type = this.GetTypeFromAction(action);
+                Type = GetTypeFromAction(action);
             }
             else
             {
-                this.Type = type;
+                Type = type;
             }
 
-            this.Action = action;
+            Action = action;
         }
 
         private KeymapType GetTypeFromAction(KeymapAction action)

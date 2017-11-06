@@ -55,7 +55,7 @@ namespace RazzleServer.Common.Data
 
         public IEnumerator<Datum> GetEnumerator()
         {
-            foreach (Datum loopDatum in Values)
+            foreach (Datum loopDatum in Array.Empty<Datum>())
             {
                 yield return loopDatum;
             }
