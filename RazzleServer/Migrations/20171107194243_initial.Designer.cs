@@ -11,7 +11,7 @@ using System;
 namespace RazzleServer.Migrations
 {
     [DbContext(typeof(MapleDbContext))]
-    [Migration("20171105233029_initial")]
+    [Migration("20171107194243_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -88,6 +88,8 @@ namespace RazzleServer.Migrations
 
                     b.Property<int>("AccountID");
 
+                    b.Property<int>("BuddyListSlots");
+
                     b.Property<byte>("CashSlots");
 
                     b.Property<short>("Dexterity");
@@ -153,6 +155,22 @@ namespace RazzleServer.Migrations
                     b.ToTable("Characters");
                 });
 
+            modelBuilder.Entity("RazzleServer.DB.Models.CharacterStorageEntity", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("AccountID");
+
+                    b.Property<int>("Meso");
+
+                    b.Property<byte>("Slots");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("CharacterStorages");
+                });
+
             modelBuilder.Entity("RazzleServer.DB.Models.GuildEntity", b =>
                 {
                     b.Property<int>("ID")
@@ -200,50 +218,63 @@ namespace RazzleServer.Migrations
                     b.ToTable("Guilds");
                 });
 
-            modelBuilder.Entity("RazzleServer.DB.Models.InventoryEquipEntity", b =>
+            modelBuilder.Entity("RazzleServer.DB.Models.ItemEntity", b =>
                 {
-                    b.Property<long>("ID")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<short>("Acc");
+                    b.Property<int>("AccountID");
+
+                    b.Property<short>("Accuracy");
+
+                    b.Property<short>("Agility");
+
+                    b.Property<short>("Avoidability");
 
                     b.Property<short>("BonusPotential1");
 
                     b.Property<short>("BonusPotential2");
 
+                    b.Property<int>("CharacterID");
+
+                    b.Property<string>("Creator")
+                        .HasMaxLength(13);
+
                     b.Property<short>("CustomExp");
 
                     b.Property<byte>("CustomLevel");
 
-                    b.Property<short>("Dex");
-
-                    b.Property<short>("Diligence");
+                    b.Property<short>("Dexterity");
 
                     b.Property<int>("Durability");
 
                     b.Property<byte>("Enhancements");
 
-                    b.Property<short>("Eva");
+                    b.Property<DateTime>("Expiration");
 
-                    b.Property<short>("IncMaxHP");
+                    b.Property<short>("Flags");
 
-                    b.Property<short>("IncMaxMP");
+                    b.Property<short>("Health");
 
-                    b.Property<short>("Int");
+                    b.Property<short>("Intelligence");
 
-                    b.Property<long>("InventoryItemID");
+                    b.Property<bool>("IsStored");
 
                     b.Property<short>("Jump");
 
-                    b.Property<short>("Luk");
+                    b.Property<short>("Luck");
 
-                    b.Property<short>("Mad");
+                    b.Property<short>("MagicAttack");
 
-                    b.Property<short>("Mdd");
+                    b.Property<short>("MagicDefense");
 
-                    b.Property<short>("Pad");
+                    b.Property<short>("Mana");
 
-                    b.Property<short>("Pdd");
+                    b.Property<int>("MapleID");
+
+                    b.Property<int?>("PetID");
+
+                    b.Property<short>("Position");
 
                     b.Property<short>("Potential1");
 
@@ -253,70 +284,27 @@ namespace RazzleServer.Migrations
 
                     b.Property<byte>("PotentialState");
 
-                    b.Property<byte>("RemainingUpgradeCount");
-
-                    b.Property<short>("Socket1");
-
-                    b.Property<short>("Socket2");
-
-                    b.Property<short>("Socket3");
-
-                    b.Property<short>("Speed");
-
-                    b.Property<short>("Str");
-
-                    b.Property<byte>("UpgradeCount");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("InventoryEquips");
-                });
-
-            modelBuilder.Entity("RazzleServer.DB.Models.InventoryItemEntity", b =>
-                {
-                    b.Property<long>("ID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("CharacterID");
-
-                    b.Property<string>("Creator")
-                        .HasMaxLength(13);
-
-                    b.Property<short>("Flags");
-
-                    b.Property<int>("ItemID");
-
-                    b.Property<short>("Position");
-
                     b.Property<short>("Quantity");
+
+                    b.Property<byte>("Slot");
 
                     b.Property<string>("Source");
 
-                    b.HasKey("ID");
+                    b.Property<short>("Speed");
 
-                    b.ToTable("InventoryItems");
-                });
+                    b.Property<short>("Strength");
 
-            modelBuilder.Entity("RazzleServer.DB.Models.InventorySlotEntity", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd();
+                    b.Property<byte>("UpgradesApplied");
 
-                    b.Property<byte>("CashSlots");
+                    b.Property<byte>("UpgradesAvailable");
 
-                    b.Property<int>("CharacterID");
+                    b.Property<short>("WeaponAttack");
 
-                    b.Property<byte>("EquipSlots");
-
-                    b.Property<byte>("EtcSlots");
-
-                    b.Property<byte>("SetupSlots");
-
-                    b.Property<byte>("UseSlots");
+                    b.Property<short>("WeaponDefense");
 
                     b.HasKey("ID");
 
-                    b.ToTable("InventorySlots");
+                    b.ToTable("Items");
                 });
 
             modelBuilder.Entity("RazzleServer.DB.Models.KeyMapEntity", b =>
@@ -397,7 +385,7 @@ namespace RazzleServer.Migrations
                     b.Property<string>("CustomData")
                         .HasMaxLength(255);
 
-                    b.Property<int>("Quest");
+                    b.Property<int>("QuestID");
 
                     b.Property<byte>("Status");
 

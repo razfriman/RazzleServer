@@ -58,6 +58,7 @@ namespace RazzleServer.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     AbilityPoints = table.Column<short>(type: "INTEGER", nullable: false),
                     AccountID = table.Column<int>(type: "INTEGER", nullable: false),
+                    BuddyListSlots = table.Column<int>(type: "INTEGER", nullable: false),
                     CashSlots = table.Column<byte>(type: "INTEGER", nullable: false),
                     Dexterity = table.Column<short>(type: "INTEGER", nullable: false),
                     EquipmentSlots = table.Column<byte>(type: "INTEGER", nullable: false),
@@ -95,6 +96,21 @@ namespace RazzleServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CharacterStorages",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    AccountID = table.Column<int>(type: "INTEGER", nullable: false),
+                    Meso = table.Column<int>(type: "INTEGER", nullable: false),
+                    Slots = table.Column<byte>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CharacterStorages", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Guilds",
                 columns: table => new
                 {
@@ -122,83 +138,54 @@ namespace RazzleServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "InventoryEquips",
-                columns: table => new
-                {
-                    ID = table.Column<long>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Acc = table.Column<short>(type: "INTEGER", nullable: false),
-                    BonusPotential1 = table.Column<short>(type: "INTEGER", nullable: false),
-                    BonusPotential2 = table.Column<short>(type: "INTEGER", nullable: false),
-                    CustomExp = table.Column<short>(type: "INTEGER", nullable: false),
-                    CustomLevel = table.Column<byte>(type: "INTEGER", nullable: false),
-                    Dex = table.Column<short>(type: "INTEGER", nullable: false),
-                    Diligence = table.Column<short>(type: "INTEGER", nullable: false),
-                    Durability = table.Column<int>(type: "INTEGER", nullable: false),
-                    Enhancements = table.Column<byte>(type: "INTEGER", nullable: false),
-                    Eva = table.Column<short>(type: "INTEGER", nullable: false),
-                    IncMaxHP = table.Column<short>(type: "INTEGER", nullable: false),
-                    IncMaxMP = table.Column<short>(type: "INTEGER", nullable: false),
-                    Int = table.Column<short>(type: "INTEGER", nullable: false),
-                    InventoryItemID = table.Column<long>(type: "INTEGER", nullable: false),
-                    Jump = table.Column<short>(type: "INTEGER", nullable: false),
-                    Luk = table.Column<short>(type: "INTEGER", nullable: false),
-                    Mad = table.Column<short>(type: "INTEGER", nullable: false),
-                    Mdd = table.Column<short>(type: "INTEGER", nullable: false),
-                    Pad = table.Column<short>(type: "INTEGER", nullable: false),
-                    Pdd = table.Column<short>(type: "INTEGER", nullable: false),
-                    Potential1 = table.Column<short>(type: "INTEGER", nullable: false),
-                    Potential2 = table.Column<short>(type: "INTEGER", nullable: false),
-                    Potential3 = table.Column<short>(type: "INTEGER", nullable: false),
-                    PotentialState = table.Column<byte>(type: "INTEGER", nullable: false),
-                    RemainingUpgradeCount = table.Column<byte>(type: "INTEGER", nullable: false),
-                    Socket1 = table.Column<short>(type: "INTEGER", nullable: false),
-                    Socket2 = table.Column<short>(type: "INTEGER", nullable: false),
-                    Socket3 = table.Column<short>(type: "INTEGER", nullable: false),
-                    Speed = table.Column<short>(type: "INTEGER", nullable: false),
-                    Str = table.Column<short>(type: "INTEGER", nullable: false),
-                    UpgradeCount = table.Column<byte>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_InventoryEquips", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "InventoryItems",
-                columns: table => new
-                {
-                    ID = table.Column<long>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    CharacterID = table.Column<int>(type: "INTEGER", nullable: false),
-                    Creator = table.Column<string>(type: "TEXT", maxLength: 13, nullable: true),
-                    Flags = table.Column<short>(type: "INTEGER", nullable: false),
-                    ItemID = table.Column<int>(type: "INTEGER", nullable: false),
-                    Position = table.Column<short>(type: "INTEGER", nullable: false),
-                    Quantity = table.Column<short>(type: "INTEGER", nullable: false),
-                    Source = table.Column<string>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_InventoryItems", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "InventorySlots",
+                name: "Items",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    CashSlots = table.Column<byte>(type: "INTEGER", nullable: false),
+                    AccountID = table.Column<int>(type: "INTEGER", nullable: false),
+                    Accuracy = table.Column<short>(type: "INTEGER", nullable: false),
+                    Agility = table.Column<short>(type: "INTEGER", nullable: false),
+                    Avoidability = table.Column<short>(type: "INTEGER", nullable: false),
+                    BonusPotential1 = table.Column<short>(type: "INTEGER", nullable: false),
+                    BonusPotential2 = table.Column<short>(type: "INTEGER", nullable: false),
                     CharacterID = table.Column<int>(type: "INTEGER", nullable: false),
-                    EquipSlots = table.Column<byte>(type: "INTEGER", nullable: false),
-                    EtcSlots = table.Column<byte>(type: "INTEGER", nullable: false),
-                    SetupSlots = table.Column<byte>(type: "INTEGER", nullable: false),
-                    UseSlots = table.Column<byte>(type: "INTEGER", nullable: false)
+                    Creator = table.Column<string>(type: "TEXT", maxLength: 13, nullable: true),
+                    CustomExp = table.Column<short>(type: "INTEGER", nullable: false),
+                    CustomLevel = table.Column<byte>(type: "INTEGER", nullable: false),
+                    Dexterity = table.Column<short>(type: "INTEGER", nullable: false),
+                    Durability = table.Column<int>(type: "INTEGER", nullable: false),
+                    Enhancements = table.Column<byte>(type: "INTEGER", nullable: false),
+                    Expiration = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Flags = table.Column<short>(type: "INTEGER", nullable: false),
+                    Health = table.Column<short>(type: "INTEGER", nullable: false),
+                    Intelligence = table.Column<short>(type: "INTEGER", nullable: false),
+                    IsStored = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Jump = table.Column<short>(type: "INTEGER", nullable: false),
+                    Luck = table.Column<short>(type: "INTEGER", nullable: false),
+                    MagicAttack = table.Column<short>(type: "INTEGER", nullable: false),
+                    MagicDefense = table.Column<short>(type: "INTEGER", nullable: false),
+                    Mana = table.Column<short>(type: "INTEGER", nullable: false),
+                    MapleID = table.Column<int>(type: "INTEGER", nullable: false),
+                    PetID = table.Column<int>(type: "INTEGER", nullable: true),
+                    Position = table.Column<short>(type: "INTEGER", nullable: false),
+                    Potential1 = table.Column<short>(type: "INTEGER", nullable: false),
+                    Potential2 = table.Column<short>(type: "INTEGER", nullable: false),
+                    Potential3 = table.Column<short>(type: "INTEGER", nullable: false),
+                    PotentialState = table.Column<byte>(type: "INTEGER", nullable: false),
+                    Quantity = table.Column<short>(type: "INTEGER", nullable: false),
+                    Slot = table.Column<byte>(type: "INTEGER", nullable: false),
+                    Source = table.Column<string>(type: "TEXT", nullable: true),
+                    Speed = table.Column<short>(type: "INTEGER", nullable: false),
+                    Strength = table.Column<short>(type: "INTEGER", nullable: false),
+                    UpgradesApplied = table.Column<byte>(type: "INTEGER", nullable: false),
+                    UpgradesAvailable = table.Column<byte>(type: "INTEGER", nullable: false),
+                    WeaponAttack = table.Column<short>(type: "INTEGER", nullable: false),
+                    WeaponDefense = table.Column<short>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_InventorySlots", x => x.ID);
+                    table.PrimaryKey("PK_Items", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -256,7 +243,7 @@ namespace RazzleServer.Migrations
                     CharacterID = table.Column<int>(type: "INTEGER", nullable: false),
                     CompleteTime = table.Column<uint>(type: "INTEGER", nullable: false),
                     CustomData = table.Column<string>(type: "TEXT", maxLength: 255, nullable: true),
-                    Quest = table.Column<int>(type: "INTEGER", nullable: false),
+                    QuestID = table.Column<int>(type: "INTEGER", nullable: false),
                     Status = table.Column<byte>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -341,16 +328,13 @@ namespace RazzleServer.Migrations
                 name: "Characters");
 
             migrationBuilder.DropTable(
+                name: "CharacterStorages");
+
+            migrationBuilder.DropTable(
                 name: "Guilds");
 
             migrationBuilder.DropTable(
-                name: "InventoryEquips");
-
-            migrationBuilder.DropTable(
-                name: "InventoryItems");
-
-            migrationBuilder.DropTable(
-                name: "InventorySlots");
+                name: "Items");
 
             migrationBuilder.DropTable(
                 name: "KeyMaps");
