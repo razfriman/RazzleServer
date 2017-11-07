@@ -1,10 +1,13 @@
-﻿using System;
+﻿using RazzleServer.Common.Packet;
+
 namespace RazzleServer.Game.Handlers
 {
-    public class CancelBuffHandler
+    [PacketHandler(ClientOperationCode.CancelBuff)]
+    public class CancelBuffHandler : GamePacketHandler
     {
-        public CancelBuffHandler()
+        public override void HandlePacket(PacketReader packet, GameClient client)
         {
+
         }
     }
 }

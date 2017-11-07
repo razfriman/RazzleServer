@@ -16,8 +16,8 @@ namespace RazzleServer.Login.Handlers
                 pw.WriteString(world.Name);
                 pw.WriteByte((byte)world.Flag);
                 pw.WriteString(world.EventMessage);
-                pw.WriteShort(100);// Event EXP Rate
-                pw.WriteShort(100); // Event Drop Rate
+                pw.WriteShort(world.EventExperienceRate);
+                pw.WriteShort(world.EventDropRate);
                 pw.WriteBool(!world.EnableCharacterCreation);
                 pw.WriteByte(world.Count);
 

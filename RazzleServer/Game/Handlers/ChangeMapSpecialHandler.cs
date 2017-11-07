@@ -1,10 +1,13 @@
-﻿using System;
+﻿using RazzleServer.Common.Packet;
+
 namespace RazzleServer.Game.Handlers
 {
-    public class ChangeMapSpecialHandler
+    [PacketHandler(ClientOperationCode.ChangeMapSpecial)]
+    public class ChangeMapSpecialHandler : GamePacketHandler
     {
-        public ChangeMapSpecialHandler()
+        public override void HandlePacket(PacketReader packet, GameClient client)
         {
+
         }
     }
 }

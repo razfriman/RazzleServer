@@ -20,7 +20,7 @@ namespace RazzleServer.Game.Maple.Maps
                     }
                 }
 
-                throw new KeyNotFoundException();
+                return null;
             }
         }
 

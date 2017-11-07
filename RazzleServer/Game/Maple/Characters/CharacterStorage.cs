@@ -1,6 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
+using RazzleServer.Data;
+using RazzleServer.DB.Models;
 using RazzleServer.Game.Maple.Life;
 
 namespace RazzleServer.Game.Maple.Characters
@@ -15,81 +19,77 @@ namespace RazzleServer.Game.Maple.Characters
 
         public bool IsFull => Items.Count == Slots;
 
-        public CharacterStorage(Character parent)
-        {
-            Parent = parent;
-        }
+        public CharacterStorage(Character parent) => Parent = parent;
 
         public void Load()
         {
-            Datum datum = new Datum("storages");
-
-            try
+            using (var dbContext = new MapleDbContext())
             {
-                datum.Populate("AccountID = {0}", this.Parent.AccountID);
-            }
-            catch
-            {
-                datum["AccountID"] = this.Parent.AccountID;
-                datum["Slots"] = (byte)4;
-                datum["Meso"] = 0;
+                var entity = dbContext.CharacterStorages.FirstOrDefault(x => x.AccountID == Parent.AccountID);
 
-                datum.Insert();
-            }
+                if (entity == null)
+                {
+                    entity = GenerateDefault();
+                    dbContext.CharacterStorages.Add(entity);
+                    dbContext.SaveChanges();
+                }
 
-            this.Slots = (byte)datum["Slots"];
-            this.Meso = (int)datum["Meso"];
+                Slots = entity.Slots;
+                Meso = entity.Meso;
 
-            this.Items = new List<Item>();
+                var itemEntities = dbContext.Items
+                                            .Where(x => x.AccountID == Parent.AccountID)
+                                            .Where(x => x.IsStored)
+                                            .ToList();
 
-            foreach (Datum itemDatum in new Datums("items").Populate("AccountID = {0} AND IsStored = True", this.Parent.AccountID))
-            {
-                this.Items.Add(new Item(itemDatum));
+                itemEntities.ForEach(x => Items.Add(new Item(x)));
             }
         }
+
+        private CharacterStorageEntity GenerateDefault() => 
+        new CharacterStorageEntity
+        {
+            AccountID = Parent.AccountID,
+            Slots = 4,
+            Meso = 0
+        };
 
         public void Save()
         {
             Datum datum = new Datum("storages");
 
-            datum["Slots"] = this.Slots;
-            datum["Meso"] = this.Meso;
+            datum["Slots"] = Slots;
+            datum["Meso"] = Meso;
 
-            datum.Update("AccountID = {0}", this.Parent.AccountID);
+            datum.Update("AccountID = {0}", Parent.AccountID);
 
-            foreach (Item item in this.Items)
-            {
-                item.Save();
-            }
+            Items.ForEach((item => item.Save()));
         }
 
         public void Show(Npc npc)
         {
-            this.Npc = npc;
+            Npc = npc;
 
-            this.Load();
+            Load();
 
             using (var oPacket = new PacketWriter(ServerOperationCode.Storage))
             {
                 oPacket.WriteByte(22);
                 oPacket.WriteInt(npc.MapleID);
-                oPacket.WriteByte(this.Slots);
+                oPacket.WriteByte(Slots);
                 oPacket.WriteShort(126);
                 oPacket.WriteShort(0);
                 oPacket.WriteInt(0);
-                oPacket.WriteInt(this.Meso);
+                oPacket.WriteInt(Meso);
                 oPacket.WriteShort(0);
-                oPacket.WriteByte((byte)this.Items.Count);
+                oPacket.WriteByte((byte)Items.Count);
 
-                foreach (Item item in this.Items)
-                {
-                    oPacket.WriteBytes(item.ToByteArray(true, true));
-                }
+                Items.ForEach(item => item.ToByteArray(true, true));
 
                 oPacket.WriteShort(0);
                 oPacket.WriteByte(0);
 
-                this.Parent.Client.Send(oPacket);
+                Parent.Client.Send(oPacket);
             }
         }
     }

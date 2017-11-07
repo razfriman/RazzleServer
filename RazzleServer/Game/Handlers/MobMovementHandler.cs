@@ -1,10 +1,13 @@
-﻿using System;
+﻿using RazzleServer.Common.Packet;
+
 namespace RazzleServer.Game.Handlers
 {
-    public class MobMovementHandler
+    [PacketHandler(ClientOperationCode.MobMovement)]
+    public class MobMovementHandler : GamePacketHandler
     {
-        public MobMovementHandler()
+        public override void HandlePacket(PacketReader packet, GameClient client)
         {
+
         }
     }
 }

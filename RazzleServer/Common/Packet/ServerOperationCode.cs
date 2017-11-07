@@ -62,6 +62,8 @@ namespace RazzleServer.Common.Packet
         MigrateCommand = 0x10,
         CheckUserLimitResult = 0x12,
         SelectWorldResult = 0x13,
+        ReloginResponse = 0x15,
+
         //MODIFY_INVENTORY_ITEM = 0x18
         AvatarMegaphoneRes = 0x19,
         //SHOW_QUEST_COMPLETION = 0x1F
@@ -81,6 +83,7 @@ namespace RazzleServer.Common.Packet
 
         //BOSS_ENV = 0x54
         //MULTICHAT = 0x56
+        ShowApple = 0x5C,
         Whisper = 0x5F,
 
         //CLOCK = 0x62
@@ -127,9 +130,7 @@ namespace RazzleServer.Common.Packet
         //SPAWN_DOOR = 0xC0
         //REMOVE_DOOR = 0xC1
 
-        FuncKeyMappedInit = 0xF7,
-        FuncKeyMappedPetConsumeItemInit = 0xF8,
-        FuncKeyMappedPetConsumeMPItemInit = 0xF9,
+        Keymap = 0xF7,
 
         EnergyAttack = 189,
         SkillPrepare = 190,
@@ -155,7 +156,6 @@ namespace RazzleServer.Common.Packet
         AntiMacroResult = 43,
         ClaimResult = 45,
         SetClaimSvrAvailableTime = 46,
-        ClaimSvrStatusChanged = 47,
         SetTaminbMobInfo = 48,
         QuestClear = 49,
         EntrustedShopCheckResult = 50,

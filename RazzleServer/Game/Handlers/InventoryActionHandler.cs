@@ -1,10 +1,13 @@
-﻿using System;
+﻿using RazzleServer.Common.Packet;
+
 namespace RazzleServer.Game.Handlers
 {
-    public class InventoryActionHandler
+    [PacketHandler(ClientOperationCode.InventoryAction)]
+    public class InventoryActionHandler : GamePacketHandler
     {
-        public InventoryActionHandler()
+        public override void HandlePacket(PacketReader packet, GameClient client)
         {
+
         }
     }
 }

@@ -1,10 +1,13 @@
-﻿using System;
+﻿using RazzleServer.Common.Packet;
+
 namespace RazzleServer.Game.Handlers
 {
-    public class ChangeKeymapHandler
+    [PacketHandler(ClientOperationCode.ChangeKeymap)]
+    public class ChangeKeymapHandler : GamePacketHandler
     {
-        public ChangeKeymapHandler()
+        public override void HandlePacket(PacketReader packet, GameClient client)
         {
+
         }
     }
 }

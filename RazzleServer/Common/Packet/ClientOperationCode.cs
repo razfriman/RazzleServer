@@ -10,7 +10,6 @@
         CharacterSelectRequestPic = 0,
         RegisterPicFromVAC = 0,
         RequestPicFromVAC = 0,
-        ClientStart = 0,
         AccountInfo = 0,
 
         Unknown = 0x00,
@@ -30,6 +29,7 @@
         AccountGender = 0x17,
         WorldList = 0x18,
         WorldSelect = 0x19,
+        Relogin = 0x1A,
         AccountLogin = 0x1B,
 
 

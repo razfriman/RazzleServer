@@ -1,10 +1,13 @@
-﻿using System;
+﻿using RazzleServer.Common.Packet;
+
 namespace RazzleServer.Game.Handlers
 {
-    public class NoteActionHandler
+    [PacketHandler(ClientOperationCode.NoteAction)]
+    public class NoteActionHandler : GamePacketHandler
     {
-        public NoteActionHandler()
+        public override void HandlePacket(PacketReader packet, GameClient client)
         {
+
         }
     }
 }

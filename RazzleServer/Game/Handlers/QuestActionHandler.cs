@@ -1,10 +1,13 @@
-﻿using System;
+﻿using RazzleServer.Common.Packet;
+
 namespace RazzleServer.Game.Handlers
 {
-    public class QuestActionHandler
+    [PacketHandler(ClientOperationCode.QuestAction)]
+    public class QuestActionHandler : GamePacketHandler
     {
-        public QuestActionHandler()
+        public override void HandlePacket(PacketReader packet, GameClient client)
         {
+
         }
     }
 }

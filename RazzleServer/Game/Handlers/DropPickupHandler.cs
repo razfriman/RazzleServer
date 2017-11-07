@@ -1,10 +1,13 @@
-﻿using System;
+﻿using RazzleServer.Common.Packet;
+
 namespace RazzleServer.Game.Handlers
 {
-    public class DropPickupHandler
+    [PacketHandler(ClientOperationCode.DropPickup)]
+    public class DropPickupHandler : GamePacketHandler
     {
-        public DropPickupHandler()
+        public override void HandlePacket(PacketReader packet, GameClient client)
         {
+
         }
     }
 }

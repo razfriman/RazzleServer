@@ -94,17 +94,18 @@ namespace RazzleServer.Game.Maple.Life
             Position = spawnPoint.Position;
         }
 
-        public void Hit(Character character, short actionDelay, int skillID)
+        public void Hit(Character character, short actionDelay)
         {
             ReactorState state = States[State];
 
+            // TODO - Reactor scripts
             switch (state.Type)
             {
                 case ReactorEventType.PlainAdvanceState:
                     {
                         State = state.NextState;
 
-                        if (State == States.Length - 1) // TODO: Is this the correct way of doing this?
+                        if (State == States.Length - 1)
                         {
                             Map.Reactors.Remove(this);
                         }

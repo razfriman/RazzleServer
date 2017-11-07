@@ -5,6 +5,7 @@ using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.WzLib;
 using RazzleServer.Data;
+using RazzleServer.DB.Models;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Maps;
@@ -434,24 +435,23 @@ namespace RazzleServer.Game.Maple
             OnlyOne = (info["only"]?.GetInt() ?? 0) > 0;
         }
 
-        public Item(Datum datum)
+        public Item(ItemEntity datum)
         {
-            ID = (int)datum["ID"];
+            ID = datum.ID;
             Assigned = true;
-
-            AccountID = (int)datum["AccountID"];
-            MapleID = (int)datum["MapleID"];
+            AccountID = datum.AccountID;
+            MapleID = datum.MapleID;
             MaxPerStack = CachedReference.MaxPerStack;
-            Quantity = (short)datum["Quantity"];
-            Slot = (short)datum["Slot"];
-            Creator = (string)datum["Creator"];
-            Expiration = (DateTime)datum["Expiration"];
-            PetID = (int?)datum["PetID"];
+            Quantity = datum.Quantity;
+            Slot = datum.Slot;
+            Creator = datum.Creator;
+            Expiration = datum.Expiration;
+            PetID = datum.PetID;
 
             IsCash = CachedReference.IsCash;
             OnlyOne = CachedReference.OnlyOne;
             IsTradeBlocked = CachedReference.IsTradeBlocked;
-            IsStored = (bool)datum["IsStored"];
+            IsStored = datum.IsStored;
             SalePrice = CachedReference.SalePrice;
             RequiredLevel = CachedReference.RequiredLevel;
             Meso = CachedReference.Meso;
@@ -469,23 +469,23 @@ namespace RazzleServer.Game.Maple
                 RequiredFame = CachedReference.RequiredFame;
                 RequiredJob = CachedReference.RequiredJob;
 
-                UpgradesAvailable = (byte)datum["UpgradesAvailable"];
-                UpgradesApplied = (byte)datum["UpgradesApplied"];
-                Strength = (short)datum["Strength"];
-                Dexterity = (short)datum["Dexterity"];
-                Intelligence = (short)datum["Intelligence"];
-                Luck = (short)datum["Luck"];
-                Health = (short)datum["Health"];
-                Mana = (short)datum["Mana"];
-                WeaponAttack = (short)datum["WeaponAttack"];
-                MagicAttack = (short)datum["MagicAttack"];
-                WeaponDefense = (short)datum["WeaponDefense"];
-                MagicDefense = (short)datum["MagicDefense"];
-                Accuracy = (short)datum["Accuracy"];
-                Avoidability = (short)datum["Avoidability"];
-                Agility = (short)datum["Agility"];
-                Speed = (short)datum["Speed"];
-                Jump = (short)datum["Jump"];
+                UpgradesAvailable = datum.UpgradesAvailable;
+                UpgradesApplied = datum.UpgradesApplied;
+                Strength = datum.Strength;
+                Dexterity = datum.Dexterity;
+                Intelligence = datum.Intelligence;
+                Luck = datum.Luck;
+                Health = datum.Health;
+                Mana = datum.Mana;
+                WeaponAttack = datum.WeaponAttack;
+                MagicAttack = datum.MagicAttack;
+                WeaponDefense = datum.WeaponDefense;
+                MagicDefense = datum.MagicDefense;
+                Accuracy = datum.Accuracy;
+                Avoidability = datum.Avoidability;
+                Agility = datum.Agility;
+                Speed = datum.Speed;
+                Jump = datum.Jump;
             }
             else if (IsConsumable)
             {
@@ -610,7 +610,7 @@ namespace RazzleServer.Game.Maple
         {
             using (var dbContext = new MapleDbContext())
             {
-                var item = dbContext.InventoryItems.Find(ID);
+                var item = dbContext.Items.Find(ID);
                 if (item != null)
                 {
                     dbContext.Remove(item);

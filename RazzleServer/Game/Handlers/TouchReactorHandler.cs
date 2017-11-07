@@ -1,10 +1,13 @@
-﻿using System;
+﻿using RazzleServer.Common.Packet;
+
 namespace RazzleServer.Game.Handlers
 {
-    public class TouchReactorHandler
+    [PacketHandler(ClientOperationCode.TouchReactor)]
+    public class TouchReactorHandler : GamePacketHandler
     {
-        public TouchReactorHandler()
+        public override void HandlePacket(PacketReader packet, GameClient client)
         {
+            
         }
     }
 }

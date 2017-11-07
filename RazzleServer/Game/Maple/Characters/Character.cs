@@ -33,6 +33,7 @@ namespace RazzleServer.Game.Maple.Characters
         public byte Portals { get; set; }
         public int Chair { get; set; }
         public int? GuildRank { get; set; }
+        public int BuddyListSlots { get; private set; } = 20;
         public CharacterItems Items { get; private set; }
         public CharacterSkills Skills { get; private set; }
         public CharacterQuests Quests { get; private set; }
@@ -47,10 +48,9 @@ namespace RazzleServer.Game.Maple.Characters
         public Trade Trade { get; set; }
         public PlayerShop PlayerShop { get; set; }
         private bool Assigned { get; set; }
-        public int BuddyListSize { get; private set; } = 20;
 
-        private DateTime LastHealthHealOverTime = new DateTime();
-        private DateTime LastManaHealOverTime = new DateTime();
+        public DateTime LastHealthHealOverTime { get; set; } = new DateTime();
+        public DateTime LastManaHealOverTime { get; set; } = new DateTime();
 
         private Gender gender;
         private byte skin;
@@ -100,7 +100,7 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 if (!DataProvider.Styles.Skins.Contains(value))
                 {
-                    //throw new StyleUnavailableException();
+                    throw new StyleUnavailableException();
                 }
 
                 skin = value;
@@ -121,7 +121,7 @@ namespace RazzleServer.Game.Maple.Characters
                 if ((Gender == Gender.Male && !DataProvider.Styles.MaleFaces.Contains(value)) ||
                     Gender == Gender.Female && !DataProvider.Styles.FemaleFaces.Contains(value))
                 {
-                    //throw new StyleUnavailableException();
+                    throw new StyleUnavailableException();
                 }
 
                 face = value;
@@ -142,7 +142,7 @@ namespace RazzleServer.Game.Maple.Characters
                 if ((Gender == Gender.Male && !DataProvider.Styles.MaleHairs.Contains(value)) ||
                     Gender == Gender.Female && !DataProvider.Styles.FemaleHairs.Contains(value))
                 {
-                    //throw new StyleUnavailableException();
+                    throw new StyleUnavailableException();
                 }
 
                 hair = value;
@@ -163,7 +163,6 @@ namespace RazzleServer.Game.Maple.Characters
 
         public int FaceColorOffset => ((Face / 100) - (10 * (Face / 1000))) * 100;
 
-        // TODO: Update party's properties.
         public byte Level
         {
             get => level;
@@ -209,11 +208,11 @@ namespace RazzleServer.Game.Maple.Characters
                         Health = MaxHealth;
                         Mana = MaxMana;
                     }
+                    UpdateStatsForParty();
                 }
             }
         }
 
-        // TODO: Update party's properties.
         public Job Job
         {
             get => job;
@@ -224,7 +223,7 @@ namespace RazzleServer.Game.Maple.Characters
                 if (IsInitialized)
                 {
                     Update(StatisticType.Job);
-
+                    UpdateStatsForParty();
                     ShowRemoteUserEffect(UserEffect.JobChanged);
                 }
             }
@@ -579,7 +578,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             using (var oPacket = new PacketWriter(ServerOperationCode.SetField))
             {
-               
+
                 oPacket.WriteInt(Client.Server.ChannelID);
                 oPacket.WriteByte(++Portals);
                 oPacket.WriteBool(true);
@@ -596,100 +595,25 @@ namespace RazzleServer.Game.Maple.Characters
                 Client.Send(oPacket);
             }
 
-
-            /*
-
-        mplew.write(chr.getBuddylist().getCapacity()); // buddylist capacity
-
-        mplew.writeInt(chr.getMeso()); // mesos
-             * mplew.write(100); // equip slots
-
-        mplew.write(100); // use slots
-
-        mplew.write(100); // set-up slots
-
-        mplew.write(100); // etc slots
-
-        mplew.write(100); // cash slots
-
-        MapleInventory iv = chr.getInventory(MapleInventoryType.EQUIPPED);
-        Collection<IItem> equippedC = iv.list();
-        List<Item> equipped = new ArrayList<Item>(equippedC.size());
-        for (IItem item : equippedC) {
-            equipped.add((Item) item);
-        }
-        Collections.sort(equipped);
-
-        for (Item item : equipped) {
-            addItemInfo(mplew, item);
-        }
-        mplew.writeShort(0); // start of equip inventory
-
-        iv = chr.getInventory(MapleInventoryType.EQUIP);
-        for (IItem item : iv.list()) {
-            addItemInfo(mplew, item);
-        }
-        mplew.write(0); // start of use inventory
-        // addItemInfo(mplew, new Item(2020028, (byte) 8, (short) 1));
-
-        iv = chr.getInventory(MapleInventoryType.USE);
-        for (IItem item : iv.list()) {
-            addItemInfo(mplew, item);
-        }
-        mplew.write(0); // start of set-up inventory
-
-        iv = chr.getInventory(MapleInventoryType.SETUP);
-        for (IItem item : iv.list()) {
-            addItemInfo(mplew, item);
-        }
-        mplew.write(0); // start of etc inventory
-
-        iv = chr.getInventory(MapleInventoryType.ETC);
-        for (IItem item : iv.list()) {
-            addItemInfo(mplew, item);
-        }
-        mplew.write(0); // start of cash inventory
-
-        iv = chr.getInventory(MapleInventoryType.CASH);
-        for (IItem item : iv.list()) {
-            addItemInfo(mplew, item);
-        }
-        mplew.write(0); // start of skills
-
-        Map<ISkill, MapleCharacter.SkillEntry> skills = chr.getSkills();
-        mplew.writeShort(skills.size());
-        for (Entry<ISkill, MapleCharacter.SkillEntry> skill : skills.entrySet()) {
-            mplew.writeInt(skill.getKey().getId());
-            mplew.writeInt(skill.getValue().skillevel);
-            if (skill.getKey().isFourthJob()) {
-                mplew.writeInt(skill.getValue().masterlevel);
-            }
-        }
-
-        mplew.writeShort(0);
-        addQuestInfo(mplew, chr);
-
-        mplew.write(new byte[8]);
-        for (int x = 0; x < 15; x++) {
-            mplew.write(CHAR_INFO_MAGIC);
-        }
-        mplew.write(HexTool.getByteArrayFromHexString("90 63 3A 0D C5 5D C8 01"));
-
-        return mplew.getPacket();*/
-
-            //using (var oPacket = new PacketWriter(ServerOperationCode.ClaimSvrStatusChanged))
-            //{
-            //    oPacket.WriteBool(true);
-            //    Client.Send(oPacket);
-            //}
-
             IsInitialized = true;
 
             Map.Characters.Add(this);
 
-            //Keymap.Send();
+            ShowApple();
 
-            //Memos.Send();
+            UpdateStatsForParty();
+
+            Keymap.Send();
+
+            Memos.Send();
+        }
+
+        private void ShowApple()
+        {
+            if (Map.MapleID == 1 || Map.MapleID == 2)
+            {
+                Client.Send(new PacketWriter(ServerOperationCode.ShowApple));
+            }
         }
 
         public void Update(params StatisticType[] statistics)
@@ -864,8 +788,8 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void AddAbility(StatisticType statistic, short mod, bool isReset)
         {
-            short maxStat = short.MaxValue; // TODO: Should this be a setting?
-            bool isSubtract = mod < 0;
+            var maxStat = short.MaxValue;
+            var isSubtract = mod < 0;
 
             lock (this)
             {
@@ -924,51 +848,14 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public void Move(PacketReader iPacket)
-        {
-            byte portals = iPacket.ReadByte();
-
-            //if (portals != Portals)
-            //{
-            //    return;
-            //}
-
-            iPacket.ReadInt(); // NOE: Unknown.
-
-            var movements = new Movements(iPacket);
-
-            Position = movements.Position;
-            Foothold = movements.Foothold;
-            Stance = movements.Stance;
-
-            using (var oPacket = new PacketWriter(ServerOperationCode.Move))
-            {
-                oPacket.WriteInt(ID);
-                oPacket.WriteBytes(movements.ToByteArray());
-
-                Map.Broadcast(oPacket, this);
-            }
-
-            if (Foothold == 0)
-            {
-                // NOTE: Player is floating in the air.
-                // GMs might be legitmately in this state due to GM fly.
-                // We shouldn't mess with them because they have the tools toget out of falling off the map anyway.
-
-                // TODO: Attempt to find foothold.
-                // If none found, check the player fall counter.
-                // If it's over 3, reset the player's map.
-            }
-        }
-
         public void Attack(PacketReader iPacket, AttackType type)
         {
             Attack attack = new Attack(iPacket, type);
 
-            //if (attack.Portals != Portals)
-            //{
-            //    return;
-            //}
+            if (attack.Portals != Portals)
+            {
+                return;
+            }
 
             Skill skill = null;
 
@@ -1032,150 +919,6 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        private const sbyte BumpDamage = -1;
-        private const sbyte MapDamage = -2;
-
-        public void Damage(PacketReader iPacket)
-        {
-            iPacket.Skip(4); // NOTE: Ticks.
-            sbyte type = (sbyte)iPacket.ReadByte();
-            iPacket.ReadByte(); // NOTE: Elemental type.
-            int damage = iPacket.ReadInt();
-            bool damageApplied = false;
-            bool deadlyAttack = false;
-            byte hit = 0;
-            byte stance = 0;
-            int disease = 0;
-            byte level = 0;
-            short mpBurn = 0;
-            int mobObjectID = 0;
-            int mobID = 0;
-            int noDamageSkillID = 0;
-
-            if (type != MapDamage)
-            {
-                mobID = iPacket.ReadInt();
-                mobObjectID = iPacket.ReadInt();
-
-                if (!Map.Mobs.Contains(mobObjectID))
-                {
-                    return;
-                }
-                var mob = Map.Mobs[mobObjectID];
-
-                if (mobID != mob.MapleID)
-                {
-                    return;
-                }
-
-                if (type != BumpDamage)
-                {
-                    // TODO: Get mob attack and apply to disease/level/mpBurn/deadlyAttack.
-                }
-            }
-
-            hit = iPacket.ReadByte();
-            byte reduction = iPacket.ReadByte();
-            iPacket.ReadByte(); // NOTE: Unknown.
-
-            if (reduction != 0)
-            {
-                // TODO: Return damage (Power Guard).
-            }
-
-            if (type == MapDamage)
-            {
-                level = iPacket.ReadByte();
-                disease = iPacket.ReadInt();
-            }
-            else
-            {
-                stance = iPacket.ReadByte();
-
-                if (stance > 0)
-                {
-                    // TODO: Power Stance.
-                }
-            }
-
-            if (damage == -1)
-            {
-                // TODO: Validate no damage skills.
-            }
-
-            if (disease > 0 && damage != 0)
-            {
-                // NOTE: Fake/Guardian don't prevent disease.
-                // TODO: Add disease buff.
-            }
-
-            if (damage > 0)
-            {
-                // TODO: Check for Meso Guard.
-                // TODO: Check for Magic Guard.
-                // TODO: Check for Achilles.
-
-                if (!damageApplied)
-                {
-                    if (deadlyAttack)
-                    {
-                        // TODO: Deadly attack function.
-                    }
-                    else
-                    {
-                        Health -= (short)damage;
-                    }
-
-                    if (mpBurn > 0)
-                    {
-                        Mana -= mpBurn;
-                    }
-                }
-
-                // TODO: Apply damage to buffs.
-            }
-
-            using (var oPacket = new PacketWriter(ServerOperationCode.Hit))
-            {
-                oPacket.WriteInt(ID);
-                oPacket.WriteByte(type);
-
-                switch (type)
-                {
-                    case MapDamage:
-                        {
-                            oPacket.WriteInt(damage);
-                            oPacket.WriteInt(damage);
-                        }
-                        break;
-
-                    default:
-                        {
-                            oPacket.WriteInt(damage); // TODO: ... or PGMR damage.
-                            oPacket.WriteInt(mobID);
-                            oPacket.WriteByte(hit);
-                            oPacket.WriteByte(reduction);
-
-                            if (reduction > 0)
-                            {
-                                // TODO: PGMR stuff.
-                            }
-
-                            oPacket.WriteByte(stance);
-                            oPacket.WriteInt(damage);
-
-                            if (noDamageSkillID > 0)
-                            {
-                                oPacket.WriteInt(noDamageSkillID);
-                            }
-                        }
-                        break;
-                }
-
-                Map.Broadcast(oPacket, this);
-            }
-        }
-
         public void Talk(string text, bool isShout)
         {
             using (var oPacket = new PacketWriter(ServerOperationCode.UserChat))
@@ -1203,7 +946,6 @@ namespace RazzleServer.Game.Maple.Characters
             using (var oPacket = new PacketWriter(ServerOperationCode.Effect))
             {
                 oPacket.WriteByte((byte)effect);
-
                 Client.Send(oPacket);
             }
         }
@@ -1214,7 +956,6 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 oPacket.WriteInt(ID);
                 oPacket.WriteByte((int)effect);
-
                 Map.Broadcast(oPacket, skipSelf ? this : null);
             }
         }
@@ -1223,7 +964,6 @@ namespace RazzleServer.Game.Maple.Characters
         {
             LastNpc = npc;
             LastQuest = quest;
-
             LastNpc.Converse(this);
         }
 
@@ -1255,178 +995,15 @@ namespace RazzleServer.Game.Maple.Characters
                     // TODO: Get addition based on other factors.
                     break;
             }
+
+            AbilityPoints -= amount;
         }
 
-        public void DistributeAP(PacketReader iPacket)
+        private void UpdateStatsForParty()
         {
-            if (AbilityPoints == 0)
-            {
-                return;
-            }
-
-            iPacket.ReadInt(); // NOTE: Ticks.
-            StatisticType type = (StatisticType)iPacket.ReadInt();
-
-            DistributeAP(type);
-            AbilityPoints--;
+            // TODO
         }
 
-        public void AutoDistributeAP(PacketReader iPacket)
-        {
-            iPacket.ReadInt(); // NOTE: Ticks.
-            int count = iPacket.ReadInt(); // NOTE: There are always 2 primary stats for each job, but still.
-
-            int total = 0;
-
-            for (int i = 0; i < count; i++)
-            {
-                StatisticType type = (StatisticType)iPacket.ReadInt();
-                int amount = iPacket.ReadInt();
-
-                if (amount > AbilityPoints || amount < 0)
-                {
-                    return;
-                }
-
-                DistributeAP(type, (short)amount);
-
-                total += amount;
-            }
-
-            AbilityPoints -= (short)total;
-        }
-
-        public void HealOverTime(PacketReader iPacket)
-        {
-            iPacket.ReadInt(); // NOTE: Ticks.
-            iPacket.ReadInt(); // NOTE: Unknown.
-            short healthAmount = iPacket.ReadShort(); // TODO: Validate
-            short manaAmount = iPacket.ReadShort(); // TODO: Validate
-
-            if (healthAmount != 0)
-            {
-                if ((DateTime.Now - LastHealthHealOverTime).TotalSeconds < 2)
-                {
-                    return;
-                }
-                else
-                {
-                    Health += healthAmount;
-                    LastHealthHealOverTime = DateTime.Now;
-                }
-            }
-
-            if (manaAmount != 0)
-            {
-                if ((DateTime.Now - LastManaHealOverTime).TotalSeconds < 2)
-                {
-                    return;
-                }
-                else
-                {
-                    Mana += manaAmount;
-                    LastManaHealOverTime = DateTime.Now;
-                }
-            }
-        }
-
-        public void DistributeSP(PacketReader iPacket)
-        {
-            if (SkillPoints == 0)
-            {
-                return;
-            }
-
-            iPacket.ReadInt(); // NOTE: Ticks.
-            int mapleID = iPacket.ReadInt();
-
-            if (!Skills.Contains(mapleID))
-            {
-                Skills.Add(new Skill(mapleID));
-            }
-
-            Skill skill = Skills[mapleID];
-
-            // TODO: Check for skill requirements.
-
-            if (skill.IsFromBeginner)
-            {
-                // TODO: Handle beginner skills.
-            }
-
-            if (skill.CurrentLevel + 1 <= skill.MaxLevel)
-            {
-                if (!skill.IsFromBeginner)
-                {
-                    SkillPoints--;
-                }
-
-                Release();
-
-                skill.CurrentLevel++;
-            }
-        }
-
-        public void DropMeso(PacketReader iPacket)
-        {
-            iPacket.Skip(4); // NOTE: tRequestTime (ticks).
-            int amount = iPacket.ReadInt();
-
-            if (amount > Meso || amount < 10 || amount > 50000)
-            {
-                return;
-            }
-
-            Meso -= amount;
-
-            var mesoDrop = new Meso(amount)
-            {
-                Dropper = this,
-                Owner = null
-            };
-
-            Map.Drops.Add(mesoDrop);
-        }
-
-        public void InformOnCharacter(PacketReader iPacket)
-        {
-            iPacket.Skip(4);
-            int characterID = iPacket.ReadInt();
-
-            Character target;
-
-            try
-            {
-                target = Map.Characters[characterID];
-            }
-            catch (KeyNotFoundException)
-            {
-                return;
-            }
-
-            if (target.IsMaster && !IsMaster)
-            {
-                return;
-            }
-
-            using (var oPacket = new PacketWriter(ServerOperationCode.CharacterInformation))
-            {
-                oPacket.WriteInt(target.ID);
-                oPacket.WriteByte(target.Level);
-                oPacket.WriteShort((int)target.Job);
-                oPacket.WriteShort(target.Fame);
-                oPacket.WriteBool(false); // NOTE: Marriage.
-                oPacket.WriteString("-"); // NOTE: Guild name.
-                oPacket.WriteByte(0); // NOTE: Unknown.
-                oPacket.WriteByte(0); // NOTE: Pets.
-                oPacket.WriteByte(0); // NOTE: Mount.
-                oPacket.WriteByte(0); // NOTE: Wishlist.
-                oPacket.WriteInt(0); // NOTE: Medal ID.
-                oPacket.WriteShort(0); // NOTE: Medal quests.
-
-                Client.Send(oPacket);
-            }
-        }
 
         // TODO: Should we refactor it in a way that sends it to the buddy/party/guild objects
         // instead of pooling the world for characters?
@@ -1681,66 +1258,6 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public void Report(PacketReader iPacket)
-        {
-            ReportType type = (ReportType)iPacket.ReadByte();
-            string victimName = iPacket.ReadString();
-            iPacket.ReadByte(); // NOTE: Unknown.
-            string description = iPacket.ReadString();
-
-            ReportResult result;
-
-            switch (type)
-            {
-                case ReportType.IllegalProgramUsage:
-                    {
-                    }
-                    break;
-
-                case ReportType.ConversationClaim:
-                    {
-                        string chatLog = iPacket.ReadString();
-                    }
-                    break;
-            }
-
-            if (true) // TODO: Check for available report claims.
-            {
-                /*if (this.Client.World.IsCharacterOnline(victimName)) // TODO: Should we check for map existance instead? The hacker can teleport away before the reported is executed.
-                {
-                    if (this.Meso >= 300)
-                    {
-                        this.Meso -= 300;
-
-                        // TODO: Update GMs of reported player.
-                        // TODO: Update available report claims.
-
-                        result = ReportResult.Success;
-                    }
-                    else
-                    {
-                        result = ReportResult.UnknownError;
-                    }
-                }
-                else
-                {
-                    result = ReportResult.UnableToLocate;
-                }*/
-                result = ReportResult.Success;
-            }
-            else
-            {
-                result = ReportResult.Max10TimesADay;
-            }
-
-            using (var oPacket = new PacketWriter(ServerOperationCode.SueCharacterResult))
-            {
-                oPacket.WriteByte((byte)result);
-
-                Client.Send(oPacket);
-            }
-        }
-
         public byte[] ToByteArray(bool viewAllCharacters = false)
         {
             using (var oPacket = new PacketWriter())
@@ -1837,7 +1354,6 @@ namespace RazzleServer.Game.Maple.Characters
 
                 foreach (KeyValuePair<byte, int> entry in visibleLayer)
                 {
-
                     oPacket.WriteByte(entry.Key);
                     oPacket.WriteInt(entry.Value);
                 }
@@ -1846,7 +1362,6 @@ namespace RazzleServer.Game.Maple.Characters
 
                 foreach (KeyValuePair<byte, int> entry in hiddenLayer)
                 {
-
                     oPacket.WriteByte(entry.Key);
                     oPacket.WriteInt(entry.Value);
                 }
@@ -1869,7 +1384,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             var pw = new PacketWriter();
             pw.WriteBytes(StatisticsToByteArray());
-            pw.WriteByte(BuddyListSize);
+            pw.WriteByte(BuddyListSlots);
             pw.WriteInt(Meso);
             pw.WriteBytes(Items.ToByteArray());
             pw.WriteBytes(Skills.ToByteArray());
@@ -1889,7 +1404,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             var oPacket = new PacketWriter(ServerOperationCode.UserEnterField);
 
-          
+
             oPacket.WriteInt(ID);
             oPacket.WriteByte(Level);
             oPacket.WriteString(Name);
@@ -2017,6 +1532,7 @@ namespace RazzleServer.Game.Maple.Characters
                 character.WorldID = WorldID;
                 character.Strength = Strength;
                 character.Name = Name;
+                character.BuddyListSlots = BuddyListSlots;
                 character.GuildRank = GuildRank;
                 character.EquipmentSlots = Items.MaxSlots[ItemType.Equipment];
                 character.UsableSlots = Items.MaxSlots[ItemType.Usable];
@@ -2079,6 +1595,7 @@ namespace RazzleServer.Game.Maple.Characters
                     Strength = Strength,
                     Name = Name,
                     GuildRank = GuildRank,
+                    BuddyListSlots = BuddyListSlots,
                     EquipmentSlots = Items.MaxSlots[ItemType.Equipment],
                     UsableSlots = Items.MaxSlots[ItemType.Usable],
                     SetupSlots = Items.MaxSlots[ItemType.Setup],
@@ -2138,13 +1655,14 @@ namespace RazzleServer.Game.Maple.Characters
                 WorldID = character.WorldID;
                 Strength = character.Strength;
                 GuildRank = character.GuildRank;
+                BuddyListSlots = character.BuddyListSlots;
                 Items.MaxSlots[ItemType.Equipment] = character.EquipmentSlots;
                 Items.MaxSlots[ItemType.Usable] = character.UsableSlots;
                 Items.MaxSlots[ItemType.Setup] = character.SetupSlots;
                 Items.MaxSlots[ItemType.Etcetera] = character.EtceteraSlots;
                 Items.MaxSlots[ItemType.Cash] = character.CashSlots;
             }
-           
+
             Items.Load();
             Skills.Load();
             Quests.Load();

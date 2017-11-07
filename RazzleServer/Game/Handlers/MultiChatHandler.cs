@@ -1,10 +1,13 @@
-﻿using System;
+﻿using RazzleServer.Common.Packet;
+
 namespace RazzleServer.Game.Handlers
 {
-    public class MultiChatHandler
+    [PacketHandler(ClientOperationCode.MultiChat)]
+    public class MultiChatHandler : GamePacketHandler
     {
-        public MultiChatHandler()
+        public override void HandlePacket(PacketReader packet, GameClient client)
         {
+
         }
     }
 }

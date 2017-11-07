@@ -1,10 +1,13 @@
-﻿using System;
+﻿using RazzleServer.Common.Packet;
+
 namespace RazzleServer.Game.Handlers
 {
-    public class UseSkillHandler
+    [PacketHandler(ClientOperationCode.UseSkill)]
+    public class UseSkillHandler : GamePacketHandler
     {
-        public UseSkillHandler()
+        public override void HandlePacket(PacketReader packet, GameClient client)
         {
+
         }
     }
 }

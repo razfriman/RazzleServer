@@ -1,10 +1,13 @@
-﻿using System;
+﻿using RazzleServer.Common.Packet;
+
 namespace RazzleServer.Game.Handlers
 {
-    public class UseReturnScrollHandler
+    [PacketHandler(ClientOperationCode.UseReturnScroll)]
+    public class UseReturnScrollHandler : GamePacketHandler
     {
-        public UseReturnScrollHandler()
+        public override void HandlePacket(PacketReader packet, GameClient client)
         {
+
         }
     }
 }

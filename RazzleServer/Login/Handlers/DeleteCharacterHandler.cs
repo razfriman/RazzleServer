@@ -11,6 +11,7 @@ namespace RazzleServer.Login.Handlers
         {
             var characterID = packet.ReadInt();
             var result = CharacterDeletionResult.Valid;
+
             Character.Delete(characterID);
 
             using (var oPacket = new PacketWriter(ServerOperationCode.DeleteCharacterResult))

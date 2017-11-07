@@ -1,10 +1,30 @@
-﻿using System;
+﻿using RazzleServer.Common.Packet;
+using RazzleServer.Game.Maple;
+
 namespace RazzleServer.Game.Handlers
 {
-    public class MesoDropHandler
+    [PacketHandler(ClientOperationCode.MesoDrop)]
+    public class MesoDropHandler : GamePacketHandler
     {
-        public MesoDropHandler()
+        public override void HandlePacket(PacketReader packet, GameClient client)
         {
+            packet.ReadInt(); // NOTE: tickets
+            int amount = packet.ReadInt();
+
+            if (amount > client.Character.Meso || amount < 10 || amount > 50000)
+            {
+                return;
+            }
+
+            client.Character.Meso -= amount;
+
+            var mesoDrop = new Meso(amount)
+            {
+                Dropper = client.Character,
+                Owner = null
+            };
+
+            client.Character.Map.Drops.Add(mesoDrop);
         }
     }
 }

@@ -83,12 +83,27 @@ namespace RazzleServer.Login.Handlers
                 SpawnPoint = 0,
                 Meso = 0
             };
+
             character.Items.Add(new Item(topID, equipped: true));
             character.Items.Add(new Item(bottomID, equipped: true));
             character.Items.Add(new Item(shoesID, equipped: true));
             character.Items.Add(new Item(weaponID, equipped: true));
             character.Items.Add(new Item(4161001), forceGetSlot: true);
 
+            CreateDefaultKeymap(character);
+
+            character.Create();
+
+            using (var outPacket = new PacketWriter(ServerOperationCode.CreateNewCharacterResult))
+            {
+                outPacket.WriteBool(error);
+                outPacket.WriteBytes(character.ToByteArray());
+                client.Send(outPacket);
+            }
+        }
+
+        private static void CreateDefaultKeymap(Character character)
+        {
             character.Keymap.Add(new Shortcut(KeymapKey.One, KeymapAction.AllChat));
             character.Keymap.Add(new Shortcut(KeymapKey.Two, KeymapAction.PartyChat));
             character.Keymap.Add(new Shortcut(KeymapKey.Three, KeymapAction.BuddyChat));
@@ -124,15 +139,6 @@ namespace RazzleServer.Login.Handlers
             character.Keymap.Add(new Shortcut(KeymapKey.F5, KeymapAction.Outraged));
             character.Keymap.Add(new Shortcut(KeymapKey.F6, KeymapAction.Shocked));
             character.Keymap.Add(new Shortcut(KeymapKey.F7, KeymapAction.Annoyed));
-
-            character.Create();
-
-            using (var outPacket = new PacketWriter(ServerOperationCode.CreateNewCharacterResult))
-            {
-                outPacket.WriteBool(error);
-                outPacket.WriteBytes(character.ToByteArray());
-                client.Send(outPacket);
-            }
         }
     }
 }

@@ -20,6 +20,8 @@ namespace RazzleServer.Center.Maple
         public int PartyQuestExperienceRate { get; set; }
         public int MesoRate { get; set; }
         public int DropRate { get; set; }
+        public int EventDropRate { get; set; } = 100;
+        public int EventExperienceRate { get; set; } = 100;
 
         public World(WorldConfig config)
         {
@@ -42,6 +44,8 @@ namespace RazzleServer.Center.Maple
 
         [JsonIgnore]
         public int Population => this.Sum(x => x.Population);
+
+
 
         protected override byte GetKeyForItem(GameServer item) => item.ChannelID;
     }

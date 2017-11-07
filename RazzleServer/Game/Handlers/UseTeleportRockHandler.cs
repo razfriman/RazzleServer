@@ -1,10 +1,13 @@
-﻿using System;
+﻿using RazzleServer.Common.Packet;
+
 namespace RazzleServer.Game.Handlers
 {
-    public class UseTeleportRockHandler
+    [PacketHandler(ClientOperationCode.UseTeleportRock)]
+    public class UseTeleportRockHandler : GamePacketHandler
     {
-        public UseTeleportRockHandler()
+        public override void HandlePacket(PacketReader packet, GameClient client)
         {
+
         }
     }
 }

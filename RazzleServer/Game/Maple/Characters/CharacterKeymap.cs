@@ -65,7 +65,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Send()
         {
-            using (var oPacket = new PacketWriter(ServerOperationCode.FuncKeyMappedInit))
+            using (var oPacket = new PacketWriter(ServerOperationCode.Keymap))
             {
                 oPacket.WriteBool(false);
 
