@@ -62,16 +62,7 @@ namespace RazzleServer.Migrations
 
                     b.Property<int>("CharacterID");
 
-                    b.Property<string>("Group")
-                        .HasMaxLength(16);
-
                     b.Property<bool>("IsRequest");
-
-                    b.Property<string>("Memo")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(13);
 
                     b.HasKey("ID");
 
@@ -119,6 +110,10 @@ namespace RazzleServer.Migrations
 
                     b.Property<short>("Job");
 
+                    b.Property<int>("JobRank");
+
+                    b.Property<int>("JobRankMove");
+
                     b.Property<byte>("Level");
 
                     b.Property<short>("Luck");
@@ -134,6 +129,10 @@ namespace RazzleServer.Migrations
                     b.Property<int>("Meso");
 
                     b.Property<string>("Name");
+
+                    b.Property<int>("Rank");
+
+                    b.Property<int>("RankMove");
 
                     b.Property<byte>("SetupSlots");
 

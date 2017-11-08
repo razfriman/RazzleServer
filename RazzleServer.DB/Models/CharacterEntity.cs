@@ -36,5 +36,10 @@ namespace RazzleServer.DB.Models
         public byte EtceteraSlots { get; set; }
         public byte CashSlots { get; set; }
         public int BuddyListSlots { get; set; }
+        public int Rank { get; set; }
+        public int RankMove { get; set; }
+        public int JobRank { get; set; }
+        public int JobRankMove { get; set; }
+
     }
 }

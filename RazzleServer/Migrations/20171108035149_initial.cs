@@ -40,10 +40,7 @@ namespace RazzleServer.Migrations
                     BuddyAccountID = table.Column<int>(type: "INTEGER", nullable: false),
                     BuddyCharacterID = table.Column<int>(type: "INTEGER", nullable: false),
                     CharacterID = table.Column<int>(type: "INTEGER", nullable: false),
-                    Group = table.Column<string>(type: "TEXT", maxLength: 16, nullable: true),
-                    IsRequest = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Memo = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 13, nullable: true)
+                    IsRequest = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -74,6 +71,8 @@ namespace RazzleServer.Migrations
                     Health = table.Column<short>(type: "INTEGER", nullable: false),
                     Intelligence = table.Column<short>(type: "INTEGER", nullable: false),
                     Job = table.Column<short>(type: "INTEGER", nullable: false),
+                    JobRank = table.Column<int>(type: "INTEGER", nullable: false),
+                    JobRankMove = table.Column<int>(type: "INTEGER", nullable: false),
                     Level = table.Column<byte>(type: "INTEGER", nullable: false),
                     Luck = table.Column<short>(type: "INTEGER", nullable: false),
                     Mana = table.Column<short>(type: "INTEGER", nullable: false),
@@ -82,6 +81,8 @@ namespace RazzleServer.Migrations
                     MaxMana = table.Column<short>(type: "INTEGER", nullable: false),
                     Meso = table.Column<int>(type: "INTEGER", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: true),
+                    Rank = table.Column<int>(type: "INTEGER", nullable: false),
+                    RankMove = table.Column<int>(type: "INTEGER", nullable: false),
                     SetupSlots = table.Column<byte>(type: "INTEGER", nullable: false),
                     SkillPoints = table.Column<short>(type: "INTEGER", nullable: false),
                     Skin = table.Column<byte>(type: "INTEGER", nullable: false),

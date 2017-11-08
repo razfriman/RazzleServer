@@ -1,5 +1,5 @@
-﻿using RazzleServer.Common.Constants;
-using RazzleServer.Common.Data;
+﻿using System.Linq;
+using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.WzLib;
 using RazzleServer.Game.Maple.Characters;
@@ -108,21 +108,11 @@ namespace RazzleServer.Game.Maple.Maps
             }
         }
 
-        public void Notify(string text, NoticeType type = NoticeType.Popup)
-        {
-            foreach (Character character in Characters)
-            {
-                character.Notify(text, type);
-            }
-        }
 
-        // TODO: Refactor this.
+        public void Notify(string text, NoticeType type = NoticeType.Popup) => Characters.ToList().ForEach(x => x.Notify(text, type));
 
-        private int mObjectIDs = 0;
+        private int mObjectIDs;
 
-        public int AssignObjectID()
-        {
-            return ++mObjectIDs;
-        }
+        public int AssignObjectID() => ++mObjectIDs;
     }
 }

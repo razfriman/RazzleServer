@@ -55,7 +55,7 @@ namespace RazzleServer.Login.Handlers
                 result = PinResult.Error;
             }
 
-            using (var oPacket = new PacketWriter(ServerOperationCode.CheckPinCodeResult))
+            using (var oPacket = new PacketWriter(ServerOperationCode.PinCodeOperation))
             {
                 oPacket.WriteByte((byte)result);
                 client.Send(oPacket);

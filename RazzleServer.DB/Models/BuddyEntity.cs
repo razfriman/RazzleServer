@@ -10,11 +10,5 @@ namespace RazzleServer.DB.Models
         public int AccountID { get; set; }
         public int BuddyAccountID { get; set; }
         public bool IsRequest { get; set; }
-        [MaxLength(13)]
-        public string Name { get; set; }
-        [MaxLength(16)]
-        public string Group { get; set; }
-        [MaxLength(256)]
-        public string Memo { get; set; }
     }
 }

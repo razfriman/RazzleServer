@@ -1,4 +1,5 @@
-﻿using RazzleServer.Common.Packet;
+﻿using RazzleServer.Common.Constants;
+using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
 
 namespace RazzleServer.Login.Handlers
@@ -16,9 +17,9 @@ namespace RazzleServer.Login.Handlers
                 client.Account.Pin = Functions.GetSha512(pin);
                 client.Account.Save();
 
-                using (var oPacket = new PacketWriter(ServerOperationCode.UpdatePinCodeResult))
+                using (var oPacket = new PacketWriter(ServerOperationCode.PinCodeOperation))
                 {
-                    oPacket.WriteByte(0);
+                    oPacket.WriteByte((byte)PinResult.Valid);
                     client.Send(oPacket);
                 }
             }

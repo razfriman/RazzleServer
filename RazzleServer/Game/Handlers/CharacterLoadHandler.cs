@@ -9,14 +9,7 @@ namespace RazzleServer.Game.Handlers
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
-            int accountID;
             int characterID = packet.ReadInt();
-
-            //if ((accountID = ServerManager.Instance.ValidateMigration(client.Socket.Host, characterID)) == 0)
-            //{
-            //    client.Terminate("Invalid migration");
-            //    return;
-            //}
 
             client.Character = new Character(characterID, client);
             client.Character.Load();

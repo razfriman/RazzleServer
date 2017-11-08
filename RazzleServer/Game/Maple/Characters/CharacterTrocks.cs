@@ -198,24 +198,15 @@ namespace RazzleServer.Game.Maple.Characters
 
             if (destinationMapID != -1)
             {
-                var originMap = this.Parent.Map;
+                var originMap = Parent.Map;
                 var destinationMap = DataProvider.Maps[destinationMapID];
 
-                if (false) // TODO: Field limit check.
-                {
-                    result = TrockResult.CannotGo;
-                }
-                else if (false) // TODO: Origin map field limit check.
-                {
-                    result = TrockResult.CannotGo;
-                }
-                else if (originMap.MapleID == destinationMap.MapleID)
+                // TODO: Field limit check.
+                // TODO: Origin map field limit check.
+                // TODO: Continent check.
+                if (originMap.MapleID == destinationMap.MapleID)
                 {
                     result = TrockResult.AlreadyThere;
-                }
-                else if (false) // TODO: Continent check.
-                {
-                    result = TrockResult.CannotGo;
                 }
             }
 

@@ -32,6 +32,10 @@ namespace RazzleServer.Game.Maple.Characters
         public int Chair { get; set; }
         public int? GuildRank { get; set; }
         public int BuddyListSlots { get; private set; } = 20;
+        public int Rank { get; set; }
+        public int RankMove { get; set; }
+        public int JobRank { get; set; }
+        public int JobRankMove { get; set; }
         public CharacterItems Items { get; private set; }
         public CharacterSkills Skills { get; private set; }
         public CharacterQuests Quests { get; private set; }
@@ -102,7 +106,7 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 if (!DataProvider.Styles.Skins.Contains(value))
                 {
-                    throw new StyleUnavailableException();
+                    //throw new StyleUnavailableException();
                 }
 
                 skin = value;
@@ -123,7 +127,7 @@ namespace RazzleServer.Game.Maple.Characters
                 if ((Gender == Gender.Male && !DataProvider.Styles.MaleFaces.Contains(value)) ||
                     Gender == Gender.Female && !DataProvider.Styles.FemaleFaces.Contains(value))
                 {
-                    throw new StyleUnavailableException();
+                    //throw new StyleUnavailableException();
                 }
 
                 face = value;
@@ -144,7 +148,7 @@ namespace RazzleServer.Game.Maple.Characters
                 if ((Gender == Gender.Male && !DataProvider.Styles.MaleHairs.Contains(value)) ||
                     Gender == Gender.Female && !DataProvider.Styles.FemaleHairs.Contains(value))
                 {
-                    throw new StyleUnavailableException();
+                    //throw new StyleUnavailableException();
                 }
 
                 hair = value;
@@ -1226,10 +1230,10 @@ namespace RazzleServer.Game.Maple.Characters
 
                 if (IsRanked)
                 {
-                    oPacket.WriteInt(0);
-                    oPacket.WriteInt(0);
-                    oPacket.WriteInt(0);
-                    oPacket.WriteInt(0);
+                    oPacket.WriteInt(Rank);
+                    oPacket.WriteInt(RankMove);
+                    oPacket.WriteInt(JobRank);
+                    oPacket.WriteInt(JobRankMove);
                 }
 
                 return oPacket.ToArray();
@@ -1608,6 +1612,7 @@ namespace RazzleServer.Game.Maple.Characters
                 Meso = character.Meso;
                 Mana = character.Mana;
                 Skin = character.Skin;
+                Strength = character.Strength;
                 SkillPoints = character.SkillPoints;
                 SpawnPoint = character.SpawnPoint;
                 WorldID = character.WorldID;

@@ -14,28 +14,27 @@
         SelectCharacterByVACResult = 0x09,
         Ping = 0x09,
         SelectCharacterResult = 0x0C,
-        CheckPinCodeResult = 0x0D,
-        UpdatePinCodeResult = 0x0D,
+        PinCodeOperation = 0x0D,
 
         MigrateCommand = 0x10,
         CheckUserLimitResult = 0x12,
         SelectWorldResult = 0x13,
         ReloginResponse = 0x15,
 
-        //MODIFY_INVENTORY_ITEM = 0x18
+        InventoryOperation = 0x18,
         AvatarMegaphoneRes = 0x19,
-        //SHOW_QUEST_COMPLETION = 0x1F
+        QuestResult = 0x1F,
 
         StatChanged = 0x23,
-        //CANCEL_BUFF = 0x24
-        //SPAWN_PORTAL = 0x29
-        //SERVERMESSAGE = 0x2D
-        //UPDATE_SKILLS = 0x2F
+        BuffCancel = 0x24,
+        PortalSpawn = 0x29,
+        ServerMessage = 0x2D,
+        SkillsUpdate = 0x2F,
 
-        //FAME_RESPONSE = 0x31
-        //SHOW_STATUS_INFO = 0x32
-        //SHOW_MESO_GAIN = 0x33
-        //GIVE_BUFF = 0x3B
+        FameResponse = 0x31,
+        ShowStatusInfo = 0x32,
+        ShowMesoGain = 0x33,
+        BuffGive = 0x3B,
 
         SetField = 0x4E,
 
@@ -53,8 +52,12 @@
         //NoticeMsg = 231,
 
         Cooldown = 0x70,
+
+        UserEnterField = 160,
+        UserLeaveField = 161,
+
         //REMOVE_PLAYER_FROM_MAP = 0x71
-        //CHATTEXT = 0x72
+        UserChat = 0x72,
         //SPAWN_SPECIAL_MAPOBJECT = 0x73
         //REMOVE_SPECIAL_MAPOBJECT = 0x74
         //MOVE_SUMMON = 0x75
@@ -63,176 +66,66 @@
         //SHOW_SCROLL_EFFECT = 0x7B
 
         Move = 0x85,
-        //SHOW_FOREIGN_EFFECT = 0x86
+        ForeignEffectShow = 0x86,
         CloseRangeAttack = 0x88,
         Hit = 0x8A,
-        //CANCEL_FOREIGN_BUFF = 0x8B
-        //UPDATE_PARTYMEMBER_HP = 0x8C
+        ForeignBuffCancel = 0x8B,
+        PartyUpdateHp = 0x8C,
         Emotion = 0x8D,
         RangedAttack = 0x8E,
         ItemEffect = 0x8F,
 
         ShowChair = 0x92,
-
-        //UPDATE_CHAR_LOOK = 0x93
+        AvatarModified = 0x93,
         MagicAttack = 0x94,
-        //SPAWN_MONSTER = 0x97
-        //MOVE_MONSTER = 0x98
-        //APPLY_MONSTER_STATUS = 0x9B
-        //MOVE_MONSTER_RESPONSE = 0x9D
+        MobSpawn = 0x97,
+        MobMove = 0x98,
+        MobApplyStatus = 0x9B,
+        MobMoveResponse = 0x9D,
 
-        //SPAWN_MONSTER_CONTROL = 0xA5
-        //SPAWN_NPC = 0xA8
 
-        //REACTOR_SPAWN = 0xB3
+
+
+        MonsterControlSpawn = 0xA5,
+        NpcSpawn = 0xA8,
+
+        ReactorSpawn = 0xB3,
         //DROP_ITEM_FROM_MAPOBJECT = 0xB9
-        //SPAWN_MIST = 0xBE
-        //REMOVE_MIST = 0xBF
+        MistSpawn = 0xBE,
+        MistRemove = 0xBF,
 
-        //SPAWN_DOOR = 0xC0
-        //REMOVE_DOOR = 0xC1
+        DoorSpawn = 0xC0,
+        DoorRemove = 0xC1,
 
         Keymap = 0xF7,
 
-        EnergyAttack = 189,
-        SkillPrepare = 190,
-        SkillCancel = 191,
-        WorldCharacterCreationDisabled = 22,
-        LastConnectedWorld = 26,
-        RecommendedWorldMessage = 27,
-        CheckSPWResult = 28,
-        InventoryOperation = 29,
-        InventoryGrow = 30,
-        TemporaryStatSet = 32,
-        TemporaryStatReset = 33,
         ForcedStatSet = 34,
         ForcedStatReset = 35,
         ChangeSkillRecordResult = 36,
-        SkillUseResult = 37,
-        GivePopularityResult = 38,
         Message = 39,
-        OpenFullClientDownloadLink = 40,
         MemoResult = 41,
         MapTransferResult = 42,
-        AntiMacroResult = 43,
-        SetTaminbMobInfo = 48,
         QuestClear = 49,
-        EntrustedShopCheckResult = 50,
-        SkillLearnItemResult = 51,
         SueCharacterResult = 55,
-        TradeMoneyLimit = 57,
         SetGender = 58,
-        GuildBBSPacket = 59,
         CharacterInformation = 61,
-        PartyResult = 62,
-        FriendResult = 63,
-        GuildResult = 65,
-        TownPortal = 67,
         BroadcastMsg = 68,
-        IncubatorResult = 69,
-        ShopScannerResult = 70,
-        ShopLinkResult = 71,
-        CashPetFoodResult = 76,
-        SetWeekEventMessage = 77,
-        SetPotionDiscountRate = 78,
-        BridleMobCatchFail = 79,
-        ImitatedNPCResult = 80,
-        NpcImitateData = 81,
-        NpcUpdateLimitedDisableInfo = 82,
-        HourChanged = 85,
-        MiniMapOnOff = 86,
-        ConsultAuthkeyUpdate = 87,
-        ClassCompetitionAuthkeyUpdate = 88,
-        WebBoardAuthkeyUpdate = 89,
-        SessionValue = 90,
-        PartyValue = 91,
-        FieldSetVariable = 92,
-        BonusExpRateChanged = 93,
-        NotifyLevelUp = 105,
-        NotifyJobChange = 107,
-        MapleTVUseRes = 109,
         SetAvatarMegaphone = 111,
-        ClearAvatarMegaphone = 112,
-        CancelNameChangeResult = 113,
-        CancelTransferWorldResult = 114,
-        DestroyShopResult = 115,
-        FakeGMNotice = 116,
-        SuccessInUsegachaponBox = 117,
-        NewYearCardRes = 118,
-        RandomMorphRes = 119,
-        CancelNameChangebyOther = 120,
-        SetBuyEquipExt = 121,
-        ScriptProgressMessage = 122,
-        DataCRCCheckFailed = 123,
-        MacroSysDataInit = 124,
-        SetITC = 126,
-        SetCashShop = 127,
-        SetMapObjectVisible = 129,
         TransferFieldReqInogred = 131,
-        TransferChannelReqIgnored = 132,
-        FieldSpecificData = 133,
         GroupMessage = 134,
-        CoupleMessage = 136,
-        SummonItemInavailable = 137,
-        FieldEffect = 138,
-        FieldObstacleOnOff = 139,
-        FieldObstacleOnOffStatus = 140,
-        FieldObstacleReset = 141,
-        BlowWeather = 142,
-        PlayJukebox = 143,
         AdminResult = 144,
-        Quiz = 145,
-        Desc = 146,
-        ContiMove = 148,
-        ContiState = 149,
-        SetQuestClear = 150,
-        SetQuestTime = 151,
-        WarnMessage = 152,
-        SetObjectState = 153,
-        DestroyClock = 154,
-        StalkResult = 156,
-        PyramidGauge = 157,
-        PyramidScore = 158,
-        UserEnterField = 160,
-        UserLeaveField = 161,
-        UserChat = 162,
         Chalkboard = 164,
         AnnounceBox = 165,
-        ShowConsumeEffect = 166,
-        ShowScrollEffect = 167,
-        PetEnterField = 168,
-        PetMove = 170,
-        PetAction = 171,
-        PetNameChanged = 172,
-        PetLoadExceptionList = 173,
-        PetActionCommand = 174,
-        SummonedCreated = 175,
-        SummonedRemoved = 176,
-        SummonedMove = 177,
-        SummonedAttack = 178,
-        SummonedHit = 179,
-        SummonedSkill = 180,
-        DragonEnterField = 181,
-        DragonMove = 182,
-        SetActiveEffectItem = 194,
-        ShowUpgradeTombEffect = 195,
-        AvatarModified = 197,
         RemoteEffect = 198,
         SetTemporaryStat = 199,
         ResetTemporaryStat = 200,
-        RecieveHP = 201,
-        GuildNameChanged = 202,
-        GuildMarkChanged = 203,
-        ThrowGrenade = 204,
         Sit = 205,
         Effect = 206,
         Teleport = 207,
-        QuestResult = 211,
         BalloonMsg = 214,
         MobEnterField = 236,
         MobLeaveField = 237,
         MobChangeController = 238,
-        MobMove = 239,
         MobCtrlAck = 240,
         MobStatSet = 242,
         MobStatReset = 243,
@@ -244,7 +137,6 @@
         NpcMove = 260,
         DropEnterField = 268,
         DropLeaveField = 269,
-
         ReactorChangeState = 277,
         ReactorEnterField = 279,
         ReactorLeaveField = 280,
@@ -255,5 +147,7 @@
         AdminShop = 308,
         Storage = 309,
         PlayerInteraction = 314,
+        TemporaryStatSet = 333,
+        TemporaryStatReset = 333,
     }
 }
