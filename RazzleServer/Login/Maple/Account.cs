@@ -33,13 +33,11 @@ namespace RazzleServer.Login.Maple
             Client = client;
         }
 
-        public void Load(object key)
+        public void Load()
         {
-            var username = key as string;
-
             using (var dbContext = new MapleDbContext())
             {
-                var account = dbContext.Accounts.FirstOrDefault(x => x.Username == username);
+                var account = dbContext.Accounts.FirstOrDefault(x => x.Username == Username);
 
                 if (account == null)
                 {

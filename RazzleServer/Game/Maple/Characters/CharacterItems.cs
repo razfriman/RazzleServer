@@ -895,7 +895,7 @@ namespace RazzleServer.Game.Maple.Characters
                     }
                 }
 
-                return null; // TODO: Should be keynotfoundexception, but I'm lazy.
+                return null;
             }
         }
 
@@ -1088,15 +1088,9 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public IEnumerator<Item> GetEnumerator()
-        {
-            return Items.GetEnumerator();
-        }
+        public IEnumerator<Item> GetEnumerator() => Items.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return ((IEnumerable)Items).GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)Items).GetEnumerator();
     }
 }
 

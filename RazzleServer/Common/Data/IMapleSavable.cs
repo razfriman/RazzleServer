@@ -4,6 +4,6 @@
     {
         void Create();
         void Save();
-        void Load(object key);
+        void Load();
     }
 }

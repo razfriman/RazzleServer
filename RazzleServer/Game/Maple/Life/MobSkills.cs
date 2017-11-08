@@ -34,7 +34,7 @@ namespace RazzleServer.Game.Maple.Life
                     }
                 }
 
-                throw new KeyNotFoundException();
+                return null;
             }
         }
 

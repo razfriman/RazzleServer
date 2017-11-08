@@ -1,5 +1,4 @@
-﻿using RazzleServer.Common.Constants;
-using RazzleServer.Common.Packet;
+﻿using RazzleServer.Common.Packet;
 
 namespace RazzleServer.Game.Handlers
 {
@@ -17,7 +16,7 @@ namespace RazzleServer.Game.Handlers
 
             client.Character.Chair = chairItemID;
 
-            using (var oPacket = new PacketWriter(ServerOperationCode.SetActiveRemoteChair))
+            using (var oPacket = new PacketWriter(ServerOperationCode.ShowChair))
             {
                 oPacket.WriteInt(client.Character.ID);
                 oPacket.WriteInt(chairItemID);

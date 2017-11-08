@@ -60,6 +60,7 @@ namespace RazzleServer.Game
             }
         }
 
-        public Character GetCharacterByName(string name) => Clients.Values.Select(x => x.Character).FirstOrDefault(x => x.Name == name);   
+        public Character GetCharacterByID(int id) => Clients.Values.Select(x => x.Character).FirstOrDefault(x => x.ID == id);
+        public Character GetCharacterByName(string name) => Clients.Values.Select(x => x.Character).FirstOrDefault(x => x.Name == name);
     }
 }

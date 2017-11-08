@@ -36,7 +36,7 @@ namespace RazzleServer.Game.Handlers
         {
             client.Character.Chair = 0;
 
-            using (var oPacket = new PacketWriter(ServerOperationCode.SetActiveRemoteChair))
+            using (var oPacket = new PacketWriter(ServerOperationCode.CancelChair))
             {
                 oPacket.WriteInt(client.Character.ID);
                 oPacket.WriteInt(0);

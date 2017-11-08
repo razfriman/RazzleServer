@@ -2,7 +2,7 @@
 
 namespace RazzleServer.Game.Handlers
 {
-    [PacketHandler(ClientOperationCode.MapChange)]
+    [PacketHandler(ClientOperationCode.ChangeMap)]
     public class ChangeMapHandler : GamePacketHandler
     {
         public override void HandlePacket(PacketReader packet, GameClient client)

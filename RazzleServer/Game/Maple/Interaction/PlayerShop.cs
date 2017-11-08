@@ -13,6 +13,7 @@ namespace RazzleServer.Game.Maple.Interaction
         public Character[] Visitors { get; private set; }
         public List<PlayerShopItem> Items { get; private set; }
         public bool Opened { get; private set; }
+        public bool IsPrivate { get; private set; } = false;
 
         public bool IsFull
         {
@@ -29,6 +30,7 @@ namespace RazzleServer.Game.Maple.Interaction
                 return true;
             }
         }
+
 
         public PlayerShop(Character owner, string description)
         {

@@ -24,7 +24,7 @@ namespace RazzleServer.Game.Handlers
                 oPacket.WriteShort((int)target.Job);
                 oPacket.WriteShort(target.Fame);
                 oPacket.WriteBool(false); // NOTE: Marriage.
-                oPacket.WriteString("-"); // NOTE: Guild name.
+                oPacket.WriteString(target.Guild?.Name ?? "-");
                 oPacket.WriteByte(0); // NOTE: Unknown.
                 oPacket.WriteByte(0); // NOTE: Pets.
                 oPacket.WriteByte(0); // NOTE: Mount.

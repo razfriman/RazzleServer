@@ -1827,25 +1827,10 @@ public class MaplePacketCreator {
         mplew.writeShort(chr.getPosition().x);
         mplew.writeShort(chr.getPosition().y);
         mplew.write(chr.getStance());
-        // 04 34 00 00
-        // mplew.writeInt(1); // dunno p00 (?)
-        /*if (chr.getPet() != null) {
-            mplew.writeInt(chr.getPet().getUniqueId());
-            mplew.writeInt(chr.getPet().getItemId());
-            mplew.writeMapleAsciiString(chr.getPet().getName());
-            // 38 EVTL. Y
-            // mplew.write(HexTool.getByteArrayFromHexString("72 FB 38 00 00 00
-            // 00 00 09 03 04 00 18 34 00 00 00 01 00
-            // 00 00"));
-            mplew.write(HexTool.getByteArrayFromHexString("00 00 00 00 00 00 00 00"));
-            mplew.writeShort(chr.getPosition().x);
-            mplew.writeShort(chr.getPosition().y);
-            mplew.write(HexTool.getByteArrayFromHexString("00 00 00 00 00 00 00 00 00"));
-        } else {*/
+     
             mplew.writeInt(0);
             mplew.writeInt(1);
-        //}
-
+      
         mplew.writeLong(0);
         if (chr.getPlayerShop() != null && chr.getPlayerShop().isOwner(chr)) {
             addAnnounceBox(mplew, chr.getPlayerShop());
@@ -1876,21 +1861,13 @@ public class MaplePacketCreator {
         mplew.writeInt(shop.getObjectId()); // gameid/shopid
 
         mplew.writeMapleAsciiString(shop.getDescription()); // desc
-        // 00: public
-        // 01: private
 
         mplew.write(0);
-        // 00: red 4x3
-        // 01: green 5x4
-        // 02: blue 6x5
-        // omok:
-        // 00: normal
         mplew.write(0);
-        // first slot: 1/2/3/4
-        // second slot: 1/2/3/4
         mplew.write(1);
         mplew.write(4);
-        // 0: open
+
+         // 0: open
         // 1: in progress
         mplew.write(0);
     }

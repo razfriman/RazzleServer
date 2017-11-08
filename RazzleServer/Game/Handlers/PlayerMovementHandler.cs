@@ -9,8 +9,12 @@ namespace RazzleServer.Game.Handlers
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
             //35 00
-            //02 
-            //2D 00 15 00 
+
+            //02 portals
+            //2D 00 15 00 -- unk 
+
+            //----------
+
             //03
 
             //00 
@@ -38,16 +42,12 @@ namespace RazzleServer.Game.Handlers
             //F0 
             //FF FF FF FF 
             //FF FF FF 0F 
+          
+
             //2D 00 15 00 
             //2D 00 35 00
+
             byte portals = packet.ReadByte();
-
-            //if (portals != Portals)
-            //{
-            //    return;
-            //}
-
-            packet.ReadInt(); // NOE: Unknown.
 
             var movements = new Movements(packet);
 

@@ -64,23 +64,19 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
 
                             Character target;
 
-                            try
-                            {
-                                target = caller.Map.Characters[targetName];
-                            }
-                            catch (KeyNotFoundException)
-                            {
+                            target = caller.Map.Characters[targetName];
+
+                            if(target == null) {
                                 caller.Notify("[Command] " + targetName + " cannot be found.");
+                            } else {
+                                target.Health = 0;
 
-                                return;
                             }
-
-                            target.Health = 0;
                         }
                         break;
 
                     default:
-                        this.ShowSyntax(caller);
+                        ShowSyntax(caller);
                         break;
                 }
             }

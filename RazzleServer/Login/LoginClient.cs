@@ -69,7 +69,8 @@ namespace RazzleServer.Login
 
             try
             {
-                Account.Load(username);
+                Account.Username = username;
+                Account.Load();
 
                 if (Functions.GetSha512(password + Account.Salt) != Account.Password)
                 {

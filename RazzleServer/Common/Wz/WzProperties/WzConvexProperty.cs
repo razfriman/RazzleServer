@@ -69,7 +69,6 @@ namespace RazzleServer.Common.WzLib.WzProperties
                 foreach (WzImageProperty iwp in properties)
                     if (iwp.Name.ToLower() == name.ToLower())
                         return iwp;
-                //throw new KeyNotFoundException("A wz property with the specified name was not found");
                 return null;
             }
         }

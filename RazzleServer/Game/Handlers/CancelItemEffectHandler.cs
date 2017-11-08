@@ -2,8 +2,8 @@
 
 namespace RazzleServer.Game.Handlers
 {
-    [PacketHandler(ClientOperationCode.ChangeMapSpecial)]
-    public class ChangeMapSpecialHandler : GamePacketHandler
+    [PacketHandler(ClientOperationCode.CancelItemEffect)]
+    public class CancelItemEffectHandler : GamePacketHandler
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
         {

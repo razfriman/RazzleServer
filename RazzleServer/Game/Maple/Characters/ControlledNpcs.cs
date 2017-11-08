@@ -17,19 +17,8 @@ namespace RazzleServer.Game.Maple.Characters
         public void Move(PacketReader iPacket)
         {
             int objectID = iPacket.ReadInt();
-
-            Npc npc;
-
-            try
-            {
-                npc = this[objectID];
-            }
-            catch (KeyNotFoundException)
-            {
-                return;
-            }
-
-            npc.Move(iPacket);
+            var npc = this[objectID];
+            npc?.Move(iPacket);
         }
 
         protected override void InsertItem(int index, Npc item)

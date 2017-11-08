@@ -31,8 +31,7 @@ namespace RazzleServer.Login
                           {
                               var c = new Character();
                               c.ID = x.ID;
-                              c.WorldID = worldID;
-                              c.Load(null);
+                              c.Load();
                               result.Add(c);
                           });
 

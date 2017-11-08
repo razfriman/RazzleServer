@@ -19,7 +19,7 @@ namespace RazzleServer.Game.Handlers
             //}
 
             client.Character = new Character(characterID, client);
-            client.Character.Load(characterID);
+            client.Character.Load();
             client.Character.Initialize();
         }
     }

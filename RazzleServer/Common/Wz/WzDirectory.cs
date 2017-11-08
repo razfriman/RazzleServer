@@ -94,7 +94,6 @@ namespace RazzleServer.Common.WzLib
 				foreach (WzDirectory d in subDirs)
 					if (d.Name.ToLower() == name.ToLower())
 						return d;
-				//throw new KeyNotFoundException("No wz image or directory was found with the specified name");
 				return null;
 			}
             set

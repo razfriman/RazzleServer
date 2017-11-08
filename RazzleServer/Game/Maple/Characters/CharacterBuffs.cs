@@ -26,7 +26,7 @@ namespace RazzleServer.Game.Maple.Characters
                     }
                 }
 
-                throw new KeyNotFoundException();
+                return null;
             }
         }
 

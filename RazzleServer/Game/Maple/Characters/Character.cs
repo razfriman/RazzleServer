@@ -9,12 +9,10 @@ using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
 using RazzleServer.Data;
 using RazzleServer.DB.Models;
-using RazzleServer.Game.Maple.Commands;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Interaction;
 using RazzleServer.Game.Maple.Life;
 using RazzleServer.Game.Maple.Maps;
-using RazzleServer.Game.Maple.Scripting;
 using RazzleServer.Server;
 
 namespace RazzleServer.Game.Maple.Characters
@@ -47,6 +45,9 @@ namespace RazzleServer.Game.Maple.Characters
         public ControlledNpcs ControlledNpcs { get; private set; }
         public Trade Trade { get; set; }
         public PlayerShop PlayerShop { get; set; }
+        public CharacterGuild Guild { get; set; }
+        public CharacterParty Party { get; set; }
+
         private bool Assigned { get; set; }
 
         public DateTime LastHealthHealOverTime { get; set; } = new DateTime();
@@ -74,6 +75,7 @@ namespace RazzleServer.Game.Maple.Characters
         private Npc lastNpc;
         private Quest lastQuest;
         private string chalkboard;
+        private int itemEffect;
 
         private readonly ILogger Log = LogManager.Log;
 
@@ -507,6 +509,24 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
+        public int ItemEffect
+        {
+            get => itemEffect;
+            set
+            {
+                itemEffect = value;
+                if (IsInitialized)
+                {
+                    using (var oPacket = new PacketWriter(ServerOperationCode.ItemEffect))
+                    {
+                        oPacket.WriteInt(ID);
+                        oPacket.WriteInt(itemEffect);
+                        Map.Broadcast(oPacket, this);
+                    }
+                }
+            }
+        }
+
         public Portal ClosestPortal
         {
             get
@@ -587,6 +607,7 @@ namespace RazzleServer.Game.Maple.Characters
                 {
                     oPacket.WriteInt(Functions.Random());
                 }
+
                 oPacket.WriteShort(-1);
 
                 oPacket.WriteBytes(DataToByteArray());
@@ -600,11 +621,8 @@ namespace RazzleServer.Game.Maple.Characters
             Map.Characters.Add(this);
 
             ShowApple();
-
             UpdateStatsForParty();
-
             Keymap.Send();
-
             Memos.Send();
         }
 
@@ -1005,8 +1023,6 @@ namespace RazzleServer.Game.Maple.Characters
         }
 
 
-        // TODO: Should we refactor it in a way that sends it to the buddy/party/guild objects
-        // instead of pooling the world for characters?
         public void MultiTalk(PacketReader iPacket)
         {
             MultiChatType type = (MultiChatType)iPacket.ReadByte();
@@ -1044,35 +1060,24 @@ namespace RazzleServer.Game.Maple.Characters
                     break;
             }
 
-            // NOTE: This is here for convinience. If you accidently use another text window (like party) and not the main text window,
-            // your commands won't be shown but instead executed from there as well.
-            if (text.StartsWith(ServerConfig.Instance.CommandIndicator))
+            using (var oPacket = new PacketWriter(ServerOperationCode.GroupMessage))
             {
-                CommandFactory.Execute(this, text);
-            }
-            else
-            {
-                using (var oPacket = new PacketWriter(ServerOperationCode.GroupMessage))
-                {
-                    oPacket.WriteByte((byte)type);
-                    oPacket.WriteString(Name);
-                    oPacket.WriteString(text);
+                oPacket.WriteByte((byte)type);
+                oPacket.WriteString(Name);
+                oPacket.WriteString(text);
 
-                    foreach (int recipient in recipients)
-                    {
-                        //this.Client.World.GetCharacter(recipient).Client.Send(oPacket);
-                    }
+                foreach (int recipient in recipients)
+                {
+                    Client.Server.GetCharacterByID(recipient).Client.Send(oPacket);
                 }
             }
         }
 
-        // TODO: Cash Shop/MTS scenarios.
         public void UseCommand(PacketReader iPacket)
         {
-            /*CommandType type = (CommandType)iPacket.ReadByte();
+            CommandType type = (CommandType)iPacket.ReadByte();
             string targetName = iPacket.ReadString();
-
-            Character target = null;// this.Client.World.GetCharacter(targetName);
+            var target = Client.Server.GetCharacterByName(targetName);
 
             switch (type)
             {
@@ -1082,29 +1087,25 @@ namespace RazzleServer.Game.Maple.Characters
                         {
                             using (var oPacket = new PacketWriter(ServerOperationCode.Whisper))
                             {
-                                oPacket
-                                    oPacket.WriteByte(0x0A)
-                                    oPacket.WriteString(targetName)
-                                    oPacket.WriteBool(false);
-
+                                oPacket.WriteByte(0x0A);
+                                oPacket.WriteString(targetName);
+                                oPacket.WriteBool(false);
                                 this.Client.Send(oPacket);
                             }
                         }
                         else
                         {
-                            bool isInSameChannel = this.Client.ChannelID == target.Client.ChannelID;
+                            bool isInSameChannel = Client.Server.ChannelID == target.Client.Server.ChannelID;
 
                             using (var oPacket = new PacketWriter(ServerOperationCode.Whisper))
                             {
-                                oPacket
-                                    oPacket.WriteByte(0x09)
-                                    oPacket.WriteString(targetName)
-                                    oPacket.WriteByte((byte)(isInSameChannel ? 1 : 3))
-                                    oPacket.WriteInt(isInSameChannel ? target.Map.MapleID : target.Client.ChannelID)
-                                    oPacket.WriteInt() // NOTE: Unknown.
-                                    oPacket.WriteInt(); // NOTE: Unknown.
-
-                                this.Client.Send(oPacket);
+                                oPacket.WriteByte(0x09);
+                                oPacket.WriteString(targetName);
+                                oPacket.WriteByte((byte)(isInSameChannel ? 1 : 3));
+                                oPacket.WriteInt(isInSameChannel ? target.Map.MapleID : target.Client.Server.ChannelID);
+                                oPacket.WriteInt(0); // NOTE: Unknown.
+                                oPacket.WriteInt(0); // NOTE: Unknown.
+                                Client.Send(oPacket);
                             }
                         }
                     }
@@ -1116,31 +1117,27 @@ namespace RazzleServer.Game.Maple.Characters
 
                         using (var oPacket = new PacketWriter(ServerOperationCode.Whisper))
                         {
-                            oPacket
-                                oPacket.WriteByte(10)
-                                oPacket.WriteString(targetName)
-                                oPacket.WriteBool(target != null);
-
-                            this.Client.Send(oPacket);
+                            oPacket.WriteByte(10);
+                            oPacket.WriteString(targetName);
+                            oPacket.WriteBool(target != null);
+                            Client.Send(oPacket);
                         }
 
                         if (target != null)
                         {
                             using (var oPacket = new PacketWriter(ServerOperationCode.Whisper))
                             {
-                                oPacket
-                                    oPacket.WriteByte(18)
-                                    oPacket.WriteString(this.Name)
-                                    oPacket.WriteByte(this.Client.ChannelID)
-                                    oPacket.WriteByte() // NOTE: Unknown.
-                                    oPacket.WriteString(text);
-
+                                oPacket.WriteByte(18);
+                                oPacket.WriteString(Name);
+                                oPacket.WriteByte(Client.Server.ChannelID);
+                                oPacket.WriteByte(0);
+                                oPacket.WriteString(text); ;
                                 target.Client.Send(oPacket);
                             }
                         }
                     }
                     break;
-            }*/
+            }
         }
 
         public void Interact(PacketReader iPacket)
@@ -1216,45 +1213,6 @@ namespace RazzleServer.Game.Maple.Characters
                         }
                     }
                     break;
-            }
-        }
-
-        public void EnterPortal(PacketReader iPacket)
-        {
-            byte portals = iPacket.ReadByte();
-
-            if (portals != Portals)
-            {
-                return;
-            }
-
-            string label = iPacket.ReadString();
-
-            Portal portal;
-
-            try
-            {
-                portal = Map.Portals[label];
-            }
-            catch (KeyNotFoundException)
-            {
-                return;
-            }
-
-            if (false) // TODO: Check if portal is onlyOnce and player already used it.
-            {
-                // TODO: Send a "closed for now" portal message.
-
-                return;
-            }
-
-            try
-            {
-                new PortalScript(portal, this).Execute();
-            }
-            catch (Exception ex)
-            {
-                Log.LogError($"Script error: {ex}");
             }
         }
 
@@ -1408,16 +1366,16 @@ namespace RazzleServer.Game.Maple.Characters
             oPacket.WriteInt(ID);
             oPacket.WriteByte(Level);
             oPacket.WriteString(Name);
-            oPacket.WriteString(""); //Guild
-            oPacket.WriteShort(0); //Guild
-            oPacket.WriteByte(0); //Guild
-            oPacket.WriteShort(0); //Guild
-            oPacket.WriteByte(0); //Guild
+            oPacket.WriteString(Guild?.Name);
+            oPacket.WriteShort(Guild?.LogoBG ?? 0);
+            oPacket.WriteByte(Guild?.LogoBGColor ?? 0);
+            oPacket.WriteShort(Guild?.Logo ?? 0);
+            oPacket.WriteByte(Guild?.LogoColor ?? 0);
             oPacket.WriteBytes(Buffs.ToByteArray());
             oPacket.WriteShort((short)Job);
             oPacket.WriteBytes(AppearanceToByteArray());
             oPacket.WriteInt(Items.Available(5110000));
-            oPacket.WriteInt(0); // NOTE: Item effect.
+            oPacket.WriteInt(ItemEffect);
             oPacket.WriteInt(Item.GetType(Chair) == ItemType.Setup ? Chair : 0);
             oPacket.WritePoint(Position);
             oPacket.WriteByte(Stance);
@@ -1430,10 +1388,10 @@ namespace RazzleServer.Game.Maple.Characters
             if (PlayerShop != null && PlayerShop.Owner == this)
             {
 
-                oPacket.WriteByte(4);
+                oPacket.WriteByte((byte)InteractionType.PlayerShop);
                 oPacket.WriteInt(PlayerShop.ObjectID);
                 oPacket.WriteString(PlayerShop.Description);
-                oPacket.WriteByte(0);
+                oPacket.WriteBool(PlayerShop.IsPrivate);
                 oPacket.WriteByte(0);
                 oPacket.WriteByte(1);
                 oPacket.WriteByte((byte)(PlayerShop.IsFull ? 1 : 2)); // NOTE: Visitor availability.
@@ -1617,7 +1575,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public void Load(object key)
+        public void Load()
         {
             using (var dbContext = new MapleDbContext())
             {
@@ -1661,6 +1619,7 @@ namespace RazzleServer.Game.Maple.Characters
                 Items.MaxSlots[ItemType.Setup] = character.SetupSlots;
                 Items.MaxSlots[ItemType.Etcetera] = character.EtceteraSlots;
                 Items.MaxSlots[ItemType.Cash] = character.CashSlots;
+                Guild = null;
             }
 
             Items.Load();
