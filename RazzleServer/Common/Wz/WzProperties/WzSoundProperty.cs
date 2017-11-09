@@ -1,7 +1,7 @@
 ﻿using System.IO;
-using System;
+//using System;
 using RazzleServer.Common.WzLib.Util;
-using NAudio.Wave;
+//using NAudio.Wave;
 using System.Text;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
@@ -25,7 +25,10 @@ namespace RazzleServer.Common.WzLib.WzProperties
         internal byte[] header;
         //internal WzImage imgParent;
         internal WzBinaryReader wzReader;
-        internal bool headerEncrypted;
+
+        // TODO - Wait for .NET Core Audio library
+        //internal bool headerEncrypted;
+
         internal long offs;
         internal int soundDataLen;
         public static readonly byte[] soundHeader = {
@@ -36,7 +39,6 @@ namespace RazzleServer.Common.WzLib.WzProperties
             0x01,
             0x81, 0x9F, 0x58, 0x05, 0x56, 0xC3, 0xCE, 0x11, 0xBF, 0x01, 0x00, 0xAA, 0x00, 0x55, 0x59, 0x5A };
 
-        internal WaveFormat wavFormat;
         #endregion
 
         #region Inherited Members
@@ -102,13 +104,18 @@ namespace RazzleServer.Common.WzLib.WzProperties
         /// Length of the mp3 file in milliseconds
         /// </summary>
         public int Length { get { return len_ms; } set { len_ms = value; } }
+
+
+
         /// <summary>
         /// Frequency of the mp3 file in Hz
         /// </summary>
-        public int Frequency
-        {
-            get { return wavFormat != null ? wavFormat.SampleRate : 0; }
-        }
+        // TODO - Wait for .NET Core Audio library
+        //public int Frequency
+        //{
+        //    get { return wavFormat != null ? wavFormat.SampleRate : 0; }
+        //}
+
         /// <summary>
         /// BPS of the mp3 file
         /// </summary>
@@ -175,14 +182,15 @@ namespace RazzleServer.Common.WzLib.WzProperties
         /// <param name="file">The path to the sound file</param>
         public WzSoundProperty(string name, string file)
         {
-            this.name = name;
-            using (var reader = new Mp3FileReader(file))
-            {
-                wavFormat = reader.Mp3WaveFormat;
-                len_ms = (int)(reader.Length * 1000d / reader.WaveFormat.AverageBytesPerSecond);
-                RebuildHeader();
-            }
-            mp3bytes = File.ReadAllBytes(file);
+            // TODO - Wait for .NET Core Audio library
+            //this.name = name;
+            //using (var reader = new Mp3FileReader(file))
+            //{
+            //    wavFormat = reader.Mp3WaveFormat;
+            //    len_ms = (int)(reader.Length * 1000d / reader.WaveFormat.AverageBytesPerSecond);
+            //    RebuildHeader();
+            //}
+            //mp3bytes = File.ReadAllBytes(file);
         }
 
         public static bool Memcmp(byte[] a, byte[] b, int n)
@@ -209,18 +217,19 @@ namespace RazzleServer.Common.WzLib.WzProperties
         {
             using (BinaryWriter bw = new BinaryWriter(new MemoryStream()))
             {
-                bw.Write(soundHeader);
-                byte[] wavHeader = StructToBytes(wavFormat);
-                if (headerEncrypted)
-                {
-                    for (int i = 0; i < wavHeader.Length; i++)
-                    {
-                        wavHeader[i] ^= wzReader.WzKey[i];
-                    }
-                }
-                bw.Write((byte)wavHeader.Length);
-                bw.Write(wavHeader, 0, wavHeader.Length);
-                header = ((MemoryStream)bw.BaseStream).ToArray();
+                // TODO - Wait for .NET Core Audio library
+                //bw.Write(soundHeader);
+                //byte[] wavHeader = StructToBytes(wavFormat);
+                //if (headerEncrypted)
+                //{
+                //    for (int i = 0; i < wavHeader.Length; i++)
+                //    {
+                //        wavHeader[i] ^= wzReader.WzKey[i];
+                //    }
+                //}
+                //bw.Write((byte)wavHeader.Length);
+                //bw.Write(wavHeader, 0, wavHeader.Length);
+                //header = ((MemoryStream)bw.BaseStream).ToArray();
             }
         }
 
@@ -269,44 +278,45 @@ namespace RazzleServer.Common.WzLib.WzProperties
 
         private void ParseHeader()
         {
-            byte[] wavHeader = new byte[header.Length - soundHeader.Length - 1];
-            Buffer.BlockCopy(header, soundHeader.Length + 1, wavHeader, 0, wavHeader.Length);
+            // TODO - Wait for .NET Core Audio library
+            //byte[] wavHeader = new byte[header.Length - soundHeader.Length - 1];
+            //Buffer.BlockCopy(header, soundHeader.Length + 1, wavHeader, 0, wavHeader.Length);
 
-            if (wavHeader.Length < Marshal.SizeOf<WaveFormat>())
-                return;
+            //if (wavHeader.Length < Marshal.SizeOf<WaveFormat>())
+            //    return;
 
-            WaveFormat wavFmt = BytesToStruct<WaveFormat>(wavHeader);
+            //WaveFormat wavFmt = BytesToStruct<WaveFormat>(wavHeader);
 
-            if (Marshal.SizeOf<WaveFormat>() + wavFmt.ExtraSize != wavHeader.Length)
-            {
-                //try decrypt
-                for (int i = 0; i < wavHeader.Length; i++)
-                {
-                    wavHeader[i] ^= wzReader.WzKey[i];
-                }
-                wavFmt = BytesToStruct<WaveFormat>(wavHeader);
+            //if (Marshal.SizeOf<WaveFormat>() + wavFmt.ExtraSize != wavHeader.Length)
+            //{
+            //    //try decrypt
+            //    for (int i = 0; i < wavHeader.Length; i++)
+            //    {
+            //        wavHeader[i] ^= wzReader.WzKey[i];
+            //    }
+            //    wavFmt = BytesToStruct<WaveFormat>(wavHeader);
 
-                if (Marshal.SizeOf<WaveFormat>() + wavFmt.ExtraSize != wavHeader.Length)
-                {
-                    Log.LogCritical($"Failed to parse sound header");
-                    return;
-                }
-                headerEncrypted = true;
-            }
+            //    if (Marshal.SizeOf<WaveFormat>() + wavFmt.ExtraSize != wavHeader.Length)
+            //    {
+            //        Log.LogCritical($"Failed to parse sound header");
+            //        return;
+            //    }
+            //    headerEncrypted = true;
+            //}
 
-            // parse to mp3 header
-            if (wavFmt.Encoding == WaveFormatEncoding.MpegLayer3 && wavHeader.Length >= Marshal.SizeOf<Mp3WaveFormat>())
-            {
-                wavFormat = BytesToStructConstructorless<Mp3WaveFormat>(wavHeader);
-            }
-            else if (wavFmt.Encoding == WaveFormatEncoding.Pcm)
-            {
-                wavFormat = wavFmt;
-            }
-            else
-            {
-                Log.LogError($"Unknown wave encoding: {wavFmt.Encoding}");
-            }
+            //// parse to mp3 header
+            //if (wavFmt.Encoding == WaveFormatEncoding.MpegLayer3 && wavHeader.Length >= Marshal.SizeOf<Mp3WaveFormat>())
+            //{
+            //    wavFormat = BytesToStructConstructorless<Mp3WaveFormat>(wavHeader);
+            //}
+            //else if (wavFmt.Encoding == WaveFormatEncoding.Pcm)
+            //{
+            //    wavFormat = wavFmt;
+            //}
+            //else
+            //{
+            //    Log.LogError($"Unknown wave encoding: {wavFmt.Encoding}");
+            //}
         }
         #endregion
 

@@ -1,13 +1,17 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.WzLib;
 using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Game.Maple.Life;
 
 namespace RazzleServer.Game.Maple.Maps
 {
     public sealed class Map
     {
+        private int mObjectIDs;
+
         public int MapleID { get; private set; }
         public int ReturnMapID { get; private set; }
         public int ForcedReturnMapID { get; private set; }
@@ -65,48 +69,29 @@ namespace RazzleServer.Game.Maple.Maps
             ReturnMapID = info["returnMap"]?.GetInt() ?? 0;
             ForcedReturnMapID = info["forcedReturn"]?.GetInt() ?? 0;
 
-            var portals = img["portal"];
-            foreach (var portal in portals.WzProperties)
+            img["portal"]?.WzProperties?.ForEach(x => Portals.Add(new Portal(x)));
+            img["seat"]?.WzProperties?.ForEach(x => Seats.Add(new Seat(x)));
+            img["footholds"]?.WzProperties?.ForEach(x => Footholds.Add(new Foothold(x)));
+            img["reactor"]?.WzProperties?.ForEach(x => SpawnPoints.Add(new SpawnPoint(x, LifeObjectType.Reactor)));
+            img["seat"]?.WzProperties?.ForEach(x => Seats.Add(new Seat(x)));
+            img["seat"]?.WzProperties?.ForEach(x => Seats.Add(new Seat(x)));
+
+            img["life"]?.WzProperties?.ForEach(life =>
             {
-                Portals.Add(new Portal(portal));
-            
-            }
-            //foreach (Datum datum in new Datums("map_footholds", Database.SchemaMCDB).Populate("mapid = {0}", key))
-            //{
-            //    this[key].Footholds.Add(new Foothold(datum));
-            //}
+                var type = life["type"].GetString();
 
-            //foreach (Datum datum in new Datums("map_seats", Database.SchemaMCDB).Populate("mapid = {0}", key))
-            //{
-            //    this[key].Seats.Add(new Seat(datum));
-            //}
+                switch (type)
+                {
+                    case "n":
+                        Npcs.Add(new Npc(life));
+                        break;
+                    case "m":
+                        SpawnPoints.Add(new SpawnPoint(life, LifeObjectType.Mob));
+                        break;
+                }
+            });
 
-            //foreach (Datum datum in new Datums("map_portals", Database.SchemaMCDB).Populate("mapid = {0}", key))
-            //{
-            //    this[key].Portals.Add(new Portal(datum));
-            //}
-
-            //foreach (Datum datum in new Datums("map_life", Database.SchemaMCDB).Populate("mapid = {0}", key))
-            //{
-            //    switch ((string)datum["life_type"])
-            //    {
-            //        case "npc":
-            //            {
-            //                this[key].Npcs.Add(new Npc(datum));
-            //            }
-            //            break;
-
-            //        case "mob":
-            //            this[key].SpawnPoints.Add(new SpawnPoint(datum, true));
-            //            break;
-
-            //        case "reactor":
-            //            this[key].SpawnPoints.Add(new SpawnPoint(datum, false));
-            //            break;
-            //    }
-            //}
-
-            //this[key].SpawnPoints.Spawn();
+            SpawnPoints.Spawn();
         }
 
         public void Broadcast(PacketWriter oPacket, Character ignored = null)
@@ -120,10 +105,7 @@ namespace RazzleServer.Game.Maple.Maps
             }
         }
 
-
         public void Notify(string text, NoticeType type = NoticeType.Popup) => Characters.ToList().ForEach(x => x.Notify(text, type));
-
-        private int mObjectIDs;
 
         public int AssignObjectID() => ++mObjectIDs;
     }

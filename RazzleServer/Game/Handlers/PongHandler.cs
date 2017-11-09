@@ -10,7 +10,7 @@ namespace RazzleServer.Game.Handlers
         public override void HandlePacket(PacketReader packet, GameClient client) 
         {
             client.LastPong = DateTime.Now;
-            Delay.Execute(() => client.Ping(), 30 * 1000);
+            //Delay.Execute(() => client.Ping(), 30 * 1000);
         }
     }
 }

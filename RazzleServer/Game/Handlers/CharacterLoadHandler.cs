@@ -15,7 +15,8 @@ namespace RazzleServer.Game.Handlers
 
             if (accountID == 0)
             {
-                client.Terminate("Invalid migraiton");
+                client.Terminate("Invalid migration");
+                return;
             }
 
             client.Account = new Account(accountID, client);

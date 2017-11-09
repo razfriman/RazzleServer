@@ -215,7 +215,7 @@ namespace RazzleServer.Common.WzLib.WzProperties
             return LinkValue.GetString();
         }
 
-        public override Point GetPoint()
+        public override Game.Maple.Point GetPoint()
         {
             return LinkValue.GetPoint();
         }

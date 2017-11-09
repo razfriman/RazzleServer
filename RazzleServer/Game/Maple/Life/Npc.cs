@@ -4,29 +4,27 @@ using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Common.Constants;
 using RazzleServer.Game.Maple.Scripting;
-using RazzleServer.Common.Data;
 using RazzleServer.Game.Maple.Shops;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Util;
+using RazzleServer.Common.WzLib;
 
 namespace RazzleServer.Game.Maple.Life
 {
     public class Npc : LifeObject, ISpawnable, IControllable
     {
-        private readonly ILogger Log = LogManager.Log;
-
-
-        public Npc(Datum datum)
-            : base(datum)
-        {
-            this.Scripts = new Dictionary<Character, NpcScript>();
-        }
-
         public Character Controller { get; set; }
-
         public Shop Shop { get; set; }
         public int StorageCost { get; set; }
         public Dictionary<Character, NpcScript> Scripts { get; private set; }
+
+        private readonly ILogger Log = LogManager.Log;
+
+        public Npc(WzImageProperty img)
+            : base(img, LifeObjectType.Npc)
+        {
+            Scripts = new Dictionary<Character, NpcScript>();
+        }
 
         public void Move(PacketReader iPacket)
         {
@@ -43,7 +41,7 @@ namespace RazzleServer.Game.Maple.Life
             using (var oPacket = new PacketWriter(ServerOperationCode.NpcMove))
             {
 
-                oPacket.WriteInt(this.ObjectID);
+                oPacket.WriteInt(ObjectID);
                 oPacket.WriteByte(action1);
                 oPacket.WriteByte(action2);
 
@@ -52,17 +50,17 @@ namespace RazzleServer.Game.Maple.Life
                     oPacket.WriteBytes(movements.ToByteArray());
                 }
 
-                this.Map.Broadcast(oPacket);
+                Map.Broadcast(oPacket);
             }
         }
 
         public void Converse(Character talker)
         {
-            if (this.Shop != null)
+            if (Shop != null)
             {
-                this.Shop.Show(talker);
+                Shop.Show(talker);
             }
-            else if (this.StorageCost > 0)
+            else if (StorageCost > 0)
             {
                 talker.Storage.Show(this);
             }
@@ -70,7 +68,7 @@ namespace RazzleServer.Game.Maple.Life
             {
                 var script = new NpcScript(this, talker);
 
-                this.Scripts[talker] = script;
+                Scripts[talker] = script;
 
                 try
                 {
@@ -92,8 +90,6 @@ namespace RazzleServer.Game.Maple.Life
 
             NpcMessageType lastMessageType = (NpcMessageType)iPacket.ReadByte();
             byte action = iPacket.ReadByte();
-
-            // TODO: Validate last message type.
 
             int selection = -1;
 
@@ -131,11 +127,11 @@ namespace RazzleServer.Game.Maple.Life
 
                 if (selection != -1)
                 {
-                    this.Scripts[talker].SetResult(selection);
+                    Scripts[talker].SetResult(selection);
                 }
                 else
                 {
-                    this.Scripts[talker].SetResult(action);
+                    Scripts[talker].SetResult(action);
                 }
             }
             else
@@ -146,14 +142,14 @@ namespace RazzleServer.Game.Maple.Life
 
         public void AssignController()
         {
-            if (this.Controller == null)
+            if (Controller == null)
             {
                 int leastControlled = int.MaxValue;
                 Character newController = null;
 
-                lock (this.Map.Characters)
+                lock (Map.Characters)
                 {
-                    foreach (Character character in this.Map.Characters)
+                    foreach (Character character in Map.Characters)
                     {
                         if (character.ControlledNpcs.Count < leastControlled)
                         {
@@ -170,20 +166,11 @@ namespace RazzleServer.Game.Maple.Life
             }
         }
 
-        public PacketWriter GetCreatePacket()
-        {
-            return this.GetSpawnPacket();
-        }
+        public PacketWriter GetCreatePacket() => GetSpawnPacket();
 
-        public PacketWriter GetSpawnPacket()
-        {
-            return this.GetInternalPacket(false);
-        }
+        public PacketWriter GetSpawnPacket() => GetInternalPacket(false);
 
-        public PacketWriter GetControlRequestPacket()
-        {
-            return this.GetInternalPacket(true);
-        }
+        public PacketWriter GetControlRequestPacket() => GetInternalPacket(true);
 
         private PacketWriter GetInternalPacket(bool requestControl)
         {
@@ -194,15 +181,13 @@ namespace RazzleServer.Game.Maple.Life
                 oPacket.WriteBool(true);
             }
 
-
-            oPacket.WriteInt(this.ObjectID);
-            oPacket.WriteInt(this.MapleID);
-            oPacket.WritePoint(this.Position);
-            oPacket.WriteBool(!this.FacesLeft);
-            oPacket.WriteShort(this.Foothold);
-            oPacket.WriteShort(this.MinimumClickX);
-            oPacket.WriteShort(this.MaximumClickX);
-            oPacket.WriteBool(true); // NOTE: Hide.
+            oPacket.WriteInt(ObjectID);
+            oPacket.WriteInt(MapleID);
+            oPacket.WritePoint(Position);
+            oPacket.WriteBool(!FacesLeft);
+            oPacket.WriteShort(Foothold);
+            oPacket.WriteShort(MinimumClickX);
+            oPacket.WriteShort(MaximumClickX);
 
             return oPacket;
         }
@@ -212,7 +197,7 @@ namespace RazzleServer.Game.Maple.Life
             var oPacket = new PacketWriter(ServerOperationCode.NpcChangeController);
 
             oPacket.WriteBool(false);
-            oPacket.WriteInt(this.ObjectID);
+            oPacket.WriteInt(ObjectID);
 
             return oPacket;
         }
@@ -223,7 +208,7 @@ namespace RazzleServer.Game.Maple.Life
 
 
             oPacket.WriteByte(4); // NOTE: Unknown.
-            oPacket.WriteInt(this.MapleID);
+            oPacket.WriteInt(MapleID);
             oPacket.WriteByte((byte)messageType);
             oPacket.WriteByte(0); // NOTE: Speaker.
             oPacket.WriteString(text);
@@ -236,7 +221,7 @@ namespace RazzleServer.Game.Maple.Life
         {
             var oPacket = new PacketWriter(ServerOperationCode.NpcLeaveField);
 
-            oPacket.WriteInt(this.ObjectID);
+            oPacket.WriteInt(ObjectID);
 
             return oPacket;
         }

@@ -44,8 +44,8 @@ namespace RazzleServer.Game
                     else
                     {
                         Log.LogWarning($"Unhandled Packet [{header.ToString()}] {Functions.ByteArrayToStr(packet.ToArray())}");
+                        Character?.Release();
                     }
-
                 }
             }
             catch (Exception e)
@@ -73,7 +73,9 @@ namespace RazzleServer.Game
 
         public void ChangeChannel(byte channelID)
         {
-            var outPacket = new PacketWriter(ServerOperationCode.MigrateCommand);
+            Server.Manager.Migrate(Host, Account.ID, Character.ID);
+
+            var outPacket = new PacketWriter(ServerOperationCode.ChangeChannel);
             outPacket.WriteBool(true);
             outPacket.WriteBytes(Socket.HostBytes);
             outPacket.WriteUShort(Server.World[channelID].Port);

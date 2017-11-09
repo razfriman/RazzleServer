@@ -117,9 +117,9 @@ namespace RazzleServer.Common.WzLib.WzProperties
 		#endregion
 
         #region Cast Values
-        public override System.Drawing.Point GetPoint()
+        public override Game.Maple.Point GetPoint()
         {
-            return new System.Drawing.Point(x.val, y.val);
+            return new Game.Maple.Point(x.val, y.val);
         }
 
         public override string ToString()

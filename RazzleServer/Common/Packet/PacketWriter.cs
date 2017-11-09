@@ -3,6 +3,7 @@ using System.Text;
 using RazzleServer.Game.Maple;
 using RazzleServer.Common.Util;
 using System;
+using Microsoft.Extensions.Logging;
 
 namespace RazzleServer.Common.Packet
 {
@@ -151,7 +152,14 @@ namespace RazzleServer.Common.Packet
             WriteShort(writeValue.Y);
         }
 
-        public void WriteHeader(ServerOperationCode header) => WriteUShort((ushort)header);
+        public void WriteHeader(ServerOperationCode header)
+        {
+            if (Server.ServerConfig.Instance.PrintPackets) {
+                LogManager.Log.LogInformation(header.ToString());
+            }
+
+            WriteUShort((ushort)header);
+        }
 
         public void WriteBox(Rectangle box)
         {

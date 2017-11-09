@@ -1,4 +1,6 @@
-﻿using RazzleServer.Common.Data;
+﻿using RazzleServer.Common.Constants;
+using RazzleServer.Common.Data;
+using RazzleServer.Common.WzLib;
 using RazzleServer.Game.Maple.Maps;
 
 namespace RazzleServer.Game.Maple.Life
@@ -11,16 +13,25 @@ namespace RazzleServer.Game.Maple.Life
         public short MaximumClickX { get; private set; }
         public bool FacesLeft { get; private set; }
         public int RespawnTime { get; private set; }
+        public LifeObjectType Type { get; private set; }
 
-        public LifeObject(Datum datum)
+        public LifeObject(WzImageProperty img, LifeObjectType type)
         {
-            this.MapleID = (int)datum["lifeid"];
-            this.Position = new Point((short)datum["x_pos"], (short)datum["y_pos"]);
-            this.Foothold = (short)datum["foothold"];
-            this.MinimumClickX = (short)datum["min_click_pos"];
-            this.MaximumClickX = (short)datum["max_click_pos"];
-            this.FacesLeft = ((string)datum["flags"]).Contains("faces_left");
-            this.RespawnTime = (int)datum["respawn_time"];
+            MapleID = int.Parse(img["id"].GetString());
+            Position = new Point(img["x"].GetShort(), img["y"].GetShort());
+            Foothold = img["fh"]?.GetShort() ?? 0;
+            MinimumClickX = img["rx0"]?.GetShort() ?? 0;
+            MaximumClickX = img["rx1"]?.GetShort() ?? 0;
+            FacesLeft = (img["f"]?.GetInt() ?? 0) > 0;
+
+            if (type == LifeObjectType.Mob)
+            {
+                RespawnTime = img["mobTime"]?.GetInt() ?? 0;
+            }
+            else if (type == LifeObjectType.Reactor)
+            {
+                RespawnTime = img["reactorTime"]?.GetInt() ?? 0;
+            }
         }
     }
 }

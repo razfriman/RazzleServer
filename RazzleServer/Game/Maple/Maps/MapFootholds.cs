@@ -20,10 +20,10 @@ namespace RazzleServer.Game.Maple.Maps
 
             foreach (Foothold foothold in this)
             {
-                short x1 = foothold.Line.Point1.X;
-                short y1 = foothold.Line.Point1.Y;
-                short x2 = foothold.Line.Point2.X;
-                short y2 = foothold.Line.Point2.Y;
+                short x1 = foothold.Line.Start.X;
+                short y1 = foothold.Line.Start.Y;
+                short x2 = foothold.Line.End.X;
+                short y2 = foothold.Line.End.Y;
 
                 if ((x >= x1 && x <= x2) || (x <= x1 && x >= x2))
                 {

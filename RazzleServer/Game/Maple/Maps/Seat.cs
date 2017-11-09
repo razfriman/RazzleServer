@@ -1,4 +1,4 @@
-﻿using RazzleServer.Common.Data;
+﻿using RazzleServer.Common.WzLib;
 
 namespace RazzleServer.Game.Maple.Maps
 {
@@ -6,11 +6,10 @@ namespace RazzleServer.Game.Maple.Maps
     {
         public short ID { get; private set; }
 
-        public Seat(Datum datum)
-            : base()
+        public Seat(WzImageProperty img)
         {
-            this.ID = (short)datum["seatid"];
-            this.Position = new Point((short)datum["x_pos"], (short)datum["y_pos"]);
+            ID = short.Parse(img.Name);
+            Position = img.GetPoint();
         }
     }
 }

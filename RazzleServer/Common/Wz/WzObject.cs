@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using RazzleServer.Game.Maple;
 
 namespace RazzleServer.Common.WzLib
 {
@@ -104,7 +105,7 @@ namespace RazzleServer.Common.WzLib
             throw new NotImplementedException();
         }
 
-        public virtual Point GetPoint()
+        public virtual Game.Maple.Point GetPoint()
         {
             throw new NotImplementedException();
         }

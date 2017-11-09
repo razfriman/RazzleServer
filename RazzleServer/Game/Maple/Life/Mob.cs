@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using RazzleServer.Common.Constants;
-using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
 using RazzleServer.Common.WzLib;
@@ -73,6 +72,7 @@ namespace RazzleServer.Game.Maple.Life
             {
                 return;
             }
+
             MapleID = id;
 
             //MapleID = (int)datum["mobid"];
@@ -218,12 +218,11 @@ namespace RazzleServer.Game.Maple.Life
         public void Move(PacketReader iPacket)
         {
             short moveAction = iPacket.ReadShort();
-            bool cheatResult = (iPacket.ReadByte() & 0xF) != 0;
-            byte centerSplit = iPacket.ReadByte();
-            int illegalVelocity = iPacket.ReadInt();
-            iPacket.Skip(8);
-            iPacket.ReadByte();
+            var skillByte = iPacket.ReadByte();
+            var skillID = iPacket.ReadInt();
+            iPacket.ReadShort();
             iPacket.ReadInt();
+            iPacket.ReadPoint();
 
             Movements movements = new Movements(iPacket);
 
@@ -231,10 +230,8 @@ namespace RazzleServer.Game.Maple.Life
             Foothold = movements.Foothold;
             Stance = movements.Stance;
 
-            byte skillID = 0;
-            byte skillLevel = 0;
+            // TODO - Load the mob skill
             MobSkill skill = null;
-
             if (skill != null)
             {
                 if (Health * 100 / MaxHealth > skill.PercentageLimitHP ||
@@ -250,27 +247,23 @@ namespace RazzleServer.Game.Maple.Life
                 skill.Cast(this);
             }
 
-            using (var oPacket = new PacketWriter(ServerOperationCode.MobCtrlAck))
+            using (var oPacket = new PacketWriter(ServerOperationCode.MobMoveResponse))
             {
-
                 oPacket.WriteInt(ObjectID);
                 oPacket.WriteShort(moveAction);
-                oPacket.WriteBool(cheatResult);
+                oPacket.WriteBool(skill != null); // use skills
                 oPacket.WriteShort((short)Mana);
-                oPacket.WriteByte(skillID);
-                oPacket.WriteByte(skillLevel);
+                oPacket.WriteShort(0); // skill id, skill level?
 
                 Controller.Client.Send(oPacket);
             }
 
             using (var oPacket = new PacketWriter(ServerOperationCode.MobMove))
             {
-
                 oPacket.WriteInt(ObjectID);
-                oPacket.WriteBool(false);
-                oPacket.WriteBool(cheatResult);
-                oPacket.WriteByte(centerSplit);
-                oPacket.WriteInt(illegalVelocity);
+                oPacket.WriteBool(skill != null); // use skills
+                oPacket.WriteInt(skillID);
+                oPacket.WriteByte(0);
                 oPacket.WriteBytes(movements.ToByteArray());
 
                 Map.Broadcast(oPacket, Controller);
@@ -372,20 +365,11 @@ namespace RazzleServer.Game.Maple.Life
             }
         }
 
-        public PacketWriter GetCreatePacket()
-        {
-            return GetInternalPacket(false, true);
-        }
+        public PacketWriter GetCreatePacket() => GetInternalPacket(false, true);
 
-        public PacketWriter GetSpawnPacket()
-        {
-            return GetInternalPacket(false, false);
-        }
+        public PacketWriter GetSpawnPacket() => GetInternalPacket(false, false);
 
-        public PacketWriter GetControlRequestPacket()
-        {
-            return GetInternalPacket(true, false);
-        }
+        public PacketWriter GetControlRequestPacket() => GetInternalPacket(true, false);
 
         private PacketWriter GetInternalPacket(bool requestControl, bool newSpawn)
         {
@@ -399,13 +383,10 @@ namespace RazzleServer.Game.Maple.Life
             oPacket.WriteInt(ObjectID);
             oPacket.WriteByte((byte)(Controller == null ? 5 : 1));
             oPacket.WriteInt(MapleID);
-            oPacket.WriteZeroBytes(15); // NOTE: Unknown.
-            oPacket.WriteByte(0x88); // NOTE: Unknown.
-            oPacket.WriteZeroBytes(6); // NOTE: Unknown.
-            oPacket.WriteShort(Position.X);
-            oPacket.WriteShort(Position.Y);
+            oPacket.WriteInt(0);
+            oPacket.WritePoint(Position);
             oPacket.WriteByte((byte)(0x02 | (IsFacingLeft ? 0x01 : 0x00)));
-            oPacket.WriteShort(Foothold);
+            oPacket.WriteShort(0);
             oPacket.WriteShort(Foothold);
 
             if (SpawnEffect > 0)
@@ -413,17 +394,10 @@ namespace RazzleServer.Game.Maple.Life
                 oPacket.WriteByte((byte)SpawnEffect);
                 oPacket.WriteByte(0);
                 oPacket.WriteShort(0);
-
-                if (SpawnEffect == 15)
-                {
-                    oPacket.WriteByte(0);
-                }
             }
 
             oPacket.WriteByte((byte)(newSpawn ? -2 : -1));
             oPacket.WriteByte(0);
-            oPacket.WriteByte(byte.MaxValue); // NOTE: Carnival team.
-            oPacket.WriteInt(0); // NOTE: Unknown.
 
             return oPacket;
         }
@@ -441,10 +415,9 @@ namespace RazzleServer.Game.Maple.Life
         public PacketWriter GetDestroyPacket()
         {
             var oPacket = new PacketWriter(ServerOperationCode.MobLeaveField);
-
+            var animated = true;
             oPacket.WriteInt(ObjectID);
-            oPacket.WriteByte(1);
-            oPacket.WriteByte(1); // TODO: Death effects.
+            oPacket.WriteBool(animated);
 
             return oPacket;
         }

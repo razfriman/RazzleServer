@@ -20,6 +20,7 @@ namespace RazzleServer.Game.Maple.Data
         {
             Log.LogInformation("Loading Items");
 
+            Log.LogInformation("Loading Regular Items");
             using (var file = new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, "Item.wz"), WzMapleVersion.CLASSIC))
             {
                 file.ParseWzFile();
@@ -30,6 +31,7 @@ namespace RazzleServer.Game.Maple.Data
                 LoadItems(file.WzDirectory.GetDirectoryByName("Install"), ItemType.Setup);
             }
 
+            Log.LogInformation("Loading Equip Items");
             using (var file = new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, "Character.wz"), WzMapleVersion.CLASSIC))
             {
                 file.ParseWzFile();

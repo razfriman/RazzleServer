@@ -1,26 +1,24 @@
-﻿using RazzleServer.Common.Data;
+﻿using RazzleServer.Common.Constants;
+using RazzleServer.Common.WzLib;
 
 namespace RazzleServer.Game.Maple.Life
 {
     public sealed class SpawnPoint : LifeObject
     {
-        public bool IsMob { get; private set; }
-
-        public SpawnPoint(Datum datum, bool isMob)
-            : base(datum)
+        public SpawnPoint(WzImageProperty img, LifeObjectType type)
+            : base(img, type)
         {
-            this.IsMob = isMob;
         }
 
         public void Spawn()
         {
-            if (this.IsMob)
+            if (Type == LifeObjectType.Mob)
             {
-                this.Map.Mobs.Add(new Mob(this));
+                Map.Mobs.Add(new Mob(this));
             }
-            else
+            else if (Type == LifeObjectType.Reactor)
             {
-                this.Map.Reactors.Add(new Reactor(this));
+                Map.Reactors.Add(new Reactor(this));
             }
         }
     }

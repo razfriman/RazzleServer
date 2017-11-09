@@ -2,13 +2,13 @@
 {
     public sealed class Line
     {
-        public Point Point1 { get; private set; }
-        public Point Point2 { get; private set; }
+        public Point Start { get; private set; }
+        public Point End { get; private set; }
 
-        public Line(Point point1, Point point2)
+        public Line(Point start, Point end)
         {
-            this.Point1 = point1;
-            this.Point2 = point2;
+            Start = start;
+            End = end;
         }
     }
 }

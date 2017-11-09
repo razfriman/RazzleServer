@@ -4,6 +4,7 @@
     {
         CheckPasswordResult = 0x00,
         AccountInfoResult = 0x02,
+        ChangeChannel = 0x03,
         ChannelSelected = 0x03,
         SetAccountResult = 0x04,
         WorldInformation = 0x05,
@@ -16,7 +17,6 @@
         SelectCharacterResult = 0x0C,
         PinCodeOperation = 0x0D,
 
-        MigrateCommand = 0x10,
         CheckUserLimitResult = 0x12,
         SelectWorldResult = 0x13,
         ReloginResponse = 0x15,
@@ -80,17 +80,19 @@
         MagicAttack = 0x94,
         MobSpawn = 0x97,
         MobMove = 0x98,
+        MobHPIndicator = 0x99,
         MobApplyStatus = 0x9B,
         MobMoveResponse = 0x9D,
 
-
-
-
-        MonsterControlSpawn = 0xA5,
-        NpcSpawn = 0xA8,
+        MobChangeController = 0xA5,
+        NpcEnterField = 0xA8,
+        NpcLeaveField = 0xA9,
+        NpcMove = 0xAB,
+        NpcChangeController = 0xAD,
 
         ReactorSpawn = 0xB3,
-        //DROP_ITEM_FROM_MAPOBJECT = 0xB9
+        DropEnterField = 0xB9,
+        DropLeaveField = 0xBA,
         MistSpawn = 0xBE,
         MistRemove = 0xBF,
 
@@ -125,18 +127,14 @@
         BalloonMsg = 214,
         MobEnterField = 236,
         MobLeaveField = 237,
-        MobChangeController = 238,
-        MobCtrlAck = 240,
         MobStatSet = 242,
         MobStatReset = 243,
         MobDamaged = 246,
-        MobHPIndicator = 250,
-        NpcEnterField = 257,
-        NpcLeaveField = 258,
-        NpcChangeController = 259,
-        NpcMove = 260,
-        DropEnterField = 268,
-        DropLeaveField = 269,
+
+
+ 
+
+        
         ReactorChangeState = 277,
         ReactorEnterField = 279,
         ReactorLeaveField = 280,

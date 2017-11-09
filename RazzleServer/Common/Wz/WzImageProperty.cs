@@ -12,14 +12,11 @@ namespace RazzleServer.Common.WzLib
     public abstract class WzImageProperty : WzObject
     {
         #region Virtual\Abstrcat Members
-        public virtual List<WzImageProperty> WzProperties { get { return null; } }
+        public virtual List<WzImageProperty> WzProperties => new List<WzImageProperty>();
 
         public virtual new WzImageProperty this[string name] { get { return null; } set => throw new NotImplementedException(); }
 
-        public virtual WzImageProperty GetFromPath(string path)
-        {
-            return null;
-        }
+        public virtual WzImageProperty GetFromPath(string path) => null;
 
         public abstract WzPropertyType PropertyType { get; }
 
@@ -62,10 +59,8 @@ namespace RazzleServer.Common.WzLib
             writer.WriteLine(XmlUtil.Indentation(level) + XmlUtil.CloseTag(this.PropertyType.ToString()));
         }
 
-        public override WzFile WzFileParent
-        {
-            get { return ParentImage.WzFileParent; }
-        }
+        public override WzFile WzFileParent => ParentImage.WzFileParent;
+
         #endregion
 
         #region Extended Properties Parsing
