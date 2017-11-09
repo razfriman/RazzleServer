@@ -29,7 +29,7 @@ namespace RazzleServer.Game.Maple.Characters
                 {
                     item.Controller = this.Parent;
                     base.InsertItem(index, item);
-                    this.Parent.Client.Send(item.GetControlRequestPacket());
+                    //this.Parent.Client.Send(item.GetControlRequestPacket());
                 }
                 else
                 {

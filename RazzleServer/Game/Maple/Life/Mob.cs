@@ -37,13 +37,11 @@ namespace RazzleServer.Game.Maple.Life
         public uint Experience { get; private set; }
         public int Link { get; private set; }
         public short SummonType { get; private set; }
-        public int KnockBack { get; private set; }
         public int FixedDamage { get; private set; }
         public int DeathBuff { get; private set; }
         public int DeathAfter { get; private set; }
         public double Traction { get; private set; }
-        public int DamagedBySkillOnly { get; private set; }
-        public int DamagedByMobOnly { get; private set; }
+        public bool DamagedByMobOnly { get; private set; }
         public int DropItemPeriod { get; private set; }
         public byte HpBarForeColor { get; private set; }
         public byte HpBarBackColor { get; private set; }
@@ -75,40 +73,55 @@ namespace RazzleServer.Game.Maple.Life
 
             MapleID = id;
 
-            //MapleID = (int)datum["mobid"];
+            Level = img["level"]?.GetShort() ?? 1;
+            MaxHealth = (uint)(img["maxHP"]?.GetInt() ?? 0);
+            Health = MaxHealth;
+            MaxMana = (uint)(img["maxMP"]?.GetInt() ?? 0);
+            Mana = MaxHealth;
+            Speed = img["speed"]?.GetShort() ?? 0;
+            HpBarForeColor = (byte)(img["hpTagColor"]?.GetInt() ?? 0);
+            HpBarBackColor = (byte)(img["hpTagBgcolor"]?.GetInt() ?? 0);
+            SummonType = img["summonType"]?.GetShort() ?? 0;
+            Link = img["link"]?.GetInt() ?? 0;
+            WeaponAttack = img["PADamage"]?.GetInt() ?? 0;
+            WeaponDefense = img["PDDamage"]?.GetInt() ?? 0;
+            MagicAttack = img["MADamage"]?.GetInt() ?? 0;
+            MagicDefense = img["MDDamage"]?.GetInt() ?? 0;
+            Accuracy = img["acc"]?.GetShort() ?? 0;
+            Avoidability = img["eva"]?.GetShort() ?? 0;
+            Experience = (uint)(img["exp"]?.GetInt() ?? 0);
+            HealthRecovery = (uint)(img["hpRecovery"]?.GetInt() ?? 0);
+            ManaRecovery = (uint)(img["mpRecovery"]?.GetInt() ?? 0);
+            ChaseSpeed = img["chaseSpeed"]?.GetShort() ?? 0;
+            FixedDamage = img["fixedDamage"]?.GetInt() ?? 0;
+            DropItemPeriod = img["dropItemPeriod"]?.GetInt() ?? 0;
+            DamagedByMobOnly = (img["damagedByMob"]?.GetInt() ?? 0) > 0;
+            Traction = img["fs"]?.GetDouble() ?? 0d;
+            DeathAfter = img["removeAfter"]?.GetInt() ?? 0;
 
-            //Level = (short)datum["mob_level"];
-            //Health = MaxHealth = (uint)datum["hp"];
-            //Mana = MaxMana = (uint)datum["mp"];
-            //HealthRecovery = (uint)datum["hp_recovery"];
-            //ManaRecovery = (uint)datum["mp_recovery"];
+            //publicReward
+            //explosiveReward
+            //HPgaugeHide
+            //firstAttack
+            //boss
+            //undead
+            //pushed
+            //bodyAttack
+            //elemAttr
+            //noFlip
+            //damagedBySelectedMob/0 = 9300150
+            //doNotRemove
+            //onlyNormalAttack
+
             //ExplodeHealth = (int)datum["explode_hp"];
-            //Experience = (uint)datum["experience"];
-            //Link = (int)datum["link"];
-            //SummonType = (short)datum["summon_type"];
-            //KnockBack = (int)datum["knockback"];
-            //FixedDamage = (int)datum["fixed_damage"];
             //DeathBuff = (int)datum["death_buff"];
-            //DeathAfter = (int)datum["death_after"];
-            //Traction = (double)datum["traction"];
-            //DamagedBySkillOnly = (int)datum["damaged_by_skill_only"];
-            //DamagedByMobOnly = (int)datum["damaged_by_mob_only"];
-            //DropItemPeriod = (int)datum["drop_item_period"];
-            //HpBarForeColor = (byte)(sbyte)datum["hp_bar_color"];
-            //HpBarBackColor = (byte)(sbyte)datum["hp_bar_bg_color"];
-            //CarnivalPoints = (byte)(sbyte)datum["carnival_points"];
-            //WeaponAttack = (int)datum["physical_attack"];
-            //WeaponDefense = (int)datum["physical_defense"];
-            //MagicAttack = (int)datum["magical_attack"];
-            //MagicDefense = (int)datum["magical_defense"];
-            //Accuracy = (short)datum["accuracy"];
-            //Avoidability = (short)datum["avoidability"];
-            //Speed = (short)datum["speed"];
-            //ChaseSpeed = (short)datum["chase_speed"];
 
             Loots = new List<Loot>();
             Skills = new MobSkills(this);
             DeathSummons = new List<int>();
+
+            img["skill"]?.WzProperties.ForEach(x => Skills.Add(new MobSkill(x)));
+            img["revive"]?.WzProperties?.ForEach(x => DeathSummons.Add(x.GetInt()));
         }
 
         public Mob(int mapleID)
@@ -126,12 +139,10 @@ namespace RazzleServer.Game.Maple.Life
             Experience = CachedReference.Experience;
             Link = CachedReference.Link;
             SummonType = CachedReference.SummonType;
-            KnockBack = CachedReference.KnockBack;
             FixedDamage = CachedReference.FixedDamage;
             DeathBuff = CachedReference.DeathBuff;
             DeathAfter = CachedReference.DeathAfter;
             Traction = CachedReference.Traction;
-            DamagedBySkillOnly = CachedReference.DamagedBySkillOnly;
             DamagedByMobOnly = CachedReference.DamagedByMobOnly;
             DropItemPeriod = CachedReference.DropItemPeriod;
             HpBarForeColor = CachedReference.HpBarForeColor;

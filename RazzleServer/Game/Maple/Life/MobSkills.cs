@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using RazzleServer.Common.Util;
 
 namespace RazzleServer.Game.Maple.Life
@@ -9,18 +8,11 @@ namespace RazzleServer.Game.Maple.Life
         public Mob Parent { get; private set; }
 
         public MobSkills(Mob parent)
-            : base()
         {
-            this.Parent = parent;
+            Parent = parent;
         }
 
-        public MobSkill Random
-        {
-            get
-            {
-                return base[Functions.Random(this.Count - 1)];
-            }
-        }
+        public MobSkill Random => base[Functions.Random(this.Count - 1)];
 
         public new MobSkill this[int mapleID]
         {

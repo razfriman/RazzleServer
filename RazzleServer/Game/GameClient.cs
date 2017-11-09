@@ -59,11 +59,13 @@ namespace RazzleServer.Game
             var save = Character;
             try
             {
-                Character?.Save();
-                Character?.Map?.Characters?.Remove(Character);
                 Connected = false;
                 Server.RemoveClient(this);
                 Socket?.Dispose();
+
+                Character?.Save();
+                Character?.Map?.Characters?.Remove(Character);
+                Character = null;
             }
             catch (Exception e)
             {
@@ -80,6 +82,14 @@ namespace RazzleServer.Game
             outPacket.WriteBytes(Socket.HostBytes);
             outPacket.WriteUShort(Server.World[channelID].Port);
             Send(outPacket);
+        }
+
+        public void StartPingCheck() {
+            Ping();
+
+            if (Socket?.Connected ?? false) {
+                Delay.Execute(() => StartPingCheck(), 5 * 1000);    
+            }
         }
 
         public void Ping() => Send(new PacketWriter(ServerOperationCode.Ping));

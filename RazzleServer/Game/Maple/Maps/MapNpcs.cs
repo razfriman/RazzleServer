@@ -14,7 +14,7 @@ namespace RazzleServer.Game.Maple.Maps
             if (DataProvider.IsInitialized)
             {
                 this.Map.Broadcast(item.GetCreatePacket());
-                //item.AssignController();
+                item.AssignController();
             }
         }
 

@@ -9,7 +9,12 @@ namespace RazzleServer.Game.Handlers
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
-            var shop = client.Character.LastNpc.Shop;
+            var shop = client.Character.LastNpc?.Shop;
+
+            // TODO - Load the shop
+            if(shop == null) {
+                client.Character.Release();
+            }
 
             var action = (ShopAction)packet.ReadByte();
 

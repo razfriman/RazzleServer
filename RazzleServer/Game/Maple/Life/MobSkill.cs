@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
+using RazzleServer.Common.WzLib;
 using RazzleServer.Game.Maple.Characters;
 
 namespace RazzleServer.Game.Maple.Life
@@ -28,11 +29,11 @@ namespace RazzleServer.Game.Maple.Life
         public short SummonLimit { get; private set; }
         public short SummonEffect { get; private set; }
 
-        public MobSkill(Datum datum)
+        public MobSkill(WzImageProperty img)
         {
-            MapleID = (byte)(int)datum["skillid"];
-            Level = (byte)(short)datum["skill_level"];
-            EffectDelay = (short)(short)datum["effect_delay"];
+            MapleID = (byte)(img["skill"]?.GetInt() ?? 0);
+            Level = (byte)(img["level"]?.GetInt() ?? 0);
+            EffectDelay = img["effectAfter"]?.GetShort() ?? 0;
         }
 
         public void Load(Datum datum)

@@ -121,7 +121,6 @@ namespace RazzleServer.Common.Network
 		public void Disconnect()
 		{
 			Log.LogInformation("Client Disconnected");
-			_client.Disconnected();
 			Dispose();
 		}
 

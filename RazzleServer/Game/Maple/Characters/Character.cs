@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Data;
@@ -627,8 +628,9 @@ namespace RazzleServer.Game.Maple.Characters
             ShowApple();
             UpdateStatsForParty();
             Keymap.Send();
-            Client.Ping();
             //Memos.Send();
+
+            Task.Factory.StartNew(() => { Client.StartPingCheck(); });
         }
 
         private void ShowApple()

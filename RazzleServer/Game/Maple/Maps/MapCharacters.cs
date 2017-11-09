@@ -100,7 +100,7 @@ namespace RazzleServer.Game.Maple.Maps
         {
             lock (this)
             {
-                Character item = base.Items[index];
+                var item = Items[index];
 
                 item.ControlledMobs.Clear();
                 item.ControlledNpcs.Clear();
@@ -127,9 +127,6 @@ namespace RazzleServer.Game.Maple.Maps
             }
         }
 
-        protected override int GetKeyForItem(Character item)
-        {
-            return item.ID;
-        }
+        protected override int GetKeyForItem(Character item) => item.ID;
     }
 }

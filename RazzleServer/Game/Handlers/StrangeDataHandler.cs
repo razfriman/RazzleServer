@@ -5,9 +5,6 @@ namespace RazzleServer.Game.Handlers
     [PacketHandler(ClientOperationCode.StrangeData)]
     public class StrangeDataHandler : GamePacketHandler
     {
-        public override void HandlePacket(PacketReader packet, GameClient client)
-        {
-            client.Character.Release();
-        }
+        public override void HandlePacket(PacketReader packet, GameClient client) => client.Character.Release();
     }
 }

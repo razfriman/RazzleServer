@@ -9,7 +9,6 @@ namespace RazzleServer.Login.Handlers
         {
             var a = packet.ReadBool();
             var b = packet.ReadInt();
-
         }
     }
 }

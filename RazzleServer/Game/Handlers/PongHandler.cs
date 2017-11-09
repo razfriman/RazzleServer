@@ -1,16 +1,11 @@
 ﻿using System;
 using RazzleServer.Common.Packet;
-using RazzleServer.Common.Util;
 
 namespace RazzleServer.Game.Handlers
 {
     [PacketHandler(ClientOperationCode.Pong)]
     public class PongHandler : GamePacketHandler
     {
-        public override void HandlePacket(PacketReader packet, GameClient client) 
-        {
-            client.LastPong = DateTime.Now;
-            //Delay.Execute(() => client.Ping(), 30 * 1000);
-        }
+        public override void HandlePacket(PacketReader packet, GameClient client)  => client.LastPong = DateTime.Now;
     }
 }
