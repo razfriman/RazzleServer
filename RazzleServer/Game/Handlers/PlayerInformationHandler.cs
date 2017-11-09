@@ -25,13 +25,9 @@ namespace RazzleServer.Game.Handlers
                 oPacket.WriteShort(target.Fame);
                 oPacket.WriteBool(false); // NOTE: Marriage.
                 oPacket.WriteString(target.Guild?.Name ?? "-");
-                oPacket.WriteByte(0); // NOTE: Unknown.
                 oPacket.WriteByte(0); // NOTE: Pets.
                 oPacket.WriteByte(0); // NOTE: Mount.
                 oPacket.WriteByte(0); // NOTE: Wishlist.
-                oPacket.WriteInt(0); // NOTE: Medal ID.
-                oPacket.WriteShort(0); // NOTE: Medal quests.
-
                 client.Send(oPacket);
             }
         }

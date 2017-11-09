@@ -73,7 +73,7 @@
         CloseRangeAttack = 0x59,
         FaceExpression = 0x5C,
         UseItemEffect = 0x5D,
-       
+
         InventoryAction = 0x62,
         UseItem = 0x63,
         UseReturnScroll = 0x64,
@@ -109,14 +109,14 @@
         //ITEM_MOVE = 0x62
         //USE_ITEM = ITEM_MOVE 1
         //SPECIAL_MOVE = 0x51
-        //WHISPER = 0x58
+        Whisper = 0x58,
         //MOVE_LIFE = 0x9D
         //CANCEL_CHAIR = 0x2B
         //NPC_ACTION = 0x98
 
         Sit = 42,
         CloseChalkboard = 50,
-        UseDeathItem = 53,
+        UseDeathItem = 0xFF,
         AdminShopAction = 68,
         UsePetFood = 0x4C,
         UseMountFood = 0x4D,
@@ -157,12 +157,7 @@
         MonsterCarnival = 0xD0,
         PlayerUpdate = 0xD5,
         LeaveField = 0xDF,
-        MtsOperation = 0xF1,
-        UseMapleLife = 0xF4,
-        MapleTV = 0x222,
         HitReactor = 205,
         TouchReactor = 206,
-        PartySearchStart = 222,
-        PartySearchStop = 223,
     }
 }

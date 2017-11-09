@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Net.Sockets;
 using RazzleServer.Common.Network;
 using Microsoft.Extensions.Logging;
@@ -7,7 +6,6 @@ using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple;
 using RazzleServer.Game.Maple.Characters;
-using RazzleServer.Center;
 
 namespace RazzleServer.Game
 {
@@ -61,6 +59,8 @@ namespace RazzleServer.Game
             var save = Character;
             try
             {
+                Character?.Save();
+                Character?.Map?.Characters?.Remove(Character);
                 Connected = false;
                 Server.RemoveClient(this);
                 Socket?.Dispose();
@@ -71,12 +71,6 @@ namespace RazzleServer.Game
             }
         }
 
-        public override void Terminate(string message = null)
-        {
-            Character?.Save();
-            Character?.Map?.Characters?.Remove(Character);
-        }
-
         public void ChangeChannel(byte channelID)
         {
             var outPacket = new PacketWriter(ServerOperationCode.MigrateCommand);
@@ -85,5 +79,7 @@ namespace RazzleServer.Game
             outPacket.WriteUShort(Server.World[channelID].Port);
             Send(outPacket);
         }
+
+        public void Ping() => Send(new PacketWriter(ServerOperationCode.Ping));
     }
 }

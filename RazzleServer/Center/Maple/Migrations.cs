@@ -11,6 +11,7 @@ namespace RazzleServer.Center.Maple
             var migration = this
                 .Where(x => x.Host == host)
                 .FirstOrDefault(x => x.CharacterID == characterID);
+            
             return RemoveMigration(migration);
         }
 

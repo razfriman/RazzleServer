@@ -11,11 +11,7 @@ namespace RazzleServer.Login.Handlers
             var characterID = packet.ReadInt();
             client.MacAddresses = packet.ReadString().Split(new char[] { ',', ' ' });
 
-            if (!client.Server.Manager.Migrate(client.Host, client.Account.ID, characterID))
-            {
-                client.Terminate();
-                return;
-            }
+            client.Server.Manager.Migrate(client.Host, client.Account.ID, characterID);
 
             using (var oPacket = new PacketWriter(ServerOperationCode.SelectCharacterResult))
             {

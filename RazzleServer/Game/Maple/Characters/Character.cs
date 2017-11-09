@@ -627,7 +627,8 @@ namespace RazzleServer.Game.Maple.Characters
             ShowApple();
             UpdateStatsForParty();
             Keymap.Send();
-            Memos.Send();
+            Client.Ping();
+            //Memos.Send();
         }
 
         private void ShowApple()
@@ -641,7 +642,8 @@ namespace RazzleServer.Game.Maple.Characters
         public void Update(params StatisticType[] statistics)
         {
             var oPacket = new PacketWriter(ServerOperationCode.StatChanged);
-            oPacket.WriteBool(true); // TODO: bOnExclRequest.
+            oPacket.WriteBool(true);
+            oPacket.WriteBool(false);
 
             int flag = 0;
 
@@ -779,7 +781,7 @@ namespace RazzleServer.Game.Maple.Characters
             ChangeMap(mapID, DataProvider.Maps[mapID].Portals[portalLabel].ID);
         }
 
-        public void ChangeMap(int mapID, byte portalID = 0, bool fromPosition = false, Point position = null)
+        public void ChangeMap(int mapID, byte? portalID = null, bool fromPosition = false, Point position = null)
         {
             Map.Characters.Remove(this);
 
@@ -788,10 +790,8 @@ namespace RazzleServer.Game.Maple.Characters
                 oPacket.WriteInt(Client.Server.ChannelID);
                 oPacket.WriteByte(++Portals);
                 oPacket.WriteBool(false);
-                oPacket.WriteShort(0);
-                oPacket.WriteByte(0);
                 oPacket.WriteInt(mapID);
-                oPacket.WriteByte(SpawnPoint);
+                oPacket.WriteByte(portalID ?? SpawnPoint);
                 oPacket.WriteShort(Health);
                 oPacket.WriteBool(fromPosition);
 
@@ -941,14 +941,13 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public void Talk(string text, bool isShout)
+        public void Talk(string text)
         {
             using (var oPacket = new PacketWriter(ServerOperationCode.UserChat))
             {
                 oPacket.WriteInt(ID);
                 oPacket.WriteBool(IsMaster);
                 oPacket.WriteString(text);
-                oPacket.WriteBool(isShout);
                 Map.Broadcast(oPacket);
             }
         }

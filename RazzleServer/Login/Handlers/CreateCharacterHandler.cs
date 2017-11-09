@@ -22,11 +22,11 @@ namespace RazzleServer.Login.Handlers
             int bottomID = packet.ReadInt();
             int shoesID = packet.ReadInt();
             int weaponID = packet.ReadInt();
+            var gender = (Gender)packet.ReadByte();
             var strength = packet.ReadByte();
             var dexterity = packet.ReadByte();
             var intelligence = packet.ReadByte();
             var luck = packet.ReadByte();
-            Gender gender = (Gender)packet.ReadByte();
 
             bool error = name.Length < 4
                              || name.Length > 12

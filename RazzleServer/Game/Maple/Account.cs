@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Data;
 using RazzleServer.Common.Constants;
-using RazzleServer.Common.Data;
+using RazzleServer.Common.Exceptions;
+using RazzleServer.Data;
 
 namespace RazzleServer.Game.Maple
 {
@@ -9,33 +9,41 @@ namespace RazzleServer.Game.Maple
     {
         public GameClient Client { get; private set; }
 
-        public int ID { get; private set; }
+        public int ID { get; set; }
         public string Username { get; set; }
         public Gender Gender { get; set; }
         public bool IsMaster { get; set; }
+        public bool IsBanned { get; set; }
         public DateTime Birthday { get; set; }
         public DateTime Creation { get; set; }
 
         private bool Assigned { get; set; }
 
-        public Account(GameClient client)
+        public Account(int accountID, GameClient client)
         {
-            this.Client = client;
+            ID = accountID;
+            Client = client;
         }
 
-        public void Load(int accountID)
+        public void Load()
         {
-            Datum datum = new Datum("accounts");
-            datum.Populate("ID = {0}", accountID);
+            using (var dbContext = new MapleDbContext())
+            {
+                var account = dbContext.Accounts.Find(ID);
 
-            this.ID = (int)datum["ID"];
-            this.Assigned = true;
+                if (account == null)
+                {
+                    throw new NoAccountException();
+                }
 
-            this.Username = (string)datum["Username"];
-            this.Gender = (Gender)datum["Gender"];
-            this.IsMaster = (bool)datum["IsMaster"];
-            this.Birthday = (DateTime)datum["Birthday"];
-            this.Creation = (DateTime)datum["Creation"];
+                ID = account.ID;
+                Username = account.Username;
+                Gender = (Gender)account.Gender;
+                Birthday = account.Birthday;
+                Creation = account.Creation;
+                IsBanned = account.IsBanned;
+                IsMaster = account.IsMaster;
+            }
         }
     }
 }

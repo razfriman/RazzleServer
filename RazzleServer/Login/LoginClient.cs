@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
-using System.Reflection;
 using RazzleServer.Common.Network;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Packet;
@@ -29,8 +26,6 @@ namespace RazzleServer.Login
         {
             Server = server;
         }
-
-
 
         public override void Receive(PacketReader packet)
         {
@@ -99,6 +94,7 @@ namespace RazzleServer.Login
                     Account.Birthday = DateTime.UtcNow;
                     Account.Creation = DateTime.UtcNow;
                     Account.MaxCharacters = ServerConfig.Instance.DefaultCreationSlots;
+                    Account.IsMaster = true;
                     Account.Create();
                 }
                 else

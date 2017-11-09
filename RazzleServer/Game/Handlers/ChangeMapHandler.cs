@@ -13,11 +13,8 @@ namespace RazzleServer.Game.Handlers
             {
                 return;
             }
-
             int mapID = packet.ReadInt();
             string portalLabel = packet.ReadString();
-            packet.ReadByte(); // NOTE: Unknown.
-            bool wheel = packet.ReadBool();
 
             switch (mapID)
             {
@@ -45,7 +42,7 @@ namespace RazzleServer.Game.Handlers
 
                 default: // NOTE: Admin '/m' command.
                     {
-                        if (!client.Character.IsMaster)
+                        if (!client.Account.IsMaster)
                         {
                             return;
                         }

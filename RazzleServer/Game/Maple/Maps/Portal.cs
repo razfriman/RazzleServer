@@ -3,6 +3,7 @@ using RazzleServer.Common.Constants;
 using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
+using RazzleServer.Common.WzLib;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
 
@@ -17,6 +18,8 @@ namespace RazzleServer.Game.Maple.Maps
         public int DestinationMapID { get; private set; }
         public string DestinationLabel { get; private set; }
         public string Script { get; private set; }
+        public bool IsOnlyOnce { get; private set; }
+        public int PortalType { get; private set; }
 
         public bool IsSpawnPoint => Label == "sp";
 
@@ -24,14 +27,16 @@ namespace RazzleServer.Game.Maple.Maps
 
         public Portal Link => DataProvider.Maps[DestinationMapID].Portals[DestinationLabel];
 
-        public Portal(Datum datum)
+        public Portal(WzImageProperty datum)
         {
-            ID = (byte)(int)datum["id"];
-            Label = (string)datum["label"];
-            Position = new Point((short)datum["x_pos"], (short)datum["y_pos"]);
-            DestinationMapID = (int)datum["destination"];
-            DestinationLabel = (string)datum["destination_label"];
-            Script = (string)datum["script"];
+            ID = byte.Parse(datum.Name);
+            Position = new Point(datum["x"].GetShort(), datum["y"].GetShort());
+            Label = datum["pn"].GetString();
+            DestinationMapID = datum["tm"].GetInt();
+            DestinationLabel = datum["tn"]?.GetString();
+            Script = datum["script"]?.GetString();
+            PortalType = datum["pt"].GetInt();
+            IsOnlyOnce = (datum["onlyOnce"]?.GetInt() ?? 0) > 0;
         }
 
         public virtual void Enter(Character character)

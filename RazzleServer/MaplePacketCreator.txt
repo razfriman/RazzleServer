@@ -681,7 +681,7 @@ public class MaplePacketCreator {
 
         mplew.write(chr.getBuddylist().getCapacity()); // buddylist capacity
 
-        mplew.writeInt(chr.getMeso()); // mesos
+        mplew.wrigteInt(chr.getMeso()); // mesos
 
         mplew.write(100); // equip slots
 

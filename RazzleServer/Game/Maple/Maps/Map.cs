@@ -59,6 +59,18 @@ namespace RazzleServer.Game.Maple.Maps
             SpawnPoints = new MapSpawnPoints(this);
             PlayerShops = new MapPlayerShops(this);
 
+            var info = img["info"];
+            IsTown = (info["town"]?.GetInt() ?? 0) > 0;
+            SpawnRate = info["mobRate"]?.GetDouble() ?? 1.0;
+            ReturnMapID = info["returnMap"]?.GetInt() ?? 0;
+            ForcedReturnMapID = info["forcedReturn"]?.GetInt() ?? 0;
+
+            var portals = img["portal"];
+            foreach (var portal in portals.WzProperties)
+            {
+                Portals.Add(new Portal(portal));
+            
+            }
             //foreach (Datum datum in new Datums("map_footholds", Database.SchemaMCDB).Populate("mapid = {0}", key))
             //{
             //    this[key].Footholds.Add(new Foothold(datum));

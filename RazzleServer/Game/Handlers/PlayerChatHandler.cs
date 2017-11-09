@@ -10,7 +10,6 @@ namespace RazzleServer.Game.Handlers
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
             string text = packet.ReadString();
-            bool shout = packet.ReadBool();
 
             if (text.StartsWith(ServerConfig.Instance.CommandIndicator))
             {
@@ -18,7 +17,7 @@ namespace RazzleServer.Game.Handlers
             }
             else
             {
-                client.Character.Talk(text, shout);
+                client.Character.Talk(text);
             }
         }
     }
