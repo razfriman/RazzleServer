@@ -16,7 +16,7 @@ namespace RazzleServer.Game.Maple.Data
 
         private readonly ILogger Log = LogManager.Log;
 
-        public CachedItems()
+        public void Load()
         {
             Log.LogInformation("Loading Items");
 

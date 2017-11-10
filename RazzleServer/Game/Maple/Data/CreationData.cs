@@ -32,7 +32,7 @@ namespace RazzleServer.Game.Maple.Data
         public List<int> MaleWeapons { get; private set; } = new List<int>();
         public List<int> FemaleWeapons { get; private set; } = new List<int>();
 
-        public CreationData()
+        public void Load()
         {
             Log.LogInformation("Loading Character Creation Data");
 

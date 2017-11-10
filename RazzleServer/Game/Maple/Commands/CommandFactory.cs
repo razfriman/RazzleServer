@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Util;
@@ -17,13 +18,14 @@ namespace RazzleServer.Game.Maple.Commands
         {
             Commands = new Commands();
 
-            foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
-            {
-                if (type.IsSubclassOf(typeof(Command)))
-                {
-                    Commands.Add((Command)Activator.CreateInstance(type));
-                }
-            }
+            var commandTypes = Assembly.GetExecutingAssembly()
+                    .GetTypes()
+                    .Where(x => x.IsSubclassOf(typeof(Command)))
+                    .ToList();
+
+            commandTypes.ForEach(x => Commands.Add((Command)Activator.CreateInstance(x)));
+
+            Log.LogInformation($"Loaded {commandTypes.Count} commands");
         }
 
         public static void Execute(Character caller, string text)

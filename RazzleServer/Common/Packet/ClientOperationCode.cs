@@ -34,9 +34,11 @@
 
 
         Storage = 0x20,
-        NpcConverse = 0x21,
-        NpcResult = 0x22,
-        NpcShop = 0x23,
+        NpcResult = 0x21,
+        NpcShop = 0x22,
+        NpcConverse = 0x23,
+        NpcAction = 0xBB,
+
         ChannelChange = 0x27,
         CashShopMigration = 0x28,
         TakeDamage = 0x2A,
@@ -90,6 +92,8 @@
         SummonAttack = 0x7B,
         MoveSummon = 0x7C,
 
+        MobMovement = 0x9D,
+
         PetChat = 0x82,
         PetCommand = 0x80,
         MovePet = 0x84,
@@ -103,14 +107,11 @@
         CouponCode = 0xAC,
 
 
-        //NPC_TALK_MORE = STORAGE 1
-        //NPC_SHOP = NPC_TALK_MORE 1
-        //NPC_TALK = NPC_SHOP 1
         //ITEM_MOVE = 0x62
         //USE_ITEM = ITEM_MOVE 1
         //SPECIAL_MOVE = 0x51
         Whisper = 0x58,
-        //MOVE_LIFE = 0x9D
+
         //CANCEL_CHAIR = 0x2B
         //NPC_ACTION = 0x98
 
@@ -148,11 +149,9 @@
         PetAutoPot = 0xA5,
         PetExcludeItems = 0xA6,
         Beholder = 0xAC,
-        MobMovement = 0xBC,
         MobDamageModFriendly = 0xB6,
         MonsterBomb = 0xB7,
         MobDamageMob = 0xB8,
-        NpcAction = 0xBB,
         ChangedMap = 0xC4,
         MonsterCarnival = 0xD0,
         PlayerUpdate = 0xD5,

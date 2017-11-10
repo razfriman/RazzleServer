@@ -1,7 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using Microsoft.Extensions.Logging;
-using RazzleServer.Common.Constants;
-using RazzleServer.Common.Data;
 using RazzleServer.Common.Util;
 
 namespace RazzleServer.Game.Maple.Data
@@ -10,8 +8,7 @@ namespace RazzleServer.Game.Maple.Data
     {
         private readonly ILogger Log = LogManager.Log;
 
-        public CachedQuests()
-            : base()
+        public void Load()
         {
             Log.LogInformation("Loading Quests");
 

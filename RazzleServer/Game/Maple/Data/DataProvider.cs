@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Commands;
@@ -8,7 +9,6 @@ namespace RazzleServer.Game.Maple.Data
     public static class DataProvider
     {
         public static bool IsInitialized { get; private set; }
-
         public static AvailableStyles Styles { get; private set; }
         public static CachedItems Items { get; private set; }
         public static CachedSkills Skills { get; private set; }
@@ -20,44 +20,9 @@ namespace RazzleServer.Game.Maple.Data
 
         private static readonly ILogger Log = LogManager.Log;
 
-
         public static void Initialize()
         {
             IsInitialized = false;
-
-            if (Styles != null)
-            {
-                Styles.Skins.Clear();
-                Styles.MaleHairs.Clear();
-                Styles.MaleFaces.Clear();
-                Styles.FemaleHairs.Clear();
-                Styles.FemaleFaces.Clear();
-            }
-
-            if (Items != null)
-            {
-                Items.Clear();
-            }
-
-            if (Skills != null)
-            {
-                Skills.Clear();
-            }
-
-            if (Mobs != null)
-            {
-                Mobs.Clear();
-            }
-
-            if (Maps != null)
-            {
-                Maps.Clear();
-            }
-
-            if (Quests != null)
-            {
-                Quests.Clear();
-            }
 
             var sw = new Stopwatch();
 
@@ -74,7 +39,17 @@ namespace RazzleServer.Game.Maple.Data
             CreationData = new CreationData();
             Maps = new CachedMaps();
 
-            CommandFactory.Initialize();
+            Task.WaitAll(
+                Task.Run(() => Styles.Load()),
+                Task.Run(() => Items.Load()),
+                Task.Run(() => Skills.Load()),
+                Task.Run(() => Mobs.Load()),
+                Task.Run(() => Reactors.Load()),
+                Task.Run(() => Quests.Load()),
+                Task.Run(() => CreationData.Load()),
+                Task.Run(() => Maps.Load()),
+                Task.Run(() => CommandFactory.Initialize())
+            );
 
             sw.Stop();
 

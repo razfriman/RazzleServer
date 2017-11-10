@@ -26,38 +26,6 @@ namespace RazzleServer.Game.Maple
 
         public Movements(PacketReader iPacket)
         {
-            //2D 00 15 00 -- unk 
-
-            //03
-
-            //00 
-            //2D 00 2B 00  - point
-            //00 00 2C 01 - point
-            //00 00 - short
-            //12  - byte 
-            //96 00  - short
-
-            //00 
-            //2D 00 35 00 
-            //00 00 00 00 
-            //00 00 
-            //12 
-            //1E 00 
-
-            //00 
-            //2D 00 35 00 
-            //00 00 00 00 
-            //00 00
-            //12
-            //4A 01 
-
-            //11  -- 17 states 
-            //F0 FF FF FF FF FF FF FF 0F 
-
-
-            //2D 00 15 00 
-            //2D 00 35 00
-
             short foothold = 0;
             byte stance = 0;
             Point position = iPacket.ReadPoint();

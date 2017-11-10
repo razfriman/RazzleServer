@@ -93,7 +93,7 @@ namespace RazzleServer.Game.Maple.Maps
                 }
             }
 
-            Map.Broadcast(item.GetCreatePacket(), item);
+            Map.Broadcast(item.GetCreatePacket());
         }
 
         protected override void RemoveItem(int index)

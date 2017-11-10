@@ -8,6 +8,7 @@ using RazzleServer.Game;
 using RazzleServer.Center.Maple;
 using RazzleServer.Server;
 using RazzleServer.Game.Maple.Data;
+using System;
 
 namespace RazzleServer.Center
 {
@@ -21,7 +22,8 @@ namespace RazzleServer.Center
 
         private readonly ILogger Log = LogManager.Log;
 
-        public ServerManager() {
+        public ServerManager()
+        {
             Worlds = new Worlds();
             Migrations = new Maple.Migrations();
 
@@ -65,7 +67,28 @@ namespace RazzleServer.Center
 
         public int ValidateMigration(string host, int characterID) => Migrations.Validate(host, characterID);
 
-        internal void Migrate(string host, int accountID, int characterID) => Migrations.Add(new Migration(host, accountID, characterID));
+        internal void Migrate(string host, int accountID, int characterID)
+        {
+            if (Migrations.Contains(host))
+            {
+                Migrations.Remove(host);
+            }
+
+            Migrations.Add(new Migration(host, accountID, characterID));
+        }
+
+        internal void ProcessInput()
+        {
+            while (true)
+            {
+                var line = Console.ReadLine();
+                ProcessCommandLineComand(line);
+            }
+        }
+
+        private void ProcessCommandLineComand(string line)
+        {
+        }
 
         public static ServerManager Instance
         {

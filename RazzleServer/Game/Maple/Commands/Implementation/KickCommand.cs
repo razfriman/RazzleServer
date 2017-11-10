@@ -46,7 +46,7 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
                     return;
                 }
 
-                target.Client.Terminate();
+                target.Client.Terminate("Player was kicked");
             }
         }
     }

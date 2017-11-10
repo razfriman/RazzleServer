@@ -18,8 +18,7 @@ namespace RazzleServer.Game.Maple.Data
 
         private readonly ILogger Log = LogManager.Log;
 
-        public AvailableStyles()
-        {
+        public void Load() {
             Log.LogInformation("Loading Character Creation Data");
 
             Skins = new List<byte>();

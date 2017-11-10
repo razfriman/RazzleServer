@@ -14,13 +14,6 @@ namespace RazzleServer.Game.Maple.Characters
             this.Parent = parent;
         }
 
-        public void Move(PacketReader iPacket)
-        {
-            int objectID = iPacket.ReadInt();
-            var mob = this[objectID];
-            mob?.Move(iPacket);
-        }
-
         protected override void InsertItem(int index, Mob item)
         {
             lock (this)
@@ -75,9 +68,6 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        protected override int GetKeyForItem(Mob item)
-        {
-            return item.ObjectID;
-        }
+        protected override int GetKeyForItem(Mob item) => item.ObjectID;
     }
 }

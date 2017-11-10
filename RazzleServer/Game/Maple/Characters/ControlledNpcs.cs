@@ -14,13 +14,6 @@ namespace RazzleServer.Game.Maple.Characters
             this.Parent = parent;
         }
 
-        public void Move(PacketReader iPacket)
-        {
-            int objectID = iPacket.ReadInt();
-            var npc = this[objectID];
-            npc?.Move(iPacket);
-        }
-
         protected override void InsertItem(int index, Npc item)
         {
             lock (this)

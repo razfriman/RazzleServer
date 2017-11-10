@@ -45,7 +45,6 @@ namespace RazzleServer.Game.Maple.Characters
         public CharacterTrocks Trocks { get; private set; }
         public CharacterMemos Memos { get; private set; }
         public CharacterStorage Storage { get; private set; }
-        public CharacterVariables Variables { get; private set; }
         public ControlledMobs ControlledMobs { get; private set; }
         public ControlledNpcs ControlledNpcs { get; private set; }
         public Trade Trade { get; set; }
@@ -593,7 +592,6 @@ namespace RazzleServer.Game.Maple.Characters
             Trocks = new CharacterTrocks(this);
             Memos = new CharacterMemos(this);
             Storage = new CharacterStorage(this);
-            Variables = new CharacterVariables(this);
             Position = new Point(0, 0);
             ControlledMobs = new ControlledMobs(this);
             ControlledNpcs = new ControlledNpcs(this);
@@ -630,7 +628,7 @@ namespace RazzleServer.Game.Maple.Characters
             Keymap.Send();
             //Memos.Send();
 
-            Task.Factory.StartNew(() => { Client.StartPingCheck(); });
+            //Task.Factory.StartNew(() => { Client.StartPingCheck(); });
         }
 
         private void ShowApple()
@@ -1512,7 +1510,6 @@ namespace RazzleServer.Game.Maple.Characters
             Buffs.Save();
             Keymap.Save();
             Trocks.Save();
-            Variables.Save();
 
             Log.LogInformation($"Saved character '{Name}' to database.");
         }
@@ -1546,7 +1543,7 @@ namespace RazzleServer.Game.Maple.Characters
                     Job = (short)Job,
                     Level = Level,
                     Luck = Luck,
-                    MapID = Map?.MapleID ?? ServerConfig.Instance.DefaultMapID,
+                    MapID = ServerConfig.Instance.DefaultMapID,
                     MaxHealth = MaxHealth,
                     MaxMana = MaxMana,
                     Meso = Meso,
@@ -1576,7 +1573,6 @@ namespace RazzleServer.Game.Maple.Characters
                 Buffs.Save();
                 Keymap.Save();
                 Trocks.Save();
-                Variables.Save();
             }
         }
 
@@ -1635,7 +1631,6 @@ namespace RazzleServer.Game.Maple.Characters
             Keymap.Load();
             Trocks.Load();
             Memos.Load();
-            Variables.Load();
         }
     }
 }

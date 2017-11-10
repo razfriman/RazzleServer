@@ -12,7 +12,7 @@ namespace RazzleServer.Game.Maple.Data
     {
         private readonly ILogger Log = LogManager.Log;
 
-        public CachedMobs()
+        public void Load()
         {
             Log.LogInformation("Loading Mobs");
 

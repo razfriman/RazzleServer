@@ -112,6 +112,7 @@ namespace RazzleServer.Game.Maple.Life
             //damagedBySelectedMob/0 = 9300150
             //doNotRemove
             //onlyNormalAttack
+            //buff
 
             //ExplodeHealth = (int)datum["explode_hp"];
             //DeathBuff = (int)datum["death_buff"];
@@ -233,7 +234,6 @@ namespace RazzleServer.Game.Maple.Life
             var skillID = iPacket.ReadInt();
             iPacket.ReadShort();
             iPacket.ReadInt();
-            iPacket.ReadPoint();
 
             Movements movements = new Movements(iPacket);
 
@@ -264,7 +264,7 @@ namespace RazzleServer.Game.Maple.Life
                 oPacket.WriteShort(moveAction);
                 oPacket.WriteBool(skill != null); // use skills
                 oPacket.WriteShort((short)Mana);
-                oPacket.WriteShort(0); // skill id, skill level?
+                oPacket.WriteShort(0); // skill id, skill level
 
                 Controller.Client.Send(oPacket);
             }

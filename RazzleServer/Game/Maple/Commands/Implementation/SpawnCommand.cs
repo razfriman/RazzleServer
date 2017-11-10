@@ -1,5 +1,4 @@
-﻿using System;
-using RazzleServer.Game.Maple.Characters;
+﻿using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Life;
 
@@ -7,29 +6,11 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
 {
     public sealed class SpawnCommand : Command
     {
-        public override string Name
-        {
-            get
-            {
-                return "spawn";
-            }
-        }
+        public override string Name => "spawn";
 
-        public override string Parameters
-        {
-            get
-            {
-                return "{ id | exact name } [ amount ] ";
-            }
-        }
+        public override string Parameters => "{ id } [ amount ] ";
 
-        public override bool IsRestricted
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool IsRestricted => true;
 
         public override void Execute(Character caller, string[] args)
         {
@@ -56,27 +37,19 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
                     amount = 1;
                 }
 
-                int mobId = -1;
-
-                try
+                if (int.TryParse(args[0], out var mobId))
                 {
-                    mobId = int.Parse(args[0]);
-                }
-                catch (FormatException)
-                {
-                    // TODO: Fetch from strings.
-                }
-
-                if (DataProvider.Mobs.Contains(mobId))
-                {
-                    for (int i = 0; i < amount; i++)
+                    if (DataProvider.Mobs.Contains(mobId))
                     {
-                        caller.Map.Mobs.Add(new Mob(mobId, caller.Position));
+                        for (int i = 0; i < amount; i++)
+                        {
+                            caller.Map.Mobs.Add(new Mob(mobId, caller.Position));
+                        }
                     }
-                }
-                else
-                {
-                    caller.Notify("[Command] Invalid mob.");
+                    else
+                    {
+                        caller.Notify("[Command] Invalid mob.");
+                    }
                 }
             }
         }

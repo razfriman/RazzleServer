@@ -23,7 +23,6 @@ namespace RazzleServer.Login.Handlers
                 oPacket.WriteInt(0);
                 oPacket.WriteByte(0);
                 client.Send(oPacket);
-                client.Terminate();
             }
         }
     }

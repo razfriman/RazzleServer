@@ -12,7 +12,7 @@ namespace RazzleServer.Game.Maple.Data
     {
         private readonly ILogger Log = LogManager.Log;
 
-        public CachedReactors()
+        public void Load()
         {
             Log.LogInformation("Loading Reactors");
 

@@ -15,26 +15,26 @@ namespace RazzleServer.Game.Maple.Characters
 
         public CharacterTrocks(Character parent)
         {
-            this.Parent = parent;
+            Parent = parent;
 
-            this.Regular = new List<int>();
-            this.VIP = new List<int>();
+            Regular = new List<int>();
+            VIP = new List<int>();
         }
 
         public void Load()
         {
-            foreach (Datum datum in new Datums("trocks").Populate("CharacterID = {0}", this.Parent.ID))
+            foreach (Datum datum in new Datums("trocks").Populate("CharacterID = {0}", Parent.ID))
             {
                 byte index = (byte)datum["Index"];
                 int map = (int)datum["Map"];
 
                 if (index >= 5)
                 {
-                    this.VIP.Add(map);
+                    VIP.Add(map);
                 }
                 else
                 {
-                    this.Regular.Add(map);
+                    Regular.Add(map);
                 }
             }
         }
@@ -45,11 +45,11 @@ namespace RazzleServer.Game.Maple.Characters
 
             byte index = 0;
 
-            foreach (int map in this.Regular)
+            foreach (int map in Regular)
             {
                 Datum datum = new Datum("trocks");
 
-                datum["CharacterID"] = this.Parent.ID;
+                datum["CharacterID"] = Parent.ID;
                 datum["Index"] = index++;
                 datum["Map"] = map;
 
@@ -58,11 +58,11 @@ namespace RazzleServer.Game.Maple.Characters
 
             index = 5;
 
-            foreach (int map in this.VIP)
+            foreach (int map in VIP)
             {
                 Datum datum = new Datum("trocks");
 
-                datum["CharacterID"] = this.Parent.ID;
+                datum["CharacterID"] = Parent.ID;
                 datum["Index"] = index++;
                 datum["Map"] = map;
 
@@ -72,7 +72,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public bool Contains(int mapID)
         {
-            foreach (int map in this.Regular)
+            foreach (int map in Regular)
             {
                 if (map == mapID)
                 {
@@ -80,7 +80,7 @@ namespace RazzleServer.Game.Maple.Characters
                 }
             }
 
-            foreach (int map in this.VIP)
+            foreach (int map in VIP)
             {
                 if (map == mapID)
                 {
@@ -104,28 +104,28 @@ namespace RazzleServer.Game.Maple.Characters
 
                         if (type == TrockType.Regular)
                         {
-                            if (!this.Regular.Contains(mapID))
+                            if (!Regular.Contains(mapID))
                             {
                                 return;
                             }
 
-                            this.Regular.Remove(mapID);
+                            Regular.Remove(mapID);
                         }
                         else if (type == TrockType.VIP)
                         {
-                            if (!this.VIP.Contains(mapID))
+                            if (!VIP.Contains(mapID))
                             {
                                 return;
                             }
 
-                            this.VIP.Remove(mapID);
+                            VIP.Remove(mapID);
                         }
                     }
                     break;
 
                 case TrockAction.Add:
                     {
-                        int mapID = this.Parent.Map.MapleID;
+                        int mapID = Parent.Map.MapleID;
 
                         // TODO: Check if the map field limits allow trocks (e.g. Maple Island is forbidden).
 
@@ -133,11 +133,11 @@ namespace RazzleServer.Game.Maple.Characters
                         {
                             if (type == TrockType.Regular)
                             {
-                                this.Regular.Add(mapID);
+                                Regular.Add(mapID);
                             }
                             else if (type == TrockType.VIP)
                             {
-                                this.VIP.Add(mapID);
+                                VIP.Add(mapID);
                             }
                         }
                         else
@@ -151,9 +151,9 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 oPacket.WriteByte((byte)(action == TrockAction.Remove ? 2 : 3));
                 oPacket.WriteByte((byte)type);
-                oPacket.WriteBytes(type == TrockType.Regular ? this.RegularToByteArray() : this.VIPToByteArray());
+                oPacket.WriteBytes(type == TrockType.Regular ? RegularToByteArray() : VIPToByteArray());
 
-                this.Parent.Client.Send(oPacket);
+                Parent.Client.Send(oPacket);
             }
         }
 
@@ -171,7 +171,7 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 int mapID = iPacket.ReadInt();
 
-                if (!this.Parent.Trocks.Contains(mapID))
+                if (!Parent.Trocks.Contains(mapID))
                 {
                     result = TrockResult.CannotGo;
                 }
@@ -212,7 +212,7 @@ namespace RazzleServer.Game.Maple.Characters
 
             if (result == TrockResult.Success)
             {
-                this.Parent.ChangeMap(destinationMapID);
+                Parent.ChangeMap(destinationMapID);
 
                 used = true;
             }
@@ -223,7 +223,7 @@ namespace RazzleServer.Game.Maple.Characters
                     oPacket.WriteByte((byte)result);
                     oPacket.WriteByte((byte)type);
 
-                    this.Parent.Client.Send(oPacket);
+                    Parent.Client.Send(oPacket);
                 }
             }
 
@@ -236,9 +236,9 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 int remaining = 1;
 
-                while (remaining <= this.Regular.Count)
+                while (remaining <= Regular.Count)
                 {
-                    oPacket.WriteInt(this.Regular[remaining - 1]);
+                    oPacket.WriteInt(Regular[remaining - 1]);
 
                     remaining++;
                 }
@@ -260,9 +260,9 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 int remaining = 1;
 
-                while (remaining <= this.VIP.Count)
+                while (remaining <= VIP.Count)
                 {
-                    oPacket.WriteInt(this.VIP[remaining - 1]);
+                    oPacket.WriteInt(VIP[remaining - 1]);
 
                     remaining++;
                 }

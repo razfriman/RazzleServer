@@ -9,7 +9,7 @@ namespace RazzleServer.Game.Handlers
         {
             var channel = packet.ReadByte();
             client.ChangeChannel(channel);
-            client.Terminate();
+            client.Terminate("Changing channel");
         }
     }
 }

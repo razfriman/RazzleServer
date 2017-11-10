@@ -414,10 +414,7 @@ namespace RazzleServer.Game.Maple.Interaction
             }
         }
 
-        public PacketWriter GetCreatePacket()
-        {
-            return this.GetSpawnPacket();
-        }
+        public PacketWriter GetCreatePacket() => GetSpawnPacket();
 
         public PacketWriter GetSpawnPacket()
         {

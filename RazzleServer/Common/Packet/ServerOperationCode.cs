@@ -5,15 +5,14 @@
         CheckPasswordResult = 0x00,
         AccountInfoResult = 0x02,
         ChangeChannel = 0x03,
-        ChannelSelected = 0x03,
         SetAccountResult = 0x04,
         WorldInformation = 0x05,
         CheckCharacterNameResult = 0x06,
         CreateNewCharacterResult = 0x07,
         DeleteCharacterResult = 0x08,
-        ViewAllCharResult = 0x08,
-        SelectCharacterByVACResult = 0x09,
         Ping = 0x09,
+        //ViewAllCharResult = 0x08,
+        //SelectCharacterByVACResult = 0x09,
         SelectCharacterResult = 0x0C,
         PinCodeOperation = 0x0D,
 
@@ -25,10 +24,11 @@
         AvatarMegaphoneRes = 0x19,
         QuestResult = 0x1F,
 
+        CharacterInformation = 0x2A,
         StatChanged = 0x23,
         BuffCancel = 0x24,
         PortalSpawn = 0x29,
-        ServerMessage = 0x2D,
+        BroadcastMsg = 0x2D,
         SkillsUpdate = 0x2F,
 
         FameResponse = 0x31,
@@ -44,7 +44,7 @@
         Whisper = 0x5F,
 
         Clock = 0x62,
-        ShowPlayer = 0x66,
+        UserEnterField = 0x66,
         CancelChair = 0x67,
         //SHOW_ITEM_GAIN_INCHAT = 0x68
         //UPDATE_QUEST_INFO = 0x6d
@@ -52,18 +52,14 @@
         //NoticeMsg = 231,
 
         Cooldown = 0x70,
-
-        UserEnterField = 160,
-        UserLeaveField = 161,
-
-        //REMOVE_PLAYER_FROM_MAP = 0x71
+        UserLeaveField = 0x71,
         UserChat = 0x72,
-        //SPAWN_SPECIAL_MAPOBJECT = 0x73
-        //REMOVE_SPECIAL_MAPOBJECT = 0x74
-        //MOVE_SUMMON = 0x75
-        //SUMMON_ATTACK = 0x76
-        //DAMAGE_SUMMON = 0x78
-        //SHOW_SCROLL_EFFECT = 0x7B
+        SummonSpawn = 0x73,
+        SummonRemove = 0x74,
+        SummonMove = 0x75,
+        SummonAttack = 0x76,
+        SummonDamage = 0x78,
+        ShowScrollEffect = 0x7B,
 
         Move = 0x85,
         ForeignEffectShow = 0x86,
@@ -78,19 +74,23 @@
         ShowChair = 0x92,
         AvatarModified = 0x93,
         MagicAttack = 0x94,
-        MobSpawn = 0x97,
+        MobEnterField = 0x97,
         MobMove = 0x98,
         MobHPIndicator = 0x99,
         MobApplyStatus = 0x9B,
         MobMoveResponse = 0x9D,
+        MobDamaged = 0x9E,
 
         MobChangeController = 0xA5,
+        MobLeaveField = 0xA6,
         NpcEnterField = 0xA8,
         NpcLeaveField = 0xA9,
         NpcMove = 0xAB,
         NpcChangeController = 0xAD,
 
-        ReactorSpawn = 0xB3,
+        ReactorEnterField = 0xB3,
+        ReactorChangeState = 0xB4,
+        ReactorLeaveField = 0xB5,
         DropEnterField = 0xB9,
         DropLeaveField = 0xBA,
         MistSpawn = 0xBE,
@@ -99,8 +99,11 @@
         DoorSpawn = 0xC0,
         DoorRemove = 0xC1,
 
+        Storage = 0xD9,
+
         Keymap = 0xF7,
 
+        // TODO
         ForcedStatSet = 34,
         ForcedStatReset = 35,
         ChangeSkillRecordResult = 36,
@@ -110,8 +113,6 @@
         QuestClear = 49,
         SueCharacterResult = 55,
         SetGender = 58,
-        CharacterInformation = 61,
-        BroadcastMsg = 68,
         SetAvatarMegaphone = 111,
         TransferFieldReqInogred = 131,
         GroupMessage = 134,
@@ -125,25 +126,13 @@
         Effect = 206,
         Teleport = 207,
         BalloonMsg = 214,
-        MobEnterField = 236,
-        MobLeaveField = 237,
         MobStatSet = 242,
         MobStatReset = 243,
-        MobDamaged = 246,
-
-
- 
-
-        
-        ReactorChangeState = 277,
-        ReactorEnterField = 279,
-        ReactorLeaveField = 280,
         ScriptMessage = 304,
         OpenNpcShop = 305,
         ConfirmShopTransaction = 306,
         AdminShopMessage = 307,
         AdminShop = 308,
-        Storage = 309,
         PlayerInteraction = 314,
         TemporaryStatSet = 333,
         TemporaryStatReset = 333,
