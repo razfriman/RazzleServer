@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
 using RazzleServer.Data;
 using RazzleServer.DB.Models;
@@ -56,12 +54,12 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Save()
         {
-            Datum datum = new Datum("storages");
+            //Datum datum = new Datum("storages");
 
-            datum["Slots"] = Slots;
-            datum["Meso"] = Meso;
+            //datum["Slots"] = Slots;
+            //datum["Meso"] = Meso;
 
-            datum.Update("AccountID = {0}", Parent.AccountID);
+            //datum.Update("AccountID = {0}", Parent.AccountID);
 
             Items.ForEach((item => item.Save()));
         }

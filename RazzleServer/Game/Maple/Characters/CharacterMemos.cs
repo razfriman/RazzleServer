@@ -16,10 +16,10 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Load()
         {
-            foreach (Datum datum in new Datums("memos").Populate("CharacterID = {0}", this.Parent.ID))
-            {
-                this.Add(new Memo(datum));
-            }
+            //foreach (Datum datum in new Datums("memos").Populate("CharacterID = {0}", this.Parent.ID))
+            //{
+            //    this.Add(new Memo(datum));
+            //}
         }
 
         // NOTE: Memos are inserted straight into the database.

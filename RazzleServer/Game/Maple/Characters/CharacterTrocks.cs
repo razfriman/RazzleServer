@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using RazzleServer.Common.Constants;
-using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple.Data;
 
@@ -23,51 +22,51 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Load()
         {
-            foreach (Datum datum in new Datums("trocks").Populate("CharacterID = {0}", Parent.ID))
-            {
-                byte index = (byte)datum["Index"];
-                int map = (int)datum["Map"];
+            //foreach (Datum datum in new Datums("trocks").Populate("CharacterID = {0}", Parent.ID))
+            //{
+            //    byte index = (byte)datum["Index"];
+            //    int map = (int)datum["Map"];
 
-                if (index >= 5)
-                {
-                    VIP.Add(map);
-                }
-                else
-                {
-                    Regular.Add(map);
-                }
-            }
+            //    if (index >= 5)
+            //    {
+            //        VIP.Add(map);
+            //    }
+            //    else
+            //    {
+            //        Regular.Add(map);
+            //    }
+            //}
         }
 
         public void Save()
         {
             //Database.Delete("trocks", "CharacterID = {0}", this.Parent.ID);
 
-            byte index = 0;
+            //byte index = 0;
 
-            foreach (int map in Regular)
-            {
-                Datum datum = new Datum("trocks");
+            //foreach (int map in Regular)
+            //{
+            //    Datum datum = new Datum("trocks");
 
-                datum["CharacterID"] = Parent.ID;
-                datum["Index"] = index++;
-                datum["Map"] = map;
+            //    datum["CharacterID"] = Parent.ID;
+            //    datum["Index"] = index++;
+            //    datum["Map"] = map;
 
-                datum.Insert();
-            }
+            //    datum.Insert();
+            //}
 
-            index = 5;
+            //index = 5;
 
-            foreach (int map in VIP)
-            {
-                Datum datum = new Datum("trocks");
+            //foreach (int map in VIP)
+            //{
+            //    Datum datum = new Datum("trocks");
 
-                datum["CharacterID"] = Parent.ID;
-                datum["Index"] = index++;
-                datum["Map"] = map;
+            //    datum["CharacterID"] = Parent.ID;
+            //    datum["Index"] = index++;
+            //    datum["Map"] = map;
 
-                datum.Insert();
-            }
+            //    datum.Insert();
+            //}
         }
 
         public bool Contains(int mapID)

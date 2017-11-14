@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using RazzleServer.Common.Constants;
-using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
 
@@ -40,13 +38,13 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Load()
         {
-            foreach (Datum datum in new Datums("buffs").Populate("CharacterID = {0}", Parent.ID))
-            {
-                if ((DateTime)datum["End"] > DateTime.Now)
-                {
-                    Add(new Buff(this, datum));
-                }
-            }
+            //foreach (Datum datum in new Datums("buffs").Populate("CharacterID = {0}", Parent.ID))
+            //{
+            //    if ((DateTime)datum["End"] > DateTime.Now)
+            //    {
+            //        Add(new Buff(this, datum));
+            //    }
+            //}
         }
 
         public void Save()

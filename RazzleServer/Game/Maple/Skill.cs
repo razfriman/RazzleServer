@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
-using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
 using RazzleServer.Common.WzLib;
 using RazzleServer.Data;
+using RazzleServer.DB.Models;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
 
@@ -208,38 +208,37 @@ namespace RazzleServer.Game.Maple
             //RB = new Point((short)datum["rbx"], (short)datum["rby"]);
             //Cooldown = (int)datum["cooldown_time"];
         }
-        public Skill(Datum datum)
+        public Skill(SkillEntity entity)
         {
-            ID = (int)datum["ID"];
-            Assigned = true;
-
-            MapleID = (int)datum["MapleID"];
-            CurrentLevel = (byte)datum["CurrentLevel"];
-            MaxLevel = (byte)datum["MaxLevel"];
-            Expiration = (DateTime)datum["Expiration"];
-            CooldownEnd = (DateTime)datum["CooldownEnd"];
+            //ID = (int)entity["ID"];
+            //Assigned = true;
+            //MapleID = (int)entity["MapleID"];
+            //CurrentLevel = (byte)entity["CurrentLevel"];
+            //MaxLevel = (byte)entity["MaxLevel"];
+            //Expiration = (DateTime)entity["Expiration"];
+            //CooldownEnd = (DateTime)entity["CooldownEnd"];
         }
 
         public void Save()
         {
-            Datum datum = new Datum("skills");
+            //Datum datum = new Datum("skills");
 
-            datum["CharacterID"] = Character.ID;
-            datum["MapleID"] = MapleID;
-            datum["CurrentLevel"] = CurrentLevel;
-            datum["MaxLevel"] = MaxLevel;
-            datum["Expiration"] = Expiration;
-            datum["CooldownEnd"] = CooldownEnd;
+            //datum["CharacterID"] = Character.ID;
+            //datum["MapleID"] = MapleID;
+            //datum["CurrentLevel"] = CurrentLevel;
+            //datum["MaxLevel"] = MaxLevel;
+            //datum["Expiration"] = Expiration;
+            //datum["CooldownEnd"] = CooldownEnd;
 
-            if (Assigned)
-            {
-                datum.Update("ID = {0}", ID);
-            }
-            else
-            {
-                ID = datum.InsertAndReturnID();
-                Assigned = true;
-            }
+            //if (Assigned)
+            //{
+            //    datum.Update("ID = {0}", ID);
+            //}
+            //else
+            //{
+            //    ID = datum.InsertAndReturnID();
+            //    Assigned = true;
+            //}
         }
 
         public void Delete()

@@ -1,137 +1,137 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿//using System;
+//using System.Collections;
+//using System.Collections.Generic;
 
-namespace RazzleServer.Common.Data
-{
-    public sealed class Datums : IEnumerable<Datum>
-    {
-        private string Table { get; set; }
-        private List<Datum> Values { get; set; }
-        private string ConnectionString { get; set; }
+//namespace RazzleServer.Common.Data
+//{
+//    public sealed class Datums : IEnumerable<Datum>
+//    {
+//        private string Table { get; set; }
+//        private List<Datum> Values { get; set; }
+//        private string ConnectionString { get; set; }
 
-        public Datums(string table)
-        {
-            Table = table;
-        }
+//        public Datums(string table)
+//        {
+//            Table = table;
+//        }
 
-        public Datums(string table, string schema)
-        {
+//        public Datums(string table, string schema)
+//        {
 
-        }
+//        }
 
-        private void PopulateInternal(string fields, string constraints, params object[] args)
-        {
+//        private void PopulateInternal(string fields, string constraints, params object[] args)
+//        {
 
-        }
+//        }
 
-        public Datums Populate()
-        {
-            PopulateInternal(null, null, null);
+//        public Datums Populate()
+//        {
+//            PopulateInternal(null, null, null);
 
-            return this;
-        }
+//            return this;
+//        }
 
-        public Datums Populate(string constraints, params object[] args)
-        {
-            PopulateInternal(null, constraints, args);
+//        public Datums Populate(string constraints, params object[] args)
+//        {
+//            PopulateInternal(null, constraints, args);
 
-            return this;
-        }
+//            return this;
+//        }
 
-        public Datums PopulateWith(string fields)
-        {
-            PopulateInternal(fields, null, null);
+//        public Datums PopulateWith(string fields)
+//        {
+//            PopulateInternal(fields, null, null);
 
-            return this;
-        }
+//            return this;
+//        }
 
-        public Datums PopulateWith(string fields, string constraints, params object[] args)
-        {
-            PopulateInternal(fields, constraints, args);
+//        public Datums PopulateWith(string fields, string constraints, params object[] args)
+//        {
+//            PopulateInternal(fields, constraints, args);
 
-            return this;
-        }
+//            return this;
+//        }
 
-        public IEnumerator<Datum> GetEnumerator()
-        {
-            foreach (Datum loopDatum in Array.Empty<Datum>())
-            {
-                yield return loopDatum;
-            }
-        }
+//        public IEnumerator<Datum> GetEnumerator()
+//        {
+//            foreach (Datum loopDatum in Array.Empty<Datum>())
+//            {
+//                yield return loopDatum;
+//            }
+//        }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return (IEnumerator)GetEnumerator();
-        }
-    }
+//        IEnumerator IEnumerable.GetEnumerator()
+//        {
+//            return (IEnumerator)GetEnumerator();
+//        }
+//    }
 
-    public sealed class Datum
-    {
-        public string Table { get; private set; }
-        public Dictionary<string, Object> Dictionary { get; set; }
-        private string ConnectionString { get; set; }
+//    public sealed class Datum
+//    {
+//        public string Table { get; private set; }
+//        public Dictionary<string, Object> Dictionary { get; set; }
+//        private string ConnectionString { get; set; }
 
-        public object this[string name]
-        {
-            get
-            {
-                return 0;
-            }
-            set
-            {
+//        public object this[string name]
+//        {
+//            get
+//            {
+//                return 0;
+//            }
+//            set
+//            {
 
-            }
-        }
+//            }
+//        }
 
-        public Datum(string table)
-        {
-            Table = table;
-            Dictionary = new Dictionary<string, object>();
-        }
+//        public Datum(string table)
+//        {
+//            Table = table;
+//            Dictionary = new Dictionary<string, object>();
+//        }
 
-        public Datum(string table, string schema)
-        {
-            Table = table;
-            Dictionary = new Dictionary<string, object>();
-        }
+//        public Datum(string table, string schema)
+//        {
+//            Table = table;
+//            Dictionary = new Dictionary<string, object>();
+//        }
 
-        public Datum(string table, Dictionary<string, object> dictionary)
-        {
-            Table = table;
-            Dictionary = dictionary;
-        }
+//        public Datum(string table, Dictionary<string, object> dictionary)
+//        {
+//            Table = table;
+//            Dictionary = dictionary;
+//        }
 
-        public Datum(string table, string schema, Dictionary<string, object> dictionary)
-        {
-            Table = table;
-            Dictionary = dictionary;
-        }
+//        public Datum(string table, string schema, Dictionary<string, object> dictionary)
+//        {
+//            Table = table;
+//            Dictionary = dictionary;
+//        }
 
-        public Datum Populate(string constraints, params object[] args)
-        {
-            PopulateWith("*", constraints, args);
+//        public Datum Populate(string constraints, params object[] args)
+//        {
+//            PopulateWith("*", constraints, args);
 
-            return this;
-        }
+//            return this;
+//        }
 
-        public Datum PopulateWith(string fields, string constraints, params object[] args)
-        {
-            return this;
-        }
+//        public Datum PopulateWith(string fields, string constraints, params object[] args)
+//        {
+//            return this;
+//        }
 
-        public void Insert()
-        {
-        }
+//        public void Insert()
+//        {
+//        }
 
-        public int InsertAndReturnID()
-        {
-            return 0;
-        }
+//        public int InsertAndReturnID()
+//        {
+//            return 0;
+//        }
 
-        public void Update(string constraints, params object[] args)
-        {
-        }
-    }
-}
+//        public void Update(string constraints, params object[] args)
+//        {
+//        }
+//    }
+//}

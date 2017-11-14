@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using RazzleServer.Common.Constants;
-using RazzleServer.Common.Data;
+using RazzleServer.Common.WzLib;
 using RazzleServer.Game.Maple.Data;
 
 namespace RazzleServer.Game.Maple
@@ -39,13 +39,7 @@ namespace RazzleServer.Game.Maple
         public Dictionary<Skill, Job> PreSkillRewards { get; set; }
         public Dictionary<Skill, Job> PostSkillRewards { get; set; }
 
-        public Quest NextQuest
-        {
-            get
-            {
-                return this.NextQuestID > 0 ? DataProvider.Quests[this.NextQuestID] : null;
-            }
-        }
+        public Quest NextQuest => NextQuestID > 0 ? DataProvider.Quests[NextQuestID] : null;
 
         public byte Flags
         {
@@ -53,47 +47,47 @@ namespace RazzleServer.Game.Maple
             {
                 byte flags = 0;
 
-                if (this.AutoStart) flags |= (byte)QuestFlags.AutoStart;
-                if (this.SelectedMob) flags |= (byte)QuestFlags.SelectedMob;
+                if (AutoStart) flags |= (byte)QuestFlags.AutoStart;
+                if (SelectedMob) flags |= (byte)QuestFlags.SelectedMob;
 
                 return flags;
             }
         }
 
-        public Quest(Datum datum)
+        public Quest(WzImageProperty img)
         {
-            this.MapleID = (ushort)datum["questid"];
-            this.NextQuestID = (ushort)datum["next_quest"];
-            this.Area = (sbyte)datum["quest_area"];
-            this.MinimumLevel = (byte)datum["min_level"];
-            this.MaximumLevel = (byte)datum["max_level"];
-            this.PetCloseness = (short)datum["pet_closeness"];
-            this.TamingMobLevel = (sbyte)datum["taming_mob_level"];
-            this.RepeatWait = (int)datum["repeat_wait"];
-            this.Fame = (short)datum["fame"];
-            this.TimeLimit = (int)datum["time_limit"];
-            this.AutoStart = datum["flags"].ToString().Contains("auto_start");
-            this.SelectedMob = datum["flags"].ToString().Contains("selected_mob");
+            //this.MapleID = (ushort)img["questid"];
+            //this.NextQuestID = (ushort)img["next_quest"];
+            //this.Area = (sbyte)img["quest_area"];
+            //this.MinimumLevel = (byte)img["min_level"];
+            //this.MaximumLevel = (byte)img["max_level"];
+            //this.PetCloseness = (short)img["pet_closeness"];
+            //this.TamingMobLevel = (sbyte)img["taming_mob_level"];
+            //this.RepeatWait = (int)img["repeat_wait"];
+            //this.Fame = (short)img["fame"];
+            //this.TimeLimit = (int)img["time_limit"];
+            //this.AutoStart = img["flags"].ToString().Contains("auto_start");
+            //this.SelectedMob = img["flags"].ToString().Contains("selected_mob");
 
-            this.PreRequiredQuests = new List<ushort>();
-            this.PostRequiredQuests = new List<ushort>();
-            this.PreRequiredItems = new Dictionary<int, short>();
-            this.PostRequiredItems = new Dictionary<int, short>();
-            this.PostRequiredKills = new Dictionary<int, short>();
+            PreRequiredQuests = new List<ushort>();
+            PostRequiredQuests = new List<ushort>();
+            PreRequiredItems = new Dictionary<int, short>();
+            PostRequiredItems = new Dictionary<int, short>();
+            PostRequiredKills = new Dictionary<int, short>();
 
-            this.ExperienceReward = new int[2];
-            this.MesoReward = new int[2];
-            this.PetClosenessReward = new int[2];
-            this.PetSpeedReward = new bool[2];
-            this.FameReward = new int[2];
-            this.PetSkillReward = new int[2];
+            ExperienceReward = new int[2];
+            MesoReward = new int[2];
+            PetClosenessReward = new int[2];
+            PetSpeedReward = new bool[2];
+            FameReward = new int[2];
+            PetSkillReward = new int[2];
 
-            this.PreItemRewards = new Dictionary<int, short>();
-            this.PostItemRewards = new Dictionary<int, short>();
-            this.PreSkillRewards = new Dictionary<Skill, Job>();
-            this.PostSkillRewards = new Dictionary<Skill, Job>();
+            PreItemRewards = new Dictionary<int, short>();
+            PostItemRewards = new Dictionary<int, short>();
+            PreSkillRewards = new Dictionary<Skill, Job>();
+            PostSkillRewards = new Dictionary<Skill, Job>();
 
-            this.ValidJobs = new List<Job>();
+            ValidJobs = new List<Job>();
         }
     }
 }

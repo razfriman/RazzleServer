@@ -1,5 +1,4 @@
 ﻿using System;
-using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple.Data;
 
@@ -22,15 +21,15 @@ namespace RazzleServer.Game.Maple.Shops
 
         public bool IsRecharageable => DataProvider.Items[this.MapleID].IsRechargeable;
 
-        public ShopItem(Shop parent, Datum datum)
-        {
-            this.Parent = parent;
+        //public ShopItem(Shop parent, Datum datum)
+        //{
+        //    this.Parent = parent;
 
-            this.MapleID = (int)datum["itemid"];
-            this.Quantity = (short)datum["quantity"];
-            this.PurchasePrice = (int)datum["price"];
-            this.Sort = (int)datum["sort"];
-        }
+        //    this.MapleID = (int)datum["itemid"];
+        //    this.Quantity = (short)datum["quantity"];
+        //    this.PurchasePrice = (int)datum["price"];
+        //    this.Sort = (int)datum["sort"];
+        //}
 
         public ShopItem(Shop parent, int mapleID)
         {

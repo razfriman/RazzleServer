@@ -36,21 +36,21 @@ namespace RazzleServer.Game.Maple.Life
             EffectDelay = img["effectAfter"]?.GetShort() ?? 0;
         }
 
-        public void Load(Datum datum)
-        {
-            Duration = (short)datum["buff_time"];
-            MpCost = (short)datum["mp_cost"];
-            ParameterA = (int)datum["x_property"];
-            ParameterB = (int)datum["y_property"];
-            Chance = (short)datum["chance"];
-            TargetCount = (short)datum["target_count"];
-            Cooldown = (int)datum["cooldown"];
-            LT = new Point((short)datum["ltx"], (short)datum["lty"]);
-            RB = new Point((short)datum["rbx"], (short)datum["rby"]);
-            PercentageLimitHP = (short)datum["hp_limit_percentage"];
-            SummonLimit = (short)datum["summon_limit"];
-            SummonEffect = (short)datum["summon_effect"];
-        }
+        //public void Load(Datum datum)
+        //{
+        //    Duration = (short)datum["buff_time"];
+        //    MpCost = (short)datum["mp_cost"];
+        //    ParameterA = (int)datum["x_property"];
+        //    ParameterB = (int)datum["y_property"];
+        //    Chance = (short)datum["chance"];
+        //    TargetCount = (short)datum["target_count"];
+        //    Cooldown = (int)datum["cooldown"];
+        //    LT = new Point((short)datum["ltx"], (short)datum["lty"]);
+        //    RB = new Point((short)datum["rbx"], (short)datum["rby"]);
+        //    PercentageLimitHP = (short)datum["hp_limit_percentage"];
+        //    SummonLimit = (short)datum["summon_limit"];
+        //    SummonEffect = (short)datum["summon_effect"];
+        //}
 
         public void Cast(Mob caster)
         {

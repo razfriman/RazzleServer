@@ -1,6 +1,6 @@
 ﻿namespace RazzleServer.DB.Models
 {
-    public class SkillCooldownEntity
+    public class BuffEntity
     {
         public int ID { get; set; }
         public long StartTime { get; set; }

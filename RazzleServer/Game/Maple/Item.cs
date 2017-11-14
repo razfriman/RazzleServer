@@ -513,97 +513,97 @@ namespace RazzleServer.Game.Maple
             Summons = CachedReference.Summons;
         }
 
-        public void LoadConsumeData(Datum datum)
+        public void LoadConsumeData(WzImageProperty datum)
         {
             //this.CFlags = datum["flags"];
             //this.CCureAilments = datum["cure_ailments"];
-            CEffect = (byte)datum["effect"];
-            CHealth = (short)datum["hp"];
-            CMana = (short)datum["mp"];
-            CHealthPercentage = (short)datum["hp_percentage"];
-            CManaPercentage = (short)datum["mp_percentage"];
-            CMoveTo = (int)datum["move_to"];
-            CProb = (byte)datum["prob"];
-            CBuffTime = (int)datum["buff_time"];
-            CWeaponAttack = (short)datum["weapon_attack"];
-            CMagicAttack = (short)datum["magic_attack"];
-            CWeaponDefense = (short)datum["weapon_defense"];
-            CMagicAttack = (short)datum["magic_attack"];
-            CAccuracy = (short)datum["accuracy"];
-            CAvoid = (short)datum["avoid"];
-            CSpeed = (short)datum["speed"];
-            CJump = (short)datum["jump"];
-            CMorph = (short)datum["morph"];
+            //CEffect = (byte)datum["effect"];
+            //CHealth = (short)datum["hp"];
+            //CMana = (short)datum["mp"];
+            //CHealthPercentage = (short)datum["hp_percentage"];
+            //CManaPercentage = (short)datum["mp_percentage"];
+            //CMoveTo = (int)datum["move_to"];
+            //CProb = (byte)datum["prob"];
+            //CBuffTime = (int)datum["buff_time"];
+            //CWeaponAttack = (short)datum["weapon_attack"];
+            //CMagicAttack = (short)datum["magic_attack"];
+            //CWeaponDefense = (short)datum["weapon_defense"];
+            //CMagicAttack = (short)datum["magic_attack"];
+            //CAccuracy = (short)datum["accuracy"];
+            //CAvoid = (short)datum["avoid"];
+            //CSpeed = (short)datum["speed"];
+            //CJump = (short)datum["jump"];
+            //CMorph = (short)datum["morph"];
         }
 
-        public void LoadEquipmentData(Datum datum)
+        public void LoadEquipmentData(WzImageProperty datum)
         {
-            RequiredStrength = (short)datum["req_str"];
-            RequiredDexterity = (short)datum["req_dex"];
-            RequiredIntelligence = (short)datum["req_int"];
-            RequiredLuck = (short)datum["req_luk"];
-            RequiredFame = (short)datum["req_fame"];
+            //RequiredStrength = (short)datum["req_str"];
+            //RequiredDexterity = (short)datum["req_dex"];
+            //RequiredIntelligence = (short)datum["req_int"];
+            //RequiredLuck = (short)datum["req_luk"];
+            //RequiredFame = (short)datum["req_fame"];
 
-            UpgradesAvailable = (byte)(ushort)datum["scroll_slots"];
-            UpgradesApplied = 0;
+            //UpgradesAvailable = (byte)(ushort)datum["scroll_slots"];
+            //UpgradesApplied = 0;
 
-            Health = (short)datum["hp"];
-            Mana = (short)datum["mp"];
-            Strength = (short)datum["strength"];
-            Dexterity = (short)datum["dexterity"];
-            Intelligence = (short)datum["intelligence"];
-            Luck = (short)datum["luck"];
-            WeaponAttack = (short)datum["weapon_attack"];
-            WeaponDefense = (short)datum["weapon_defense"];
-            MagicAttack = (short)datum["magic_attack"];
-            MagicDefense = (short)datum["magic_defense"];
-            Accuracy = (short)datum["accuracy"];
-            Avoidability = (short)datum["avoid"];
-            Speed = (short)datum["speed"];
-            Jump = (short)datum["jump"];
-            Agility = (short)datum["hands"];
+            //Health = (short)datum["hp"];
+            //Mana = (short)datum["mp"];
+            //Strength = (short)datum["strength"];
+            //Dexterity = (short)datum["dexterity"];
+            //Intelligence = (short)datum["intelligence"];
+            //Luck = (short)datum["luck"];
+            //WeaponAttack = (short)datum["weapon_attack"];
+            //WeaponDefense = (short)datum["weapon_defense"];
+            //MagicAttack = (short)datum["magic_attack"];
+            //MagicDefense = (short)datum["magic_defense"];
+            //Accuracy = (short)datum["accuracy"];
+            //Avoidability = (short)datum["avoid"];
+            //Speed = (short)datum["speed"];
+            //Jump = (short)datum["jump"];
+            //Agility = (short)datum["hands"];
         }
 
         public void Save()
         {
-            Datum datum = new Datum("items");
+            //Datum datum = new Datum("items");
 
-            datum["AccountID"] = Character.AccountID;
-            datum["CharacterID"] = Character.ID;
-            datum["MapleID"] = MapleID;
-            datum["Quantity"] = Quantity;
-            datum["Slot"] = Slot;
-            datum["Creator"] = Creator;
-            datum["UpgradesAvailable"] = UpgradesAvailable;
-            datum["UpgradesApplied"] = UpgradesApplied;
-            datum["Strength"] = Strength;
-            datum["Dexterity"] = Dexterity;
-            datum["Intelligence"] = Intelligence;
-            datum["Luck"] = Luck;
-            datum["Health"] = Health;
-            datum["Mana"] = Mana;
-            datum["WeaponAttack"] = WeaponAttack;
-            datum["MagicAttack"] = MagicAttack;
-            datum["WeaponDefense"] = WeaponDefense;
-            datum["MagicDefense"] = MagicDefense;
-            datum["Accuracy"] = Accuracy;
-            datum["Avoidability"] = Avoidability;
-            datum["Agility"] = Agility;
-            datum["Speed"] = Speed;
-            datum["Jump"] = Jump;
-            datum["IsStored"] = IsStored;
-            datum["PreventsSlipping"] = PreventsSlipping;
-            datum["PreventsColdness"] = PreventsColdness;
+            //datum["AccountID"] = Character.AccountID;
+            //datum["CharacterID"] = Character.ID;
+            //datum["MapleID"] = MapleID;
+            //datum["Quantity"] = Quantity;
+            //datum["Slot"] = Slot;
+            //datum["Creator"] = Creator;
+            //datum["UpgradesAvailable"] = UpgradesAvailable;
+            //datum["UpgradesApplied"] = UpgradesApplied;
+            //datum["Strength"] = Strength;
+            //datum["Dexterity"] = Dexterity;
+            //datum["Intelligence"] = Intelligence;
+            //datum["Luck"] = Luck;
+            //datum["Health"] = Health;
+            //datum["Mana"] = Mana;
+            //datum["WeaponAttack"] = WeaponAttack;
+            //datum["MagicAttack"] = MagicAttack;
+            //datum["WeaponDefense"] = WeaponDefense;
+            //datum["MagicDefense"] = MagicDefense;
+            //datum["Accuracy"] = Accuracy;
+            //datum["Avoidability"] = Avoidability;
+            //datum["Agility"] = Agility;
+            //datum["Speed"] = Speed;
+            //datum["Jump"] = Jump;
+            //datum["IsStored"] = IsStored;
+            //datum["PreventsSlipping"] = PreventsSlipping;
+            //datum["PreventsColdness"] = PreventsColdness;
 
-            if (Assigned)
-            {
-                datum.Update("ID = {0}", ID);
-            }
-            else
-            {
-                ID = datum.InsertAndReturnID();
-                Assigned = true;
-            }
+            //if (Assigned)
+            //{
+            //    datum.Update("ID = {0}", ID);
+            //}
+            //else
+            //{
+            //    ID = datum.InsertAndReturnID();
+            //    Assigned = true;
+            //}
         }
 
         public void Delete()

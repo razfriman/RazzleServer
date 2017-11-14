@@ -1,5 +1,4 @@
 ﻿using System;
-using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
 using RazzleServer.Data;
 
@@ -12,13 +11,13 @@ namespace RazzleServer.Game.Maple
         public string Message { get; private set; }
         public DateTime Received { get; private set; }
 
-        public Memo(Datum datum)
-        {
-            this.ID = (int)datum["ID"];
-            this.Sender = (string)datum["Sender"];
-            this.Message = (string)datum["Message"];
-            this.Received = (DateTime)datum["Received"];
-        }
+        //public Memo(Datum datum)
+        //{
+        //    this.ID = (int)datum["ID"];
+        //    this.Sender = (string)datum["Sender"];
+        //    this.Message = (string)datum["Message"];
+        //    this.Received = (DateTime)datum["Received"];
+        //}
 
         public void Delete()
         {

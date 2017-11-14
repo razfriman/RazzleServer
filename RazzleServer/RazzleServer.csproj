@@ -49,5 +49,7 @@
     <Folder Include="Common\Util\" />
     <Folder Include="Common\Wz\" />
     <Folder Include="Common\Exceptions\" />
+    <Folder Include="Game\Scripts\" />
+    <Folder Include="Game\Scripts\Reactor\" />
   </ItemGroup>
 </Project>

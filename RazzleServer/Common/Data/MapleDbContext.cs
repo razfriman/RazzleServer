@@ -19,7 +19,7 @@ namespace RazzleServer.Data
         public DbSet<QuestMobStatusEntity> QuestStatusMobs { get; set; }
         public DbSet<QuestCustomDataEntity> QuestCustomData { get; set; }
         public DbSet<SkillEntity> Skills { get; set; }
-        public DbSet<SkillCooldownEntity> SkillCooldowns { get; set; }
+        public DbSet<BuffEntity> Buffs { get; set; }
         public DbSet<MemoEntity> MemoEntities { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -1,6 +1,7 @@
 ﻿using System;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Data;
+using RazzleServer.Common.WzLib;
 
 namespace RazzleServer.Game.Maple.Life
 {
@@ -14,15 +15,22 @@ namespace RazzleServer.Game.Maple.Life
         public short Quantity { get; private set; }
         public Rectangle Boundaries { get; private set; }
 
-        public ReactorState(Datum datum)
+        public ReactorState(WzImageProperty img)
         {
-            this.Type = this.Timeout > 0 ? ReactorEventType.Timeout : (ReactorEventType)Enum.Parse(typeof(ReactorEventType), datum["event_type"].ToString().Replace("_", ""));
-            this.State = (byte)(sbyte)datum["state"];
-            this.NextState = (byte)(sbyte)datum["next_state"];
-            this.Timeout = (int)datum["timeout"];
-            this.ItemId = (int)datum["itemid"];
-            this.Quantity = (short)datum["quantity"];
-            this.Boundaries = new Rectangle(new Point((short)datum["ltx"], (short)datum["lty"]), new Point((short)datum["ltx"], (short)datum["lty"]));
+            var eventImg = img["event"]?["0"];
+
+            if (eventImg != null)
+            {
+                Type = (ReactorEventType)eventImg["type"].GetInt();
+                State = (byte)eventImg["state"].GetInt();
+                Boundaries = new Rectangle(eventImg["lt"].GetPoint(), eventImg["rb"].GetPoint());
+            }
+
+            //this.NextState = (byte)(sbyte)img["next_state"];
+            //this.Timeout = (int)img["timeout"];
+            //this.ItemId = (int)img["itemid"];
+            //this.Quantity = (short)img["quantity"];
+            //this.Boundaries = new Rectangle(new Point((short)img["ltx"], (short)img["lty"]), new Point((short)img["ltx"], (short)img["lty"]));
         }
     }
 }

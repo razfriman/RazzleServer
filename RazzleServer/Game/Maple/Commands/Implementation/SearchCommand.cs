@@ -58,12 +58,12 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
 
                     caller.Notify("[Results]");
 
-                    foreach (Datum datum in new Datums("strings").Populate("`label` LIKE '%{0}%'", query))
-                    {
-                        caller.Notify(string.Format("   -{0}: {1}", (string)datum["label"], (int)datum["objectid"]));
+                    //foreach (Datum datum in new Datums("strings").Populate("`label` LIKE '%{0}%'", query))
+                    //{
+                    //    caller.Notify(string.Format("   -{0}: {1}", (string)datum["label"], (int)datum["objectid"]));
 
-                        hasResult = true;
-                    }
+                    //    hasResult = true;
+                    //}
 
                     if (!hasResult)
                     {

@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using RazzleServer.Common.Constants;
-using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Life;
@@ -20,39 +18,39 @@ namespace RazzleServer.Game.Maple.Shops
         {
             RechargeTiers = new Dictionary<byte, Dictionary<int, double>>();
 
-            foreach (Datum datum in new Datums("shop_recharge_data").Populate())
-            {
-                if (!RechargeTiers.ContainsKey((byte)(int)datum["tierid"]))
-                {
-                    RechargeTiers.Add((byte)(int)datum["tierid"], new Dictionary<int, double>());
-                }
+            //foreach (Datum datum in new Datums("shop_recharge_data").Populate())
+            //{
+            //    if (!RechargeTiers.ContainsKey((byte)(int)datum["tierid"]))
+            //    {
+            //        RechargeTiers.Add((byte)(int)datum["tierid"], new Dictionary<int, double>());
+            //    }
 
-                RechargeTiers[(byte)(int)datum["tierid"]].Add((int)datum["itemid"], (double)datum["price"]);
-            }
+            //    RechargeTiers[(byte)(int)datum["tierid"]].Add((int)datum["itemid"], (double)datum["price"]);
+            //}
         }
 
-        public Shop(Npc parent, Datum datum)
-        {
-            Parent = parent;
+        //public Shop(Npc parent, Datum datum)
+        //{
+        //    Parent = parent;
 
-            ID = (int)datum["shopid"];
-            RechargeTierID = (byte)(int)datum["recharge_tier"];
+        //    ID = (int)datum["shopid"];
+        //    RechargeTierID = (byte)(int)datum["recharge_tier"];
 
-            Items = new List<ShopItem>();
+        //    Items = new List<ShopItem>();
 
-            foreach (Datum itemDatum in new Datums("shop_items").Populate("shopid = {0} ORDER BY sort DESC", ID))
-            {
-                Items.Add(new ShopItem(this, itemDatum));
-            }
+        //    foreach (Datum itemDatum in new Datums("shop_items").Populate("shopid = {0} ORDER BY sort DESC", ID))
+        //    {
+        //        Items.Add(new ShopItem(this, itemDatum));
+        //    }
 
-            if (RechargeTierID > 0)
-            {
-                foreach (KeyValuePair<int, double> rechargeable in UnitPrices)
-                {
-                    Items.Add(new ShopItem(this, rechargeable.Key));
-                }
-            }
-        }
+        //    if (RechargeTierID > 0)
+        //    {
+        //        foreach (KeyValuePair<int, double> rechargeable in UnitPrices)
+        //        {
+        //            Items.Add(new ShopItem(this, rechargeable.Key));
+        //        }
+        //    }
+        //}
 
         public void Show(Character customer)
         {

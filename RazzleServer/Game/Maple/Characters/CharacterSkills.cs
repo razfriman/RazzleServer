@@ -11,17 +11,16 @@ namespace RazzleServer.Game.Maple.Characters
         public Character Parent { get; private set; }
 
         public CharacterSkills(Character parent)
-             : base()
         {
             Parent = parent;
         }
 
         public void Load()
         {
-            foreach (Datum datum in new Datums("skills").Populate("CharacterID = {0}", Parent.ID))
-            {
-                Add(new Skill(datum));
-            }
+            //foreach (Datum datum in new Datums("skills").Populate("CharacterID = {0}", Parent.ID))
+            //{
+            //    Add(new Skill(datum));
+            //}
         }
 
         public void Save()
