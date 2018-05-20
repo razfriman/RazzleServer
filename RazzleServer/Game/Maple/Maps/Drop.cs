@@ -17,16 +17,13 @@ namespace RazzleServer.Game.Maple.Maps
 
         public MapObject Dropper
         {
-            get
-            {
-                return mDropper;
-            }
+            get => mDropper;
             set
             {
                 mDropper = value;
 
-                this.Origin = mDropper.Position;
-                this.Position = mDropper.Map.Footholds.FindFloor(mDropper.Position);
+                Origin = mDropper.Position;
+                Position = mDropper.Map.Footholds.FindFloor(mDropper.Position);
             }
         }
 
@@ -34,22 +31,22 @@ namespace RazzleServer.Game.Maple.Maps
 
         public PacketWriter GetCreatePacket()
         {
-            return this.GetInternalPacket(true, null);
+            return GetInternalPacket(true, null);
         }
 
         public PacketWriter GetCreatePacket(Character temporaryOwner)
         {
-            return this.GetInternalPacket(true, temporaryOwner);
+            return GetInternalPacket(true, temporaryOwner);
         }
 
         public PacketWriter GetSpawnPacket()
         {
-            return this.GetInternalPacket(false, null);
+            return GetInternalPacket(false, null);
         }
 
         public PacketWriter GetSpawnPacket(Character temporaryOwner)
         {
-            return this.GetInternalPacket(false, temporaryOwner);
+            return GetInternalPacket(false, temporaryOwner);
         }
 
         private PacketWriter GetInternalPacket(bool dropped, Character temporaryOwner)
@@ -57,7 +54,7 @@ namespace RazzleServer.Game.Maple.Maps
             var oPacket = new PacketWriter(ServerOperationCode.DropEnterField);
 
             oPacket.WriteByte((byte)(dropped ? 1 : 2)); // TODO: Other types; 3 = disappearing, and 0 probably is something as well.
-            oPacket.WriteInt(this.ObjectId);
+            oPacket.WriteInt(ObjectId);
             oPacket.WriteBool(this is Meso);
 
             if (this is Meso)
@@ -69,16 +66,16 @@ namespace RazzleServer.Game.Maple.Maps
                 oPacket.WriteInt(((Item)this).MapleId);
             }
 
-            oPacket.WriteInt(this.Owner != null ? this.Owner.Id : temporaryOwner.Id);
+            oPacket.WriteInt(Owner != null ? Owner.Id : temporaryOwner.Id);
             oPacket.WriteByte(0); // TODO: Type implementation (0 - normal, 1 - party, 2 - FFA, 3 - explosive)
-            oPacket.WriteShort(this.Position.X);
-            oPacket.WriteShort(this.Position.Y);
-            oPacket.WriteInt(this.Dropper.ObjectId);
+            oPacket.WriteShort(Position.X);
+            oPacket.WriteShort(Position.Y);
+            oPacket.WriteInt(Dropper.ObjectId);
 
             if (dropped)
             {
-                oPacket.WriteShort(this.Origin.X);
-                oPacket.WriteShort(this.Origin.Y);
+                oPacket.WriteShort(Origin.X);
+                oPacket.WriteShort(Origin.Y);
                 oPacket.WriteShort(0); // NOTE: Foothold, probably.
             }
 
@@ -96,9 +93,9 @@ namespace RazzleServer.Game.Maple.Maps
         {
             var oPacket = new PacketWriter(ServerOperationCode.DropLeaveField);
 
-            oPacket.WriteByte((byte)(this.Picker == null ? 0 : 2));
-            oPacket.WriteInt(this.ObjectId);
-            oPacket.WriteInt(this.Picker != null ? this.Picker.Id : 0);
+            oPacket.WriteByte((byte)(Picker == null ? 0 : 2));
+            oPacket.WriteInt(ObjectId);
+            oPacket.WriteInt(Picker != null ? Picker.Id : 0);
 
             return oPacket;
         }

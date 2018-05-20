@@ -37,7 +37,7 @@ namespace RazzleServer.Game.Maple.Characters
 
             using (var dbContext = new MapleDbContext())
             {
-                foreach (Shortcut entry in this)
+                foreach (var entry in this)
                 {
                     dbContext.KeyMaps.Add(new KeyMapEntity
                     {
@@ -69,13 +69,13 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 oPacket.WriteBool(false);
 
-                for (int i = 0; i < KeyCount; i++)
+                for (var i = 0; i < KeyCount; i++)
                 {
-                    KeymapKey key = (KeymapKey)i;
+                    var key = (KeymapKey)i;
 
                     if (Contains(key))
                     {
-                        Shortcut shortcut = this[key];
+                        var shortcut = this[key];
 
                         oPacket.WriteByte((byte)shortcut.Type);
                         oPacket.WriteInt((int)shortcut.Action);
@@ -93,8 +93,8 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Change(PacketReader iPacket)
         {
-            int mode = iPacket.ReadInt();
-            int count = iPacket.ReadInt();
+            var mode = iPacket.ReadInt();
+            var count = iPacket.ReadInt();
 
             if (mode == 0)
             {
@@ -103,11 +103,11 @@ namespace RazzleServer.Game.Maple.Characters
                     return;
                 }
 
-                for (int i = 0; i < count; i++)
+                for (var i = 0; i < count; i++)
                 {
-                    KeymapKey key = (KeymapKey)iPacket.ReadInt();
-                    KeymapType type = (KeymapType)iPacket.ReadByte();
-                    KeymapAction action = (KeymapAction)iPacket.ReadInt();
+                    var key = (KeymapKey)iPacket.ReadInt();
+                    var type = (KeymapType)iPacket.ReadByte();
+                    var action = (KeymapAction)iPacket.ReadInt();
 
                     if (Contains(key))
                     {

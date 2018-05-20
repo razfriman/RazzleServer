@@ -8,8 +8,8 @@
         public PlayerShopItem(int mapleId, short bundles, short quantity, int price)
             : base(mapleId, quantity)
         {
-            this.Bundles = bundles;
-            this.MerchantPrice = price;
+            Bundles = bundles;
+            MerchantPrice = price;
         }
     }
 }

@@ -6,39 +6,21 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
 {
     public sealed class ClearDropsCommand : Command
     {
-        public override string Name
-        {
-            get
-            {
-                return "cleardrops";
-            }
-        }
+        public override string Name => "cleardrops";
 
-        public override string Parameters
-        {
-            get
-            {
-                return "[ -pickup ]";
-            }
-        }
+        public override string Parameters => "[ -pickup ]";
 
-        public override bool IsRestricted
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool IsRestricted => true;
 
         public override void Execute(Character caller, string[] args)
         {
             if (args.Length > 1)
             {
-                this.ShowSyntax(caller);
+                ShowSyntax(caller);
             }
             else
             {
-                bool pickUp = false;
+                var pickUp = false;
 
                 if (args.Length == 1)
                 {
@@ -48,7 +30,7 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
                     }
                     else
                     {
-                        this.ShowSyntax(caller);
+                        ShowSyntax(caller);
 
                         return;
                     }
@@ -56,14 +38,14 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
 
                 lock (caller.Map.Drops)
                 {
-                    List<Drop> toPick = new List<Drop>();
+                    var toPick = new List<Drop>();
 
-                    foreach (Drop loopDrop in caller.Map.Drops)
+                    foreach (var loopDrop in caller.Map.Drops)
                     {
                         toPick.Add(loopDrop);
                     }
 
-                    foreach (Drop loopDrop in toPick)
+                    foreach (var loopDrop in toPick)
                     {
                         if (pickUp)
                         {

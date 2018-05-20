@@ -10,29 +10,11 @@ namespace RazzleServer.Common.Util
         private DateTime mNext;
         private readonly Timer mTimer;
 
-        public TimeSpan Period
-        {
-            get
-            {
-                return mPeriod;
-            }
-        }
+        public TimeSpan Period => mPeriod;
 
-        public DateTime Next
-        {
-            get
-            {
-                return mNext;
-            }
-        }
+        public DateTime Next => mNext;
 
-        public TimeSpan DueTime
-        {
-            get
-            {
-                return mNext - DateTime.Now;
-            }
-        }
+        public TimeSpan DueTime => mNext - DateTime.Now;
 
         public static Delay Execute(Action action, int timeout)
         {
@@ -44,7 +26,7 @@ namespace RazzleServer.Common.Util
             mAction = action;
             mPeriod = TimeSpan.FromMilliseconds(repeat);
             mNext = DateTime.Now.AddMilliseconds(timeout);
-            mTimer = new Timer(this.Callback, null, timeout, repeat);
+            mTimer = new Timer(Callback, null, timeout, repeat);
         }
 
         private void Callback(object state)

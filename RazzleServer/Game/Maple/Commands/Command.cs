@@ -13,9 +13,9 @@ namespace RazzleServer.Game.Maple.Commands
 
         public string CombineArgs(string[] args, int start = 0)
         {
-            string result = string.Empty;
+            var result = string.Empty;
 
-            for (int i = start; i < args.Length; i++)
+            for (var i = start; i < args.Length; i++)
             {
                 result += args[i] + ' ';
             }
@@ -25,9 +25,9 @@ namespace RazzleServer.Game.Maple.Commands
 
         public string CombineArgs(string[] args, int start, int length)
         {
-            string result = string.Empty;
+            var result = string.Empty;
 
-            for (int i = start; i < length; i++)
+            for (var i = start; i < length; i++)
             {
                 result += args[i] + ' ';
             }

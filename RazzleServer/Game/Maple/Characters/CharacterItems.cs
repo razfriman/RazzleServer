@@ -53,7 +53,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Save()
         {
-            foreach (Item item in this)
+            foreach (var item in this)
             {
                 item.Save();
             }
@@ -63,7 +63,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             if (Available(item.MapleId) % item.MaxPerStack != 0 && autoMerge)
             {
-                foreach (Item loopItem in this.Where(x => x.MapleId == item.MapleId && x.Quantity < x.MaxPerStack))
+                foreach (var loopItem in this.Where(x => x.MapleId == item.MapleId && x.Quantity < x.MaxPerStack))
                 {
                     if (loopItem.Quantity + item.Quantity <= loopItem.MaxPerStack)
                     {
@@ -121,7 +121,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void AddRange(IEnumerable<Item> items, bool fromDrop = false, bool autoMerge = true)
         {
-            foreach (Item loopItem in items)
+            foreach (var loopItem in items)
             {
                 Add(loopItem, fromDrop, autoMerge);
             }
@@ -129,11 +129,11 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Remove(int mapleId, short quantity)
         {
-            short leftToRemove = quantity;
+            var leftToRemove = quantity;
 
-            List<Item> toRemove = new List<Item>();
+            var toRemove = new List<Item>();
 
-            foreach (Item loopItem in this)
+            foreach (var loopItem in this)
             {
                 if (loopItem.MapleId == mapleId)
                 {
@@ -152,7 +152,7 @@ namespace RazzleServer.Game.Maple.Characters
                 }
             }
 
-            foreach (Item loopItem in toRemove)
+            foreach (var loopItem in toRemove)
             {
                 Remove(loopItem, true);
             }
@@ -186,7 +186,7 @@ namespace RazzleServer.Game.Maple.Characters
 
             item.Parent = null;
 
-            bool wasEquipped = item.IsEquipped;
+            var wasEquipped = item.IsEquipped;
 
             Items.Remove(item);
 
@@ -198,14 +198,14 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Clear(bool removeFromSlot)
         {
-            List<Item> toRemove = new List<Item>();
+            var toRemove = new List<Item>();
 
-            foreach (Item loopItem in this)
+            foreach (var loopItem in this)
             {
                 toRemove.Add(loopItem);
             }
 
-            foreach (Item loopItem in toRemove)
+            foreach (var loopItem in toRemove)
             {
                 if (!(loopItem.IsEquipped && removeFromSlot))
                 {
@@ -216,7 +216,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public bool Contains(int mapleId)
         {
-            foreach (Item loopItem in this)
+            foreach (var loopItem in this)
             {
                 if (loopItem.MapleId == mapleId)
                 {
@@ -229,9 +229,9 @@ namespace RazzleServer.Game.Maple.Characters
 
         public bool Contains(int mapleId, short quantity)
         {
-            int count = 0;
+            var count = 0;
 
-            foreach (Item loopItem in this)
+            foreach (var loopItem in this)
             {
                 if (loopItem.MapleId == mapleId)
                 {
@@ -244,9 +244,9 @@ namespace RazzleServer.Game.Maple.Characters
 
         public int Available(int mapleId)
         {
-            int count = 0;
+            var count = 0;
 
-            foreach (Item loopItem in this)
+            foreach (var loopItem in this)
             {
                 if (loopItem.MapleId == mapleId)
                 {
@@ -279,7 +279,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             short count = 0;
 
-            foreach (Item item in this)
+            foreach (var item in this)
             {
                 if (item.Type == type)
                 {
@@ -294,7 +294,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             short remaining = MaxSlots[type];
 
-            foreach (Item item in this)
+            foreach (var item in this)
             {
                 if (item.Type == type)
                 {
@@ -308,27 +308,27 @@ namespace RazzleServer.Game.Maple.Characters
         public void Sort(PacketReader iPacket)
         {
             iPacket.ReadInt(); // NOTE: Ticks.
-            ItemType type = (ItemType)iPacket.ReadByte();
+            var type = (ItemType)iPacket.ReadByte();
         }
 
         public void Gather(PacketReader iPacket)
         {
             iPacket.ReadInt(); // NOTE: Ticks.
-            ItemType type = (ItemType)iPacket.ReadByte();
+            var type = (ItemType)iPacket.ReadByte();
         }
 
         public void Handle(PacketReader iPacket)
         {
             iPacket.ReadInt();
 
-            ItemType type = (ItemType)iPacket.ReadByte();
-            short source = iPacket.ReadShort();
-            short destination = iPacket.ReadShort();
-            short quantity = iPacket.ReadShort();
+            var type = (ItemType)iPacket.ReadByte();
+            var source = iPacket.ReadShort();
+            var destination = iPacket.ReadShort();
+            var quantity = iPacket.ReadShort();
 
             try
             {
-                Item item = this[type, source];
+                var item = this[type, source];
 
                 if (destination < 0)
                 {
@@ -356,10 +356,10 @@ namespace RazzleServer.Game.Maple.Characters
         public void UseItem(PacketReader iPacket)
         {
             iPacket.ReadInt(); // NOTE: Ticks.
-            short slot = iPacket.ReadShort();
-            int itemId = iPacket.ReadInt();
+            var slot = iPacket.ReadShort();
+            var itemId = iPacket.ReadInt();
 
-            Item item = this[ItemType.Usable, slot];
+            var item = this[ItemType.Usable, slot];
 
             if (item == null || itemId != item.MapleId)
             {
@@ -402,10 +402,10 @@ namespace RazzleServer.Game.Maple.Characters
         public void UseSummonBag(PacketReader iPacket)
         {
             iPacket.ReadInt(); // NOTE: Ticks.
-            short slot = iPacket.ReadShort();
-            int itemId = iPacket.ReadInt();
+            var slot = iPacket.ReadShort();
+            var itemId = iPacket.ReadInt();
 
-            Item item = this[ItemType.Usable, slot];
+            var item = this[ItemType.Usable, slot];
 
             if (item == null || itemId != item.MapleId)
             {
@@ -414,7 +414,7 @@ namespace RazzleServer.Game.Maple.Characters
 
             Remove(itemId, 1);
 
-            foreach (Tuple<int, short> summon in item.Summons)
+            foreach (var summon in item.Summons)
             {
                 if (Functions.Random(0, 100) < summon.Item2)
                 {
@@ -428,17 +428,17 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void UseCashItem(PacketReader iPacket)
         {
-            short slot = iPacket.ReadShort();
-            int itemId = iPacket.ReadInt();
+            var slot = iPacket.ReadShort();
+            var itemId = iPacket.ReadInt();
 
-            Item item = this[ItemType.Cash, slot];
+            var item = this[ItemType.Cash, slot];
 
             if (item == null || itemId != item.MapleId)
             {
                 return;
             }
 
-            bool used = false;
+            var used = false;
 
             switch (item.MapleId) // TODO: Enum for these.
             {
@@ -461,8 +461,8 @@ namespace RazzleServer.Game.Maple.Characters
 
                 case 5050000: // NOTE: AP Reset.
                     {
-                        StatisticType statDestination = (StatisticType)iPacket.ReadInt();
-                        StatisticType statSource = (StatisticType)iPacket.ReadInt();
+                        var statDestination = (StatisticType)iPacket.ReadInt();
+                        var statSource = (StatisticType)iPacket.ReadInt();
 
                         Parent.AddAbility(statDestination, 1, true);
                         Parent.AddAbility(statSource, -1, true);
@@ -480,9 +480,9 @@ namespace RazzleServer.Game.Maple.Characters
                             return;
                         }
 
-                        string text = iPacket.ReadString();
+                        var text = iPacket.ReadString();
 
-                        string message = string.Format($"{Parent.Name} : {text}"); // TODO: Include medal name.
+                        var message = string.Format($"{Parent.Name} : {text}"); // TODO: Include medal name.
 
                         // NOTE: In GMS, this sends to everyone on the current channel, not the map (despite the item's description).
                         using (var oPacket = new PacketWriter(ServerOperationCode.BroadcastMsg))
@@ -506,10 +506,10 @@ namespace RazzleServer.Game.Maple.Characters
                             return;
                         }
 
-                        string text = iPacket.ReadString();
-                        bool whisper = iPacket.ReadBool();
+                        var text = iPacket.ReadString();
+                        var whisper = iPacket.ReadBool();
 
-                        string message = string.Format($"{Parent.Name} : {text}"); // TODO: Include medal name.
+                        var message = string.Format($"{Parent.Name} : {text}"); // TODO: Include medal name.
 
                         using (var oPacket = new PacketWriter(ServerOperationCode.BroadcastMsg))
                         {
@@ -536,11 +536,11 @@ namespace RazzleServer.Game.Maple.Characters
                             return;
                         }
 
-                        string text1 = iPacket.ReadString();
-                        string text2 = iPacket.ReadString();
-                        string text3 = iPacket.ReadString();
-                        string text4 = iPacket.ReadString();
-                        bool whisper = iPacket.ReadBool();
+                        var text1 = iPacket.ReadString();
+                        var text2 = iPacket.ReadString();
+                        var text3 = iPacket.ReadString();
+                        var text4 = iPacket.ReadString();
+                        var whisper = iPacket.ReadBool();
 
                         using (var oPacket = new PacketWriter(ServerOperationCode.SetAvatarMegaphone))
                         {
@@ -563,16 +563,16 @@ namespace RazzleServer.Game.Maple.Characters
 
                 case 5076000: // NOTE: Item Megaphone.
                     {
-                        string text = iPacket.ReadString();
-                        bool whisper = iPacket.ReadBool();
-                        bool includeItem = iPacket.ReadBool();
+                        var text = iPacket.ReadString();
+                        var whisper = iPacket.ReadBool();
+                        var includeItem = iPacket.ReadBool();
 
                         Item targetItem = null;
 
                         if (includeItem)
                         {
-                            ItemType type = (ItemType)iPacket.ReadInt();
-                            short targetSlot = iPacket.ReadShort();
+                            var type = (ItemType)iPacket.ReadInt();
+                            var targetSlot = iPacket.ReadShort();
 
                             targetItem = this[type, targetSlot];
 
@@ -582,7 +582,7 @@ namespace RazzleServer.Game.Maple.Characters
                             }
                         }
 
-                        string message = string.Format($"{Parent.Name} : {text}"); // TODO: Include medal name.
+                        var message = string.Format($"{Parent.Name} : {text}"); // TODO: Include medal name.
 
                         using (var oPacket = new PacketWriter(ServerOperationCode.BroadcastMsg))
                         {
@@ -631,14 +631,14 @@ namespace RazzleServer.Game.Maple.Characters
 
                 case 5060000: // NOTE: Item Name Tag.
                     {
-                        short targetSlot = iPacket.ReadShort();
+                        var targetSlot = iPacket.ReadShort();
 
                         if (targetSlot == 0)
                         {
                             return;
                         }
 
-                        Item targetItem = this[ItemType.Equipment, targetSlot];
+                        var targetItem = this[ItemType.Equipment, targetSlot];
 
                         if (targetItem == null)
                         {
@@ -703,7 +703,7 @@ namespace RazzleServer.Game.Maple.Characters
                 case 5370000: // NOTE: Chalkboard.
                 case 5370001: // NOTE: Chalkboard 2.
                     {
-                        string text = iPacket.ReadString();
+                        var text = iPacket.ReadString();
 
                         Parent.Chalkboard = text;
                     }
@@ -798,10 +798,10 @@ namespace RazzleServer.Game.Maple.Characters
         public void UseReturnScroll(PacketReader iPacket)
         {
             iPacket.ReadInt(); // NOTE: Ticks.
-            short slot = iPacket.ReadShort();
-            int itemId = iPacket.ReadInt();
+            var slot = iPacket.ReadShort();
+            var itemId = iPacket.ReadInt();
 
-            Item item = this[itemId, slot];
+            var item = this[itemId, slot];
 
             if (item == null)
             {
@@ -852,11 +852,11 @@ namespace RazzleServer.Game.Maple.Characters
         {
             iPacket.Skip(1);
             iPacket.Skip(4);
-            Point position = new Point(iPacket.ReadShort(), iPacket.ReadShort());
+            var position = new Point(iPacket.ReadShort(), iPacket.ReadShort());
 
             // TODO: Validate position relative to the picker.
 
-            int objectId = iPacket.ReadInt();
+            var objectId = iPacket.ReadInt();
 
             lock (Parent.Map.Drops)
             {
@@ -871,7 +871,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             get
             {
-                foreach (Item item in this)
+                foreach (var item in this)
                 {
                     if (item.Type == type && item.Slot == slot)
                     {
@@ -887,7 +887,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             get
             {
-                foreach (Item item in this)
+                foreach (var item in this)
                 {
                     if (item.Slot == (sbyte)slot)
                     {
@@ -903,7 +903,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             get
             {
-                foreach (Item item in this)
+                foreach (var item in this)
                 {
                     if (item.Slot == slot && item.Type == Item.GetType(mapleId))
                     {
@@ -919,7 +919,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             get
             {
-                foreach (Item loopItem in Items)
+                foreach (var loopItem in Items)
                 {
                     if (loopItem.Type == type && !loopItem.IsEquipped)
                     {
@@ -931,7 +931,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public IEnumerable<Item> GetStored()
         {
-            foreach (Item loopItem in Items)
+            foreach (var loopItem in Items)
             {
                 if (loopItem.IsStored)
                 {
@@ -942,7 +942,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public IEnumerable<Item> GetEquipped(EquippedQueryMode mode = EquippedQueryMode.Any)
         {
-            foreach (Item loopItem in Items)
+            foreach (var loopItem in Items)
             {
                 if (loopItem.IsEquipped)
                 {
@@ -973,11 +973,13 @@ namespace RazzleServer.Game.Maple.Characters
         public int SpaceTakenBy(Item item, bool autoMerge = true)
         {
             if (item.Quantity < 0)
+            {
                 return 0;
+            }
 
             if (Available(item.MapleId) % item.MaxPerStack != 0 && autoMerge)
             {
-                foreach (Item loopItem in this.Where(x => x.MapleId == item.MapleId && x.Quantity < x.MaxPerStack))
+                foreach (var loopItem in this.Where(x => x.MapleId == item.MapleId && x.Quantity < x.MaxPerStack))
                 {
                     if (loopItem.Quantity + item.Quantity <= loopItem.MaxPerStack)
                     {
@@ -999,7 +1001,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public bool CouldReceive(IEnumerable<Item> items, bool autoMerge = true)
         {
-            Dictionary<ItemType, int> spaceCount = new Dictionary<ItemType, int>(5);
+            var spaceCount = new Dictionary<ItemType, int>(5);
             {
                 spaceCount.Add(ItemType.Equipment, 0);
                 spaceCount.Add(ItemType.Usable, 0);
@@ -1008,12 +1010,12 @@ namespace RazzleServer.Game.Maple.Characters
                 spaceCount.Add(ItemType.Cash, 0);
             }
 
-            foreach (Item loopItem in items)
+            foreach (var loopItem in items)
             {
                 spaceCount[loopItem.Type] += SpaceTakenBy(loopItem, autoMerge);
             }
 
-            foreach (KeyValuePair<ItemType, int> loopSpaceCount in spaceCount)
+            foreach (var loopSpaceCount in spaceCount)
             {
                 if (RemainingSlots(loopSpaceCount.Key) < loopSpaceCount.Value)
                 {
@@ -1035,49 +1037,49 @@ namespace RazzleServer.Game.Maple.Characters
                 oPacket.WriteByte(MaxSlots[ItemType.Cash]);
 
 
-                foreach (Item item in GetEquipped(EquippedQueryMode.Normal))
+                foreach (var item in GetEquipped(EquippedQueryMode.Normal))
                 {
                     oPacket.WriteBytes(item.ToByteArray());
                 }
 
                 oPacket.WriteByte(0);
 
-                foreach (Item item in GetEquipped(EquippedQueryMode.Cash))
+                foreach (var item in GetEquipped(EquippedQueryMode.Cash))
                 {
                     oPacket.WriteBytes(item.ToByteArray());
                 }
 
                 oPacket.WriteByte(0);
 
-                foreach (Item item in this[ItemType.Equipment])
+                foreach (var item in this[ItemType.Equipment])
                 {
                     oPacket.WriteBytes(item.ToByteArray());
                 }
 
                 oPacket.WriteByte(0);
 
-                foreach (Item item in this[ItemType.Usable])
+                foreach (var item in this[ItemType.Usable])
                 {
                     oPacket.WriteBytes(item.ToByteArray());
                 }
 
                 oPacket.WriteByte(0);
 
-                foreach (Item item in this[ItemType.Setup])
+                foreach (var item in this[ItemType.Setup])
                 {
                     oPacket.WriteBytes(item.ToByteArray());
                 }
 
                 oPacket.WriteByte(0);
 
-                foreach (Item item in this[ItemType.Etcetera])
+                foreach (var item in this[ItemType.Etcetera])
                 {
                     oPacket.WriteBytes(item.ToByteArray());
                 }
 
                 oPacket.WriteByte(0);
 
-                foreach (Item item in this[ItemType.Cash])
+                foreach (var item in this[ItemType.Cash])
                 {
                     oPacket.WriteBytes(item.ToByteArray());
                 }

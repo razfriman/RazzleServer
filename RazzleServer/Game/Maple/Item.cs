@@ -166,10 +166,7 @@ namespace RazzleServer.Game.Maple
                     return maxPerStack;
                 }
             }
-            set
-            {
-                maxPerStack = value;
-            }
+            set => maxPerStack = value;
         }
 
         public short Quantity
@@ -196,10 +193,25 @@ namespace RazzleServer.Game.Maple
             {
                 byte flags = 0;
 
-                if (IsSealed) flags |= (byte)ItemFlags.Sealed;
-                if (PreventsSlipping) flags |= (byte)ItemFlags.AddPreventSlipping;
-                if (PreventsColdness) flags |= (byte)ItemFlags.AddPreventColdness;
-                if (IsTradeBlocked) flags |= (byte)ItemFlags.Untradeable;
+                if (IsSealed)
+                {
+                    flags |= (byte)ItemFlags.Sealed;
+                }
+
+                if (PreventsSlipping)
+                {
+                    flags |= (byte)ItemFlags.AddPreventSlipping;
+                }
+
+                if (PreventsColdness)
+                {
+                    flags |= (byte)ItemFlags.AddPreventColdness;
+                }
+
+                if (IsTradeBlocked)
+                {
+                    flags |= (byte)ItemFlags.Untradeable;
+                }
 
                 return flags;
             }
@@ -299,7 +311,10 @@ namespace RazzleServer.Game.Maple
             MapleId = mapleId;
             MaxPerStack = CachedReference.MaxPerStack;
             Quantity = (Type == ItemType.Equipment) ? (short)1 : quantity;
-            if (equipped) Slot = (short)GetEquippedSlot();
+            if (equipped)
+            {
+                Slot = (short)GetEquippedSlot();
+            }
 
             if (!expiration.HasValue)
             {
@@ -651,15 +666,15 @@ namespace RazzleServer.Game.Maple
                 return;
             }
 
-            short sourceSlot = Slot;
-            EquipmentSlot destinationSlot = GetEquippedSlot();
+            var sourceSlot = Slot;
+            var destinationSlot = GetEquippedSlot();
 
-            Item top = Parent[EquipmentSlot.Top];
-            Item bottom = Parent[EquipmentSlot.Bottom];
-            Item weapon = Parent[EquipmentSlot.Weapon];
-            Item shield = Parent[EquipmentSlot.Shield];
+            var top = Parent[EquipmentSlot.Top];
+            var bottom = Parent[EquipmentSlot.Bottom];
+            var weapon = Parent[EquipmentSlot.Weapon];
+            var shield = Parent[EquipmentSlot.Shield];
 
-            Item destination = Parent[destinationSlot];
+            var destination = Parent[destinationSlot];
 
             if (destination != null)
             {
@@ -731,7 +746,7 @@ namespace RazzleServer.Game.Maple
                 throw new InvalidOperationException("Cna only unequip equipment items.");
             }
 
-            short sourceSlot = Slot;
+            var sourceSlot = Slot;
 
             if (destinationSlot == 0)
             {
@@ -815,7 +830,7 @@ namespace RazzleServer.Game.Maple
                     Character.Client.Send(oPacket);
                 }
 
-                Item dropped = new Item(MapleId, quantity)
+                var dropped = new Item(MapleId, quantity)
                 {
                     Dropper = Character,
                     Owner = null
@@ -827,9 +842,9 @@ namespace RazzleServer.Game.Maple
 
         public void Move(short destinationSlot)
         {
-            short sourceSlot = Slot;
+            var sourceSlot = Slot;
 
-            Item destination = Parent[Type, destinationSlot];
+            var destination = Parent[Type, destinationSlot];
 
             if (destination != null &&
                 Type != ItemType.Equipment &&
@@ -907,7 +922,7 @@ namespace RazzleServer.Game.Maple
             {
                 if (!zeroPosition && !leaveOut)
                 {
-                    byte slot = ComputedSlot;
+                    var slot = ComputedSlot;
 
                     if (slot < 0)
                     {

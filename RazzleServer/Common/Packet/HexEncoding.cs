@@ -16,8 +16,8 @@ namespace RazzleServer.Common.Packet
         public static bool IsHexDigit(Char pChar)
         {
             int numChar;
-            int numA = Convert.ToInt32('A');
-            int num1 = Convert.ToInt32('0');
+            var numA = Convert.ToInt32('A');
+            var num1 = Convert.ToInt32('0');
             pChar = Char.ToUpper(pChar);
             numChar = Convert.ToInt32(pChar);
 
@@ -46,7 +46,7 @@ namespace RazzleServer.Common.Packet
                 throw new ArgumentException("hex must be 1 or 2 characters in length");
             }
 
-            byte newByte = byte.Parse(pHex, System.Globalization.NumberStyles.HexNumber);
+            var newByte = byte.Parse(pHex, System.Globalization.NumberStyles.HexNumber);
             return newByte;
         }
 
@@ -57,7 +57,7 @@ namespace RazzleServer.Common.Packet
 		/// <returns>Byte array representation of the string</returns>
         public static byte[] GetBytes(string hexString)
         {
-            string newString = string.Empty;
+            var newString = string.Empty;
             char c;
 
             // remove all none A-F, 0-9, characters
@@ -79,9 +79,9 @@ namespace RazzleServer.Common.Packet
             var byteLength = newString.Length / 2;
             var bytes = new byte[byteLength];
             string hex;
-            int j = 0;
+            var j = 0;
 
-            for (int i = 0; i < bytes.Length; i++)
+            for (var i = 0; i < bytes.Length; i++)
             {
                 hex = new String(new Char[] { newString[j], newString[j + 1] });
                 bytes[i] = HexToByte(hex);

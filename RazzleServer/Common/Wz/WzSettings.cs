@@ -30,10 +30,10 @@ namespace RazzleServer.Common.WzLib
         private void ExtractSettingsImage(WzImage settingsImage, Type settingsHolderType)
         {
             if (!settingsImage.Parsed) settingsImage.ParseImage();
-            foreach (FieldInfo fieldInfo in settingsHolderType.GetFields(BindingFlags.Public | BindingFlags.Static))
+            foreach (var fieldInfo in settingsHolderType.GetFields(BindingFlags.Public | BindingFlags.Static))
             {
-                string settingName = fieldInfo.Name;
-                WzImageProperty settingProp = settingsImage[settingName];
+                var settingName = fieldInfo.Name;
+                var settingProp = settingsImage[settingName];
                 byte[] argb;
                 if (settingProp == null)
                     SaveField(settingsImage, fieldInfo);
@@ -126,7 +126,7 @@ namespace RazzleServer.Common.WzLib
 
         private void SetWzProperty(WzImage parentImage, string propName, WzPropertyType propType, object value)
         {
-            WzImageProperty property = parentImage[propName];
+            var property = parentImage[propName];
             if (property != null)
             {
                 if (property.PropertyType == propType)
@@ -144,7 +144,7 @@ namespace RazzleServer.Common.WzLib
         private void SaveSettingsImage(WzImage settingsImage, Type settingsHolderType)
         {
             if (!settingsImage.Parsed) settingsImage.ParseImage();
-            foreach (FieldInfo fieldInfo in settingsHolderType.GetFields(BindingFlags.Public | BindingFlags.Static))
+            foreach (var fieldInfo in settingsHolderType.GetFields(BindingFlags.Public | BindingFlags.Static))
             {
                 SaveField(settingsImage, fieldInfo);
             }
@@ -153,14 +153,14 @@ namespace RazzleServer.Common.WzLib
 
         private void SaveField(WzImage settingsImage, FieldInfo fieldInfo)
         {
-            string settingName = fieldInfo.Name;
+            var settingName = fieldInfo.Name;
             if (fieldInfo.FieldType.BaseType != null && fieldInfo.FieldType.BaseType.FullName == "System.Enum")
                 SetWzProperty(settingsImage, settingName, WzPropertyType.Int, fieldInfo.GetValue(null));
             else switch (fieldInfo.FieldType.FullName)
                 {
                     //case "Microsoft.Xna.Framework.Graphics.Color":
                     case "Microsoft.Xna.Framework.Color":
-                        object xnaColor = fieldInfo.GetValue(null);
+                        var xnaColor = fieldInfo.GetValue(null);
                         //for some odd reason .NET requires casting the result to uint before it can be
                         //casted to double
                         SetWzProperty(settingsImage, settingName, WzPropertyType.Double, (double)(uint)xnaColor.GetType().GetProperty("PackedValue").GetValue(xnaColor, null));
@@ -209,7 +209,7 @@ namespace RazzleServer.Common.WzLib
 
         public void Save()
         {
-            bool settingsExist = File.Exists(wzPath);
+            var settingsExist = File.Exists(wzPath);
             WzFile wzFile;
             if (settingsExist)
             {
@@ -221,8 +221,8 @@ namespace RazzleServer.Common.WzLib
                 wzFile = new WzFile(1337, WzMapleVersion.CLASSIC);
                 wzFile.Header.Copyright = "MapleLib";
                 wzFile.Header.RecalculateFileStart();
-                WzImage US = new WzImage("UserSettings.img") { Changed = true, Parsed = true };
-                WzImage AS = new WzImage("ApplicationSettings.img") { Changed = true, Parsed = true };
+                var US = new WzImage("UserSettings.img") { Changed = true, Parsed = true };
+                var AS = new WzImage("ApplicationSettings.img") { Changed = true, Parsed = true };
                 wzFile.WzDirectory.WzImages.Add(US);
                 wzFile.WzDirectory.WzImages.Add(AS);
             }
@@ -230,8 +230,8 @@ namespace RazzleServer.Common.WzLib
             SaveSettingsImage((WzImage)wzFile["ApplicationSettings.img"], appSettingsType);
             if (settingsExist)
             {
-                string tempFile = Path.GetTempFileName();
-                string settingsPath = wzFile.FilePath;
+                var tempFile = Path.GetTempFileName();
+                var settingsPath = wzFile.FilePath;
                 wzFile.SaveToDisk(tempFile);
                 wzFile.Dispose();
                 File.Delete(settingsPath);

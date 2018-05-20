@@ -21,13 +21,7 @@ namespace RazzleServer.Game.Maple
         public DateTime End { get; set; }
         public int Value { get; set; }
 
-        public Character Character
-        {
-            get
-            {
-                return Parent.Parent;
-            }
-        }
+        public Character Character => Parent.Parent;
 
         public long PrimaryBuffMask
         {
@@ -35,7 +29,7 @@ namespace RazzleServer.Game.Maple
             {
                 long mask = 0;
 
-                foreach (KeyValuePair<PrimaryBuffStat, short> primaryStatup in PrimaryStatups)
+                foreach (var primaryStatup in PrimaryStatups)
                 {
                     mask |= (long)primaryStatup.Key;
                 }
@@ -50,7 +44,7 @@ namespace RazzleServer.Game.Maple
             {
                 long mask = 0;
 
-                foreach (KeyValuePair<SecondaryBuffStat, short> secondaryStatus in SecondaryStatups)
+                foreach (var secondaryStatus in SecondaryStatups)
                 {
                     mask |= (long)secondaryStatus.Key;
                 }
@@ -131,14 +125,14 @@ namespace RazzleServer.Game.Maple
                             oPacket.WriteLong(PrimaryBuffMask);
                             oPacket.WriteLong(SecondaryBuffMask);
 
-                            foreach (KeyValuePair<PrimaryBuffStat, short> primaryStatup in PrimaryStatups)
+                            foreach (var primaryStatup in PrimaryStatups)
                             {
                                 oPacket.WriteShort(primaryStatup.Value);
                                 oPacket.WriteInt(MapleId);
                                 oPacket.WriteInt((int)(End - DateTime.Now).TotalMilliseconds);
                             }
 
-                            foreach (KeyValuePair<SecondaryBuffStat, short> secondaryStatup in SecondaryStatups)
+                            foreach (var secondaryStatup in SecondaryStatups)
                             {
                                 oPacket.WriteShort(secondaryStatup.Value);
                                 oPacket.WriteInt(MapleId);
@@ -159,12 +153,12 @@ namespace RazzleServer.Game.Maple
                             oPacket.WriteLong(PrimaryBuffMask);
                             oPacket.WriteLong(SecondaryBuffMask);
 
-                            foreach (KeyValuePair<PrimaryBuffStat, short> primaryStatup in PrimaryStatups)
+                            foreach (var primaryStatup in PrimaryStatups)
                             {
                                 oPacket.WriteShort(primaryStatup.Value);
                             }
 
-                            foreach (KeyValuePair<SecondaryBuffStat, short> secondaryStatup in SecondaryStatups)
+                            foreach (var secondaryStatup in SecondaryStatups)
                             {
                                 oPacket.WriteShort(secondaryStatup.Value);
                             }

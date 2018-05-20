@@ -8,7 +8,7 @@ namespace RazzleServer.Game.Handlers
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
             packet.ReadInt();
-            int characterId = packet.ReadInt();
+            var characterId = packet.ReadInt();
 
             var target = client.Character.Map.Characters[characterId];
 

@@ -49,11 +49,15 @@ namespace RazzleServer.Common.MapleCryptoLib
 		/// </summary>
 		public ushort? Encrypt(ref byte[] data, bool toClient)
 		{
-			if (!Handshaken || MapleIV == null) return null;
+			if (!Handshaken || MapleIV == null)
+			{
+				return null;
+			}
+
 			ushort? ret;
 
 
-			byte[] newData = new byte[data.Length + 4];
+			var newData = new byte[data.Length + 4];
 			if (toClient)
 			{
 				WriteHeaderToClient(newData);
@@ -83,10 +87,14 @@ namespace RazzleServer.Common.MapleCryptoLib
 		/// <param name="data">Data to decrypt</param>
 		public void Decrypt(ref byte[] data)
 		{
-			if (!Handshaken || MapleIV == null) return;
-			int length = GetPacketLength(data);
+			if (!Handshaken || MapleIV == null)
+			{
+				return;
+			}
 
-			byte[] newData = new byte[length];
+			var length = GetPacketLength(data);
+
+			var newData = new byte[length];
 			Buffer.BlockCopy(data, 4, newData, 0, length);
 
 			lock (Locker)
@@ -118,8 +126,8 @@ namespace RazzleServer.Common.MapleCryptoLib
 		/// </summary>
 		public void Handshake(ref byte[] data)
 		{
-			ushort length = BitConverter.ToUInt16(data, 0);
-			byte[] ret = new byte[length];
+			var length = BitConverter.ToUInt16(data, 0);
+			var ret = new byte[length];
 			Buffer.BlockCopy(data, 2, ret, 0, ret.Length);
 			data = ret;
 		}
@@ -130,10 +138,13 @@ namespace RazzleServer.Common.MapleCryptoLib
 		/// <returns>The expanded key</returns>
 		private byte[] ExpandKey(ulong AESKey)
 		{
-			byte[] Expand = BitConverter.GetBytes(AESKey);
-			byte[] Key = new byte[Expand.Length * 4];
-			for (int i = 0; i < Expand.Length; i++)
+			var Expand = BitConverter.GetBytes(AESKey);
+			var Key = new byte[Expand.Length * 4];
+			for (var i = 0; i < Expand.Length; i++)
+			{
 				Key[i * 4] = Expand[i];
+			}
+
 			return Key;
 		}
 
@@ -153,13 +164,21 @@ namespace RazzleServer.Common.MapleCryptoLib
 			while (remaining > 0)
 			{
 				for (index = 0; index < realIV.Length; ++index)
+				{
 					realIV[index] = IVBytes[index % 4];
+				}
 
-				if (remaining < length) length = remaining;
+				if (remaining < length)
+				{
+					length = remaining;
+				}
+
 				for (index = start; index < (start + length); ++index)
 				{
 					if (((index - start) % realIV.Length) == 0)
+					{
 						Transformer.TransformBlock(realIV);
+					}
 
 					buffer[index] ^= realIV[(index - start) % realIV.Length];
 				}
@@ -201,7 +220,7 @@ namespace RazzleServer.Common.MapleCryptoLib
 		{
 			int length = buffer.Length, i;
 			byte xorKey, save, len, temp;
-			for (int passes = 0; passes < 3; passes++)
+			for (var passes = 0; passes < 3; passes++)
 			{
 				xorKey = 0;
 				save = 0;
@@ -235,10 +254,10 @@ namespace RazzleServer.Common.MapleCryptoLib
 		/// </summary>
 		private void EncryptShanda(byte[] buffer)
 		{
-			int length = buffer.Length;
+			var length = buffer.Length;
 			byte xorKey, len, temp;
 			int i;
-			for (int passes = 0; passes < 3; passes++)
+			for (var passes = 0; passes < 3; passes++)
 			{
 				xorKey = 0;
 				len = (byte)(length & 0xFF);
@@ -268,7 +287,7 @@ namespace RazzleServer.Common.MapleCryptoLib
 		/// </summary>
 		private byte ROL(byte b, int count)
 		{
-			int tmp = b << (count & 7);
+			var tmp = b << (count & 7);
 			return unchecked((byte)(tmp | (tmp >> 8)));
 		}
 
@@ -277,7 +296,7 @@ namespace RazzleServer.Common.MapleCryptoLib
 		/// </summary>
 		private byte ROR(byte b, int count)
 		{
-			int tmp = b << (8 - (count & 7));
+			var tmp = b << (8 - (count & 7));
 			return unchecked((byte)(tmp | (tmp >> 8)));
 		}
 	}

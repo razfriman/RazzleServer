@@ -89,8 +89,8 @@ namespace RazzleServer.Common.MapleCryptoLib
 		/// </summary>
 		public static byte[] GetTrimmedUserKey()
 		{
-			byte[] key = new byte[32];
-			for (int i = 0; i < 128; i += 16)
+			var key = new byte[32];
+			for (var i = 0; i < 128; i += 16)
 			{
 				key[i / 4] = UserKey[i];
 			}

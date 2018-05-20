@@ -47,7 +47,7 @@ namespace RazzleServer.Game.Handlers
             //2D 00 15 00 
             //2D 00 35 00
 
-            byte portals = packet.ReadByte();
+            var portals = packet.ReadByte();
 
             var movements = new Movements(packet);
 

@@ -11,19 +11,19 @@ namespace RazzleServer.Game.Handlers
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
             packet.ReadInt(); // NOTE: Ticks.
-            sbyte type = (sbyte)packet.ReadByte();
+            var type = (sbyte)packet.ReadByte();
             packet.ReadByte(); // NOTE: Elemental type.
-            int damage = packet.ReadInt();
-            bool damageApplied = false;
-            bool deadlyAttack = false;
+            var damage = packet.ReadInt();
+            var damageApplied = false;
+            var deadlyAttack = false;
             byte hit = 0;
             byte stance = 0;
-            int disease = 0;
+            var disease = 0;
             byte level = 0;
             short mpBurn = 0;
-            int mobObjectId = 0;
-            int mobId = 0;
-            int noDamageSkillId = 0;
+            var mobObjectId = 0;
+            var mobId = 0;
+            var noDamageSkillId = 0;
 
             if (type != MapDamage)
             {
@@ -48,7 +48,7 @@ namespace RazzleServer.Game.Handlers
             }
 
             hit = packet.ReadByte();
-            byte reduction = packet.ReadByte();
+            var reduction = packet.ReadByte();
             packet.ReadByte(); // NOTE: Unknown.
 
             if (reduction != 0)

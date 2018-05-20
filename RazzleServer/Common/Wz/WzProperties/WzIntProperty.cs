@@ -24,15 +24,18 @@ namespace RazzleServer.Common.WzLib.WzProperties
 
         public override WzImageProperty DeepClone()
         {
-            WzIntProperty clone = new WzIntProperty(name, val);
+            var clone = new WzIntProperty(name, val);
             return clone;
         }
 
-        public override object WzValue { get { return Value; } }
+        public override object WzValue => Value;
+
         /// <summary>
         /// The parent of the object
         /// </summary>
-        public override WzObject Parent { get { return parent; } internal set { parent = value; } }
+        public override WzObject Parent { get => parent;
+            internal set => parent = value;
+        }
         /*/// <summary>
 		/// The image that this property is contained in
 		/// </summary>
@@ -40,19 +43,22 @@ namespace RazzleServer.Common.WzLib.WzProperties
         /// <summary>
         /// The WzPropertyType of the property
         /// </summary>
-        public override WzPropertyType PropertyType { get { return WzPropertyType.Int; } }
+        public override WzPropertyType PropertyType => WzPropertyType.Int;
+
         /// <summary>
         /// The name of the property
         /// </summary>
-        public override string Name { get { return name; } set { name = value; } }
-        public override void WriteValue(RazzleServer.Common.WzLib.Util.WzBinaryWriter writer)
+        public override string Name { get => name;
+            set => name = value;
+        }
+        public override void WriteValue(WzBinaryWriter writer)
         {
             writer.Write((byte)3);
             writer.WriteCompressedInt(Value);
         }
         public override void ExportXml(StreamWriter writer, int level)
         {
-            writer.WriteLine(XmlUtil.Indentation(level) + XmlUtil.EmptyNamedValuePair("WzCompressedInt", this.Name, this.Value.ToString()));
+            writer.WriteLine(XmlUtil.Indentation(level) + XmlUtil.EmptyNamedValuePair("WzCompressedInt", Name, Value.ToString()));
         }
         /// <summary>
         /// Dispose the object
@@ -67,7 +73,9 @@ namespace RazzleServer.Common.WzLib.WzProperties
         /// <summary>
         /// The value of the property
         /// </summary>
-        public int Value { get { return val; } set { val = value; } }
+        public int Value { get => val;
+            set => val = value;
+        }
         /// <summary>
         /// Creates a blank WzCompressedIntProperty
         /// </summary>
@@ -88,7 +96,7 @@ namespace RazzleServer.Common.WzLib.WzProperties
         public WzIntProperty(string name, int value)
         {
             this.name = name;
-            this.val = value;
+            val = value;
         }
         #endregion
 

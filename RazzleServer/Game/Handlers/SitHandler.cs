@@ -8,7 +8,7 @@ namespace RazzleServer.Game.Handlers
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
-            short seatId = packet.ReadShort();
+            var seatId = packet.ReadShort();
             var isSitting = seatId == -1;
             if (!isSitting)
             {

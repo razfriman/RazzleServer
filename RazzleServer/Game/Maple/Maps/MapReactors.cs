@@ -26,7 +26,7 @@ namespace RazzleServer.Game.Maple.Maps
         {
             lock (this)
             {
-                Reactor item = Items[index];
+                var item = Items[index];
 
                 if (DataProvider.IsInitialized)
                 {

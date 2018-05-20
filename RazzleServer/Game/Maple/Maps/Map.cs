@@ -95,7 +95,7 @@ namespace RazzleServer.Game.Maple.Maps
 
         public void Broadcast(PacketWriter oPacket, Character ignored = null)
         {
-            foreach (Character character in Characters)
+            foreach (var character in Characters)
             {
                 if (character != ignored)
                 {

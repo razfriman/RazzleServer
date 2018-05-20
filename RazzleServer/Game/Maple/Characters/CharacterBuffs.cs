@@ -16,7 +16,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             get
             {
-                foreach (Buff loopBuff in Buffs)
+                foreach (var loopBuff in Buffs)
                 {
                     if (loopBuff.MapleId == mapleId)
                     {
@@ -51,7 +51,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             Delete();
 
-            foreach (Buff loopBuff in Buffs)
+            foreach (var loopBuff in Buffs)
             {
                 loopBuff.Save();
             }
@@ -69,7 +69,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public bool Contains(int mapleId)
         {
-            foreach (Buff loopBuff in Buffs)
+            foreach (var loopBuff in Buffs)
             {
                 if (loopBuff.MapleId == mapleId)
                 {
@@ -87,7 +87,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Add(Buff buff)
         {
-            foreach (Buff loopBuff in Buffs)
+            foreach (var loopBuff in Buffs)
             {
                 if (loopBuff.MapleId == buff.MapleId)
                 {
@@ -124,7 +124,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Cancel(PacketReader iPacket)
         {
-            int mapleId = iPacket.ReadInt();
+            var mapleId = iPacket.ReadInt();
 
             switch (mapleId)
             {
@@ -151,7 +151,7 @@ namespace RazzleServer.Game.Maple.Characters
             using (var oPacket = new PacketWriter())
             {
                 long mask = 0;
-                int value = 0;
+                var value = 0;
 
                 if (Contains((int)SkillNames.Rogue.DarkSight))
                 {
@@ -182,7 +182,7 @@ namespace RazzleServer.Game.Maple.Characters
                 }
 
 
-                int magic = Functions.Random();
+                var magic = Functions.Random();
 
 
                 oPacket.WriteZeroBytes(6);

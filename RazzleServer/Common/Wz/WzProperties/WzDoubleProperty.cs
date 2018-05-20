@@ -23,15 +23,18 @@ namespace RazzleServer.Common.WzLib.WzProperties
 
         public override WzImageProperty DeepClone()
         {
-            WzDoubleProperty clone = new WzDoubleProperty(name, val);
+            var clone = new WzDoubleProperty(name, val);
             return clone;
         }
 
-		public override object WzValue { get { return Value; } }
+		public override object WzValue => Value;
+
 		/// <summary>
 		/// The parent of the object
 		/// </summary>
-		public override WzObject Parent { get { return parent; } internal set { parent = value; } }
+		public override WzObject Parent { get => parent;
+			internal set => parent = value;
+		}
 		/*/// <summary>
 		/// The image that this property is contained in
 		/// </summary>
@@ -39,19 +42,22 @@ namespace RazzleServer.Common.WzLib.WzProperties
 		/// <summary>
 		/// The WzPropertyType of the property
 		/// </summary>
-		public override WzPropertyType PropertyType { get { return WzPropertyType.Double; } }
+		public override WzPropertyType PropertyType => WzPropertyType.Double;
+
 		/// <summary>
 		/// The name of this property
 		/// </summary>
-		public override string Name { get { return name; } set { name = value; } }
-		public override void WriteValue(RazzleServer.Common.WzLib.Util.WzBinaryWriter writer)
+		public override string Name { get => name;
+			set => name = value;
+		}
+		public override void WriteValue(WzBinaryWriter writer)
 		{
 			writer.Write((byte)5);
 			writer.Write(Value);
 		}
 		public override void ExportXml(StreamWriter writer, int level)
 		{
-			writer.WriteLine(XmlUtil.Indentation(level) + XmlUtil.EmptyNamedValuePair("WzDouble", this.Name, this.Value.ToString()));
+			writer.WriteLine(XmlUtil.Indentation(level) + XmlUtil.EmptyNamedValuePair("WzDouble", Name, Value.ToString()));
 		}
 		public override void Dispose()
 		{
@@ -63,7 +69,9 @@ namespace RazzleServer.Common.WzLib.WzProperties
 		/// <summary>
 		/// The value of this property
 		/// </summary>
-		public double Value { get { return val; } set { val = value; } }
+		public double Value { get => val;
+			set => val = value;
+		}
 		/// <summary>
 		/// Creates a blank WzDoubleProperty
 		/// </summary>
@@ -84,7 +92,7 @@ namespace RazzleServer.Common.WzLib.WzProperties
 		public WzDoubleProperty(string name, double value)
 		{
 			this.name = name;
-			this.val = value;
+			val = value;
 		}
 		#endregion
 

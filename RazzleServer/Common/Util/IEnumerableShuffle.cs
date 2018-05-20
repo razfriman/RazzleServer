@@ -11,8 +11,8 @@ namespace RazzleServer.Common.Util
             var len = list.Count;
             for (var i = len - 1; i >= 1; --i)
             {
-                int j = r.Next(i);
-                T tmp = list[i];
+                var j = r.Next(i);
+                var tmp = list[i];
                 list[i] = list[j];
                 list[j] = tmp;
             }

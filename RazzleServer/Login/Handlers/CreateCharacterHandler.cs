@@ -13,22 +13,22 @@ namespace RazzleServer.Login.Handlers
     {
         public override void HandlePacket(PacketReader packet, LoginClient client)
         {
-            string name = packet.ReadString();
-            int face = packet.ReadInt();
-            int hair = packet.ReadInt();
-            int hairColor = packet.ReadInt();
-            byte skin = (byte)packet.ReadInt();
-            int topId = packet.ReadInt();
-            int bottomId = packet.ReadInt();
-            int shoesId = packet.ReadInt();
-            int weaponId = packet.ReadInt();
+            var name = packet.ReadString();
+            var face = packet.ReadInt();
+            var hair = packet.ReadInt();
+            var hairColor = packet.ReadInt();
+            var skin = (byte)packet.ReadInt();
+            var topId = packet.ReadInt();
+            var bottomId = packet.ReadInt();
+            var shoesId = packet.ReadInt();
+            var weaponId = packet.ReadInt();
             var gender = (Gender)packet.ReadByte();
             var strength = packet.ReadByte();
             var dexterity = packet.ReadByte();
             var intelligence = packet.ReadByte();
             var luck = packet.ReadByte();
 
-            bool error = name.Length < 4
+            var error = name.Length < 4
                              || name.Length > 12
                              || Character.CharacterExists(name)
                              || DataProvider.CreationData.ForbiddenNames.Any(name.Contains);
@@ -56,7 +56,7 @@ namespace RazzleServer.Login.Handlers
                     || !DataProvider.CreationData.FemaleWeapons.Any(x => x == weaponId));
             }
 
-            Character character = new Character
+            var character = new Character
             {
                 AccountId = client.Account.Id,
                 WorldId = client.World,

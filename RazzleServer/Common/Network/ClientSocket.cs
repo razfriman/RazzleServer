@@ -50,7 +50,7 @@ namespace RazzleServer.Common.Network
 		{
             if (!disposed)
 			{
-				SocketError error = SocketError.Success;
+				var error = SocketError.Success;
 
 				var socketArgs = new SocketAsyncEventArgs
 				{
@@ -72,7 +72,7 @@ namespace RazzleServer.Common.Network
 		{
 			if (!disposed)
 			{
-				int size = e.BytesTransferred;
+				var size = e.BytesTransferred;
 
                 if (size == 0 || e.SocketError != SocketError.Success)
 				{
@@ -90,12 +90,12 @@ namespace RazzleServer.Common.Network
 		{
             if (!disposed)
 			{
-				int offset = 0;
+				var offset = 0;
 
                 while (offset < final.Length)
 				{
-					SocketError outError = SocketError.Success;
-					int sent = _socket.Send(final, offset, final.Length - offset, SocketFlags.None, out outError);
+					var outError = SocketError.Success;
+					var sent = _socket.Send(final, offset, final.Length - offset, SocketFlags.None, out outError);
 
 					if (sent == 0 || outError != SocketError.Success)
 					{
@@ -129,7 +129,9 @@ namespace RazzleServer.Common.Network
 			lock (_disposeSync)
 			{
 				if (disposed)
+				{
 					return;
+				}
 
 				disposed = true;
 

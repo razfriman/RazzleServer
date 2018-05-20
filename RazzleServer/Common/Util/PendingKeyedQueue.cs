@@ -22,7 +22,7 @@ namespace RazzleServer.Common.Util
                 QueueDone.WaitOne();
             }
 
-            TValue value = this[key];
+            var value = this[key];
 
             Remove(key);
 

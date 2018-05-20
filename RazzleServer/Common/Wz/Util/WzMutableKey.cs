@@ -38,7 +38,7 @@ namespace RazzleServer.Common.WzLib.Util
             }
 
             size = (int)Math.Ceiling(1.0 * size / BatchSize) * BatchSize;
-            byte[] newKeys = new byte[size];
+            var newKeys = new byte[size];
 
             if (BitConverter.ToInt32(iv, 0) == 0)
             {
@@ -46,7 +46,7 @@ namespace RazzleServer.Common.WzLib.Util
                 return;
             }
 
-            int startIndex = 0;
+            var startIndex = 0;
 
             if (keys != null)
             {
@@ -54,20 +54,20 @@ namespace RazzleServer.Common.WzLib.Util
                 startIndex = keys.Length;
             }
 
-            Rijndael aes = Rijndael.Create();
+            var aes = Rijndael.Create();
             aes.KeySize = 256;
             aes.BlockSize = 128;
             aes.Key = aesKey;
             aes.Mode = CipherMode.ECB;
-            MemoryStream ms = new MemoryStream(newKeys, startIndex, newKeys.Length - startIndex, true);
-            CryptoStream s = new CryptoStream(ms, aes.CreateEncryptor(), CryptoStreamMode.Write);
+            var ms = new MemoryStream(newKeys, startIndex, newKeys.Length - startIndex, true);
+            var s = new CryptoStream(ms, aes.CreateEncryptor(), CryptoStreamMode.Write);
 
-            for (int i = startIndex; i < size; i += 16)
+            for (var i = startIndex; i < size; i += 16)
             {
                 if (i == 0)
                 {
-                    byte[] block = new byte[16];
-                    for (int j = 0; j < block.Length; j++)
+                    var block = new byte[16];
+                    for (var j = 0; j < block.Length; j++)
                     {
                         block[j] = iv[j % 4];
                     }

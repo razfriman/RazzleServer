@@ -27,7 +27,7 @@ namespace RazzleServer.Common.WzLib.Util
         {
             WzKey = WzKeyGenerator.GenerateWzKey(WzIv);
             StringCache = new Hashtable();
-            this.LeaveOpen = leaveOpen;
+            LeaveOpen = leaveOpen;
         }
 
         public void WriteStringValue(string s, int withoutOffset, int withOffset)
@@ -40,7 +40,7 @@ namespace RazzleServer.Common.WzLib.Util
             else
             {
                 Write((byte)withoutOffset);
-                int sOffset = (int)this.BaseStream.Position;
+                var sOffset = (int)BaseStream.Position;
                 Write(s);
                 if (!StringCache.ContainsKey(s))
                 {
@@ -51,7 +51,7 @@ namespace RazzleServer.Common.WzLib.Util
 
         public void WriteWzObjectValue(string s, byte type)
         {
-            string storeName = type + "_" + s;
+            var storeName = type + "_" + s;
             if (s.Length > 4 && StringCache.ContainsKey(storeName))
             {
                 Write((byte)2);
@@ -59,7 +59,7 @@ namespace RazzleServer.Common.WzLib.Util
             }
             else
             {
-                int sOffset = (int)(this.BaseStream.Position - Header.FStart);
+                var sOffset = (int)(BaseStream.Position - Header.FStart);
                 Write(type);
                 Write(s);
                 if (!StringCache.ContainsKey(storeName))
@@ -77,8 +77,8 @@ namespace RazzleServer.Common.WzLib.Util
             }
             else
             {
-                bool unicode = false;
-                for (int i = 0; i < value.Length; i++)
+                var unicode = false;
+                for (var i = 0; i < value.Length; i++)
                 {
                     unicode |= value[i] > sbyte.MaxValue;
                 }
@@ -97,7 +97,7 @@ namespace RazzleServer.Common.WzLib.Util
                         Write((sbyte)value.Length);
                     }
 
-                    for (int i = 0; i < value.Length; i++)
+                    for (var i = 0; i < value.Length; i++)
                     {
                         ushort encryptedChar = value[i];
                         encryptedChar ^= (ushort)((WzKey[i * 2 + 1] << 8) + WzKey[i * 2]);
@@ -120,9 +120,9 @@ namespace RazzleServer.Common.WzLib.Util
                         Write((sbyte)(-value.Length));
                     }
 
-                    for (int i = 0; i < value.Length; i++)
+                    for (var i = 0; i < value.Length; i++)
                     {
-                        byte encryptedChar = (byte)value[i];
+                        var encryptedChar = (byte)value[i];
                         encryptedChar ^= WzKey[i];
                         encryptedChar ^= mask;
                         mask++;
@@ -134,7 +134,7 @@ namespace RazzleServer.Common.WzLib.Util
 
         public void Write(string value, int length)
         {
-            for (int i = 0; i < length; i++)
+            for (var i = 0; i < length; i++)
             {
                 if (i < value.Length)
                 {
@@ -149,23 +149,29 @@ namespace RazzleServer.Common.WzLib.Util
 
         public char[] EncryptString(string stringToDecrypt)
         {
-            char[] outputChars = new char[stringToDecrypt.Length];
-            for (int i = 0; i < stringToDecrypt.Length; i++)
+            var outputChars = new char[stringToDecrypt.Length];
+            for (var i = 0; i < stringToDecrypt.Length; i++)
+            {
                 outputChars[i] = (char)(stringToDecrypt[i] ^ ((char)((WzKey[i * 2 + 1] << 8) + WzKey[i * 2])));
+            }
+
             return outputChars;
         }
 
         public char[] EncryptNonUnicodeString(string stringToDecrypt)
         {
-            char[] outputChars = new char[stringToDecrypt.Length];
-            for (int i = 0; i < stringToDecrypt.Length; i++)
+            var outputChars = new char[stringToDecrypt.Length];
+            for (var i = 0; i < stringToDecrypt.Length; i++)
+            {
                 outputChars[i] = (char)(stringToDecrypt[i] ^ WzKey[i]);
+            }
+
             return outputChars;
         }
 
         public void WriteNullTerminatedString(string value)
         {
-            for (int i = 0; i < value.Length; i++)
+            for (var i = 0; i < value.Length; i++)
             {
                 Write((byte)value[i]);
             }
@@ -200,12 +206,12 @@ namespace RazzleServer.Common.WzLib.Util
 
         public void WriteOffset(uint value)
         {
-            uint encOffset = (uint)BaseStream.Position;
+            var encOffset = (uint)BaseStream.Position;
             encOffset = (encOffset - Header.FStart) ^ 0xFFFFFFFF;
             encOffset *= Hash;
             encOffset -= CryptoConstants.WZ_OffsetConstant;
             encOffset = RotateLeft(encOffset, (byte)(encOffset & 0x1F));
-            uint writeOffset = encOffset ^ (value - (Header.FStart * 2));
+            var writeOffset = encOffset ^ (value - (Header.FStart * 2));
             Write(writeOffset);
         }
 

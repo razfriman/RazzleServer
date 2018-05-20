@@ -97,13 +97,7 @@ namespace RazzleServer.Game.Maple
 
         public bool IsFromFourthJob => MapleId > 1000000 && (MapleId / 10000).ToString()[2] == '2'; // TODO: Redo that.
 
-        public bool IsFromBeginner
-        {
-            get
-            {
-                return MapleId % 10000000 > 999 && MapleId % 10000000 < 1003;
-            }
-        }
+        public bool IsFromBeginner => MapleId % 10000000 > 999 && MapleId % 10000000 < 1003;
 
         public bool IsCoolingDown => DateTime.Now < CooldownEnd;
 

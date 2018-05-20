@@ -115,7 +115,7 @@ namespace RazzleServer.Common.Packet
 		{
 			var oldPos = _buffer.Position;
 			_buffer.Position = 0;
-			ushort ret = ReadUShort();
+			var ret = ReadUShort();
 
             if (oldPos != 0)
             {
@@ -131,9 +131,9 @@ namespace RazzleServer.Common.Packet
 		/// <returns>A point</returns>        
 		public Point ReadPoint()
 		{
-			short x = ReadShort();
-			short y = ReadShort();
-			Point ret = new Point(x, y);
+			var x = ReadShort();
+			var y = ReadShort();
+			var ret = new Point(x, y);
 			return ret;
 		}
 	}

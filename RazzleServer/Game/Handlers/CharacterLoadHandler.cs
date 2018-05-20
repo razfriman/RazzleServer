@@ -10,7 +10,7 @@ namespace RazzleServer.Game.Handlers
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
-            int characterId = packet.ReadInt();
+            var characterId = packet.ReadInt();
             var accountId = client.Server.Manager.ValidateMigration(client.Host, characterId);
 
             if (accountId == 0)

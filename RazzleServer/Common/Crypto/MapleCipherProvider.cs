@@ -98,16 +98,20 @@ namespace RazzleServer.Common.MapleCryptoLib
             {
                 if (WaitForData <= AvailableData)
                 {
-                    int w = WaitForData - 2;
+                    var w = WaitForData - 2;
                     if (RecvCipher.Handshaken)
+                    {
                         w -= 2;
+                    }
 
                     WaitForData = 0;
                     WaitMore(w);
                 }
             }
             if (IsWaiting)
+            {
                 Wait();
+            }
         }
 
         /// <summary>
@@ -129,8 +133,12 @@ namespace RazzleServer.Common.MapleCryptoLib
         /// </summary>
         private void EnsureCapacity(int length)
         {
-            if (DataBuffer.Length > length) return; //Return as quikly as posible
-            byte[] newBuffer = new byte[DataBuffer.Length + 0x50];
+            if (DataBuffer.Length > length)
+            {
+                return; //Return as quikly as posible
+            }
+
+            var newBuffer = new byte[DataBuffer.Length + 0x50];
             Buffer.BlockCopy(DataBuffer, 0, newBuffer, 0, DataBuffer.Length);
             DataBuffer = newBuffer;
             EnsureCapacity(length);
@@ -142,7 +150,9 @@ namespace RazzleServer.Common.MapleCryptoLib
         private void Wait()
         {
             if (!IsWaiting)
+            {
                 IsWaiting = true;
+            }
 
             if (AvailableData >= 4)
             {
@@ -156,7 +166,7 @@ namespace RazzleServer.Common.MapleCryptoLib
         /// </summary>
         private void WaitMore(int length)
         {
-            int add = RecvCipher.Handshaken ? 4 : 2;
+            var add = RecvCipher.Handshaken ? 4 : 2;
 
             if (AvailableData < (length + add))
             {
@@ -217,7 +227,7 @@ namespace RazzleServer.Common.MapleCryptoLib
             }
             else
             {
-                int packetLength = RecvCipher.GetPacketLength(DataBuffer);
+                var packetLength = RecvCipher.GetPacketLength(DataBuffer);
                 WaitMore(packetLength);
             }
         }

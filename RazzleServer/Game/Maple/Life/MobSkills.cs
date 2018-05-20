@@ -12,13 +12,13 @@ namespace RazzleServer.Game.Maple.Life
             Parent = parent;
         }
 
-        public MobSkill Random => base[Functions.Random(this.Count - 1)];
+        public MobSkill Random => base[Functions.Random(Count - 1)];
 
         public new MobSkill this[int mapleId]
         {
             get
             {
-                foreach (MobSkill loopMobSkill in this)
+                foreach (var loopMobSkill in this)
                 {
                     if (loopMobSkill.MapleId == mapleId)
                     {
@@ -32,7 +32,7 @@ namespace RazzleServer.Game.Maple.Life
 
         public bool Contains(int mapleId, byte level)
         {
-            foreach (MobSkill loopMobSkill in this)
+            foreach (var loopMobSkill in this)
             {
                 if (loopMobSkill.MapleId == mapleId && loopMobSkill.Level == level)
                 {

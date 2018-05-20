@@ -6,29 +6,11 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
 {
     public sealed class KillMobsCommand : Command
     {
-        public override string Name
-        {
-            get
-            {
-                return "killmobs";
-            }
-        }
+        public override string Name => "killmobs";
 
-        public override string Parameters
-        {
-            get
-            {
-                return "[ - drop ]";
-            }
-        }
+        public override string Parameters => "[ - drop ]";
 
-        public override bool IsRestricted
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool IsRestricted => true;
 
         public override void Execute(Character caller, string[] args)
         {
@@ -38,7 +20,7 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
             }
             else
             {
-                bool drop = false;
+                var drop = false;
 
                 if (args.Length == 1)
                 {
@@ -48,7 +30,7 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
                     }
                     else
                     {
-                        this.ShowSyntax(caller);
+                        ShowSyntax(caller);
 
                         return;
                     }
@@ -56,14 +38,14 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
 
                 lock (caller.Map.Mobs)
                 {
-                    List<Mob> toKill = new List<Mob>();
+                    var toKill = new List<Mob>();
 
-                    foreach (Mob loopMob in caller.Map.Mobs)
+                    foreach (var loopMob in caller.Map.Mobs)
                     {
                         toKill.Add(loopMob);
                     }
 
-                    foreach (Mob loopMob in toKill)
+                    foreach (var loopMob in toKill)
                     {
                         loopMob.CanDrop = drop;
                         loopMob.Die();

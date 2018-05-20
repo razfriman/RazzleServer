@@ -7,7 +7,7 @@ namespace RazzleServer.Login.Handlers
     {
         public override void HandlePacket(PacketReader packet, LoginClient client)
         {
-            byte worldId = packet.ReadByte();
+            var worldId = packet.ReadByte();
 
             if (client.Server.Manager.Worlds.Contains(worldId))
             {

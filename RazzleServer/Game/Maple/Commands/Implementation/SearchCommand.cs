@@ -5,35 +5,17 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
 {
     public sealed class SearchCommand : Command
     {
-        public override string Name
-        {
-            get
-            {
-                return "search";
-            }
-        }
+        public override string Name => "search";
 
-        public override string Parameters
-        {
-            get
-            {
-                return "[ -item | -map | -mob | -npc | -quest ] label";
-            }
-        }
+        public override string Parameters => "[ -item | -map | -mob | -npc | -quest ] label";
 
-        public override bool IsRestricted
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool IsRestricted => true;
 
         public override void Execute(Character caller, string[] args)
         {
             if (args.Length == 0)
             {
-                this.ShowSyntax(caller);
+                ShowSyntax(caller);
             }
             else
             {
@@ -41,11 +23,11 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
 
                 if (args[0].StartsWith("-"))
                 {
-                    query = this.CombineArgs(args, 1).ToLower();
+                    query = CombineArgs(args, 1).ToLower();
                 }
                 else
                 {
-                    query = this.CombineArgs(args).ToLower();
+                    query = CombineArgs(args).ToLower();
                 }
 
                 if (query.Length < 2)
@@ -54,7 +36,7 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
                 }
                 else
                 {
-                    bool hasResult = false;
+                    var hasResult = false;
 
                     caller.Notify("[Results]");
 

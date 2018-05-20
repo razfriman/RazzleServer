@@ -25,6 +25,6 @@ namespace RazzleServer.Common.Util
             mEvent.Set();
         }
 
-        public T Value { get { return mValue; } }
+        public T Value => mValue;
     }
 }

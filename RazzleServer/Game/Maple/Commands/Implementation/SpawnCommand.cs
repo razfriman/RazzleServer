@@ -16,11 +16,11 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
         {
             if (args.Length < 1)
             {
-                this.ShowSyntax(caller);
+                ShowSyntax(caller);
             }
             else
             {
-                int amount = 0;
+                var amount = 0;
                 bool isAmountSpecified;
 
                 if (args.Length > 1)
@@ -41,7 +41,7 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
                 {
                     if (DataProvider.Mobs.Contains(mobId))
                     {
-                        for (int i = 0; i < amount; i++)
+                        for (var i = 0; i < amount; i++)
                         {
                             caller.Map.Mobs.Add(new Mob(mobId, caller.Position));
                         }

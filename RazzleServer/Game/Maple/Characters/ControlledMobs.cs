@@ -11,20 +11,20 @@ namespace RazzleServer.Game.Maple.Characters
 
         public ControlledMobs(Character parent)
         {
-            this.Parent = parent;
+            Parent = parent;
         }
 
         protected override void InsertItem(int index, Mob item)
         {
             lock (this)
             {
-                if (this.Parent.Client.Connected)
+                if (Parent.Client.Connected)
                 {
-                    item.Controller = this.Parent;
+                    item.Controller = Parent;
 
                     base.InsertItem(index, item);
 
-                    this.Parent.Client.Send(item.GetControlRequestPacket());
+                    Parent.Client.Send(item.GetControlRequestPacket());
                 }
                 else
                 {
@@ -37,11 +37,11 @@ namespace RazzleServer.Game.Maple.Characters
         {
             lock (this)
             {
-                Mob item = base.Items[index];
+                var item = Items[index];
 
-                if (this.Parent.Client.Connected)
+                if (Parent.Client.Connected)
                 {
-                    this.Parent.Client.Send(item.GetControlCancelPacket());
+                    Parent.Client.Send(item.GetControlCancelPacket());
                 }
 
                 item.Controller = null;
@@ -54,16 +54,16 @@ namespace RazzleServer.Game.Maple.Characters
         {
             lock (this)
             {
-                List<Mob> toRemove = new List<Mob>();
+                var toRemove = new List<Mob>();
 
-                foreach (Mob mob in this)
+                foreach (var mob in this)
                 {
                     toRemove.Add(mob);
                 }
 
-                foreach (Mob mob in toRemove)
+                foreach (var mob in toRemove)
                 {
-                    this.Remove(mob);
+                    Remove(mob);
                 }
             }
         }

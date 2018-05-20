@@ -9,35 +9,17 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
 {
     public sealed class TestCommand : Command
     {
-        public override string Name
-        {
-            get
-            {
-                return "test";
-            }
-        }
+        public override string Name => "test";
 
-        public override string Parameters
-        {
-            get
-            {
-                return string.Empty;
-            }
-        }
+        public override string Parameters => string.Empty;
 
-        public override bool IsRestricted
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool IsRestricted => true;
 
         public override void Execute(Character caller, string[] args)
         {
             if (args.Length != 0)
             {
-                this.ShowSyntax(caller);
+                ShowSyntax(caller);
             }
             else
             {

@@ -47,8 +47,15 @@ namespace RazzleServer.Game.Maple
             {
                 byte flags = 0;
 
-                if (AutoStart) flags |= (byte)QuestFlags.AutoStart;
-                if (SelectedMob) flags |= (byte)QuestFlags.SelectedMob;
+                if (AutoStart)
+                {
+                    flags |= (byte)QuestFlags.AutoStart;
+                }
+
+                if (SelectedMob)
+                {
+                    flags |= (byte)QuestFlags.SelectedMob;
+                }
 
                 return flags;
             }

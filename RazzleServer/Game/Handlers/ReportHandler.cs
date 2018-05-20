@@ -11,7 +11,7 @@ namespace RazzleServer.Game.Handlers
             var type = (ReportType)packet.ReadByte();
             var victimName = packet.ReadString();
             packet.ReadByte(); // NOTE: Unknown.
-            string description = packet.ReadString();
+            var description = packet.ReadString();
 
             ReportResult result;
 
@@ -24,7 +24,7 @@ namespace RazzleServer.Game.Handlers
 
                 case ReportType.ConversationClaim:
                     {
-                        string chatLog = packet.ReadString();
+                        var chatLog = packet.ReadString();
                     }
                     break;
             }

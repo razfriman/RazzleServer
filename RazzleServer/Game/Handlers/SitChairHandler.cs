@@ -7,7 +7,7 @@ namespace RazzleServer.Game.Handlers
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
-            int chairItemId = packet.ReadInt();
+            var chairItemId = packet.ReadInt();
 
             if (!client.Character.Items.Contains(chairItemId))
             {

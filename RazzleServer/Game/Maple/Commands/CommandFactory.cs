@@ -30,15 +30,15 @@ namespace RazzleServer.Game.Maple.Commands
 
         public static void Execute(Character caller, string text)
         {
-            string[] splitted = text.Split(' ');
+            var splitted = text.Split(' ');
 
             splitted[0] = splitted[0].ToLower();
 
-            string commandName = splitted[0].TrimStart(ServerConfig.Instance.CommandIndicator[0]);
+            var commandName = splitted[0].TrimStart(ServerConfig.Instance.CommandIndicator[0]);
 
-            string[] args = new string[splitted.Length - 1];
+            var args = new string[splitted.Length - 1];
 
-            for (int i = 1; i < splitted.Length; i++)
+            for (var i = 1; i < splitted.Length; i++)
             {
                 args[i - 1] = splitted[i];
             }

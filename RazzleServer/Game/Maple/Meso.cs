@@ -11,7 +11,7 @@ namespace RazzleServer.Game.Maple
         public Meso(int amount)
              : base()
         {
-            this.Amount = amount;
+            Amount = amount;
         }
 
         public override PacketWriter GetShowGainPacket()
@@ -21,7 +21,7 @@ namespace RazzleServer.Game.Maple
             oPacket.WriteByte((byte)MessageType.DropPickup);
             oPacket.WriteBool(true);
             oPacket.WriteByte(0); // NOTE: Unknown.
-            oPacket.WriteInt(this.Amount);
+            oPacket.WriteInt(Amount);
             oPacket.WriteShort(0);
 
             return oPacket;

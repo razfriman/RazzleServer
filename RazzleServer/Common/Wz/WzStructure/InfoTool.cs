@@ -101,8 +101,12 @@ namespace RazzleServer.Common.WzLib.WzStructure
 
         public static int? GetOptionalTranslatedInt(WzImageProperty source)
         {
-            string str = InfoTool.GetOptionalString(source);
-            if (str == null) return null;
+            var str = GetOptionalString(source);
+            if (str == null)
+            {
+                return null;
+            }
+
             return int.Parse(str);
         }
 

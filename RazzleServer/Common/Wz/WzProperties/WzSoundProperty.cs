@@ -45,11 +45,11 @@ namespace RazzleServer.Common.WzLib.WzProperties
 
         public override WzImageProperty DeepClone()
         {
-            WzSoundProperty clone = new WzSoundProperty(name, len_ms, header, mp3bytes);
+            var clone = new WzSoundProperty(name, len_ms, header, mp3bytes);
             return clone;
         }
 
-        public override object WzValue { get { return GetBytes(false); } }
+        public override object WzValue => GetBytes(false);
 
         public override void SetValue(object value)
         {
@@ -58,7 +58,9 @@ namespace RazzleServer.Common.WzLib.WzProperties
         /// <summary>
         /// The parent of the object
         /// </summary>
-        public override WzObject Parent { get { return parent; } internal set { parent = value; } }
+        public override WzObject Parent { get => parent;
+            internal set => parent = value;
+        }
         /*/// <summary>
 		/// The image that this property is contained in
 		/// </summary>
@@ -66,14 +68,17 @@ namespace RazzleServer.Common.WzLib.WzProperties
         /// <summary>
         /// The name of the property
         /// </summary>
-        public override string Name { get { return name; } set { name = value; } }
+        public override string Name { get => name;
+            set => name = value;
+        }
         /// <summary>
         /// The WzPropertyType of the property
         /// </summary>
-        public override WzPropertyType PropertyType { get { return WzPropertyType.Sound; } }
+        public override WzPropertyType PropertyType => WzPropertyType.Sound;
+
         public override void WriteValue(WzBinaryWriter writer)
         {
-            byte[] data = GetBytes(false);
+            var data = GetBytes(false);
             writer.WriteStringValue("Sound_DX8", 0x73, 0x1B);
             writer.Write((byte)0);
             writer.WriteCompressedInt(data.Length);
@@ -99,11 +104,15 @@ namespace RazzleServer.Common.WzLib.WzProperties
         /// <summary>
         /// The data of the mp3 header
         /// </summary>
-        public byte[] Header { get { return header; } set { header = value; } }
+        public byte[] Header { get => header;
+            set => header = value;
+        }
         /// <summary>
         /// Length of the mp3 file in milliseconds
         /// </summary>
-        public int Length { get { return len_ms; } set { len_ms = value; } }
+        public int Length { get => len_ms;
+            set => len_ms = value;
+        }
 
 
 
@@ -136,7 +145,7 @@ namespace RazzleServer.Common.WzLib.WzProperties
             soundDataLen = reader.ReadCompressedInt();
             len_ms = reader.ReadCompressedInt();
 
-            long headerOff = reader.BaseStream.Position;
+            var headerOff = reader.BaseStream.Position;
             reader.BaseStream.Position += soundHeader.Length; //skip GUIds
             int wavFormatLen = reader.ReadByte();
             reader.BaseStream.Position = headerOff;
@@ -147,9 +156,13 @@ namespace RazzleServer.Common.WzLib.WzProperties
             //sound file offs
             offs = reader.BaseStream.Position;
             if (parseNow)
+            {
                 mp3bytes = reader.ReadBytes(soundDataLen);
+            }
             else
+            {
                 reader.BaseStream.Position += soundDataLen;
+            }
         }
 
         /*public WzSoundProperty(string name)
@@ -195,7 +208,7 @@ namespace RazzleServer.Common.WzLib.WzProperties
 
         public static bool Memcmp(byte[] a, byte[] b, int n)
         {
-            for (int i = 0; i < n; i++)
+            for (var i = 0; i < n; i++)
             {
                 if (a[i] != b[i])
                 {
@@ -207,15 +220,18 @@ namespace RazzleServer.Common.WzLib.WzProperties
 
         public static string ByteArrayToString(byte[] ba)
         {
-            StringBuilder hex = new StringBuilder(ba.Length * 3);
-            foreach (byte b in ba)
+            var hex = new StringBuilder(ba.Length * 3);
+            foreach (var b in ba)
+            {
                 hex.AppendFormat("{0:x2} ", b);
+            }
+
             return hex.ToString();
         }
 
         public void RebuildHeader()
         {
-            using (BinaryWriter bw = new BinaryWriter(new MemoryStream()))
+            using (var bw = new BinaryWriter(new MemoryStream()))
             {
                 // TODO - Wait for .NET Core Audio library
                 //bw.Write(soundHeader);
@@ -235,8 +251,8 @@ namespace RazzleServer.Common.WzLib.WzProperties
 
         private static byte[] StructToBytes<T>(T obj)
         {
-            byte[] result = new byte[Marshal.SizeOf(obj)];
-            GCHandle handle = GCHandle.Alloc(result, GCHandleType.Pinned);
+            var result = new byte[Marshal.SizeOf(obj)];
+            var handle = GCHandle.Alloc(result, GCHandleType.Pinned);
             try
             {
                 Marshal.StructureToPtr(obj, handle.AddrOfPinnedObject(), false);
@@ -250,7 +266,7 @@ namespace RazzleServer.Common.WzLib.WzProperties
 
         private static T BytesToStruct<T>(byte[] data) where T : new()
         {
-            GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+            var handle = GCHandle.Alloc(data, GCHandleType.Pinned);
             try
             {
                 return Marshal.PtrToStructure<T>(handle.AddrOfPinnedObject());
@@ -263,10 +279,10 @@ namespace RazzleServer.Common.WzLib.WzProperties
 
         private static T BytesToStructConstructorless<T>(byte[] data)
         {
-            GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+            var handle = GCHandle.Alloc(data, GCHandleType.Pinned);
             try
             {
-                T obj = (T)FormatterServices.GetUninitializedObject(typeof(T));
+                var obj = (T)FormatterServices.GetUninitializedObject(typeof(T));
                 Marshal.PtrToStructure<T>(handle.AddrOfPinnedObject(), obj);
                 return obj;
             }
@@ -327,8 +343,12 @@ namespace RazzleServer.Common.WzLib.WzProperties
             {
                 return mp3bytes;
             }
-            if (wzReader == null) return null;
-            long currentPos = wzReader.BaseStream.Position;
+            if (wzReader == null)
+            {
+                return null;
+            }
+
+            var currentPos = wzReader.BaseStream.Position;
             wzReader.BaseStream.Position = offs;
             mp3bytes = wzReader.ReadBytes(soundDataLen);
             wzReader.BaseStream.Position = currentPos;
@@ -338,7 +358,7 @@ namespace RazzleServer.Common.WzLib.WzProperties
                 return mp3bytes;
             }
 
-            byte[] result = mp3bytes;
+            var result = mp3bytes;
             mp3bytes = null;
             return result;
         }

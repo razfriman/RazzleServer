@@ -16,7 +16,7 @@ namespace RazzleServer.Common.Util
             {
                 lock (locker)
                 {
-                    int ret = current;
+                    var ret = current;
                     current++;
                     return ret;
                 }

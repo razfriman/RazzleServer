@@ -55,7 +55,7 @@ namespace RazzleServer.Game.Maple.Life
 
         public void Hit(Character character, short actionDelay)
         {
-            ReactorState state = States[State];
+            var state = States[State];
 
             // TODO - Reactor scripts
             switch (state.Type)

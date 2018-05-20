@@ -5,35 +5,17 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
 {
     public sealed class KillCommand : Command
     {
-        public override string Name
-        {
-            get
-            {
-                return "kill";
-            }
-        }
+        public override string Name => "kill";
 
-        public override string Parameters
-        {
-            get
-            {
-                return "[ -map | -character ]";
-            }
-        }
+        public override string Parameters => "[ -map | -character ]";
 
-        public override bool IsRestricted
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool IsRestricted => true;
 
         public override void Execute(Character caller, string[] args)
         {
             if (args.Length < 1)
             {
-                this.ShowSyntax(caller);
+                ShowSyntax(caller);
             }
             else
             {
@@ -41,7 +23,7 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
                 {
                     case "-map":
                         {
-                            foreach (Character character in caller.Map.Characters)
+                            foreach (var character in caller.Map.Characters)
                             {
                                 if (character != caller && !character.IsMaster)
                                 {
@@ -55,12 +37,12 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
                         {
                             if (args.Length == 1)
                             {
-                                this.ShowSyntax(caller);
+                                ShowSyntax(caller);
 
                                 return;
                             }
 
-                            string targetName = args[1];
+                            var targetName = args[1];
 
                             Character target;
 

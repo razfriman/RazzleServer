@@ -27,8 +27,8 @@ namespace RazzleServer.Common.MapleCryptoLib
         {
             fixed (byte* pBlock = block)
             {
-                int curRound = 0;
-                uint[] wk = WorkingKey[curRound];
+                var curRound = 0;
+                var wk = WorkingKey[curRound];
 
                 uint C0, C1, C2, C3; //Value holders
                 uint r0, r1, r2, r3; //Temp value holders
@@ -88,10 +88,10 @@ namespace RazzleServer.Common.MapleCryptoLib
         [SecuritySafeCritical]
         private uint[][] GenerateWorkingKey(byte[] key)
         {
-            int KeyLength = key.Length / 4;  // key length in words
+            var KeyLength = key.Length / 4;  // key length in words
 
-            uint[][] KeyResult = new uint[Rounds + 1][]; // 4 words in a block
-            for (int i = 0; i <= Rounds; ++i)
+            var KeyResult = new uint[Rounds + 1][]; // 4 words in a block
+            for (var i = 0; i <= Rounds; ++i)
             {
                 KeyResult[i] = new uint[4];
             }
@@ -105,10 +105,10 @@ namespace RazzleServer.Common.MapleCryptoLib
 
             // while not enough round key material calculated
             // calculate new values
-            int k = (Rounds + 1) << 2;
-            for (int i = KeyLength; (i < k); i++)
+            var k = (Rounds + 1) << 2;
+            for (var i = KeyLength; (i < k); i++)
             {
-                uint temp = KeyResult[(i - 1) >> 2][(i - 1) & 3];
+                var temp = KeyResult[(i - 1) >> 2][(i - 1) & 3];
                 if ((i % KeyLength) == 0)
                 {
                     temp = SubWord(Shift(temp, 8)) ^ Rcon[(i / KeyLength) - 1];

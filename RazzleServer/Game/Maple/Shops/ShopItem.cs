@@ -13,13 +13,13 @@ namespace RazzleServer.Game.Maple.Shops
         public int PurchasePrice { get; private set; }
         public int Sort { get; private set; }
 
-        public short MaxPerStack => DataProvider.Items[this.MapleId].MaxPerStack;
+        public short MaxPerStack => DataProvider.Items[MapleId].MaxPerStack;
 
-        public int SalePrice => DataProvider.Items[this.MapleId].SalePrice;
+        public int SalePrice => DataProvider.Items[MapleId].SalePrice;
 
-        public double UnitPrice => Parent.UnitPrices[this.MapleId];
+        public double UnitPrice => Parent.UnitPrices[MapleId];
 
-        public bool IsRecharageable => DataProvider.Items[this.MapleId].IsRechargeable;
+        public bool IsRecharageable => DataProvider.Items[MapleId].IsRechargeable;
 
         //public ShopItem(Shop parent, Datum datum)
         //{
@@ -33,36 +33,36 @@ namespace RazzleServer.Game.Maple.Shops
 
         public ShopItem(Shop parent, int mapleId)
         {
-            this.Parent = parent;
+            Parent = parent;
 
-            this.MapleId = mapleId;
-            this.Quantity = 1;
-            this.PurchasePrice = 0;
+            MapleId = mapleId;
+            Quantity = 1;
+            PurchasePrice = 0;
         }
 
         public byte[] ToByteArray()
         {
             using (var oPacket = new PacketWriter())
             {
-                oPacket.WriteInt(this.MapleId);
-                oPacket.WriteInt(this.PurchasePrice);
+                oPacket.WriteInt(MapleId);
+                oPacket.WriteInt(PurchasePrice);
                 oPacket.WriteInt(0); // NOTE: Perfect Pitch.
                 oPacket.WriteInt(0); // NOTE: Time limit.
                 oPacket.WriteInt(0); // NOTE: Unknown.
 
-                if (this.IsRecharageable)
+                if (IsRecharageable)
                 {
 
                     oPacket.WriteShort(0);
                     oPacket.WriteInt(0);
-                    oPacket.WriteShort((short)(BitConverter.DoubleToInt64Bits(this.UnitPrice) >> 48));
-                    oPacket.WriteShort(this.MaxPerStack);
+                    oPacket.WriteShort((short)(BitConverter.DoubleToInt64Bits(UnitPrice) >> 48));
+                    oPacket.WriteShort(MaxPerStack);
                 }
                 else
                 {
 
-                    oPacket.WriteShort(this.Quantity);
-                    oPacket.WriteShort(this.MaxPerStack);
+                    oPacket.WriteShort(Quantity);
+                    oPacket.WriteShort(MaxPerStack);
                 }
 
                 return oPacket.ToArray();

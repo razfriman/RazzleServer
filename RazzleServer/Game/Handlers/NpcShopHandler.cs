@@ -22,9 +22,9 @@ namespace RazzleServer.Game.Handlers
             {
                 case ShopAction.Buy:
                     {
-                        short index = packet.ReadShort();
-                        int mapleId = packet.ReadInt();
-                        short quantity = packet.ReadShort();
+                        var index = packet.ReadShort();
+                        var mapleId = packet.ReadInt();
+                        var quantity = packet.ReadShort();
 
                         var item = shop.Items[index];
 
@@ -73,11 +73,11 @@ namespace RazzleServer.Game.Handlers
 
                 case ShopAction.Sell:
                     {
-                        short slot = packet.ReadShort();
-                        int mapleId = packet.ReadInt();
-                        short quantity = packet.ReadShort();
+                        var slot = packet.ReadShort();
+                        var mapleId = packet.ReadInt();
+                        var quantity = packet.ReadShort();
 
-                        Item item = client.Character.Items[mapleId, slot];
+                        var item = client.Character.Items[mapleId, slot];
 
                         if (item.IsRechargeable)
                         {
@@ -118,11 +118,11 @@ namespace RazzleServer.Game.Handlers
 
                 case ShopAction.Recharge:
                     {
-                        short slot = packet.ReadShort();
+                        var slot = packet.ReadShort();
 
-                        Item item = client.Character.Items[ItemType.Usable, slot];
+                        var item = client.Character.Items[ItemType.Usable, slot];
 
-                        int price = (int)(shop.UnitPrices[item.MapleId] * (item.MaxPerStack - item.Quantity));
+                        var price = (int)(shop.UnitPrices[item.MapleId] * (item.MaxPerStack - item.Quantity));
 
                         if (client.Character.Meso < price)
                         {

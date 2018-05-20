@@ -21,35 +21,17 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
             new Tuple<int, int, int, short>(2, 2000002, 1000, 200)
         };
 
-        public override string Name
-        {
-            get
-            {
-                return "adminshop";
-            }
-        }
+        public override string Name => "adminshop";
 
-        public override string Parameters
-        {
-            get
-            {
-                return string.Empty;
-            }
-        }
+        public override string Parameters => string.Empty;
 
-        public override bool IsRestricted
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool IsRestricted => true;
 
         public override void Execute(Character caller, string[] args)
         {
             if (args.Length != 0)
             {
-                this.ShowSyntax(caller);
+                ShowSyntax(caller);
             }
             else
             {
@@ -57,9 +39,9 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
                 {
 
                     oPacket.WriteInt(Npc);
-                    oPacket.WriteShort((short)AdminShopCommand.Items.Count);
+                    oPacket.WriteShort((short)Items.Count);
 
-                    foreach (var item in AdminShopCommand.Items)
+                    foreach (var item in Items)
                     {
 
                         oPacket.WriteInt(item.Item1);

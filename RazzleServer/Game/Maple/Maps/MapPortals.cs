@@ -11,7 +11,7 @@ namespace RazzleServer.Game.Maple.Maps
         {
             get
             {
-                foreach (Portal portal in this)
+                foreach (var portal in this)
                 {
                     if (portal.Label.ToLower() == label.ToLower())
                     {

@@ -55,9 +55,13 @@ namespace RazzleServer.Common.WzLib
         {
             get
             {
-                if (this is WzFile) return ((WzFile)this).WzDirectory.Name;
-                string result = this.Name;
-                WzObject currObj = this;
+                if (this is WzFile)
+                {
+                    return ((WzFile)this).WzDirectory.Name;
+                }
+
+                var result = Name;
+                var currObj = this;
                 while (currObj.Parent != null)
                 {
                     currObj = currObj.Parent;
@@ -67,9 +71,9 @@ namespace RazzleServer.Common.WzLib
             }
         }
 
-        public virtual object WzValue { get { return null; } }
+        public virtual object WzValue => null;
 
-        public abstract void Remove();
+	    public abstract void Remove();
 
         //Credits to BluePoop for the idea of using cast overriding
         //2015 - That is the worst idea ever, removed and replaced with Get* methods

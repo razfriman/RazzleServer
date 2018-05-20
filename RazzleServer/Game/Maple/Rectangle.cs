@@ -7,8 +7,8 @@
 
         public Rectangle(Point lt, Point rb)
         {
-            this.LT = lt;
-            this.RB = rb;
+            LT = lt;
+            RB = rb;
         }
     }
 }

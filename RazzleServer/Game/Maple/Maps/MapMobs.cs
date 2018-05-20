@@ -20,21 +20,21 @@ namespace RazzleServer.Game.Maple.Maps
 
             if (DataProvider.IsInitialized)
             {
-                this.Map.Broadcast(item.GetCreatePacket());
+                Map.Broadcast(item.GetCreatePacket());
                 item.AssignController();
             }
         }
 
         protected override void RemoveItem(int index) // NOTE: Equivalent of mob death.
         {
-            Mob item = base.Items[index];
+            var item = Items[index];
 
-            int mostDamage = 0;
+            var mostDamage = 0;
             Character owner = null;
 
-            foreach (KeyValuePair<Character, uint> attacker in item.Attackers)
+            foreach (var attacker in item.Attackers)
             {
-                if (attacker.Key.Map == this.Map)
+                if (attacker.Key.Map == Map)
                 {
                     if (attacker.Value > mostDamage)
                     {
@@ -49,9 +49,9 @@ namespace RazzleServer.Game.Maple.Maps
 
             if (item.CanDrop)
             {
-                List<Drop> drops = new List<Drop>();
+                var drops = new List<Drop>();
 
-                foreach (Loot loopLoot in item.Loots)
+                foreach (var loopLoot in item.Loots)
                 {
                     if ((Functions.Random(1000000) / ServerManager.Instance.Worlds[0].DropRate) <= loopLoot.Chance)
                     {
@@ -74,17 +74,17 @@ namespace RazzleServer.Game.Maple.Maps
                     }
                 }
 
-                foreach (Drop loopDrop in drops)
+                foreach (var loopDrop in drops)
                 {
                     // TODO: Space out drops.
 
-                    this.Map.Drops.Add(loopDrop);
+                    Map.Drops.Add(loopDrop);
                 }
             }
 
             if (owner != null)
             {
-                foreach (KeyValuePair<ushort, Dictionary<int, short>> loopStarted in owner.Quests.Started)
+                foreach (var loopStarted in owner.Quests.Started)
                 {
                     if (loopStarted.Value.ContainsKey(item.MapleId))
                     {
@@ -98,7 +98,7 @@ namespace RazzleServer.Game.Maple.Maps
                                 oPacket.WriteUShort(loopStarted.Key);
                                 oPacket.WriteByte(1);
 
-                                string kills = string.Empty;
+                                var kills = string.Empty;
 
                                 foreach (int kill in loopStarted.Value.Values)
                                 {
@@ -124,7 +124,7 @@ namespace RazzleServer.Game.Maple.Maps
             if (DataProvider.IsInitialized)
             {
                 item.Controller.ControlledMobs.Remove(item);
-                this.Map.Broadcast(item.GetDestroyPacket());
+                Map.Broadcast(item.GetDestroyPacket());
             }
 
             base.RemoveItem(index);
@@ -134,9 +134,9 @@ namespace RazzleServer.Game.Maple.Maps
                 Delay.Execute(() => item.SpawnPoint.Spawn(), 3 * 1000); // TODO: Actual respawn time.
             }
 
-            foreach (int summonId in item.DeathSummons)
+            foreach (var summonId in item.DeathSummons)
             {
-                this.Map.Mobs.Add(new Mob(summonId)
+                Map.Mobs.Add(new Mob(summonId)
                 {
                     Position = item.Position // TODO: Set owner as well.
                 });

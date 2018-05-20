@@ -9,7 +9,7 @@ namespace RazzleServer.Game.Handlers
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
-            string text = packet.ReadString();
+            var text = packet.ReadString();
 
             if (text.StartsWith(ServerConfig.Instance.CommandIndicator))
             {

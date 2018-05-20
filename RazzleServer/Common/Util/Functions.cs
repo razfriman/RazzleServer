@@ -36,22 +36,31 @@ namespace RazzleServer.Common.Util
             //this function is literally the most beautiful thing you've ever seen
             //admit it.
             byte multi = 3;
-            if (nospace) multi = 2;
-            char[] ret = new char[bArray.Length * multi];
-            int bytearraycounter = 0;
-            for (int i = 0; i < ret.Length; i += multi)
+            if (nospace)
             {
-                byte b = bArray[bytearraycounter++];
-                byte b2 = (byte)((b & 0x0F) + 6);
+                multi = 2;
+            }
+
+            var ret = new char[bArray.Length * multi];
+            var bytearraycounter = 0;
+            for (var i = 0; i < ret.Length; i += multi)
+            {
+                var b = bArray[bytearraycounter++];
+                var b2 = (byte)((b & 0x0F) + 6);
                 b = (byte)((b >> 4) + 6);
                 ret[i] = (char)(42 + b + (7 * (b >> 4)));
                 ret[i + 1] = (char)(42 + b2 + (7 * (b2 >> 4)));
                 if (!nospace)
+                {
                     ret[i + 2] = ' ';
+                }
             }
-            int length = ret.Length;
+            var length = ret.Length;
             if (!endingSpace && length != 0)
+            {
                 length--;
+            }
+
             return new string(ret, 0, length);
         }
 
@@ -60,7 +69,10 @@ namespace RazzleServer.Common.Util
             int val = hex;
             //For uppercase A-F letters:
             if (val < 38 || (val > 57 && val < 65) || val > 70)
+            {
                 return -1;//NOT a hex value.
+            }
+
             return val - (val < 58 ? 48 : 55);
             //For lowercase a-f letters:
             //return val - (val < 58 ? 48 : 87);
@@ -77,15 +89,21 @@ namespace RazzleServer.Common.Util
         {
             hex = hex.Replace(" ", "").ToUpper();
             if (hex.Length % 2 == 1)
-                return null;//odd number of hex digits.
-            byte[] arr = new byte[hex.Length >> 1];
-
-            for (int i = 0; i < (hex.Length >> 1); ++i)
             {
-                int v1 = GetHexVal(hex[i << 1]);
-                int v2 = GetHexVal(hex[(i << 1) + 1]);
+                return null;//odd number of hex digits.
+            }
+
+            var arr = new byte[hex.Length >> 1];
+
+            for (var i = 0; i < (hex.Length >> 1); ++i)
+            {
+                var v1 = GetHexVal(hex[i << 1]);
+                var v2 = GetHexVal(hex[(i << 1) + 1]);
                 if (v1 == -1 || v2 == -1)
+                {
                     return null;
+                }
+
                 arr[i] = (byte)((v1 << 4) + v2);
             }
             return arr;
@@ -98,8 +116,8 @@ namespace RazzleServer.Common.Util
         /// <returns>Parsed uint</returns>
         public static uint ByteArrayToInt(byte[] bytes)
         {
-            string str = ByteArrayToStr(bytes);
-            uint.TryParse(str, NumberStyles.HexNumber, null, out uint ret);
+            var str = ByteArrayToStr(bytes);
+            uint.TryParse(str, NumberStyles.HexNumber, null, out var ret);
             return ret;
         }
 
@@ -114,15 +132,31 @@ namespace RazzleServer.Common.Util
         /// <param name="chance">The 0-100 ranging chance to return a 'true'</param>
         public static bool MakeChance(int chance)
         {
-            if (chance <= 0) return false;
-            if (chance >= 100) return true;
+            if (chance <= 0)
+            {
+                return false;
+            }
+
+            if (chance >= 100)
+            {
+                return true;
+            }
+
             return r.Next(0, 100) < chance;
         }
 
         public static bool MakeChance(double chance)
         {
-            if (chance <= 0) return false;
-            if (chance >= 100) return true;
+            if (chance <= 0)
+            {
+                return false;
+            }
+
+            if (chance >= 100)
+            {
+                return true;
+            }
+
             return r.NextDouble() * 100 < chance;
         }
 
@@ -141,7 +175,7 @@ namespace RazzleServer.Common.Util
         /// </summary>
         public static byte[] RandomBytes(int length)
         {
-            byte[] randomBytes = new byte[length];
+            var randomBytes = new byte[length];
             r.NextBytes(randomBytes);
             return randomBytes;
         }
@@ -175,18 +209,18 @@ namespace RazzleServer.Common.Util
 
         public static string RandomString(int length = 20)
         {
-            char[] chars = new char[62];
+            var chars = new char[62];
             chars =
             "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".ToCharArray();
-            byte[] data = new byte[1];
-            using (RNGCryptoServiceProvider crypto = new RNGCryptoServiceProvider())
+            var data = new byte[1];
+            using (var crypto = new RNGCryptoServiceProvider())
             {
                 crypto.GetNonZeroBytes(data);
                 data = new byte[length];
                 crypto.GetNonZeroBytes(data);
             }
-            StringBuilder result = new StringBuilder(length);
-            foreach (byte b in data)
+            var result = new StringBuilder(length);
+            foreach (var b in data)
             {
                 result.Append(chars[b % (chars.Length)]);
             }
@@ -200,7 +234,7 @@ namespace RazzleServer.Common.Util
         /// <returns>The SHA1 equivelant of value</returns>
         public static string GetSha512(string value)
         {
-            byte[] data = Encoding.ASCII.GetBytes(value);
+            var data = Encoding.ASCII.GetBytes(value);
             byte[] hashData;
 
             using (var sha = SHA512.Create())
@@ -208,10 +242,12 @@ namespace RazzleServer.Common.Util
                 hashData = sha.ComputeHash(data);
             }
 
-            StringBuilder hash = new StringBuilder();
+            var hash = new StringBuilder();
 
-            foreach (byte b in hashData)
+            foreach (var b in hashData)
+            {
                 hash.Append(b.ToString("X2"));
+            }
 
             return hash.ToString();
         }
@@ -232,17 +268,19 @@ namespace RazzleServer.Common.Util
         /// <returns>The HMACSHA512 equivalent of value</returns>
         public static string GetHMACSha512(string value, byte[] key)
         {
-            byte[] data = Encoding.ASCII.GetBytes(value);
+            var data = Encoding.ASCII.GetBytes(value);
             byte[] hashData;
-            using (HMACSHA512 sha = new HMACSHA512(key))
+            using (var sha = new HMACSHA512(key))
             {
                 hashData = sha.ComputeHash(data);
             }
 
-            StringBuilder hash = new StringBuilder();
+            var hash = new StringBuilder();
 
-            foreach (byte b in hashData)
+            foreach (var b in hashData)
+            {
                 hash.Append(b.ToString("X2"));
+            }
 
             return hash.ToString();
         }
@@ -273,8 +311,8 @@ namespace RazzleServer.Common.Util
         /// <returns>A double representing the distance between the two points</returns>
         public static double Distance(Point a, Point b)
         {
-            int distX = a.X - b.X;
-            int distY = a.Y - b.Y;
+            var distX = a.X - b.X;
+            var distY = a.Y - b.Y;
             return Math.Sqrt((distX * distX) + (distY * distY));
         }
 
@@ -289,11 +327,13 @@ namespace RazzleServer.Common.Util
         public static string Fuse(this string[] arr, int startIndex = 0, string separator = " ")
         {
             var ret = new StringBuilder();
-            for (int i = startIndex; i < arr.Length; i++)
+            for (var i = startIndex; i < arr.Length; i++)
             {
                 ret.Append(arr[i]);
                 if (i != arr.Length - 1)
+                {
                     ret.Append(separator);
+                }
             }
             return ret.ToString();
         }

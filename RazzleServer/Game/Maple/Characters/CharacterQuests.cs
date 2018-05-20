@@ -118,14 +118,14 @@ namespace RazzleServer.Game.Maple.Characters
         public void Handle(PacketReader iPacket)
         {
             var action = (QuestAction)iPacket.ReadByte();
-            ushort questId = iPacket.ReadUShort();
+            var questId = iPacket.ReadUShort();
 
             if (!DataProvider.Quests.Contains(questId))
             {
                 return;
             }
 
-            Quest quest = DataProvider.Quests[questId];
+            var quest = DataProvider.Quests[questId];
 
             int npcId;
 
@@ -133,12 +133,12 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 case QuestAction.RestoreLostItem: // TODO: Validate.
                     {
-                        int quantity = iPacket.ReadInt();
-                        int itemId = iPacket.ReadInt();
+                        var quantity = iPacket.ReadInt();
+                        var itemId = iPacket.ReadInt();
 
                         quantity -= Parent.Items.Available(itemId);
 
-                        Item item = new Item(itemId, (short)quantity);
+                        var item = new Item(itemId, (short)quantity);
 
                         Parent.Items.Add(item);
                     }
@@ -156,7 +156,7 @@ namespace RazzleServer.Game.Maple.Characters
                     {
                         npcId = iPacket.ReadInt();
                         iPacket.ReadInt(); // NOTE: Unknown
-                        int selection = iPacket.Available >= 4 ? iPacket.ReadInt() : 0;
+                        var selection = iPacket.Available >= 4 ? iPacket.ReadInt() : 0;
 
                         Complete(quest, selection);
                     }
@@ -175,7 +175,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                         Npc npc = null;
 
-                        foreach (Npc loopNpc in Parent.Map.Npcs)
+                        foreach (var loopNpc in Parent.Map.Npcs)
                         {
                             if (loopNpc.MapleId == npcId)
                             {
@@ -200,7 +200,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             Started.Add(quest.MapleId, new Dictionary<int, short>());
 
-            foreach (KeyValuePair<int, short> requiredKills in quest.PostRequiredKills)
+            foreach (var requiredKills in quest.PostRequiredKills)
             {
                 Started[quest.MapleId].Add(requiredKills.Key, 0);
             }
@@ -211,7 +211,7 @@ namespace RazzleServer.Game.Maple.Characters
 
             // TODO: Skill and pet rewards.
 
-            foreach (KeyValuePair<int, short> item in quest.PreItemRewards)
+            foreach (var item in quest.PreItemRewards)
             {
                 if (item.Value > 0)
                 {
@@ -238,7 +238,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Complete(Quest quest, int selection)
         {
-            foreach (KeyValuePair<int, short> item in quest.PostRequiredItems)
+            foreach (var item in quest.PostRequiredItems)
             {
                 Parent.Items.Remove(item.Key, item.Value);
             }
@@ -272,7 +272,7 @@ namespace RazzleServer.Game.Maple.Characters
 
             // TODO: Meso gain packet in chat.
 
-            foreach (KeyValuePair<Skill, Job> skill in quest.PostSkillRewards)
+            foreach (var skill in quest.PostSkillRewards)
             {
                 if (Parent.Job == skill.Value)
                 {
@@ -310,7 +310,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
             else
             {
-                foreach (KeyValuePair<int, short> item in quest.PostItemRewards)
+                foreach (var item in quest.PostItemRewards)
                 {
                     if (item.Value > 0)
                     {
@@ -373,9 +373,9 @@ namespace RazzleServer.Game.Maple.Characters
 
         public bool CanComplete(ushort questId, bool onlyOnFinalKill = false)
         {
-            Quest quest = DataProvider.Quests[questId];
+            var quest = DataProvider.Quests[questId];
 
-            foreach (KeyValuePair<int, short> requiredItem in quest.PostRequiredItems)
+            foreach (var requiredItem in quest.PostRequiredItems)
             {
                 if (!Parent.Items.Contains(requiredItem.Key, requiredItem.Value))
                 {
@@ -383,7 +383,7 @@ namespace RazzleServer.Game.Maple.Characters
                 }
             }
 
-            foreach (ushort requiredQuest in quest.PostRequiredQuests)
+            foreach (var requiredQuest in quest.PostRequiredQuests)
             {
                 if (!Completed.ContainsKey(requiredQuest))
                 {
@@ -391,7 +391,7 @@ namespace RazzleServer.Game.Maple.Characters
                 }
             }
 
-            foreach (KeyValuePair<int, short> requiredKill in quest.PostRequiredKills)
+            foreach (var requiredKill in quest.PostRequiredKills)
             {
                 if (onlyOnFinalKill)
                 {
@@ -428,11 +428,11 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 oPacket.WriteShort((short)Started.Count);
 
-                foreach (KeyValuePair<ushort, Dictionary<int, short>> quest in Started)
+                foreach (var quest in Started)
                 {
                     oPacket.WriteUShort(quest.Key);
 
-                    string kills = string.Empty;
+                    var kills = string.Empty;
 
                     foreach (int kill in quest.Value.Values)
                     {
@@ -444,7 +444,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                 oPacket.WriteShort((short)Completed.Count);
 
-                foreach (KeyValuePair<ushort, DateTime> quest in Completed)
+                foreach (var quest in Completed)
                 {
                     oPacket.WriteUShort(quest.Key);
                     oPacket.WriteDateTime(quest.Value);

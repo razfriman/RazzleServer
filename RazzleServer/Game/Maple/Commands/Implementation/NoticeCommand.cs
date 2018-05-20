@@ -4,39 +4,21 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
 {
     public sealed class NoticeCommand : Command
     {
-        public override string Name
-        {
-            get
-            {
-                return "notice";
-            }
-        }
+        public override string Name => "notice";
 
-        public override string Parameters
-        {
-            get
-            {
-                return "{ -map | -channel | -world } message";
-            }
-        }
+        public override string Parameters => "{ -map | -channel | -world } message";
 
-        public override bool IsRestricted
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool IsRestricted => true;
 
         public override void Execute(Character caller, string[] args)
         {
             if (args.Length < 2)
             {
-                this.ShowSyntax(caller);
+                ShowSyntax(caller);
             }
             else
             {
-                string message = this.CombineArgs(args, 1);
+                var message = CombineArgs(args, 1);
 
                 switch (args[0].ToLower())
                 {
@@ -53,7 +35,7 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
                         break;
 
                     default:
-                        this.ShowSyntax(caller);
+                        ShowSyntax(caller);
                         break;
                 }
             }

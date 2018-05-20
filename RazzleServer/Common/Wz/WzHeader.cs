@@ -9,27 +9,27 @@
 
         public string Ident
         {
-            get { return ident; }
-            set { ident = value; }
+            get => ident;
+	        set => ident = value;
         }
 
         public string Copyright
         {
-            get { return copyright; }
-            set { copyright = value; }
+            get => copyright;
+	        set => copyright = value;
         }
 
         public ulong FSize
         {
-            get { return fsize; }
-            set { fsize = value; }
+            get => fsize;
+	        set => fsize = value;
         }
 
 		public uint FStart 
         {
-            get { return fstart; }
-            set { fstart = value; }
-        }
+            get => fstart;
+			set => fstart = value;
+		}
 
         public void RecalculateFileStart()
         {
@@ -38,7 +38,7 @@
 
 		public static WzHeader GetDefault()
 		{
-			WzHeader header = new WzHeader();
+			var header = new WzHeader();
 			header.ident = "PKG1";
 			header.copyright = "Package file v1.0 Copyright 2002 Wizet, ZMS";
 			header.fstart = 60;

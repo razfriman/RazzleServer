@@ -5,39 +5,21 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
 {
     public sealed class HorntailCommand : Command
     {
-        public override string Name
-        {
-            get
-            {
-                return "horntail";
-            }
-        }
+        public override string Name => "horntail";
 
-        public override string Parameters
-        {
-            get
-            {
-                return string.Empty;
-            }
-        }
+        public override string Parameters => string.Empty;
 
-        public override bool IsRestricted
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool IsRestricted => true;
 
         public override void Execute(Character caller, string[] args)
         {
             if (args.Length != 0)
             {
-                this.ShowSyntax(caller);
+                ShowSyntax(caller);
             }
             else
             {
-                Mob mob = new Mob(8810026) // TODO: Get from strings 'Summon Horntail' so we don't have to deal with
+                var mob = new Mob(8810026) // TODO: Get from strings 'Summon Horntail' so we don't have to deal with
                 {
                     Position = caller.Position
                 };

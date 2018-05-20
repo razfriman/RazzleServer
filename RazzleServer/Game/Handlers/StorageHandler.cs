@@ -12,16 +12,16 @@ namespace RazzleServer.Game.Handlers
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
 
-            StorageAction action = (StorageAction)packet.ReadByte();
+            var action = (StorageAction)packet.ReadByte();
 
             switch (action)
             {
                 case StorageAction.Withdraw:
                     {
-                        ItemType type = (ItemType)packet.ReadByte();
-                        byte slot = packet.ReadByte();
+                        var type = (ItemType)packet.ReadByte();
+                        var slot = packet.ReadByte();
 
-                        Item item = client.Character.Storage.Items[slot];
+                        var item = client.Character.Storage.Items[slot];
 
                         if (item == null)
                         {
@@ -55,7 +55,7 @@ namespace RazzleServer.Game.Handlers
                             oPacket.WriteInt(0);
                             oPacket.WriteByte((byte)itemsByType.Count);
 
-                            foreach (Item loopItem in itemsByType)
+                            foreach (var loopItem in itemsByType)
                             {
                                 oPacket.WriteBytes(loopItem.ToByteArray(true, true));
                             }
@@ -67,11 +67,11 @@ namespace RazzleServer.Game.Handlers
 
                 case StorageAction.Deposit:
                     {
-                        short slot = packet.ReadShort();
-                        int itemId = packet.ReadInt();
-                        short quantity = packet.ReadShort();
+                        var slot = packet.ReadShort();
+                        var itemId = packet.ReadInt();
+                        var quantity = packet.ReadShort();
 
-                        Item item = client.Character.Items[itemId, slot];
+                        var item = client.Character.Items[itemId, slot];
 
                         if (client.Character.Storage.IsFull)
                         {
@@ -102,9 +102,9 @@ namespace RazzleServer.Game.Handlers
 
                         client.Character.Items.Add(item);
 
-                        List<Item> itemsByType = new List<Item>();
+                        var itemsByType = new List<Item>();
 
-                        foreach (Item loopItem in client.Character.Items)
+                        foreach (var loopItem in client.Character.Items)
                         {
                             if (loopItem.Type == item.Type)
                             {
@@ -122,7 +122,7 @@ namespace RazzleServer.Game.Handlers
                             oPacket.WriteInt(0);
                             oPacket.WriteByte((byte)itemsByType.Count);
 
-                            foreach (Item loopItem in itemsByType)
+                            foreach (var loopItem in itemsByType)
                             {
                                 oPacket.WriteBytes(loopItem.ToByteArray(true, true));
                             }
@@ -134,7 +134,7 @@ namespace RazzleServer.Game.Handlers
 
                 case StorageAction.ModifyMeso:
                     {
-                        int meso = packet.ReadInt();
+                        var meso = packet.ReadInt();
 
                         if (meso > 0) // NOTE: Withdraw meso.
                         {

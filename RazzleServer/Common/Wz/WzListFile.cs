@@ -24,22 +24,25 @@ namespace RazzleServer.Common.WzLib
 		/// <param name="filePath">Path to the wz file</param>
         public static List<string> ParseListFile(string filePath, byte[] WzIv)
         {
-            List<string> listEntries = new List<string>();
-            byte[] wzFileBytes = File.ReadAllBytes(filePath);
-            WzBinaryReader wzParser = new WzBinaryReader(new MemoryStream(wzFileBytes), WzIv);
+            var listEntries = new List<string>();
+            var wzFileBytes = File.ReadAllBytes(filePath);
+            var wzParser = new WzBinaryReader(new MemoryStream(wzFileBytes), WzIv);
             while (wzParser.PeekChar() != -1)
             {
-                int len = wzParser.ReadInt32();
-                char[] strChrs = new char[len];
-                for (int i = 0; i < len; i++)
+                var len = wzParser.ReadInt32();
+                var strChrs = new char[len];
+                for (var i = 0; i < len; i++)
+                {
                     strChrs[i] = (char)wzParser.ReadInt16();
+                }
+
                 wzParser.ReadUInt16(); //encrypted null
-                string decryptedStr = wzParser.DecryptString(strChrs);
+                var decryptedStr = wzParser.DecryptString(strChrs);
                 listEntries.Add(decryptedStr);
             }
             wzParser.Close();
-            int lastIndex = listEntries.Count - 1;
-            string lastEntry = listEntries[lastIndex];
+            var lastIndex = listEntries.Count - 1;
+            var lastEntry = listEntries[lastIndex];
             listEntries[lastIndex] = lastEntry.Substring(0, lastEntry.Length - 1) + "g";
             return listEntries;
         }
@@ -51,18 +54,20 @@ namespace RazzleServer.Common.WzLib
 
         public static void SaveToDisk(string path, byte[] WzIv, List<string> listEntries)
         {
-            int lastIndex = listEntries.Count - 1;
-            string lastEntry = listEntries[lastIndex];
+            var lastIndex = listEntries.Count - 1;
+            var lastEntry = listEntries[lastIndex];
             listEntries[lastIndex] = lastEntry.Substring(0, lastEntry.Length - 1) + "/";
-            WzBinaryWriter wzWriter = new WzBinaryWriter(File.Create(path), WzIv);
+            var wzWriter = new WzBinaryWriter(File.Create(path), WzIv);
             string s;
-            for (int i = 0; i < listEntries.Count; i++)
+            for (var i = 0; i < listEntries.Count; i++)
             {
                 s = listEntries[i];
                 wzWriter.Write(s.Length);
-                char[] encryptedChars = wzWriter.EncryptString(s + (char)0);
-                for (int j = 0; j < encryptedChars.Length; j++)
+                var encryptedChars = wzWriter.EncryptString(s + (char)0);
+                for (var j = 0; j < encryptedChars.Length; j++)
+                {
                     wzWriter.Write((short)encryptedChars[j]);
+                }
             }
             listEntries[lastIndex] = lastEntry.Substring(0, lastEntry.Length - 1) + "/";
         }

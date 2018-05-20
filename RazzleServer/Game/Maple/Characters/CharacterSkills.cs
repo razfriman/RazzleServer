@@ -25,7 +25,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Save()
         {
-            foreach (Skill skill in this)
+            foreach (var skill in this)
             {
                 skill.Save();
             }
@@ -33,7 +33,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Delete()
         {
-            foreach (Skill skill in this)
+            foreach (var skill in this)
             {
                 skill.Delete();
             }
@@ -42,10 +42,10 @@ namespace RazzleServer.Game.Maple.Characters
         public void Cast(PacketReader iPacket)
         {
             iPacket.ReadInt(); // NOTE: Ticks.
-            int mapleId = iPacket.ReadInt();
-            byte level = iPacket.ReadByte();
+            var mapleId = iPacket.ReadInt();
+            var level = iPacket.ReadByte();
 
-            Skill skill = this[mapleId];
+            var skill = this[mapleId];
 
             if (level != skill.CurrentLevel)
             {
@@ -59,13 +59,13 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 case (int)SkillNames.SuperGM.Resurrection:
                     {
-                        byte targets = iPacket.ReadByte();
+                        var targets = iPacket.ReadByte();
 
                         while (targets-- > 0)
                         {
-                            int targetId = iPacket.ReadInt();
+                            var targetId = iPacket.ReadInt();
 
-                            Character target = Parent.Map.Characters[targetId];
+                            var target = Parent.Map.Characters[targetId];
 
                             if (!target.IsAlive)
                             {
@@ -83,9 +83,9 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 oPacket.WriteShort((short)Count);
 
-                List<Skill> cooldownSkills = new List<Skill>();
+                var cooldownSkills = new List<Skill>();
 
-                foreach (Skill loopSkill in this)
+                foreach (var loopSkill in this)
                 {
                     oPacket.WriteBytes(loopSkill.ToByteArray());
 
@@ -97,7 +97,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                 oPacket.WriteShort((short)cooldownSkills.Count);
 
-                foreach (Skill loopCooldown in cooldownSkills)
+                foreach (var loopCooldown in cooldownSkills)
                 {
 
                     oPacket.WriteInt(loopCooldown.MapleId);
@@ -117,7 +117,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         protected override void RemoveItem(int index)
         {
-            Skill item = base.Items[index];
+            var item = Items[index];
 
             item.Parent = null;
 

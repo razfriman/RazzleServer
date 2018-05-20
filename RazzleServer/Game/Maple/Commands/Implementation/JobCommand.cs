@@ -6,41 +6,23 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
 {
     public sealed class JobCommand : Command
     {
-        public override string Name
-        {
-            get
-            {
-                return "job";
-            }
-        }
+        public override string Name => "job";
 
-        public override string Parameters
-        {
-            get
-            {
-                return "{ id | name}";
-            }
-        }
+        public override string Parameters => "{ id | name}";
 
-        public override bool IsRestricted
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool IsRestricted => true;
 
         public override void Execute(Character caller, string[] args)
         {
             if (args.Length != 1)
             {
-                this.ShowSyntax(caller);
+                ShowSyntax(caller);
             }
             else
             {
                 try
                 {
-                    short jobId = short.Parse(args[0]);
+                    var jobId = short.Parse(args[0]);
 
                     if (Enum.IsDefined(typeof(Job), jobId))
                     {

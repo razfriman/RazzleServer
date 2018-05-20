@@ -28,9 +28,9 @@ namespace RazzleServer.Common.WzLib.WzStructure
             this.strMapName = strMapName;
             this.strStreetName = strStreetName;
             this.strCategoryName = strCategoryName;
-            WzFile file = image.WzFileParent;
-            string loggerSuffix = ", map " + image.Name + ((file != null) ? (" of version " + Enum.GetName(typeof(WzMapleVersion), file.MapleVersion) + ", v" + file.Version.ToString()) : "");
-            foreach (WzImageProperty prop in image["info"].WzProperties)
+            var file = image.WzFileParent;
+            var loggerSuffix = ", map " + image.Name + ((file != null) ? (" of version " + Enum.GetName(typeof(WzMapleVersion), file.MapleVersion) + ", v" + file.Version.ToString()) : "");
+            foreach (var prop in image["info"].WzProperties)
             {
                 switch (prop.Name)
                 {
@@ -74,7 +74,7 @@ namespace RazzleServer.Common.WzLib.WzStructure
                         version = InfoTool.GetInt(prop);
                         break;
                     case "fieldLimit":
-                        int fl = InfoTool.GetInt(prop);
+                        var fl = InfoTool.GetInt(prop);
                         if (fl >= (int)Math.Pow(2, 23))
                         {
                             Log.LogError($"Invalid fieldlimit: {fl}");
@@ -112,7 +112,7 @@ namespace RazzleServer.Common.WzLib.WzStructure
                         partyOnly = InfoTool.GetBool(prop);
                         break;
                     case "fieldType":
-                        int ft = InfoTool.GetInt(prop);
+                        var ft = InfoTool.GetInt(prop);
                         if (!Enum.IsDefined(typeof(FieldType), ft))
                         {
                             Log.LogError($"Invalid fieldType: {ft}");
@@ -144,14 +144,17 @@ namespace RazzleServer.Common.WzLib.WzStructure
                     case "timeMob":
                         startHour = InfoTool.GetOptionalInt(prop["startHour"]);
                         endHour = InfoTool.GetOptionalInt(prop["endHour"]);
-                        int? propId = InfoTool.GetOptionalInt(prop["id"]);
-                        string message = InfoTool.GetOptionalString(prop["message"]);
+                        var propId = InfoTool.GetOptionalInt(prop["id"]);
+                        var message = InfoTool.GetOptionalString(prop["message"]);
                         if (propId == null || message == null || (startHour == null ^ endHour == null))
                         {
                             Log.LogError("timeMob is missing data");
                         }
                         else
+                        {
                             timeMob = new TimeMob(startHour, endHour, (int)propId, message);
+                        }
+
                         break;
                     case "help":
                         help = InfoTool.GetString(prop);
@@ -195,8 +198,13 @@ namespace RazzleServer.Common.WzLib.WzStructure
                     case "allowedItem":
                         allowedItem = new List<int>();
                         if (prop.WzProperties != null && prop.WzProperties.Count > 0)
-                            foreach (WzImageProperty item in prop.WzProperties)
+                        {
+                            foreach (var item in prop.WzProperties)
+                            {
                                 allowedItem.Add(item.GetInt());
+                            }
+                        }
+
                         break;
                     case "recovery":
                         recovery = InfoTool.GetFloat(prop);
@@ -244,11 +252,11 @@ namespace RazzleServer.Common.WzLib.WzStructure
             Rectangle? result = null;
             if (image["info"]["VRLeft"] != null)
             {
-                WzImageProperty info = image["info"];
-                int left = InfoTool.GetInt(info["VRLeft"]);
-                int right = InfoTool.GetInt(info["VRRight"]);
-                int top = InfoTool.GetInt(info["VRTop"]);
-                int bottom = InfoTool.GetInt(info["VRBottom"]);
+                var info = image["info"];
+                var left = InfoTool.GetInt(info["VRLeft"]);
+                var right = InfoTool.GetInt(info["VRRight"]);
+                var top = InfoTool.GetInt(info["VRTop"]);
+                var bottom = InfoTool.GetInt(info["VRBottom"]);
                 result = new Rectangle(left, top, right - left, bottom - top);
             }
             return result;
@@ -256,7 +264,7 @@ namespace RazzleServer.Common.WzLib.WzStructure
 
         public void Save(WzImage dest, Rectangle? VR)
         {
-            WzSubProperty info = new WzSubProperty();
+            var info = new WzSubProperty();
             info["bgm"] = InfoTool.SetString(bgm);
             info["cloud"] = InfoTool.SetBool(cloud);
             info["swim"] = InfoTool.SetBool(swim);
@@ -288,7 +296,7 @@ namespace RazzleServer.Common.WzLib.WzStructure
             info["lvForceMove"] = InfoTool.SetOptionalInt(lvForceMove);
             if (timeMob != null)
             {
-                WzSubProperty prop = new WzSubProperty();
+                var prop = new WzSubProperty();
                 prop["startHour"] = InfoTool.SetOptionalInt(timeMob.Value.startHour);
                 prop["endHour"] = InfoTool.SetOptionalInt(timeMob.Value.endHour);
                 prop["id"] = InfoTool.SetOptionalInt(timeMob.Value.id);
@@ -310,8 +318,8 @@ namespace RazzleServer.Common.WzLib.WzStructure
             info["noRegenMap"] = InfoTool.SetOptionalBool(noRegenMap);
             if (allowedItem != null)
             {
-                WzSubProperty prop = new WzSubProperty();
-                for (int i = 0; i < allowedItem.Count; i++)
+                var prop = new WzSubProperty();
+                for (var i = 0; i < allowedItem.Count; i++)
                 {
                     prop[i.ToString()] = InfoTool.SetInt(allowedItem[i]);
                 }
@@ -328,7 +336,7 @@ namespace RazzleServer.Common.WzLib.WzStructure
             info["allMoveCheck"] = InfoTool.SetOptionalBool(allMoveCheck);
             info["VRLimit"] = InfoTool.SetOptionalBool(VRLimit);
             info["consumeItemCoolTime"] = InfoTool.SetOptionalBool(consumeItemCoolTime);
-            foreach (WzImageProperty prop in additionalProps)
+            foreach (var prop in additionalProps)
             {
                 info.AddProperty(prop);
             }
@@ -419,8 +427,8 @@ namespace RazzleServer.Common.WzLib.WzStructure
 
         public WzImage Image
         {
-            get { return image; }
-            set { image = value; }
+            get => image;
+            set => image = value;
         }
 
         public struct TimeMob

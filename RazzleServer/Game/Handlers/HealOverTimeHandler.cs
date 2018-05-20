@@ -10,8 +10,8 @@ namespace RazzleServer.Game.Handlers
         {
             packet.ReadInt(); // NOTE: Ticks.
             packet.ReadInt(); // NOTE: Unknown.
-            short healthAmount = packet.ReadShort();
-            short manaAmount = packet.ReadShort();
+            var healthAmount = packet.ReadShort();
+            var manaAmount = packet.ReadShort();
 
             if (healthAmount != 0)
             {

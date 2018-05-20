@@ -11,7 +11,7 @@ namespace RazzleServer.Center.Maple
         {
             lock (this)
             {
-                foreach (World loopWorld in this)
+                foreach (var loopWorld in this)
                 {
                     if (type == ServerType.Channel && loopWorld.IsFull)
                     {

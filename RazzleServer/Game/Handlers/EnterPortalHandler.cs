@@ -13,14 +13,14 @@ namespace RazzleServer.Game.Handlers
 
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
-            byte portals = packet.ReadByte();
+            var portals = packet.ReadByte();
 
             if (portals != client.Character.Portals)
             {
                 return;
             }
 
-            string label = packet.ReadString();
+            var label = packet.ReadString();
 
             var portal = client.Character.Map.Portals[label];
 

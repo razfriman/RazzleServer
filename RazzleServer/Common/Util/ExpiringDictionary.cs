@@ -66,14 +66,11 @@ namespace RazzleServer.Common.Util
             return innerDictionary.Remove(key);
         }
 
-        public ICollection<TKey> Keys
-        {
-            get => innerDictionary.Keys;
-        }
+        public ICollection<TKey> Keys => innerDictionary.Keys;
 
         public bool TryGetValue(TKey key, out TValue value)
         {
-            bool returnval = false;
+            var returnval = false;
             DestoryExpiredItems(key);
 
             if (innerDictionary.ContainsKey(key))
@@ -86,10 +83,7 @@ namespace RazzleServer.Common.Util
             return returnval;
         }
 
-        public ICollection<TValue> Values
-        {
-            get => innerDictionary.Values.Select(vals => vals.Value).ToList();
-        }
+        public ICollection<TValue> Values => innerDictionary.Values.Select(vals => vals.Value).ToList();
 
         public TValue this[TKey key]
         {

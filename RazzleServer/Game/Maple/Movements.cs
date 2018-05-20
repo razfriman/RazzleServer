@@ -28,17 +28,17 @@ namespace RazzleServer.Game.Maple
         {
             short foothold = 0;
             byte stance = 0;
-            Point position = iPacket.ReadPoint();
+            var position = iPacket.ReadPoint();
 
             Origin = position;
 
-            byte count = iPacket.ReadByte();
+            var count = iPacket.ReadByte();
 
             while (count-- > 0)
             {
-                MovementType type = (MovementType)iPacket.ReadByte();
+                var type = (MovementType)iPacket.ReadByte();
 
-                Movement movement = new Movement
+                var movement = new Movement
                 {
                     Type = type,
                     Foothold = foothold,
@@ -108,7 +108,7 @@ namespace RazzleServer.Game.Maple
                 Add(movement);
             }
 
-            byte keypadStates = iPacket.ReadByte();
+            var keypadStates = iPacket.ReadByte();
 
             for (byte i = 0; i < keypadStates; i++)
             {
@@ -135,7 +135,7 @@ namespace RazzleServer.Game.Maple
                 oPacket.WritePoint(Origin);
                 oPacket.WriteByte(Count);
 
-                foreach (Movement movement in this)
+                foreach (var movement in this)
                 {
                     oPacket.WriteByte((byte)movement.Type);
 

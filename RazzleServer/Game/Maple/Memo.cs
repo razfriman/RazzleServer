@@ -37,10 +37,10 @@ namespace RazzleServer.Game.Maple
             using (var oPacket = new PacketWriter())
             {
 
-                oPacket.WriteInt(this.Id);
-                oPacket.WriteString(this.Sender + " "); // NOTE: Space is intentional.
-                oPacket.WriteString(this.Message);
-                oPacket.WriteDateTime(this.Received);
+                oPacket.WriteInt(Id);
+                oPacket.WriteString(Sender + " "); // NOTE: Space is intentional.
+                oPacket.WriteString(Message);
+                oPacket.WriteDateTime(Received);
                 oPacket.WriteByte(3); // TODO: Memo kind (0 - None, 1 - Fame, 2 - Gift).
 
                 return oPacket.ToArray();

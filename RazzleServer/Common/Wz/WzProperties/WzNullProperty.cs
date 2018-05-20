@@ -22,14 +22,16 @@ namespace RazzleServer.Common.WzLib.WzProperties
 
         public override WzImageProperty DeepClone()
         {
-            WzNullProperty clone = new WzNullProperty(name);
+            var clone = new WzNullProperty(name);
             return clone;
         }
 
 		/// <summary>
 		/// The parent of the object
 		/// </summary>
-		public override WzObject Parent { get { return parent; } internal set { parent = value; } }
+		public override WzObject Parent { get => parent;
+			internal set => parent = value;
+		}
 		/*/// <summary>
 		/// The image that this property is contained in
 		/// </summary>
@@ -37,23 +39,27 @@ namespace RazzleServer.Common.WzLib.WzProperties
 		/// <summary>
 		/// The WzPropertyType of the property
 		/// </summary>
-		public override WzPropertyType PropertyType { get { return WzPropertyType.Null; } }
+		public override WzPropertyType PropertyType => WzPropertyType.Null;
+
 		/// <summary>
 		/// The name of the property
 		/// </summary>
 		/// 
-		public override string Name { get { return name; } set { name = value; } }
+		public override string Name { get => name;
+			set => name = value;
+		}
 		/// <summary>
 		/// The WzObjectType of the property
 		/// </summary>
-		public override WzObjectType ObjectType { get { return WzObjectType.Property; } }
-		public override void WriteValue(RazzleServer.Common.WzLib.Util.WzBinaryWriter writer)
+		public override WzObjectType ObjectType => WzObjectType.Property;
+
+		public override void WriteValue(WzBinaryWriter writer)
 		{
 			writer.Write((byte)0);
 		}
 		public override void ExportXml(StreamWriter writer, int level)
 		{
-			writer.WriteLine(XmlUtil.Indentation(level) + XmlUtil.EmptyNamedTag("WzNull", this.Name));
+			writer.WriteLine(XmlUtil.Indentation(level) + XmlUtil.EmptyNamedTag("WzNull", Name));
 		}
 		/// <summary>
 		/// Disposes the object

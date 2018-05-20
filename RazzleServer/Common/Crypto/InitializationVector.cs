@@ -15,34 +15,22 @@ namespace RazzleServer.Common.MapleCryptoLib
         /// <summary>
         /// Gets the bytes of the current container
         /// </summary>
-        internal byte[] Bytes
-        {
-            get => BitConverter.GetBytes(Value);
-        }
+        internal byte[] Bytes => BitConverter.GetBytes(Value);
 
         /// <summary>
         /// Gets the HIWORD from the current container
         /// </summary>
-        internal ushort HIWORD
-        {
-            get => unchecked((ushort)(Value >> 16));
-        }
+        internal ushort HIWORD => unchecked((ushort)(Value >> 16));
 
         /// <summary>
         /// Gets the LOWORD from the current container
         /// </summary>
-        internal ushort LOWORD
-        {
-            get => (ushort)Value;
-        }
+        internal ushort LOWORD => (ushort)Value;
 
         /// <summary>
         /// IV Security check
         /// </summary>
-        internal bool MustSend
-        {
-            get => LOWORD % 0x1F == 0;
-        }
+        internal bool MustSend => LOWORD % 0x1F == 0;
 
         /// <summary>
         /// Creates a IV instance using <paramref name="vector"/>
@@ -55,13 +43,13 @@ namespace RazzleServer.Common.MapleCryptoLib
         /// </summary>
         internal unsafe void Shuffle()
         {
-            uint Key = CryptoConstants.DefaultKey;
-            uint* pKey = &Key;
+            var Key = CryptoConstants.DefaultKey;
+            var pKey = &Key;
             fixed (uint* pIV = &Value)
             {
                 fixed (byte* pShuffle = CryptoConstants.Shuffle)
                 {
-                    for (int i = 0; i < 4; i++)
+                    for (var i = 0; i < 4; i++)
                     {
                         *((byte*)pKey + 0) += (byte)(*(pShuffle + *((byte*)pKey + 1)) - *((byte*)pIV + i));
                         *((byte*)pKey + 1) -= (byte)(*((byte*)pKey + 2) ^ *(pShuffle + *((byte*)pIV + i)));

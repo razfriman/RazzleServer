@@ -24,15 +24,18 @@ namespace RazzleServer.Common.WzLib.WzProperties
 
         public override WzImageProperty DeepClone()
         {
-            WzFloatProperty clone = new WzFloatProperty(name, val);
+            var clone = new WzFloatProperty(name, val);
             return clone;
         }
 
-        public override object WzValue { get { return Value; } }
+        public override object WzValue => Value;
+
         /// <summary>
         /// The parent of the object
         /// </summary>
-        public override WzObject Parent { get { return parent; } internal set { parent = value; } }
+        public override WzObject Parent { get => parent;
+            internal set => parent = value;
+        }
         /*/// <summary>
 		/// The image that this property is contained in
 		/// </summary>
@@ -40,11 +43,14 @@ namespace RazzleServer.Common.WzLib.WzProperties
         /// <summary>
         /// The WzPropertyType of the property
         /// </summary>
-        public override WzPropertyType PropertyType { get { return WzPropertyType.Float; } }
+        public override WzPropertyType PropertyType => WzPropertyType.Float;
+
         /// <summary>
         /// The name of the property
         /// </summary>
-        public override string Name { get { return name; } set { name = value; } }
+        public override string Name { get => name;
+            set => name = value;
+        }
         public override void WriteValue(WzBinaryWriter writer)
         {
             writer.Write((byte)4);
@@ -75,7 +81,8 @@ namespace RazzleServer.Common.WzLib.WzProperties
         /// <summary>
         /// The value of the property
         /// </summary>
-        public float Value { get { return val; } }
+        public float Value => val;
+
         /// <summary>
         /// Creates a blank WzByteFloatProperty
         /// </summary>

@@ -10,12 +10,12 @@ namespace RazzleServer.Game.Maple.Maps
 
         public MapObjects(Map map)
         {
-            this.Map = map;
+            Map = map;
         }
 
         public IEnumerable<T> GetInRange(MapObject reference, int range)
         {
-            foreach (T loopObject in this)
+            foreach (var loopObject in this)
             {
                 if (reference.Position.DistanceFrom(loopObject.Position) <= range)
                 {
@@ -31,11 +31,11 @@ namespace RazzleServer.Game.Maple.Maps
 
         protected override void InsertItem(int index, T item)
         {
-            item.Map = this.Map;
+            item.Map = Map;
 
             if (!(item is Character)  && !(item is Portal))
             {
-                item.ObjectId = this.Map.AssignObjectId();
+                item.ObjectId = Map.AssignObjectId();
             }
 
             base.InsertItem(index, item);
@@ -43,7 +43,7 @@ namespace RazzleServer.Game.Maple.Maps
 
         protected override void RemoveItem(int index)
         {
-            T item = base.Items[index];
+            var item = Items[index];
 
             item.Map = null;
 

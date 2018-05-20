@@ -11,7 +11,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public CharacterMemos(Character parent)
         {
-            this.Parent = parent;
+            Parent = parent;
         }
 
         public void Load()
@@ -40,15 +40,15 @@ namespace RazzleServer.Game.Maple.Characters
 
                 case MemoAction.Delete:
                     {
-                        byte count = iPacket.ReadByte();
-                        byte a = iPacket.ReadByte();
-                        byte b = iPacket.ReadByte();
+                        var count = iPacket.ReadByte();
+                        var a = iPacket.ReadByte();
+                        var b = iPacket.ReadByte();
 
                         for (byte i = 0; i < count; i++)
                         {
-                            int id = iPacket.ReadInt();
+                            var id = iPacket.ReadInt();
 
-                            if (!this.Contains(id))
+                            if (!Contains(id))
                             {
                                 continue;
                             }
@@ -66,14 +66,14 @@ namespace RazzleServer.Game.Maple.Characters
             using (var oPacket = new PacketWriter(ServerOperationCode.MemoResult))
             {
                 oPacket.WriteByte((byte)MemoResult.Send);
-                oPacket.WriteByte((byte)this.Count);
+                oPacket.WriteByte((byte)Count);
 
-                foreach (Memo memo in this)
+                foreach (var memo in this)
                 {
                     oPacket.WriteBytes(memo.ToByteArray());
                 }
 
-                this.Parent.Client.Send(oPacket);
+                Parent.Client.Send(oPacket);
             }
         }
 

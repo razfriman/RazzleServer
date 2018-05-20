@@ -29,7 +29,7 @@ namespace RazzleServer.Login
 
         public override void Receive(PacketReader packet)
         {
-            ClientOperationCode header = ClientOperationCode.Unknown;
+            var header = ClientOperationCode.Unknown;
             try
             {
                 if (packet.Available >= 2)

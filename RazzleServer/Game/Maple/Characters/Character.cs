@@ -176,7 +176,7 @@ namespace RazzleServer.Game.Maple.Characters
                     throw new ArgumentException("Level cannot exceed 200.");
                 }
 
-                int delta = value - Level;
+                var delta = value - Level;
 
                 if (!IsInitialized)
                 {
@@ -192,7 +192,7 @@ namespace RazzleServer.Game.Maple.Characters
                     }
                     else
                     {
-                        for (int i = 0; i < delta; i++)
+                        for (var i = 0; i < delta; i++)
                         {
                             level++;
 
@@ -399,7 +399,7 @@ namespace RazzleServer.Game.Maple.Characters
             get => experience;
             set
             {
-                int delta = value - experience;
+                var delta = value - experience;
 
                 experience = value;
 
@@ -533,11 +533,11 @@ namespace RazzleServer.Game.Maple.Characters
             get
             {
                 Portal closestPortal = null;
-                double shortestDistance = double.PositiveInfinity;
+                var shortestDistance = double.PositiveInfinity;
 
-                foreach (Portal loopPortal in Map.Portals)
+                foreach (var loopPortal in Map.Portals)
                 {
-                    double distance = loopPortal.Position.DistanceFrom(Position);
+                    var distance = loopPortal.Position.DistanceFrom(Position);
 
                     if (distance < shortestDistance)
                     {
@@ -555,13 +555,13 @@ namespace RazzleServer.Game.Maple.Characters
             get
             {
                 Portal closestPortal = null;
-                double shortestDistance = double.PositiveInfinity;
+                var shortestDistance = double.PositiveInfinity;
 
-                foreach (Portal loopPortal in Map.Portals)
+                foreach (var loopPortal in Map.Portals)
                 {
                     if (loopPortal.IsSpawnPoint)
                     {
-                        double distance = loopPortal.Position.DistanceFrom(Position);
+                        var distance = loopPortal.Position.DistanceFrom(Position);
 
                         if (distance < shortestDistance)
                         {
@@ -603,7 +603,7 @@ namespace RazzleServer.Game.Maple.Characters
                 oPacket.WriteByte(++Portals);
                 oPacket.WriteBool(true);
 
-                for (int i = 0; i < 3; i++)
+                for (var i = 0; i < 3; i++)
                 {
                     oPacket.WriteInt(Functions.Random());
                 }
@@ -642,9 +642,9 @@ namespace RazzleServer.Game.Maple.Characters
             oPacket.WriteBool(true);
             oPacket.WriteBool(false);
 
-            int flag = 0;
+            var flag = 0;
 
-            foreach (StatisticType statistic in statistics)
+            foreach (var statistic in statistics)
             {
                 flag |= (int)statistic;
             }
@@ -653,7 +653,7 @@ namespace RazzleServer.Game.Maple.Characters
 
             Array.Sort(statistics);
 
-            foreach (StatisticType statistic in statistics)
+            foreach (var statistic in statistics)
             {
                 switch (statistic)
                 {
@@ -869,7 +869,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Attack(PacketReader iPacket, AttackType type)
         {
-            Attack attack = new Attack(iPacket, type);
+            var attack = new Attack(iPacket, type);
 
             if (attack.Portals != Portals)
             {
@@ -910,7 +910,7 @@ namespace RazzleServer.Game.Maple.Characters
                     oPacket.WriteInt(target.Key);
                     oPacket.WriteByte(6);
 
-                    foreach (uint hit in target.Value)
+                    foreach (var hit in target.Value)
                     {
                         oPacket.WriteUInt(hit);
                     }
@@ -919,7 +919,7 @@ namespace RazzleServer.Game.Maple.Characters
                 Map.Broadcast(oPacket, this);
             }
 
-            foreach (KeyValuePair<int, List<uint>> target in attack.Damages)
+            foreach (var target in attack.Damages)
             {
                 if (!Map.Mobs.Contains(target.Key))
                 {
@@ -928,7 +928,7 @@ namespace RazzleServer.Game.Maple.Characters
                 var mob = Map.Mobs[target.Key];
                 mob.IsProvoked = true;
                 mob.SwitchController(this);
-                foreach (uint hit in target.Value)
+                foreach (var hit in target.Value)
                 {
                     if (mob.Damage(this, hit))
                     {
@@ -1025,19 +1025,19 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void MultiTalk(PacketReader iPacket)
         {
-            MultiChatType type = (MultiChatType)iPacket.ReadByte();
-            byte count = iPacket.ReadByte();
+            var type = (MultiChatType)iPacket.ReadByte();
+            var count = iPacket.ReadByte();
 
-            List<int> recipients = new List<int>();
+            var recipients = new List<int>();
 
             while (count-- > 0)
             {
-                int recipientId = iPacket.ReadInt();
+                var recipientId = iPacket.ReadInt();
 
                 recipients.Add(recipientId);
             }
 
-            string text = iPacket.ReadString();
+            var text = iPacket.ReadString();
 
             switch (type)
             {
@@ -1066,7 +1066,7 @@ namespace RazzleServer.Game.Maple.Characters
                 oPacket.WriteString(Name);
                 oPacket.WriteString(text);
 
-                foreach (int recipient in recipients)
+                foreach (var recipient in recipients)
                 {
                     Client.Server.GetCharacterById(recipient).Client.Send(oPacket);
                 }
@@ -1075,8 +1075,8 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void UseCommand(PacketReader iPacket)
         {
-            CommandType type = (CommandType)iPacket.ReadByte();
-            string targetName = iPacket.ReadString();
+            var type = (CommandType)iPacket.ReadByte();
+            var targetName = iPacket.ReadString();
             var target = Client.Server.GetCharacterByName(targetName);
 
             switch (type)
@@ -1090,12 +1090,12 @@ namespace RazzleServer.Game.Maple.Characters
                                 oPacket.WriteByte(0x0A);
                                 oPacket.WriteString(targetName);
                                 oPacket.WriteBool(false);
-                                this.Client.Send(oPacket);
+                                Client.Send(oPacket);
                             }
                         }
                         else
                         {
-                            bool isInSameChannel = Client.Server.ChannelId == target.Client.Server.ChannelId;
+                            var isInSameChannel = Client.Server.ChannelId == target.Client.Server.ChannelId;
 
                             using (var oPacket = new PacketWriter(ServerOperationCode.Whisper))
                             {
@@ -1113,7 +1113,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                 case CommandType.Whisper:
                     {
-                        string text = iPacket.ReadString();
+                        var text = iPacket.ReadString();
 
                         using (var oPacket = new PacketWriter(ServerOperationCode.Whisper))
                         {
@@ -1142,13 +1142,13 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Interact(PacketReader iPacket)
         {
-            InteractionCode code = (InteractionCode)iPacket.ReadByte();
+            var code = (InteractionCode)iPacket.ReadByte();
 
             switch (code)
             {
                 case InteractionCode.Create:
                     {
-                        InteractionType type = (InteractionType)iPacket.ReadByte();
+                        var type = (InteractionType)iPacket.ReadByte();
 
                         switch (type)
                         {
@@ -1169,7 +1169,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                             case InteractionType.PlayerShop:
                                 {
-                                    string description = iPacket.ReadString();
+                                    var description = iPacket.ReadString();
 
                                     if (PlayerShop == null)
                                     {
@@ -1191,7 +1191,7 @@ namespace RazzleServer.Game.Maple.Characters
                     {
                         if (PlayerShop == null)
                         {
-                            int objectId = iPacket.ReadInt();
+                            var objectId = iPacket.ReadInt();
 
                             if (Map.PlayerShops.Contains(objectId))
                             {
@@ -1282,12 +1282,12 @@ namespace RazzleServer.Game.Maple.Characters
                 oPacket.WriteBool(megaphone);
                 oPacket.WriteInt(Hair);
 
-                Dictionary<byte, int> visibleLayer = new Dictionary<byte, int>();
-                Dictionary<byte, int> hiddenLayer = new Dictionary<byte, int>();
+                var visibleLayer = new Dictionary<byte, int>();
+                var hiddenLayer = new Dictionary<byte, int>();
 
-                foreach (Item item in Items.GetEquipped())
+                foreach (var item in Items.GetEquipped())
                 {
-                    byte slot = item.AbsoluteSlot;
+                    var slot = item.AbsoluteSlot;
 
                     if (slot < 100 && !visibleLayer.ContainsKey(slot))
                     {
@@ -1310,7 +1310,7 @@ namespace RazzleServer.Game.Maple.Characters
                     }
                 }
 
-                foreach (KeyValuePair<byte, int> entry in visibleLayer)
+                foreach (var entry in visibleLayer)
                 {
                     oPacket.WriteByte(entry.Key);
                     oPacket.WriteInt(entry.Value);
@@ -1318,7 +1318,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                 oPacket.WriteByte(byte.MaxValue);
 
-                foreach (KeyValuePair<byte, int> entry in hiddenLayer)
+                foreach (var entry in hiddenLayer)
                 {
                     oPacket.WriteByte(entry.Key);
                     oPacket.WriteInt(entry.Value);
@@ -1326,7 +1326,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                 oPacket.WriteByte(byte.MaxValue);
 
-                Item cashWeapon = Items[EquipmentSlot.CashWeapon];
+                var cashWeapon = Items[EquipmentSlot.CashWeapon];
 
                 oPacket.WriteInt(cashWeapon != null ? cashWeapon.MapleId : 0);
 
@@ -1402,7 +1402,7 @@ namespace RazzleServer.Game.Maple.Characters
                 oPacket.WriteByte(0);
             }
 
-            bool hasChalkboard = !string.IsNullOrEmpty(Chalkboard);
+            var hasChalkboard = !string.IsNullOrEmpty(Chalkboard);
 
             oPacket.WriteBool(hasChalkboard);
 

@@ -8,7 +8,7 @@ namespace RazzleServer.Game.Maple.Maps
 
         public void Spawn()
         {
-            foreach (SpawnPoint spawnPoint in this)
+            foreach (var spawnPoint in this)
             {
                 spawnPoint.Spawn();
             }

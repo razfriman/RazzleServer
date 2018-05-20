@@ -23,14 +23,14 @@ namespace RazzleServer.Game.Maple
 
         public Attack(PacketReader iPacket, AttackType type)
         {
-            this.Type = type;
-            this.Portals = iPacket.ReadByte();
-            byte tByte = iPacket.ReadByte();
-            this.Targets = tByte / 0x10;
-            this.Hits = tByte % 0x10;
-            this.SkillId = iPacket.ReadInt();
+            Type = type;
+            Portals = iPacket.ReadByte();
+            var tByte = iPacket.ReadByte();
+            Targets = tByte / 0x10;
+            Hits = tByte % 0x10;
+            SkillId = iPacket.ReadInt();
 
-            if (this.SkillId > 0)
+            if (SkillId > 0)
             {
 
             }
@@ -38,50 +38,50 @@ namespace RazzleServer.Game.Maple
             iPacket.Skip(4); // NOTE: Unknown, probably CRC.
             iPacket.Skip(4); // NOTE: Unknown, probably CRC.
             iPacket.Skip(1); // NOTE: Unknown.
-            this.Display = iPacket.ReadByte();
-            this.Animation = iPacket.ReadByte();
-            this.WeaponClass = iPacket.ReadByte();
-            this.WeaponSpeed = iPacket.ReadByte();
-            this.Ticks = iPacket.ReadInt();
+            Display = iPacket.ReadByte();
+            Animation = iPacket.ReadByte();
+            WeaponClass = iPacket.ReadByte();
+            WeaponSpeed = iPacket.ReadByte();
+            Ticks = iPacket.ReadInt();
 
-            if (this.Type == AttackType.Range)
+            if (Type == AttackType.Range)
             {
-                short starSlot = iPacket.ReadShort();
-                short cashStarSlot = iPacket.ReadShort();
+                var starSlot = iPacket.ReadShort();
+                var cashStarSlot = iPacket.ReadShort();
                 iPacket.ReadByte(); // NOTE: Unknown.
             }
 
-            this.Damages = new Dictionary<int, List<uint>>();
+            Damages = new Dictionary<int, List<uint>>();
 
-            for (int i = 0; i < this.Targets; i++)
+            for (var i = 0; i < Targets; i++)
             {
-                int objectId = iPacket.ReadInt();
+                var objectId = iPacket.ReadInt();
                 iPacket.ReadInt(); // NOTE: Unknown.
                 iPacket.ReadInt(); // NOTE: Mob position.
                 iPacket.ReadInt(); // NOTE: Damage position.
                 iPacket.ReadShort(); // NOTE: Distance.
 
-                for (int j = 0; j < this.Hits; j++)
+                for (var j = 0; j < Hits; j++)
                 {
-                    uint damage = iPacket.ReadUInt();
+                    var damage = iPacket.ReadUInt();
 
-                    if (!this.Damages.ContainsKey(objectId))
+                    if (!Damages.ContainsKey(objectId))
                     {
-                        this.Damages.Add(objectId, new List<uint>());
+                        Damages.Add(objectId, new List<uint>());
                     }
 
-                    this.Damages[objectId].Add(damage);
+                    Damages[objectId].Add(damage);
 
-                    this.TotalDamage += damage;
+                    TotalDamage += damage;
                 }
 
-                if (this.Type != AttackType.Summon)
+                if (Type != AttackType.Summon)
                 {
                     iPacket.ReadInt(); // NOTE: Unknown, probably CRC.
                 }
             }
 
-            if (this.Type == AttackType.Range)
+            if (Type == AttackType.Range)
             {
                 new Point(iPacket.ReadShort(), iPacket.ReadShort()); // NOTE: Projectile position.
             }

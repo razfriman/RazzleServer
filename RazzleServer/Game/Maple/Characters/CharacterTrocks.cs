@@ -71,7 +71,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public bool Contains(int mapId)
         {
-            foreach (int map in Regular)
+            foreach (var map in Regular)
             {
                 if (map == mapId)
                 {
@@ -79,7 +79,7 @@ namespace RazzleServer.Game.Maple.Characters
                 }
             }
 
-            foreach (int map in VIP)
+            foreach (var map in VIP)
             {
                 if (map == mapId)
                 {
@@ -99,7 +99,7 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 case TrockAction.Remove:
                     {
-                        int mapId = iPacket.ReadInt();
+                        var mapId = iPacket.ReadInt();
 
                         if (type == TrockType.Regular)
                         {
@@ -124,7 +124,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                 case TrockAction.Add:
                     {
-                        int mapId = Parent.Map.MapleId;
+                        var mapId = Parent.Map.MapleId;
 
                         // TODO: Check if the map field limits allow trocks (e.g. Maple Island is forbidden).
 
@@ -158,17 +158,17 @@ namespace RazzleServer.Game.Maple.Characters
 
         public bool Use(int itemId, PacketReader iPacket)
         {
-            bool used = false;
-            byte action = iPacket.ReadByte();
+            var used = false;
+            var action = iPacket.ReadByte();
 
-            TrockType type = itemId == 5040000 ? TrockType.Regular : TrockType.VIP;
+            var type = itemId == 5040000 ? TrockType.Regular : TrockType.VIP;
 
-            int destinationMapId = -1;
-            TrockResult result = TrockResult.Success;
+            var destinationMapId = -1;
+            var result = TrockResult.Success;
 
             if (action == 0) // NOTE: Preset map.
             {
-                int mapId = iPacket.ReadInt();
+                var mapId = iPacket.ReadInt();
 
                 if (!Parent.Trocks.Contains(mapId))
                 {
@@ -179,7 +179,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
             else if (action == 1) // NOTE: IGN.
             {
-                string targetName = iPacket.ReadString();
+                var targetName = iPacket.ReadString();
 
                 Character target = null;// this.Parent.Client.Channel.Characters.GetCharacter(targetName);
 
@@ -233,7 +233,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             using (var oPacket = new PacketWriter())
             {
-                int remaining = 1;
+                var remaining = 1;
 
                 while (remaining <= Regular.Count)
                 {
@@ -257,7 +257,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             using (var oPacket = new PacketWriter())
             {
-                int remaining = 1;
+                var remaining = 1;
 
                 while (remaining <= VIP.Count)
                 {

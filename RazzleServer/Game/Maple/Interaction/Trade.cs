@@ -19,15 +19,15 @@ namespace RazzleServer.Game.Maple.Interaction
 
         public Trade(Character owner)
         {
-            this.Owner = owner;
-            this.Visitor = null;
-            this.OwnerMeso = 0;
-            this.VisitorMeso = 0;
-            this.OwnerItems = new List<Item>();
-            this.VisitorItems = new List<Item>();
-            this.Started = false;
-            this.OwnerLocked = false;
-            this.VisitorLocked = false;
+            Owner = owner;
+            Visitor = null;
+            OwnerMeso = 0;
+            VisitorMeso = 0;
+            OwnerItems = new List<Item>();
+            VisitorItems = new List<Item>();
+            Started = false;
+            OwnerLocked = false;
+            VisitorLocked = false;
 
             using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
             {
@@ -36,11 +36,11 @@ namespace RazzleServer.Game.Maple.Interaction
                 oPacket.WriteByte(2);
                 oPacket.WriteByte(0); // NOTE: Player index.
                 oPacket.WriteByte(0);
-                oPacket.WriteBytes(this.Owner.AppearanceToByteArray());
-                oPacket.WriteString(this.Owner.Name);
+                oPacket.WriteBytes(Owner.AppearanceToByteArray());
+                oPacket.WriteString(Owner.Name);
                 oPacket.WriteByte(byte.MaxValue);
 
-                this.Owner.Client.Send(oPacket);
+                Owner.Client.Send(oPacket);
             }
         }
 
@@ -50,16 +50,16 @@ namespace RazzleServer.Game.Maple.Interaction
             {
                 case InteractionCode.Invite:
                     {
-                        int characterId = iPacket.ReadInt();
+                        var characterId = iPacket.ReadInt();
 
-                        if (!this.Owner.Map.Characters.Contains(characterId))
+                        if (!Owner.Map.Characters.Contains(characterId))
                         {
                             // TODO: What does happen in case the invitee left?
 
                             return;
                         }
 
-                        Character invitee = this.Owner.Map.Characters[characterId];
+                        var invitee = Owner.Map.Characters[characterId];
 
                         if (invitee.Trade != null)
                         {
@@ -69,22 +69,22 @@ namespace RazzleServer.Game.Maple.Interaction
                                 oPacket.WriteByte(2);
                                 oPacket.WriteString(invitee.Name);
 
-                                this.Owner.Client.Send(oPacket);
+                                Owner.Client.Send(oPacket);
                             }
                         }
                         else
                         {
                             invitee.Trade = this;
-                            this.Visitor = invitee;
+                            Visitor = invitee;
 
                             using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                             {
                                 oPacket.WriteByte((byte)InteractionCode.Invite);
                                 oPacket.WriteByte(3);
-                                oPacket.WriteString(this.Owner.Name);
+                                oPacket.WriteString(Owner.Name);
                                 oPacket.WriteBytes(new byte[4] { 0xB7, 0x50, 0x00, 0x00 });
 
-                                this.Visitor.Client.Send(oPacket);
+                                Visitor.Client.Send(oPacket);
                             }
                         }
                     }
@@ -98,37 +98,37 @@ namespace RazzleServer.Game.Maple.Interaction
                             oPacket.WriteByte(3);
                             oPacket.WriteString(character.Name);
 
-                            this.Owner.Client.Send(oPacket);
+                            Owner.Client.Send(oPacket);
                         }
 
-                        this.Owner.Trade = null;
-                        this.Visitor.Trade = null;
-                        this.Owner = null;
-                        this.Visitor = null;
+                        Owner.Trade = null;
+                        Visitor.Trade = null;
+                        Owner = null;
+                        Visitor = null;
                     }
                     break;
 
                 case InteractionCode.Visit:
                     {
-                        if (this.Owner == null)
+                        if (Owner == null)
                         {
-                            this.Visitor = null;
+                            Visitor = null;
                             character.Trade = null;
 
                             character.Notify("Trade has been closed.", NoticeType.Popup);
                         }
                         else
                         {
-                            this.Started = true;
+                            Started = true;
 
                             using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                             {
                                 oPacket.WriteByte((byte)InteractionCode.Visit);
                                 oPacket.WriteByte(1);
-                                oPacket.WriteBytes(this.Visitor.AppearanceToByteArray());
-                                oPacket.WriteString(this.Visitor.Name);
+                                oPacket.WriteBytes(Visitor.AppearanceToByteArray());
+                                oPacket.WriteString(Visitor.Name);
 
-                                this.Owner.Client.Send(oPacket);
+                                Owner.Client.Send(oPacket);
                             }
 
                             using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
@@ -138,14 +138,14 @@ namespace RazzleServer.Game.Maple.Interaction
                                 oPacket.WriteByte(2);
                                 oPacket.WriteByte(1);
                                 oPacket.WriteByte(0);
-                                oPacket.WriteBytes(this.Owner.AppearanceToByteArray());
-                                oPacket.WriteString(this.Owner.Name);
+                                oPacket.WriteBytes(Owner.AppearanceToByteArray());
+                                oPacket.WriteString(Owner.Name);
                                 oPacket.WriteByte(1);
-                                oPacket.WriteBytes(this.Visitor.AppearanceToByteArray());
-                                oPacket.WriteString(this.Visitor.Name);
+                                oPacket.WriteBytes(Visitor.AppearanceToByteArray());
+                                oPacket.WriteString(Visitor.Name);
                                 oPacket.WriteByte(byte.MaxValue);
 
-                                this.Visitor.Client.Send(oPacket);
+                                Visitor.Client.Send(oPacket);
                             }
                         }
                     }
@@ -153,12 +153,12 @@ namespace RazzleServer.Game.Maple.Interaction
 
                 case InteractionCode.SetItems:
                     {
-                        ItemType type = (ItemType)iPacket.ReadByte();
-                        short slot = iPacket.ReadShort();
-                        short quantity = iPacket.ReadShort();
-                        byte targetSlot = iPacket.ReadByte();
+                        var type = (ItemType)iPacket.ReadByte();
+                        var slot = iPacket.ReadShort();
+                        var quantity = iPacket.ReadShort();
+                        var targetSlot = iPacket.ReadByte();
 
-                        Item item = character.Items[type, slot];
+                        var item = character.Items[type, slot];
 
                         if (item.IsBlocked)
                         {
@@ -191,17 +191,17 @@ namespace RazzleServer.Game.Maple.Interaction
                             oPacket.WriteByte(targetSlot);
                             oPacket.WriteBytes(item.ToByteArray(true));
 
-                            if (character == this.Owner)
+                            if (character == Owner)
                             {
-                                this.OwnerItems.Add(item);
+                                OwnerItems.Add(item);
 
-                                this.Owner.Client.Send(oPacket);
+                                Owner.Client.Send(oPacket);
                             }
                             else
                             {
-                                this.VisitorItems.Add(item);
+                                VisitorItems.Add(item);
 
-                                this.Visitor.Client.Send(oPacket);
+                                Visitor.Client.Send(oPacket);
                             }
                         }
 
@@ -212,13 +212,13 @@ namespace RazzleServer.Game.Maple.Interaction
                             oPacket.WriteByte(targetSlot);
                             oPacket.WriteBytes(item.ToByteArray(true));
 
-                            if (character == this.Owner)
+                            if (character == Owner)
                             {
-                                this.Visitor.Client.Send(oPacket);
+                                Visitor.Client.Send(oPacket);
                             }
                             else
                             {
-                                this.Owner.Client.Send(oPacket);
+                                Owner.Client.Send(oPacket);
                             }
                         }
                     }
@@ -226,7 +226,7 @@ namespace RazzleServer.Game.Maple.Interaction
 
                 case InteractionCode.SetMeso:
                     {
-                        int meso = iPacket.ReadInt();
+                        var meso = iPacket.ReadInt();
 
                         if (meso < 0 || meso > character.Meso)
                         {
@@ -242,29 +242,29 @@ namespace RazzleServer.Game.Maple.Interaction
                             oPacket.WriteByte(0);
                             oPacket.WriteInt(meso);
 
-                            if (character == this.Owner)
+                            if (character == Owner)
                             {
-                                if (this.OwnerLocked)
+                                if (OwnerLocked)
                                 {
                                     return;
                                 }
 
-                                this.OwnerMeso += meso;
-                                this.Owner.Meso -= meso;
+                                OwnerMeso += meso;
+                                Owner.Meso -= meso;
 
-                                this.Owner.Client.Send(oPacket);
+                                Owner.Client.Send(oPacket);
                             }
                             else
                             {
-                                if (this.VisitorLocked)
+                                if (VisitorLocked)
                                 {
                                     return;
                                 }
 
-                                this.VisitorMeso += meso;
-                                this.Visitor.Meso -= meso;
+                                VisitorMeso += meso;
+                                Visitor.Meso -= meso;
 
-                                this.Visitor.Client.Send(oPacket);
+                                Visitor.Client.Send(oPacket);
                             }
                         }
 
@@ -274,15 +274,15 @@ namespace RazzleServer.Game.Maple.Interaction
                             oPacket.WriteByte(1);
                             oPacket.WriteInt(meso);
 
-                            if (this.Owner == character)
+                            if (Owner == character)
                             {
-                                this.Visitor.Client.Send(oPacket);
+                                Visitor.Client.Send(oPacket);
                             }
                             else
                             {
-                                oPacket.WriteInt(this.OwnerMeso);
+                                oPacket.WriteInt(OwnerMeso);
 
-                                this.Owner.Client.Send(oPacket);
+                                Owner.Client.Send(oPacket);
                             }
                         }
                     }
@@ -290,9 +290,9 @@ namespace RazzleServer.Game.Maple.Interaction
 
                 case InteractionCode.Exit:
                     {
-                        if (this.Started)
+                        if (Started)
                         {
-                            this.Cancel();
+                            Cancel();
 
                             using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                             {
@@ -300,14 +300,14 @@ namespace RazzleServer.Game.Maple.Interaction
                                 oPacket.WriteByte(0);
                                 oPacket.WriteByte(2);
 
-                                this.Owner.Client.Send(oPacket);
-                                this.Visitor.Client.Send(oPacket);
+                                Owner.Client.Send(oPacket);
+                                Visitor.Client.Send(oPacket);
                             }
 
-                            this.Owner.Trade = null;
-                            this.Visitor.Trade = null;
-                            this.Owner = null;
-                            this.Visitor = null;
+                            Owner.Trade = null;
+                            Visitor.Trade = null;
+                            Owner = null;
+                            Visitor = null;
                         }
                         else
                         {
@@ -317,11 +317,11 @@ namespace RazzleServer.Game.Maple.Interaction
                                 oPacket.WriteByte(0);
                                 oPacket.WriteByte(2);
 
-                                this.Owner.Client.Send(oPacket);
+                                Owner.Client.Send(oPacket);
                             }
 
-                            this.Owner.Trade = null;
-                            this.Owner = null;
+                            Owner.Trade = null;
+                            Owner = null;
                         }
                     }
                     break;
@@ -332,23 +332,23 @@ namespace RazzleServer.Game.Maple.Interaction
                         {
                             oPacket.WriteByte((byte)InteractionCode.Confirm);
 
-                            if (character == this.Owner)
+                            if (character == Owner)
                             {
-                                this.OwnerLocked = true;
+                                OwnerLocked = true;
 
-                                this.Visitor.Client.Send(oPacket);
+                                Visitor.Client.Send(oPacket);
                             }
                             else
                             {
-                                this.VisitorLocked = true;
+                                VisitorLocked = true;
 
-                                this.Owner.Client.Send(oPacket);
+                                Owner.Client.Send(oPacket);
                             }
                         }
 
-                        if (this.OwnerLocked && this.VisitorLocked)
+                        if (OwnerLocked && VisitorLocked)
                         {
-                            this.Complete();
+                            Complete();
 
                             using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                             {
@@ -356,31 +356,31 @@ namespace RazzleServer.Game.Maple.Interaction
                                 oPacket.WriteByte(0);
                                 oPacket.WriteByte(6);
 
-                                this.Owner.Client.Send(oPacket);
-                                this.Visitor.Client.Send(oPacket);
+                                Owner.Client.Send(oPacket);
+                                Visitor.Client.Send(oPacket);
                             }
 
-                            this.Owner.Trade = null;
-                            this.Visitor.Trade = null;
-                            this.Owner = null;
-                            this.Visitor = null;
+                            Owner.Trade = null;
+                            Visitor.Trade = null;
+                            Owner = null;
+                            Visitor = null;
                         }
                     }
                     break;
 
                 case InteractionCode.Chat:
                     {
-                        string text = iPacket.ReadString();
+                        var text = iPacket.ReadString();
 
                         using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                         {
                             oPacket.WriteByte((byte)InteractionCode.Chat);
                             oPacket.WriteByte(8);
-                            oPacket.WriteBool(this.Owner != character);
+                            oPacket.WriteBool(Owner != character);
                             oPacket.WriteString($"{character.Name} : {text}");
 
-                            this.Owner.Client.Send(oPacket);
-                            this.Visitor.Client.Send(oPacket);
+                            Owner.Client.Send(oPacket);
+                            Visitor.Client.Send(oPacket);
                         }
                     }
                     break;
@@ -389,13 +389,13 @@ namespace RazzleServer.Game.Maple.Interaction
 
         public void Complete()
         {
-            if (this.Owner.Items.CouldReceive(this.VisitorItems) && this.Visitor.Items.CouldReceive(this.OwnerItems))
+            if (Owner.Items.CouldReceive(VisitorItems) && Visitor.Items.CouldReceive(OwnerItems))
             {
-                this.Owner.Meso += this.VisitorMeso;
-                this.Visitor.Meso += this.OwnerMeso;
+                Owner.Meso += VisitorMeso;
+                Visitor.Meso += OwnerMeso;
 
-                this.Owner.Items.AddRange(this.VisitorItems);
-                this.Visitor.Items.AddRange(this.OwnerItems);
+                Owner.Items.AddRange(VisitorItems);
+                Visitor.Items.AddRange(OwnerItems);
             }
             else
             {
@@ -405,11 +405,11 @@ namespace RazzleServer.Game.Maple.Interaction
 
         public void Cancel()
         {
-            this.Owner.Meso += this.OwnerMeso;
-            this.Visitor.Meso += this.VisitorMeso;
+            Owner.Meso += OwnerMeso;
+            Visitor.Meso += VisitorMeso;
 
-            this.Owner.Items.AddRange(this.OwnerItems);
-            this.Visitor.Items.AddRange(this.VisitorItems);
+            Owner.Items.AddRange(OwnerItems);
+            Visitor.Items.AddRange(VisitorItems);
         }
     }
 }

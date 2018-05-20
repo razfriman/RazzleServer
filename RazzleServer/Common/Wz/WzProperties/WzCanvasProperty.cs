@@ -27,36 +27,40 @@ namespace RazzleServer.Common.WzLib.WzProperties
 
         public override WzImageProperty DeepClone()
         {
-            WzCanvasProperty clone = new WzCanvasProperty(name);
-            foreach (WzImageProperty prop in properties)
+            var clone = new WzCanvasProperty(name);
+            foreach (var prop in properties)
+            {
                 clone.AddProperty(prop.DeepClone());
+            }
+
             clone.imageProp = (WzPngProperty)imageProp.DeepClone();
             return clone;
         }
 
-        public override object WzValue { get { return PngProperty; } }
+        public override object WzValue => PngProperty;
+
         /// <summary>
         /// The parent of the object
         /// </summary>
-        public override WzObject Parent { get { return parent; } internal set { parent = value; } }
+        public override WzObject Parent { get => parent;
+            internal set => parent = value;
+        }
         /// <summary>
         /// The WzPropertyType of the property
         /// </summary>
-        public override WzPropertyType PropertyType { get { return WzPropertyType.Canvas; } }
+        public override WzPropertyType PropertyType => WzPropertyType.Canvas;
+
         /// <summary>
         /// The properties contained in this property
         /// </summary>
-        public override List<WzImageProperty> WzProperties
-        {
-            get
-            {
-                return properties;
-            }
-        }
+        public override List<WzImageProperty> WzProperties => properties;
+
         /// <summary>
         /// The name of the property
         /// </summary>
-        public override string Name { get { return name; } set { name = value; } }
+        public override string Name { get => name;
+            set => name = value;
+        }
         /// <summary>
         /// Gets a wz property by it's name
         /// </summary>
@@ -67,10 +71,18 @@ namespace RazzleServer.Common.WzLib.WzProperties
             get
             {
                 if (name == "PNG")
+                {
                     return imageProp;
-                foreach (WzImageProperty iwp in properties)
+                }
+
+                foreach (var iwp in properties)
+                {
                     if (iwp.Name.ToLower() == name.ToLower())
+                    {
                         return iwp;
+                    }
+                }
+
                 return null;
             }
             set
@@ -90,9 +102,14 @@ namespace RazzleServer.Common.WzLib.WzProperties
 
         public WzImageProperty GetProperty(string name)
         {
-            foreach (WzImageProperty iwp in properties)
+            foreach (var iwp in properties)
+            {
                 if (iwp.Name.ToLower() == name.ToLower())
+                {
                     return iwp;
+                }
+            }
+
             return null;
         }
         /// <summary>
@@ -102,20 +119,20 @@ namespace RazzleServer.Common.WzLib.WzProperties
 		/// <returns>the wz property with the specified name</returns>
 		public override WzImageProperty GetFromPath(string path)
         {
-            string[] segments = path.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+            var segments = path.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
             if (segments[0] == "..")
             {
                 return ((WzImageProperty)Parent)[path.Substring(name.IndexOf('/') + 1)];
             }
             WzImageProperty ret = this;
-            for (int x = 0; x < segments.Length; x++)
+            for (var x = 0; x < segments.Length; x++)
             {
-                bool foundChild = false;
+                var foundChild = false;
                 if (segments[x] == "PNG")
                 {
                     return imageProp;
                 }
-                foreach (WzImageProperty iwp in ret.WzProperties)
+                foreach (var iwp in ret.WzProperties)
                 {
                     if (iwp.Name == segments[x])
                     {
@@ -131,14 +148,14 @@ namespace RazzleServer.Common.WzLib.WzProperties
             }
             return ret;
         }
-        public override void WriteValue(RazzleServer.Common.WzLib.Util.WzBinaryWriter writer)
+        public override void WriteValue(WzBinaryWriter writer)
         {
             writer.WriteStringValue("Canvas", 0x73, 0x1B);
             writer.Write((byte)0);
             if (properties.Count > 0)
             {
                 writer.Write((byte)1);
-                WzImageProperty.WritePropertyList(writer, properties);
+                WritePropertyList(writer, properties);
             }
             else
             {
@@ -149,17 +166,17 @@ namespace RazzleServer.Common.WzLib.WzProperties
             writer.WriteCompressedInt(PngProperty.format);
             writer.Write((byte)PngProperty.format2);
             writer.Write(0);
-            byte[] bytes = PngProperty.GetCompressedBytes(false);
+            var bytes = PngProperty.GetCompressedBytes(false);
             writer.Write(bytes.Length + 1);
             writer.Write((byte)0);
             writer.Write(bytes);
         }
         public override void ExportXml(StreamWriter writer, int level)
         {
-            writer.WriteLine(XmlUtil.Indentation(level) + XmlUtil.OpenNamedTag("WzCanvas", this.Name, false, false) +
+            writer.WriteLine(XmlUtil.Indentation(level) + XmlUtil.OpenNamedTag("WzCanvas", Name, false, false) +
             XmlUtil.Attrib("width", PngProperty.Width.ToString()) +
             XmlUtil.Attrib("height", PngProperty.Height.ToString(), true, false));
-            WzImageProperty.DumpPropertyList(writer, level, this.WzProperties);
+            DumpPropertyList(writer, level, WzProperties);
             writer.WriteLine(XmlUtil.Indentation(level) + XmlUtil.CloseTag("WzCanvas"));
         }
         /// <summary>
@@ -180,7 +197,9 @@ namespace RazzleServer.Common.WzLib.WzProperties
         /// <summary>
         /// The png image for this canvas property
         /// </summary>
-        public WzPngProperty PngProperty { get { return imageProp; } set { imageProp = value; } }
+        public WzPngProperty PngProperty { get => imageProp;
+            set => imageProp = value;
+        }
         /// <summary>
         /// Creates a blank WzCanvasProperty
         /// </summary>
@@ -204,7 +223,7 @@ namespace RazzleServer.Common.WzLib.WzProperties
         }
         public void AddProperties(List<WzImageProperty> props)
         {
-            foreach (WzImageProperty prop in props)
+            foreach (var prop in props)
             {
                 AddProperty(prop);
             }
@@ -223,7 +242,11 @@ namespace RazzleServer.Common.WzLib.WzProperties
         /// </summary>
         public void ClearProperties()
         {
-            foreach (WzImageProperty prop in properties) prop.Parent = null;
+            foreach (var prop in properties)
+            {
+                prop.Parent = null;
+            }
+
             properties.Clear();
         }
         #endregion

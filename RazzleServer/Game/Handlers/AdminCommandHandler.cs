@@ -16,13 +16,13 @@ namespace RazzleServer.Game.Handlers
                 return;
             }
 
-            AdminCommandType type = (AdminCommandType)packet.ReadByte();
+            var type = (AdminCommandType)packet.ReadByte();
 
             switch (type)
             {
                 case AdminCommandType.Hide:
                     {
-                        bool hide = packet.ReadBool();
+                        var hide = packet.ReadBool();
 
                         if (hide)
                         {
@@ -37,8 +37,8 @@ namespace RazzleServer.Game.Handlers
 
                 case AdminCommandType.Send:
                     {
-                        string name = packet.ReadString();
-                        int destinationId = packet.ReadInt();
+                        var name = packet.ReadString();
+                        var destinationId = packet.ReadInt();
 
                         var target = client.Server.GetCharacterByName(name);
 
@@ -60,12 +60,12 @@ namespace RazzleServer.Game.Handlers
 
                 case AdminCommandType.Summon:
                     {
-                        int mobId = packet.ReadInt();
-                        int count = packet.ReadInt();
+                        var mobId = packet.ReadInt();
+                        var count = packet.ReadInt();
 
                         if (DataProvider.Mobs.Contains(mobId))
                         {
-                            for (int i = 0; i < count; i++)
+                            for (var i = 0; i < count; i++)
                             {
                                 client.Character.Map.Mobs.Add(new Mob(mobId, client.Character.Position));
                             }
@@ -80,7 +80,7 @@ namespace RazzleServer.Game.Handlers
 
                 case AdminCommandType.CreateItem:
                     {
-                        int itemId = packet.ReadInt();
+                        var itemId = packet.ReadInt();
                         client.Character.Items.Add(new Item(itemId));
                     }
                     break;
@@ -93,14 +93,14 @@ namespace RazzleServer.Game.Handlers
 
                 case AdminCommandType.GiveExperience:
                     {
-                        int amount = packet.ReadInt();
+                        var amount = packet.ReadInt();
                         client.Character.Experience += amount;
                     }
                     break;
 
                 case AdminCommandType.Ban:
                     {
-                        string name = packet.ReadString();
+                        var name = packet.ReadString();
 
                         var target = client.Server.GetCharacterByName(name);
 
@@ -147,8 +147,8 @@ namespace RazzleServer.Game.Handlers
 
                 case AdminCommandType.Warn:
                     {
-                        string name = packet.ReadString();
-                        string text = packet.ReadString();
+                        var name = packet.ReadString();
+                        var text = packet.ReadString();
 
                         var target = client.Server.GetCharacterByName(name);
 

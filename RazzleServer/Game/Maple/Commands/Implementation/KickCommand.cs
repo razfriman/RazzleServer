@@ -4,39 +4,21 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
 {
     public sealed class KickCommand : Command
     {
-        public override string Name
-        {
-            get
-            {
-                return "kick";
-            }
-        }
+        public override string Name => "kick";
 
-        public override string Parameters
-        {
-            get
-            {
-                return "[character]";
-            }
-        }
+        public override string Parameters => "[character]";
 
-        public override bool IsRestricted
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool IsRestricted => true;
 
         public override void Execute(Character caller, string[] args)
         {
             if (args.Length == 0)
             {
-                this.ShowSyntax(caller);
+                ShowSyntax(caller);
             }
             else
             {
-                string name = args[0];
+                var name = args[0];
                 Character target = null;// caller.Client.World.GetCharacter(name);
 
                 if (target == null)

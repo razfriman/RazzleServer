@@ -37,7 +37,7 @@ namespace RazzleServer.Server
 			{
 				if (File.Exists(path))
 				{
-					string contents = await File.ReadAllTextAsync(path);
+					var contents = await File.ReadAllTextAsync(path);
 					_instance = JsonConvert.DeserializeObject<ServerConfig>(contents);
                 } else {
                     Log.LogWarning($"Using default config. Config file does not exist at '{path}'");

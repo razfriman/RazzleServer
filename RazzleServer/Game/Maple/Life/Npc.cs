@@ -28,8 +28,8 @@ namespace RazzleServer.Game.Maple.Life
 
         public void Move(PacketReader iPacket)
         {
-            byte action1 = iPacket.ReadByte();
-            byte action2 = iPacket.ReadByte();
+            var action1 = iPacket.ReadByte();
+            var action2 = iPacket.ReadByte();
 
             Movements movements = null;
 
@@ -88,10 +88,10 @@ namespace RazzleServer.Game.Maple.Life
                 return;
             }
 
-            NpcMessageType lastMessageType = (NpcMessageType)iPacket.ReadByte();
-            byte action = iPacket.ReadByte();
+            var lastMessageType = (NpcMessageType)iPacket.ReadByte();
+            var action = iPacket.ReadByte();
 
-            int selection = -1;
+            var selection = -1;
 
             byte endTalkByte;
 
@@ -144,12 +144,12 @@ namespace RazzleServer.Game.Maple.Life
         {
             if (Controller == null)
             {
-                int leastControlled = int.MaxValue;
+                var leastControlled = int.MaxValue;
                 Character newController = null;
 
                 lock (Map.Characters)
                 {
-                    foreach (Character character in Map.Characters)
+                    foreach (var character in Map.Characters)
                     {
                         if (character.ControlledNpcs.Count < leastControlled)
                         {

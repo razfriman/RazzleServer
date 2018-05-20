@@ -5,35 +5,17 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
 {
     public sealed class ItemCommand : Command
     {
-        public override string Name
-        {
-            get
-            {
-                return "item";
-            }
-        }
+        public override string Name => "item";
 
-        public override string Parameters
-        {
-            get
-            {
-                return "{ id } [ quantity ]";
-            }
-        }
+        public override string Parameters => "{ id } [ quantity ]";
 
-        public override bool IsRestricted
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool IsRestricted => true;
 
         public override void Execute(Character caller, string[] args)
         {
             if (args.Length < 1)
             {
-                this.ShowSyntax(caller);
+                ShowSyntax(caller);
             }
             else
             {
@@ -49,7 +31,7 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
                     quantity = 1;
                 }
 
-                int itemId = int.Parse(args[0]);
+                var itemId = int.Parse(args[0]);
 
                 if (DataProvider.Items.Contains(itemId))
                 {

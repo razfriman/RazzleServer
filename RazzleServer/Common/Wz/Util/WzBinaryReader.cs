@@ -19,20 +19,20 @@ namespace RazzleServer.Common.WzLib.Util
 
         public string ReadStringAtOffset(long Offset, bool readByte)
         {
-            long CurrentOffset = BaseStream.Position;
+            var CurrentOffset = BaseStream.Position;
             BaseStream.Position = Offset;
             if (readByte)
             {
                 ReadByte();
             }
-            string ReturnString = ReadString();
+            var ReturnString = ReadString();
             BaseStream.Position = CurrentOffset;
             return ReturnString;
         }
 
         public override string ReadString()
         {
-            sbyte smallLength = base.ReadSByte();
+            var smallLength = ReadSByte();
 
             if (smallLength == 0)
             {
@@ -40,7 +40,7 @@ namespace RazzleServer.Common.WzLib.Util
             }
 
             int length;
-            StringBuilder retString = new StringBuilder();
+            var retString = new StringBuilder();
             if (smallLength > 0) // Unicode
             {
                 ushort mask = 0xAAAA;
@@ -57,9 +57,9 @@ namespace RazzleServer.Common.WzLib.Util
                     return string.Empty;
                 }
 
-                for (int i = 0; i < length; i++)
+                for (var i = 0; i < length; i++)
                 {
-                    ushort encryptedChar = ReadUInt16();
+                    var encryptedChar = ReadUInt16();
                     encryptedChar ^= mask;
                     encryptedChar ^= (ushort)((WzKey[i * 2 + 1] << 8) + WzKey[i * 2]);
                     retString.Append((char)encryptedChar);
@@ -82,9 +82,9 @@ namespace RazzleServer.Common.WzLib.Util
                     return string.Empty;
                 }
 
-                for (int i = 0; i < length; i++)
+                for (var i = 0; i < length; i++)
                 {
-                    byte encryptedChar = ReadByte();
+                    var encryptedChar = ReadByte();
                     encryptedChar ^= mask;
                     encryptedChar ^= WzKey[i];
                     retString.Append((char)encryptedChar);
@@ -102,8 +102,8 @@ namespace RazzleServer.Common.WzLib.Util
 
         public string ReadNullTerminatedString()
         {
-            StringBuilder retString = new StringBuilder();
-            byte b = ReadByte();
+            var retString = new StringBuilder();
+            var b = ReadByte();
             while (b != 0)
             {
                 retString.Append((char)b);
@@ -114,7 +114,7 @@ namespace RazzleServer.Common.WzLib.Util
 
         public int ReadCompressedInt()
         {
-            sbyte sb = base.ReadSByte();
+            var sb = ReadSByte();
             if (sb == sbyte.MinValue)
             {
                 return ReadInt32();
@@ -124,7 +124,7 @@ namespace RazzleServer.Common.WzLib.Util
 
         public long ReadLong()
         {
-            sbyte sb = base.ReadSByte();
+            var sb = ReadSByte();
             if (sb == sbyte.MinValue)
             {
                 return ReadInt64();
@@ -134,12 +134,12 @@ namespace RazzleServer.Common.WzLib.Util
 
         public uint ReadOffset()
         {
-            uint offset = (uint)BaseStream.Position;
+            var offset = (uint)BaseStream.Position;
             offset = (offset - Header.FStart) ^ uint.MaxValue;
             offset *= Hash;
             offset -= CryptoConstants.WZ_OffsetConstant;
             offset = WzTool.RotateLeft(offset, (byte)(offset & 0x1F));
-            uint encryptedOffset = ReadUInt32();
+            var encryptedOffset = ReadUInt32();
             offset ^= encryptedOffset;
             offset += Header.FStart * 2;
             return offset;
@@ -147,17 +147,23 @@ namespace RazzleServer.Common.WzLib.Util
 
         public string DecryptString(char[] stringToDecrypt)
         {
-            string outputString = "";
-            for (int i = 0; i < stringToDecrypt.Length; i++)
+            var outputString = "";
+            for (var i = 0; i < stringToDecrypt.Length; i++)
+            {
                 outputString += (char)(stringToDecrypt[i] ^ ((char)((WzKey[i * 2 + 1] << 8) + WzKey[i * 2])));
+            }
+
             return outputString;
         }
 
         public string DecryptNonUnicodeString(char[] stringToDecrypt)
         {
-            string outputString = "";
-            for (int i = 0; i < stringToDecrypt.Length; i++)
+            var outputString = "";
+            for (var i = 0; i < stringToDecrypt.Length; i++)
+            {
                 outputString += (char)(stringToDecrypt[i] ^ WzKey[i]);
+            }
+
             return outputString;
         }
 

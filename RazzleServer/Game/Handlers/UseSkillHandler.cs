@@ -65,11 +65,11 @@ namespace RazzleServer.Game.Handlers
                 case (int)SkillNames.DragonKnight.PowerCrash:
                     {
                         packet.ReadInt(); // NOTE: Unknown, probably CRC.
-                        byte mobs = packet.ReadByte();
+                        var mobs = packet.ReadByte();
 
                         for (byte i = 0; i < mobs; i++)
                         {
-                            int objectId = packet.ReadInt();
+                            var objectId = packet.ReadInt();
 
                             var mob = skill.Character.Map.Mobs[objectId];
 
@@ -82,15 +82,15 @@ namespace RazzleServer.Game.Handlers
                 case (int)SkillNames.Paladin.MonsterMagnet:
                 case (int)SkillNames.DarkKnight.MonsterMagnet:
                     {
-                        int mobs = packet.ReadInt();
+                        var mobs = packet.ReadInt();
 
-                        for (int i = 0; i < mobs; i++)
+                        for (var i = 0; i < mobs; i++)
                         {
-                            int objectId = packet.ReadInt();
+                            var objectId = packet.ReadInt();
 
                             var mob = skill.Character.Map.Mobs[objectId];
 
-                            bool success = packet.ReadBool();
+                            var success = packet.ReadBool();
 
                             // TODO: Packet.
                         }
@@ -105,11 +105,11 @@ namespace RazzleServer.Game.Handlers
                     {
                         packet.ReadInt(); // NOTE: Unknown, probably CRC.
 
-                        byte mobs = packet.ReadByte();
+                        var mobs = packet.ReadByte();
 
                         for (byte i = 0; i < mobs; i++)
                         {
-                            int objectId = packet.ReadInt();
+                            var objectId = packet.ReadInt();
 
                             var mob = skill.Character.Map.Mobs[objectId];
                         }
@@ -125,11 +125,11 @@ namespace RazzleServer.Game.Handlers
                 case (int)SkillNames.Shadower.NinjaAmbush:
                 case (int)SkillNames.NightLord.NinjaAmbush:
                     {
-                        byte mobs = packet.ReadByte();
+                        var mobs = packet.ReadByte();
 
                         for (byte i = 0; i < mobs; i++)
                         {
-                            int objectId = packet.ReadInt();
+                            var objectId = packet.ReadInt();
 
                             var mob = skill.Character.Map.Mobs[objectId];
                         }
@@ -163,19 +163,19 @@ namespace RazzleServer.Game.Handlers
 
                 case (int)SkillNames.Cleric.Heal:
                     {
-                        short healthRate = skill.HP;
+                        var healthRate = skill.HP;
 
                         if (healthRate > 100)
                         {
                             healthRate = 100;
                         }
 
-                        int partyPlayers = skill.Character.Party?.Count ?? 1;
-                        short healthMod = (short)(((healthRate * skill.Character.MaxHealth) / 100) / partyPlayers);
+                        var partyPlayers = skill.Character.Party?.Count ?? 1;
+                        var healthMod = (short)(((healthRate * skill.Character.MaxHealth) / 100) / partyPlayers);
 
                         if (skill.Character.Party != null)
                         {
-                            int experience = 0;
+                            var experience = 0;
 
                             var members = new List<PartyMember>();
 
@@ -187,9 +187,9 @@ namespace RazzleServer.Game.Handlers
                                 }
                             }
 
-                            foreach (PartyMember member in members)
+                            foreach (var member in members)
                             {
-                                short memberHealth = member.Character.Health;
+                                var memberHealth = member.Character.Health;
 
                                 if (memberHealth > 0 && memberHealth < member.Character.MaxHealth)
                                 {
@@ -242,11 +242,11 @@ namespace RazzleServer.Game.Handlers
 
                         if (skill.Character.Party != null)
                         {
-                            byte targets = packet.ReadByte();
+                            var targets = packet.ReadByte();
 
                             // TODO: Get affected party members.
 
-                            List<PartyMember> affected = new List<PartyMember>();
+                            var affected = new List<PartyMember>();
 
                             foreach (var member in affected)
                             {
@@ -284,7 +284,7 @@ namespace RazzleServer.Game.Handlers
                 case (int)SkillNames.SuperGM.HealPlusDispel:
                 case (int)SkillNames.SuperGM.Resurrection:
                     {
-                        byte targets = packet.ReadByte();
+                        var targets = packet.ReadByte();
                         Func<Character, bool> condition = null;
                         Action<Character> action = null;
 
@@ -326,9 +326,9 @@ namespace RazzleServer.Game.Handlers
 
                         for (byte i = 0; i < targets; i++)
                         {
-                            int targetId = packet.ReadInt();
+                            var targetId = packet.ReadInt();
 
-                            Character target = skill.Character.Map.Characters[targetId];
+                            var target = skill.Character.Map.Characters[targetId];
 
                             if (target != skill.Character && condition(target))
                             {

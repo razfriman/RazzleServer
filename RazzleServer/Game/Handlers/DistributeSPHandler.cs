@@ -15,7 +15,7 @@ namespace RazzleServer.Game.Handlers
             }
 
             packet.ReadInt(); // NOTE: Ticks.
-            int mapleId = packet.ReadInt();
+            var mapleId = packet.ReadInt();
 
             if (!client.Character.Skills.Contains(mapleId))
             {

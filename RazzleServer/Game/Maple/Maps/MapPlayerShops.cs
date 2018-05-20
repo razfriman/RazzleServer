@@ -19,8 +19,8 @@ namespace RazzleServer.Game.Maple.Maps
         {
             lock (this)
             {
-                PlayerShop item = base.Items[index];
-                this.Map.Broadcast(item.GetDestroyPacket());
+                var item = Items[index];
+                Map.Broadcast(item.GetDestroyPacket());
                 base.RemoveItem(index);
             }
         }

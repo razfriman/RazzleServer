@@ -65,7 +65,7 @@ namespace RazzleServer.Server
 
         public T GenerateClient(Socket socket)
         {
-            string ip = ((IPEndPoint)socket.RemoteEndPoint).Address.ToString();
+            var ip = ((IPEndPoint)socket.RemoteEndPoint).Address.ToString();
             if (!AllowConnection(ip))
             {
                 socket.Shutdown(SocketShutdown.Both);

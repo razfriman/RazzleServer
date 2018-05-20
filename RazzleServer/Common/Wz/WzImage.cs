@@ -67,37 +67,61 @@ namespace RazzleServer.Common.WzLib
         /// <summary>
 		/// The parent of the object
 		/// </summary>
-		public override WzObject Parent { get { return parent; } internal set { parent = value; } }
+		public override WzObject Parent { get => parent;
+            internal set => parent = value;
+        }
         /// <summary>
         /// The name of the image
         /// </summary>
-        public override string Name { get { return name; } set { name = value; } }
-        public override WzFile WzFileParent { get { return Parent != null ? Parent.WzFileParent : null; } }
+        public override string Name { get => name;
+            set => name = value;
+        }
+        public override WzFile WzFileParent => Parent != null ? Parent.WzFileParent : null;
+
         /// <summary>
         /// Is the object parsed
         /// </summary>
-        public bool Parsed { get { return parsed; } set { parsed = value; } }
+        public bool Parsed { get => parsed;
+            set => parsed = value;
+        }
         /// <summary>
         /// Was the image changed
         /// </summary>
-        public bool Changed { get { return changed; } set { changed = value; } }
+        public bool Changed { get => changed;
+            set => changed = value;
+        }
         /// <summary>
         /// The size in the wz file of the image
         /// </summary>
-        public int BlockSize { get { return size; } set { size = value; } }
+        public int BlockSize { get => size;
+            set => size = value;
+        }
         /// <summary>
         /// The checksum of the image
         /// </summary>
-        public int Checksum { get { return checksum; } set { checksum = value; } }
+        public int Checksum { get => checksum;
+            set => checksum = value;
+        }
         /// <summary>
         /// The offset of the image
         /// </summary>
-        public uint Offset { get { return offset; } set { offset = value; } }
-        public int BlockStart { get { return blockStart; } }
+        public uint Offset { get => offset;
+            set => offset = value;
+        }
+        public int BlockStart => blockStart;
+
         /// <summary>
         /// The WzObjectType of the image
         /// </summary>
-        public override WzObjectType ObjectType { get { if (reader != null) if (!parsed) ParseImage(); return WzObjectType.Image; } }
+        public override WzObjectType ObjectType { get { if (reader != null)
+            {
+                if (!parsed)
+                {
+                    ParseImage();
+                }
+            }
+
+            return WzObjectType.Image; } }
         /// <summary>
         /// The properties contained in the image
         /// </summary>
@@ -115,11 +139,18 @@ namespace RazzleServer.Common.WzLib
 
         public WzImage DeepClone()
         {
-            if (reader != null && !parsed) ParseImage();
-            WzImage clone = new WzImage(name);
+            if (reader != null && !parsed)
+            {
+                ParseImage();
+            }
+
+            var clone = new WzImage(name);
             clone.changed = true;
-            foreach (WzImageProperty prop in properties)
+            foreach (var prop in properties)
+            {
                 clone.AddProperty(prop.DeepClone());
+            }
+
             return clone;
         }
 
@@ -132,10 +163,22 @@ namespace RazzleServer.Common.WzLib
         {
             get
             {
-                if (reader != null) if (!parsed) ParseImage();
-                foreach (WzImageProperty iwp in properties)
+                if (reader != null)
+                {
+                    if (!parsed)
+                    {
+                        ParseImage();
+                    }
+                }
+
+                foreach (var iwp in properties)
+                {
                     if (iwp.Name.ToLower() == name.ToLower())
+                    {
                         return iwp;
+                    }
+                }
+
                 return null;
             }
             set
@@ -157,19 +200,25 @@ namespace RazzleServer.Common.WzLib
 		/// <returns>the selected WzImageProperty</returns>
 		public WzImageProperty GetFromPath(string path)
         {
-            if (reader != null) if (!parsed) ParseImage();
+            if (reader != null)
+            {
+                if (!parsed)
+                {
+                    ParseImage();
+                }
+            }
 
-            string[] segments = path.Split(new char[] { '/' }, System.StringSplitOptions.RemoveEmptyEntries);
+            var segments = path.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
             if (segments[0] == "..")
             {
                 return null;
             }
 
             WzImageProperty ret = null;
-            for (int x = 0; x < segments.Length; x++)
+            for (var x = 0; x < segments.Length; x++)
             {
-                bool foundChild = false;
-                foreach (WzImageProperty iwp in (ret == null ? properties : ret.WzProperties))
+                var foundChild = false;
+                foreach (var iwp in (ret == null ? properties : ret.WzProperties))
                 {
                     if (iwp.Name == segments[x])
                     {
@@ -193,12 +242,16 @@ namespace RazzleServer.Common.WzLib
         public void AddProperty(WzImageProperty prop)
         {
             prop.Parent = this;
-            if (reader != null && !parsed) ParseImage();
+            if (reader != null && !parsed)
+            {
+                ParseImage();
+            }
+
             properties.Add(prop);
         }
         public void AddProperties(List<WzImageProperty> props)
         {
-            foreach (WzImageProperty prop in props)
+            foreach (var prop in props)
             {
                 AddProperty(prop);
             }
@@ -209,13 +262,21 @@ namespace RazzleServer.Common.WzLib
         /// <param name="prop">The property to remove</param>
         public void RemoveProperty(WzImageProperty prop)
         {
-            if (reader != null && !parsed) ParseImage();
+            if (reader != null && !parsed)
+            {
+                ParseImage();
+            }
+
             prop.Parent = null;
             properties.Remove(prop);
         }
         public void ClearProperties()
         {
-            foreach (WzImageProperty prop in properties) prop.Parent = null;
+            foreach (var prop in properties)
+            {
+                prop.Parent = null;
+            }
+
             properties.Clear();
         }
 
@@ -240,11 +301,14 @@ namespace RazzleServer.Common.WzLib
                 Parsed = true; return;
             }
             this.parseEverything = parseEverything;
-            long originalPos = reader.BaseStream.Position;
+            var originalPos = reader.BaseStream.Position;
             reader.BaseStream.Position = offset;
-            byte b = reader.ReadByte();
+            var b = reader.ReadByte();
             if (b != 0x73 || reader.ReadString() != "Property" || reader.ReadUInt16() != 0)
+            {
                 return;
+            }
+
             properties.AddRange(WzImageProperty.ParsePropertyList(offset, reader, this, this));
             parsed = true;
         }
@@ -260,11 +324,14 @@ namespace RazzleServer.Common.WzLib
             }
             if (Changed) { Parsed = true; return; }
             parseEverything = false;
-            long originalPos = reader.BaseStream.Position;
+            var originalPos = reader.BaseStream.Position;
             reader.BaseStream.Position = offset;
-            byte b = reader.ReadByte();
+            var b = reader.ReadByte();
             if (b != 0x73 || reader.ReadString() != "Property" || reader.ReadUInt16() != 0)
+            {
                 return;
+            }
+
             properties.AddRange(WzImageProperty.ParsePropertyList(offset, reader, this, this));
             parsed = true;
         }
@@ -293,9 +360,13 @@ namespace RazzleServer.Common.WzLib
         {
             if (changed)
             {
-                if (reader != null && !parsed) ParseImage();
-                WzSubProperty imgProp = new WzSubProperty();
-                long startPos = writer.BaseStream.Position;
+                if (reader != null && !parsed)
+                {
+                    ParseImage();
+                }
+
+                var imgProp = new WzSubProperty();
+                var startPos = writer.BaseStream.Position;
                 imgProp.AddProperties(WzProperties);
                 imgProp.WriteValue(writer);
                 writer.StringCache.Clear();
@@ -303,7 +374,7 @@ namespace RazzleServer.Common.WzLib
             }
             else
             {
-                long pos = reader.BaseStream.Position;
+                var pos = reader.BaseStream.Position;
                 reader.BaseStream.Position = offset;
                 writer.Write(reader.ReadBytes(size));
                 reader.BaseStream.Position = pos;

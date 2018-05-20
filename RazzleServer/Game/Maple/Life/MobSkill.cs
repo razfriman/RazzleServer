@@ -54,11 +54,11 @@ namespace RazzleServer.Game.Maple.Life
 
         public void Cast(Mob caster)
         {
-            MobStatus status = MobStatus.None;
-            CharacterDisease disease = CharacterDisease.None;
-            bool heal = false;
-            bool banish = false;
-            bool dispel = false;
+            var status = MobStatus.None;
+            var disease = CharacterDisease.None;
+            var heal = false;
+            var banish = false;
+            var dispel = false;
 
             switch ((MobSkillName)MapleId)
             {
@@ -164,9 +164,9 @@ namespace RazzleServer.Game.Maple.Life
 
                 case MobSkillName.Summon:
 
-                    foreach (int mobId in MobSkill.Summons[Level])
+                    foreach (var mobId in Summons[Level])
                     {
-                        Mob summon = new Mob(mobId)
+                        var summon = new Mob(mobId)
                         {
                             Position = caster.Position,
                             SpawnEffect = SummonEffect
@@ -177,7 +177,7 @@ namespace RazzleServer.Game.Maple.Life
                     break;
             }
 
-            foreach (Mob affectedMob in GetAffectedMobs(caster))
+            foreach (var affectedMob in GetAffectedMobs(caster))
             {
                 if (heal)
                 {
@@ -190,7 +190,7 @@ namespace RazzleServer.Game.Maple.Life
                 }
             }
 
-            foreach (Character affectedCharacter in GetAffectedCharacters(caster))
+            foreach (var affectedCharacter in GetAffectedCharacters(caster))
             {
                 if (dispel)
                 {
@@ -239,9 +239,9 @@ namespace RazzleServer.Game.Maple.Life
 
         private IEnumerable<Character> GetAffectedCharacters(Mob caster)
         {
-            Rectangle Rectangle = new Rectangle(LT + caster.Position, RB + caster.Position);
+            var Rectangle = new Rectangle(LT + caster.Position, RB + caster.Position);
 
-            foreach (Character character in caster.Map.Characters)
+            foreach (var character in caster.Map.Characters)
             {
                 if (character.Position.IsInRectangle(Rectangle))
                 {
@@ -252,9 +252,9 @@ namespace RazzleServer.Game.Maple.Life
 
         private IEnumerable<Mob> GetAffectedMobs(Mob caster)
         {
-            Rectangle Rectangle = new Rectangle(LT + caster.Position, RB + caster.Position);
+            var Rectangle = new Rectangle(LT + caster.Position, RB + caster.Position);
 
-            foreach (Mob mob in caster.Map.Mobs)
+            foreach (var mob in caster.Map.Mobs)
             {
                 if (mob.Position.IsInRectangle(Rectangle))
                 {

@@ -20,15 +20,15 @@ namespace RazzleServer.Game.Maple.Maps
 
             item.Expiry = new Delay(() =>
             {
-                if (item.Map == this.Map)
+                if (item.Map == Map)
                 {
-                    this.Remove(item);
+                    Remove(item);
                 }
             }, Drop.ExpiryTime);
 
-            lock (this.Map.Characters)
+            lock (Map.Characters)
             {
-                foreach (Character character in this.Map.Characters)
+                foreach (var character in Map.Characters)
                 {
                     using (var oPacket = item.GetCreatePacket(item.Owner == null ? character : null))
                     {
@@ -40,14 +40,14 @@ namespace RazzleServer.Game.Maple.Maps
 
         protected override void RemoveItem(int index)
         {
-            Drop item = base.Items[index];
+            var item = Items[index];
 
             if (item.Expiry != null)
             {
                 item.Expiry.Dispose();
             }
 
-            this.Map.Broadcast(item.GetDestroyPacket());
+            Map.Broadcast(item.GetDestroyPacket());
             base.RemoveItem(index);
         }
     }

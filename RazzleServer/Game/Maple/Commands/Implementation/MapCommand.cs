@@ -6,35 +6,17 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
 {
     public class MapCommand : Command
     {
-        public override string Name
-        {
-            get
-            {
-                return "map";
-            }
-        }
+        public override string Name => "map";
 
-        public override string Parameters
-        {
-            get
-            {
-                return "{ { id | keyword | exact name } [portal] | -current }";
-            }
-        }
+        public override string Parameters => "{ { id | keyword | exact name } [portal] | -current }";
 
-        public override bool IsRestricted
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool IsRestricted => true;
 
         public override void Execute(Character caller, string[] args)
         {
             if (args.Length == 0)
             {
-                this.ShowSyntax(caller);
+                ShowSyntax(caller);
             }
             else
             {
@@ -46,7 +28,7 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
                 }
                 else
                 {
-                    string mapName = "";
+                    var mapName = "";
                     int mapId = int.TryParse(args[0], out mapId) ? mapId : -1;
                     byte portalId = 0;
 
@@ -61,7 +43,9 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
                         CommandMaps val;
                         Enum.TryParse<CommandMaps>(mapName, true, out val);
                         if (val > 0)
+                        {
                             mapId = (int)val;
+                        }
                     }
 
                     if (DataProvider.Maps.Contains(mapId))

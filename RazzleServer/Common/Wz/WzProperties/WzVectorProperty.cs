@@ -32,15 +32,18 @@ namespace RazzleServer.Common.WzLib.WzProperties
 
         public override WzImageProperty DeepClone()
         {
-            WzVectorProperty clone = new WzVectorProperty(name, x, y);
+            var clone = new WzVectorProperty(name, x, y);
             return clone;
         }
 
-		public override object WzValue { get { return new System.Drawing.Point(x.Value, y.Value); } }
+		public override object WzValue => new System.Drawing.Point(x.Value, y.Value);
+
 		/// <summary>
 		/// The parent of the object
 		/// </summary>
-		public override WzObject Parent { get { return parent; } internal set { parent = value; } }
+		public override WzObject Parent { get => parent;
+			internal set => parent = value;
+		}
 		/*/// <summary>
 		/// The image that this property is contained in
 		/// </summary>
@@ -48,12 +51,15 @@ namespace RazzleServer.Common.WzLib.WzProperties
 		/// <summary>
 		/// The name of the property
 		/// </summary>
-		public override string Name { get { return name; } set { name = value; } }
+		public override string Name { get => name;
+			set => name = value;
+		}
 		/// <summary>
 		/// The WzPropertyType of the property
 		/// </summary>
-		public override WzPropertyType PropertyType { get { return WzPropertyType.Vector; } }
-		public override void WriteValue(RazzleServer.Common.WzLib.Util.WzBinaryWriter writer)
+		public override WzPropertyType PropertyType => WzPropertyType.Vector;
+
+		public override void WriteValue(WzBinaryWriter writer)
 		{
 			writer.WriteStringValue("Shape2D#Vector2D", 0x73, 0x1B);
 			writer.WriteCompressedInt(X.Value);
@@ -61,8 +67,8 @@ namespace RazzleServer.Common.WzLib.WzProperties
 		}
 		public override void ExportXml(StreamWriter writer, int level)
 		{
-			writer.WriteLine(XmlUtil.Indentation(level) + XmlUtil.OpenNamedTag("WzVector", this.Name, false, false) +
-				XmlUtil.Attrib("X", this.X.Value.ToString()) + XmlUtil.Attrib("Y", this.Y.Value.ToString(), true, true));
+			writer.WriteLine(XmlUtil.Indentation(level) + XmlUtil.OpenNamedTag("WzVector", Name, false, false) +
+				XmlUtil.Attrib("X", X.Value.ToString()) + XmlUtil.Attrib("Y", Y.Value.ToString(), true, true));
 		}
 		/// <summary>
 		/// Disposes the object
@@ -81,15 +87,20 @@ namespace RazzleServer.Common.WzLib.WzProperties
 		/// <summary>
 		/// The X value of the Vector2D
 		/// </summary>
-		public WzIntProperty X { get { return x; } set { x = value; } }
+		public WzIntProperty X { get => x;
+			set => x = value;
+		}
 		/// <summary>
 		/// The Y value of the Vector2D
 		/// </summary>
-		public WzIntProperty Y { get { return y; } set { y = value; } }
+		public WzIntProperty Y { get => y;
+			set => y = value;
+		}
 		/// <summary>
 		/// The Point of the Vector2D created from the X and Y
 		/// </summary>
-		public System.Drawing.Point Pos { get { return new System.Drawing.Point(X.Value, Y.Value); } }
+		public System.Drawing.Point Pos => new System.Drawing.Point(X.Value, Y.Value);
+
 		/// <summary>
 		/// Creates a blank WzVectorProperty
 		/// </summary>

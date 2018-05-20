@@ -4,35 +4,17 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
 {
     public sealed class ReleaseCommand : Command
     {
-        public override string Name
-        {
-            get
-            {
-                return "release";
-            }
-        }
+        public override string Name => "release";
 
-        public override string Parameters
-        {
-            get
-            {
-                return string.Empty;
-            }
-        }
+        public override string Parameters => string.Empty;
 
-        public override bool IsRestricted
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool IsRestricted => false;
 
         public override void Execute(Character caller, string[] args)
         {
             if (args.Length != 0)
             {
-                this.ShowSyntax(caller);
+                ShowSyntax(caller);
             }
             else
             {

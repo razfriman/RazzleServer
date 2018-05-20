@@ -4,39 +4,21 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
 {
     public sealed class SayCommand : Command
     {
-        public override string Name
-        {
-            get
-            {
-                return "say";
-            }
-        }
+        public override string Name => "say";
 
-        public override string Parameters
-        {
-            get
-            {
-                return "message";
-            }
-        }
+        public override string Parameters => "message";
 
-        public override bool IsRestricted
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool IsRestricted => true;
 
         public override void Execute(Character caller, string[] args)
         {
             if (args.Length < 1)
             {
-                this.ShowSyntax(caller);
+                ShowSyntax(caller);
             }
             else
             {
-                string message = this.CombineArgs(args);
+                var message = CombineArgs(args);
 
                 //caller.Client.World.Notify(string.Format("{0}: {1}", caller.Name, message));
             }

@@ -10,12 +10,12 @@ namespace RazzleServer.Common.WzLib.Util
 
         public static string SanitizeText(string text)
         {
-            string fixedText = "";
+            var fixedText = "";
             bool charFixed;
-            for (int i = 0; i < text.Length; i++)
+            for (var i = 0; i < text.Length; i++)
             {
                 charFixed = false;
-                for (int k = 0; k < specialCharacters.Length; k++)
+                for (var k = 0; k < specialCharacters.Length; k++)
                 {
 
                     if (text[i] == specialCharacters[k])
@@ -70,8 +70,8 @@ namespace RazzleServer.Common.WzLib.Util
 
         public static string Indentation(int level)
         {
-            char[] indent = new char[level];
-            for (int i = 0; i < indent.Length; i++)
+            var indent = new char[level];
+            for (var i = 0; i < indent.Length; i++)
             {
                 indent[i] = '\t';
             }

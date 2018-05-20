@@ -12,7 +12,7 @@ namespace RazzleServer.Game.Maple.Maps
         {
             get
             {
-                foreach (Character character in this)
+                foreach (var character in this)
                 {
                     if (character.Name.ToLower() == name.ToLower())
                     {
@@ -28,7 +28,7 @@ namespace RazzleServer.Game.Maple.Maps
         {
             lock (this)
             {
-                foreach (Character character in this)
+                foreach (var character in this)
                 {
                     item.Client.Send(character.GetSpawnPacket());
                 }
@@ -40,7 +40,7 @@ namespace RazzleServer.Game.Maple.Maps
 
             lock (Map.Drops)
             {
-                foreach (Drop drop in Map.Drops)
+                foreach (var drop in Map.Drops)
                 {
                     if (drop.Owner == null)
                     {
@@ -55,7 +55,7 @@ namespace RazzleServer.Game.Maple.Maps
 
             lock (Map.Mobs)
             {
-                foreach (Mob mob in Map.Mobs)
+                foreach (var mob in Map.Mobs)
                 {
                     item.Client.Send(mob.GetSpawnPacket());
                 }
@@ -63,7 +63,7 @@ namespace RazzleServer.Game.Maple.Maps
 
             lock (Map.Npcs)
             {
-                foreach (Npc npc in Map.Npcs)
+                foreach (var npc in Map.Npcs)
                 {
                     item.Client.Send(npc.GetSpawnPacket());
                 }
@@ -71,7 +71,7 @@ namespace RazzleServer.Game.Maple.Maps
 
             lock (Map.Reactors)
             {
-                foreach (Reactor reactor in Map.Reactors)
+                foreach (var reactor in Map.Reactors)
                 {
                     item.Client.Send(reactor.GetSpawnPacket());
                 }
@@ -79,7 +79,7 @@ namespace RazzleServer.Game.Maple.Maps
 
             lock (Map.Mobs)
             {
-                foreach (Mob mob in Map.Mobs)
+                foreach (var mob in Map.Mobs)
                 {
                     mob.AssignController();
                 }
@@ -87,7 +87,7 @@ namespace RazzleServer.Game.Maple.Maps
 
             lock (Map.Npcs)
             {
-                foreach (Npc npc in Map.Npcs)
+                foreach (var npc in Map.Npcs)
                 {
                     npc.AssignController();
                 }
@@ -112,7 +112,7 @@ namespace RazzleServer.Game.Maple.Maps
 
             lock (Map.Mobs)
             {
-                foreach (Mob mob in Map.Mobs)
+                foreach (var mob in Map.Mobs)
                 {
                     mob.AssignController();
                 }
@@ -120,7 +120,7 @@ namespace RazzleServer.Game.Maple.Maps
 
             lock (Map.Npcs)
             {
-                foreach (Npc npc in Map.Npcs)
+                foreach (var npc in Map.Npcs)
                 {
                     npc.AssignController();
                 }

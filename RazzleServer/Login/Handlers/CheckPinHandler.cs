@@ -9,15 +9,15 @@ namespace RazzleServer.Login.Handlers
     {
         public override void HandlePacket(PacketReader packet, LoginClient client)
         {
-            byte a = packet.ReadByte();
-            byte b = packet.ReadByte();
+            var a = packet.ReadByte();
+            var b = packet.ReadByte();
 
             PinResult result;
 
             if (b == 0)
             {
                 packet.ReadInt();
-                string pin = packet.ReadString();
+                var pin = packet.ReadString();
 
                 if (Functions.GetSha512(pin) != client.Account.Pin)
                 {

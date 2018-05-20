@@ -9,27 +9,27 @@ namespace RazzleServer.Game.Maple
 
         public Point(short x, short y)
         {
-            this.X = x;
-            this.Y = y;
+            X = x;
+            Y = y;
         }
 
         public Point(int x, int y)
         {
-            this.X = (short)x;
-            this.Y = (short)y;
+            X = (short)x;
+            Y = (short)y;
         }
 
         public double DistanceFrom(Point point)
         {
-            return Math.Sqrt(Math.Pow(this.X - point.X, 2) + Math.Pow(this.Y - point.Y, 2));
+            return Math.Sqrt(Math.Pow(X - point.X, 2) + Math.Pow(Y - point.Y, 2));
         }
 
         public bool IsInRectangle(Rectangle rectangle)
         {
-            return this.X >= rectangle.LT.X &&
-                this.Y >= rectangle.LT.Y &&
-                this.X <= rectangle.RB.X &&
-                this.Y <= rectangle.RB.Y;
+            return X >= rectangle.LT.X &&
+                Y >= rectangle.LT.Y &&
+                X <= rectangle.RB.X &&
+                Y <= rectangle.RB.Y;
         }
 
         public static Point operator +(Point p1, Point p2)

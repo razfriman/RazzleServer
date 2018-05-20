@@ -190,12 +190,12 @@ namespace RazzleServer.Game.Maple.Life
         {
             if (Controller == null)
             {
-                int leastControlled = int.MaxValue;
+                var leastControlled = int.MaxValue;
                 Character newController = null;
 
                 lock (Map.Characters)
                 {
-                    foreach (Character character in Map.Characters)
+                    foreach (var character in Map.Characters)
                     {
                         if (character.ControlledMobs.Count < leastControlled)
                         {
@@ -229,13 +229,13 @@ namespace RazzleServer.Game.Maple.Life
 
         public void Move(PacketReader iPacket)
         {
-            short moveAction = iPacket.ReadShort();
+            var moveAction = iPacket.ReadShort();
             var skillByte = iPacket.ReadByte();
             var skillId = iPacket.ReadInt();
             iPacket.ReadShort();
             iPacket.ReadInt();
 
-            Movements movements = new Movements(iPacket);
+            var movements = new Movements(iPacket);
 
             Position = movements.Position;
             Foothold = movements.Foothold;
@@ -344,7 +344,7 @@ namespace RazzleServer.Game.Maple.Life
         {
             lock (this)
             {
-                uint originalAmount = amount;
+                var originalAmount = amount;
 
                 amount = Math.Min(amount, Health);
 

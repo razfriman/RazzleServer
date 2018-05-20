@@ -26,8 +26,8 @@ namespace RazzleServer.Common.WzLib.Serialization
                 }
             }
 
-            string basePath = path;
-            int curridx = 0;
+            var basePath = path;
+            var curridx = 0;
             while (Directory.Exists(path) || File.Exists(path))
             {
                 curridx++;
@@ -73,8 +73,8 @@ namespace RazzleServer.Common.WzLib.Serialization
                     lineBreak = "\n";
                     break;
             }
-            char[] indentArray = new char[indentation];
-            for (int i = 0; i < indentation; i++)
+            var indentArray = new char[indentation];
+            for (var i = 0; i < indentation; i++)
             {
                 {
                     indentArray[i] = (char)0x20;
@@ -90,9 +90,9 @@ namespace RazzleServer.Common.WzLib.Serialization
             {
                 if (ExportBase64Data)
                 {
-                    MemoryStream stream = new MemoryStream();
+                    var stream = new MemoryStream();
                     property3.PngProperty.GetPNG(false).Save(stream, ImageFormat.Png);
-                    byte[] pngbytes = stream.ToArray();
+                    var pngbytes = stream.ToArray();
                     stream.Close();
                     tw.Write(string.Concat(new object[] { depth, "<canvas name=\"", XmlUtil.SanitizeText(property3.Name), "\" width=\"", property3.PngProperty.Width, "\" height=\"", property3.PngProperty.Height, "\" basedata=\"", Convert.ToBase64String(pngbytes), "\">" }) + lineBreak);
                 }
@@ -103,8 +103,8 @@ namespace RazzleServer.Common.WzLib.Serialization
                     }
                 }
 
-                string newDepth = depth + indent;
-                foreach (WzImageProperty property in property3.WzProperties)
+                var newDepth = depth + indent;
+                foreach (var property in property3.WzProperties)
                 {
                     {
                         WritePropertyToXML(tw, newDepth, property);
@@ -142,14 +142,14 @@ namespace RazzleServer.Common.WzLib.Serialization
             }
             else if (prop is WzStringProperty property8)
             {
-                string str = XmlUtil.SanitizeText(property8.Value);
+                var str = XmlUtil.SanitizeText(property8.Value);
                 tw.Write(depth + "<string name=\"" + XmlUtil.SanitizeText(property8.Name) + "\" value=\"" + str + "\"/>" + lineBreak);
             }
             else if (prop is WzSubProperty property9)
             {
                 tw.Write(depth + "<imgdir name=\"" + XmlUtil.SanitizeText(property9.Name) + "\">" + lineBreak);
-                string newDepth = depth + indent;
-                foreach (WzImageProperty property in property9.WzProperties)
+                var newDepth = depth + indent;
+                foreach (var property in property9.WzProperties)
                 {
                     {
                         WritePropertyToXML(tw, newDepth, property);
@@ -176,7 +176,7 @@ namespace RazzleServer.Common.WzLib.Serialization
             }
             else if (prop is WzFloatProperty property13)
             {
-                string str2 = Convert.ToString(property13.Value, formattingInfo);
+                var str2 = Convert.ToString(property13.Value, formattingInfo);
                 if (!str2.Contains("."))
                 {
                     {
@@ -189,8 +189,8 @@ namespace RazzleServer.Common.WzLib.Serialization
             else if (prop is WzConvexProperty property14)
             {
                 tw.Write(depth + "<extended name=\"" + XmlUtil.SanitizeText(prop.Name) + "\">" + lineBreak);
-                string newDepth = depth + indent;
-                foreach (WzImageProperty property in property14.WzProperties)
+                var newDepth = depth + indent;
+                foreach (var property in property14.WzProperties)
                 {
                     {
                         WritePropertyToXML(tw, newDepth, property);
@@ -243,18 +243,18 @@ namespace RazzleServer.Common.WzLib.Serialization
     {
         private byte[] SerializeImageInternal(WzImage img)
         {
-            MemoryStream stream = new MemoryStream();
-            WzBinaryWriter wzWriter = new WzBinaryWriter(stream, ((WzDirectory)img.parent).WzIv);
+            var stream = new MemoryStream();
+            var wzWriter = new WzBinaryWriter(stream, ((WzDirectory)img.parent).WzIv);
             img.SaveImage(wzWriter);
-            byte[] result = stream.ToArray();
+            var result = stream.ToArray();
             wzWriter.Close();
             return result;
         }
 
         private void SerializeImageInternal(WzImage img, string outPath)
         {
-            FileStream stream = File.Create(outPath);
-            WzBinaryWriter wzWriter = new WzBinaryWriter(stream, ((WzDirectory)img.parent).WzIv);
+            var stream = File.Create(outPath);
+            var wzWriter = new WzBinaryWriter(stream, ((WzDirectory)img.parent).WzIv);
             img.SaveImage(wzWriter);
             wzWriter.Close();
         }
@@ -296,14 +296,14 @@ namespace RazzleServer.Common.WzLib.Serialization
                 }
             }
 
-            foreach (WzDirectory subdir in dir.WzDirectories)
+            foreach (var subdir in dir.WzDirectories)
             {
                 {
                     SerializeDirectory(subdir, outPath + subdir.Name + @"\");
                 }
             }
 
-            foreach (WzImage img in dir.WzImages)
+            foreach (var img in dir.WzImages)
             {
                 {
                     SerializeImage(img, outPath + img.Name);
@@ -329,15 +329,15 @@ namespace RazzleServer.Common.WzLib.Serialization
 
         public WzImage WzImageFromIMGBytes(byte[] bytes, WzMapleVersion version, string name, bool freeResources)
         {
-            byte[] iv = WzTool.GetIvByMapleVersion(version);
-            MemoryStream stream = new MemoryStream(bytes);
-            WzBinaryReader wzReader = new WzBinaryReader(stream, iv);
-            WzImage img = new WzImage(name, wzReader)
+            var iv = WzTool.GetIvByMapleVersion(version);
+            var stream = new MemoryStream(bytes);
+            var wzReader = new WzBinaryReader(stream, iv);
+            var img = new WzImage(name, wzReader)
             {
                 BlockSize = bytes.Length,
                 Checksum = 0
             };
-            foreach (byte b in bytes)
+            foreach (var b in bytes)
             {
                 {
                     img.Checksum += b;
@@ -356,17 +356,17 @@ namespace RazzleServer.Common.WzLib.Serialization
 
         public WzImage WzImageFromIMGFile(string inPath, byte[] iv, string name)
         {
-            FileStream stream = File.OpenRead(inPath);
-            WzBinaryReader wzReader = new WzBinaryReader(stream, iv);
-            WzImage img = new WzImage(name, wzReader)
+            var stream = File.OpenRead(inPath);
+            var wzReader = new WzBinaryReader(stream, iv);
+            var img = new WzImage(name, wzReader)
             {
                 BlockSize = (int)stream.Length,
                 Checksum = 0
             };
-            byte[] bytes = new byte[stream.Length];
+            var bytes = new byte[stream.Length];
             stream.Read(bytes, 0, (int)stream.Length);
             stream.Position = 0;
-            foreach (byte b in bytes)
+            foreach (var b in bytes)
             {
                 {
                     img.Checksum += b;
@@ -433,7 +433,7 @@ namespace RazzleServer.Common.WzLib.Serialization
 
         private int CalculateTotal(WzObject currObj)
         {
-            int result = 0;
+            var result = 0;
             if (currObj is WzFile)
             {
                 {
@@ -468,14 +468,14 @@ namespace RazzleServer.Common.WzLib.Serialization
                     }
                 }
 
-                foreach (WzDirectory subdir in ((WzDirectory)currObj).WzDirectories)
+                foreach (var subdir in ((WzDirectory)currObj).WzDirectories)
                 {
                     {
                         ExportRecursion(subdir, exportOutPath + subdir.Name + @"\");
                     }
                 }
 
-                foreach (WzImage subimg in ((WzDirectory)currObj).WzImages)
+                foreach (var subimg in ((WzDirectory)currObj).WzImages)
                 {
                     {
                         ExportRecursion(subimg, exportOutPath + subimg.Name + @"\");
@@ -484,14 +484,14 @@ namespace RazzleServer.Common.WzLib.Serialization
             }
             else if (currObj is WzCanvasProperty)
             {
-                Bitmap bmp = ((WzCanvasProperty)currObj).PngProperty.GetPNG(false);
-                string path = exportOutPath + currObj.Name + ".png";
+                var bmp = ((WzCanvasProperty)currObj).PngProperty.GetPNG(false);
+                var path = exportOutPath + currObj.Name + ".png";
                 bmp.Save(path, ImageFormat.Png);
                 //curr++;
             }
             else if (currObj is WzSoundProperty)
             {
-                string path = exportOutPath + currObj.Name + ".mp3";
+                var path = exportOutPath + currObj.Name + ".mp3";
                 ((WzSoundProperty)currObj).SaveToFile(path);
             }
             else if (currObj is WzImage)
@@ -504,7 +504,7 @@ namespace RazzleServer.Common.WzLib.Serialization
                     }
                 }
 
-                bool parse = ((WzImage)currObj).Parsed || ((WzImage)currObj).Changed;
+                var parse = ((WzImage)currObj).Parsed || ((WzImage)currObj).Changed;
                 if (!parse)
                 {
                     {
@@ -512,7 +512,7 @@ namespace RazzleServer.Common.WzLib.Serialization
                     }
                 }
 
-                foreach (WzImageProperty subprop in ((IPropertyContainer)currObj).WzProperties)
+                foreach (var subprop in ((IPropertyContainer)currObj).WzProperties)
                 {
                     {
                         ExportRecursion(subprop, exportOutPath);
@@ -531,7 +531,7 @@ namespace RazzleServer.Common.WzLib.Serialization
             else if (currObj is IPropertyContainer)
             {
                 exportOutPath += currObj.Name + ".";
-                foreach (WzImageProperty subprop in ((IPropertyContainer)currObj).WzProperties)
+                foreach (var subprop in ((IPropertyContainer)currObj).WzProperties)
                 {
                     {
                         ExportRecursion(subprop, exportOutPath);
@@ -555,7 +555,7 @@ namespace RazzleServer.Common.WzLib.Serialization
 
         private void ExportXmlInternal(WzImage img, string path)
         {
-            bool parsed = img.Parsed || img.Changed;
+            var parsed = img.Parsed || img.Changed;
             if (!parsed)
             {
                 {
@@ -567,7 +567,7 @@ namespace RazzleServer.Common.WzLib.Serialization
             TextWriter tw = new StreamWriter(path);
             tw.Write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" + lineBreak);
             tw.Write("<imgdir name=\"" + XmlUtil.SanitizeText(img.Name) + "\">" + lineBreak);
-            foreach (WzImageProperty property in img.WzProperties)
+            foreach (var property in img.WzProperties)
             {
                 {
                     WritePropertyToXML(tw, indent, property);
@@ -600,14 +600,14 @@ namespace RazzleServer.Common.WzLib.Serialization
                 }
             }
 
-            foreach (WzDirectory subdir in dir.WzDirectories)
+            foreach (var subdir in dir.WzDirectories)
             {
                 {
                     ExportDirXmlInternal(subdir, path + subdir.name + @"\");
                 }
             }
 
-            foreach (WzImage subimg in dir.WzImages)
+            foreach (var subimg in dir.WzImages)
             {
                 {
                     ExportXmlInternal(subimg, path + subimg.Name + ".xml");
@@ -648,7 +648,7 @@ namespace RazzleServer.Common.WzLib.Serialization
 
         internal void DumpImageToXML(TextWriter tw, string depth, WzImage img)
         {
-            bool parsed = img.Parsed || img.Changed;
+            var parsed = img.Parsed || img.Changed;
             if (!parsed)
             {
                 {
@@ -658,8 +658,8 @@ namespace RazzleServer.Common.WzLib.Serialization
 
             curr++;
             tw.Write(depth + "<wzimg name=\"" + XmlUtil.SanitizeText(img.Name) + "\">" + lineBreak);
-            string newDepth = depth + indent;
-            foreach (WzImageProperty property in img.WzProperties)
+            var newDepth = depth + indent;
+            foreach (var property in img.WzProperties)
             {
                 {
                     WritePropertyToXML(tw, newDepth, property);
@@ -678,14 +678,14 @@ namespace RazzleServer.Common.WzLib.Serialization
         internal void DumpDirectoryToXML(TextWriter tw, string depth, WzDirectory dir)
         {
             tw.Write(depth + "<wzdir name=\"" + XmlUtil.SanitizeText(dir.Name) + "\">" + lineBreak);
-            foreach (WzDirectory subdir in dir.WzDirectories)
+            foreach (var subdir in dir.WzDirectories)
             {
                 {
                     DumpDirectoryToXML(tw, depth + indent, subdir);
                 }
             }
 
-            foreach (WzImage img in dir.WzImages)
+            foreach (var img in dir.WzImages)
             {
                 {
                     DumpImageToXML(tw, depth + indent, img);
@@ -705,7 +705,7 @@ namespace RazzleServer.Common.WzLib.Serialization
                 }
             }
 
-            foreach (WzObject obj in objects)
+            foreach (var obj in objects)
             {
                 if (obj is WzImage)
                 {
@@ -725,7 +725,7 @@ namespace RazzleServer.Common.WzLib.Serialization
             TextWriter tw = new StreamWriter(path);
             tw.Write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" + lineBreak);
             tw.Write("<xmldump>" + lineBreak);
-            foreach (WzObject obj in objects)
+            foreach (var obj in objects)
             {
                 if (obj is WzDirectory)
                 {
@@ -768,10 +768,10 @@ namespace RazzleServer.Common.WzLib.Serialization
         #region Public Functions
         public List<WzObject> ParseXML(string path)
         {
-            List<WzObject> result = new List<WzObject>();
-            XmlDocument doc = new XmlDocument();
+            var result = new List<WzObject>();
+            var doc = new XmlDocument();
             doc.Load(path);
-            XmlElement mainElement = (XmlElement)doc.ChildNodes[1];
+            var mainElement = (XmlElement)doc.ChildNodes[1];
             curr = 0;
             if (mainElement.Name == "xmldump")
             {
@@ -818,7 +818,7 @@ namespace RazzleServer.Common.WzLib.Serialization
         #region Internal Functions
         internal int CountImgs(XmlElement element)
         {
-            int result = 0;
+            var result = 0;
             foreach (XmlElement subelement in element)
             {
                 if (subelement.Name == "wzimg")
@@ -839,7 +839,7 @@ namespace RazzleServer.Common.WzLib.Serialization
 
         internal WzDirectory ParseXMLWzDir(XmlElement dirElement)
         {
-            WzDirectory result = new WzDirectory(dirElement.GetAttribute("name"));
+            var result = new WzDirectory(dirElement.GetAttribute("name"));
             foreach (XmlElement subelement in dirElement)
             {
                 if (subelement.Name == "wzdir")
@@ -866,8 +866,8 @@ namespace RazzleServer.Common.WzLib.Serialization
 
         internal WzImage ParseXMLWzImg(XmlElement imgElement)
         {
-            string name = imgElement.GetAttribute("name");
-            WzImage result = new WzImage(name);
+            var name = imgElement.GetAttribute("name");
+            var result = new WzImage(name);
             foreach (XmlElement subelement in imgElement)
             {
                 {
@@ -878,8 +878,8 @@ namespace RazzleServer.Common.WzLib.Serialization
             result.Changed = true;
             if (this.useMemorySaving)
             {
-                string path = Path.GetTempFileName();
-                WzBinaryWriter wzWriter = new WzBinaryWriter(File.Create(path), iv);
+                var path = Path.GetTempFileName();
+                var wzWriter = new WzBinaryWriter(File.Create(path), iv);
                 result.SaveImage(wzWriter);
                 wzWriter.Close();
                 result.Dispose();
@@ -893,7 +893,7 @@ namespace RazzleServer.Common.WzLib.Serialization
             switch (element.Name)
             {
                 case "imgdir":
-                    WzSubProperty sub = new WzSubProperty(element.GetAttribute("name"));
+                    var sub = new WzSubProperty(element.GetAttribute("name"));
                     foreach (XmlElement subelement in element)
                     {
                         {
@@ -904,7 +904,7 @@ namespace RazzleServer.Common.WzLib.Serialization
                     return sub;
 
                 case "canvas":
-                    WzCanvasProperty canvas = new WzCanvasProperty(element.GetAttribute("name"));
+                    var canvas = new WzCanvasProperty(element.GetAttribute("name"));
                     if (!element.HasAttribute("basedata"))
                     {
                         {
@@ -913,7 +913,7 @@ namespace RazzleServer.Common.WzLib.Serialization
                     }
 
                     canvas.PngProperty = new WzPngProperty();
-                    MemoryStream pngstream = new MemoryStream(Convert.FromBase64String(element.GetAttribute("basedata")));
+                    var pngstream = new MemoryStream(Convert.FromBase64String(element.GetAttribute("basedata")));
                     canvas.PngProperty.SetPNG((Bitmap)Image.FromStream(pngstream));
                     foreach (XmlElement subelement in element)
                     {
@@ -925,15 +925,15 @@ namespace RazzleServer.Common.WzLib.Serialization
                     return canvas;
 
                 case "int":
-                    WzIntProperty compressedInt = new WzIntProperty(element.GetAttribute("name"), int.Parse(element.GetAttribute("value"), formattingInfo));
+                    var compressedInt = new WzIntProperty(element.GetAttribute("name"), int.Parse(element.GetAttribute("value"), formattingInfo));
                     return compressedInt;
 
                 case "double":
-                    WzDoubleProperty doubleProp = new WzDoubleProperty(element.GetAttribute("name"), double.Parse(element.GetAttribute("value"), formattingInfo));
+                    var doubleProp = new WzDoubleProperty(element.GetAttribute("name"), double.Parse(element.GetAttribute("value"), formattingInfo));
                     return doubleProp;
 
                 case "null":
-                    WzNullProperty nullProp = new WzNullProperty(element.GetAttribute("name"));
+                    var nullProp = new WzNullProperty(element.GetAttribute("name"));
                     return nullProp;
 
                 case "sound":
@@ -944,38 +944,38 @@ namespace RazzleServer.Common.WzLib.Serialization
                         }
                     }
 
-                    WzSoundProperty sound = new WzSoundProperty(element.GetAttribute("name"),
+                    var sound = new WzSoundProperty(element.GetAttribute("name"),
                         int.Parse(element.GetAttribute("length")),
                         Convert.FromBase64String(element.GetAttribute("basehead")),
                         Convert.FromBase64String(element.GetAttribute("basedata")));
                     return sound;
 
                 case "string":
-                    WzStringProperty stringProp = new WzStringProperty(element.GetAttribute("name"), element.GetAttribute("value"));
+                    var stringProp = new WzStringProperty(element.GetAttribute("name"), element.GetAttribute("value"));
                     return stringProp;
 
                 case "short":
-                    WzShortProperty shortProp = new WzShortProperty(element.GetAttribute("name"), short.Parse(element.GetAttribute("value"), formattingInfo));
+                    var shortProp = new WzShortProperty(element.GetAttribute("name"), short.Parse(element.GetAttribute("value"), formattingInfo));
                     return shortProp;
 
                 case "long":
-                    WzLongProperty longProp = new WzLongProperty(element.GetAttribute("name"), long.Parse(element.GetAttribute("value"), formattingInfo));
+                    var longProp = new WzLongProperty(element.GetAttribute("name"), long.Parse(element.GetAttribute("value"), formattingInfo));
                     return longProp;
 
                 case "uol":
-                    WzUOLProperty uol = new WzUOLProperty(element.GetAttribute("name"), element.GetAttribute("value"));
+                    var uol = new WzUOLProperty(element.GetAttribute("name"), element.GetAttribute("value"));
                     return uol;
 
                 case "vector":
-                    WzVectorProperty vector = new WzVectorProperty(element.GetAttribute("name"), new WzIntProperty("x", Convert.ToInt32(element.GetAttribute("x"))), new WzIntProperty("y", Convert.ToInt32(element.GetAttribute("y"))));
+                    var vector = new WzVectorProperty(element.GetAttribute("name"), new WzIntProperty("x", Convert.ToInt32(element.GetAttribute("x"))), new WzIntProperty("y", Convert.ToInt32(element.GetAttribute("y"))));
                     return vector;
 
                 case "float":
-                    WzFloatProperty floatProp = new WzFloatProperty(element.GetAttribute("name"), float.Parse(element.GetAttribute("value"), formattingInfo));
+                    var floatProp = new WzFloatProperty(element.GetAttribute("name"), float.Parse(element.GetAttribute("value"), formattingInfo));
                     return floatProp;
 
                 case "extended":
-                    WzConvexProperty convex = new WzConvexProperty(element.GetAttribute("name"));
+                    var convex = new WzConvexProperty(element.GetAttribute("name"));
                     foreach (XmlElement subelement in element)
                     {
                         {
