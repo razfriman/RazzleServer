@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using RazzleServer.Common.WzLib.Util;
 using RazzleServer.Common.WzLib.WzProperties;
 using System.IO;
-using System.Drawing.Imaging;
 using System.Globalization;
 using System.Xml;
-using System.Drawing;
+using System.DrawingCore;
+using System.DrawingCore.Imaging;
 
 namespace RazzleServer.Common.WzLib.Serialization
 {
@@ -91,7 +91,7 @@ namespace RazzleServer.Common.WzLib.Serialization
                 if (ExportBase64Data)
                 {
                     MemoryStream stream = new MemoryStream();
-                    property3.PngProperty.GetPNG(false).Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                    property3.PngProperty.GetPNG(false).Save(stream, ImageFormat.Png);
                     byte[] pngbytes = stream.ToArray();
                     stream.Close();
                     tw.Write(string.Concat(new object[] { depth, "<canvas name=\"", XmlUtil.SanitizeText(property3.Name), "\" width=\"", property3.PngProperty.Width, "\" height=\"", property3.PngProperty.Height, "\" basedata=\"", Convert.ToBase64String(pngbytes), "\">" }) + lineBreak);

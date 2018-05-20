@@ -23,7 +23,11 @@ namespace RazzleServer.Game.Maple.Life
             {
                 Type = (ReactorEventType)eventImg["type"].GetInt();
                 State = (byte)eventImg["state"].GetInt();
-                Boundaries = new Rectangle(eventImg["lt"].GetPoint(), eventImg["rb"].GetPoint());
+
+                if (eventImg["lt"] != null && eventImg["rb"] != null)
+                {
+                    Boundaries = new Rectangle(eventImg["lt"].GetPoint(), eventImg["rb"].GetPoint());
+                }
             }
 
             //this.NextState = (byte)(sbyte)img["next_state"];

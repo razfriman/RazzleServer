@@ -3,9 +3,9 @@
 using System.IO;
 using System.Collections.Generic;
 using RazzleServer.Common.WzLib.Util;
-using System.Drawing;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Util;
+using System.DrawingCore;
 
 namespace RazzleServer.Common.WzLib.WzProperties
 {

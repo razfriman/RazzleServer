@@ -26,12 +26,10 @@ namespace RazzleServer.Game.Handlers
 
                         if (hide)
                         {
-                            // Add SuperGM's hide buff.
                             client.Character.Buffs.Add(new Skill(5101004), 1);
                         }
                         else
                         {
-                            // Remove SuperGM's hide buff.
                             client.Character.Buffs.Remove(5101004);
                         }
                     }

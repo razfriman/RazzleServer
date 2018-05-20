@@ -2,7 +2,7 @@
 using System.IO;
 using RazzleServer.Common.WzLib.Util;
 using System;
-using System.Drawing;
+using System.DrawingCore;
 
 namespace RazzleServer.Common.WzLib.WzProperties
 {

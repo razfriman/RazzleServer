@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Drawing;
-using RazzleServer.Game.Maple;
+using System.DrawingCore;
 
 namespace RazzleServer.Common.WzLib
 {

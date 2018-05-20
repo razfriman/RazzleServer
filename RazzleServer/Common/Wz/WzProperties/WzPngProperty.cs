@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Drawing;
-using System.Drawing.Imaging;
+using System.DrawingCore;
+using System.DrawingCore.Imaging;
 using System.IO;
 using System.IO.Compression;
 using System.Runtime.InteropServices;
@@ -573,8 +573,8 @@ namespace RazzleServer.Common.WzLib.WzProperties
         {
             color[0] = RGB565ToColor(u0);
             color[1] = RGB565ToColor(u1);
-            color[2] = System.Drawing.Color.FromArgb(0xff, (color[0].R * 2 + color[1].R + 1) / 3, (color[0].G * 2 + color[1].G + 1) / 3, (color[0].B * 2 + color[1].B + 1) / 3);
-            color[3] = System.Drawing.Color.FromArgb(0xff, (color[0].R + color[1].R * 2 + 1) / 3, (color[0].G + color[1].G * 2 + 1) / 3, (color[0].B + color[1].B * 2 + 1) / 3);
+            color[2] = Color.FromArgb(0xff, (color[0].R * 2 + color[1].R + 1) / 3, (color[0].G * 2 + color[1].G + 1) / 3, (color[0].B * 2 + color[1].B + 1) / 3);
+            color[3] = Color.FromArgb(0xff, (color[0].R + color[1].R * 2 + 1) / 3, (color[0].G + color[1].G * 2 + 1) / 3, (color[0].B + color[1].B * 2 + 1) / 3);
         }
 
         private static void ExpandColorIndexTable(int[] colorIndex, byte[] rawData, int offset)
