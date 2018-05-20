@@ -14,8 +14,8 @@ namespace RazzleServer.Common.WzLib.Serialization
     {
         protected int total;
         protected int curr;
-        public int Total { get { return total; } }
-        public int Current { get { return curr; } }
+        public int Total => total;
+        public int Current => curr;
 
         protected static void CreateDirSafe(ref string path)
         {
@@ -233,7 +233,7 @@ namespace RazzleServer.Common.WzLib.Serialization
     {
         public NoBase64DataException() { }
         public NoBase64DataException(string message) : base(message) { }
-        public NoBase64DataException(string message, System.Exception inner) : base(message, inner) { }
+        public NoBase64DataException(string message, Exception inner) : base(message, inner) { }
         protected NoBase64DataException(System.Runtime.Serialization.SerializationInfo info,
             System.Runtime.Serialization.StreamingContext context)
         { }
@@ -285,7 +285,7 @@ namespace RazzleServer.Common.WzLib.Serialization
             if (!Directory.Exists(outPath))
             {
                 {
-                    ProgressingWzSerializer.CreateDirSafe(ref outPath);
+                    CreateDirSafe(ref outPath);
                 }
             }
 
@@ -876,7 +876,7 @@ namespace RazzleServer.Common.WzLib.Serialization
             }
 
             result.Changed = true;
-            if (this.useMemorySaving)
+            if (useMemorySaving)
             {
                 var path = Path.GetTempFileName();
                 var wzWriter = new WzBinaryWriter(File.Create(path), iv);

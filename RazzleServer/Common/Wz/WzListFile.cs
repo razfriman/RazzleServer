@@ -58,15 +58,13 @@ namespace RazzleServer.Common.WzLib
             var lastEntry = listEntries[lastIndex];
             listEntries[lastIndex] = lastEntry.Substring(0, lastEntry.Length - 1) + "/";
             var wzWriter = new WzBinaryWriter(File.Create(path), WzIv);
-            string s;
-            for (var i = 0; i < listEntries.Count; i++)
+            foreach (var entry in listEntries)
             {
-                s = listEntries[i];
-                wzWriter.Write(s.Length);
-                var encryptedChars = wzWriter.EncryptString(s + (char)0);
-                for (var j = 0; j < encryptedChars.Length; j++)
+                wzWriter.Write(entry.Length);
+                var encryptedChars = wzWriter.EncryptString(entry + (char)0);
+                foreach (var encryptedChar in encryptedChars)
                 {
-                    wzWriter.Write((short)encryptedChars[j]);
+                    wzWriter.Write((short)encryptedChar);
                 }
             }
             listEntries[lastIndex] = lastEntry.Substring(0, lastEntry.Length - 1) + "/";

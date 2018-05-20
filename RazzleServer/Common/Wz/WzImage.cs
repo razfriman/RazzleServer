@@ -76,7 +76,7 @@ namespace RazzleServer.Common.WzLib
         public override string Name { get => name;
             set => name = value;
         }
-        public override WzFile WzFileParent => Parent != null ? Parent.WzFileParent : null;
+        public override WzFile WzFileParent => Parent?.WzFileParent;
 
         /// <summary>
         /// Is the object parsed

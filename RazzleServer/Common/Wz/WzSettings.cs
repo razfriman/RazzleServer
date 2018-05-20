@@ -29,21 +29,35 @@ namespace RazzleServer.Common.WzLib
 
         private void ExtractSettingsImage(WzImage settingsImage, Type settingsHolderType)
         {
-            if (!settingsImage.Parsed) settingsImage.ParseImage();
+            if (!settingsImage.Parsed)
+            {
+                settingsImage.ParseImage();
+            }
+
             foreach (var fieldInfo in settingsHolderType.GetFields(BindingFlags.Public | BindingFlags.Static))
             {
                 var settingName = fieldInfo.Name;
                 var settingProp = settingsImage[settingName];
                 byte[] argb;
                 if (settingProp == null)
+                {
                     SaveField(settingsImage, fieldInfo);
+                }
                 else if (fieldInfo.FieldType.BaseType != null && fieldInfo.FieldType.BaseType.FullName == "System.Enum")
+                {
                     fieldInfo.SetValue(null, InfoTool.GetInt(settingProp));
-                else switch (fieldInfo.FieldType.FullName)
+                }
+                else
+                {
+                    switch (fieldInfo.FieldType.FullName)
                     {
                         //case "Microsoft.Xna.Framework.Graphics.Color":
                         case "Microsoft.Xna.Framework.Color":
-                            if (xnaColorType == null) throw new InvalidDataException("XNA color detected, but XNA type activator is null");
+                            if (xnaColorType == null)
+                            {
+                                throw new InvalidDataException("XNA color detected, but XNA type activator is null");
+                            }
+
                             argb = BitConverter.GetBytes((uint)((WzDoubleProperty)settingProp).Value);
                             fieldInfo.SetValue(null, Activator.CreateInstance(xnaColorType, argb[0], argb[1], argb[2], argb[3]));
                             break;
@@ -82,6 +96,7 @@ namespace RazzleServer.Common.WzLib
                         default:
                             throw new Exception("unrecognized setting type");
                     }
+                }
             }
         }
 
@@ -130,7 +145,9 @@ namespace RazzleServer.Common.WzLib
             if (property != null)
             {
                 if (property.PropertyType == propType)
+                {
                     property.SetValue(value);
+                }
                 else
                 {
                     property.Remove();
@@ -138,12 +155,18 @@ namespace RazzleServer.Common.WzLib
                 }
             }
             else
+            {
                 CreateWzProp(parentImage, propType, propName, value);
+            }
         }
 
         private void SaveSettingsImage(WzImage settingsImage, Type settingsHolderType)
         {
-            if (!settingsImage.Parsed) settingsImage.ParseImage();
+            if (!settingsImage.Parsed)
+            {
+                settingsImage.ParseImage();
+            }
+
             foreach (var fieldInfo in settingsHolderType.GetFields(BindingFlags.Public | BindingFlags.Static))
             {
                 SaveField(settingsImage, fieldInfo);
@@ -155,8 +178,12 @@ namespace RazzleServer.Common.WzLib
         {
             var settingName = fieldInfo.Name;
             if (fieldInfo.FieldType.BaseType != null && fieldInfo.FieldType.BaseType.FullName == "System.Enum")
+            {
                 SetWzProperty(settingsImage, settingName, WzPropertyType.Int, fieldInfo.GetValue(null));
-            else switch (fieldInfo.FieldType.FullName)
+            }
+            else
+            {
+                switch (fieldInfo.FieldType.FullName)
                 {
                     //case "Microsoft.Xna.Framework.Graphics.Color":
                     case "Microsoft.Xna.Framework.Color":
@@ -190,6 +217,7 @@ namespace RazzleServer.Common.WzLib
                         SetWzProperty(settingsImage, settingName, WzPropertyType.Int, (bool)fieldInfo.GetValue(null) ? 1 : 0);
                         break;
                 }
+            }
         }
 
         public void Load()
@@ -238,7 +266,9 @@ namespace RazzleServer.Common.WzLib
                 File.Move(tempFile, settingsPath);
             }
             else
+            {
                 wzFile.SaveToDisk(wzPath);
+            }
         }
     }
 }
