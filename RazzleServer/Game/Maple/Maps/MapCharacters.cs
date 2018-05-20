@@ -127,6 +127,6 @@ namespace RazzleServer.Game.Maple.Maps
             }
         }
 
-        protected override int GetKeyForItem(Character item) => item.ID;
+        protected override int GetKeyForItem(Character item) => item.Id;
     }
 }

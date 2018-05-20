@@ -29,6 +29,6 @@ namespace RazzleServer.Game.Maple.Data
             }
         }
 
-        protected override int GetKeyForItem(Map item) => item.MapleID;
+        protected override int GetKeyForItem(Map item) => item.MapleId;
     }
 }

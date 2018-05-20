@@ -6,7 +6,7 @@ namespace RazzleServer.Game.Maple.Interaction
 {
     public sealed class CharacterGuild : IMapleSavable
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
         public int Leader { get; set; }
         public int Logo { get; set; }
         public int LogoBG { get; set; }

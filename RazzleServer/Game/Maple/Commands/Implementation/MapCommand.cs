@@ -40,33 +40,33 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
             {
                 if (args.Length == 1 && args[0] == "-current")
                 {
-                    caller.Notify("[Command] Current map: " + caller.Map.MapleID);
+                    caller.Notify("[Command] Current map: " + caller.Map.MapleId);
                     caller.Notify("   -X: " + caller.Position.X);
                     caller.Notify("   -Y: " + caller.Position.Y);
                 }
                 else
                 {
                     string mapName = "";
-                    int mapID = int.TryParse(args[0], out mapID) ? mapID : -1;
-                    byte portalID = 0;
+                    int mapId = int.TryParse(args[0], out mapId) ? mapId : -1;
+                    byte portalId = 0;
 
                     if (args.Length >= 2)
                     {
-                        byte.TryParse(args[1], out portalID);
+                        byte.TryParse(args[1], out portalId);
                     }
 
-                    if (mapID == -1)
+                    if (mapId == -1)
                     {
                         mapName = string.Join(" ", args);
                         CommandMaps val;
                         Enum.TryParse<CommandMaps>(mapName, true, out val);
                         if (val > 0)
-                            mapID = (int)val;
+                            mapId = (int)val;
                     }
 
-                    if (DataProvider.Maps.Contains(mapID))
+                    if (DataProvider.Maps.Contains(mapId))
                     {
-                        caller.ChangeMap(mapID, portalID);
+                        caller.ChangeMap(mapId, portalId);
                     }
                     else
                     {

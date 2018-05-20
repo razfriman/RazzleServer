@@ -26,7 +26,7 @@ namespace RazzleServer.Login.Handlers
 
                 if (result == LoginResult.Valid)
                 {
-                    pw.WriteInt(acc.ID);
+                    pw.WriteInt(acc.Id);
                     pw.WriteByte((int)acc.Gender);
                     pw.WriteBool(acc.IsMaster);
                     pw.WriteByte(0);

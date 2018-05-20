@@ -1,7 +1,6 @@
 ﻿using RazzleServer.Common.Util;
 using System.Linq;
 using System.Threading.Tasks;
-using RazzleServer.Data;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Login;
 using RazzleServer.Game;
@@ -9,6 +8,7 @@ using RazzleServer.Center.Maple;
 using RazzleServer.Server;
 using RazzleServer.Game.Maple.Data;
 using System;
+using RazzleServer.Common.Data;
 
 namespace RazzleServer.Center
 {
@@ -17,17 +17,11 @@ namespace RazzleServer.Center
         private static ServerManager _instance;
 
         public LoginServer Login { get; set; }
-        public Worlds Worlds { get; private set; }
-        public Maple.Migrations Migrations { get; private set; }
+        public Worlds Worlds { get; private set; } = new Worlds();
+        public Maple.Migrations Migrations { get; private set; } = new Maple.Migrations();
+        public IServiceProvider ServiceProvider { get; set; }
 
         private readonly ILogger Log = LogManager.Log;
-
-        public ServerManager()
-        {
-            Worlds = new Worlds();
-            Migrations = new Maple.Migrations();
-
-        }
 
         public async Task Configure()
         {
@@ -65,16 +59,16 @@ namespace RazzleServer.Center
             }
         }
 
-        public int ValidateMigration(string host, int characterID) => Migrations.Validate(host, characterID);
+        public int ValidateMigration(string host, int characterId) => Migrations.Validate(host, characterId);
 
-        internal void Migrate(string host, int accountID, int characterID)
+        internal void Migrate(string host, int accountId, int characterId)
         {
             if (Migrations.Contains(host))
             {
                 Migrations.Remove(host);
             }
 
-            Migrations.Add(new Migration(host, accountID, characterID));
+            Migrations.Add(new Migration(host, accountId, characterId));
         }
 
         internal void ProcessInput()
@@ -88,6 +82,7 @@ namespace RazzleServer.Center
 
         private void ProcessCommandLineComand(string line)
         {
+            Console.WriteLine($"Unknown command: {line}");
         }
 
         public static ServerManager Instance

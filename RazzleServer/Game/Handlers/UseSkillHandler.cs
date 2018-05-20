@@ -27,7 +27,7 @@ namespace RazzleServer.Game.Handlers
                 return;
             }
 
-            if (skill.MapleID == (int)SkillNames.Priest.MysticDoor)
+            if (skill.MapleId == (int)SkillNames.Priest.MysticDoor)
             {
                 var origin = packet.ReadPoint();
                 // TODO: Open mystic door.
@@ -47,7 +47,7 @@ namespace RazzleServer.Game.Handlers
             byte direction = 0;
             short addedInfo = 0;
 
-            switch (skill.MapleID)
+            switch (skill.MapleId)
             {
                 case (int)SkillNames.Priest.MysticDoor:
                     // NOTe: Prevents the default case from executing, there's no packet data left for it.
@@ -69,9 +69,9 @@ namespace RazzleServer.Game.Handlers
 
                         for (byte i = 0; i < mobs; i++)
                         {
-                            int objectID = packet.ReadInt();
+                            int objectId = packet.ReadInt();
 
-                            var mob = skill.Character.Map.Mobs[objectID];
+                            var mob = skill.Character.Map.Mobs[objectId];
 
                             // TODO: Mob crash skill.
                         }
@@ -86,9 +86,9 @@ namespace RazzleServer.Game.Handlers
 
                         for (int i = 0; i < mobs; i++)
                         {
-                            int objectID = packet.ReadInt();
+                            int objectId = packet.ReadInt();
 
-                            var mob = skill.Character.Map.Mobs[objectID];
+                            var mob = skill.Character.Map.Mobs[objectId];
 
                             bool success = packet.ReadBool();
 
@@ -109,9 +109,9 @@ namespace RazzleServer.Game.Handlers
 
                         for (byte i = 0; i < mobs; i++)
                         {
-                            int objectID = packet.ReadInt();
+                            int objectId = packet.ReadInt();
 
-                            var mob = skill.Character.Map.Mobs[objectID];
+                            var mob = skill.Character.Map.Mobs[objectId];
                         }
 
                         // TODO: Apply mob status.
@@ -129,9 +129,9 @@ namespace RazzleServer.Game.Handlers
 
                         for (byte i = 0; i < mobs; i++)
                         {
-                            int objectID = packet.ReadInt();
+                            int objectId = packet.ReadInt();
 
-                            var mob = skill.Character.Map.Mobs[objectID];
+                            var mob = skill.Character.Map.Mobs[objectId];
                         }
 
                         // TODO: Apply mob status.
@@ -181,7 +181,7 @@ namespace RazzleServer.Game.Handlers
 
                             foreach (var member in skill.Character.Party)
                             {
-                                if (member.Character != null && member.Character.Map.MapleID == skill.Character.Map.MapleID)
+                                if (member.Character != null && member.Character.Map.MapleId == skill.Character.Map.MapleId)
                                 {
                                     members.Add(member);
                                 }
@@ -253,7 +253,7 @@ namespace RazzleServer.Game.Handlers
                                 using (var oPacket = new PacketWriter(ServerOperationCode.Effect))
                                 {
                                     oPacket.WriteByte((byte)UserEffect.SkillAffected);
-                                    oPacket.WriteInt(skill.MapleID);
+                                    oPacket.WriteInt(skill.MapleId);
                                     oPacket.WriteByte(1);
                                     oPacket.WriteByte(1);
 
@@ -262,9 +262,9 @@ namespace RazzleServer.Game.Handlers
 
                                 using (var oPacket = new PacketWriter(ServerOperationCode.RemoteEffect))
                                 {
-                                    oPacket.WriteInt(member.Character.ID);
+                                    oPacket.WriteInt(member.Character.Id);
                                     oPacket.WriteByte((byte)UserEffect.SkillAffected);
-                                    oPacket.WriteInt(skill.MapleID);
+                                    oPacket.WriteInt(skill.MapleId);
                                     oPacket.WriteByte(1);
                                     oPacket.WriteByte(1);
 
@@ -288,7 +288,7 @@ namespace RazzleServer.Game.Handlers
                         Func<Character, bool> condition = null;
                         Action<Character> action = null;
 
-                        switch (skill.MapleID)
+                        switch (skill.MapleId)
                         {
                             case (int)SkillNames.SuperGM.HealPlusDispel:
                                 {
@@ -326,16 +326,16 @@ namespace RazzleServer.Game.Handlers
 
                         for (byte i = 0; i < targets; i++)
                         {
-                            int targetID = packet.ReadInt();
+                            int targetId = packet.ReadInt();
 
-                            Character target = skill.Character.Map.Characters[targetID];
+                            Character target = skill.Character.Map.Characters[targetId];
 
                             if (target != skill.Character && condition(target))
                             {
                                 using (var oPacket = new PacketWriter(ServerOperationCode.Effect))
                                 {
                                     oPacket.WriteByte((byte)UserEffect.SkillAffected);
-                                    oPacket.WriteInt(skill.MapleID);
+                                    oPacket.WriteInt(skill.MapleId);
                                     oPacket.WriteByte(1);
                                     oPacket.WriteByte(1);
 
@@ -345,9 +345,9 @@ namespace RazzleServer.Game.Handlers
                                 using (var oPacket = new PacketWriter(ServerOperationCode.RemoteEffect))
                                 {
 
-                                    oPacket.WriteInt(target.ID);
+                                    oPacket.WriteInt(target.Id);
                                     oPacket.WriteByte((byte)UserEffect.SkillAffected);
-                                    oPacket.WriteInt(skill.MapleID);
+                                    oPacket.WriteInt(skill.MapleId);
                                     oPacket.WriteByte(1);
                                     oPacket.WriteByte(1);
 
@@ -377,7 +377,7 @@ namespace RazzleServer.Game.Handlers
             using (var oPacket = new PacketWriter(ServerOperationCode.Effect))
             {
                 oPacket.WriteByte((byte)UserEffect.SkillUse);
-                oPacket.WriteInt(skill.MapleID);
+                oPacket.WriteInt(skill.MapleId);
                 oPacket.WriteByte(1);
                 oPacket.WriteByte(1);
 
@@ -387,9 +387,9 @@ namespace RazzleServer.Game.Handlers
             using (var oPacket = new PacketWriter(ServerOperationCode.RemoteEffect))
             {
 
-                oPacket.WriteInt(client.Character.ID);
+                oPacket.WriteInt(client.Character.Id);
                 oPacket.WriteByte((byte)UserEffect.SkillUse);
-                oPacket.WriteInt(skill.MapleID);
+                oPacket.WriteInt(skill.MapleId);
                 oPacket.WriteByte(1);
                 oPacket.WriteByte(1);
 

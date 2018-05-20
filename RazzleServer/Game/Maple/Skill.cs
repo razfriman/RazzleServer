@@ -3,8 +3,8 @@ using System.Linq;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
 using RazzleServer.Common.WzLib;
+using RazzleServer.Common.Data;
 using RazzleServer.Data;
-using RazzleServer.DB.Models;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
 
@@ -18,8 +18,8 @@ namespace RazzleServer.Game.Maple
         private byte maxLevel;
         private DateTime cooldownEnd = DateTime.MinValue;
 
-        public int ID { get; set; }
-        public int MapleID { get; set; }
+        public int Id { get; set; }
+        public int MapleId { get; set; }
         public DateTime Expiration { get; set; }
 
         public sbyte MobCount { get; set; }
@@ -91,17 +91,17 @@ namespace RazzleServer.Game.Maple
             }
         }
 
-        public Skill CachedReference => DataProvider.Skills[MapleID][CurrentLevel];
+        public Skill CachedReference => DataProvider.Skills[MapleId][CurrentLevel];
 
         public Character Character => Parent.Parent;
 
-        public bool IsFromFourthJob => MapleID > 1000000 && (MapleID / 10000).ToString()[2] == '2'; // TODO: Redo that.
+        public bool IsFromFourthJob => MapleId > 1000000 && (MapleId / 10000).ToString()[2] == '2'; // TODO: Redo that.
 
         public bool IsFromBeginner
         {
             get
             {
-                return MapleID % 10000000 > 999 && MapleID % 10000000 < 1003;
+                return MapleId % 10000000 > 999 && MapleId % 10000000 < 1003;
             }
         }
 
@@ -120,7 +120,7 @@ namespace RazzleServer.Game.Maple
                 {
                     using (var oPacket = new PacketWriter(ServerOperationCode.Cooldown))
                     {
-                        oPacket.WriteInt(MapleID);
+                        oPacket.WriteInt(MapleId);
                         oPacket.WriteShort((short)RemainingCooldownSeconds);
 
                         Character.Client.Send(oPacket);
@@ -130,7 +130,7 @@ namespace RazzleServer.Game.Maple
                     {
                         using (var oPacket = new PacketWriter(ServerOperationCode.Cooldown))
                         {
-                            oPacket.WriteInt(MapleID);
+                            oPacket.WriteInt(MapleId);
                             oPacket.WriteShort(0);
 
                             Character.Client.Send(oPacket);
@@ -142,11 +142,11 @@ namespace RazzleServer.Game.Maple
 
         private bool Assigned { get; set; }
 
-        public Skill(int mapleID, DateTime? expiration = null)
+        public Skill(int mapleId, DateTime? expiration = null)
         {
-            MapleID = mapleID;
+            MapleId = mapleId;
             CurrentLevel = 0;
-            MaxLevel = (byte)DataProvider.Skills[MapleID].Count;
+            MaxLevel = (byte)DataProvider.Skills[MapleId].Count;
 
             if (!expiration.HasValue)
             {
@@ -156,9 +156,9 @@ namespace RazzleServer.Game.Maple
             Expiration = (DateTime)expiration;
         }
 
-        public Skill(int mapleID, byte currentLevel, byte maxLevel, DateTime? expiration = null)
+        public Skill(int mapleId, byte currentLevel, byte maxLevel, DateTime? expiration = null)
         {
-            MapleID = mapleID;
+            MapleId = mapleId;
             CurrentLevel = currentLevel;
             MaxLevel = maxLevel;
 
@@ -172,7 +172,7 @@ namespace RazzleServer.Game.Maple
 
         public Skill(WzImageProperty img)
         {
-            //MapleID = (int)datum["skillid"];
+            //MapleId = (int)datum["skillid"];
             //CurrentLevel = (byte)(short)datum["skill_level"];
             //MobCount = (sbyte)datum["mob_count"];
             //HitCount = (sbyte)datum["hit_count"];
@@ -210,9 +210,9 @@ namespace RazzleServer.Game.Maple
         }
         public Skill(SkillEntity entity)
         {
-            //ID = (int)entity["ID"];
+            //Id = (int)entity["Id"];
             //Assigned = true;
-            //MapleID = (int)entity["MapleID"];
+            //MapleId = (int)entity["MapleId"];
             //CurrentLevel = (byte)entity["CurrentLevel"];
             //MaxLevel = (byte)entity["MaxLevel"];
             //Expiration = (DateTime)entity["Expiration"];
@@ -223,8 +223,8 @@ namespace RazzleServer.Game.Maple
         {
             //Datum datum = new Datum("skills");
 
-            //datum["CharacterID"] = Character.ID;
-            //datum["MapleID"] = MapleID;
+            //datum["CharacterId"] = Character.Id;
+            //datum["MapleId"] = MapleId;
             //datum["CurrentLevel"] = CurrentLevel;
             //datum["MaxLevel"] = MaxLevel;
             //datum["Expiration"] = Expiration;
@@ -232,11 +232,11 @@ namespace RazzleServer.Game.Maple
 
             //if (Assigned)
             //{
-            //    datum.Update("ID = {0}", ID);
+            //    datum.Update("Id = {0}", Id);
             //}
             //else
             //{
-            //    ID = datum.InsertAndReturnID();
+            //    Id = datum.InsertAndReturnId();
             //    Assigned = true;
             //}
         }
@@ -245,7 +245,7 @@ namespace RazzleServer.Game.Maple
         {
             using (var dbContext = new MapleDbContext())
             {
-                var skill = dbContext.Skills.FirstOrDefault(x => x.ID == ID);
+                var skill = dbContext.Skills.FirstOrDefault(x => x.Id == Id);
                 if (skill != null)
                 {
                     dbContext.Skills.Remove(skill);
@@ -261,7 +261,7 @@ namespace RazzleServer.Game.Maple
             {
                 oPacket.WriteByte(1);
                 oPacket.WriteShort(1);
-                oPacket.WriteInt(MapleID);
+                oPacket.WriteInt(MapleId);
                 oPacket.WriteInt(CurrentLevel);
                 oPacket.WriteInt(MaxLevel);
                 oPacket.WriteDateTime(Expiration);
@@ -343,7 +343,7 @@ namespace RazzleServer.Game.Maple
         {
             using (var oPacket = new PacketWriter())
             {
-                oPacket.WriteInt(MapleID);
+                oPacket.WriteInt(MapleId);
                 oPacket.WriteInt(CurrentLevel);
 
                 if (IsFromFourthJob)

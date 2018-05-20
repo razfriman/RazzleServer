@@ -21,22 +21,22 @@ namespace RazzleServer.Game.Handlers
             int disease = 0;
             byte level = 0;
             short mpBurn = 0;
-            int mobObjectID = 0;
-            int mobID = 0;
-            int noDamageSkillID = 0;
+            int mobObjectId = 0;
+            int mobId = 0;
+            int noDamageSkillId = 0;
 
             if (type != MapDamage)
             {
-                mobID = packet.ReadInt();
-                mobObjectID = packet.ReadInt();
+                mobId = packet.ReadInt();
+                mobObjectId = packet.ReadInt();
 
-                if (!client.Character.Map.Mobs.Contains(mobObjectID))
+                if (!client.Character.Map.Mobs.Contains(mobObjectId))
                 {
                     return;
                 }
-                var mob = client.Character.Map.Mobs[mobObjectID];
+                var mob = client.Character.Map.Mobs[mobObjectId];
 
-                if (mobID != mob.MapleID)
+                if (mobId != mob.MapleId)
                 {
                     return;
                 }
@@ -110,7 +110,7 @@ namespace RazzleServer.Game.Handlers
 
             using (var oPacket = new PacketWriter(ServerOperationCode.Hit))
             {
-                oPacket.WriteInt(client.Character.ID);
+                oPacket.WriteInt(client.Character.Id);
                 oPacket.WriteByte(type);
 
                 switch (type)
@@ -125,7 +125,7 @@ namespace RazzleServer.Game.Handlers
                     default:
                         {
                             oPacket.WriteInt(damage); // TODO: ... or PGMR damage.
-                            oPacket.WriteInt(mobID);
+                            oPacket.WriteInt(mobId);
                             oPacket.WriteByte(hit);
                             oPacket.WriteByte(reduction);
 
@@ -137,9 +137,9 @@ namespace RazzleServer.Game.Handlers
                             oPacket.WriteByte(stance);
                             oPacket.WriteInt(damage);
 
-                            if (noDamageSkillID > 0)
+                            if (noDamageSkillId > 0)
                             {
-                                oPacket.WriteInt(noDamageSkillID);
+                                oPacket.WriteInt(noDamageSkillId);
                             }
                         }
                         break;

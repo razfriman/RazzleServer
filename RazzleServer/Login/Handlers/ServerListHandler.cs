@@ -12,7 +12,7 @@ namespace RazzleServer.Login.Handlers
 
             foreach (var world in client.Server.Manager.Worlds)
             {
-                pw.WriteByte(world.ID);
+                pw.WriteByte(world.Id);
                 pw.WriteString(world.Name);
                 pw.WriteByte((byte)world.Flag);
                 pw.WriteString(world.EventMessage);
@@ -25,7 +25,7 @@ namespace RazzleServer.Login.Handlers
                 {
                     pw.WriteString($"{world.Name}-{i}");
                     pw.WriteInt(world.Population);
-                    pw.WriteByte(world.ID);
+                    pw.WriteByte(world.Id);
                     pw.WriteShort(i);
                 }
             }

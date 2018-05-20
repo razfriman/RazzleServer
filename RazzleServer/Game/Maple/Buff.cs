@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
-using RazzleServer.DB.Models;
+using RazzleServer.Data;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
 
@@ -13,7 +13,7 @@ namespace RazzleServer.Game.Maple
     {
         public CharacterBuffs Parent { get; set; }
 
-        public int MapleID { get; set; }
+        public int MapleId { get; set; }
         public byte SkillLevel { get; set; }
         public byte Type { get; set; }
         public Dictionary<PrimaryBuffStat, short> PrimaryStatups { get; set; }
@@ -62,7 +62,7 @@ namespace RazzleServer.Game.Maple
         public Buff(CharacterBuffs parent, Skill skill, int value)
         {
             Parent = parent;
-            MapleID = skill.MapleID;
+            MapleId = skill.MapleId;
             SkillLevel = skill.CurrentLevel;
             Type = 1;
             Value = value;
@@ -84,7 +84,7 @@ namespace RazzleServer.Game.Maple
         public Buff(CharacterBuffs parent, BuffEntity datum)
         {
             Parent = parent;
-            //MapleID = (int)datum["MapleID"];
+            //MapleId = (int)datum["MapleId"];
             //SkillLevel = (byte)datum["SkillLevel"];
             //Type = (byte)datum["Type"];
             //Value = (int)datum["Value"];
@@ -94,7 +94,7 @@ namespace RazzleServer.Game.Maple
 
             if (Type == 1)
             {
-                CalculateStatups(DataProvider.Skills[MapleID][SkillLevel]);
+                CalculateStatups(DataProvider.Skills[MapleId][SkillLevel]);
             }
 
             Delay.Execute(() =>
@@ -110,8 +110,8 @@ namespace RazzleServer.Game.Maple
         {
             //Datum datum = new Datum("buffs");
 
-            //datum["CharacterID"] = Character.ID;
-            //datum["MapleID"] = MapleID;
+            //datum["CharacterId"] = Character.Id;
+            //datum["MapleId"] = MapleId;
             //datum["SkillLevel"] = SkillLevel;
             //datum["Type"] = Type;
             //datum["Value"] = Value;
@@ -122,7 +122,7 @@ namespace RazzleServer.Game.Maple
 
         public void Apply()
         {
-            switch (MapleID)
+            switch (MapleId)
             {
                 default:
                     {
@@ -134,14 +134,14 @@ namespace RazzleServer.Game.Maple
                             foreach (KeyValuePair<PrimaryBuffStat, short> primaryStatup in PrimaryStatups)
                             {
                                 oPacket.WriteShort(primaryStatup.Value);
-                                oPacket.WriteInt(MapleID);
+                                oPacket.WriteInt(MapleId);
                                 oPacket.WriteInt((int)(End - DateTime.Now).TotalMilliseconds);
                             }
 
                             foreach (KeyValuePair<SecondaryBuffStat, short> secondaryStatup in SecondaryStatups)
                             {
                                 oPacket.WriteShort(secondaryStatup.Value);
-                                oPacket.WriteInt(MapleID);
+                                oPacket.WriteInt(MapleId);
                                 oPacket.WriteInt((int)(End - DateTime.Now).TotalMilliseconds);
                             }
 
@@ -155,7 +155,7 @@ namespace RazzleServer.Game.Maple
 
                         using (var oPacket = new PacketWriter(ServerOperationCode.SetTemporaryStat))
                         {
-                            oPacket.WriteInt(Character.ID);
+                            oPacket.WriteInt(Character.Id);
                             oPacket.WriteLong(PrimaryBuffMask);
                             oPacket.WriteLong(SecondaryBuffMask);
 
@@ -192,7 +192,7 @@ namespace RazzleServer.Game.Maple
 
             using (var oPacket = new PacketWriter(ServerOperationCode.ResetTemporaryStat))
             {
-                oPacket.WriteInt(Character.ID);
+                oPacket.WriteInt(Character.Id);
                 oPacket.WriteLong(PrimaryBuffMask);
                 oPacket.WriteLong(SecondaryBuffMask);
 
@@ -247,7 +247,7 @@ namespace RazzleServer.Game.Maple
                 SecondaryStatups.Add(SecondaryBuffStat.Morph, (short)(skill.Morph + 100 * (int)Character.Gender));
             }
 
-            switch (MapleID)
+            switch (MapleId)
             {
                 case (int)SkillNames.SuperGM.HolySymbol:
                     SecondaryStatups.Add(SecondaryBuffStat.HolySymbol, skill.ParameterA);

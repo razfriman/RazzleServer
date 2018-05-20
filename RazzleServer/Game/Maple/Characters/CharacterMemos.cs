@@ -16,7 +16,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Load()
         {
-            //foreach (Datum datum in new Datums("memos").Populate("CharacterID = {0}", this.Parent.ID))
+            //foreach (Datum datum in new Datums("memos").Populate("CharacterId = {0}", this.Parent.Id))
             //{
             //    this.Add(new Memo(datum));
             //}
@@ -79,7 +79,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         protected override int GetKeyForItem(Memo item)
         {
-            return item.ID;
+            return item.Id;
         }
     }
 }

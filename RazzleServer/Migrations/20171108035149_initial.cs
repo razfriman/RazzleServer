@@ -12,7 +12,7 @@ namespace RazzleServer.Migrations
                 name: "Accounts",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Birthday = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Creation = table.Column<DateTime>(type: "TEXT", nullable: false),
@@ -27,34 +27,34 @@ namespace RazzleServer.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Accounts", x => x.ID);
+                    table.PrimaryKey("PK_Accounts", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Buddies",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    AccountID = table.Column<int>(type: "INTEGER", nullable: false),
-                    BuddyAccountID = table.Column<int>(type: "INTEGER", nullable: false),
-                    BuddyCharacterID = table.Column<int>(type: "INTEGER", nullable: false),
-                    CharacterID = table.Column<int>(type: "INTEGER", nullable: false),
+                    AccountId = table.Column<int>(type: "INTEGER", nullable: false),
+                    BuddyAccountId = table.Column<int>(type: "INTEGER", nullable: false),
+                    BuddyCharacterId = table.Column<int>(type: "INTEGER", nullable: false),
+                    CharacterId = table.Column<int>(type: "INTEGER", nullable: false),
                     IsRequest = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Buddies", x => x.ID);
+                    table.PrimaryKey("PK_Buddies", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Characters",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     AbilityPoints = table.Column<short>(type: "INTEGER", nullable: false),
-                    AccountID = table.Column<int>(type: "INTEGER", nullable: false),
+                    AccountId = table.Column<int>(type: "INTEGER", nullable: false),
                     BuddyListSlots = table.Column<int>(type: "INTEGER", nullable: false),
                     CashSlots = table.Column<byte>(type: "INTEGER", nullable: false),
                     Dexterity = table.Column<short>(type: "INTEGER", nullable: false),
@@ -65,7 +65,7 @@ namespace RazzleServer.Migrations
                     Fame = table.Column<short>(type: "INTEGER", nullable: false),
                     Gender = table.Column<byte>(type: "INTEGER", nullable: false),
                     GuildContribution = table.Column<int>(type: "INTEGER", nullable: false),
-                    GuildID = table.Column<int>(type: "INTEGER", nullable: false),
+                    GuildId = table.Column<int>(type: "INTEGER", nullable: false),
                     GuildRank = table.Column<int>(type: "INTEGER", nullable: true),
                     Hair = table.Column<int>(type: "INTEGER", nullable: false),
                     Health = table.Column<short>(type: "INTEGER", nullable: false),
@@ -76,7 +76,7 @@ namespace RazzleServer.Migrations
                     Level = table.Column<byte>(type: "INTEGER", nullable: false),
                     Luck = table.Column<short>(type: "INTEGER", nullable: false),
                     Mana = table.Column<short>(type: "INTEGER", nullable: false),
-                    MapID = table.Column<int>(type: "INTEGER", nullable: false),
+                    MapId = table.Column<int>(type: "INTEGER", nullable: false),
                     MaxHealth = table.Column<short>(type: "INTEGER", nullable: false),
                     MaxMana = table.Column<short>(type: "INTEGER", nullable: false),
                     Meso = table.Column<int>(type: "INTEGER", nullable: false),
@@ -89,33 +89,33 @@ namespace RazzleServer.Migrations
                     SpawnPoint = table.Column<byte>(type: "INTEGER", nullable: false),
                     Strength = table.Column<short>(type: "INTEGER", nullable: false),
                     UsableSlots = table.Column<byte>(type: "INTEGER", nullable: false),
-                    WorldID = table.Column<byte>(type: "INTEGER", nullable: false)
+                    WorldId = table.Column<byte>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Characters", x => x.ID);
+                    table.PrimaryKey("PK_Characters", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "CharacterStorages",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    AccountID = table.Column<int>(type: "INTEGER", nullable: false),
+                    AccountId = table.Column<int>(type: "INTEGER", nullable: false),
                     Meso = table.Column<int>(type: "INTEGER", nullable: false),
                     Slots = table.Column<byte>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CharacterStorages", x => x.ID);
+                    table.PrimaryKey("PK_CharacterStorages", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Guilds",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Capacity = table.Column<int>(type: "INTEGER", nullable: false),
                     GP = table.Column<int>(type: "INTEGER", nullable: false),
@@ -135,22 +135,22 @@ namespace RazzleServer.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Guilds", x => x.ID);
+                    table.PrimaryKey("PK_Guilds", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Items",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    AccountID = table.Column<int>(type: "INTEGER", nullable: false),
+                    AccountId = table.Column<int>(type: "INTEGER", nullable: false),
                     Accuracy = table.Column<short>(type: "INTEGER", nullable: false),
                     Agility = table.Column<short>(type: "INTEGER", nullable: false),
                     Avoidability = table.Column<short>(type: "INTEGER", nullable: false),
                     BonusPotential1 = table.Column<short>(type: "INTEGER", nullable: false),
                     BonusPotential2 = table.Column<short>(type: "INTEGER", nullable: false),
-                    CharacterID = table.Column<int>(type: "INTEGER", nullable: false),
+                    CharacterId = table.Column<int>(type: "INTEGER", nullable: false),
                     Creator = table.Column<string>(type: "TEXT", maxLength: 13, nullable: true),
                     CustomExp = table.Column<short>(type: "INTEGER", nullable: false),
                     CustomLevel = table.Column<byte>(type: "INTEGER", nullable: false),
@@ -167,8 +167,8 @@ namespace RazzleServer.Migrations
                     MagicAttack = table.Column<short>(type: "INTEGER", nullable: false),
                     MagicDefense = table.Column<short>(type: "INTEGER", nullable: false),
                     Mana = table.Column<short>(type: "INTEGER", nullable: false),
-                    MapleID = table.Column<int>(type: "INTEGER", nullable: false),
-                    PetID = table.Column<int>(type: "INTEGER", nullable: true),
+                    MapleId = table.Column<int>(type: "INTEGER", nullable: false),
+                    PetId = table.Column<int>(type: "INTEGER", nullable: true),
                     Position = table.Column<short>(type: "INTEGER", nullable: false),
                     Potential1 = table.Column<short>(type: "INTEGER", nullable: false),
                     Potential2 = table.Column<short>(type: "INTEGER", nullable: false),
@@ -186,30 +186,30 @@ namespace RazzleServer.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Items", x => x.ID);
+                    table.PrimaryKey("PK_Items", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "KeyMaps",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Action = table.Column<int>(type: "INTEGER", nullable: false),
-                    CharacterID = table.Column<int>(type: "INTEGER", nullable: false),
+                    CharacterId = table.Column<int>(type: "INTEGER", nullable: false),
                     Key = table.Column<byte>(type: "INTEGER", nullable: false),
                     Type = table.Column<byte>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_KeyMaps", x => x.ID);
+                    table.PrimaryKey("PK_KeyMaps", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "MemoEntities",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Message = table.Column<string>(type: "TEXT", nullable: true),
                     Received = table.Column<DateTime>(type: "TEXT", nullable: false),
@@ -217,103 +217,103 @@ namespace RazzleServer.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MemoEntities", x => x.ID);
+                    table.PrimaryKey("PK_MemoEntities", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "QuestCustomData",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    CharacterID = table.Column<int>(type: "INTEGER", nullable: false),
+                    CharacterId = table.Column<int>(type: "INTEGER", nullable: false),
                     Key = table.Column<string>(type: "TEXT", nullable: true),
                     Value = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_QuestCustomData", x => x.ID);
+                    table.PrimaryKey("PK_QuestCustomData", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "QuestStatus",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    CharacterID = table.Column<int>(type: "INTEGER", nullable: false),
+                    CharacterId = table.Column<int>(type: "INTEGER", nullable: false),
                     CompleteTime = table.Column<uint>(type: "INTEGER", nullable: false),
                     CustomData = table.Column<string>(type: "TEXT", maxLength: 255, nullable: true),
-                    QuestID = table.Column<int>(type: "INTEGER", nullable: false),
+                    QuestId = table.Column<int>(type: "INTEGER", nullable: false),
                     Status = table.Column<byte>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_QuestStatus", x => x.ID);
+                    table.PrimaryKey("PK_QuestStatus", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "QuestStatusMobs",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Count = table.Column<int>(type: "INTEGER", nullable: false),
                     Mob = table.Column<int>(type: "INTEGER", nullable: false),
-                    QuestStatusID = table.Column<int>(type: "INTEGER", nullable: false)
+                    QuestStatusId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_QuestStatusMobs", x => x.ID);
+                    table.PrimaryKey("PK_QuestStatusMobs", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "QuickSlotKeyMaps",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    CharacterID = table.Column<int>(type: "INTEGER", nullable: false),
+                    CharacterId = table.Column<int>(type: "INTEGER", nullable: false),
                     Index = table.Column<byte>(type: "INTEGER", nullable: false),
                     Key = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_QuickSlotKeyMaps", x => x.ID);
+                    table.PrimaryKey("PK_QuickSlotKeyMaps", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "SkillCooldowns",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    CharacterID = table.Column<int>(type: "INTEGER", nullable: false),
+                    CharacterId = table.Column<int>(type: "INTEGER", nullable: false),
                     Length = table.Column<int>(type: "INTEGER", nullable: false),
-                    SkillID = table.Column<int>(type: "INTEGER", nullable: false),
+                    SkillId = table.Column<int>(type: "INTEGER", nullable: false),
                     StartTime = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SkillCooldowns", x => x.ID);
+                    table.PrimaryKey("PK_SkillCooldowns", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Skills",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    CharacterID = table.Column<int>(type: "INTEGER", nullable: false),
+                    CharacterId = table.Column<int>(type: "INTEGER", nullable: false),
                     Expiration = table.Column<long>(type: "INTEGER", nullable: false),
                     Level = table.Column<byte>(type: "INTEGER", nullable: false),
                     MasterLevel = table.Column<byte>(type: "INTEGER", nullable: false),
                     SkillExp = table.Column<short>(type: "INTEGER", nullable: false),
-                    SkillID = table.Column<int>(type: "INTEGER", nullable: false)
+                    SkillId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Skills", x => x.ID);
+                    table.PrimaryKey("PK_Skills", x => x.Id);
                 });
         }
 

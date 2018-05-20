@@ -14,7 +14,7 @@ namespace RazzleServer.Game
 {
     public class GameServer : MapleServer<GameClient>
     {
-        public byte ChannelID { get; set; }
+        public byte ChannelId { get; set; }
         public int Population { get; set; }
         public World World { get; set; }
 
@@ -24,7 +24,7 @@ namespace RazzleServer.Game
         {
             World = world;
             Port = port;
-            ChannelID = channelId;
+            ChannelId = channelId;
             Start(new IPAddress(new byte[] { 0, 0, 0, 0 }), Port);
         }
 
@@ -60,7 +60,7 @@ namespace RazzleServer.Game
             }
         }
 
-        public Character GetCharacterByID(int id) => Clients.Values.Select(x => x.Character).FirstOrDefault(x => x.ID == id);
+        public Character GetCharacterById(int id) => Clients.Values.Select(x => x.Character).FirstOrDefault(x => x.Id == id);
         public Character GetCharacterByName(string name) => Clients.Values.Select(x => x.Character).FirstOrDefault(x => x.Name == name);
     }
 }

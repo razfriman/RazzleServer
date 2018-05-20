@@ -41,7 +41,7 @@ namespace RazzleServer.Game.Maple.Life
             using (var oPacket = new PacketWriter(ServerOperationCode.NpcMove))
             {
 
-                oPacket.WriteInt(ObjectID);
+                oPacket.WriteInt(ObjectId);
                 oPacket.WriteByte(action1);
                 oPacket.WriteByte(action2);
 
@@ -181,8 +181,8 @@ namespace RazzleServer.Game.Maple.Life
                 oPacket.WriteBool(true);
             }
 
-            oPacket.WriteInt(ObjectID);
-            oPacket.WriteInt(MapleID);
+            oPacket.WriteInt(ObjectId);
+            oPacket.WriteInt(MapleId);
             oPacket.WritePoint(Position);
             oPacket.WriteBool(!FacesLeft);
             oPacket.WriteShort(Foothold);
@@ -197,7 +197,7 @@ namespace RazzleServer.Game.Maple.Life
             var oPacket = new PacketWriter(ServerOperationCode.NpcChangeController);
 
             oPacket.WriteBool(false);
-            oPacket.WriteInt(ObjectID);
+            oPacket.WriteInt(ObjectId);
 
             return oPacket;
         }
@@ -208,7 +208,7 @@ namespace RazzleServer.Game.Maple.Life
 
 
             oPacket.WriteByte(4); // NOTE: Unknown.
-            oPacket.WriteInt(MapleID);
+            oPacket.WriteInt(MapleId);
             oPacket.WriteByte((byte)messageType);
             oPacket.WriteByte(0); // NOTE: Speaker.
             oPacket.WriteString(text);
@@ -221,7 +221,7 @@ namespace RazzleServer.Game.Maple.Life
         {
             var oPacket = new PacketWriter(ServerOperationCode.NpcLeaveField);
 
-            oPacket.WriteInt(ObjectID);
+            oPacket.WriteInt(ObjectId);
 
             return oPacket;
         }

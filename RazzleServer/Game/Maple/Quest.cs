@@ -7,8 +7,8 @@ namespace RazzleServer.Game.Maple
 {
     public class Quest
     {
-        public ushort MapleID { get; private set; }
-        public ushort NextQuestID { get; private set; }
+        public ushort MapleId { get; private set; }
+        public ushort NextQuestId { get; private set; }
         public sbyte Area { get; private set; }
         public byte MinimumLevel { get; private set; }
         public byte MaximumLevel { get; private set; }
@@ -39,7 +39,7 @@ namespace RazzleServer.Game.Maple
         public Dictionary<Skill, Job> PreSkillRewards { get; set; }
         public Dictionary<Skill, Job> PostSkillRewards { get; set; }
 
-        public Quest NextQuest => NextQuestID > 0 ? DataProvider.Quests[NextQuestID] : null;
+        public Quest NextQuest => NextQuestId > 0 ? DataProvider.Quests[NextQuestId] : null;
 
         public byte Flags
         {
@@ -56,8 +56,8 @@ namespace RazzleServer.Game.Maple
 
         public Quest(WzImageProperty img)
         {
-            //this.MapleID = (ushort)img["questid"];
-            //this.NextQuestID = (ushort)img["next_quest"];
+            //this.MapleId = (ushort)img["questid"];
+            //this.NextQuestId = (ushort)img["next_quest"];
             //this.Area = (sbyte)img["quest_area"];
             //this.MinimumLevel = (byte)img["min_level"];
             //this.MaximumLevel = (byte)img["max_level"];

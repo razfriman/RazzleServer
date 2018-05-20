@@ -1,14 +1,14 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace RazzleServer.DB.Models
+namespace RazzleServer.Data
 {
     public class ItemEntity
     {
-        public int ID { get; set; }
-        public int MapleID { get; set; }
-        public int AccountID { get; set; }
-        public int CharacterID { get; set; }
+        public int Id { get; set; }
+        public int MapleId { get; set; }
+        public int AccountId { get; set; }
+        public int CharacterId { get; set; }
         public short Position { get; set; }
         public short Quantity { get; set; }
         public short Flags { get; set; }
@@ -16,7 +16,7 @@ namespace RazzleServer.DB.Models
         public string Creator { get; set; }
         public string Source { get; set; }
         public bool IsStored { get; set; }
-        public int? PetID { get; set; }
+        public int? PetId { get; set; }
         public byte Slot { get; set; }
         public DateTime Expiration { get; set; }
 

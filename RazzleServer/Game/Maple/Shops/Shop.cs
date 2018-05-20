@@ -7,11 +7,11 @@ namespace RazzleServer.Game.Maple.Shops
 {
     public sealed class Shop
     {
-        private byte RechargeTierID { get; set; }
-        public int ID { get; private set; }
+        private byte RechargeTierId { get; set; }
+        public int Id { get; private set; }
         public Npc Parent { get; private set; }
         public List<ShopItem> Items { get; private set; }
-        public Dictionary<int, double> UnitPrices => RechargeTiers[RechargeTierID];
+        public Dictionary<int, double> UnitPrices => RechargeTiers[RechargeTierId];
         public static Dictionary<byte, Dictionary<int, double>> RechargeTiers { get; set; }
 
         public static void LoadRechargeTiers()
@@ -33,17 +33,17 @@ namespace RazzleServer.Game.Maple.Shops
         //{
         //    Parent = parent;
 
-        //    ID = (int)datum["shopid"];
-        //    RechargeTierID = (byte)(int)datum["recharge_tier"];
+        //    Id = (int)datum["shopid"];
+        //    RechargeTierId = (byte)(int)datum["recharge_tier"];
 
         //    Items = new List<ShopItem>();
 
-        //    foreach (Datum itemDatum in new Datums("shop_items").Populate("shopid = {0} ORDER BY sort DESC", ID))
+        //    foreach (Datum itemDatum in new Datums("shop_items").Populate("shopid = {0} ORDER BY sort DESC", Id))
         //    {
         //        Items.Add(new ShopItem(this, itemDatum));
         //    }
 
-        //    if (RechargeTierID > 0)
+        //    if (RechargeTierId > 0)
         //    {
         //        foreach (KeyValuePair<int, double> rechargeable in UnitPrices)
         //        {
@@ -56,7 +56,7 @@ namespace RazzleServer.Game.Maple.Shops
         {
             using (var oPacket = new PacketWriter(ServerOperationCode.OpenNpcShop))
             {
-                oPacket.WriteInt(ID);
+                oPacket.WriteInt(Id);
                 oPacket.WriteShort((short)Items.Count);
 
                 foreach (ShopItem loopShopItem in Items)

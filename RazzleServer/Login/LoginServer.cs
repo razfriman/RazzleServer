@@ -1,11 +1,11 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Reflection;
 using RazzleServer.Center;
 using RazzleServer.Common.Packet;
-using RazzleServer.Data;
+using RazzleServer.Common.Data;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Server;
 
@@ -15,21 +15,22 @@ namespace RazzleServer.Login
     {
         public static Dictionary<ClientOperationCode, List<LoginPacketHandler>> PacketHandlers { get; private set; } = new Dictionary<ClientOperationCode, List<LoginPacketHandler>>();
 
-        internal List<Character> GetCharacters(byte worldID, int accountID)
+        internal List<Character> GetCharacters(byte worldId, int accountId)
         {
             using (var dbContext = new MapleDbContext())
             {
                 var result = new List<Character>();
 
-                var characters = dbContext.Characters
-                                          .Where(x => x.AccountID == accountID)
-                                          .Where(x => x.WorldID == worldID);
+                var characters = dbContext
+                    .Characters
+                    .Where(x => x.AccountId == accountId)
+                    .Where(x => x.WorldId == worldId);
 
                 characters.ToList()
                           .ForEach(x =>
                           {
                               var c = new Character();
-                              c.ID = x.ID;
+                              c.Id = x.Id;
                               c.Load();
                               result.Add(c);
                           });

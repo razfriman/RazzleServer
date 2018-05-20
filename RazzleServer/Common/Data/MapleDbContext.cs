@@ -1,10 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RazzleServer.DB.Models;
+using RazzleServer.Data;
 using RazzleServer.Server;
 
-namespace RazzleServer.Data
+namespace RazzleServer.Common.Data
 {
-
     public class MapleDbContext : DbContext
     {
         public DbSet<AccountEntity> Accounts { get; set; }

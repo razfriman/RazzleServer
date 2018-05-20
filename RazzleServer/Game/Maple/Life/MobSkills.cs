@@ -14,13 +14,13 @@ namespace RazzleServer.Game.Maple.Life
 
         public MobSkill Random => base[Functions.Random(this.Count - 1)];
 
-        public new MobSkill this[int mapleID]
+        public new MobSkill this[int mapleId]
         {
             get
             {
                 foreach (MobSkill loopMobSkill in this)
                 {
-                    if (loopMobSkill.MapleID == mapleID)
+                    if (loopMobSkill.MapleId == mapleId)
                     {
                         return loopMobSkill;
                     }
@@ -30,11 +30,11 @@ namespace RazzleServer.Game.Maple.Life
             }
         }
 
-        public bool Contains(int mapleID, byte level)
+        public bool Contains(int mapleId, byte level)
         {
             foreach (MobSkill loopMobSkill in this)
             {
-                if (loopMobSkill.MapleID == mapleID && loopMobSkill.Level == level)
+                if (loopMobSkill.MapleId == mapleId && loopMobSkill.Level == level)
                 {
                     return true;
                 }

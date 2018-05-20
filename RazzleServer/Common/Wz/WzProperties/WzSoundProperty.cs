@@ -137,7 +137,7 @@ namespace RazzleServer.Common.WzLib.WzProperties
             len_ms = reader.ReadCompressedInt();
 
             long headerOff = reader.BaseStream.Position;
-            reader.BaseStream.Position += soundHeader.Length; //skip GUIDs
+            reader.BaseStream.Position += soundHeader.Length; //skip GUIds
             int wavFormatLen = reader.ReadByte();
             reader.BaseStream.Position = headerOff;
 

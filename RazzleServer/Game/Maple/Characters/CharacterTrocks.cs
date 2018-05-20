@@ -22,7 +22,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Load()
         {
-            //foreach (Datum datum in new Datums("trocks").Populate("CharacterID = {0}", Parent.ID))
+            //foreach (Datum datum in new Datums("trocks").Populate("CharacterId = {0}", Parent.Id))
             //{
             //    byte index = (byte)datum["Index"];
             //    int map = (int)datum["Map"];
@@ -40,7 +40,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Save()
         {
-            //Database.Delete("trocks", "CharacterID = {0}", this.Parent.ID);
+            //Database.Delete("trocks", "CharacterId = {0}", this.Parent.Id);
 
             //byte index = 0;
 
@@ -48,7 +48,7 @@ namespace RazzleServer.Game.Maple.Characters
             //{
             //    Datum datum = new Datum("trocks");
 
-            //    datum["CharacterID"] = Parent.ID;
+            //    datum["CharacterId"] = Parent.Id;
             //    datum["Index"] = index++;
             //    datum["Map"] = map;
 
@@ -61,7 +61,7 @@ namespace RazzleServer.Game.Maple.Characters
             //{
             //    Datum datum = new Datum("trocks");
 
-            //    datum["CharacterID"] = Parent.ID;
+            //    datum["CharacterId"] = Parent.Id;
             //    datum["Index"] = index++;
             //    datum["Map"] = map;
 
@@ -69,11 +69,11 @@ namespace RazzleServer.Game.Maple.Characters
             //}
         }
 
-        public bool Contains(int mapID)
+        public bool Contains(int mapId)
         {
             foreach (int map in Regular)
             {
-                if (map == mapID)
+                if (map == mapId)
                 {
                     return true;
                 }
@@ -81,7 +81,7 @@ namespace RazzleServer.Game.Maple.Characters
 
             foreach (int map in VIP)
             {
-                if (map == mapID)
+                if (map == mapId)
                 {
                     return true;
                 }
@@ -99,32 +99,32 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 case TrockAction.Remove:
                     {
-                        int mapID = iPacket.ReadInt();
+                        int mapId = iPacket.ReadInt();
 
                         if (type == TrockType.Regular)
                         {
-                            if (!Regular.Contains(mapID))
+                            if (!Regular.Contains(mapId))
                             {
                                 return;
                             }
 
-                            Regular.Remove(mapID);
+                            Regular.Remove(mapId);
                         }
                         else if (type == TrockType.VIP)
                         {
-                            if (!VIP.Contains(mapID))
+                            if (!VIP.Contains(mapId))
                             {
                                 return;
                             }
 
-                            VIP.Remove(mapID);
+                            VIP.Remove(mapId);
                         }
                     }
                     break;
 
                 case TrockAction.Add:
                     {
-                        int mapID = Parent.Map.MapleID;
+                        int mapId = Parent.Map.MapleId;
 
                         // TODO: Check if the map field limits allow trocks (e.g. Maple Island is forbidden).
 
@@ -132,11 +132,11 @@ namespace RazzleServer.Game.Maple.Characters
                         {
                             if (type == TrockType.Regular)
                             {
-                                Regular.Add(mapID);
+                                Regular.Add(mapId);
                             }
                             else if (type == TrockType.VIP)
                             {
-                                VIP.Add(mapID);
+                                VIP.Add(mapId);
                             }
                         }
                         else
@@ -156,26 +156,26 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public bool Use(int itemID, PacketReader iPacket)
+        public bool Use(int itemId, PacketReader iPacket)
         {
             bool used = false;
             byte action = iPacket.ReadByte();
 
-            TrockType type = itemID == 5040000 ? TrockType.Regular : TrockType.VIP;
+            TrockType type = itemId == 5040000 ? TrockType.Regular : TrockType.VIP;
 
-            int destinationMapID = -1;
+            int destinationMapId = -1;
             TrockResult result = TrockResult.Success;
 
             if (action == 0) // NOTE: Preset map.
             {
-                int mapID = iPacket.ReadInt();
+                int mapId = iPacket.ReadInt();
 
-                if (!Parent.Trocks.Contains(mapID))
+                if (!Parent.Trocks.Contains(mapId))
                 {
                     result = TrockResult.CannotGo;
                 }
 
-                destinationMapID = mapID;
+                destinationMapId = mapId;
             }
             else if (action == 1) // NOTE: IGN.
             {
@@ -189,21 +189,21 @@ namespace RazzleServer.Game.Maple.Characters
                 }
                 else
                 {
-                    destinationMapID = target.Map.MapleID;
+                    destinationMapId = target.Map.MapleId;
                 }
             }
 
             iPacket.ReadInt(); // NOTE: Ticks.
 
-            if (destinationMapID != -1)
+            if (destinationMapId != -1)
             {
                 var originMap = Parent.Map;
-                var destinationMap = DataProvider.Maps[destinationMapID];
+                var destinationMap = DataProvider.Maps[destinationMapId];
 
                 // TODO: Field limit check.
                 // TODO: Origin map field limit check.
                 // TODO: Continent check.
-                if (originMap.MapleID == destinationMap.MapleID)
+                if (originMap.MapleId == destinationMap.MapleId)
                 {
                     result = TrockResult.AlreadyThere;
                 }
@@ -211,7 +211,7 @@ namespace RazzleServer.Game.Maple.Characters
 
             if (result == TrockResult.Success)
             {
-                Parent.ChangeMap(destinationMapID);
+                Parent.ChangeMap(destinationMapId);
 
                 used = true;
             }

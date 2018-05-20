@@ -25,16 +25,16 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Load()
         {
-            //foreach (Datum datum in new Datums("quests_started").Populate("CharacterID = {0}", this.Parent.ID))
+            //foreach (Datum datum in new Datums("quests_started").Populate("CharacterId = {0}", this.Parent.Id))
             //{
-            //    if (!this.Started.ContainsKey((ushort)datum["QuestID"]))
+            //    if (!this.Started.ContainsKey((ushort)datum["QuestId"]))
             //    {
-            //        this.Started.Add((ushort)datum["QuestID"], new Dictionary<int, short>());
+            //        this.Started.Add((ushort)datum["QuestId"], new Dictionary<int, short>());
             //    }
 
-            //    if (datum["MobID"] != null && datum["Killed"] != null)
+            //    if (datum["MobId"] != null && datum["Killed"] != null)
             //    {
-            //        this.Started[(ushort)datum["QuestID"]].Add((int)datum["MobID"], ((short)datum["Killed"]));
+            //        this.Started[(ushort)datum["QuestId"]].Add((int)datum["MobId"], ((short)datum["Killed"]));
             //    }
             //}
         }
@@ -47,10 +47,10 @@ namespace RazzleServer.Game.Maple.Characters
             //    {
             //        Datum datum = new Datum("quests_started");
 
-            //        datum["CharacterID"] = this.Parent.ID;
-            //        datum["QuestID"] = loopStarted.Key;
+            //        datum["CharacterId"] = this.Parent.Id;
+            //        datum["QuestId"] = loopStarted.Key;
 
-            //        if (!Database.Exists("quests_started", "CharacterID = {0} && QuestID = {1}", this.Parent.ID, loopStarted.Key))
+            //        if (!Database.Exists("quests_started", "CharacterId = {0} && QuestId = {1}", this.Parent.Id, loopStarted.Key))
             //        {
             //            datum.Insert();
             //        }
@@ -61,14 +61,14 @@ namespace RazzleServer.Game.Maple.Characters
             //        {
             //            Datum datum = new Datum("quests_started");
 
-            //            datum["CharacterID"] = this.Parent.ID;
-            //            datum["QuestID"] = loopStarted.Key;
-            //            datum["MobID"] = mobKills.Key;
+            //            datum["CharacterId"] = this.Parent.Id;
+            //            datum["QuestId"] = loopStarted.Key;
+            //            datum["MobId"] = mobKills.Key;
             //            datum["Killed"] = mobKills.Value;
 
-            //            if (Database.Exists("quests_started", "CharacterID = {0} && QuestID = {1} && MobID = {2}", this.Parent.ID, loopStarted.Key, mobKills.Key))
+            //            if (Database.Exists("quests_started", "CharacterId = {0} && QuestId = {1} && MobId = {2}", this.Parent.Id, loopStarted.Key, mobKills.Key))
             //            {
-            //                datum.Update("CharacterID = {0} && QuestID = {1} && MobID = {2}", this.Parent.ID, loopStarted.Key, mobKills.Key);
+            //                datum.Update("CharacterId = {0} && QuestId = {1} && MobId = {2}", this.Parent.Id, loopStarted.Key, mobKills.Key);
             //            }
             //            else
             //            {
@@ -82,13 +82,13 @@ namespace RazzleServer.Game.Maple.Characters
             //{
             //    Datum datum = new Datum("quests_completed");
 
-            //    datum["CharacterID"] = this.Parent.ID;
-            //    datum["QuestID"] = loopCompleted.Key;
+            //    datum["CharacterId"] = this.Parent.Id;
+            //    datum["QuestId"] = loopCompleted.Key;
             //    datum["CompletionTime"] = loopCompleted.Value;
 
-            //    if (Database.Exists("quests_completed", "CharacterID = {0} && QuestID = {1}", this.Parent.ID, loopCompleted.Key))
+            //    if (Database.Exists("quests_completed", "CharacterId = {0} && QuestId = {1}", this.Parent.Id, loopCompleted.Key))
             //    {
-            //        datum.Update("CharacterID = {0} && QuestID = {1}", this.Parent.ID, loopCompleted.Key);
+            //        datum.Update("CharacterId = {0} && QuestId = {1}", this.Parent.Id, loopCompleted.Key);
             //    }
             //    else
             //    {
@@ -97,16 +97,16 @@ namespace RazzleServer.Game.Maple.Characters
             //}
         }
 
-        public void Delete(ushort questID)
+        public void Delete(ushort questId)
         {
-            if (Started.ContainsKey(questID))
+            if (Started.ContainsKey(questId))
             {
-                Started.Remove(questID);
+                Started.Remove(questId);
             }
 
-            //if (Database.Exists("quests_started", "QuestID = {0}", questID))
+            //if (Database.Exists("quests_started", "QuestId = {0}", questId))
             //{
-            //    Database.Delete("quests_started", "QuestID = {0}", questID);
+            //    Database.Delete("quests_started", "QuestId = {0}", questId);
             //}
         }
 
@@ -118,14 +118,14 @@ namespace RazzleServer.Game.Maple.Characters
         public void Handle(PacketReader iPacket)
         {
             var action = (QuestAction)iPacket.ReadByte();
-            ushort questID = iPacket.ReadUShort();
+            ushort questId = iPacket.ReadUShort();
 
-            if (!DataProvider.Quests.Contains(questID))
+            if (!DataProvider.Quests.Contains(questId))
             {
                 return;
             }
 
-            Quest quest = DataProvider.Quests[questID];
+            Quest quest = DataProvider.Quests[questId];
 
             int npcId;
 
@@ -134,11 +134,11 @@ namespace RazzleServer.Game.Maple.Characters
                 case QuestAction.RestoreLostItem: // TODO: Validate.
                     {
                         int quantity = iPacket.ReadInt();
-                        int itemID = iPacket.ReadInt();
+                        int itemId = iPacket.ReadInt();
 
-                        quantity -= Parent.Items.Available(itemID);
+                        quantity -= Parent.Items.Available(itemId);
 
-                        Item item = new Item(itemID, (short)quantity);
+                        Item item = new Item(itemId, (short)quantity);
 
                         Parent.Items.Add(item);
                     }
@@ -164,7 +164,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                 case QuestAction.Forfeit:
                     {
-                        Forfeit(quest.MapleID);
+                        Forfeit(quest.MapleId);
                     }
                     break;
 
@@ -177,7 +177,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                         foreach (Npc loopNpc in Parent.Map.Npcs)
                         {
-                            if (loopNpc.MapleID == npcId)
+                            if (loopNpc.MapleId == npcId)
                             {
                                 npc = loopNpc;
 
@@ -196,13 +196,13 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public void Start(Quest quest, int npcID)
+        public void Start(Quest quest, int npcId)
         {
-            Started.Add(quest.MapleID, new Dictionary<int, short>());
+            Started.Add(quest.MapleId, new Dictionary<int, short>());
 
             foreach (KeyValuePair<int, short> requiredKills in quest.PostRequiredKills)
             {
-                Started[quest.MapleID].Add(requiredKills.Key, 0);
+                Started[quest.MapleId].Add(requiredKills.Key, 0);
             }
 
             Parent.Experience += quest.ExperienceReward[0];
@@ -223,13 +223,13 @@ namespace RazzleServer.Game.Maple.Characters
                 }
             }
 
-            Update(quest.MapleID, QuestStatus.InProgress);
+            Update(quest.MapleId, QuestStatus.InProgress);
 
             using (var oPacket = new PacketWriter(ServerOperationCode.QuestResult))
             {
                 oPacket.WriteByte((byte)QuestResult.Complete);
-                oPacket.WriteUShort(quest.MapleID);
-                oPacket.WriteInt(npcID);
+                oPacket.WriteUShort(quest.MapleId);
+                oPacket.WriteInt(npcId);
                 oPacket.WriteInt(0);
 
                 Parent.Client.Send(oPacket);
@@ -333,29 +333,29 @@ namespace RazzleServer.Game.Maple.Characters
                 }
             }
 
-            Update(quest.MapleID, QuestStatus.Complete);
+            Update(quest.MapleId, QuestStatus.Complete);
 
-            Delete(quest.MapleID);
+            Delete(quest.MapleId);
 
-            Completed.Add(quest.MapleID, DateTime.UtcNow);
+            Completed.Add(quest.MapleId, DateTime.UtcNow);
 
             Parent.ShowLocalUserEffect(UserEffect.QuestComplete);
             Parent.ShowRemoteUserEffect(UserEffect.QuestComplete, true);
         }
 
-        public void Forfeit(ushort questID)
+        public void Forfeit(ushort questId)
         {
-            Delete(questID);
+            Delete(questId);
 
-            Update(questID, QuestStatus.NotStarted);
+            Update(questId, QuestStatus.NotStarted);
         }
 
-        private void Update(ushort questID, QuestStatus status, string progress = "")
+        private void Update(ushort questId, QuestStatus status, string progress = "")
         {
             using (var oPacket = new PacketWriter(ServerOperationCode.Message))
             {
                 oPacket.WriteByte((byte)MessageType.QuestRecord);
-                oPacket.WriteUShort(questID);
+                oPacket.WriteUShort(questId);
                 oPacket.WriteByte((byte)status);
 
                 if (status == QuestStatus.InProgress)
@@ -371,9 +371,9 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public bool CanComplete(ushort questID, bool onlyOnFinalKill = false)
+        public bool CanComplete(ushort questId, bool onlyOnFinalKill = false)
         {
-            Quest quest = DataProvider.Quests[questID];
+            Quest quest = DataProvider.Quests[questId];
 
             foreach (KeyValuePair<int, short> requiredItem in quest.PostRequiredItems)
             {
@@ -395,14 +395,14 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 if (onlyOnFinalKill)
                 {
-                    if (Started[questID][requiredKill.Key] != requiredKill.Value)
+                    if (Started[questId][requiredKill.Key] != requiredKill.Value)
                     {
                         return false;
                     }
                 }
                 else
                 {
-                    if (Started[questID][requiredKill.Key] < requiredKill.Value)
+                    if (Started[questId][requiredKill.Key] < requiredKill.Value)
                     {
                         return false;
                     }
@@ -412,11 +412,11 @@ namespace RazzleServer.Game.Maple.Characters
             return true;
         }
 
-        public void NotifyComplete(ushort questID)
+        public void NotifyComplete(ushort questId)
         {
             using (var oPacket = new PacketWriter(ServerOperationCode.QuestClear))
             {
-                oPacket.WriteUShort(questID);
+                oPacket.WriteUShort(questId);
 
                 Parent.Client.Send(oPacket);
             }

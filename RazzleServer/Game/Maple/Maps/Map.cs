@@ -9,15 +9,15 @@ namespace RazzleServer.Game.Maple.Maps
 {
     public sealed class Map
     {
-        private int mObjectIDs;
+        private int mObjectIds;
 
-        public int MapleID { get; private set; }
-        public int ReturnMapID { get; private set; }
-        public int ForcedReturnMapID { get; private set; }
+        public int MapleId { get; private set; }
+        public int ReturnMapId { get; private set; }
+        public int ForcedReturnMapId { get; private set; }
         public sbyte RegenerationRate { get; private set; }
         public byte DecreaseHP { get; private set; }
         public ushort DamagePerSecond { get; private set; }
-        public int ProtectorItemID { get; private set; }
+        public int ProtectorItemId { get; private set; }
         public sbyte ShipKind { get; private set; }
         public byte RequiredLevel { get; private set; }
         public int TimeLimit { get; private set; }
@@ -50,7 +50,7 @@ namespace RazzleServer.Game.Maple.Maps
             {
                 return;
             }
-            MapleID = id;
+            MapleId = id;
             Characters = new MapCharacters(this);
             Drops = new MapDrops(this);
             Mobs = new MapMobs(this);
@@ -65,8 +65,8 @@ namespace RazzleServer.Game.Maple.Maps
             var info = img["info"];
             IsTown = (info["town"]?.GetInt() ?? 0) > 0;
             SpawnRate = info["mobRate"]?.GetDouble() ?? 1.0;
-            ReturnMapID = info["returnMap"]?.GetInt() ?? 0;
-            ForcedReturnMapID = info["forcedReturn"]?.GetInt() ?? 0;
+            ReturnMapId = info["returnMap"]?.GetInt() ?? 0;
+            ForcedReturnMapId = info["forcedReturn"]?.GetInt() ?? 0;
 
             img["portal"]?.WzProperties?.ForEach(x => Portals.Add(new Portal(x)));
             img["seat"]?.WzProperties?.ForEach(x => Seats.Add(new Seat(x)));
@@ -106,6 +106,6 @@ namespace RazzleServer.Game.Maple.Maps
 
         public void Notify(string text, NoticeType type = NoticeType.Popup) => Characters.ToList().ForEach(x => x.Notify(text, type));
 
-        public int AssignObjectID() => ++mObjectIDs;
+        public int AssignObjectId() => ++mObjectIds;
     }
 }

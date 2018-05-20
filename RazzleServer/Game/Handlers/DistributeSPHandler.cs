@@ -15,14 +15,14 @@ namespace RazzleServer.Game.Handlers
             }
 
             packet.ReadInt(); // NOTE: Ticks.
-            int mapleID = packet.ReadInt();
+            int mapleId = packet.ReadInt();
 
-            if (!client.Character.Skills.Contains(mapleID))
+            if (!client.Character.Skills.Contains(mapleId))
             {
-                client.Character.Skills.Add(new Skill(mapleID));
+                client.Character.Skills.Add(new Skill(mapleId));
             }
 
-            var skill = client.Character.Skills[mapleID];
+            var skill = client.Character.Skills[mapleId];
 
             if (skill.CurrentLevel + 1 <= skill.MaxLevel)
             {

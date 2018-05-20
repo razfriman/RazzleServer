@@ -26,7 +26,7 @@ namespace RazzleServer.Game.Maple.Maps
 
         protected override int GetKeyForItem(T item)
         {
-            return item.ObjectID;
+            return item.ObjectId;
         }
 
         protected override void InsertItem(int index, T item)
@@ -35,7 +35,7 @@ namespace RazzleServer.Game.Maple.Maps
 
             if (!(item is Character)  && !(item is Portal))
             {
-                item.ObjectID = this.Map.AssignObjectID();
+                item.ObjectId = this.Map.AssignObjectId();
             }
 
             base.InsertItem(index, item);
@@ -49,7 +49,7 @@ namespace RazzleServer.Game.Maple.Maps
 
             if (!(item is Character) && !(item is Portal))
             {
-                item.ObjectID = -1;
+                item.ObjectId = -1;
             }
 
             base.RemoveItem(index);

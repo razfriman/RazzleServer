@@ -12,7 +12,7 @@ namespace RazzleServer.Game.Maple.Life
     {
         public static Dictionary<short, List<int>> Summons { get; set; }
 
-        public byte MapleID { get; private set; }
+        public byte MapleId { get; private set; }
         public byte Level { get; private set; }
         public short EffectDelay { get; private set; }
 
@@ -31,7 +31,7 @@ namespace RazzleServer.Game.Maple.Life
 
         public MobSkill(WzImageProperty img)
         {
-            MapleID = (byte)(img["skill"]?.GetInt() ?? 0);
+            MapleId = (byte)(img["skill"]?.GetInt() ?? 0);
             Level = (byte)(img["level"]?.GetInt() ?? 0);
             EffectDelay = img["effectAfter"]?.GetShort() ?? 0;
         }
@@ -60,7 +60,7 @@ namespace RazzleServer.Game.Maple.Life
             bool banish = false;
             bool dispel = false;
 
-            switch ((MobSkillName)MapleID)
+            switch ((MobSkillName)MapleId)
             {
                 case MobSkillName.WeaponAttackUp:
                 case MobSkillName.WeaponAttackUpAreaOfEffect:
@@ -199,7 +199,7 @@ namespace RazzleServer.Game.Maple.Life
 
                 if (banish)
                 {
-                    affectedCharacter.ChangeMap(affectedCharacter.Map.ReturnMapID);
+                    affectedCharacter.ChangeMap(affectedCharacter.Map.ReturnMapId);
                 }
 
                 if (disease != CharacterDisease.None)
@@ -210,7 +210,7 @@ namespace RazzleServer.Game.Maple.Life
                         oPacket.WriteLong((long)disease);
 
                         oPacket.WriteShort((short)ParameterA);
-                        oPacket.WriteShort(MapleID);
+                        oPacket.WriteShort(MapleId);
                         oPacket.WriteShort(Level);
                         oPacket.WriteInt(Duration);
 

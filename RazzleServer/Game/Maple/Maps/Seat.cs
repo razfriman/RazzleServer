@@ -4,11 +4,11 @@ namespace RazzleServer.Game.Maple.Maps
 {
     public sealed class Seat : MapObject
     {
-        public short ID { get; private set; }
+        public short Id { get; private set; }
 
         public Seat(WzImageProperty img)
         {
-            ID = short.Parse(img.Name);
+            Id = short.Parse(img.Name);
             Position = img.GetPoint();
         }
     }

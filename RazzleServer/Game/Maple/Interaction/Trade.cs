@@ -50,16 +50,16 @@ namespace RazzleServer.Game.Maple.Interaction
             {
                 case InteractionCode.Invite:
                     {
-                        int characterID = iPacket.ReadInt();
+                        int characterId = iPacket.ReadInt();
 
-                        if (!this.Owner.Map.Characters.Contains(characterID))
+                        if (!this.Owner.Map.Characters.Contains(characterId))
                         {
                             // TODO: What does happen in case the invitee left?
 
                             return;
                         }
 
-                        Character invitee = this.Owner.Map.Characters[characterID];
+                        Character invitee = this.Owner.Map.Characters[characterId];
 
                         if (invitee.Trade != null)
                         {
@@ -175,7 +175,7 @@ namespace RazzleServer.Game.Maple.Interaction
                             item.Quantity -= quantity;
                             item.Update();
 
-                            item = new Item(item.MapleID, quantity);
+                            item = new Item(item.MapleId, quantity);
                         }
                         else
                         {

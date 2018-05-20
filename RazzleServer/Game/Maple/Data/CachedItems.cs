@@ -12,7 +12,7 @@ namespace RazzleServer.Game.Maple.Data
 {
     public sealed class CachedItems : KeyedCollection<int, Item>
     {
-        public List<int> WizetItemIDs { get; private set; }
+        public List<int> WizetItemIds { get; private set; }
 
         private readonly ILogger Log = LogManager.Log;
 
@@ -50,7 +50,7 @@ namespace RazzleServer.Game.Maple.Data
                 LoadEquipment(file.WzDirectory.GetDirectoryByName("Weapon"));
             }
 
-            LoadWizetItemIDs();
+            LoadWizetItemIds();
         }
 
         private void LoadItems(WzDirectory dir, ItemType type)
@@ -67,16 +67,16 @@ namespace RazzleServer.Game.Maple.Data
             {
                 var i = new Item(item, ItemType.Equipment);
 
-                if (!Contains(i.MapleID))
+                if (!Contains(i.MapleId))
                 {
                     Add(i);
                 }
             });
         }
 
-        private void LoadWizetItemIDs()
+        private void LoadWizetItemIds()
         {
-            WizetItemIDs = new List<int>(4)
+            WizetItemIds = new List<int>(4)
             {
                 1002140,
                 1322013,
@@ -85,6 +85,6 @@ namespace RazzleServer.Game.Maple.Data
             };
         }
 
-        protected override int GetKeyForItem(Item item) => item.MapleID;
+        protected override int GetKeyForItem(Item item) => item.MapleId;
     }
 }

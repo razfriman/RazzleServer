@@ -1,5 +1,5 @@
 ﻿using RazzleServer.Common.Constants;
-using RazzleServer.DB.Models;
+using RazzleServer.Data;
 
 namespace RazzleServer.Game.Maple
 {

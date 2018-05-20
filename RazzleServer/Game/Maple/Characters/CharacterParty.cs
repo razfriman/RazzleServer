@@ -5,6 +5,6 @@ namespace RazzleServer.Game.Maple.Characters
 {
     public class CharacterParty : KeyedCollection<int, PartyMember>
     {
-        protected override int GetKeyForItem(PartyMember item) => item.ID;
+        protected override int GetKeyForItem(PartyMember item) => item.Id;
     }
 }

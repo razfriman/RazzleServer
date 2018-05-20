@@ -5,7 +5,6 @@ using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.WzLib;
 using RazzleServer.Data;
-using RazzleServer.DB.Models;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Maps;
@@ -14,19 +13,19 @@ namespace RazzleServer.Game.Maple
 {
     public class Item : Drop
     {
-        public static ItemType GetType(int mapleID) => (ItemType)(mapleID / 1000000);
+        public static ItemType GetType(int mapleId) => (ItemType)(mapleId / 1000000);
 
         public CharacterItems Parent { get; set; }
 
-        public int ID { get; private set; }
-        public int AccountID { get; private set; }
-        public int MapleID { get; private set; }
+        public int Id { get; private set; }
+        public int AccountId { get; private set; }
+        public int MapleId { get; private set; }
         public short Slot { get; set; }
         private short maxPerStack;
         private short quantity;
         public string Creator { get; set; }
         public DateTime Expiration { get; set; }
-        public int? PetID { get; set; }
+        public int? PetId { get; set; }
 
         public bool IsCash { get; private set; }
         public bool OnlyOne { get; private set; }
@@ -91,13 +90,13 @@ namespace RazzleServer.Game.Maple
 
         public List<Tuple<int, short>> Summons { get; private set; }
 
-        public ItemType Type => GetType(MapleID);
+        public ItemType Type => GetType(MapleId);
 
         public WeaponType WeaponType
         {
             get
             {
-                switch (MapleID / 10000 % 100)
+                switch (MapleId / 10000 % 100)
                 {
                     case 30:
                         return WeaponType.Sword1H;
@@ -150,7 +149,7 @@ namespace RazzleServer.Game.Maple
             }
         }
 
-        public Item CachedReference => DataProvider.Items[MapleID];
+        public Item CachedReference => DataProvider.Items[MapleId];
 
         public Character Character => Parent.Parent;
 
@@ -189,7 +188,7 @@ namespace RazzleServer.Game.Maple
             }
         }
 
-        public bool IsSealed => DataProvider.Items.WizetItemIDs.Contains(MapleID);
+        public bool IsSealed => DataProvider.Items.WizetItemIds.Contains(MapleId);
 
         public byte Flags
         {
@@ -210,29 +209,29 @@ namespace RazzleServer.Game.Maple
 
         public bool IsEquippedCash => Slot < -100;
 
-        public bool IsConsumable => MapleID / 10000 >= 200 && MapleID / 10000 < 204;
+        public bool IsConsumable => MapleId / 10000 >= 200 && MapleId / 10000 < 204;
 
         public bool IsRechargeable => IsThrowingStar || IsBullet;
 
-        public bool IsThrowingStar => MapleID / 10000 == 207;
+        public bool IsThrowingStar => MapleId / 10000 == 207;
 
-        public bool IsBullet => MapleID / 10000 == 233;
+        public bool IsBullet => MapleId / 10000 == 233;
 
         public bool IsArrow => IsArrowForBow || IsArrowForCrossbow;
 
-        public bool IsArrowForBow => MapleID >= 2060000 && MapleID < 2061000;
+        public bool IsArrowForBow => MapleId >= 2060000 && MapleId < 2061000;
 
-        public bool IsArrowForCrossbow => MapleID >= 2061000 && MapleID < 2062000;
+        public bool IsArrowForCrossbow => MapleId >= 2061000 && MapleId < 2062000;
 
-        public bool IsOverall => MapleID / 10000 == 105;
+        public bool IsOverall => MapleId / 10000 == 105;
 
         public bool IsWeapon => WeaponType != WeaponType.NotAWeapon;
 
-        public bool IsShield => MapleID / 10000 % 100 == 9;
+        public bool IsShield => MapleId / 10000 % 100 == 9;
 
-        public bool IsPet => MapleID >= 5000000 && MapleID <= 5000100;
+        public bool IsPet => MapleId >= 5000000 && MapleId <= 5000100;
 
-        public bool IsTownScroll => MapleID >= 2030000 && MapleID < 2030020;
+        public bool IsTownScroll => MapleId >= 2030000 && MapleId < 2030020;
 
         public bool IsTwoHanded
         {
@@ -295,9 +294,9 @@ namespace RazzleServer.Game.Maple
 
         public bool Assigned { get; set; }
 
-        public Item(int mapleID, short quantity = 1, DateTime? expiration = null, bool equipped = false)
+        public Item(int mapleId, short quantity = 1, DateTime? expiration = null, bool equipped = false)
         {
-            MapleID = mapleID;
+            MapleId = mapleId;
             MaxPerStack = CachedReference.MaxPerStack;
             Quantity = (Type == ItemType.Equipment) ? (short)1 : quantity;
             if (equipped) Slot = (short)GetEquippedSlot();
@@ -387,7 +386,7 @@ namespace RazzleServer.Game.Maple
                 return;
             }
 
-            MapleID = id;
+            MapleId = id;
             Summons = new List<Tuple<int, short>>();
             MaxPerStack = info["slotMax"]?.GetShort() ?? 1;
             IsCash = (info["cash"]?.GetInt() ?? 0) > 0;
@@ -423,7 +422,7 @@ namespace RazzleServer.Game.Maple
                 return;
             }
 
-            MapleID = id;
+            MapleId = id;
             Summons = new List<Tuple<int, short>>();
             MaxPerStack = info["slotMax"]?.GetShort() ?? 1;
             IsCash = (info["cash"]?.GetInt() ?? 0) > 0;
@@ -437,16 +436,16 @@ namespace RazzleServer.Game.Maple
 
         public Item(ItemEntity datum)
         {
-            ID = datum.ID;
+            Id = datum.Id;
             Assigned = true;
-            AccountID = datum.AccountID;
-            MapleID = datum.MapleID;
+            AccountId = datum.AccountId;
+            MapleId = datum.MapleId;
             MaxPerStack = CachedReference.MaxPerStack;
             Quantity = datum.Quantity;
             Slot = datum.Slot;
             Creator = datum.Creator;
             Expiration = datum.Expiration;
-            PetID = datum.PetID;
+            PetId = datum.PetId;
 
             IsCash = CachedReference.IsCash;
             OnlyOne = CachedReference.OnlyOne;
@@ -568,9 +567,9 @@ namespace RazzleServer.Game.Maple
         {
             //Datum datum = new Datum("items");
 
-            //datum["AccountID"] = Character.AccountID;
-            //datum["CharacterID"] = Character.ID;
-            //datum["MapleID"] = MapleID;
+            //datum["AccountId"] = Character.AccountId;
+            //datum["CharacterId"] = Character.Id;
+            //datum["MapleId"] = MapleId;
             //datum["Quantity"] = Quantity;
             //datum["Slot"] = Slot;
             //datum["Creator"] = Creator;
@@ -597,11 +596,11 @@ namespace RazzleServer.Game.Maple
 
             //if (Assigned)
             //{
-            //    datum.Update("ID = {0}", ID);
+            //    datum.Update("Id = {0}", Id);
             //}
             //else
             //{
-            //    ID = datum.InsertAndReturnID();
+            //    Id = datum.InsertAndReturnId();
             //    Assigned = true;
             //}
         }
@@ -610,7 +609,7 @@ namespace RazzleServer.Game.Maple
         {
             using (var dbContext = new MapleDbContext())
             {
-                var item = dbContext.Items.Find(ID);
+                var item = dbContext.Items.Find(Id);
                 if (item != null)
                 {
                     dbContext.Remove(item);
@@ -816,7 +815,7 @@ namespace RazzleServer.Game.Maple
                     Character.Client.Send(oPacket);
                 }
 
-                Item dropped = new Item(MapleID, quantity)
+                Item dropped = new Item(MapleId, quantity)
                 {
                     Dropper = Character,
                     Owner = null
@@ -834,7 +833,7 @@ namespace RazzleServer.Game.Maple
 
             if (destination != null &&
                 Type != ItemType.Equipment &&
-                MapleID == destination.MapleID &&
+                MapleId == destination.MapleId &&
                 !IsRechargeable &&
                 destination.Quantity < destination.MaxPerStack)
             {
@@ -929,18 +928,18 @@ namespace RazzleServer.Game.Maple
                     }
                 }
 
-                oPacket.WriteByte((byte)(PetID != null ? 3 : Type == ItemType.Equipment ? 1 : 2));
-                oPacket.WriteInt(MapleID);
+                oPacket.WriteByte((byte)(PetId != null ? 3 : Type == ItemType.Equipment ? 1 : 2));
+                oPacket.WriteInt(MapleId);
                 oPacket.WriteBool(IsCash);
 
                 if (IsCash)
                 {
-                    oPacket.WriteLong(1); // TODO: Unique ID for cash items.
+                    oPacket.WriteLong(1); // TODO: Unique Id for cash items.
                 }
 
                 oPacket.WriteDateTime(Expiration);
 
-                if (PetID != null)
+                if (PetId != null)
                 {
 
                 }
@@ -988,7 +987,7 @@ namespace RazzleServer.Game.Maple
 
                     if (IsRechargeable)
                     {
-                        oPacket.WriteLong(0); // TODO: Unique ID.
+                        oPacket.WriteLong(0); // TODO: Unique Id.
                     }
                 }
 
@@ -1000,59 +999,59 @@ namespace RazzleServer.Game.Maple
         {
             short slot = 0;
 
-            if (MapleID >= 1000000 && MapleID < 1010000)
+            if (MapleId >= 1000000 && MapleId < 1010000)
             {
                 slot -= 1;
             }
-            else if (MapleID >= 1010000 && MapleID < 1020000)
+            else if (MapleId >= 1010000 && MapleId < 1020000)
             {
                 slot -= 2;
             }
-            else if (MapleID >= 1020000 && MapleID < 1030000)
+            else if (MapleId >= 1020000 && MapleId < 1030000)
             {
                 slot -= 3;
             }
-            else if (MapleID >= 1030000 && MapleID < 1040000)
+            else if (MapleId >= 1030000 && MapleId < 1040000)
             {
                 slot -= 4;
             }
-            else if (MapleID >= 1040000 && MapleID < 1060000)
+            else if (MapleId >= 1040000 && MapleId < 1060000)
             {
                 slot -= 5;
             }
-            else if (MapleID >= 1060000 && MapleID < 1070000)
+            else if (MapleId >= 1060000 && MapleId < 1070000)
             {
                 slot -= 6;
             }
-            else if (MapleID >= 1070000 && MapleID < 1080000)
+            else if (MapleId >= 1070000 && MapleId < 1080000)
             {
                 slot -= 7;
             }
-            else if (MapleID >= 1080000 && MapleID < 1090000)
+            else if (MapleId >= 1080000 && MapleId < 1090000)
             {
                 slot -= 8;
             }
-            else if (MapleID >= 1102000 && MapleID < 1103000)
+            else if (MapleId >= 1102000 && MapleId < 1103000)
             {
                 slot -= 9;
             }
-            else if (MapleID >= 1092000 && MapleID < 1100000)
+            else if (MapleId >= 1092000 && MapleId < 1100000)
             {
                 slot -= 10;
             }
-            else if (MapleID >= 1300000 && MapleID < 1800000)
+            else if (MapleId >= 1300000 && MapleId < 1800000)
             {
                 slot -= 11;
             }
-            else if (MapleID >= 1112000 && MapleID < 1120000)
+            else if (MapleId >= 1112000 && MapleId < 1120000)
             {
                 slot -= 12;
             }
-            else if (MapleID >= 1122000 && MapleID < 1123000)
+            else if (MapleId >= 1122000 && MapleId < 1123000)
             {
                 slot -= 17;
             }
-            else if (MapleID >= 1900000 && MapleID < 2000000)
+            else if (MapleId >= 1900000 && MapleId < 2000000)
             {
                 slot -= 18;
             }
@@ -1071,7 +1070,7 @@ namespace RazzleServer.Game.Maple
 
             oPacket.WriteByte((byte)MessageType.DropPickup);
             oPacket.WriteBool(false);
-            oPacket.WriteInt(MapleID);
+            oPacket.WriteInt(MapleId);
             oPacket.WriteInt(Quantity);
             oPacket.WriteInt(0);
             oPacket.WriteInt(0);

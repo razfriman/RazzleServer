@@ -73,14 +73,14 @@ namespace RazzleServer.Game
             }
         }
 
-        public void ChangeChannel(byte channelID)
+        public void ChangeChannel(byte channelId)
         {
-            Server.Manager.Migrate(Host, Account.ID, Character.ID);
+            Server.Manager.Migrate(Host, Account.Id, Character.Id);
 
             var outPacket = new PacketWriter(ServerOperationCode.ChangeChannel);
             outPacket.WriteBool(true);
             outPacket.WriteBytes(Socket.HostBytes);
-            outPacket.WriteUShort(Server.World[channelID].Port);
+            outPacket.WriteUShort(Server.World[channelId].Port);
             Send(outPacket);
         }
 

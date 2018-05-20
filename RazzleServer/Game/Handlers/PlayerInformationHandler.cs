@@ -8,9 +8,9 @@ namespace RazzleServer.Game.Handlers
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
             packet.ReadInt();
-            int characterID = packet.ReadInt();
+            int characterId = packet.ReadInt();
 
-            var target = client.Character.Map.Characters[characterID];
+            var target = client.Character.Map.Characters[characterId];
 
             if (target == null || (target.IsMaster && !client.Character.IsMaster))
             {
@@ -19,7 +19,7 @@ namespace RazzleServer.Game.Handlers
 
             using (var oPacket = new PacketWriter(ServerOperationCode.CharacterInformation))
             {
-                oPacket.WriteInt(target.ID);
+                oPacket.WriteInt(target.Id);
                 oPacket.WriteByte(target.Level);
                 oPacket.WriteShort((int)target.Job);
                 oPacket.WriteShort(target.Fame);

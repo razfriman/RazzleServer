@@ -7,11 +7,11 @@ namespace RazzleServer.Login.Handlers
     {
         public override void HandlePacket(PacketReader packet, LoginClient client)
         {
-            byte worldID = packet.ReadByte();
+            byte worldId = packet.ReadByte();
 
-            if (client.Server.Manager.Worlds.Contains(worldID))
+            if (client.Server.Manager.Worlds.Contains(worldId))
             {
-                var world = client.Server.Manager.Worlds[worldID];
+                var world = client.Server.Manager.Worlds[worldId];
                 using (var oPacket = new PacketWriter(ServerOperationCode.CheckUserLimitResult))
                 {
                     oPacket.WriteShort((short)world.Flag);

@@ -65,7 +65,7 @@ namespace RazzleServer.Game.Maple.Maps
                         }
                         else
                         {
-                            drops.Add(new Item(loopLoot.MapleID, (short)Functions.Random(loopLoot.MinimumQuantity, loopLoot.MaximumQuantity))
+                            drops.Add(new Item(loopLoot.MapleId, (short)Functions.Random(loopLoot.MinimumQuantity, loopLoot.MaximumQuantity))
                             {
                                 Dropper = item,
                                 Owner = owner
@@ -86,11 +86,11 @@ namespace RazzleServer.Game.Maple.Maps
             {
                 foreach (KeyValuePair<ushort, Dictionary<int, short>> loopStarted in owner.Quests.Started)
                 {
-                    if (loopStarted.Value.ContainsKey(item.MapleID))
+                    if (loopStarted.Value.ContainsKey(item.MapleId))
                     {
-                        if (loopStarted.Value[item.MapleID] < DataProvider.Quests[loopStarted.Key].PostRequiredKills[item.MapleID])
+                        if (loopStarted.Value[item.MapleId] < DataProvider.Quests[loopStarted.Key].PostRequiredKills[item.MapleId])
                         {
-                            loopStarted.Value[item.MapleID]++;
+                            loopStarted.Value[item.MapleId]++;
 
                             using (var oPacket = new PacketWriter(ServerOperationCode.Message))
                             {
@@ -134,9 +134,9 @@ namespace RazzleServer.Game.Maple.Maps
                 Delay.Execute(() => item.SpawnPoint.Spawn(), 3 * 1000); // TODO: Actual respawn time.
             }
 
-            foreach (int summonID in item.DeathSummons)
+            foreach (int summonId in item.DeathSummons)
             {
-                this.Map.Mobs.Add(new Mob(summonID)
+                this.Map.Mobs.Add(new Mob(summonId)
                 {
                     Position = item.Position // TODO: Set owner as well.
                 });

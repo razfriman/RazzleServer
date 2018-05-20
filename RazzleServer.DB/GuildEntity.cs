@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RazzleServer.DB.Models
+namespace RazzleServer.Data
 {
     public class GuildEntity
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
         public int Leader { get; set; }
         public int Logo { get; set; }
         public int LogoBG { get; set; }

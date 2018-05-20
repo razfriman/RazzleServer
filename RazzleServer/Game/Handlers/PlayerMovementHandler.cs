@@ -58,7 +58,7 @@ namespace RazzleServer.Game.Handlers
             using (var oPacket = new PacketWriter(ServerOperationCode.Move))
             {
 
-                oPacket.WriteInt(client.Character.ID);
+                oPacket.WriteInt(client.Character.Id);
                 oPacket.WriteBytes(movements.ToByteArray());
                 client.Character.Map.Broadcast(oPacket, client.Character);
             }

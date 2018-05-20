@@ -8,34 +8,34 @@ namespace RazzleServer.Game.Maple.Shops
     {
         public Shop Parent { get; private set; }
 
-        public int MapleID { get; private set; }
+        public int MapleId { get; private set; }
         public short Quantity { get; private set; }
         public int PurchasePrice { get; private set; }
         public int Sort { get; private set; }
 
-        public short MaxPerStack => DataProvider.Items[this.MapleID].MaxPerStack;
+        public short MaxPerStack => DataProvider.Items[this.MapleId].MaxPerStack;
 
-        public int SalePrice => DataProvider.Items[this.MapleID].SalePrice;
+        public int SalePrice => DataProvider.Items[this.MapleId].SalePrice;
 
-        public double UnitPrice => Parent.UnitPrices[this.MapleID];
+        public double UnitPrice => Parent.UnitPrices[this.MapleId];
 
-        public bool IsRecharageable => DataProvider.Items[this.MapleID].IsRechargeable;
+        public bool IsRecharageable => DataProvider.Items[this.MapleId].IsRechargeable;
 
         //public ShopItem(Shop parent, Datum datum)
         //{
         //    this.Parent = parent;
 
-        //    this.MapleID = (int)datum["itemid"];
+        //    this.MapleId = (int)datum["itemid"];
         //    this.Quantity = (short)datum["quantity"];
         //    this.PurchasePrice = (int)datum["price"];
         //    this.Sort = (int)datum["sort"];
         //}
 
-        public ShopItem(Shop parent, int mapleID)
+        public ShopItem(Shop parent, int mapleId)
         {
             this.Parent = parent;
 
-            this.MapleID = mapleID;
+            this.MapleId = mapleId;
             this.Quantity = 1;
             this.PurchasePrice = 0;
         }
@@ -44,7 +44,7 @@ namespace RazzleServer.Game.Maple.Shops
         {
             using (var oPacket = new PacketWriter())
             {
-                oPacket.WriteInt(this.MapleID);
+                oPacket.WriteInt(this.MapleId);
                 oPacket.WriteInt(this.PurchasePrice);
                 oPacket.WriteInt(0); // NOTE: Perfect Pitch.
                 oPacket.WriteInt(0); // NOTE: Time limit.

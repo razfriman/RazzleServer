@@ -18,7 +18,7 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 foreach (Buff loopBuff in Buffs)
                 {
-                    if (loopBuff.MapleID == mapleId)
+                    if (loopBuff.MapleId == mapleId)
                     {
                         return loopBuff;
                     }
@@ -38,7 +38,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Load()
         {
-            //foreach (Datum datum in new Datums("buffs").Populate("CharacterID = {0}", Parent.ID))
+            //foreach (Datum datum in new Datums("buffs").Populate("CharacterId = {0}", Parent.Id))
             //{
             //    if ((DateTime)datum["End"] > DateTime.Now)
             //    {
@@ -59,7 +59,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Delete()
         {
-            //Database.Delete("buffs", "CharacterID = {0}", this.Parent.ID);
+            //Database.Delete("buffs", "CharacterId = {0}", this.Parent.Id);
         }
 
         public bool Contains(Buff buff)
@@ -71,7 +71,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             foreach (Buff loopBuff in Buffs)
             {
-                if (loopBuff.MapleID == mapleId)
+                if (loopBuff.MapleId == mapleId)
                 {
                     return true;
                 }
@@ -89,7 +89,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             foreach (Buff loopBuff in Buffs)
             {
-                if (loopBuff.MapleID == buff.MapleID)
+                if (loopBuff.MapleId == buff.MapleId)
                 {
                     Remove(loopBuff);
 
@@ -124,14 +124,14 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Cancel(PacketReader iPacket)
         {
-            int mapleID = iPacket.ReadInt();
+            int mapleId = iPacket.ReadInt();
 
-            switch (mapleID)
+            switch (mapleId)
             {
                 // TODO: Handle special skills.
 
                 default:
-                    Remove(mapleID);
+                    Remove(mapleId);
                     break;
             }
         }

@@ -49,11 +49,11 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
                     quantity = 1;
                 }
 
-                int itemID = int.Parse(args[0]);
+                int itemId = int.Parse(args[0]);
 
-                if (DataProvider.Items.Contains(itemID))
+                if (DataProvider.Items.Contains(itemId))
                 {
-                    caller.Items.Add(new Item(itemID, quantity));
+                    caller.Items.Add(new Item(itemId, quantity));
                 }
                 else
                 {

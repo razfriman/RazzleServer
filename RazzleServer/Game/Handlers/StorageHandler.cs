@@ -68,10 +68,10 @@ namespace RazzleServer.Game.Handlers
                 case StorageAction.Deposit:
                     {
                         short slot = packet.ReadShort();
-                        int itemID = packet.ReadInt();
+                        int itemId = packet.ReadInt();
                         short quantity = packet.ReadShort();
 
-                        Item item = client.Character.Items[itemID, slot];
+                        Item item = client.Character.Items[itemId, slot];
 
                         if (client.Character.Storage.IsFull)
                         {

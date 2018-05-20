@@ -68,6 +68,6 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        protected override int GetKeyForItem(Mob item) => item.ObjectID;
+        protected override int GetKeyForItem(Mob item) => item.ObjectId;
     }
 }

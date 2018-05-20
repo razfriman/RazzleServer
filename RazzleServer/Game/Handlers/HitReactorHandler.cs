@@ -8,10 +8,10 @@ namespace RazzleServer.Game.Handlers
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
-            int objectID = packet.ReadInt();
+            int objectId = packet.ReadInt();
 
             var reactors = client.Character.Map.Reactors;
-            if (!reactors.Contains(objectID))
+            if (!reactors.Contains(objectId))
             {
                 return;
             }
@@ -19,7 +19,7 @@ namespace RazzleServer.Game.Handlers
             Point characterPosition = packet.ReadPoint();
             short actionDelay = packet.ReadShort();
 
-            var reactor = reactors[objectID];
+            var reactor = reactors[objectId];
             reactor.Hit(client.Character, actionDelay);
         }
     }

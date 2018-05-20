@@ -6,7 +6,6 @@ using RazzleServer.Common.Data;
 using RazzleServer.Common.Exceptions;
 using RazzleServer.Common.Util;
 using RazzleServer.Data;
-using RazzleServer.DB.Models;
 
 namespace RazzleServer.Login.Maple
 {
@@ -14,7 +13,7 @@ namespace RazzleServer.Login.Maple
     {
         public LoginClient Client { get; private set; }
 
-        public int ID { get; private set; }
+        public int Id { get; private set; }
         public string Username { get; set; }
         public string Password { get; set; }
         public string Salt { get; set; }
@@ -44,7 +43,7 @@ namespace RazzleServer.Login.Maple
                     throw new NoAccountException();
                 }
 
-                ID = account.ID;
+                Id = account.Id;
                 Username = account.Username;
                 Gender = (Gender)account.Gender;
                 Password = account.Password;
@@ -63,11 +62,11 @@ namespace RazzleServer.Login.Maple
         {
             using (var dbContext = new MapleDbContext())
             {
-                var account = dbContext.Accounts.Find(ID);
+                var account = dbContext.Accounts.Find(Id);
 
                 if (account == null)
                 {
-                    Log.LogError($"Account does not exists with ID [{ID}]");
+                    Log.LogError($"Account does not exists with Id [{Id}]");
                 }
 
                 account.Username = Username;
@@ -113,7 +112,7 @@ namespace RazzleServer.Login.Maple
 
                 dbContext.Accounts.Add(account);
                 dbContext.SaveChanges();
-                ID = account.ID;
+                Id = account.Id;
             }
         }
     }

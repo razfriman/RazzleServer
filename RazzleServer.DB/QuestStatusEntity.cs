@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RazzleServer.DB.Models
+namespace RazzleServer.Data
 {
     public class QuestStatusEntity
     {
-        public int ID { get; set; }
-        public int CharacterID { get; set; }
-        public int QuestID { get; set; }
+        public int Id { get; set; }
+        public int CharacterId { get; set; }
+        public int QuestId { get; set; }
         public uint CompleteTime { get; set; }
         public byte Status { get; set; }
         [MaxLength(0xFF)]

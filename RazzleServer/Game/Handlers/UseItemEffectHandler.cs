@@ -7,8 +7,8 @@ namespace RazzleServer.Game.Handlers
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
-            int mapleID = packet.ReadInt();
-            client.Character.ItemEffect = mapleID;
+            int mapleId = packet.ReadInt();
+            client.Character.ItemEffect = mapleId;
         }
     }
 }

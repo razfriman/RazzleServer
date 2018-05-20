@@ -10,7 +10,7 @@ namespace RazzleServer.Login.Handlers
             client.World = packet.ReadByte();
             client.Channel = packet.ReadByte();
 
-            var characters = client.Server.GetCharacters(client.World, client.Account.ID);
+            var characters = client.Server.GetCharacters(client.World, client.Account.Id);
            
             using (var oPacket = new PacketWriter(ServerOperationCode.SelectWorldResult))
             {

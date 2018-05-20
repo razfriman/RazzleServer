@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazzleServer.DB", "RazzleServer.DB\RazzleServer.DB.csproj", "{F791C1A9-66AD-463A-93B4-6FEB8BD8C45D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazzleServer", "RazzleServer\RazzleServer.csproj", "{23750A73-86BE-49CF-9159-39B34627990F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazzleServer.Data", "RazzleServer.DB\RazzleServer.Data.csproj", "{728BCBCC-1E8D-4AE6-B40D-05B54FED815F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F791C1A9-66AD-463A-93B4-6FEB8BD8C45D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F791C1A9-66AD-463A-93B4-6FEB8BD8C45D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F791C1A9-66AD-463A-93B4-6FEB8BD8C45D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F791C1A9-66AD-463A-93B4-6FEB8BD8C45D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{23750A73-86BE-49CF-9159-39B34627990F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{23750A73-86BE-49CF-9159-39B34627990F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23750A73-86BE-49CF-9159-39B34627990F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23750A73-86BE-49CF-9159-39B34627990F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{728BCBCC-1E8D-4AE6-B40D-05B54FED815F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{728BCBCC-1E8D-4AE6-B40D-05B54FED815F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{728BCBCC-1E8D-4AE6-B40D-05B54FED815F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{728BCBCC-1E8D-4AE6-B40D-05B54FED815F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

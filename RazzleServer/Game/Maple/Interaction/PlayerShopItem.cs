@@ -5,8 +5,8 @@
         public short Bundles { get; set; }
         public int MerchantPrice { get; private set; }
 
-        public PlayerShopItem(int mapleID, short bundles, short quantity, int price)
-            : base(mapleID, quantity)
+        public PlayerShopItem(int mapleId, short bundles, short quantity, int price)
+            : base(mapleId, quantity)
         {
             this.Bundles = bundles;
             this.MerchantPrice = price;

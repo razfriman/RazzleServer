@@ -2,8 +2,8 @@
 using System.Linq;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
+using RazzleServer.Common.Data;
 using RazzleServer.Data;
-using RazzleServer.DB.Models;
 
 namespace RazzleServer.Game.Maple.Characters
 {
@@ -22,7 +22,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             using (var dbContext = new MapleDbContext())
             {
-                var entities = dbContext.KeyMaps.Where(x => x.CharacterID == Parent.ID);
+                var entities = dbContext.KeyMaps.Where(x => x.CharacterId == Parent.Id);
 
                 foreach (var entity in entities)
                 {
@@ -41,7 +41,7 @@ namespace RazzleServer.Game.Maple.Characters
                 {
                     dbContext.KeyMaps.Add(new KeyMapEntity
                     {
-                        CharacterID = Parent.ID,
+                        CharacterId = Parent.Id,
                         Action = (byte)entry.Action,
                         Key = (byte)entry.Key,
                         Type = (byte)entry.Type
@@ -56,7 +56,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             using (var dbContext = new MapleDbContext())
             {
-                var entities = dbContext.KeyMaps.Where(x => x.CharacterID == Parent.ID);
+                var entities = dbContext.KeyMaps.Where(x => x.CharacterId == Parent.Id);
 
                 dbContext.KeyMaps.RemoveRange(entities);
                 dbContext.SaveChanges();

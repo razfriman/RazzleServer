@@ -9,14 +9,14 @@ namespace RazzleServer.Login.Handlers
     {
         public override void HandlePacket(PacketReader packet, LoginClient client)
         {
-            var characterID = packet.ReadInt();
+            var characterId = packet.ReadInt();
             var result = CharacterDeletionResult.Valid;
 
-            Character.Delete(characterID);
+            Character.Delete(characterId);
 
             using (var oPacket = new PacketWriter(ServerOperationCode.DeleteCharacterResult))
             {
-                oPacket.WriteInt(characterID);
+                oPacket.WriteInt(characterId);
                 oPacket.WriteByte((byte)result);
                 client.Send(oPacket);
             }

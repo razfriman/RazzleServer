@@ -13,7 +13,6 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="ZKWeb.System.Drawing" Version="4.0.1" />
-    <ProjectReference Include="..\RazzleServer.DB\RazzleServer.DB.csproj" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.0.2" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="2.0.2" />
@@ -49,5 +48,8 @@
     <Folder Include="Common\Exceptions\" />
     <Folder Include="Game\Scripts\" />
     <Folder Include="Game\Scripts\Reactor\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RazzleServer.DB\RazzleServer.Data.csproj" />
   </ItemGroup>
 </Project>

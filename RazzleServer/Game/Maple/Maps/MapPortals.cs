@@ -27,7 +27,7 @@ namespace RazzleServer.Game.Maple.Maps
 
         protected override int GetKeyForItem(Portal item)
         {
-            return item.ID;
+            return item.Id;
         }
     }
 }

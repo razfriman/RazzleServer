@@ -107,7 +107,7 @@ namespace RazzleServer.Game.Maple.Interaction
                             character.Items.Remove(item, true);
                         }
 
-                        PlayerShopItem shopItem = new PlayerShopItem(item.MapleID, bundles, quantity, price);
+                        PlayerShopItem shopItem = new PlayerShopItem(item.MapleId, bundles, quantity, price);
 
                         this.Items.Add(shopItem);
 
@@ -130,7 +130,7 @@ namespace RazzleServer.Game.Maple.Interaction
 
                             if (shopItem.Quantity > 0)
                             {
-                                this.Owner.Items.Add(new Item(shopItem.MapleID, shopItem.Quantity));
+                                this.Owner.Items.Add(new Item(shopItem.MapleId, shopItem.Quantity));
                             }
 
                             this.Items.Remove(shopItem);
@@ -185,7 +185,7 @@ namespace RazzleServer.Game.Maple.Interaction
                         character.Meso -= shopItem.MerchantPrice * quantity;
                         this.Owner.Meso += shopItem.MerchantPrice * quantity;
 
-                        character.Items.Add(new Item(shopItem.MapleID, quantity));
+                        character.Items.Add(new Item(shopItem.MapleId, quantity));
 
                         this.UpdateItems(); // TODO: This doesn't mark the item as sold.
 
@@ -248,7 +248,7 @@ namespace RazzleServer.Game.Maple.Interaction
             {
                 if (loopShopItem.Quantity > 0)
                 {
-                    this.Owner.Items.Add(new Item(loopShopItem.MapleID, loopShopItem.Quantity));
+                    this.Owner.Items.Add(new Item(loopShopItem.MapleId, loopShopItem.Quantity));
                 }
             }
 
@@ -421,9 +421,9 @@ namespace RazzleServer.Game.Maple.Interaction
             var oPacket = new PacketWriter(ServerOperationCode.AnnounceBox);
 
 
-            oPacket.WriteInt(this.Owner.ID);
+            oPacket.WriteInt(this.Owner.Id);
             oPacket.WriteByte(4);
-            oPacket.WriteInt(this.ObjectID);
+            oPacket.WriteInt(this.ObjectId);
             oPacket.WriteString(this.Description);
             oPacket.WriteByte(0);
             oPacket.WriteByte(0);
@@ -438,7 +438,7 @@ namespace RazzleServer.Game.Maple.Interaction
         {
             var oPacket = new PacketWriter(ServerOperationCode.AnnounceBox);
 
-            oPacket.WriteInt(this.Owner.ID);
+            oPacket.WriteInt(this.Owner.Id);
             oPacket.WriteByte(0);
 
             return oPacket;

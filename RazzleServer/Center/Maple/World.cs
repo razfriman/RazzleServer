@@ -8,7 +8,7 @@ namespace RazzleServer.Center.Maple
 {
     public sealed class World : KeyedCollection<byte, GameServer>
     {
-        public byte ID { get; set; }
+        public byte Id { get; set; }
         public string Name { get; set; }
         public byte Channels { get; set; }
         public WorldStatusFlag Flag { get; set; }
@@ -25,7 +25,7 @@ namespace RazzleServer.Center.Maple
 
         public World(WorldConfig config)
         {
-            ID = config.ID;
+            Id = config.Id;
             Name = config.Name;
             Channels = config.Channels;
             Flag = config.Flag;
@@ -47,6 +47,6 @@ namespace RazzleServer.Center.Maple
 
 
 
-        protected override byte GetKeyForItem(GameServer item) => item.ChannelID;
+        protected override byte GetKeyForItem(GameServer item) => item.ChannelId;
     }
 }

@@ -89,7 +89,7 @@ namespace RazzleServer.Game.Maple.Data
             //                    {
             //                        if (this[(ushort)(int)datum["questid"]].PreItemRewards.ContainsKey((int)datum["rewardid"]))
             //                        {
-            //                            // NOTE: Neckson'd. Quest 8801 has rewards of the same ID.
+            //                            // NOTE: Neckson'd. Quest 8801 has rewards of the same Id.
 
             //                            continue;
             //                        }
@@ -100,7 +100,7 @@ namespace RazzleServer.Game.Maple.Data
             //                    {
             //                        if (this[(ushort)(int)datum["questid"]].PostItemRewards.ContainsKey((int)datum["rewardid"]))
             //                        {
-            //                            // NOTE: Neckson'd. Quest 8801 has rewards of the same ID.
+            //                            // NOTE: Neckson'd. Quest 8801 has rewards of the same Id.
 
             //                            continue;
             //                        }
@@ -144,6 +144,6 @@ namespace RazzleServer.Game.Maple.Data
             //}
         }
 
-        protected override ushort GetKeyForItem(Quest item) => item.MapleID;
+        protected override ushort GetKeyForItem(Quest item) => item.MapleId;
     }
 }

@@ -7,8 +7,8 @@ namespace RazzleServer.Game.Handlers
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
-            int objectID = packet.ReadInt();
-            var npc = client.Character.ControlledNpcs[objectID];
+            int objectId = packet.ReadInt();
+            var npc = client.Character.ControlledNpcs[objectId];
             npc?.Move(packet);
 
         }

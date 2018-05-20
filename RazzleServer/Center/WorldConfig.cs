@@ -4,7 +4,7 @@ namespace RazzleServer.Center
 {
     public sealed class WorldConfig
     {
-        public byte ID { get; set; }
+        public byte Id { get; set; }
         public string Name { get; set; }
         public byte Channels { get; set; }
         public WorldStatusFlag Flag { get; set; }

@@ -1,19 +1,19 @@
 ﻿using System;
 using RazzleServer.Common.Packet;
-using RazzleServer.Data;
+using RazzleServer.Common.Data;
 
 namespace RazzleServer.Game.Maple
 {
     public sealed class Memo
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
         public string Sender { get; private set; }
         public string Message { get; private set; }
         public DateTime Received { get; private set; }
 
         //public Memo(Datum datum)
         //{
-        //    this.ID = (int)datum["ID"];
+        //    this.Id = (int)datum["Id"];
         //    this.Sender = (string)datum["Sender"];
         //    this.Message = (string)datum["Message"];
         //    this.Received = (DateTime)datum["Received"];
@@ -23,7 +23,7 @@ namespace RazzleServer.Game.Maple
         {
             using (var dbContext = new MapleDbContext())
             {
-                var item = dbContext.MemoEntities.Find(ID);
+                var item = dbContext.MemoEntities.Find(Id);
                 if (item != null)
                 {
                     dbContext.Remove(item);
@@ -37,7 +37,7 @@ namespace RazzleServer.Game.Maple
             using (var oPacket = new PacketWriter())
             {
 
-                oPacket.WriteInt(this.ID);
+                oPacket.WriteInt(this.Id);
                 oPacket.WriteString(this.Sender + " "); // NOTE: Space is intentional.
                 oPacket.WriteString(this.Message);
                 oPacket.WriteDateTime(this.Received);

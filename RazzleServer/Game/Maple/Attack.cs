@@ -10,7 +10,7 @@ namespace RazzleServer.Game.Maple
         public byte Portals { get; private set; }
         public int Targets { get; private set; }
         public int Hits { get; private set; }
-        public int SkillID { get; private set; }
+        public int SkillId { get; private set; }
 
         public byte Display { get; private set; }
         public byte Animation { get; private set; }
@@ -28,9 +28,9 @@ namespace RazzleServer.Game.Maple
             byte tByte = iPacket.ReadByte();
             this.Targets = tByte / 0x10;
             this.Hits = tByte % 0x10;
-            this.SkillID = iPacket.ReadInt();
+            this.SkillId = iPacket.ReadInt();
 
-            if (this.SkillID > 0)
+            if (this.SkillId > 0)
             {
 
             }
@@ -55,7 +55,7 @@ namespace RazzleServer.Game.Maple
 
             for (int i = 0; i < this.Targets; i++)
             {
-                int objectID = iPacket.ReadInt();
+                int objectId = iPacket.ReadInt();
                 iPacket.ReadInt(); // NOTE: Unknown.
                 iPacket.ReadInt(); // NOTE: Mob position.
                 iPacket.ReadInt(); // NOTE: Damage position.
@@ -65,12 +65,12 @@ namespace RazzleServer.Game.Maple
                 {
                     uint damage = iPacket.ReadUInt();
 
-                    if (!this.Damages.ContainsKey(objectID))
+                    if (!this.Damages.ContainsKey(objectId))
                     {
-                        this.Damages.Add(objectID, new List<uint>());
+                        this.Damages.Add(objectId, new List<uint>());
                     }
 
-                    this.Damages[objectID].Add(damage);
+                    this.Damages[objectId].Add(damage);
 
                     this.TotalDamage += damage;
                 }

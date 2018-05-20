@@ -1,10 +1,10 @@
-using System;
+﻿using System;
 
-namespace RazzleServer.DB.Models
+namespace RazzleServer.Data
 {
     public class AccountEntity
     {
-        public int ID { get; private set; }
+        public int Id { get; private set; }
         public string Username { get; set; }
         public string Password { get; set; }
         public string Salt { get; set; }

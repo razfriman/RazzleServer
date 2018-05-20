@@ -5,7 +5,6 @@ using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Util;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using RazzleServer.Center.Maple;
 using RazzleServer.Center;
 
 namespace RazzleServer.Server
@@ -14,7 +13,7 @@ namespace RazzleServer.Server
 	{
 		public ushort LoginPort { get; set; } = 8484;
         public ushort ChannelPort { get; set; } = 8585;
-		public int DefaultMapID { get; set; } = 180000000;
+		public int DefaultMapId { get; set; } = 180000000;
 		public string DatabaseName { get; set; } = "MapleServer.db";
         public string WzFilePath { get; set; } = string.Empty;
 		public ushort Version { get; set; } = 55;

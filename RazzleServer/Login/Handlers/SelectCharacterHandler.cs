@@ -8,10 +8,10 @@ namespace RazzleServer.Login.Handlers
     {
         public override void HandlePacket(PacketReader packet, LoginClient client)
         {
-            var characterID = packet.ReadInt();
+            var characterId = packet.ReadInt();
             client.MacAddresses = packet.ReadString().Split(new char[] { ',', ' ' });
 
-            client.Server.Manager.Migrate(client.Host, client.Account.ID, characterID);
+            client.Server.Manager.Migrate(client.Host, client.Account.Id, characterId);
 
             using (var oPacket = new PacketWriter(ServerOperationCode.SelectCharacterResult))
             {
@@ -19,7 +19,7 @@ namespace RazzleServer.Login.Handlers
                 oPacket.WriteByte(0);
                 oPacket.WriteBytes(client.Socket.HostBytes);
                 oPacket.WriteUShort(client.Server.Manager.Worlds[client.World][client.Channel].Port);
-                oPacket.WriteInt(characterID);
+                oPacket.WriteInt(characterId);
                 oPacket.WriteInt(0);
                 oPacket.WriteByte(0);
                 client.Send(oPacket);

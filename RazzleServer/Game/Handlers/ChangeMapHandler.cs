@@ -13,10 +13,10 @@ namespace RazzleServer.Game.Handlers
             {
                 return;
             }
-            int mapID = packet.ReadInt();
+            int mapId = packet.ReadInt();
             string portalLabel = packet.ReadString();
 
-            switch (mapID)
+            switch (mapId)
             {
                 case 0: // NOTE: Death.
                     {
@@ -35,7 +35,7 @@ namespace RazzleServer.Game.Handlers
                         if (client.Character.Map.Portals.ContainsPortal(portalLabel))
                         {
                             var portal = client.Character.Map.Portals[portalLabel];
-                            client.Character.ChangeMap(portal.DestinationMapID, portal.Link.ID);
+                            client.Character.ChangeMap(portal.DestinationMapId, portal.Link.Id);
                         }
                     }
                     break;
@@ -47,7 +47,7 @@ namespace RazzleServer.Game.Handlers
                             return;
                         }
 
-                        client.Character.ChangeMap(mapID);
+                        client.Character.ChangeMap(mapId);
                     }
                     break;
             }

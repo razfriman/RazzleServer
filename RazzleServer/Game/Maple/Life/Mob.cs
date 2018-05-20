@@ -12,7 +12,7 @@ namespace RazzleServer.Game.Maple.Life
 {
     public sealed class Mob : MapObject, IMoveable, ISpawnable, IControllable
     {
-        public int MapleID { get; private set; }
+        public int MapleId { get; private set; }
         public Character Controller { get; set; }
         public Dictionary<Character, uint> Attackers { get; private set; }
         public SpawnPoint SpawnPoint { get; private set; }
@@ -61,7 +61,7 @@ namespace RazzleServer.Game.Maple.Life
 
         public int SpawnEffect { get; set; }
 
-        public Mob CachedReference => DataProvider.Mobs[MapleID];
+        public Mob CachedReference => DataProvider.Mobs[MapleId];
 
         public Mob(WzImage img)
         {
@@ -71,7 +71,7 @@ namespace RazzleServer.Game.Maple.Life
                 return;
             }
 
-            MapleID = id;
+            MapleId = id;
 
             Level = img["level"]?.GetShort() ?? 1;
             MaxHealth = (uint)(img["maxHP"]?.GetInt() ?? 0);
@@ -125,9 +125,9 @@ namespace RazzleServer.Game.Maple.Life
             img["revive"]?.WzProperties?.ForEach(x => DeathSummons.Add(x.GetInt()));
         }
 
-        public Mob(int mapleID)
+        public Mob(int mapleId)
         {
-            MapleID = mapleID;
+            MapleId = mapleId;
 
             Level = CachedReference.Level;
             Health = CachedReference.Health;
@@ -170,7 +170,7 @@ namespace RazzleServer.Game.Maple.Life
         }
 
         public Mob(SpawnPoint spawnPoint)
-            : this(spawnPoint.MapleID)
+            : this(spawnPoint.MapleId)
         {
             SpawnPoint = spawnPoint;
             Foothold = SpawnPoint.Foothold;
@@ -178,8 +178,8 @@ namespace RazzleServer.Game.Maple.Life
             Position.Y -= 1; // TODO: Is this needed?
         }
 
-        public Mob(int mapleID, Point position)
-            : this(mapleID)
+        public Mob(int mapleId, Point position)
+            : this(mapleId)
         {
             Foothold = 0; // TODO.
             Position = position;
@@ -231,7 +231,7 @@ namespace RazzleServer.Game.Maple.Life
         {
             short moveAction = iPacket.ReadShort();
             var skillByte = iPacket.ReadByte();
-            var skillID = iPacket.ReadInt();
+            var skillId = iPacket.ReadInt();
             iPacket.ReadShort();
             iPacket.ReadInt();
 
@@ -247,7 +247,7 @@ namespace RazzleServer.Game.Maple.Life
             {
                 if (Health * 100 / MaxHealth > skill.PercentageLimitHP ||
                     (Cooldowns.ContainsKey(skill) && Cooldowns[skill].AddSeconds(skill.Cooldown) >= DateTime.Now) ||
-                    ((MobSkillName)skill.MapleID) == MobSkillName.Summon && Map.Mobs.Count >= 100)
+                    ((MobSkillName)skill.MapleId) == MobSkillName.Summon && Map.Mobs.Count >= 100)
                 {
                     skill = null;
                 }
@@ -260,7 +260,7 @@ namespace RazzleServer.Game.Maple.Life
 
             using (var oPacket = new PacketWriter(ServerOperationCode.MobMoveResponse))
             {
-                oPacket.WriteInt(ObjectID);
+                oPacket.WriteInt(ObjectId);
                 oPacket.WriteShort(moveAction);
                 oPacket.WriteBool(skill != null); // use skills
                 oPacket.WriteShort((short)Mana);
@@ -271,9 +271,9 @@ namespace RazzleServer.Game.Maple.Life
 
             using (var oPacket = new PacketWriter(ServerOperationCode.MobMove))
             {
-                oPacket.WriteInt(ObjectID);
+                oPacket.WriteInt(ObjectId);
                 oPacket.WriteBool(skill != null); // use skills
-                oPacket.WriteInt(skillID);
+                oPacket.WriteInt(skillId);
                 oPacket.WriteByte(0);
                 oPacket.WriteBytes(movements.ToByteArray());
 
@@ -285,12 +285,12 @@ namespace RazzleServer.Game.Maple.Life
         {
             using (var oPacket = new PacketWriter(ServerOperationCode.MobStatSet))
             {
-                oPacket.WriteInt(ObjectID);
+                oPacket.WriteInt(ObjectId);
                 oPacket.WriteLong(0);
                 oPacket.WriteInt(0);
                 oPacket.WriteInt((int)buff);
                 oPacket.WriteShort(value);
-                oPacket.WriteShort(skill.MapleID);
+                oPacket.WriteShort(skill.MapleId);
                 oPacket.WriteShort(skill.Level);
                 oPacket.WriteShort(-1);
                 oPacket.WriteShort(0);// Delay
@@ -303,7 +303,7 @@ namespace RazzleServer.Game.Maple.Life
             {
                 using (var packet = new PacketWriter(ServerOperationCode.MobStatReset))
                 {
-                    packet.WriteInt(ObjectID);
+                    packet.WriteInt(ObjectId);
                     packet.WriteLong(0);
                     packet.WriteInt(0);
                     packet.WriteInt((int)buff);
@@ -322,7 +322,7 @@ namespace RazzleServer.Game.Maple.Life
 
             using (var packet = new PacketWriter(ServerOperationCode.MobDamaged))
             {
-                packet.WriteInt(ObjectID);
+                packet.WriteInt(ObjectId);
                 packet.WriteByte(0);
                 packet.WriteInt((int)-hp);
                 packet.WriteByte(0);
@@ -361,7 +361,7 @@ namespace RazzleServer.Game.Maple.Life
 
                 using (var oPacket = new PacketWriter(ServerOperationCode.MobHPIndicator))
                 {
-                    oPacket.WriteInt(ObjectID);
+                    oPacket.WriteInt(ObjectId);
                     oPacket.WriteByte((byte)((Health * 100) / MaxHealth));
 
                     attacker.Client.Send(oPacket);
@@ -391,9 +391,9 @@ namespace RazzleServer.Game.Maple.Life
                 oPacket.WriteByte((byte)(IsProvoked ? 2 : 1));
             }
 
-            oPacket.WriteInt(ObjectID);
+            oPacket.WriteInt(ObjectId);
             oPacket.WriteByte((byte)(Controller == null ? 5 : 1));
-            oPacket.WriteInt(MapleID);
+            oPacket.WriteInt(MapleId);
             oPacket.WriteInt(0);
             oPacket.WritePoint(Position);
             oPacket.WriteByte((byte)(0x02 | (IsFacingLeft ? 0x01 : 0x00)));
@@ -418,7 +418,7 @@ namespace RazzleServer.Game.Maple.Life
             var oPacket = new PacketWriter(ServerOperationCode.MobChangeController);
 
             oPacket.WriteBool(false);
-            oPacket.WriteInt(ObjectID);
+            oPacket.WriteInt(ObjectId);
 
             return oPacket;
         }
@@ -427,7 +427,7 @@ namespace RazzleServer.Game.Maple.Life
         {
             var oPacket = new PacketWriter(ServerOperationCode.MobLeaveField);
             var animated = true;
-            oPacket.WriteInt(ObjectID);
+            oPacket.WriteInt(ObjectId);
             oPacket.WriteBool(animated);
 
             return oPacket;

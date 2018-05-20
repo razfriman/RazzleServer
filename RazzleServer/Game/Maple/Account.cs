@@ -1,7 +1,7 @@
 ﻿using System;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Exceptions;
-using RazzleServer.Data;
+using RazzleServer.Common.Data;
 
 namespace RazzleServer.Game.Maple
 {
@@ -9,7 +9,7 @@ namespace RazzleServer.Game.Maple
     {
         public GameClient Client { get; private set; }
 
-        public int ID { get; set; }
+        public int Id { get; set; }
         public string Username { get; set; }
         public Gender Gender { get; set; }
         public bool IsMaster { get; set; }
@@ -19,9 +19,9 @@ namespace RazzleServer.Game.Maple
 
         private bool Assigned { get; set; }
 
-        public Account(int accountID, GameClient client)
+        public Account(int accountId, GameClient client)
         {
-            ID = accountID;
+            Id = accountId;
             Client = client;
         }
 
@@ -29,14 +29,14 @@ namespace RazzleServer.Game.Maple
         {
             using (var dbContext = new MapleDbContext())
             {
-                var account = dbContext.Accounts.Find(ID);
+                var account = dbContext.Accounts.Find(Id);
 
                 if (account == null)
                 {
                     throw new NoAccountException();
                 }
 
-                ID = account.ID;
+                Id = account.Id;
                 Username = account.Username;
                 Gender = (Gender)account.Gender;
                 Birthday = account.Birthday;

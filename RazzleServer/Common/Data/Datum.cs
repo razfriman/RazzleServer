@@ -125,7 +125,7 @@
 //        {
 //        }
 
-//        public int InsertAndReturnID()
+//        public int InsertAndReturnId()
 //        {
 //            return 0;
 //        }

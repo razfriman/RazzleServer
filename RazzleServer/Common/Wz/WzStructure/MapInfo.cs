@@ -382,7 +382,7 @@ namespace RazzleServer.Common.WzLib.WzStructure
         public int? decInterval;
         public MapleBool expeditionOnly = null;
         public float? fs; //slip on ice speed, default 0.2
-        public int? protectItem; //ID, item protecting from cold
+        public int? protectItem; //Id, item protecting from cold
         public int? createMobInterval; //used for massacre pqs
         public int? fixedMobCapacity; //mob capacity to target (used for massacre pqs)
 

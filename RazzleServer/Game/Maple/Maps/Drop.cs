@@ -57,7 +57,7 @@ namespace RazzleServer.Game.Maple.Maps
             var oPacket = new PacketWriter(ServerOperationCode.DropEnterField);
 
             oPacket.WriteByte((byte)(dropped ? 1 : 2)); // TODO: Other types; 3 = disappearing, and 0 probably is something as well.
-            oPacket.WriteInt(this.ObjectID);
+            oPacket.WriteInt(this.ObjectId);
             oPacket.WriteBool(this is Meso);
 
             if (this is Meso)
@@ -66,14 +66,14 @@ namespace RazzleServer.Game.Maple.Maps
             }
             else if (this is Item)
             {
-                oPacket.WriteInt(((Item)this).MapleID);
+                oPacket.WriteInt(((Item)this).MapleId);
             }
 
-            oPacket.WriteInt(this.Owner != null ? this.Owner.ID : temporaryOwner.ID);
+            oPacket.WriteInt(this.Owner != null ? this.Owner.Id : temporaryOwner.Id);
             oPacket.WriteByte(0); // TODO: Type implementation (0 - normal, 1 - party, 2 - FFA, 3 - explosive)
             oPacket.WriteShort(this.Position.X);
             oPacket.WriteShort(this.Position.Y);
-            oPacket.WriteInt(this.Dropper.ObjectID);
+            oPacket.WriteInt(this.Dropper.ObjectId);
 
             if (dropped)
             {
@@ -97,8 +97,8 @@ namespace RazzleServer.Game.Maple.Maps
             var oPacket = new PacketWriter(ServerOperationCode.DropLeaveField);
 
             oPacket.WriteByte((byte)(this.Picker == null ? 0 : 2));
-            oPacket.WriteInt(this.ObjectID);
-            oPacket.WriteInt(this.Picker != null ? this.Picker.ID : 0);
+            oPacket.WriteInt(this.ObjectId);
+            oPacket.WriteInt(this.Picker != null ? this.Picker.Id : 0);
 
             return oPacket;
         }

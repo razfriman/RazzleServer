@@ -36,18 +36,18 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
             }
             else
             {
-                int shopID = -1;
+                int shopId = -1;
 
-                if (args[0] == "gear") shopID = 9999999;
-                else if (args[0] == "scrolls") shopID = 9999998;
-                else if (args[0] == "nx") shopID = 9999997;
-                else if (args[0] == "face") shopID = 9999996;
-                else if (args[0] == "ring") shopID = 9999995;
-                else if (args[0] == "chair") shopID = 9999994;
-                else if (args[0] == "mega") shopID = 9999993;
-                else if (args[0] == "pet") shopID = 9999992;
+                if (args[0] == "gear") shopId = 9999999;
+                else if (args[0] == "scrolls") shopId = 9999998;
+                else if (args[0] == "nx") shopId = 9999997;
+                else if (args[0] == "face") shopId = 9999996;
+                else if (args[0] == "ring") shopId = 9999995;
+                else if (args[0] == "chair") shopId = 9999994;
+                else if (args[0] == "mega") shopId = 9999993;
+                else if (args[0] == "pet") shopId = 9999992;
 
-                if (shopID == -1)
+                if (shopId == -1)
                 {
                     this.ShowSyntax(caller);
 

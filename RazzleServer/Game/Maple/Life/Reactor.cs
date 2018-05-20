@@ -11,13 +11,13 @@ namespace RazzleServer.Game.Maple.Life
 {
     public sealed class Reactor : MapObject, ISpawnable
     {
-        public int MapleID { get; private set; }
+        public int MapleId { get; private set; }
         public string Label { get; private set; }
         public byte State { get; set; }
         public SpawnPoint SpawnPoint { get; private set; }
         public List<ReactorState> States { get; set; } = new List<ReactorState>();
 
-        public Reactor CachedReference => DataProvider.Reactors[MapleID];
+        public Reactor CachedReference => DataProvider.Reactors[MapleId];
 
         public Reactor(WzImage img)
         {
@@ -26,7 +26,7 @@ namespace RazzleServer.Game.Maple.Life
             {
                 return;
             }
-            MapleID = id;
+            MapleId = id;
             Label = img["action"]?.GetString();
 
             foreach (var state in img.WzProperties)
@@ -38,16 +38,16 @@ namespace RazzleServer.Game.Maple.Life
             }
         }
 
-        public Reactor(int mapleID)
+        public Reactor(int mapleId)
         {
-            MapleID = mapleID;
+            MapleId = mapleId;
             Label = CachedReference.Label;
             State = CachedReference.State;
             States = CachedReference.States;
         }
 
         public Reactor(SpawnPoint spawnPoint)
-            : this(spawnPoint.MapleID)
+            : this(spawnPoint.MapleId)
         {
             SpawnPoint = spawnPoint;
             Position = spawnPoint.Position;
@@ -72,7 +72,7 @@ namespace RazzleServer.Game.Maple.Life
                         {
                             using (var oPacket = new PacketWriter(ServerOperationCode.ReactorChangeState))
                             {
-                                oPacket.WriteInt(ObjectID);
+                                oPacket.WriteInt(ObjectId);
                                 oPacket.WriteByte(State);
                                 oPacket.WritePoint(Position);
                                 oPacket.WriteShort(actionDelay);
@@ -93,8 +93,8 @@ namespace RazzleServer.Game.Maple.Life
         {
             var oPacket = new PacketWriter(ServerOperationCode.ReactorEnterField);
 
-            oPacket.WriteInt(ObjectID);
-            oPacket.WriteInt(MapleID);
+            oPacket.WriteInt(ObjectId);
+            oPacket.WriteInt(MapleId);
             oPacket.WriteByte(State);
             oPacket.WritePoint(Position);
             oPacket.WriteShort(0); // NOTE: Flags (not sure).
@@ -108,7 +108,7 @@ namespace RazzleServer.Game.Maple.Life
         {
             var oPacket = new PacketWriter(ServerOperationCode.ReactorLeaveField);
 
-            oPacket.WriteInt(ObjectID);
+            oPacket.WriteInt(ObjectId);
             oPacket.WriteByte(State);
             oPacket.WritePoint(Position);
 

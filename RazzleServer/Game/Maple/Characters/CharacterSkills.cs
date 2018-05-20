@@ -17,7 +17,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Load()
         {
-            //foreach (Datum datum in new Datums("skills").Populate("CharacterID = {0}", Parent.ID))
+            //foreach (Datum datum in new Datums("skills").Populate("CharacterId = {0}", Parent.Id))
             //{
             //    Add(new Skill(datum));
             //}
@@ -42,10 +42,10 @@ namespace RazzleServer.Game.Maple.Characters
         public void Cast(PacketReader iPacket)
         {
             iPacket.ReadInt(); // NOTE: Ticks.
-            int mapleID = iPacket.ReadInt();
+            int mapleId = iPacket.ReadInt();
             byte level = iPacket.ReadByte();
 
-            Skill skill = this[mapleID];
+            Skill skill = this[mapleId];
 
             if (level != skill.CurrentLevel)
             {
@@ -55,7 +55,7 @@ namespace RazzleServer.Game.Maple.Characters
             skill.Recalculate();
             skill.Cast();
 
-            switch (skill.MapleID)
+            switch (skill.MapleId)
             {
                 case (int)SkillNames.SuperGM.Resurrection:
                     {
@@ -63,9 +63,9 @@ namespace RazzleServer.Game.Maple.Characters
 
                         while (targets-- > 0)
                         {
-                            int targetID = iPacket.ReadInt();
+                            int targetId = iPacket.ReadInt();
 
-                            Character target = Parent.Map.Characters[targetID];
+                            Character target = Parent.Map.Characters[targetId];
 
                             if (!target.IsAlive)
                             {
@@ -100,7 +100,7 @@ namespace RazzleServer.Game.Maple.Characters
                 foreach (Skill loopCooldown in cooldownSkills)
                 {
 
-                    oPacket.WriteInt(loopCooldown.MapleID);
+                    oPacket.WriteInt(loopCooldown.MapleId);
                     oPacket.WriteShort((short)loopCooldown.RemainingCooldownSeconds);
                 }
 
@@ -126,7 +126,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         protected override int GetKeyForItem(Skill item)
         {
-            return item.MapleID;
+            return item.MapleId;
         }
     }
 }

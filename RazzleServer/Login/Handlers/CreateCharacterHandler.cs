@@ -18,10 +18,10 @@ namespace RazzleServer.Login.Handlers
             int hair = packet.ReadInt();
             int hairColor = packet.ReadInt();
             byte skin = (byte)packet.ReadInt();
-            int topID = packet.ReadInt();
-            int bottomID = packet.ReadInt();
-            int shoesID = packet.ReadInt();
-            int weaponID = packet.ReadInt();
+            int topId = packet.ReadInt();
+            int bottomId = packet.ReadInt();
+            int shoesId = packet.ReadInt();
+            int weaponId = packet.ReadInt();
             var gender = (Gender)packet.ReadByte();
             var strength = packet.ReadByte();
             var dexterity = packet.ReadByte();
@@ -39,10 +39,10 @@ namespace RazzleServer.Login.Handlers
                     || !DataProvider.CreationData.MaleFaces.Any(x => x == face)
                     || !DataProvider.CreationData.MaleHairs.Any(x => x == hair)
                     || !DataProvider.CreationData.MaleHairColors.Any(x => x == hairColor)
-                    || !DataProvider.CreationData.MaleTops.Any(x => x == topID)
-                    || !DataProvider.CreationData.MaleBottoms.Any(x => x == bottomID)
-                    || !DataProvider.CreationData.MaleShoes.Any(x => x == shoesID)
-                    || !DataProvider.CreationData.MaleWeapons.Any(x => x == weaponID));
+                    || !DataProvider.CreationData.MaleTops.Any(x => x == topId)
+                    || !DataProvider.CreationData.MaleBottoms.Any(x => x == bottomId)
+                    || !DataProvider.CreationData.MaleShoes.Any(x => x == shoesId)
+                    || !DataProvider.CreationData.MaleWeapons.Any(x => x == weaponId));
             }
             else if (gender == Gender.Female)
             {
@@ -50,16 +50,16 @@ namespace RazzleServer.Login.Handlers
                     || !DataProvider.CreationData.FemaleFaces.Any(x => x == face)
                     || !DataProvider.CreationData.FemaleHairs.Any(x => x == hair)
                     || !DataProvider.CreationData.FemaleHairColors.Any(x => x == hairColor)
-                    || !DataProvider.CreationData.FemaleTops.Any(x => x == topID)
-                    || !DataProvider.CreationData.FemaleBottoms.Any(x => x == bottomID)
-                    || !DataProvider.CreationData.FemaleShoes.Any(x => x == shoesID)
-                    || !DataProvider.CreationData.FemaleWeapons.Any(x => x == weaponID));
+                    || !DataProvider.CreationData.FemaleTops.Any(x => x == topId)
+                    || !DataProvider.CreationData.FemaleBottoms.Any(x => x == bottomId)
+                    || !DataProvider.CreationData.FemaleShoes.Any(x => x == shoesId)
+                    || !DataProvider.CreationData.FemaleWeapons.Any(x => x == weaponId));
             }
 
             Character character = new Character
             {
-                AccountID = client.Account.ID,
-                WorldID = client.World,
+                AccountId = client.Account.Id,
+                WorldId = client.World,
                 Name = name,
                 Gender = gender,
                 Skin = skin,
@@ -79,15 +79,15 @@ namespace RazzleServer.Login.Handlers
                 SkillPoints = 0,
                 Experience = 0,
                 Fame = 0,
-                Map = DataProvider.Maps[ServerConfig.Instance.DefaultMapID],
+                Map = DataProvider.Maps[ServerConfig.Instance.DefaultMapId],
                 SpawnPoint = 0,
                 Meso = 0
             };
 
-            character.Items.Add(new Item(topID, equipped: true));
-            character.Items.Add(new Item(bottomID, equipped: true));
-            character.Items.Add(new Item(shoesID, equipped: true));
-            character.Items.Add(new Item(weaponID, equipped: true));
+            character.Items.Add(new Item(topId, equipped: true));
+            character.Items.Add(new Item(bottomId, equipped: true));
+            character.Items.Add(new Item(shoesId, equipped: true));
+            character.Items.Add(new Item(weaponId, equipped: true));
             character.Items.Add(new Item(4161001), forceGetSlot: true);
 
             CreateDefaultKeymap(character);

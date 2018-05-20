@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
-using RazzleServer.Data;
+using RazzleServer.Common.Data;
 using System;
 
 namespace RazzleServer.Migrations
@@ -21,7 +21,7 @@ namespace RazzleServer.Migrations
 
             modelBuilder.Entity("RazzleServer.DB.Models.AccountEntity", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("Birthday");
@@ -44,39 +44,39 @@ namespace RazzleServer.Migrations
 
                     b.Property<string>("Username");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("Accounts");
                 });
 
             modelBuilder.Entity("RazzleServer.DB.Models.BuddyEntity", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("AccountID");
+                    b.Property<int>("AccountId");
 
-                    b.Property<int>("BuddyAccountID");
+                    b.Property<int>("BuddyAccountId");
 
-                    b.Property<int>("BuddyCharacterID");
+                    b.Property<int>("BuddyCharacterId");
 
-                    b.Property<int>("CharacterID");
+                    b.Property<int>("CharacterId");
 
                     b.Property<bool>("IsRequest");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("Buddies");
                 });
 
             modelBuilder.Entity("RazzleServer.DB.Models.CharacterEntity", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<short>("AbilityPoints");
 
-                    b.Property<int>("AccountID");
+                    b.Property<int>("AccountId");
 
                     b.Property<int>("BuddyListSlots");
 
@@ -98,7 +98,7 @@ namespace RazzleServer.Migrations
 
                     b.Property<int>("GuildContribution");
 
-                    b.Property<int>("GuildID");
+                    b.Property<int>("GuildId");
 
                     b.Property<int?>("GuildRank");
 
@@ -120,7 +120,7 @@ namespace RazzleServer.Migrations
 
                     b.Property<short>("Mana");
 
-                    b.Property<int>("MapID");
+                    b.Property<int>("MapId");
 
                     b.Property<short>("MaxHealth");
 
@@ -146,32 +146,32 @@ namespace RazzleServer.Migrations
 
                     b.Property<byte>("UsableSlots");
 
-                    b.Property<byte>("WorldID");
+                    b.Property<byte>("WorldId");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("Characters");
                 });
 
             modelBuilder.Entity("RazzleServer.DB.Models.CharacterStorageEntity", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("AccountID");
+                    b.Property<int>("AccountId");
 
                     b.Property<int>("Meso");
 
                     b.Property<byte>("Slots");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("CharacterStorages");
                 });
 
             modelBuilder.Entity("RazzleServer.DB.Models.GuildEntity", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("Capacity");
@@ -211,17 +211,17 @@ namespace RazzleServer.Migrations
 
                     b.Property<int>("Signature");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("Guilds");
                 });
 
             modelBuilder.Entity("RazzleServer.DB.Models.ItemEntity", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("AccountID");
+                    b.Property<int>("AccountId");
 
                     b.Property<short>("Accuracy");
 
@@ -233,7 +233,7 @@ namespace RazzleServer.Migrations
 
                     b.Property<short>("BonusPotential2");
 
-                    b.Property<int>("CharacterID");
+                    b.Property<int>("CharacterId");
 
                     b.Property<string>("Creator")
                         .HasMaxLength(13);
@@ -268,9 +268,9 @@ namespace RazzleServer.Migrations
 
                     b.Property<short>("Mana");
 
-                    b.Property<int>("MapleID");
+                    b.Property<int>("MapleId");
 
-                    b.Property<int?>("PetID");
+                    b.Property<int?>("PetId");
 
                     b.Property<short>("Position");
 
@@ -300,32 +300,32 @@ namespace RazzleServer.Migrations
 
                     b.Property<short>("WeaponDefense");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("Items");
                 });
 
             modelBuilder.Entity("RazzleServer.DB.Models.KeyMapEntity", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("Action");
 
-                    b.Property<int>("CharacterID");
+                    b.Property<int>("CharacterId");
 
                     b.Property<byte>("Key");
 
                     b.Property<byte>("Type");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("KeyMaps");
                 });
 
             modelBuilder.Entity("RazzleServer.DB.Models.MemoEntity", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Message");
@@ -334,104 +334,104 @@ namespace RazzleServer.Migrations
 
                     b.Property<string>("Sender");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("MemoEntities");
                 });
 
             modelBuilder.Entity("RazzleServer.DB.Models.QuestCustomDataEntity", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("CharacterID");
+                    b.Property<int>("CharacterId");
 
                     b.Property<string>("Key");
 
                     b.Property<string>("Value");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("QuestCustomData");
                 });
 
             modelBuilder.Entity("RazzleServer.DB.Models.QuestMobStatusEntity", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("Count");
 
                     b.Property<int>("Mob");
 
-                    b.Property<int>("QuestStatusID");
+                    b.Property<int>("QuestStatusId");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("QuestStatusMobs");
                 });
 
             modelBuilder.Entity("RazzleServer.DB.Models.QuestStatusEntity", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("CharacterID");
+                    b.Property<int>("CharacterId");
 
                     b.Property<uint>("CompleteTime");
 
                     b.Property<string>("CustomData")
                         .HasMaxLength(255);
 
-                    b.Property<int>("QuestID");
+                    b.Property<int>("QuestId");
 
                     b.Property<byte>("Status");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("QuestStatus");
                 });
 
             modelBuilder.Entity("RazzleServer.DB.Models.QuickSlotKeyMapEntity", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("CharacterID");
+                    b.Property<int>("CharacterId");
 
                     b.Property<byte>("Index");
 
                     b.Property<int>("Key");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("QuickSlotKeyMaps");
                 });
 
             modelBuilder.Entity("RazzleServer.DB.Models.SkillCooldownEntity", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("CharacterID");
+                    b.Property<int>("CharacterId");
 
                     b.Property<int>("Length");
 
-                    b.Property<int>("SkillID");
+                    b.Property<int>("SkillId");
 
                     b.Property<long>("StartTime");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("SkillCooldowns");
                 });
 
             modelBuilder.Entity("RazzleServer.DB.Models.SkillEntity", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("CharacterID");
+                    b.Property<int>("CharacterId");
 
                     b.Property<long>("Expiration");
 
@@ -441,9 +441,9 @@ namespace RazzleServer.Migrations
 
                     b.Property<short>("SkillExp");
 
-                    b.Property<int>("SkillID");
+                    b.Property<int>("SkillId");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("Skills");
                 });

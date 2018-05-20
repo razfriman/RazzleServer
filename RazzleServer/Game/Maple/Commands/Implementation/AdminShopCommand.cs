@@ -13,7 +13,7 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
         // TODO: Make a separate class called AdminShopItem to hold these values.
         // We can either make the items constant or load them from SQL.
         // As you can edit them in-game, I think SQL would be better.
-        // In order: ID, MapleID, Price, Stock.
+        // In order: Id, MapleId, Price, Stock.
         public static List<Tuple<int, int, int, short>> Items = new List<Tuple<int, int, int, short>>()
         {
             new Tuple<int, int, int, short>(0, 2000000, 1000, 200),
@@ -71,7 +71,7 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
 
                     // NOTE: If enabled, when you exit the shop the NPC will ask you if you were looking for something that was missing.
                     // If you press yes, a search box with all the items in game will pop up and you can select an item to "register".
-                    // Once you register an item, a packet will be sent to the server with it's ID so it can be added to the shop.
+                    // Once you register an item, a packet will be sent to the server with it's Id so it can be added to the shop.
                     oPacket.WriteBool(true);
 
                     caller.Client.Send(oPacket);

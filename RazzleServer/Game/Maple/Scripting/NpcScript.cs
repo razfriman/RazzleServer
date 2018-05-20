@@ -12,7 +12,7 @@ namespace RazzleServer.Game.Maple.Scripting
         private WaitableResult<int> mResult;
 
         public NpcScript(Npc npc, Character character)
-            : base(ScriptType.Npc, npc.MapleID.ToString(), character) // TODO: Use actual npc script instead of ID.
+            : base(ScriptType.Npc, npc.MapleId.ToString(), character) // TODO: Use actual npc script instead of Id.
         {
             Npc = npc;
         }

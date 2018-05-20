@@ -7,19 +7,19 @@ namespace RazzleServer.Game.Handlers
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
-            int chairItemID = packet.ReadInt();
+            int chairItemId = packet.ReadInt();
 
-            if (!client.Character.Items.Contains(chairItemID))
+            if (!client.Character.Items.Contains(chairItemId))
             {
                 return;
             }
 
-            client.Character.Chair = chairItemID;
+            client.Character.Chair = chairItemId;
 
             using (var oPacket = new PacketWriter(ServerOperationCode.ShowChair))
             {
-                oPacket.WriteInt(client.Character.ID);
-                oPacket.WriteInt(chairItemID);
+                oPacket.WriteInt(client.Character.Id);
+                oPacket.WriteInt(chairItemId);
                 client.Character.Map.Broadcast(oPacket, client.Character);
             }
         }

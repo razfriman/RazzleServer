@@ -6,11 +6,11 @@ namespace RazzleServer.Center.Maple
 {
     public sealed class Migrations : KeyedCollection<string, Migration>
     {
-        public int Validate(string host, int characterID)
+        public int Validate(string host, int characterId)
         {
             var migration = this
                 .Where(x => x.Host == host)
-                .FirstOrDefault(x => x.CharacterID == characterID);
+                .FirstOrDefault(x => x.CharacterId == characterId);
             
             return RemoveMigration(migration);
         }
@@ -26,7 +26,7 @@ namespace RazzleServer.Center.Maple
                     return 0;
                 }
 
-                return migration.AccountID;
+                return migration.AccountId;
             }
 
             return 0;

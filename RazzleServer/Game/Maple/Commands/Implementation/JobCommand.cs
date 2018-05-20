@@ -40,15 +40,15 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
             {
                 try
                 {
-                    short jobID = short.Parse(args[0]);
+                    short jobId = short.Parse(args[0]);
 
-                    if (Enum.IsDefined(typeof(Job), jobID))
+                    if (Enum.IsDefined(typeof(Job), jobId))
                     {
-                        caller.Job = (Job)jobID;
+                        caller.Job = (Job)jobId;
                     }
                     else
                     {
-                        caller.Notify("[Command] Invalid job ID.");
+                        caller.Notify("[Command] Invalid job Id.");
                     }
                 }
                 catch (FormatException)

@@ -13,9 +13,9 @@ namespace RazzleServer.Game.Maple.Maps
     {
         private readonly ILogger Log = LogManager.Log;
 
-        public byte ID { get; private set; }
+        public byte Id { get; private set; }
         public string Label { get; private set; }
-        public int DestinationMapID { get; private set; }
+        public int DestinationMapId { get; private set; }
         public string DestinationLabel { get; private set; }
         public string Script { get; private set; }
         public bool IsOnlyOnce { get; private set; }
@@ -23,16 +23,16 @@ namespace RazzleServer.Game.Maple.Maps
 
         public bool IsSpawnPoint => Label == "sp";
 
-        public Map DestinationMap => DataProvider.Maps[DestinationMapID];
+        public Map DestinationMap => DataProvider.Maps[DestinationMapId];
 
-        public Portal Link => DataProvider.Maps[DestinationMapID].Portals[DestinationLabel];
+        public Portal Link => DataProvider.Maps[DestinationMapId].Portals[DestinationLabel];
 
         public Portal(WzImageProperty datum)
         {
-            ID = byte.Parse(datum.Name);
+            Id = byte.Parse(datum.Name);
             Position = new Point(datum["x"].GetShort(), datum["y"].GetShort());
             Label = datum["pn"].GetString();
-            DestinationMapID = datum["tm"].GetInt();
+            DestinationMapId = datum["tm"].GetInt();
             DestinationLabel = datum["tn"]?.GetString();
             Script = datum["script"]?.GetString();
             PortalType = datum["pt"].GetInt();

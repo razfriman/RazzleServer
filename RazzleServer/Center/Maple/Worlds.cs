@@ -25,6 +25,6 @@ namespace RazzleServer.Center.Maple
             }
         }
 
-        protected override byte GetKeyForItem(World item) => item.ID;
+        protected override byte GetKeyForItem(World item) => item.Id;
     }
 }

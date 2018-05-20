@@ -38,13 +38,13 @@ namespace RazzleServer.Game.Handlers
                 case AdminCommandType.Send:
                     {
                         string name = packet.ReadString();
-                        int destinationID = packet.ReadInt();
+                        int destinationId = packet.ReadInt();
 
                         var target = client.Server.GetCharacterByName(name);
 
                         if (target != null)
                         {
-                            target.ChangeMap(destinationID);
+                            target.ChangeMap(destinationId);
                         }
                         else
                         {
@@ -60,28 +60,28 @@ namespace RazzleServer.Game.Handlers
 
                 case AdminCommandType.Summon:
                     {
-                        int mobID = packet.ReadInt();
+                        int mobId = packet.ReadInt();
                         int count = packet.ReadInt();
 
-                        if (DataProvider.Mobs.Contains(mobID))
+                        if (DataProvider.Mobs.Contains(mobId))
                         {
                             for (int i = 0; i < count; i++)
                             {
-                                client.Character.Map.Mobs.Add(new Mob(mobID, client.Character.Position));
+                                client.Character.Map.Mobs.Add(new Mob(mobId, client.Character.Position));
                             }
                         }
                         else
                         {
                             // TODO: Actual message.
-                            client.Character.Notify("invalid mob: " + mobID); 
+                            client.Character.Notify("invalid mob: " + mobId); 
                         }
                     }
                     break;
 
                 case AdminCommandType.CreateItem:
                     {
-                        int itemID = packet.ReadInt();
-                        client.Character.Items.Add(new Item(itemID));
+                        int itemId = packet.ReadInt();
+                        client.Character.Items.Add(new Item(itemId));
                     }
                     break;
 
