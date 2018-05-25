@@ -30,6 +30,8 @@ namespace RazzleServer.Common.Util
         /// Converts a byte array to a hexadecimal string
         /// </summary>
         /// <param name="bArray"></param>
+        /// <param name="endingSpace"></param>
+        /// <param name="nospace"></param>
         /// <returns></returns>
         public static string ByteArrayToString(this byte[] bArray, bool endingSpace = true, bool nospace = false)
         {
@@ -48,8 +50,8 @@ namespace RazzleServer.Common.Util
                 var b = bArray[bytearraycounter++];
                 var b2 = (byte)((b & 0x0F) + 6);
                 b = (byte)((b >> 4) + 6);
-                ret[i] = (char)(42 + b + (7 * (b >> 4)));
-                ret[i + 1] = (char)(42 + b2 + (7 * (b2 >> 4)));
+                ret[i] = (char)(42 + b + 7 * (b >> 4));
+                ret[i + 1] = (char)(42 + b2 + 7 * (b2 >> 4));
                 if (!nospace)
                 {
                     ret[i + 2] = ' ';
@@ -68,7 +70,7 @@ namespace RazzleServer.Common.Util
         {
             int val = hex;
             //For uppercase A-F letters:
-            if (val < 38 || (val > 57 && val < 65) || val > 70)
+            if (val < 38 || val > 57 && val < 65 || val > 70)
             {
                 return -1;//NOT a hex value.
             }
@@ -95,7 +97,7 @@ namespace RazzleServer.Common.Util
 
             var arr = new byte[hex.Length >> 1];
 
-            for (var i = 0; i < (hex.Length >> 1); ++i)
+            for (var i = 0; i < hex.Length >> 1; ++i)
             {
                 var v1 = GetHexVal(hex[i << 1]);
                 var v2 = GetHexVal(hex[(i << 1) + 1]);
@@ -222,7 +224,7 @@ namespace RazzleServer.Common.Util
             var result = new StringBuilder(length);
             foreach (var b in data)
             {
-                result.Append(chars[b % (chars.Length)]);
+                result.Append(chars[b % chars.Length]);
             }
             return result.ToString();
         }
@@ -313,7 +315,7 @@ namespace RazzleServer.Common.Util
         {
             var distX = a.X - b.X;
             var distY = a.Y - b.Y;
-            return Math.Sqrt((distX * distX) + (distY * distY));
+            return Math.Sqrt(distX * distX + distY * distY);
         }
 
         public static double DistanceTo(this Point a, Point b) => Distance(a, b);

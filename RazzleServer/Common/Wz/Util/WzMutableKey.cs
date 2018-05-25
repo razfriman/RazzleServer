@@ -2,7 +2,7 @@
 using System.IO;
 using System.Security.Cryptography;
 
-namespace RazzleServer.Common.WzLib.Util
+namespace RazzleServer.Common.Wz.Util
 {
     public class WzMutableKey
     {

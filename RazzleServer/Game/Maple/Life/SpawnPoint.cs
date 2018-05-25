@@ -1,5 +1,5 @@
 ﻿using RazzleServer.Common.Constants;
-using RazzleServer.Common.WzLib;
+using RazzleServer.Common.Wz;
 
 namespace RazzleServer.Game.Maple.Life
 {

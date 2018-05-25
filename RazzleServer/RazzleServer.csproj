@@ -5,7 +5,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <LangVersion>7.1</LangVersion>
+    <LangVersion>Latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -20,33 +20,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.3" />
-  </ItemGroup>
-  <ItemGroup>
-    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Login\" />
-    <Folder Include="Game\" />
-    <Folder Include="Center\" />
-    <Folder Include="Login\Handlers\" />
-    <Folder Include="Game\Handlers\" />
-    <Folder Include="Center\Maple\" />
-    <Folder Include="Login\Maple\" />
-    <Folder Include="Common\" />
-    <Folder Include="Common\Constants\" />
-    <Folder Include="Common\Crypto\" />
-    <Folder Include="Common\Data\" />
-    <Folder Include="Common\Network\" />
-    <Folder Include="Common\Packet\" />
-    <Folder Include="Common\Server\" />
-    <Folder Include="Common\Util\" />
-    <Folder Include="Common\Wz\" />
-    <Folder Include="Common\Exceptions\" />
-    <Folder Include="Game\Scripts\" />
-    <Folder Include="Game\Scripts\Reactor\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RazzleServer.DB\RazzleServer.Data.csproj" />

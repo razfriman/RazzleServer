@@ -1,4 +1,4 @@
-﻿namespace RazzleServer.Common.WzLib
+﻿namespace RazzleServer.Common.Wz
 {
 	public enum WzObjectType
 	{

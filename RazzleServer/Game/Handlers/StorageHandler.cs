@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple;
@@ -137,10 +136,6 @@ namespace RazzleServer.Game.Handlers
                         var meso = packet.ReadInt();
 
                         if (meso > 0) // NOTE: Withdraw meso.
-                        {
-                            // TODO: Meso checks.
-                        }
-                        else // NOTE: Deposit meso.
                         {
                             // TODO: Meso checks.
                         }

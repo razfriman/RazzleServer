@@ -1,13 +1,14 @@
 ﻿#define UOLRES
 
-using System.IO;
 using System.Collections.Generic;
-using RazzleServer.Common.WzLib.Util;
+using System.DrawingCore;
+using System.IO;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Util;
-using System.DrawingCore;
+using RazzleServer.Common.Wz.Util;
+using Point = RazzleServer.Game.Maple.Point;
 
-namespace RazzleServer.Common.WzLib.WzProperties
+namespace RazzleServer.Common.Wz.WzProperties
 {
     /// <summary>
     /// A property that's value is a string
@@ -214,7 +215,7 @@ namespace RazzleServer.Common.WzLib.WzProperties
             return LinkValue.GetString();
         }
 
-        public override Game.Maple.Point GetPoint()
+        public override Point GetPoint()
         {
             return LinkValue.GetPoint();
         }

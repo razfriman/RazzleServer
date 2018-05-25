@@ -1,7 +1,7 @@
 ﻿using System;
 using RazzleServer.Common.Constants;
-using RazzleServer.Common.Exceptions;
 using RazzleServer.Common.Data;
+using RazzleServer.Common.Exceptions;
 
 namespace RazzleServer.Game.Maple
 {

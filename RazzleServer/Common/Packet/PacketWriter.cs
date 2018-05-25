@@ -1,8 +1,8 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text;
-using RazzleServer.Game.Maple;
 using RazzleServer.Common.Util;
-using System;
+using RazzleServer.Game.Maple;
 
 namespace RazzleServer.Common.Packet
 {
@@ -127,6 +127,7 @@ namespace RazzleServer.Common.Packet
         /// Writes a string to the stream. Pads it with 0 until the specified length
         /// </summary>
         /// <param name="writeValue">The string to write</param>
+        /// <param name="length"></param>
         public void WriteString(string writeValue, int length)
         {
             _binWriter.Write(writeValue.ToCharArray());

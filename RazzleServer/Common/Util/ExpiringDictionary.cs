@@ -20,7 +20,7 @@ namespace RazzleServer.Common.Util
             public override string ToString() { return Value.ToString(); }
 
             public override int GetHashCode() { return Value.GetHashCode(); }
-        };
+        }
 
         private Dictionary<TKey, ExpiringValueHolder<TValue>> innerDictionary;
         private TimeSpan expiryTimeSpan;

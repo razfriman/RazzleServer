@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
-using System;
-using RazzleServer.Common.WzLib.Util;
-using RazzleServer.Common.WzLib.WzProperties;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Util;
+using RazzleServer.Common.Wz.Util;
+using RazzleServer.Common.Wz.WzProperties;
 
-namespace RazzleServer.Common.WzLib
+namespace RazzleServer.Common.Wz
 {
     /// <summary>
     /// A class that contains all the information of a wz file
@@ -105,6 +105,7 @@ namespace RazzleServer.Common.WzLib
         /// Open a wz file from a file on the disk
         /// </summary>
         /// <param name="filePath">Path to the wz file</param>
+        /// <param name="version"></param>
         public WzFile(string filePath, WzMapleVersion version)
         {
             name = Path.GetFileName(filePath);
@@ -129,6 +130,8 @@ namespace RazzleServer.Common.WzLib
         /// Open a wz file from a file on the disk
         /// </summary>
         /// <param name="filePath">Path to the wz file</param>
+        /// <param name="gameVersion"></param>
+        /// <param name="version"></param>
         public WzFile(string filePath, short gameVersion, WzMapleVersion version)
         {
             name = Path.GetFileName(filePath);
@@ -250,7 +253,7 @@ namespace RazzleServer.Common.WzLib
                 }
                 throw new Exception("Error with game version hash : The specified game version is incorrect and WzLib was unable to determine the version itself");
             }
-            else
+
             {
                 versionHash = GetVersionHash(version, fileVersion);
                 reader.Hash = versionHash;
@@ -274,13 +277,13 @@ namespace RazzleServer.Common.WzLib
             l = VersionNumberStr.Length;
             for (var i = 0; i < l; i++)
             {
-                VersionHash = (32 * VersionHash) + VersionNumberStr[i] + 1;
+                VersionHash = 32 * VersionHash + VersionNumberStr[i] + 1;
             }
             a = (VersionHash >> 24) & 0xFF;
             b = (VersionHash >> 16) & 0xFF;
             c = (VersionHash >> 8) & 0xFF;
             d = VersionHash & 0xFF;
-            DecryptedVersionNumber = (0xff ^ a ^ b ^ c ^ d);
+            DecryptedVersionNumber = 0xff ^ a ^ b ^ c ^ d;
 
             if (EncryptedVersionNumber == DecryptedVersionNumber)
             {
@@ -295,7 +298,7 @@ namespace RazzleServer.Common.WzLib
             versionHash = 0;
             foreach (var ch in fileVersion.ToString())
             {
-                versionHash = (versionHash * 32) + (byte)ch + 1;
+                versionHash = versionHash * 32 + (byte)ch + 1;
             }
             uint a = (versionHash >> 24) & 0xFF,
                 b = (versionHash >> 16) & 0xFF,

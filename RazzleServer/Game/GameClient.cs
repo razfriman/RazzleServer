@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Sockets;
-using RazzleServer.Common.Network;
 using Microsoft.Extensions.Logging;
+using RazzleServer.Common.Network;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple;

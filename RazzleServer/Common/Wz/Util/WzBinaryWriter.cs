@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using System.IO;
-using RazzleServer.Common.MapleCryptoLib;
+using RazzleServer.Common.Crypto;
 
-namespace RazzleServer.Common.WzLib.Util
+namespace RazzleServer.Common.Wz.Util
 {
     /*
 	   TODO : Maybe WzBinaryReader/Writer should read and contain the hash (this is probably what's going to happen)
@@ -117,7 +117,7 @@ namespace RazzleServer.Common.WzLib.Util
                     }
                     else
                     {
-                        Write((sbyte)(-value.Length));
+                        Write((sbyte)-value.Length);
                     }
 
                     for (var i = 0; i < value.Length; i++)
@@ -152,7 +152,7 @@ namespace RazzleServer.Common.WzLib.Util
             var outputChars = new char[stringToDecrypt.Length];
             for (var i = 0; i < stringToDecrypt.Length; i++)
             {
-                outputChars[i] = (char)(stringToDecrypt[i] ^ ((char)((WzKey[i * 2 + 1] << 8) + WzKey[i * 2])));
+                outputChars[i] = (char)(stringToDecrypt[i] ^ (char)((WzKey[i * 2 + 1] << 8) + WzKey[i * 2]));
             }
 
             return outputChars;
@@ -211,13 +211,13 @@ namespace RazzleServer.Common.WzLib.Util
             encOffset *= Hash;
             encOffset -= CryptoConstants.WZ_OffsetConstant;
             encOffset = RotateLeft(encOffset, (byte)(encOffset & 0x1F));
-            var writeOffset = encOffset ^ (value - (Header.FStart * 2));
+            var writeOffset = encOffset ^ (value - Header.FStart * 2);
             Write(writeOffset);
         }
 
-        private uint RotateLeft(uint x, byte n) => ((x) << (n)) | ((x) >> (32 - (n)));
+        private uint RotateLeft(uint x, byte n) => (x << n) | (x >> (32 - n));
 
-        private uint RotateRight(uint x, byte n) => ((x) >> (n)) | ((x) << (32 - (n)));
+        private uint RotateRight(uint x, byte n) => (x >> n) | (x << (32 - n));
        
         public override void Close()
         {

@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using Microsoft.Extensions.Logging;
+using RazzleServer.Center;
 using RazzleServer.Common.Util;
-using RazzleServer.Common.WzLib;
-using RazzleServer.Server;
+using RazzleServer.Common.Wz;
 
 namespace RazzleServer.Game.Maple.Data
 {
@@ -48,7 +47,7 @@ namespace RazzleServer.Game.Maple.Data
                     continue;
                 }
 
-                if ((id / 1000) % 10 == 0)
+                if (id / 1000 % 10 == 0)
                 {
                     MaleHairs.Add(id);
                 }
@@ -69,7 +68,7 @@ namespace RazzleServer.Game.Maple.Data
                     continue;
                 }
 
-                if ((id / 1000) % 10 == 0)
+                if (id / 1000 % 10 == 0)
                 {
                     MaleHairs.Add(id);
                 }

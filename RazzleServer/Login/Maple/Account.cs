@@ -57,7 +57,6 @@ namespace RazzleServer.Login.Maple
             }
         }
 
-
         public void Save()
         {
             using (var dbContext = new MapleDbContext())

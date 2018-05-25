@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using RazzleServer.Common.WzLib.Util;
+using RazzleServer.Common.Wz.Util;
 
-namespace RazzleServer.Common.WzLib.WzProperties
+namespace RazzleServer.Common.Wz.WzProperties
 {
     /// <summary>
     /// A property that contains a set of properties
@@ -19,7 +20,7 @@ namespace RazzleServer.Common.WzLib.WzProperties
         #region Inherited Members
         public override void SetValue(object value)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public override WzImageProperty DeepClone()
@@ -96,7 +97,7 @@ namespace RazzleServer.Common.WzLib.WzProperties
         /// <returns>the wz property with the specified name</returns>
         public override WzImageProperty GetFromPath(string path)
         {
-            var segments = path.Split(new char[] { '/' }, System.StringSplitOptions.RemoveEmptyEntries);
+            var segments = path.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
             if (segments[0] == "..")
             {
                 return ((WzImageProperty)Parent)[path.Substring(name.IndexOf('/') + 1)];

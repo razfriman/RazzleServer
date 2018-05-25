@@ -41,7 +41,7 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
                     {
                         mapName = string.Join(" ", args);
                         CommandMaps val;
-                        Enum.TryParse<CommandMaps>(mapName, true, out val);
+                        Enum.TryParse(mapName, true, out val);
                         if (val > 0)
                         {
                             mapId = (int)val;

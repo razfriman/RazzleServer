@@ -1,6 +1,6 @@
 ﻿using System;
-using RazzleServer.Common.Packet;
 using RazzleServer.Common.Data;
+using RazzleServer.Common.Packet;
 
 namespace RazzleServer.Game.Maple
 {

@@ -1,13 +1,12 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.IO;
-using Microsoft.Extensions.Logging;
-using RazzleServer.Common.Util;
-using System.Threading.Tasks;
+﻿using System;
 using System.Collections.Generic;
-using RazzleServer.Center;
+using System.IO;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using RazzleServer.Common.Util;
 
-namespace RazzleServer.Server
+namespace RazzleServer.Center
 {
 	public class ServerConfig
 	{

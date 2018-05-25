@@ -1,9 +1,10 @@
-﻿using System.IO;
-using RazzleServer.Common.WzLib.Util;
+﻿using System;
+using System.IO;
+using RazzleServer.Common.Wz.Util;
 
-namespace RazzleServer.Common.WzLib.WzProperties
+namespace RazzleServer.Common.Wz.WzProperties
 {
-    class WzLongProperty : WzImageProperty
+    internal class WzLongProperty : WzImageProperty
     {
         #region Fields
         internal string name;
@@ -15,7 +16,7 @@ namespace RazzleServer.Common.WzLib.WzProperties
         #region Inherited Members
         public override void SetValue(object value)
         {
-            val = System.Convert.ToInt64(value);
+            val = Convert.ToInt64(value);
         }
 
         public override WzImageProperty DeepClone()

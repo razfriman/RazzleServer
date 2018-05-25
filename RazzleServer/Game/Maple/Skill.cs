@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
+using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
-using RazzleServer.Common.WzLib;
-using RazzleServer.Common.Data;
+using RazzleServer.Common.Wz;
 using RazzleServer.Data;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
@@ -129,7 +129,7 @@ namespace RazzleServer.Game.Maple
 
                             Character.Client.Send(oPacket);
                         }
-                    }, (RemainingCooldownSeconds * 1000));
+                    }, RemainingCooldownSeconds * 1000);
                 }
             }
         }

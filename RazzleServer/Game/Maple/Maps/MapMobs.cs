@@ -41,7 +41,7 @@ namespace RazzleServer.Game.Maple.Maps
                         owner = attacker.Key;
                     }
 
-                    attacker.Key.Experience += (int)Math.Min(item.Experience, (attacker.Value * item.Experience) / item.MaxHealth) * ServerManager.Instance.Worlds[0].ExperienceRate;
+                    attacker.Key.Experience += (int)Math.Min(item.Experience, attacker.Value * item.Experience / item.MaxHealth) * ServerManager.Instance.Worlds[0].ExperienceRate;
                 }
             }
 
@@ -53,7 +53,7 @@ namespace RazzleServer.Game.Maple.Maps
 
                 foreach (var loopLoot in item.Loots)
                 {
-                    if ((Functions.Random(1000000) / ServerManager.Instance.Worlds[0].DropRate) <= loopLoot.Chance)
+                    if (Functions.Random(1000000) / ServerManager.Instance.Worlds[0].DropRate <= loopLoot.Chance)
                     {
                         if (loopLoot.IsMeso)
                         {

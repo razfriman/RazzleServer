@@ -1,7 +1,7 @@
 ﻿using System.IO;
-using RazzleServer.Common.WzLib.Util;
+using RazzleServer.Common.Wz.Util;
 
-namespace RazzleServer.Common.WzLib.WzProperties
+namespace RazzleServer.Common.Wz.WzProperties
 {
     /// <summary>
     /// A property that is stored in the wz file with a byte and possibly followed by a float. If the 

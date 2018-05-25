@@ -1,4 +1,4 @@
-﻿using RazzleServer.Common.WzLib;
+﻿using RazzleServer.Common.Wz;
 
 namespace RazzleServer.Game.Maple.Maps
 {

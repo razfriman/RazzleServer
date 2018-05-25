@@ -4,15 +4,21 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using RazzleServer.Center;
-using RazzleServer.Common.Packet;
 using RazzleServer.Common.Data;
+using RazzleServer.Common.Packet;
+using RazzleServer.Common.Server;
 using RazzleServer.Game.Maple.Characters;
-using RazzleServer.Server;
 
 namespace RazzleServer.Login
 {
     public class LoginServer : MapleServer<LoginClient>
     {
+        public LoginServer(ServerManager manager) : base(manager)
+        {
+            Port = ServerConfig.Instance.LoginPort;
+            Start(new IPAddress(new byte[] { 0, 0, 0, 0 }), Port);
+        }
+
         public static Dictionary<ClientOperationCode, List<LoginPacketHandler>> PacketHandlers { get; private set; } = new Dictionary<ClientOperationCode, List<LoginPacketHandler>>();
 
         internal List<Character> GetCharacters(byte worldId, int accountId)
@@ -41,19 +47,11 @@ namespace RazzleServer.Login
             }
         }
 
-        public LoginServer(ServerManager manager) : base(manager)
-        {
-            Port = ServerConfig.Instance.LoginPort;
-            Start(new IPAddress(new byte[] { 0, 0, 0, 0 }), Port);
-        }
-
         public static void RegisterPacketHandlers()
         {
             var types = Assembly.GetEntryAssembly()
                                 .GetTypes()
                                 .Where(x => x.IsSubclassOf(typeof(LoginPacketHandler)));
-
-            var handlerCount = 0;
 
             foreach (var type in types)
             {
@@ -71,7 +69,6 @@ namespace RazzleServer.Login
                         PacketHandlers[header] = new List<LoginPacketHandler>();
                     }
 
-                    handlerCount++;
                     var handler = (LoginPacketHandler)Activator.CreateInstance(type);
                     PacketHandlers[header].Add(handler);
                 }

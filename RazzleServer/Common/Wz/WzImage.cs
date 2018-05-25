@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using System;
-using RazzleServer.Common.WzLib.Util;
-using RazzleServer.Common.WzLib.WzProperties;
+using RazzleServer.Common.Wz.Util;
+using RazzleServer.Common.Wz.WzProperties;
 
-namespace RazzleServer.Common.WzLib
+namespace RazzleServer.Common.Wz
 {
     /// <summary>
     /// A .img contained in a wz directory
@@ -76,7 +76,7 @@ namespace RazzleServer.Common.WzLib
         public override string Name { get => name;
             set => name = value;
         }
-        public override WzFile WzFileParent => Parent?.WzFileParent;
+        public override WzFile WzFileParent => Parent != null ? Parent.WzFileParent : null;
 
         /// <summary>
         /// Is the object parsed
@@ -208,7 +208,7 @@ namespace RazzleServer.Common.WzLib
                 }
             }
 
-            var segments = path.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+            var segments = path.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
             if (segments[0] == "..")
             {
                 return null;
@@ -218,7 +218,7 @@ namespace RazzleServer.Common.WzLib
             for (var x = 0; x < segments.Length; x++)
             {
                 var foundChild = false;
-                foreach (var iwp in (ret == null ? properties : ret.WzProperties))
+                foreach (var iwp in ret == null ? properties : ret.WzProperties)
                 {
                     if (iwp.Name == segments[x])
                     {

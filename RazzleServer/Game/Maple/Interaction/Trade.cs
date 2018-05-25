@@ -397,10 +397,6 @@ namespace RazzleServer.Game.Maple.Interaction
                 Owner.Items.AddRange(VisitorItems);
                 Visitor.Items.AddRange(OwnerItems);
             }
-            else
-            {
-                // TODO: Cancel trade.
-            }
         }
 
         public void Cancel()

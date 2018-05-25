@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using RazzleServer.Common.Packet;
 using RazzleServer.Common.Data;
+using RazzleServer.Common.Packet;
 using RazzleServer.Data;
 using RazzleServer.Game.Maple.Life;
 
@@ -61,7 +61,7 @@ namespace RazzleServer.Game.Maple.Characters
 
             //datum.Update("AccountId = {0}", Parent.AccountId);
 
-            Items.ForEach((item => item.Save()));
+            Items.ForEach(item => item.Save());
         }
 
         public void Show(Npc npc)

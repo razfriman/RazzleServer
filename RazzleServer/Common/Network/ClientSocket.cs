@@ -2,9 +2,9 @@
 using System.Net;
 using System.Net.Sockets;
 using Microsoft.Extensions.Logging;
-using RazzleServer.Common.Util;
-using RazzleServer.Common.MapleCryptoLib;
+using RazzleServer.Common.Crypto;
 using RazzleServer.Common.Packet;
+using RazzleServer.Common.Util;
 
 namespace RazzleServer.Common.Network
 {
@@ -43,7 +43,7 @@ namespace RazzleServer.Common.Network
             _toClient = toClient;
 
             Crypto = new MapleCipherProvider(currentGameVersion, aesKey);
-            Crypto.PacketFinished += (data) => _client.Receive(new PacketReader(data));
+            Crypto.PacketFinished += data => _client.Receive(new PacketReader(data));
 			WaitForData();
 		}
 		private void WaitForData()

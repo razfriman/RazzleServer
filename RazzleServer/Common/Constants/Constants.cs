@@ -46,7 +46,7 @@ namespace RazzleServer.Common.Constants
         Spear,
         Staff,
         Wand,
-        Knuckle,
+        Knuckle
     }
     #endregion
 
@@ -57,7 +57,7 @@ namespace RazzleServer.Common.Constants
         Sealed = 0x01,
         AddPreventSlipping = 0x02,
         AddPreventColdness = 0x04,
-        Untradeable = 0x08,
+        Untradeable = 0x08
     }
 
     public enum ItemType : byte
@@ -144,7 +144,7 @@ namespace RazzleServer.Common.Constants
         Buy = 23,
         UpdateItems = 25,
         RemoveItem = 27,
-        OpenStore = 30,
+        OpenStore = 30
     }
 
     public enum InteractionType : byte

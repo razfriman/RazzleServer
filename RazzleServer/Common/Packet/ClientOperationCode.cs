@@ -157,6 +157,6 @@
         PlayerUpdate = 0xD5,
         LeaveField = 0xDF,
         HitReactor = 205,
-        TouchReactor = 206,
+        TouchReactor = 206
     }
 }

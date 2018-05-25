@@ -1,7 +1,8 @@
-﻿using System.IO;
-using RazzleServer.Common.WzLib.Util;
+﻿using System;
+using System.IO;
+using RazzleServer.Common.Wz.Util;
 
-namespace RazzleServer.Common.WzLib.WzProperties
+namespace RazzleServer.Common.Wz.WzProperties
 {
     /// <summary>
     /// A property that is stored in the wz file with a signed byte and possibly followed by an int. If the 
@@ -19,7 +20,7 @@ namespace RazzleServer.Common.WzLib.WzProperties
         #region Inherited Members
         public override void SetValue(object value)
         {
-            val = System.Convert.ToInt32(value);
+            val = Convert.ToInt32(value);
         }
 
         public override WzImageProperty DeepClone()

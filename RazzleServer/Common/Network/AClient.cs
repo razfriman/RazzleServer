@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Net.Sockets;
 using Microsoft.Extensions.Logging;
+using RazzleServer.Center;
 using RazzleServer.Common.Packet;
-using RazzleServer.Server;
 using RazzleServer.Common.Util;
 
 namespace RazzleServer.Common.Network

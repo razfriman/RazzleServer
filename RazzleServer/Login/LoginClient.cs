@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Net.Sockets;
-using RazzleServer.Common.Network;
 using Microsoft.Extensions.Logging;
-using RazzleServer.Common.Packet;
-using RazzleServer.Login.Maple;
-using RazzleServer.Common.Util;
+using RazzleServer.Center;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Exceptions;
-using RazzleServer.Server;
+using RazzleServer.Common.Network;
+using RazzleServer.Common.Packet;
+using RazzleServer.Common.Util;
+using RazzleServer.Login.Maple;
 
 namespace RazzleServer.Login
 {
@@ -71,31 +71,19 @@ namespace RazzleServer.Login
                 {
                     return LoginResult.InvalidPassword;
                 }
-                else if (Account.IsBanned)
+
+                if (Account.IsBanned)
                 {
                     return LoginResult.Banned;
                 }
-                else
-                {
-                    return LoginResult.Valid;
-                }
+
+                return LoginResult.Valid;
             }
             catch (NoAccountException)
             {
                 if (ServerConfig.Instance.EnableAutoRegister && username == LastUsername && password == LastPassword)
                 {
-                    Account.Username = username;
-                    Account.Salt = Functions.RandomString();
-                    Account.Password = Functions.GetSha512(password + Account.Salt);
-                    Account.Gender = Gender.Unset;
-                    Account.Pin = string.Empty;
-                    Account.IsBanned = false;
-                    Account.IsMaster = false;
-                    Account.Birthday = DateTime.UtcNow;
-                    Account.Creation = DateTime.UtcNow;
-                    Account.MaxCharacters = ServerConfig.Instance.DefaultCreationSlots;
-                    Account.IsMaster = true;
-                    Account.Create();
+                    AutoRegisterAccount(username, password);
                 }
                 else
                 {
@@ -106,6 +94,22 @@ namespace RazzleServer.Login
             }
 
             return LoginResult.Valid;
+        }
+
+        private void AutoRegisterAccount(string username, string password)
+        {
+            Account.Username = username;
+            Account.Salt = Functions.RandomString();
+            Account.Password = Functions.GetSha512(password + Account.Salt);
+            Account.Gender = Gender.Unset;
+            Account.Pin = string.Empty;
+            Account.IsBanned = false;
+            Account.IsMaster = false;
+            Account.Birthday = DateTime.UtcNow;
+            Account.Creation = DateTime.UtcNow;
+            Account.MaxCharacters = ServerConfig.Instance.DefaultCreationSlots;
+            Account.IsMaster = true;
+            Account.Create();
         }
     }
 }

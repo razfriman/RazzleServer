@@ -1,14 +1,13 @@
-﻿using RazzleServer.Common.Util;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using RazzleServer.Login;
-using RazzleServer.Game;
 using RazzleServer.Center.Maple;
-using RazzleServer.Server;
-using RazzleServer.Game.Maple.Data;
-using System;
 using RazzleServer.Common.Data;
+using RazzleServer.Common.Util;
+using RazzleServer.Game;
+using RazzleServer.Game.Maple.Data;
+using RazzleServer.Login;
 
 namespace RazzleServer.Center
 {
@@ -18,8 +17,7 @@ namespace RazzleServer.Center
 
         public LoginServer Login { get; set; }
         public Worlds Worlds { get; private set; } = new Worlds();
-        public Maple.Migrations Migrations { get; private set; } = new Maple.Migrations();
-        public IServiceProvider ServiceProvider { get; set; }
+        public Migrations Migrations { get; private set; } = new Migrations();
 
         private readonly ILogger Log = LogManager.Log;
 

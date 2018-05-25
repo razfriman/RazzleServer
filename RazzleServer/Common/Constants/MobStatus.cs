@@ -3,7 +3,7 @@
 namespace RazzleServer.Common.Constants
 {
     [Flags]
-    public enum MobStatus : int
+    public enum MobStatus
     {
         None,
 

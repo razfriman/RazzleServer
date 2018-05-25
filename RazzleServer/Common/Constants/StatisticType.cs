@@ -1,8 +1,9 @@
 ﻿using System;
+
 namespace RazzleServer.Common.Constants
 {
     [Flags]
-    public enum StatisticType : int
+    public enum StatisticType
     {
         Skin = 0x1,
         Face = 0x2,

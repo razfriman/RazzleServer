@@ -12,7 +12,7 @@ namespace RazzleServer.Game.Handlers
 
             var target = client.Character.Map.Characters[characterId];
 
-            if (target == null || (target.IsMaster && !client.Character.IsMaster))
+            if (target == null || target.IsMaster && !client.Character.IsMaster)
             {
                 return;
             }

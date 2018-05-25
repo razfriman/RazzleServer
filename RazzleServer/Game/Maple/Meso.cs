@@ -9,7 +9,6 @@ namespace RazzleServer.Game.Maple
         public int Amount { get; private set; }
 
         public Meso(int amount)
-             : base()
         {
             Amount = amount;
         }

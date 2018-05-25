@@ -1,4 +1,5 @@
 using System;
+
 namespace RazzleServer.Common.Packet
 {
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]

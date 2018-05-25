@@ -1,10 +1,10 @@
 ﻿using System.Linq;
+using RazzleServer.Center;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
-using RazzleServer.Server;
 
 namespace RazzleServer.Login.Handlers
 {
@@ -35,25 +35,25 @@ namespace RazzleServer.Login.Handlers
 
             if (gender == Gender.Male)
             {
-                error |= (!DataProvider.CreationData.MaleSkins.Any(x => x == skin)
-                    || !DataProvider.CreationData.MaleFaces.Any(x => x == face)
-                    || !DataProvider.CreationData.MaleHairs.Any(x => x == hair)
-                    || !DataProvider.CreationData.MaleHairColors.Any(x => x == hairColor)
-                    || !DataProvider.CreationData.MaleTops.Any(x => x == topId)
-                    || !DataProvider.CreationData.MaleBottoms.Any(x => x == bottomId)
-                    || !DataProvider.CreationData.MaleShoes.Any(x => x == shoesId)
-                    || !DataProvider.CreationData.MaleWeapons.Any(x => x == weaponId));
+                error |= !DataProvider.CreationData.MaleSkins.Any(x => x == skin)
+                         || !DataProvider.CreationData.MaleFaces.Any(x => x == face)
+                         || !DataProvider.CreationData.MaleHairs.Any(x => x == hair)
+                         || !DataProvider.CreationData.MaleHairColors.Any(x => x == hairColor)
+                         || !DataProvider.CreationData.MaleTops.Any(x => x == topId)
+                         || !DataProvider.CreationData.MaleBottoms.Any(x => x == bottomId)
+                         || !DataProvider.CreationData.MaleShoes.Any(x => x == shoesId)
+                         || !DataProvider.CreationData.MaleWeapons.Any(x => x == weaponId);
             }
             else if (gender == Gender.Female)
             {
-                error |= (!DataProvider.CreationData.FemaleSkins.Any(x => x == skin)
-                    || !DataProvider.CreationData.FemaleFaces.Any(x => x == face)
-                    || !DataProvider.CreationData.FemaleHairs.Any(x => x == hair)
-                    || !DataProvider.CreationData.FemaleHairColors.Any(x => x == hairColor)
-                    || !DataProvider.CreationData.FemaleTops.Any(x => x == topId)
-                    || !DataProvider.CreationData.FemaleBottoms.Any(x => x == bottomId)
-                    || !DataProvider.CreationData.FemaleShoes.Any(x => x == shoesId)
-                    || !DataProvider.CreationData.FemaleWeapons.Any(x => x == weaponId));
+                error |= !DataProvider.CreationData.FemaleSkins.Any(x => x == skin)
+                         || !DataProvider.CreationData.FemaleFaces.Any(x => x == face)
+                         || !DataProvider.CreationData.FemaleHairs.Any(x => x == hair)
+                         || !DataProvider.CreationData.FemaleHairColors.Any(x => x == hairColor)
+                         || !DataProvider.CreationData.FemaleTops.Any(x => x == topId)
+                         || !DataProvider.CreationData.FemaleBottoms.Any(x => x == bottomId)
+                         || !DataProvider.CreationData.FemaleShoes.Any(x => x == shoesId)
+                         || !DataProvider.CreationData.FemaleWeapons.Any(x => x == weaponId);
             }
 
             var character = new Character

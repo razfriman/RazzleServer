@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
-using RazzleServer.Common.WzLib;
+using RazzleServer.Common.Wz;
 using RazzleServer.Data;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
@@ -161,10 +161,8 @@ namespace RazzleServer.Game.Maple
                 {
                     return maxPerStack;
                 }
-                else
-                {
-                    return maxPerStack;
-                }
+
+                return maxPerStack;
             }
             set => maxPerStack = value;
         }
@@ -178,10 +176,8 @@ namespace RazzleServer.Game.Maple
                 {
                     throw new ArgumentException("Quantity too high.");
                 }
-                else
-                {
-                    quantity = value;
-                }
+
+                quantity = value;
             }
         }
 
@@ -278,10 +274,8 @@ namespace RazzleServer.Game.Maple
                 {
                     return (byte)(Slot * -1);
                 }
-                else
-                {
-                    throw new InvalidOperationException("Attempting to retrieve absolute slot for non-equipped item.");
-                }
+
+                throw new InvalidOperationException("Attempting to retrieve absolute slot for non-equipped item.");
             }
         }
 
@@ -291,16 +285,15 @@ namespace RazzleServer.Game.Maple
             {
                 if (IsEquippedCash)
                 {
-                    return ((byte)(AbsoluteSlot - 100));
+                    return (byte)(AbsoluteSlot - 100);
                 }
-                else if (IsEquipped)
+
+                if (IsEquipped)
                 {
                     return AbsoluteSlot;
                 }
-                else
-                {
-                    return (byte)Slot;
-                }
+
+                return (byte)Slot;
             }
         }
 
@@ -310,7 +303,7 @@ namespace RazzleServer.Game.Maple
         {
             MapleId = mapleId;
             MaxPerStack = CachedReference.MaxPerStack;
-            Quantity = (Type == ItemType.Equipment) ? (short)1 : quantity;
+            Quantity = Type == ItemType.Equipment ? (short)1 : quantity;
             if (equipped)
             {
                 Slot = (short)GetEquippedSlot();

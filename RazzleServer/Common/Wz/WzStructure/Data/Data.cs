@@ -1,8 +1,7 @@
 ﻿
-using System;
 using System.Collections.Generic;
 
-namespace RazzleServer.Common.WzLib.WzStructure.Data
+namespace RazzleServer.Common.Wz.WzStructure.Data
 {
 
     public static class Tables

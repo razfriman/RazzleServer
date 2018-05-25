@@ -139,9 +139,6 @@ namespace RazzleServer.Game.Maple.Characters
                                 VIP.Add(mapId);
                             }
                         }
-                        else
-                        {
-                        }
                     }
                     break;
             }

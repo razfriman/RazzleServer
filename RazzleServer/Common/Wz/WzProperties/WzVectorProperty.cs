@@ -1,7 +1,8 @@
-﻿using System.IO;
-using RazzleServer.Common.WzLib.Util;
+﻿using System.Drawing;
+using System.IO;
+using RazzleServer.Common.Wz.Util;
 
-namespace RazzleServer.Common.WzLib.WzProperties
+namespace RazzleServer.Common.Wz.WzProperties
 {
 	/// <summary>
 	/// A property that contains an x and a y value
@@ -18,15 +19,15 @@ namespace RazzleServer.Common.WzLib.WzProperties
 		#region Inherited Members
         public override void SetValue(object value)
         {
-            if (value is System.Drawing.Point)
+            if (value is Point)
             {
-                x.val = ((System.Drawing.Point)value).X;
-                y.val = ((System.Drawing.Point)value).Y;
+                x.val = ((Point)value).X;
+                y.val = ((Point)value).Y;
             }
             else
             {
-                x.val = ((System.Drawing.Size)value).Width;
-                y.val = ((System.Drawing.Size)value).Height;
+                x.val = ((Size)value).Width;
+                y.val = ((Size)value).Height;
             }
         }
 
@@ -36,7 +37,7 @@ namespace RazzleServer.Common.WzLib.WzProperties
             return clone;
         }
 
-		public override object WzValue => new System.Drawing.Point(x.Value, y.Value);
+		public override object WzValue => new Point(x.Value, y.Value);
 
 		/// <summary>
 		/// The parent of the object
@@ -99,7 +100,7 @@ namespace RazzleServer.Common.WzLib.WzProperties
 		/// <summary>
 		/// The Point of the Vector2D created from the X and Y
 		/// </summary>
-		public System.Drawing.Point Pos => new System.Drawing.Point(X.Value, Y.Value);
+		public Point Pos => new Point(X.Value, Y.Value);
 
 		/// <summary>
 		/// Creates a blank WzVectorProperty
@@ -135,7 +136,7 @@ namespace RazzleServer.Common.WzLib.WzProperties
 
         public override string ToString()
         {
-            return "X: " + x.val.ToString() + ", Y: " + y.val.ToString();
+            return "X: " + x.val + ", Y: " + y.val;
         }
         #endregion
 	}

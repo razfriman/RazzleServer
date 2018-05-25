@@ -368,7 +368,7 @@
             Hide = 5101004,
             Resurrection = 5101005,
             SuperDragonRoar = 5101006,
-            Teleport = 5101007,
+            Teleport = 5101007
         }
     }
 }

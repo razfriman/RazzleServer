@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace RazzleServer.Data
 {
     public class MemoEntity

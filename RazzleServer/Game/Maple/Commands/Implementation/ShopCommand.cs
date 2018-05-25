@@ -56,8 +56,6 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
                 if (shopId == -1)
                 {
                     ShowSyntax(caller);
-
-                    return;
                 }
 
                 // TODO: Shop the desired shop.

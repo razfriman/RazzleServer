@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace RazzleServer.Common.Packet
 {
@@ -13,20 +14,20 @@ namespace RazzleServer.Common.Packet
         /// </summary>
         /// <param name="pChar">Char to check</param>
         /// <returns>Char is a hex digit</returns>
-        public static bool IsHexDigit(Char pChar)
+        public static bool IsHexDigit(char pChar)
         {
             int numChar;
             var numA = Convert.ToInt32('A');
             var num1 = Convert.ToInt32('0');
-            pChar = Char.ToUpper(pChar);
+            pChar = char.ToUpper(pChar);
             numChar = Convert.ToInt32(pChar);
 
-            if (numChar >= numA && numChar < (numA + 6))
+            if (numChar >= numA && numChar < numA + 6)
             {
                 return true;
             }
 
-            if (numChar >= num1 && numChar < (num1 + 10))
+            if (numChar >= num1 && numChar < num1 + 10)
             {
                 return true;
             }
@@ -46,7 +47,7 @@ namespace RazzleServer.Common.Packet
                 throw new ArgumentException("hex must be 1 or 2 characters in length");
             }
 
-            var newByte = byte.Parse(pHex, System.Globalization.NumberStyles.HexNumber);
+            var newByte = byte.Parse(pHex, NumberStyles.HexNumber);
             return newByte;
         }
 
@@ -83,7 +84,7 @@ namespace RazzleServer.Common.Packet
 
             for (var i = 0; i < bytes.Length; i++)
             {
-                hex = new String(new Char[] { newString[j], newString[j + 1] });
+                hex = new string(new[] { newString[j], newString[j + 1] });
                 bytes[i] = HexToByte(hex);
                 j = j + 2;
             }

@@ -1,7 +1,7 @@
 ﻿using System.IO;
-using RazzleServer.Common.MapleCryptoLib;
+using RazzleServer.Common.Crypto;
 
-namespace RazzleServer.Common.WzLib.Util
+namespace RazzleServer.Common.Wz.Util
 {
     public static class WzKeyGenerator
     {

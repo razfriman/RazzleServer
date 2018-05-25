@@ -1,8 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
 using RazzleServer.Common.Constants;
-using RazzleServer.Common.Packet;
 using RazzleServer.Common.Data;
+using RazzleServer.Common.Packet;
 using RazzleServer.Data;
 
 namespace RazzleServer.Game.Maple.Characters

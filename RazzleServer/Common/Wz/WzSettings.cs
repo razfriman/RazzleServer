@@ -1,10 +1,11 @@
 ﻿using System;
-using RazzleServer.Common.WzLib.WzProperties;
-using System.Reflection;
-using RazzleServer.Common.WzLib.WzStructure;
+using System.Drawing;
 using System.IO;
+using System.Reflection;
+using RazzleServer.Common.Wz.WzProperties;
+using RazzleServer.Common.Wz.WzStructure;
 
-namespace RazzleServer.Common.WzLib
+namespace RazzleServer.Common.Wz
 {
     public class WzSettingsManager
     {
@@ -63,7 +64,7 @@ namespace RazzleServer.Common.WzLib
                             break;
                         case "System.Drawing.Color":
                             argb = BitConverter.GetBytes((uint)((WzDoubleProperty)settingProp).Value);
-                            fieldInfo.SetValue(null, System.Drawing.Color.FromArgb(argb[3], argb[2], argb[1], argb[0]));
+                            fieldInfo.SetValue(null, Color.FromArgb(argb[3], argb[2], argb[1], argb[0]));
                             break;
                         case "System.Int32":
                             fieldInfo.SetValue(null, InfoTool.GetInt(settingProp));
@@ -85,7 +86,7 @@ namespace RazzleServer.Common.WzLib
                             fieldInfo.SetValue(null, (ItemTypes)InfoTool.GetInt(settingProp));
                             break;*/
                         case "System.Drawing.Size":
-                            fieldInfo.SetValue(null, new System.Drawing.Size(((WzVectorProperty)settingProp).X.Value, ((WzVectorProperty)settingProp).Y.Value));
+                            fieldInfo.SetValue(null, new Size(((WzVectorProperty)settingProp).X.Value, ((WzVectorProperty)settingProp).Y.Value));
                             break;
                         case "System.String":
                             fieldInfo.SetValue(null, InfoTool.GetString(settingProp));
@@ -193,7 +194,7 @@ namespace RazzleServer.Common.WzLib
                         SetWzProperty(settingsImage, settingName, WzPropertyType.Double, (double)(uint)xnaColor.GetType().GetProperty("PackedValue").GetValue(xnaColor, null));
                         break;
                     case "System.Drawing.Color":
-                        SetWzProperty(settingsImage, settingName, WzPropertyType.Double, (double)((System.Drawing.Color)fieldInfo.GetValue(null)).ToArgb());
+                        SetWzProperty(settingsImage, settingName, WzPropertyType.Double, (double)((Color)fieldInfo.GetValue(null)).ToArgb());
                         break;
                     case "System.Int32":
                         SetWzProperty(settingsImage, settingName, WzPropertyType.Int, fieldInfo.GetValue(null));

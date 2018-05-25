@@ -1,6 +1,4 @@
-﻿using RazzleServer.Common.Data;
-
-namespace RazzleServer.Game.Maple.Life
+﻿namespace RazzleServer.Game.Maple.Life
 {
     public sealed class Loot
     {

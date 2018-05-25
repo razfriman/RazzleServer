@@ -1,15 +1,14 @@
-﻿using System.Collections.Generic;
-using System;
+﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using RazzleServer.Common.Constants;
-using RazzleServer.Game.Maple.Maps;
-using RazzleServer.Common.Packet;
 using RazzleServer.Common.Exceptions;
-using RazzleServer.Game.Maple.Life;
-using RazzleServer.Game.Maple.Data;
+using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
-using RazzleServer.Common.Data;
+using RazzleServer.Game.Maple.Data;
+using RazzleServer.Game.Maple.Life;
+using RazzleServer.Game.Maple.Maps;
 
 namespace RazzleServer.Game.Maple.Characters
 {
@@ -20,7 +19,6 @@ namespace RazzleServer.Game.Maple.Characters
         private List<Item> Items { get; set; }
 
         public CharacterItems(Character parent, byte equipmentSlots, byte usableSlots, byte setupSlots, byte etceteraSlots, byte cashSlots)
-            : base()
         {
             Parent = parent;
 
@@ -74,20 +72,18 @@ namespace RazzleServer.Game.Maple.Characters
 
                         break;
                     }
-                    else
+
+                    item.Quantity -= (short)(loopItem.MaxPerStack - loopItem.Quantity);
+                    item.Slot = GetNextFreeSlot(item.Type);
+
+                    loopItem.Quantity = loopItem.MaxPerStack;
+
+                    if (Parent.IsInitialized)
                     {
-                        item.Quantity -= (short)(loopItem.MaxPerStack - loopItem.Quantity);
-                        item.Slot = GetNextFreeSlot(item.Type);
-
-                        loopItem.Quantity = loopItem.MaxPerStack;
-
-                        if (Parent.IsInitialized)
-                        {
-                            loopItem.Update();
-                        }
-
-                        break;
+                        loopItem.Update();
                     }
+
+                    break;
                 }
             }
 
@@ -95,7 +91,7 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 item.Parent = this;
 
-                if ((Parent.IsInitialized && item.Slot == 0) || forceGetSlot)
+                if (Parent.IsInitialized && item.Slot == 0 || forceGetSlot)
                 {
                     item.Slot = GetNextFreeSlot(item.Type);
                 }
@@ -144,11 +140,9 @@ namespace RazzleServer.Game.Maple.Characters
 
                         break;
                     }
-                    else
-                    {
-                        leftToRemove -= loopItem.Quantity;
-                        toRemove.Add(loopItem);
-                    }
+
+                    leftToRemove -= loopItem.Quantity;
+                    toRemove.Add(loopItem);
                 }
             }
 
@@ -287,7 +281,7 @@ namespace RazzleServer.Game.Maple.Characters
                 }
             }
 
-            return (count == MaxSlots[type]);
+            return count == MaxSlots[type];
         }
 
         public int RemainingSlots(ItemType type)
@@ -380,12 +374,12 @@ namespace RazzleServer.Game.Maple.Characters
 
             if (item.CHealthPercentage != 0)
             {
-                Parent.Health += (short)((item.CHealthPercentage * Parent.MaxHealth) / 100);
+                Parent.Health += (short)(item.CHealthPercentage * Parent.MaxHealth / 100);
             }
 
             if (item.CManaPercentage != 0)
             {
-                Parent.Mana += (short)((item.CManaPercentage * Parent.MaxMana) / 100);
+                Parent.Mana += (short)(item.CManaPercentage * Parent.MaxMana / 100);
             }
 
             if (item.CBuffTime > 0 && item.CProb == 0)
@@ -985,18 +979,14 @@ namespace RazzleServer.Game.Maple.Characters
                     {
                         return 0;
                     }
-                    else
-                    {
-                        return 1;
-                    }
+
+                    return 1;
                 }
 
                 return 1;
             }
-            else
-            {
-                return 1;
-            }
+
+            return 1;
         }
 
         public bool CouldReceive(IEnumerable<Item> items, bool autoMerge = true)

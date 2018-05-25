@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Center;
 using RazzleServer.Common.Network;
 using RazzleServer.Common.Util;
 
-namespace RazzleServer.Server
+namespace RazzleServer.Common.Server
 {
     public abstract class MapleServer<T> where T : AClient, IDisposable
     {
@@ -75,7 +74,7 @@ namespace RazzleServer.Server
 
             Log.LogInformation("Client Connected");
 
-            var client = Activator.CreateInstance(typeof(T), new object[] { socket, this }) as T;
+            var client = Activator.CreateInstance(typeof(T), socket, this) as T;
 
             try
             {

@@ -1,14 +1,15 @@
 ﻿using System.IO;
-//using System;
-using RazzleServer.Common.WzLib.Util;
-//using NAudio.Wave;
-using System.Text;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+using System.Text;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Util;
+using RazzleServer.Common.Wz.Util;
 
-namespace RazzleServer.Common.WzLib.WzProperties
+//using System;
+//using NAudio.Wave;
+
+namespace RazzleServer.Common.Wz.WzProperties
 {
     /// <summary>
     /// A property that contains data for an MP3 file
@@ -53,7 +54,6 @@ namespace RazzleServer.Common.WzLib.WzProperties
 
         public override void SetValue(object value)
         {
-            return;
         }
         /// <summary>
         /// The parent of the object
@@ -283,7 +283,7 @@ namespace RazzleServer.Common.WzLib.WzProperties
             try
             {
                 var obj = (T)FormatterServices.GetUninitializedObject(typeof(T));
-                Marshal.PtrToStructure<T>(handle.AddrOfPinnedObject(), obj);
+                Marshal.PtrToStructure(handle.AddrOfPinnedObject(), obj);
                 return obj;
             }
             finally

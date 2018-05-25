@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 
 namespace RazzleServer.Game.Maple.Maps
@@ -23,7 +23,7 @@ namespace RazzleServer.Game.Maple.Maps
             }
         }
 
-        public bool ContainsPortal(string label) => this.Any(x => x.Label.Equals(label, System.StringComparison.InvariantCultureIgnoreCase));
+        public bool ContainsPortal(string label) => this.Any(x => x.Label.Equals(label, StringComparison.InvariantCultureIgnoreCase));
 
         protected override int GetKeyForItem(Portal item)
         {

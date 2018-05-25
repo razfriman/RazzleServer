@@ -9,7 +9,7 @@ namespace RazzleServer.Login.Handlers
         public override void HandlePacket(PacketReader packet, LoginClient client)
         {
             var characterId = packet.ReadInt();
-            client.MacAddresses = packet.ReadString().Split(new char[] { ',', ' ' });
+            client.MacAddresses = packet.ReadString().Split(',', ' ');
 
             client.Server.Manager.Migrate(client.Host, client.Account.Id, characterId);
 

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using RazzleServer.Common.WzLib.WzProperties;
-using RazzleServer.Common.WzLib.WzStructure.Data;
 using System.Drawing;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Util;
+using RazzleServer.Common.Wz.WzProperties;
+using RazzleServer.Common.Wz.WzStructure.Data;
 
-namespace RazzleServer.Common.WzLib.WzStructure
+namespace RazzleServer.Common.Wz.WzStructure
 {
     public class MapInfo //Credits to Bui for some of the info
     {
@@ -29,7 +29,7 @@ namespace RazzleServer.Common.WzLib.WzStructure
             this.strStreetName = strStreetName;
             this.strCategoryName = strCategoryName;
             var file = image.WzFileParent;
-            var loggerSuffix = ", map " + image.Name + ((file != null) ? (" of version " + Enum.GetName(typeof(WzMapleVersion), file.MapleVersion) + ", v" + file.Version.ToString()) : "");
+            var loggerSuffix = ", map " + image.Name + (file != null ? " of version " + Enum.GetName(typeof(WzMapleVersion), file.MapleVersion) + ", v" + file.Version : "");
             foreach (var prop in image["info"].WzProperties)
             {
                 switch (prop.Name)
@@ -146,7 +146,7 @@ namespace RazzleServer.Common.WzLib.WzStructure
                         endHour = InfoTool.GetOptionalInt(prop["endHour"]);
                         var propId = InfoTool.GetOptionalInt(prop["id"]);
                         var message = InfoTool.GetOptionalString(prop["message"]);
-                        if (propId == null || message == null || (startHour == null ^ endHour == null))
+                        if (propId == null || message == null || startHour == null ^ endHour == null)
                         {
                             Log.LogError("timeMob is missing data");
                         }

@@ -1,6 +1,6 @@
 ﻿using System.Security;
 
-namespace RazzleServer.Common.MapleCryptoLib
+namespace RazzleServer.Common.Crypto
 {
     /// <summary>
     /// FastAES based on the AesFastEngine from bouncy castle
@@ -45,7 +45,7 @@ namespace RazzleServer.Common.MapleCryptoLib
                 C3 ^= wk[3];
 
                 //Loop 2 rounds of SubBytes, ShiftRows, MixColumns and AddRoundKey
-                while (curRound < (Rounds - 2))
+                while (curRound < Rounds - 2)
                 {
                     wk = WorkingKey[++curRound];
                     r0 = Table0[C0 & 255] ^ Table1[(C1 >> 8) & 255] ^ Table2[(C2 >> 16) & 255] ^ Table3[C3 >> 24] ^ wk[0];
@@ -68,10 +68,10 @@ namespace RazzleServer.Common.MapleCryptoLib
 
                 //Final round of SubBytes, ShiftRows and AddRoundKey
                 wk = WorkingKey[++curRound];
-                C0 = (uint)Sbox[r0 & 255] ^ (((uint)Sbox[(r1 >> 8) & 255]) << 8) ^ (((uint)Sbox[(r2 >> 16) & 255]) << 16) ^ (((uint)Sbox[r3 >> 24]) << 24) ^ wk[0];
-                C1 = (uint)Sbox[r1 & 255] ^ (((uint)Sbox[(r2 >> 8) & 255]) << 8) ^ (((uint)Sbox[(r3 >> 16) & 255]) << 16) ^ (((uint)Sbox[r0 >> 24]) << 24) ^ wk[1];
-                C2 = (uint)Sbox[r2 & 255] ^ (((uint)Sbox[(r3 >> 8) & 255]) << 8) ^ (((uint)Sbox[(r0 >> 16) & 255]) << 16) ^ (((uint)Sbox[r1 >> 24]) << 24) ^ wk[2];
-                C3 = (uint)Sbox[r3 & 255] ^ (((uint)Sbox[(r0 >> 8) & 255]) << 8) ^ (((uint)Sbox[(r1 >> 16) & 255]) << 16) ^ (((uint)Sbox[r2 >> 24]) << 24) ^ wk[3];
+                C0 = Sbox[r0 & 255] ^ ((uint)Sbox[(r1 >> 8) & 255] << 8) ^ ((uint)Sbox[(r2 >> 16) & 255] << 16) ^ ((uint)Sbox[r3 >> 24] << 24) ^ wk[0];
+                C1 = Sbox[r1 & 255] ^ ((uint)Sbox[(r2 >> 8) & 255] << 8) ^ ((uint)Sbox[(r3 >> 16) & 255] << 16) ^ ((uint)Sbox[r0 >> 24] << 24) ^ wk[1];
+                C2 = Sbox[r2 & 255] ^ ((uint)Sbox[(r3 >> 8) & 255] << 8) ^ ((uint)Sbox[(r0 >> 16) & 255] << 16) ^ ((uint)Sbox[r1 >> 24] << 24) ^ wk[2];
+                C3 = Sbox[r3 & 255] ^ ((uint)Sbox[(r0 >> 8) & 255] << 8) ^ ((uint)Sbox[(r1 >> 16) & 255] << 16) ^ ((uint)Sbox[r2 >> 24] << 24) ^ wk[3];
 
                 *((uint*)pBlock + 0) = C0;
                 *((uint*)pBlock + 1) = C1;
@@ -106,14 +106,14 @@ namespace RazzleServer.Common.MapleCryptoLib
             // while not enough round key material calculated
             // calculate new values
             var k = (Rounds + 1) << 2;
-            for (var i = KeyLength; (i < k); i++)
+            for (var i = KeyLength; i < k; i++)
             {
                 var temp = KeyResult[(i - 1) >> 2][(i - 1) & 3];
-                if ((i % KeyLength) == 0)
+                if (i % KeyLength == 0)
                 {
-                    temp = SubWord(Shift(temp, 8)) ^ Rcon[(i / KeyLength) - 1];
+                    temp = SubWord(Shift(temp, 8)) ^ Rcon[i / KeyLength - 1];
                 }
-                else if ((KeyLength > 6) && ((i % KeyLength) == 4))
+                else if (KeyLength > 6 && i % KeyLength == 4)
                 {
                     temp = SubWord(temp);
                 }
@@ -131,13 +131,13 @@ namespace RazzleServer.Common.MapleCryptoLib
 
         private static uint SubWord(uint x)
         {
-            return (uint)Sbox[x & 255]
-                | (((uint)Sbox[(x >> 8) & 255]) << 8)
-                | (((uint)Sbox[(x >> 16) & 255]) << 16)
-                | (((uint)Sbox[(x >> 24) & 255]) << 24);
+            return Sbox[x & 255]
+                | ((uint)Sbox[(x >> 8) & 255] << 8)
+                | ((uint)Sbox[(x >> 16) & 255] << 16)
+                | ((uint)Sbox[(x >> 24) & 255] << 24);
         }
 
-		private static uint LeToUInt32(byte[] buffer, int off) => (uint)buffer[off]
+		private static uint LeToUInt32(byte[] buffer, int off) => buffer[off]
 				| (uint)buffer[off + 1] << 8
 				| (uint)buffer[off + 2] << 16
 				| (uint)buffer[off + 3] << 24;
@@ -180,7 +180,7 @@ namespace RazzleServer.Common.MapleCryptoLib
             225, 248, 152,  17, 105, 217, 142, 148,
             155,  30, 135, 233, 206,  85,  40, 223,
             140, 161, 137,  13, 191, 230,  66, 104,
-            65, 153,  45,  15, 176,  84, 187,  22,
+            65, 153,  45,  15, 176,  84, 187,  22
         };
 
         private static readonly byte[] Rcon =

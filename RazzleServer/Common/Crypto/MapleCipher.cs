@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RazzleServer.Common.MapleCryptoLib
+namespace RazzleServer.Common.Crypto
 {
 	/// <summary>
 	/// Cipher class used for encrypting and decrypting maple packet data
@@ -15,7 +15,7 @@ namespace RazzleServer.Common.MapleCryptoLib
 		/// <summary>
 		/// General locker to prevent multithreading
 		/// </summary>
-		private volatile Object Locker = new Object();
+		private volatile object Locker = new object();
 
 		/// <summary>
 		/// Vector to use in the MapleCrypto
@@ -173,9 +173,9 @@ namespace RazzleServer.Common.MapleCryptoLib
 					length = remaining;
 				}
 
-				for (index = start; index < (start + length); ++index)
+				for (index = start; index < start + length; ++index)
 				{
-					if (((index - start) % realIV.Length) == 0)
+					if ((index - start) % realIV.Length == 0)
 					{
 						Transformer.TransformBlock(realIV);
 					}
@@ -239,7 +239,7 @@ namespace RazzleServer.Common.MapleCryptoLib
 				len = (byte)(length & 0xFF);
 				for (i = 0; i < length; ++i)
 				{
-					temp = ROL((byte)(~(buffer[i] - 0x48)), len & 0xFF);
+					temp = ROL((byte)~(buffer[i] - 0x48), len & 0xFF);
 					save = temp;
 					temp = ROR((byte)((xorKey ^ temp) - len), 3);
 					xorKey = save;
@@ -265,7 +265,7 @@ namespace RazzleServer.Common.MapleCryptoLib
 				{
 					temp = (byte)((ROL(buffer[i], 3) + len) ^ xorKey);
 					xorKey = temp;
-					temp = (byte)(((~ROR(temp, len & 0xFF)) & 0xFF) + 0x48);
+					temp = (byte)((~ROR(temp, len & 0xFF) & 0xFF) + 0x48);
 					buffer[i] = temp;
 					len--;
 				}

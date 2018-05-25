@@ -1,7 +1,8 @@
-﻿using System.IO;
-using RazzleServer.Common.WzLib.Util;
+﻿using System;
+using System.IO;
+using RazzleServer.Common.Wz.Util;
 
-namespace RazzleServer.Common.WzLib.WzProperties
+namespace RazzleServer.Common.Wz.WzProperties
 {
 	/// <summary>
 	/// A property that's value is null
@@ -17,7 +18,7 @@ namespace RazzleServer.Common.WzLib.WzProperties
 		#region Inherited Members
         public override void SetValue(object value)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public override WzImageProperty DeepClone()

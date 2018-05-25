@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace RazzleServer.Common.WzLib.Util
+﻿namespace RazzleServer.Common.Wz.Util
 {
     public static class XmlUtil
     {
@@ -75,7 +73,7 @@ namespace RazzleServer.Common.WzLib.Util
             {
                 indent[i] = '\t';
             }
-            return new String(indent);
+            return new string(indent);
         }
     }
 }

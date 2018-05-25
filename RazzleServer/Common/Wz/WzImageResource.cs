@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RazzleServer.Common.WzLib
+namespace RazzleServer.Common.Wz
 {
     public class WzImageResource : IDisposable
     {

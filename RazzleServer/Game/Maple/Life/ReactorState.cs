@@ -1,7 +1,5 @@
-﻿using System;
-using RazzleServer.Common.Constants;
-using RazzleServer.Common.Data;
-using RazzleServer.Common.WzLib;
+﻿using RazzleServer.Common.Constants;
+using RazzleServer.Common.Wz;
 
 namespace RazzleServer.Game.Maple.Life
 {

@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using RazzleServer.Common.WzLib.Util;
-using System;
+using RazzleServer.Common.Wz.Util;
 
-namespace RazzleServer.Common.WzLib
+namespace RazzleServer.Common.Wz
 {
 	/// <summary>
 	/// A directory in the wz file, which may contain sub directories or wz images
@@ -150,11 +150,14 @@ namespace RazzleServer.Common.WzLib
 		{
 			this.name = name;
 		}
+
 		/// <summary>
 		/// Creates a WzDirectory
 		/// </summary>
 		/// <param name="reader">The BinaryReader that is currently reading the wz file</param>
-        /// <param name="wzFile">The parent Wz File</param>
+		/// <param name="wzFile">The parent Wz File</param>
+		/// <param name="dirName"></param>
+		/// <param name="verHash"></param>
 		internal WzDirectory(WzBinaryReader reader, string dirName, uint verHash, byte[] WzIv, WzFile wzFile)
 		{
 			this.reader = reader;
@@ -265,7 +268,7 @@ namespace RazzleServer.Common.WzLib
 			if (entryCount == 0)
 			{
 				offsetSize = 1;
-				return (size = 0);
+				return size = 0;
 			}
 			size = WzTool.GetCompressedIntLength(entryCount);
 			offsetSize = WzTool.GetCompressedIntLength(entryCount);

@@ -171,7 +171,7 @@ namespace RazzleServer.Game.Handlers
                         }
 
                         var partyPlayers = skill.Character.Party?.Count ?? 1;
-                        var healthMod = (short)(((healthRate * skill.Character.MaxHealth) / 100) / partyPlayers);
+                        var healthMod = (short)(healthRate * skill.Character.MaxHealth / 100 / partyPlayers);
 
                         if (skill.Character.Party != null)
                         {
@@ -292,34 +292,34 @@ namespace RazzleServer.Game.Handlers
                         {
                             case (int)SkillNames.SuperGM.HealPlusDispel:
                                 {
-                                    condition = new Func<Character, bool>((target) => target.IsAlive);
-                                    action = new Action<Character>((target) =>
+                                    condition = target => target.IsAlive;
+                                    action = target =>
                                     {
                                         target.Health = target.MaxHealth;
                                         target.Mana = target.MaxMana;
 
                                         // TODO: Use dispell.
-                                    });
+                                    };
                                 }
                                 break;
 
                             case (int)SkillNames.SuperGM.Resurrection:
                                 {
-                                    condition = new Func<Character, bool>((target) => !target.IsAlive);
-                                    action = new Action<Character>((target) =>
+                                    condition = target => !target.IsAlive;
+                                    action = target =>
                                     {
                                         target.Health = target.MaxHealth;
-                                    });
+                                    };
                                 }
                                 break;
 
                             default:
                                 {
-                                    condition = new Func<Character, bool>((target) => true);
-                                    action = new Action<Character>((target) =>
+                                    condition = target => true;
+                                    action = target =>
                                     {
                                         target.Buffs.Add(skill, 0);
-                                    });
+                                    };
                                 }
                                 break;
                         }

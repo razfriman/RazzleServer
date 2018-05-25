@@ -4,11 +4,11 @@ using System.DrawingCore.Imaging;
 using System.IO;
 using System.IO.Compression;
 using System.Runtime.InteropServices;
-using RazzleServer.Common.WzLib.Util;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Util;
+using RazzleServer.Common.Wz.Util;
 
-namespace RazzleServer.Common.WzLib.WzProperties
+namespace RazzleServer.Common.Wz.WzProperties
 {
     /// <summary>
     /// A property that contains the information for a bitmap
@@ -289,11 +289,11 @@ namespace RazzleServer.Common.WzLib.WzProperties
                     uncompressedSize = width * height * 2;
                     decBuf = new byte[uncompressedSize];
                     zlib.Read(decBuf, 0, uncompressedSize);
-                    var argb = new Byte[uncompressedSize * 2];
+                    var argb = new byte[uncompressedSize * 2];
                     for (var i = 0; i < uncompressedSize; i++)
                     {
-                        b = decBuf[i] & 0x0F; b |= (b << 4); argb[i * 2] = (byte)b;
-                        g = decBuf[i] & 0xF0; g |= (g >> 4); argb[i * 2 + 1] = (byte)g;
+                        b = decBuf[i] & 0x0F; b |= b << 4; argb[i * 2] = (byte)b;
+                        g = decBuf[i] & 0xF0; g |= g >> 4; argb[i * 2 + 1] = (byte)g;
                     }
                     Marshal.Copy(argb, 0, bmpData.Scan0, argb.Length);
                     bmp.UnlockBits(bmpData);
@@ -308,7 +308,7 @@ namespace RazzleServer.Common.WzLib.WzProperties
                     bmp.UnlockBits(bmpData);
                     break;
                 case 3: // thanks to Elem8100 
-                    uncompressedSize = ((int)Math.Ceiling(width / 4.0)) * 4 * ((int)Math.Ceiling(height / 4.0)) * 4 / 8;
+                    uncompressedSize = (int)Math.Ceiling(width / 4.0) * 4 * (int)Math.Ceiling(height / 4.0) * 4 / 8;
                     decBuf = new byte[uncompressedSize];
                     zlib.Read(decBuf, 0, uncompressedSize);
                     bmp = new Bitmap(width, height, PixelFormat.Format32bppArgb);
@@ -317,8 +317,8 @@ namespace RazzleServer.Common.WzLib.WzProperties
                         int index;
                         int index2;
                         int p;
-                        var w = ((int)Math.Ceiling(width / 4.0));
-                        var h = ((int)Math.Ceiling(height / 4.0));
+                        var w = (int)Math.Ceiling(width / 4.0);
+                        var h = (int)Math.Ceiling(height / 4.0);
                         for (var i = 0; i < h; i++)
                         {
                             for (var j = 0; j < w; j++)
@@ -602,7 +602,7 @@ namespace RazzleServer.Common.WzLib.WzProperties
         {
             for (var i = 0; i < 16; i += 4, offset++)
             {
-                colorIndex[i + 0] = (rawData[offset] & 0x03);
+                colorIndex[i + 0] = rawData[offset] & 0x03;
                 colorIndex[i + 1] = (rawData[offset] & 0x0c) >> 2;
                 colorIndex[i + 2] = (rawData[offset] & 0x30) >> 4;
                 colorIndex[i + 3] = (rawData[offset] & 0xc0) >> 6;
@@ -629,7 +629,7 @@ namespace RazzleServer.Common.WzLib.WzProperties
             const int rgb565_mask_b = 0x001f;
             var r = (val & rgb565_mask_r) >> 11;
             var g = (val & rgb565_mask_g) >> 5;
-            var b = (val & rgb565_mask_b);
+            var b = val & rgb565_mask_b;
             var c = Color.FromArgb(
                 (r << 3) | (r >> 2),
                 (g << 2) | (g >> 4),

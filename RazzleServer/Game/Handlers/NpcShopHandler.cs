@@ -88,7 +88,8 @@ namespace RazzleServer.Game.Handlers
                         {
                             return;
                         }
-                        else if (quantity == item.Quantity)
+
+                        if (quantity == item.Quantity)
                         {
                             client.Character.Items.Remove(item, true);
                         }

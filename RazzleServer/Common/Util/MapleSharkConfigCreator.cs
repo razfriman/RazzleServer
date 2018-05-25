@@ -1,10 +1,10 @@
-﻿using RazzleServer.Common.Packet;
-using RazzleServer.Server;
-using System;
+﻿using System;
 using System.Text;
 using System.Xml;
+using RazzleServer.Center;
+using RazzleServer.Common.Packet;
 
-namespace RazzleServer
+namespace RazzleServer.Common.Util
 {
     public class MapleSharkConfigCreator
     {

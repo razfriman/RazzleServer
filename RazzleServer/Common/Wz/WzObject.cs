@@ -1,7 +1,8 @@
 ﻿using System;
 using System.DrawingCore;
+using Point = RazzleServer.Game.Maple.Point;
 
-namespace RazzleServer.Common.WzLib
+namespace RazzleServer.Common.Wz
 {
 	/// <summary>
 	/// An abstract class for wz objects
@@ -108,7 +109,7 @@ namespace RazzleServer.Common.WzLib
             throw new NotImplementedException();
         }
 
-        public virtual Game.Maple.Point GetPoint()
+        public virtual Point GetPoint()
         {
             throw new NotImplementedException();
         }

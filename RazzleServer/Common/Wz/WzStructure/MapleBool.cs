@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace RazzleServer.Common.WzLib.WzStructure
+namespace RazzleServer.Common.Wz.WzStructure
 {
     [DataContract]
     public struct MapleBool //I know I could have used the nullable bool.
@@ -55,7 +55,7 @@ namespace RazzleServer.Common.WzLib.WzStructure
 
         public static bool operator ==(MapleBool a, bool b)
         {
-            return (b && (a.val == True)) || (!b && (a.val == False));
+            return b && a.val == True || !b && a.val == False;
         }
 
         public static bool operator !=(MapleBool a, MapleBool b)
@@ -65,7 +65,7 @@ namespace RazzleServer.Common.WzLib.WzStructure
 
         public static bool operator !=(MapleBool a, bool b)
         {
-            return (b && (a.val != True)) || (!b && (a.val != False));
+            return b && a.val != True || !b && a.val != False;
         }
 
         public bool HasValue => val != NotExist;

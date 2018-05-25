@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.Extensions.Logging;
-using RazzleServer.Common.Util;
 using RazzleServer.Common.Packet;
+using RazzleServer.Common.Util;
 
-namespace RazzleServer.Common.MapleCryptoLib
+namespace RazzleServer.Common.Crypto
 {
     /// <summary>
     /// Helper class for Cipher related functionality
@@ -168,7 +168,7 @@ namespace RazzleServer.Common.MapleCryptoLib
         {
             var add = RecvCipher.Handshaken ? 4 : 2;
 
-            if (AvailableData < (length + add))
+            if (AvailableData < length + add)
             {
                 WaitForData = length + add;
                 return;
@@ -179,7 +179,7 @@ namespace RazzleServer.Common.MapleCryptoLib
             data = new byte[length + add];
             Buffer.BlockCopy(DataBuffer, 0, data, 0, data.Length);
             Buffer.BlockCopy(DataBuffer, length + add, DataBuffer, 0, DataBuffer.Length - (length + add));
-            AvailableData -= (length + add);
+            AvailableData -= length + add;
 
             Decrypt(data.ToArray());
         }

@@ -1,6 +1,5 @@
 ﻿using RazzleServer.Common.Constants;
-using RazzleServer.Common.Data;
-using RazzleServer.Common.WzLib;
+using RazzleServer.Common.Wz;
 using RazzleServer.Game.Maple.Maps;
 
 namespace RazzleServer.Game.Maple.Life

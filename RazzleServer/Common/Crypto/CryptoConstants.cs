@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace RazzleServer.Common.MapleCryptoLib
+﻿namespace RazzleServer.Common.Crypto
 {
     /// <summary>
     /// Cryptographic constants

@@ -1,10 +1,10 @@
 ﻿using System;
-using System.IO;
 using System.Collections.Generic;
-using RazzleServer.Common.WzLib.Util;
-using RazzleServer.Common.WzLib.WzProperties;
+using System.IO;
+using RazzleServer.Common.Wz.Util;
+using RazzleServer.Common.Wz.WzProperties;
 
-namespace RazzleServer.Common.WzLib
+namespace RazzleServer.Common.Wz
 {
     /// <summary>
     /// An interface for wz img properties
@@ -14,7 +14,7 @@ namespace RazzleServer.Common.WzLib
         #region Virtual\Abstrcat Members
         public virtual List<WzImageProperty> WzProperties => new List<WzImageProperty>();
 
-        public virtual new WzImageProperty this[string name] { get => null;
+        public new virtual WzImageProperty this[string name] { get => null;
             set => throw new NotImplementedException(); }
 
         public virtual WzImageProperty GetFromPath(string path) => null;

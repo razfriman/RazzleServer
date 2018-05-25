@@ -1,5 +1,4 @@
-﻿using System;
-using RazzleServer.Common.Constants;
+﻿using RazzleServer.Common.Constants;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Maps;
 

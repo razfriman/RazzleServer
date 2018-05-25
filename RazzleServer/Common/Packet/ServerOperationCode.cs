@@ -135,6 +135,6 @@
         AdminShop = 308,
         PlayerInteraction = 314,
         TemporaryStatSet = 333,
-        TemporaryStatReset = 333,
+        TemporaryStatReset = 333
     }
 }

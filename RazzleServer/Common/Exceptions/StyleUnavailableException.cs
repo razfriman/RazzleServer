@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace RazzleServer.Common.Exceptions
 {
     public class StyleUnavailableException : Exception

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
-using RazzleServer.Common.WzLib;
+using RazzleServer.Common.Wz;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Maps;
@@ -246,8 +246,8 @@ namespace RazzleServer.Game.Maple.Life
             if (skill != null)
             {
                 if (Health * 100 / MaxHealth > skill.PercentageLimitHP ||
-                    (Cooldowns.ContainsKey(skill) && Cooldowns[skill].AddSeconds(skill.Cooldown) >= DateTime.Now) ||
-                    ((MobSkillName)skill.MapleId) == MobSkillName.Summon && Map.Mobs.Count >= 100)
+                    Cooldowns.ContainsKey(skill) && Cooldowns[skill].AddSeconds(skill.Cooldown) >= DateTime.Now ||
+                    (MobSkillName)skill.MapleId == MobSkillName.Summon && Map.Mobs.Count >= 100)
                 {
                     skill = null;
                 }
@@ -362,7 +362,7 @@ namespace RazzleServer.Game.Maple.Life
                 using (var oPacket = new PacketWriter(ServerOperationCode.MobHPIndicator))
                 {
                     oPacket.WriteInt(ObjectId);
-                    oPacket.WriteByte((byte)((Health * 100) / MaxHealth));
+                    oPacket.WriteByte((byte)(Health * 100 / MaxHealth));
 
                     attacker.Client.Send(oPacket);
                 }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RazzleServer.Common.MapleCryptoLib
+namespace RazzleServer.Common.Crypto
 {
     /// <summary>
     /// Initialization vector used by the Cipher class
@@ -10,7 +10,7 @@ namespace RazzleServer.Common.MapleCryptoLib
         /// <summary>
         /// IV Container
         /// </summary>
-        private uint Value = 0;
+        private uint Value;
 
         /// <summary>
         /// Gets the bytes of the current container
@@ -56,7 +56,7 @@ namespace RazzleServer.Common.MapleCryptoLib
                         *((byte*)pKey + 2) ^= (byte)(*((byte*)pIV + i) + *(pShuffle + *((byte*)pKey + 3)));
                         *((byte*)pKey + 3) = (byte)(*((byte*)pKey + 3) - *(byte*)pKey + *(pShuffle + *((byte*)pIV + i)));
 
-                        *(uint*)pKey = (*(uint*)pKey << 3) | (*(uint*)pKey >> (32 - 3));
+                        *pKey = (*pKey << 3) | (*pKey >> (32 - 3));
                     }
                 }
             }

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using RazzleServer.Common.Constants;
-using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
-using RazzleServer.Common.WzLib;
+using RazzleServer.Common.Wz;
 using RazzleServer.Game.Maple.Characters;
 
 namespace RazzleServer.Game.Maple.Life

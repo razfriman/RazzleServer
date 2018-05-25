@@ -29,7 +29,6 @@ namespace RazzleServer.Game.Maple.Characters
         }
 
         public CharacterBuffs(Character parent)
-            : base()
         {
             Parent = parent;
 

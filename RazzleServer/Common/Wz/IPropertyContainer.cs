@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace RazzleServer.Common.WzLib
+namespace RazzleServer.Common.Wz
 {
 	public interface IPropertyContainer
 	{

@@ -1,6 +1,6 @@
-﻿using RazzleServer.Common.WzLib.WzProperties;
+﻿using RazzleServer.Common.Wz.WzProperties;
 
-namespace RazzleServer.Common.WzLib.WzStructure
+namespace RazzleServer.Common.Wz.WzStructure
 {
     public static class InfoTool
     {

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RazzleServer.Game.Maple.Characters;
+﻿using RazzleServer.Game.Maple.Characters;
 
 namespace RazzleServer.Game.Maple.Commands.Implementation
 {
@@ -20,10 +15,6 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
             if (args.Length != 0)
             {
                 ShowSyntax(caller);
-            }
-            else
-            {
-               
             }
         }
     }

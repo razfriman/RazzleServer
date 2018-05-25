@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using RazzleServer.Common.Data;
-using RazzleServer.Game.Maple.Characters;
 
-namespace RazzleServer.Game.Maple.Interaction
+namespace RazzleServer.Game.Maple.Characters
 {
     public sealed class CharacterGuild : IMapleSavable
     {

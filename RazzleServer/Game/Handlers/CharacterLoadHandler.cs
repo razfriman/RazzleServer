@@ -1,5 +1,4 @@
-﻿using RazzleServer.Center;
-using RazzleServer.Common.Packet;
+﻿using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple;
 using RazzleServer.Game.Maple.Characters;
 

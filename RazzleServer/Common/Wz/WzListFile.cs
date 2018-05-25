@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using RazzleServer.Common.WzLib.Util;
+using RazzleServer.Common.Wz.Util;
 
-namespace RazzleServer.Common.WzLib
+namespace RazzleServer.Common.Wz
 {
     /// <summary>
     /// A class that parses and contains the data of a wz list file
@@ -10,18 +10,20 @@ namespace RazzleServer.Common.WzLib
     public static class ListFileParser
     {
         /// <summary>
-		/// Parses a wz list file on the disk
-		/// </summary>
-		/// <param name="filePath">Path to the wz file</param>
+        /// Parses a wz list file on the disk
+        /// </summary>
+        /// <param name="filePath">Path to the wz file</param>
+        /// <param name="version"></param>
         public static List<string> ParseListFile(string filePath, WzMapleVersion version)
         {
             return ParseListFile(filePath, WzTool.GetIvByMapleVersion(version));
         }
 
         /// <summary>
-		/// Parses a wz list file on the disk
-		/// </summary>
-		/// <param name="filePath">Path to the wz file</param>
+        /// Parses a wz list file on the disk
+        /// </summary>
+        /// <param name="filePath">Path to the wz file</param>
+        /// <param name="WzIv"></param>
         public static List<string> ParseListFile(string filePath, byte[] WzIv)
         {
             var listEntries = new List<string>();

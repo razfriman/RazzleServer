@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Logging;
+using RazzleServer.Center;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
@@ -11,7 +12,6 @@ using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Interaction;
 using RazzleServer.Game.Maple.Life;
 using RazzleServer.Game.Maple.Maps;
-using RazzleServer.Server;
 
 namespace RazzleServer.Game.Maple.Characters
 {
@@ -121,7 +121,7 @@ namespace RazzleServer.Game.Maple.Characters
             get => face;
             set
             {
-                if ((Gender == Gender.Male && !DataProvider.Styles.MaleFaces.Contains(value)) ||
+                if (Gender == Gender.Male && !DataProvider.Styles.MaleFaces.Contains(value) ||
                     Gender == Gender.Female && !DataProvider.Styles.FemaleFaces.Contains(value))
                 {
                     //throw new StyleUnavailableException();
@@ -142,7 +142,7 @@ namespace RazzleServer.Game.Maple.Characters
             get => hair;
             set
             {
-                if ((Gender == Gender.Male && !DataProvider.Styles.MaleHairs.Contains(value)) ||
+                if (Gender == Gender.Male && !DataProvider.Styles.MaleHairs.Contains(value) ||
                     Gender == Gender.Female && !DataProvider.Styles.FemaleHairs.Contains(value))
                 {
                     //throw new StyleUnavailableException();
@@ -158,13 +158,13 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public int HairStyleOffset => (Hair / 10) * 10;
+        public int HairStyleOffset => Hair / 10 * 10;
 
-        public int FaceStyleOffset => (Face - (10 * (Face / 10))) + (Gender == Gender.Male ? 20000 : 21000);
+        public int FaceStyleOffset => Face - 10 * (Face / 10) + (Gender == Gender.Male ? 20000 : 21000);
 
-        public int HairColorOffset => Hair - (10 * (Hair / 10));
+        public int HairColorOffset => Hair - 10 * (Hair / 10);
 
-        public int FaceColorOffset => ((Face / 100) - (10 * (Face / 1000))) * 100;
+        public int FaceColorOffset => (Face / 100 - 10 * (Face / 1000)) * 100;
 
         public byte Level
         {
@@ -889,7 +889,7 @@ namespace RazzleServer.Game.Maple.Characters
             using (var oPacket = new PacketWriter(ServerOperationCode.CloseRangeAttack))
             {
                 oPacket.WriteInt(Id);
-                oPacket.WriteByte((byte)((attack.Targets * 0x10) + attack.Hits));
+                oPacket.WriteByte((byte)(attack.Targets * 0x10 + attack.Hits));
                 oPacket.WriteByte(0); // NOTE: Unknown.
                 oPacket.WriteByte((byte)(attack.SkillId != 0 ? skill.CurrentLevel : 0)); // NOTE: Skill level.
 

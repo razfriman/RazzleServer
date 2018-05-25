@@ -14,7 +14,7 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
         // We can either make the items constant or load them from SQL.
         // As you can edit them in-game, I think SQL would be better.
         // In order: Id, MapleId, Price, Stock.
-        public static List<Tuple<int, int, int, short>> Items = new List<Tuple<int, int, int, short>>()
+        public static List<Tuple<int, int, int, short>> Items = new List<Tuple<int, int, int, short>>
         {
             new Tuple<int, int, int, short>(0, 2000000, 1000, 200),
             new Tuple<int, int, int, short>(1, 2000001, 1000, 200),

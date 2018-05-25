@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Collections;
 using System.IO;
-using RazzleServer.Common.MapleCryptoLib;
+using RazzleServer.Common.Crypto;
 
-namespace RazzleServer.Common.WzLib.Util
+namespace RazzleServer.Common.Wz.Util
 {
     public static class WzTool
     {
 
         public static Hashtable StringCache = new Hashtable();
 
-        public static UInt32 RotateLeft(UInt32 x, byte n)
+        public static uint RotateLeft(uint x, byte n)
         {
-            return ((x) << (n)) | ((x) >> (32 - (n)));
+            return (x << n) | (x >> (32 - n));
         }
 
-        public static UInt32 RotateRight(UInt32 x, byte n)
+        public static uint RotateRight(uint x, byte n)
         {
-            return ((x) >> (n)) | ((x) << (32 - (n)));
+            return (x >> n) | (x << (32 - n));
         }
 
         public static int GetCompressedIntLength(int i)

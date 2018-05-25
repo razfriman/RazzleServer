@@ -26,6 +26,6 @@ namespace RazzleServer.Common.Constants
         NO_EXP_DECREASE = 0x80000,
         NO_DAMAGE_ON_FALLING = 0x100000,
         PARCEL_OPEN_LIMIT = 0x200000,
-        DROP_LIMIT = 0x400000,
+        DROP_LIMIT = 0x400000
     }
 }
