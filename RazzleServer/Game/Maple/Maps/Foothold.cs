@@ -11,10 +11,11 @@ namespace RazzleServer.Game.Maple.Maps
 
         public Foothold(WzImageProperty img)
         {
-            //Id = (short)(int)img["id"];
-            //Line = new Line(new Point((short)img["x1"], (short)img["y1"]), new Point((short)img["x2"], (short)img["y2"]));
-            //DragForce = (short)img["drag_force"];
-            //ForbidDownwardJump = ((string)img["flags"]).Contains("forbid_downward_jump");
+            // Id = img["id"].GetShort();
+            // Id = (short)img["id"];
+            // Line = new Line(new Point((short)img["x1"], (short)img["y1"]), new Point((short)img["x2"], (short)img["y2"]));
+            // DragForce = (short)img["drag_force"];
+            // ForbidDownwardJump = ((string)img["flags"]).Contains("forbid_downward_jump");
         }
     }
 }

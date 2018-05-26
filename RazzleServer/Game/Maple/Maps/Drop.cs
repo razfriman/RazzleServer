@@ -9,7 +9,9 @@ namespace RazzleServer.Game.Maple.Maps
     {
         public const int ExpiryTime = 60 * 1000;
 
+        [JsonIgnore]
         public Character Owner { get; set; }
+        [JsonIgnore]
         public Character Picker { get; set; }
         public Point Origin { get; set; }
         public Delay Expiry { get; set; }

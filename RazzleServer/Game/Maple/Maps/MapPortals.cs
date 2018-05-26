@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace RazzleServer.Game.Maple.Maps
 {
@@ -7,6 +8,9 @@ namespace RazzleServer.Game.Maple.Maps
     {
         public MapPortals(Map map) : base(map) { }
 
+        public MapPortals() : base() { }
+
+        [JsonIgnore]
         public Portal this[string label]
         {
             get

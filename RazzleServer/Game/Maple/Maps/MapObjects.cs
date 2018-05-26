@@ -1,20 +1,29 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Newtonsoft.Json;
 using RazzleServer.Game.Maple.Characters;
 
 namespace RazzleServer.Game.Maple.Maps
 {
     public abstract class MapObjects<T> where T : MapObject
     {
+        [JsonIgnore]
         public Map Map { get; private set; }
 
+        [JsonProperty]
         private Dictionary<int, T> Objects { get; set; } = new Dictionary<int, T>();
+
+        public MapObjects()
+        {
+
+        }
 
         public MapObjects(Map map)
         {
             Map = map;
         }
+
 
         public T this[int key]
         {
@@ -29,8 +38,11 @@ namespace RazzleServer.Game.Maple.Maps
             }
         }
 
+        [JsonIgnore]
+
         public IEnumerable<T> Values => Objects.Values;
 
+        [JsonIgnore]
         public int Count => Values.Count();
 
         public IEnumerable<T> GetInRange(MapObject reference, int range)
@@ -50,7 +62,7 @@ namespace RazzleServer.Game.Maple.Maps
         {
             var key = GetId(item);
 
-            if (Objects.ContainsKey(key))
+            if (!Objects.ContainsKey(key))
             {
                 Objects[key] = item;
                 OnItemAdded(item);

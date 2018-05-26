@@ -6,6 +6,8 @@ namespace RazzleServer.Game.Maple.Maps
     {
         public short Id { get; private set; }
 
+        public Seat() : base() { }
+
         public Seat(WzImageProperty img)
         {
             Id = short.Parse(img.Name);

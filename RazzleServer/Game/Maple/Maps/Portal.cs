@@ -29,6 +29,8 @@ namespace RazzleServer.Game.Maple.Maps
         [JsonIgnore]
         public Portal Link => DataProvider.Maps.Data[DestinationMapId].Portals[DestinationLabel];
 
+        public Portal() : base() { }
+
         public Portal(WzImageProperty datum)
         {
             Id = byte.Parse(datum.Name);

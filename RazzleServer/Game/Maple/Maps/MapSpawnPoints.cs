@@ -6,6 +6,8 @@ namespace RazzleServer.Game.Maple.Maps
     {
         public MapSpawnPoints(Map map) : base(map) { }
 
+        public MapSpawnPoints() : base() { }
+
         public void Spawn()
         {
             foreach (var spawnPoint in Values)
