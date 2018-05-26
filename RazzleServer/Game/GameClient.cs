@@ -34,7 +34,7 @@ namespace RazzleServer.Game
 
                     if (GameServer.PacketHandlers.ContainsKey(header))
                     {
-                        Log.LogInformation($"Received [{header.ToString()}] {Functions.ByteArrayToStr(packet.ToArray())}");
+                        Log.LogInformation($"Received [{header.ToString()}] {packet.ToPacketString()}");
 
                         foreach (var handler in GameServer.PacketHandlers[header])
                         {
@@ -43,7 +43,7 @@ namespace RazzleServer.Game
                     }
                     else
                     {
-                        Log.LogWarning($"Unhandled Packet [{header.ToString()}] {Functions.ByteArrayToStr(packet.ToArray())}");
+                        Log.LogWarning($"Unhandled Packet [{header.ToString()}] {packet.ToPacketString()}");
                         Character?.Release();
                     }
                 }
@@ -84,11 +84,13 @@ namespace RazzleServer.Game
             Send(outPacket);
         }
 
-        public void StartPingCheck() {
+        public void StartPingCheck()
+        {
             Ping();
 
-            if (Socket?.Connected ?? false) {
-                Delay.Execute(() => StartPingCheck(), 5 * 1000);    
+            if (Socket?.Connected ?? false)
+            {
+                Delay.Execute(() => StartPingCheck(), 5 * 1000);
             }
         }
 

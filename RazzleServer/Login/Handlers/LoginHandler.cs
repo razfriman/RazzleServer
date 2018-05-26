@@ -1,6 +1,9 @@
-﻿using RazzleServer.Center;
+﻿using System;
+using RazzleServer.Center;
 using RazzleServer.Common.Constants;
+using RazzleServer.Common.Exceptions;
 using RazzleServer.Common.Packet;
+using RazzleServer.Common.Util;
 using RazzleServer.Login.Maple;
 
 namespace RazzleServer.Login.Handlers
@@ -12,37 +15,62 @@ namespace RazzleServer.Login.Handlers
         {
             var accountName = packet.ReadString();
             var accountPassword = packet.ReadString();
-            var result = client.Login(accountName, accountPassword);
-            client.Send(SendLoginResult(result, client.Account));
+            var result = Login(client, accountName, accountPassword);
+            client.Send(LoginPackets.SendLoginResult(result, client.Account));
         }
 
-        public static PacketWriter SendLoginResult(LoginResult result, Account acc)
+        public LoginResult Login(LoginClient client, string username, string password)
         {
-            using (var pw = new PacketWriter(ServerOperationCode.CheckPasswordResult))
-            {
-                pw.WriteInt((int)result);
-                pw.WriteByte(0);
-                pw.WriteByte(0);
+            client.Account = new Account(client);
 
-                if (result == LoginResult.Valid)
+            try
+            {
+                client.Account.Username = username;
+                client.Account.Load();
+
+                if (Functions.GetSha512(password + client.Account.Salt) != client.Account.Password)
                 {
-                    pw.WriteInt(acc.Id);
-                    pw.WriteByte((int)acc.Gender);
-                    pw.WriteBool(acc.IsMaster);
-                    pw.WriteByte(0);
-                    pw.WriteString(acc.Username);
-                    pw.WriteByte(0);
-                    pw.WriteByte(0);
-                    pw.WriteByte(0);
-                    pw.WriteLong(0);
-                    pw.WriteDateTime(acc.Creation);
-                    pw.WriteByte((byte)(ServerConfig.Instance.RequestPin ? 0 : 1)); 
-                    pw.WriteByte((byte)(ServerConfig.Instance.RequestPin ? 0 : 1));
-                    pw.WriteByte((byte)(ServerConfig.Instance.RequestPin ? 0 : 1));
+                    return LoginResult.InvalidPassword;
                 }
 
-                return pw;
+                if (client.Account.IsBanned)
+                {
+                    return LoginResult.Banned;
+                }
+
+                return LoginResult.Valid;
             }
+            catch (NoAccountException)
+            {
+                if (ServerConfig.Instance.EnableAutoRegister && username == client.LastUsername && password == client.LastPassword)
+                {
+                    AutoRegisterAccount(client, username, password);
+                }
+                else
+                {
+                    client.LastUsername = username;
+                    client.LastPassword = password;
+                    return LoginResult.InvalidUsername;
+                }
+            }
+
+            return LoginResult.Valid;
+        }
+
+        private void AutoRegisterAccount(LoginClient client, string username, string password)
+        {
+            client.Account.Username = username;
+            client.Account.Salt = Functions.RandomString();
+            client.Account.Password = Functions.GetSha512(password + client.Account.Salt);
+            client.Account.Gender = Gender.Unset;
+            client.Account.Pin = string.Empty;
+            client.Account.IsBanned = false;
+            client.Account.IsMaster = false;
+            client.Account.Birthday = DateTime.UtcNow;
+            client.Account.Creation = DateTime.UtcNow;
+            client.Account.MaxCharacters = ServerConfig.Instance.DefaultCreationSlots;
+            client.Account.IsMaster = true;
+            client.Account.Create();
         }
     }
 }

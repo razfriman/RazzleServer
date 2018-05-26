@@ -7,7 +7,6 @@ namespace RazzleServer.Common.Wz.Util
 {
     public static class WzTool
     {
-
         public static Hashtable StringCache = new Hashtable();
 
         public static uint RotateLeft(uint x, byte n)
@@ -136,26 +135,32 @@ namespace RazzleServer.Common.Wz.Util
                 wzf = new WzFile(wzPath, (short)version, encVersion);
             }
 
-            wzf.ParseWzFile();
-            if (version == null)
+            using (wzf)
             {
-                version = wzf.Version;
-            }
 
-            var recognizedChars = 0;
-            var totalChars = 0;
-            foreach (var wzdir in wzf.WzDirectory.WzDirectories)
-            {
-                recognizedChars += GetRecognizedCharacters(wzdir.Name);
-                totalChars += wzdir.Name.Length;
+                wzf.ParseWzFile();
+                if (version == null)
+                {
+                    version = wzf.Version;
+                }
+
+                var recognizedChars = 0;
+                var totalChars = 0;
+
+                foreach (var wzdir in wzf.WzDirectory.WzDirectories)
+                {
+                    recognizedChars += GetRecognizedCharacters(wzdir.Name);
+                    totalChars += wzdir.Name.Length;
+                }
+
+                foreach (var wzimg in wzf.WzDirectory.WzImages)
+                {
+                    recognizedChars += GetRecognizedCharacters(wzimg.Name);
+                    totalChars += wzimg.Name.Length;
+                }
+
+                return recognizedChars / (double)totalChars;
             }
-            foreach (var wzimg in wzf.WzDirectory.WzImages)
-            {
-                recognizedChars += GetRecognizedCharacters(wzimg.Name);
-                totalChars += wzimg.Name.Length;
-            }
-            wzf.Dispose();
-            return recognizedChars / (double)totalChars;
         }
 
         public static WzMapleVersion DetectMapleVersion(string wzFilePath, out short fileVersion)
@@ -168,6 +173,7 @@ namespace RazzleServer.Common.Wz.Util
             fileVersion = (short)version;
             var mostSuitableVersion = WzMapleVersion.GMS;
             double maxSuccessRate = 0;
+
             foreach (DictionaryEntry mapleVersionEntry in mapleVersionSuccessRates)
             {
                 if ((double)mapleVersionEntry.Value > maxSuccessRate)

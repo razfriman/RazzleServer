@@ -1,11 +1,12 @@
 ﻿using System;
 using System.IO;
+using RazzleServer.Common.Util;
 
 namespace RazzleServer.Common.Packet
 {
     public abstract class APacket : IDisposable
-	{
-		protected MemoryStream _buffer;
+    {
+        protected MemoryStream _buffer;
 
         public void Dispose()
         {
@@ -13,5 +14,8 @@ namespace RazzleServer.Common.Packet
         }
 
         public byte[] ToArray() => _buffer.ToArray();
-	}
+
+        public string ToPacketString() => ToArray().ByteArrayToString();
+
+    }
 }

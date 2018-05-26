@@ -9,6 +9,10 @@ namespace RazzleServer.Common.Util
 {
     public static class Functions
     {
+        /// <summary>
+        /// Global random against time-based seed mistakes
+        /// </summary>
+        private static readonly Random r = new Random();
 
         /// <summary>
         /// Checks whether a string contains only alpha numerical characters
@@ -16,13 +20,6 @@ namespace RazzleServer.Common.Util
         /// <param name="s"></param>
         /// <returns></returns>
         public static bool IsAlphaNumerical(string s) => !string.IsNullOrEmpty(s) && new Regex("^[a-zA-Z0-9]*$").IsMatch(s);
-
-        /// <summary>
-        /// Converts a byte array to a hex parsed string
-        /// </summary>
-        /// <param name="bytes">Byte array in</param>
-        /// <returns>Hex string out</returns>
-        public static string ByteArrayToStr(byte[] bytes) => bytes.ByteArrayToString();
 
         public static byte[] ASCIIToBytes(string s) => Encoding.ASCII.GetBytes(s);
 
@@ -110,23 +107,6 @@ namespace RazzleServer.Common.Util
             }
             return arr;
         }
-
-        /// <summary>
-        /// Converts a byte array with a length of 4 to an uint
-        /// </summary>
-        /// <param name="bytes">Byte array of 4 in</param>
-        /// <returns>Parsed uint</returns>
-        public static uint ByteArrayToInt(byte[] bytes)
-        {
-            var str = ByteArrayToStr(bytes);
-            uint.TryParse(str, NumberStyles.HexNumber, null, out var ret);
-            return ret;
-        }
-
-        /// <summary>
-        /// Global random against time-based seed mistakes
-        /// </summary>
-        private static readonly Random r = new Random();
 
         /// <summary>
         /// Returns a random boolean using a percentage for the return value to be 'true'

@@ -16,12 +16,7 @@ namespace RazzleServer.Login.Handlers
                 var pin = packet.ReadString();
                 client.Account.Pin = Functions.GetSha512(pin);
                 client.Account.Save();
-
-                using (var oPacket = new PacketWriter(ServerOperationCode.PinCodeOperation))
-                {
-                    oPacket.WriteByte((byte)PinResult.Valid);
-                    client.Send(oPacket);
-                }
+                client.Send(LoginPackets.PinResult(PinResult.Valid));
             }
         }
     }

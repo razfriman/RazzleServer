@@ -142,7 +142,7 @@ namespace RazzleServer.Common.Packet
         /// Writes a hex-string to the stream
         /// </summary>
         /// <param name="pHexString">The hex-string to write</param>
-        public void WriteHexString(string pHexString) => WriteBytes(HexEncoding.GetBytes(pHexString));
+        public void WriteHexString(string pHexString) => WriteBytes(Functions.HexToBytes(pHexString));
 
         public void WriteZeroBytes(int length) => WriteBytes(new byte[length]);
 
@@ -165,7 +165,5 @@ namespace RazzleServer.Common.Packet
         public void WriteDateTime(DateTime item) => WriteLong((long)(item.ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds);
 
         public void WriteKoreanDateTime(DateTime item) => WriteLong((long)(item.ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds * 10000 + 116444592000000000L);
-
-        public string ToPacketString() => Functions.ByteArrayToStr(ToArray());
     }
 }

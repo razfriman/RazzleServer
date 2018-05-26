@@ -9,11 +9,8 @@ namespace RazzleServer.Login.Handlers
         public override void HandlePacket(PacketReader packet, LoginClient client)
         {
             var name = packet.ReadString();
-
-            var pw = new PacketWriter(ServerOperationCode.CheckCharacterNameResult);
-            pw.WriteString(name);
-            pw.WriteBool(Character.CharacterExists(name));
-            client.Send(pw);
+            var characterExists = Character.CharacterExists(name);
+            client.Send(LoginPackets.CharacterNameResult(name, characterExists));
         }
     }
 }

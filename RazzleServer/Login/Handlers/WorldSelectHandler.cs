@@ -10,16 +10,10 @@ namespace RazzleServer.Login.Handlers
             client.World = packet.ReadByte();
             client.Channel = packet.ReadByte();
 
+            var channelExists = Center.ServerManager.Instance.Worlds[client.World].Contains(client.Channel);
             var characters = client.Server.GetCharacters(client.World, client.Account.Id);
-           
-            using (var oPacket = new PacketWriter(ServerOperationCode.SelectWorldResult))
-            {
-                oPacket.WriteBool(false);
-                oPacket.WriteByte((byte)characters.Count);
-                characters.ForEach(x => oPacket.WriteBytes(x.ToByteArray()));
-                oPacket.WriteInt(client.Account.MaxCharacters);
-                client.Send(oPacket);
-            }
+
+            client.Send(LoginPackets.SelectWord(channelExists, characters, client.Account));
         }
     }
 }

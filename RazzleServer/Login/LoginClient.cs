@@ -38,7 +38,7 @@ namespace RazzleServer.Login
 
                     if (LoginServer.PacketHandlers.ContainsKey(header))
                     {
-                        Log.LogInformation($"Received [{header.ToString()}] {Functions.ByteArrayToStr(packet.ToArray())}");
+                        Log.LogInformation($"Received [{header.ToString()}] {packet.ToPacketString()}");
 
                         foreach (var handler in LoginServer.PacketHandlers[header])
                         {
@@ -47,7 +47,7 @@ namespace RazzleServer.Login
                     }
                     else
                     {
-                        Log.LogWarning($"Unhandled Packet [{header.ToString()}] {Functions.ByteArrayToStr(packet.ToArray())}");
+                        Log.LogWarning($"Unhandled Packet [{header.ToString()}] {packet.ToPacketString()}");
                     }
 
                 }
@@ -56,60 +56,6 @@ namespace RazzleServer.Login
             {
                 Log.LogError(e, $"Packet Processing Error [{header.ToString()}] - {e.Message} - {e.StackTrace}");
             }
-        }
-
-        public LoginResult Login(string username, string password)
-        {
-            Account = new Account(this);
-
-            try
-            {
-                Account.Username = username;
-                Account.Load();
-
-                if (Functions.GetSha512(password + Account.Salt) != Account.Password)
-                {
-                    return LoginResult.InvalidPassword;
-                }
-
-                if (Account.IsBanned)
-                {
-                    return LoginResult.Banned;
-                }
-
-                return LoginResult.Valid;
-            }
-            catch (NoAccountException)
-            {
-                if (ServerConfig.Instance.EnableAutoRegister && username == LastUsername && password == LastPassword)
-                {
-                    AutoRegisterAccount(username, password);
-                }
-                else
-                {
-                    LastUsername = username;
-                    LastPassword = password;
-                    return LoginResult.InvalidUsername;
-                }
-            }
-
-            return LoginResult.Valid;
-        }
-
-        private void AutoRegisterAccount(string username, string password)
-        {
-            Account.Username = username;
-            Account.Salt = Functions.RandomString();
-            Account.Password = Functions.GetSha512(password + Account.Salt);
-            Account.Gender = Gender.Unset;
-            Account.Pin = string.Empty;
-            Account.IsBanned = false;
-            Account.IsMaster = false;
-            Account.Birthday = DateTime.UtcNow;
-            Account.Creation = DateTime.UtcNow;
-            Account.MaxCharacters = ServerConfig.Instance.DefaultCreationSlots;
-            Account.IsMaster = true;
-            Account.Create();
         }
     }
 }

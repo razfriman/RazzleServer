@@ -20,7 +20,7 @@ namespace RazzleServer.Login.Handlers
                 var gender = (Gender)packet.ReadByte();
                 client.Account.Gender = gender;
                 client.Account.Save();
-                client.Send(LoginHandler.SendLoginResult(LoginResult.Valid, client.Account));
+                client.Send(LoginPackets.SendLoginResult(LoginResult.Valid, client.Account));
             }
         }
     }

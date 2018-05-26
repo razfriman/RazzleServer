@@ -91,6 +91,7 @@ namespace RazzleServer.Game.Maple.Characters
                 {
                     var oPacket = new PacketWriter(ServerOperationCode.SetGender);
                     oPacket.WriteByte((byte)Gender);
+                    oPacket.WriteByte(1);
                     Client.Send(oPacket);
                 }
             }

@@ -4,9 +4,6 @@ using RazzleServer.Common.Crypto;
 
 namespace RazzleServer.Common.Wz.Util
 {
-    /*
-	   TODO : Maybe WzBinaryReader/Writer should read and contain the hash (this is probably what's going to happen)
-	*/
     public class WzBinaryWriter : BinaryWriter
     {
         public WzMutableKey WzKey { get; set; }
@@ -210,15 +207,11 @@ namespace RazzleServer.Common.Wz.Util
             encOffset = (encOffset - Header.FStart) ^ 0xFFFFFFFF;
             encOffset *= Hash;
             encOffset -= CryptoConstants.WZ_OffsetConstant;
-            encOffset = RotateLeft(encOffset, (byte)(encOffset & 0x1F));
+            encOffset = WzTool.RotateLeft(encOffset, (byte)(encOffset & 0x1F));
             var writeOffset = encOffset ^ (value - Header.FStart * 2);
             Write(writeOffset);
         }
 
-        private uint RotateLeft(uint x, byte n) => (x << n) | (x >> (32 - n));
-
-        private uint RotateRight(uint x, byte n) => (x >> n) | (x << (32 - n));
-       
         public override void Close()
         {
             if (!LeaveOpen)

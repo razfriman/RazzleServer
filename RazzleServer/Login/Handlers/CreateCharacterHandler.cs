@@ -27,34 +27,7 @@ namespace RazzleServer.Login.Handlers
             var dexterity = packet.ReadByte();
             var intelligence = packet.ReadByte();
             var luck = packet.ReadByte();
-
-            var error = name.Length < 4
-                             || name.Length > 12
-                             || Character.CharacterExists(name)
-                             || DataProvider.CreationData.ForbiddenNames.Any(name.Contains);
-
-            if (gender == Gender.Male)
-            {
-                error |= !DataProvider.CreationData.MaleSkins.Any(x => x == skin)
-                         || !DataProvider.CreationData.MaleFaces.Any(x => x == face)
-                         || !DataProvider.CreationData.MaleHairs.Any(x => x == hair)
-                         || !DataProvider.CreationData.MaleHairColors.Any(x => x == hairColor)
-                         || !DataProvider.CreationData.MaleTops.Any(x => x == topId)
-                         || !DataProvider.CreationData.MaleBottoms.Any(x => x == bottomId)
-                         || !DataProvider.CreationData.MaleShoes.Any(x => x == shoesId)
-                         || !DataProvider.CreationData.MaleWeapons.Any(x => x == weaponId);
-            }
-            else if (gender == Gender.Female)
-            {
-                error |= !DataProvider.CreationData.FemaleSkins.Any(x => x == skin)
-                         || !DataProvider.CreationData.FemaleFaces.Any(x => x == face)
-                         || !DataProvider.CreationData.FemaleHairs.Any(x => x == hair)
-                         || !DataProvider.CreationData.FemaleHairColors.Any(x => x == hairColor)
-                         || !DataProvider.CreationData.FemaleTops.Any(x => x == topId)
-                         || !DataProvider.CreationData.FemaleBottoms.Any(x => x == bottomId)
-                         || !DataProvider.CreationData.FemaleShoes.Any(x => x == shoesId)
-                         || !DataProvider.CreationData.FemaleWeapons.Any(x => x == weaponId);
-            }
+            var error = ValidateCharacterCreation(name, face, hair, hairColor, skin, topId, bottomId, shoesId, weaponId, gender);
 
             var character = new Character
             {
@@ -89,17 +62,43 @@ namespace RazzleServer.Login.Handlers
             character.Items.Add(new Item(shoesId, equipped: true));
             character.Items.Add(new Item(weaponId, equipped: true));
             character.Items.Add(new Item(4161001), forceGetSlot: true);
-
             CreateDefaultKeymap(character);
-
             character.Create();
 
-            using (var outPacket = new PacketWriter(ServerOperationCode.CreateNewCharacterResult))
+            client.Send(LoginPackets.CreateNewCharacterResult(error, character));
+        }
+
+        private static bool ValidateCharacterCreation(string name, int face, int hair, int hairColor, byte skin, int topId, int bottomId, int shoesId, int weaponId, Gender gender)
+        {
+            var error = name.Length < 4
+                                         || name.Length > 12
+                                         || Character.CharacterExists(name)
+                                         || DataProvider.CreationData.ForbiddenNames.Any(name.Contains);
+
+            if (gender == Gender.Male)
             {
-                outPacket.WriteBool(error);
-                outPacket.WriteBytes(character.ToByteArray());
-                client.Send(outPacket);
+                error |= !DataProvider.CreationData.MaleSkins.Any(x => x == skin)
+                         || !DataProvider.CreationData.MaleFaces.Any(x => x == face)
+                         || !DataProvider.CreationData.MaleHairs.Any(x => x == hair)
+                         || !DataProvider.CreationData.MaleHairColors.Any(x => x == hairColor)
+                         || !DataProvider.CreationData.MaleTops.Any(x => x == topId)
+                         || !DataProvider.CreationData.MaleBottoms.Any(x => x == bottomId)
+                         || !DataProvider.CreationData.MaleShoes.Any(x => x == shoesId)
+                         || !DataProvider.CreationData.MaleWeapons.Any(x => x == weaponId);
             }
+            else if (gender == Gender.Female)
+            {
+                error |= !DataProvider.CreationData.FemaleSkins.Any(x => x == skin)
+                         || !DataProvider.CreationData.FemaleFaces.Any(x => x == face)
+                         || !DataProvider.CreationData.FemaleHairs.Any(x => x == hair)
+                         || !DataProvider.CreationData.FemaleHairColors.Any(x => x == hairColor)
+                         || !DataProvider.CreationData.FemaleTops.Any(x => x == topId)
+                         || !DataProvider.CreationData.FemaleBottoms.Any(x => x == bottomId)
+                         || !DataProvider.CreationData.FemaleShoes.Any(x => x == shoesId)
+                         || !DataProvider.CreationData.FemaleWeapons.Any(x => x == weaponId);
+            }
+
+            return error;
         }
 
         private static void CreateDefaultKeymap(Character character)

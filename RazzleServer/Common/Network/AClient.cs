@@ -28,10 +28,21 @@ namespace RazzleServer.Common.Network
 
         public abstract void Receive(PacketReader packet);
 
-        public virtual void Send(PacketWriter packet) {
+        public virtual void Send(PacketWriter packet)
+        {
             if (ServerConfig.Instance.PrintPackets)
             {
                 Log.LogInformation($"Sending: {packet.ToPacketString()}");
+            }
+
+            Socket?.Send(packet);
+        }
+
+        public virtual void Send(byte[] packet)
+        {
+            if (ServerConfig.Instance.PrintPackets)
+            {
+                Log.LogInformation($"Sending: {packet.ByteArrayToString()}");
             }
 
             Socket?.Send(packet);
@@ -67,7 +78,6 @@ namespace RazzleServer.Common.Network
 
         }
 
-       
         public void SendHandshake()
         {
             if (Socket == null)
@@ -90,9 +100,6 @@ namespace RazzleServer.Common.Network
             Socket.SendRawPacket(writer.ToArray());
         }
 
-        public void Dispose()
-        {
-            Socket?.Dispose();
-        }
+        public void Dispose() => Socket?.Dispose();
     }
 }

@@ -58,7 +58,9 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// <summary>
         /// The parent of the object
         /// </summary>
-        public override WzObject Parent { get => parent;
+        public override WzObject Parent
+        {
+            get => parent;
             internal set => parent = value;
         }
         /*/// <summary>
@@ -68,7 +70,9 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// <summary>
         /// The name of the property
         /// </summary>
-        public override string Name { get => name;
+        public override string Name
+        {
+            get => name;
             set => name = value;
         }
         /// <summary>
@@ -104,13 +108,17 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// <summary>
         /// The data of the mp3 header
         /// </summary>
-        public byte[] Header { get => header;
+        public byte[] Header
+        {
+            get => header;
             set => header = value;
         }
         /// <summary>
         /// Length of the mp3 file in milliseconds
         /// </summary>
-        public int Length { get => len_ms;
+        public int Length
+        {
+            get => len_ms;
             set => len_ms = value;
         }
 
@@ -216,17 +224,6 @@ namespace RazzleServer.Common.Wz.WzProperties
                 }
             }
             return true;
-        }
-
-        public static string ByteArrayToString(byte[] ba)
-        {
-            var hex = new StringBuilder(ba.Length * 3);
-            foreach (var b in ba)
-            {
-                hex.AppendFormat("{0:x2} ", b);
-            }
-
-            return hex.ToString();
         }
 
         public void RebuildHeader()
