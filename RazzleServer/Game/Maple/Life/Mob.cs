@@ -123,9 +123,6 @@ namespace RazzleServer.Game.Maple.Life
             //onlyNormalAttack
             //buff
 
-            //ExplodeHealth = (int)datum["explode_hp"];
-            //DeathBuff = (int)datum["death_buff"];
-
             Loots = new List<Loot>();
             Skills = new MobSkills(this);
             DeathSummons = new List<int>();

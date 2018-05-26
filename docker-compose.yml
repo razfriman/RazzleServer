@@ -1,0 +1,10 @@
+version: '3.4'
+
+services:
+  razzleserver:
+    image: razzleserver
+    volumes:
+      - ./RazzleServer/ServerConfig.json:/app/ServerConfig.json:ro
+    build:
+      context: .
+      dockerfile: RazzleServer/Dockerfile
