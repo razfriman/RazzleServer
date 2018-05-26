@@ -88,7 +88,7 @@ namespace RazzleServer.Game.Maple
 
             if (Type == 1)
             {
-                CalculateStatups(DataProvider.Skills[MapleId][SkillLevel]);
+                CalculateStatups(DataProvider.Skills.Data[MapleId][SkillLevel]);
             }
 
             Delay.Execute(() =>

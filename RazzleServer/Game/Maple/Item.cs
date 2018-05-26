@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
@@ -15,9 +16,13 @@ namespace RazzleServer.Game.Maple
     {
         public static ItemType GetType(int mapleId) => (ItemType)(mapleId / 1000000);
 
+        [JsonIgnore]
         public CharacterItems Parent { get; set; }
 
+        [JsonIgnore]
         public int Id { get; private set; }
+
+        [JsonIgnore]
         public int AccountId { get; private set; }
         public int MapleId { get; private set; }
         public short Slot { get; set; }
@@ -90,8 +95,10 @@ namespace RazzleServer.Game.Maple
 
         public List<Tuple<int, short>> Summons { get; private set; }
 
+        [JsonIgnore]
         public ItemType Type => GetType(MapleId);
 
+        [JsonIgnore]
         public WeaponType WeaponType
         {
             get
@@ -149,8 +156,10 @@ namespace RazzleServer.Game.Maple
             }
         }
 
-        public Item CachedReference => DataProvider.Items[MapleId];
+        [JsonIgnore]
+        public Item CachedReference => DataProvider.Items.Data[MapleId];
 
+        [JsonIgnore]
         public Character Character => Parent.Parent;
 
         public short MaxPerStack
@@ -181,8 +190,10 @@ namespace RazzleServer.Game.Maple
             }
         }
 
+        [JsonIgnore]
         public bool IsSealed => DataProvider.Items.WizetItemIds.Contains(MapleId);
 
+        [JsonIgnore]
         public byte Flags
         {
             get
@@ -264,8 +275,10 @@ namespace RazzleServer.Game.Maple
             }
         }
 
+        [JsonIgnore]
         public bool IsBlocked => IsCash || IsSealed || IsTradeBlocked;
 
+        [JsonIgnore]
         public byte AbsoluteSlot
         {
             get
@@ -279,6 +292,7 @@ namespace RazzleServer.Game.Maple
             }
         }
 
+        [JsonIgnore]
         public byte ComputedSlot
         {
             get
@@ -297,6 +311,7 @@ namespace RazzleServer.Game.Maple
             }
         }
 
+        [JsonIgnore]
         public bool Assigned { get; set; }
 
         public Item(int mapleId, short quantity = 1, DateTime? expiration = null, bool equipped = false)
@@ -382,6 +397,11 @@ namespace RazzleServer.Game.Maple
             }
 
             Summons = CachedReference.Summons;
+        }
+
+        public Item()
+        {
+
         }
 
         public Item(WzImage img, ItemType type)

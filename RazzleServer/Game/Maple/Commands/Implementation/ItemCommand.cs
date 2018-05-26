@@ -33,7 +33,7 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
 
                 var itemId = int.Parse(args[0]);
 
-                if (DataProvider.Items.Contains(itemId))
+                if (DataProvider.Items.Data.ContainsKey(itemId))
                 {
                     caller.Items.Add(new Item(itemId, quantity));
                 }

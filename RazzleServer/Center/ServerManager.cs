@@ -26,8 +26,6 @@ namespace RazzleServer.Center
             await ServerConfig.LoadFromFile("ServerConfig.json");
             DataProvider.Initialize();
             InitializeDatabase();
-            LoginServer.RegisterPacketHandlers();
-            GameServer.RegisterPacketHandlers();
         }
 
         public void Start()
@@ -53,7 +51,8 @@ namespace RazzleServer.Center
 
             using (var context = new MapleDbContext())
             {
-                var accounts = context.Accounts.ToArray();
+                context.Database.EnsureCreated();
+                var _ = context.Accounts.ToArray();
             }
         }
 

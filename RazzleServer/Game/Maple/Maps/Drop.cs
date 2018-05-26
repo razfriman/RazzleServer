@@ -1,4 +1,5 @@
-﻿using RazzleServer.Common.Packet;
+﻿using Newtonsoft.Json;
+using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Characters;
 
@@ -15,6 +16,7 @@ namespace RazzleServer.Game.Maple.Maps
 
         private MapObject mDropper;
 
+        [JsonIgnore]
         public MapObject Dropper
         {
             get => mDropper;

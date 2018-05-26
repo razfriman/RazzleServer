@@ -6,6 +6,8 @@ namespace RazzleServer.Game.Scripts
     {
         public Character Character { get; set; }
 
+        public abstract string Name { get; }
+
         public abstract void Action();
     }
 }

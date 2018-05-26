@@ -1,18 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Center;
 using RazzleServer.Common.Network;
+using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
 
 namespace RazzleServer.Common.Server
 {
-    public abstract class MapleServer<T> where T : AClient, IDisposable
+    public abstract class MapleServer<TClient, TPacketHandler>
+    where TClient : AClient
+    where TPacketHandler : APacketHandler<TClient>
     {
-        public Dictionary<string, T> Clients { get; set; } = new Dictionary<string, T>();
+        public Dictionary<string, TClient> Clients { get; set; } = new Dictionary<string, TClient>();
+
+        public Dictionary<ClientOperationCode, List<TPacketHandler>> PacketHandlers { get; private set; } = new Dictionary<ClientOperationCode, List<TPacketHandler>>();
+
         public ushort Port;
         public ServerManager Manager { get; set; }
         private TcpListener _listener;
@@ -24,9 +32,10 @@ namespace RazzleServer.Common.Server
         {
             Manager = manager;
             Log = LogManager.LogByName(GetType().FullName);
+            RegisterPacketHandlers();
         }
 
-        public virtual void RemoveClient(T client)
+        public virtual void RemoveClient(TClient client)
         {
             if (Clients.ContainsKey(client.Key))
             {
@@ -34,7 +43,7 @@ namespace RazzleServer.Common.Server
             }
         }
 
-        public virtual void AddClient(T client)
+        public virtual void AddClient(TClient client)
         {
             if (!Clients.ContainsKey(client.Key))
             {
@@ -62,7 +71,7 @@ namespace RazzleServer.Common.Server
 
         public virtual bool AllowConnection(string address) => true;
 
-        public T GenerateClient(Socket socket)
+        public TClient GenerateClient(Socket socket)
         {
             var ip = ((IPEndPoint)socket.RemoteEndPoint).Address.ToString();
             if (!AllowConnection(ip))
@@ -74,7 +83,7 @@ namespace RazzleServer.Common.Server
 
             Log.LogInformation("Client Connected");
 
-            var client = Activator.CreateInstance(typeof(T), socket, this) as T;
+            var client = Activator.CreateInstance(typeof(TClient), socket, this) as TClient;
 
             try
             {
@@ -141,6 +150,34 @@ namespace RazzleServer.Common.Server
                 }
 
                 GenerateClient(socket);
+            }
+        }
+
+        public void RegisterPacketHandlers()
+        {
+            var types = Assembly.GetEntryAssembly()
+                                .GetTypes()
+                                .Where(x => x.IsSubclassOf(typeof(TPacketHandler)));
+
+            foreach (var type in types)
+            {
+                var attributes = type.GetTypeInfo()
+                                     .GetCustomAttributes()
+                                     .OfType<PacketHandlerAttribute>()
+                                     .ToList();
+
+                foreach (var attribute in attributes)
+                {
+                    var header = attribute.Header;
+
+                    if (!PacketHandlers.ContainsKey(header))
+                    {
+                        PacketHandlers[header] = new List<TPacketHandler>();
+                    }
+
+                    var handler = (TPacketHandler)Activator.CreateInstance(type);
+                    PacketHandlers[header].Add(handler);
+                }
             }
         }
     }

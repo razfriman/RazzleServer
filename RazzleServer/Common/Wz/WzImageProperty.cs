@@ -11,7 +11,7 @@ namespace RazzleServer.Common.Wz
     /// </summary>
     public abstract class WzImageProperty : WzObject
     {
-        #region Virtual\Abstrcat Members
+        #region Virtual\Abstract Members
         public virtual List<WzImageProperty> WzProperties => new List<WzImageProperty>();
 
         public new virtual WzImageProperty this[string name] { get => null;

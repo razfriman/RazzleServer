@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Security.Cryptography;
@@ -318,6 +319,18 @@ namespace RazzleServer.Common.Util
                 }
             }
             return ret.ToString();
+        }
+
+        public static void Shuffle<T>(this IList<T> list)
+        {
+            var len = list.Count;
+            for (var i = len - 1; i >= 1; --i)
+            {
+                var j = r.Next(i);
+                var tmp = list[i];
+                list[i] = list[j];
+                list[j] = tmp;
+            }
         }
     }
 }

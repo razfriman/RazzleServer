@@ -7,7 +7,7 @@ using RazzleServer.Common.Wz;
 
 namespace RazzleServer.Game.Maple.Data
 {
-    public sealed class CreationData
+    public sealed class CachedCreationData
     {
         private readonly ILogger Log = LogManager.Log;
 

@@ -11,9 +11,12 @@ namespace RazzleServer.Game
 {
     public sealed class GameClient : AClient
     {
+        public static int PingDelay = 5000;
+
         public Account Account { get; set; }
         public GameServer Server { get; set; }
         public Character Character { get; set; }
+
 
         public GameClient(Socket session, GameServer server) : base(session)
         {
@@ -32,11 +35,11 @@ namespace RazzleServer.Game
                 {
                     header = (ClientOperationCode)packet.ReadUShort();
 
-                    if (GameServer.PacketHandlers.ContainsKey(header))
+                    if (Server.PacketHandlers.ContainsKey(header))
                     {
                         Log.LogInformation($"Received [{header.ToString()}] {packet.ToPacketString()}");
 
-                        foreach (var handler in GameServer.PacketHandlers[header])
+                        foreach (var handler in Server.PacketHandlers[header])
                         {
                             handler.HandlePacket(packet, this);
                         }
@@ -90,10 +93,10 @@ namespace RazzleServer.Game
 
             if (Socket?.Connected ?? false)
             {
-                Delay.Execute(() => StartPingCheck(), 5 * 1000);
+                Delay.Execute(() => StartPingCheck(), PingDelay);
             }
         }
 
-        public void Ping() => Send(new PacketWriter(ServerOperationCode.Ping));
+        public void Ping() => Send(GamePackets.Ping());
     }
 }

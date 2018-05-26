@@ -36,11 +36,11 @@ namespace RazzleServer.Login
                 {
                     header = (ClientOperationCode)packet.ReadUShort();
 
-                    if (LoginServer.PacketHandlers.ContainsKey(header))
+                    if (Server.PacketHandlers.ContainsKey(header))
                     {
                         Log.LogInformation($"Received [{header.ToString()}] {packet.ToPacketString()}");
 
-                        foreach (var handler in LoginServer.PacketHandlers[header])
+                        foreach (var handler in Server.PacketHandlers[header])
                         {
                             handler.HandlePacket(packet, this);
                         }

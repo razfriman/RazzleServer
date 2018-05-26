@@ -13,13 +13,13 @@ namespace RazzleServer.Game.Maple.Shops
         public int PurchasePrice { get; private set; }
         public int Sort { get; private set; }
 
-        public short MaxPerStack => DataProvider.Items[MapleId].MaxPerStack;
+        public short MaxPerStack => DataProvider.Items.Data[MapleId].MaxPerStack;
 
-        public int SalePrice => DataProvider.Items[MapleId].SalePrice;
+        public int SalePrice => DataProvider.Items.Data[MapleId].SalePrice;
 
         public double UnitPrice => Parent.UnitPrices[MapleId];
 
-        public bool IsRecharageable => DataProvider.Items[MapleId].IsRechargeable;
+        public bool IsRecharageable => DataProvider.Items.Data[MapleId].IsRechargeable;
 
         //public ShopItem(Shop parent, Datum datum)
         //{

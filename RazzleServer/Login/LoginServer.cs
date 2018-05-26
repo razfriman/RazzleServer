@@ -11,15 +11,13 @@ using RazzleServer.Game.Maple.Characters;
 
 namespace RazzleServer.Login
 {
-    public class LoginServer : MapleServer<LoginClient>
+    public class LoginServer : MapleServer<LoginClient, LoginPacketHandler>
     {
         public LoginServer(ServerManager manager) : base(manager)
         {
             Port = ServerConfig.Instance.LoginPort;
             Start(new IPAddress(new byte[] { 0, 0, 0, 0 }), Port);
         }
-
-        public static Dictionary<ClientOperationCode, List<LoginPacketHandler>> PacketHandlers { get; private set; } = new Dictionary<ClientOperationCode, List<LoginPacketHandler>>();
 
         internal List<Character> GetCharacters(byte worldId, int accountId)
         {
@@ -44,34 +42,6 @@ namespace RazzleServer.Login
                           });
 
                 return result;
-            }
-        }
-
-        public static void RegisterPacketHandlers()
-        {
-            var types = Assembly.GetEntryAssembly()
-                                .GetTypes()
-                                .Where(x => x.IsSubclassOf(typeof(LoginPacketHandler)));
-
-            foreach (var type in types)
-            {
-                var attributes = type.GetTypeInfo()
-                                     .GetCustomAttributes()
-                                     .OfType<PacketHandlerAttribute>()
-                                     .ToList();
-
-                foreach (var attribute in attributes)
-                {
-                    var header = attribute.Header;
-
-                    if (!PacketHandlers.ContainsKey(header))
-                    {
-                        PacketHandlers[header] = new List<LoginPacketHandler>();
-                    }
-
-                    var handler = (LoginPacketHandler)Activator.CreateInstance(type);
-                    PacketHandlers[header].Add(handler);
-                }
             }
         }
     }

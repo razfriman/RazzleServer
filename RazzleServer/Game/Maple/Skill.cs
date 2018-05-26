@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Newtonsoft.Json;
 using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
@@ -91,8 +92,10 @@ namespace RazzleServer.Game.Maple
             }
         }
 
-        public Skill CachedReference => DataProvider.Skills[MapleId][CurrentLevel];
+        [JsonIgnore]
+        public Skill CachedReference => DataProvider.Skills.Data[MapleId][CurrentLevel];
 
+        [JsonIgnore]
         public Character Character => Parent.Parent;
 
         public bool IsFromFourthJob => MapleId > 1000000 && (MapleId / 10000).ToString()[2] == '2'; // TODO: Redo that.
@@ -136,11 +139,16 @@ namespace RazzleServer.Game.Maple
 
         private bool Assigned { get; set; }
 
+        public Skill()
+        {
+
+        }
+
         public Skill(int mapleId, DateTime? expiration = null)
         {
             MapleId = mapleId;
             CurrentLevel = 0;
-            MaxLevel = (byte)DataProvider.Skills[MapleId].Count;
+            MaxLevel = (byte)DataProvider.Skills.Data[MapleId].Count;
 
             if (!expiration.HasValue)
             {

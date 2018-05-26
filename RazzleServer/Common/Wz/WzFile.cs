@@ -54,41 +54,41 @@ namespace RazzleServer.Common.Wz
         /// <returns>WzDirectory[name]</returns>
         public new WzObject this[string name] => WzDirectory[name];
 
-        public WzHeader Header { get => header;
+        public WzHeader Header
+        {
+            get => header;
             set => header = value;
         }
 
-        public short Version { get => fileVersion;
+        public short Version
+        {
+            get => fileVersion;
             set => fileVersion = value;
         }
 
         public string FilePath => path;
 
-        public WzMapleVersion MapleVersion { get => mapleVersion;
+        public WzMapleVersion MapleVersion
+        {
+            get => mapleVersion;
             set => mapleVersion = value;
         }
 
-        public override WzObject Parent { get => null;
-            internal set { } }
+        public override WzObject Parent
+        {
+            get => null;
+            internal set { }
+        }
 
         public override WzFile WzFileParent => this;
 
         public override void Dispose()
         {
-            if (wzDir.reader == null)
-            {
-                {
-                    return;
-                }
-            }
-
-            wzDir.reader.Close();
+            wzDir?.reader?.Close();
             Header = null;
             path = null;
             name = null;
-            WzDirectory.Dispose();
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
+            WzDirectory?.Dispose();
         }
 
         public WzFile(short gameVersion, WzMapleVersion version)
@@ -165,8 +165,6 @@ namespace RazzleServer.Common.Wz
             }
 
             ParseMainWzDirectory();
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
         }
 
         public void ParseWzFile(byte[] WzIv)
@@ -181,8 +179,6 @@ namespace RazzleServer.Common.Wz
 
             this.WzIv = WzIv;
             ParseMainWzDirectory();
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
         }
 
         internal void ParseMainWzDirectory()
@@ -191,6 +187,13 @@ namespace RazzleServer.Common.Wz
             {
                 Log.LogCritical("Path is null");
                 return;
+            }
+
+            if (!File.Exists(path))
+            {
+                var message = $"WZ File does not exist at path: '{path}'";
+                Log.LogCritical(message);
+                throw new FileNotFoundException(message);
             }
 
             var reader = new WzBinaryReader(File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read), WzIv);

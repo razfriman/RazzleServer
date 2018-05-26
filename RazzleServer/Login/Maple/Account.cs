@@ -12,7 +12,6 @@ namespace RazzleServer.Login.Maple
     public sealed class Account : IMapleSavable
     {
         public LoginClient Client { get; private set; }
-
         public int Id { get; private set; }
         public string Username { get; set; }
         public string Password { get; set; }
