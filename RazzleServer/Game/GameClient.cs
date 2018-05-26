@@ -67,7 +67,7 @@ namespace RazzleServer.Game
                 Socket?.Dispose();
 
                 Character?.Save();
-                Character?.Map?.Characters?.Remove(Character);
+                Character?.Map?.Characters?.Remove(Character.Id);
                 Character = null;
             }
             catch (Exception e)

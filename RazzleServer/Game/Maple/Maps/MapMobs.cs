@@ -14,10 +14,8 @@ namespace RazzleServer.Game.Maple.Maps
     {
         public MapMobs(Map map) : base(map) { }
 
-        protected override void InsertItem(int index, Mob item)
+        public override void OnItemAdded(Mob item)
         {
-            base.InsertItem(index, item);
-
             if (DataProvider.IsInitialized)
             {
                 Map.Broadcast(item.GetCreatePacket());
@@ -25,10 +23,8 @@ namespace RazzleServer.Game.Maple.Maps
             }
         }
 
-        protected override void RemoveItem(int index) // NOTE: Equivalent of mob death.
+        public override void OnItemRemoved(Mob item)
         {
-            var item = Items[index];
-
             var mostDamage = 0;
             Character owner = null;
 
@@ -88,7 +84,7 @@ namespace RazzleServer.Game.Maple.Maps
                 {
                     if (loopStarted.Value.ContainsKey(item.MapleId))
                     {
-                        if (loopStarted.Value[item.MapleId] < DataProvider.Quests[loopStarted.Key].PostRequiredKills[item.MapleId])
+                        if (loopStarted.Value[item.MapleId] < DataProvider.Quests.Data[loopStarted.Key].PostRequiredKills[item.MapleId])
                         {
                             loopStarted.Value[item.MapleId]++;
 
@@ -126,8 +122,6 @@ namespace RazzleServer.Game.Maple.Maps
                 item.Controller.ControlledMobs.Remove(item);
                 Map.Broadcast(item.GetDestroyPacket());
             }
-
-            base.RemoveItem(index);
 
             if (item.SpawnPoint != null)
             {

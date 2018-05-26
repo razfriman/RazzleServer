@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
@@ -22,9 +23,11 @@ namespace RazzleServer.Game.Maple.Maps
 
         public bool IsSpawnPoint => Label == "sp";
 
-        public Map DestinationMap => DataProvider.Maps[DestinationMapId];
+        [JsonIgnore]
+        public Map DestinationMap => DataProvider.Maps.Data[DestinationMapId];
 
-        public Portal Link => DataProvider.Maps[DestinationMapId].Portals[DestinationLabel];
+        [JsonIgnore]
+        public Portal Link => DataProvider.Maps.Data[DestinationMapId].Portals[DestinationLabel];
 
         public Portal(WzImageProperty datum)
         {

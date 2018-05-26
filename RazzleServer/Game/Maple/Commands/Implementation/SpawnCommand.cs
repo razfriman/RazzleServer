@@ -39,7 +39,7 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
 
                 if (int.TryParse(args[0], out var mobId))
                 {
-                    if (DataProvider.Mobs.Contains(mobId))
+                    if (DataProvider.Mobs.Data.ContainsKey(mobId))
                     {
                         for (var i = 0; i < amount; i++)
                         {

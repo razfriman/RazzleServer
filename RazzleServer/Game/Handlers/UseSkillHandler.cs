@@ -13,7 +13,6 @@ namespace RazzleServer.Game.Handlers
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
             // TODO - WHICH SKILL?
-
             var skill = client.Character.Skills[0];
 
 

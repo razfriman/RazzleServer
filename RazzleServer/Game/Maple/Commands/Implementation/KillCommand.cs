@@ -22,7 +22,7 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
                 {
                     case "-map":
                         {
-                            foreach (var character in caller.Map.Characters)
+                            foreach (var character in caller.Map.Characters.Values)
                             {
                                 if (character != caller && !character.IsMaster)
                                 {

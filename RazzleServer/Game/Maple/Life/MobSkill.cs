@@ -240,7 +240,7 @@ namespace RazzleServer.Game.Maple.Life
         {
             var Rectangle = new Rectangle(LT + caster.Position, RB + caster.Position);
 
-            foreach (var character in caster.Map.Characters)
+            foreach (var character in caster.Map.Characters.Values)
             {
                 if (character.Position.IsInRectangle(Rectangle))
                 {
@@ -253,7 +253,7 @@ namespace RazzleServer.Game.Maple.Life
         {
             var Rectangle = new Rectangle(LT + caster.Position, RB + caster.Position);
 
-            foreach (var mob in caster.Map.Mobs)
+            foreach (var mob in caster.Map.Mobs.Values)
             {
                 if (mob.Position.IsInRectangle(Rectangle))
                 {

@@ -63,7 +63,7 @@ namespace RazzleServer.Game.Handlers
                         var mobId = packet.ReadInt();
                         var count = packet.ReadInt();
 
-                        if (DataProvider.Mobs.Contains(mobId))
+                        if (DataProvider.Mobs.Data.ContainsKey(mobId))
                         {
                             for (var i = 0; i < count; i++)
                             {
@@ -73,7 +73,7 @@ namespace RazzleServer.Game.Handlers
                         else
                         {
                             // TODO: Actual message.
-                            client.Character.Notify("invalid mob: " + mobId); 
+                            client.Character.Notify("invalid mob: " + mobId);
                         }
                     }
                     break;

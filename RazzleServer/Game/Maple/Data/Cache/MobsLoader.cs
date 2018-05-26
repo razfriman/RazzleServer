@@ -8,6 +8,7 @@ using RazzleServer.Center;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Util;
 using RazzleServer.Common.Wz;
+using RazzleServer.Game.Maple.Life;
 
 namespace RazzleServer.Game.Maple.Data.Cache
 {
@@ -19,7 +20,24 @@ namespace RazzleServer.Game.Maple.Data.Cache
 
         public override void LoadFromWz()
         {
+            Log.LogInformation("Loading Mobs");
 
+            using (var file = new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, "Mob.wz"), WzMapleVersion.CLASSIC))
+            {
+                file.ParseWzFile();
+                file.WzDirectory.WzImages.ForEach(x =>
+                {
+                    var mob = new Mob(x);
+                    Data.Data.Add(mob.MapleId, mob);
+                });
+            }
+
+            using (var file = new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, "Skill.wz"), WzMapleVersion.CLASSIC))
+            {
+                file.ParseWzFile();
+                file.WzDirectory.GetImageByName("MobSkill.img");
+                // TODO - Load Mob Skills
+            }
         }
     }
 }

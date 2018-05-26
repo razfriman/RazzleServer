@@ -2,23 +2,22 @@
 
 namespace RazzleServer.Game.Maple.Maps
 {
-    public sealed class MapFootholds : List<Foothold>
+    public sealed class MapFootholds
     {
-        public Map Map { get; private set; }
+        public List<Foothold> Footholds { get; private set; } = new List<Foothold>();
 
-        public MapFootholds(Map map)
+        public MapFootholds()
         {
-            Map = map;
+
         }
 
-        // TODO: Beautify.
         public Point FindFloor(Point position)
         {
             var x = position.X;
             var y = position.Y;
             var maxy = short.MaxValue;
 
-            foreach (var foothold in this)
+            foreach (var foothold in Footholds)
             {
                 var x1 = foothold.Line.Start.X;
                 var y1 = foothold.Line.Start.Y;

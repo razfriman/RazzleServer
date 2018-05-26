@@ -195,7 +195,7 @@ namespace RazzleServer.Game.Maple.Characters
             if (destinationMapId != -1)
             {
                 var originMap = Parent.Map;
-                var destinationMap = DataProvider.Maps[destinationMapId];
+                var destinationMap = DataProvider.Maps.Data[destinationMapId];
 
                 // TODO: Field limit check.
                 // TODO: Origin map field limit check.

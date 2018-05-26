@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple.Data;
 
@@ -13,12 +14,16 @@ namespace RazzleServer.Game.Maple.Shops
         public int PurchasePrice { get; private set; }
         public int Sort { get; private set; }
 
+        [JsonIgnore]
         public short MaxPerStack => DataProvider.Items.Data[MapleId].MaxPerStack;
 
+        [JsonIgnore]
         public int SalePrice => DataProvider.Items.Data[MapleId].SalePrice;
 
+        [JsonIgnore]
         public double UnitPrice => Parent.UnitPrices[MapleId];
 
+        [JsonIgnore]
         public bool IsRecharageable => DataProvider.Items.Data[MapleId].IsRechargeable;
 
         //public ShopItem(Shop parent, Datum datum)

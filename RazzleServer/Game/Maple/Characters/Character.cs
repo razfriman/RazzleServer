@@ -536,7 +536,7 @@ namespace RazzleServer.Game.Maple.Characters
                 Portal closestPortal = null;
                 var shortestDistance = double.PositiveInfinity;
 
-                foreach (var loopPortal in Map.Portals)
+                foreach (var loopPortal in Map.Portals.Values)
                 {
                     var distance = loopPortal.Position.DistanceFrom(Position);
 
@@ -558,7 +558,7 @@ namespace RazzleServer.Game.Maple.Characters
                 Portal closestPortal = null;
                 var shortestDistance = double.PositiveInfinity;
 
-                foreach (var loopPortal in Map.Portals)
+                foreach (var loopPortal in Map.Portals.Values)
                 {
                     if (loopPortal.IsSpawnPoint)
                     {
@@ -776,7 +776,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void ChangeMap(int mapId, string portalLabel)
         {
-            ChangeMap(mapId, DataProvider.Maps[mapId].Portals[portalLabel].Id);
+            ChangeMap(mapId, DataProvider.Maps.Data[mapId].Portals[portalLabel].Id);
         }
 
         public void ChangeMap(int mapId, byte? portalId = null, bool fromPosition = false, Point position = null)
@@ -803,7 +803,7 @@ namespace RazzleServer.Game.Maple.Characters
                 Client.Send(oPacket);
             }
 
-            DataProvider.Maps[mapId].Characters.Add(this);
+            DataProvider.Maps.Data[mapId].Characters.Add(this);
         }
 
         public void AddAbility(StatisticType statistic, short mod, bool isReset)
@@ -1601,7 +1601,7 @@ namespace RazzleServer.Game.Maple.Characters
                 job = (Job)character.Job;
                 level = character.Level;
                 luck = character.Luck;
-                Map = DataProvider.Maps[character.MapId];
+                Map = DataProvider.Maps.Data[character.MapId];
                 maxHealth = character.MaxHealth;
                 maxMana = character.MaxMana;
                 meso = character.Meso;

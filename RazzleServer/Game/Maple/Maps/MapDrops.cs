@@ -6,16 +6,10 @@ namespace RazzleServer.Game.Maple.Maps
     {
         public MapDrops(Map map) : base(map) { }
 
-        protected override void InsertItem(int index, Drop item)
+        public override void OnItemAdded(Drop item)
         {
             item.Picker = null;
-
-            base.InsertItem(index, item);
-
-            if (item.Expiry != null)
-            {
-                item.Expiry.Dispose();
-            }
+            item.Expiry?.Dispose();
 
             item.Expiry = new Delay(() =>
             {
@@ -27,7 +21,7 @@ namespace RazzleServer.Game.Maple.Maps
 
             lock (Map.Characters)
             {
-                foreach (var character in Map.Characters)
+                foreach (var character in Map.Characters.Values)
                 {
                     using (var oPacket = item.GetCreatePacket(item.Owner == null ? character : null))
                     {
@@ -37,17 +31,10 @@ namespace RazzleServer.Game.Maple.Maps
             }
         }
 
-        protected override void RemoveItem(int index)
+        public override void OnItemRemoved(Drop item)
         {
-            var item = Items[index];
-
-            if (item.Expiry != null)
-            {
-                item.Expiry.Dispose();
-            }
-
+            item.Expiry?.Dispose();
             Map.Broadcast(item.GetDestroyPacket());
-            base.RemoveItem(index);
         }
     }
 }

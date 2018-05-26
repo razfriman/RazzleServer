@@ -11,7 +11,7 @@ namespace RazzleServer.Game.Maple.Maps
         {
             get
             {
-                foreach (var portal in this)
+                foreach (var portal in Values)
                 {
                     if (portal.Label.ToLower() == label.ToLower())
                     {
@@ -23,11 +23,8 @@ namespace RazzleServer.Game.Maple.Maps
             }
         }
 
-        public bool ContainsPortal(string label) => this.Any(x => x.Label.Equals(label, StringComparison.InvariantCultureIgnoreCase));
+        public bool ContainsPortal(string label) => Values.Any(x => x.Label.Equals(label, StringComparison.InvariantCultureIgnoreCase));
 
-        protected override int GetKeyForItem(Portal item)
-        {
-            return item.Id;
-        }
+        public override int GetId(Portal item) => item.Id;
     }
 }

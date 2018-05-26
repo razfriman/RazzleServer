@@ -39,7 +39,7 @@ namespace RazzleServer.Game.Maple
         public Dictionary<Skill, Job> PreSkillRewards { get; set; }
         public Dictionary<Skill, Job> PostSkillRewards { get; set; }
 
-        public Quest NextQuest => NextQuestId > 0 ? DataProvider.Quests[NextQuestId] : null;
+        public Quest NextQuest => NextQuestId > 0 ? DataProvider.Quests.Data[NextQuestId] : null;
 
         public byte Flags
         {

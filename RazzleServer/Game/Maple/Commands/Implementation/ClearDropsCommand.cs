@@ -40,7 +40,7 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
                 {
                     var toPick = new List<Drop>();
 
-                    foreach (var loopDrop in caller.Map.Drops)
+                    foreach (var loopDrop in caller.Map.Drops.Values)
                     {
                         toPick.Add(loopDrop);
                     }

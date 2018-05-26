@@ -48,7 +48,7 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
                         }
                     }
 
-                    if (DataProvider.Maps.Contains(mapId))
+                    if (DataProvider.Maps.Data.ContainsKey(mapId))
                     {
                         caller.ChangeMap(mapId, portalId);
                     }

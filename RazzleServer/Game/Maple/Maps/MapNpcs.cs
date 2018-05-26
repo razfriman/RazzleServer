@@ -7,10 +7,8 @@ namespace RazzleServer.Game.Maple.Maps
     {
         public MapNpcs(Map map) : base(map) { }
 
-        protected override void InsertItem(int index, Npc item)
+        public override void OnItemAdded(Npc item)
         {
-            base.InsertItem(index, item);
-
             if (DataProvider.IsInitialized)
             {
                 Map.Broadcast(item.GetCreatePacket());
@@ -18,17 +16,13 @@ namespace RazzleServer.Game.Maple.Maps
             }
         }
 
-        protected override void RemoveItem(int index)
+        public override void OnItemRemoved(Npc item)
         {
             if (DataProvider.IsInitialized)
             {
-                var item = Items[index];
-
-                item.Controller.ControlledNpcs.Remove(index);
-                    Map.Broadcast(item.GetDestroyPacket());
+                item.Controller.ControlledNpcs.Remove(item);
+                Map.Broadcast(item.GetDestroyPacket());
             }
-
-            base.RemoveItem(index);
         }
     }
 }

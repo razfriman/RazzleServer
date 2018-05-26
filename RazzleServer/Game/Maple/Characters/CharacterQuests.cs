@@ -119,12 +119,12 @@ namespace RazzleServer.Game.Maple.Characters
             var action = (QuestAction)iPacket.ReadByte();
             var questId = iPacket.ReadUShort();
 
-            if (!DataProvider.Quests.Contains(questId))
+            if (!DataProvider.Quests.Data.ContainsKey(questId))
             {
                 return;
             }
 
-            var quest = DataProvider.Quests[questId];
+            var quest = DataProvider.Quests.Data[questId];
 
             int npcId;
 
@@ -174,7 +174,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                         Npc npc = null;
 
-                        foreach (var loopNpc in Parent.Map.Npcs)
+                        foreach (var loopNpc in Parent.Map.Npcs.Values)
                         {
                             if (loopNpc.MapleId == npcId)
                             {
@@ -372,7 +372,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public bool CanComplete(ushort questId, bool onlyOnFinalKill = false)
         {
-            var quest = DataProvider.Quests[questId];
+            var quest = DataProvider.Quests.Data[questId];
 
             foreach (var requiredItem in quest.PostRequiredItems)
             {

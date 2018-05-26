@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Newtonsoft.Json;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Wz;
@@ -32,15 +33,27 @@ namespace RazzleServer.Game.Maple.Maps
         public bool IsShop { get; private set; }
         public bool NoPartyLeaderPass { get; private set; }
 
+        [JsonIgnore]
         public MapCharacters Characters { get; private set; }
+
+        [JsonIgnore]
         public MapDrops Drops { get; private set; }
+
+        [JsonIgnore]
         public MapMobs Mobs { get; private set; }
+
+        [JsonIgnore]
         public MapNpcs Npcs { get; private set; }
+
+        [JsonIgnore]
         public MapReactors Reactors { get; private set; }
+
         public MapFootholds Footholds { get; private set; }
         public MapSeats Seats { get; private set; }
         public MapPortals Portals { get; private set; }
         public MapSpawnPoints SpawnPoints { get; private set; }
+
+        [JsonIgnore]
         public MapPlayerShops PlayerShops { get; private set; }
 
         public Map(WzImage img)
@@ -55,7 +68,7 @@ namespace RazzleServer.Game.Maple.Maps
             Drops = new MapDrops(this);
             Mobs = new MapMobs(this);
             Npcs = new MapNpcs(this);
-            Footholds = new MapFootholds(this);
+            Footholds = new MapFootholds();
             Seats = new MapSeats(this);
             Reactors = new MapReactors(this);
             Portals = new MapPortals(this);
@@ -70,7 +83,7 @@ namespace RazzleServer.Game.Maple.Maps
 
             img["portal"]?.WzProperties?.ForEach(x => Portals.Add(new Portal(x)));
             img["seat"]?.WzProperties?.ForEach(x => Seats.Add(new Seat(x)));
-            img["footholds"]?.WzProperties?.ForEach(x => Footholds.Add(new Foothold(x)));
+            img["footholds"]?.WzProperties?.ForEach(x => Footholds.Footholds.Add(new Foothold(x)));
             img["reactor"]?.WzProperties?.ForEach(x => SpawnPoints.Add(new SpawnPoint(x, LifeObjectType.Reactor)));
             img["seat"]?.WzProperties?.ForEach(x => Seats.Add(new Seat(x)));
             img["seat"]?.WzProperties?.ForEach(x => Seats.Add(new Seat(x)));
@@ -95,7 +108,7 @@ namespace RazzleServer.Game.Maple.Maps
 
         public void Broadcast(PacketWriter oPacket, Character ignored = null)
         {
-            foreach (var character in Characters)
+            foreach (var character in Characters.Values)
             {
                 if (character != ignored)
                 {
@@ -104,7 +117,7 @@ namespace RazzleServer.Game.Maple.Maps
             }
         }
 
-        public void Notify(string text, NoticeType type = NoticeType.Popup) => Characters.ToList().ForEach(x => x.Notify(text, type));
+        public void Notify(string text, NoticeType type = NoticeType.Popup) => Characters.Values.ToList().ForEach(x => x.Notify(text, type));
 
         public int AssignObjectId() => ++mObjectIds;
     }

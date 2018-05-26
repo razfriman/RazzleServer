@@ -8,12 +8,11 @@ namespace RazzleServer.Game.Maple.Maps
     {
         public MapReactors(Map map) : base(map) { }
 
-        protected override void InsertItem(int index, Reactor item)
+
+        public override void OnItemAdded(Reactor item)
         {
             lock (this)
             {
-                base.InsertItem(index, item);
-
                 if (DataProvider.IsInitialized)
                 {
                     var oPacket = item.GetCreatePacket();
@@ -22,18 +21,14 @@ namespace RazzleServer.Game.Maple.Maps
             }
         }
 
-        protected override void RemoveItem(int index)
+        public override void OnItemRemoved(Reactor item)
         {
             lock (this)
             {
-                var item = Items[index];
-
                 if (DataProvider.IsInitialized)
                 {
                     Map.Broadcast(item.GetDestroyPacket());
                 }
-
-                base.RemoveItem(index);
 
                 if (item.SpawnPoint != null)
                 {

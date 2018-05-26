@@ -40,7 +40,7 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
                 {
                     var toKill = new List<Mob>();
 
-                    foreach (var loopMob in caller.Map.Mobs)
+                    foreach (var loopMob in caller.Map.Mobs.Values)
                     {
                         toKill.Add(loopMob);
                     }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Wz;
@@ -16,7 +17,13 @@ namespace RazzleServer.Game.Maple.Life
         public SpawnPoint SpawnPoint { get; private set; }
         public List<ReactorState> States { get; set; } = new List<ReactorState>();
 
-        public Reactor CachedReference => DataProvider.Reactors[MapleId];
+        [JsonIgnore]
+        public Reactor CachedReference => DataProvider.Reactors.Data[MapleId];
+
+        public Reactor()
+        {
+
+        }
 
         public Reactor(WzImage img)
         {

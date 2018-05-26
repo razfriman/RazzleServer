@@ -1,21 +1,41 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using RazzleServer.Game.Maple.Characters;
 
 namespace RazzleServer.Game.Maple.Maps
 {
-    public abstract class MapObjects<T> : KeyedCollection<int, T> where T : MapObject
+    public abstract class MapObjects<T> where T : MapObject
     {
         public Map Map { get; private set; }
+
+        private Dictionary<int, T> Objects { get; set; } = new Dictionary<int, T>();
 
         public MapObjects(Map map)
         {
             Map = map;
         }
 
+        public T this[int key]
+        {
+            get
+            {
+                if (Objects.ContainsKey(key))
+                {
+                    return Objects[key];
+                }
+
+                return null;
+            }
+        }
+
+        public IEnumerable<T> Values => Objects.Values;
+
+        public int Count => Values.Count();
+
         public IEnumerable<T> GetInRange(MapObject reference, int range)
         {
-            foreach (var loopObject in this)
+            foreach (var loopObject in Objects.Values)
             {
                 if (reference.Position.DistanceFrom(loopObject.Position) <= range)
                 {
@@ -24,35 +44,44 @@ namespace RazzleServer.Game.Maple.Maps
             }
         }
 
-        protected override int GetKeyForItem(T item)
-        {
-            return item.ObjectId;
-        }
+        public virtual int GetId(T item) => item.ObjectId;
 
-        protected override void InsertItem(int index, T item)
+        public bool Add(T item)
         {
-            item.Map = Map;
+            var key = GetId(item);
 
-            if (!(item is Character)  && !(item is Portal))
+            if (Objects.ContainsKey(key))
             {
-                item.ObjectId = Map.AssignObjectId();
+                Objects[key] = item;
+                OnItemAdded(item);
+                return true;
             }
 
-            base.InsertItem(index, item);
+            return false;
         }
 
-        protected override void RemoveItem(int index)
+        public bool Remove(T item)
         {
-            var item = Items[index];
+            return Remove(GetId(item));
+        }
 
-            item.Map = null;
-
-            if (!(item is Character) && !(item is Portal))
+        public bool Remove(int key)
+        {
+            if (Objects.ContainsKey(key))
             {
-                item.ObjectId = -1;
+                var item = Objects[key];
+                Objects.Remove(key);
+                OnItemRemoved(item);
+                return true;
             }
 
-            base.RemoveItem(index);
+            return false;
         }
+
+        public virtual void OnItemAdded(T item) { }
+
+        public virtual void OnItemRemoved(T item) { }
+
+        public bool Contains(int id) => Objects.ContainsKey(id);
     }
 }

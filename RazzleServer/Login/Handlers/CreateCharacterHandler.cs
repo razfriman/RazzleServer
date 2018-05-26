@@ -52,7 +52,7 @@ namespace RazzleServer.Login.Handlers
                 SkillPoints = 0,
                 Experience = 0,
                 Fame = 0,
-                Map = DataProvider.Maps[ServerConfig.Instance.DefaultMapId],
+                Map = DataProvider.Maps.Data[ServerConfig.Instance.DefaultMapId],
                 SpawnPoint = 0,
                 Meso = 0
             };

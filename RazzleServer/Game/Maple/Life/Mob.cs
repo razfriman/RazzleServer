@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Newtonsoft.Json;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
@@ -61,7 +63,13 @@ namespace RazzleServer.Game.Maple.Life
 
         public int SpawnEffect { get; set; }
 
-        public Mob CachedReference => DataProvider.Mobs[MapleId];
+        [JsonIgnore]
+        public Mob CachedReference => DataProvider.Mobs.Data[MapleId];
+
+        public Mob()
+        {
+
+        }
 
         public Mob(WzImage img)
         {
@@ -195,7 +203,7 @@ namespace RazzleServer.Game.Maple.Life
 
                 lock (Map.Characters)
                 {
-                    foreach (var character in Map.Characters)
+                    foreach (var character in Map.Characters.Values)
                     {
                         if (character.ControlledMobs.Count < leastControlled)
                         {

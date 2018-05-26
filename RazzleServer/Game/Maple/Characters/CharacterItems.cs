@@ -412,7 +412,7 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 if (Functions.Random(0, 100) < summon.Item2)
                 {
-                    if (DataProvider.Mobs.Contains(summon.Item1))
+                    if (DataProvider.Mobs.Data.ContainsKey(summon.Item1))
                     {
                         Parent.Map.Mobs.Add(new Mob(summon.Item1, Parent.Position));
                     }

@@ -10,7 +10,7 @@ namespace RazzleServer.Game.Maple.Maps
         {
             get
             {
-                foreach (var character in this)
+                foreach (var character in Values)
                 {
                     if (character.Name.ToLower() == name.ToLower())
                     {
@@ -22,11 +22,11 @@ namespace RazzleServer.Game.Maple.Maps
             }
         }
 
-        protected override void InsertItem(int index, Character item)
+        public override void OnItemAdded(Character item)
         {
             lock (this)
             {
-                foreach (var character in this)
+                foreach (var character in Values)
                 {
                     item.Client.Send(character.GetSpawnPacket());
                 }
@@ -34,11 +34,9 @@ namespace RazzleServer.Game.Maple.Maps
 
             item.Position = Map.Portals.Count > 0 ? Map.Portals[item.SpawnPoint].Position : new Point(0, 0);
 
-            base.InsertItem(index, item);
-
             lock (Map.Drops)
             {
-                foreach (var drop in Map.Drops)
+                foreach (var drop in Map.Drops.Values)
                 {
                     if (drop.Owner == null)
                     {
@@ -53,7 +51,7 @@ namespace RazzleServer.Game.Maple.Maps
 
             lock (Map.Mobs)
             {
-                foreach (var mob in Map.Mobs)
+                foreach (var mob in Map.Mobs.Values)
                 {
                     item.Client.Send(mob.GetSpawnPacket());
                 }
@@ -61,7 +59,7 @@ namespace RazzleServer.Game.Maple.Maps
 
             lock (Map.Npcs)
             {
-                foreach (var npc in Map.Npcs)
+                foreach (var npc in Map.Npcs.Values)
                 {
                     item.Client.Send(npc.GetSpawnPacket());
                 }
@@ -69,7 +67,7 @@ namespace RazzleServer.Game.Maple.Maps
 
             lock (Map.Reactors)
             {
-                foreach (var reactor in Map.Reactors)
+                foreach (var reactor in Map.Reactors.Values)
                 {
                     item.Client.Send(reactor.GetSpawnPacket());
                 }
@@ -77,7 +75,7 @@ namespace RazzleServer.Game.Maple.Maps
 
             lock (Map.Mobs)
             {
-                foreach (var mob in Map.Mobs)
+                foreach (var mob in Map.Mobs.Values)
                 {
                     mob.AssignController();
                 }
@@ -85,7 +83,7 @@ namespace RazzleServer.Game.Maple.Maps
 
             lock (Map.Npcs)
             {
-                foreach (var npc in Map.Npcs)
+                foreach (var npc in Map.Npcs.Values)
                 {
                     npc.AssignController();
                 }
@@ -94,23 +92,19 @@ namespace RazzleServer.Game.Maple.Maps
             Map.Broadcast(item.GetCreatePacket());
         }
 
-        protected override void RemoveItem(int index)
+        public override void OnItemRemoved(Character item)
         {
             lock (this)
             {
-                var item = Items[index];
-
                 item.ControlledMobs.Clear();
                 item.ControlledNpcs.Clear();
 
                 Map.Broadcast(item.GetDestroyPacket(), item);
             }
 
-            base.RemoveItem(index);
-
             lock (Map.Mobs)
             {
-                foreach (var mob in Map.Mobs)
+                foreach (var mob in Map.Mobs.Values)
                 {
                     mob.AssignController();
                 }
@@ -118,13 +112,13 @@ namespace RazzleServer.Game.Maple.Maps
 
             lock (Map.Npcs)
             {
-                foreach (var npc in Map.Npcs)
+                foreach (var npc in Map.Npcs.Values)
                 {
                     npc.AssignController();
                 }
             }
         }
 
-        protected override int GetKeyForItem(Character item) => item.Id;
+        public override int GetId(Character item) => item.Id;
     }
 }

@@ -7,6 +7,11 @@ namespace RazzleServer.Game.Maple
         public short X { get; set; }
         public short Y { get; set; }
 
+        public Point()
+        {
+
+        }
+
         public Point(short x, short y)
         {
             X = x;

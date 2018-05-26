@@ -15,7 +15,7 @@ namespace RazzleServer.Game.Maple.Life
 
         public ReactorState(WzImageProperty img)
         {
-            var eventImg = img["event"]?["0"];
+            var eventImg = img?["event"]?["0"];
 
             if (eventImg != null)
             {

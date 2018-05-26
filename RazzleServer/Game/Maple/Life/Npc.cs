@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
@@ -13,6 +14,7 @@ namespace RazzleServer.Game.Maple.Life
 {
     public class Npc : LifeObject, ISpawnable, IControllable
     {
+        [JsonIgnore]
         public Character Controller { get; set; }
         public Shop Shop { get; set; }
         public int StorageCost { get; set; }
@@ -149,7 +151,7 @@ namespace RazzleServer.Game.Maple.Life
 
                 lock (Map.Characters)
                 {
-                    foreach (var character in Map.Characters)
+                    foreach (var character in Map.Characters.Values)
                     {
                         if (character.ControlledNpcs.Count < leastControlled)
                         {
