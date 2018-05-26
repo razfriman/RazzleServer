@@ -16,7 +16,7 @@ namespace RazzleServer.Game.Maple.Maps
                 if (DataProvider.IsInitialized)
                 {
                     var oPacket = item.GetCreatePacket();
-                    Map.Broadcast(oPacket);
+                    Map.Send(oPacket);
                 }
             }
         }
@@ -27,7 +27,7 @@ namespace RazzleServer.Game.Maple.Maps
             {
                 if (DataProvider.IsInitialized)
                 {
-                    Map.Broadcast(item.GetDestroyPacket());
+                    Map.Send(item.GetDestroyPacket());
                 }
 
                 if (item.SpawnPoint != null)

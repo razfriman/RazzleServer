@@ -18,7 +18,10 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
             }
             else
             {
-                caller.Meso += int.Parse(args[0]);
+                if (uint.TryParse(args[0], out var amount))
+                {
+                    caller.Meso += (int)amount;
+                }
             }
         }
     }

@@ -18,7 +18,7 @@ namespace RazzleServer.Game.Maple.Maps
         {
             if (DataProvider.IsInitialized)
             {
-                Map.Broadcast(item.GetCreatePacket());
+                Map.Send(item.GetCreatePacket());
                 item.AssignController();
             }
         }
@@ -120,7 +120,7 @@ namespace RazzleServer.Game.Maple.Maps
             if (DataProvider.IsInitialized)
             {
                 item.Controller.ControlledMobs.Remove(item);
-                Map.Broadcast(item.GetDestroyPacket());
+                Map.Send(item.GetDestroyPacket());
             }
 
             if (item.SpawnPoint != null)

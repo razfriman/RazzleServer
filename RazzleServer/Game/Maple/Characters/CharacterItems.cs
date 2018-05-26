@@ -483,8 +483,7 @@ namespace RazzleServer.Game.Maple.Characters
                         {
                             oPacket.WriteByte((byte)NoticeType.Megaphone);
                             oPacket.WriteString(message);
-
-                            //this.Parent.Client.Channel.Broadcast(oPacket);
+                            Parent.Map.Send(oPacket);
                         }
 
                         used = true;
@@ -511,8 +510,7 @@ namespace RazzleServer.Game.Maple.Characters
                             oPacket.WriteString(message);
                             oPacket.WriteByte(Parent.Client.Server.ChannelId);
                             oPacket.WriteBool(whisper);
-
-                            //this.Parent.Client.World.Broadcast(oPacket);
+                            this.Parent.Client.Server.World.Send(oPacket);
                         }
 
                         used = true;
@@ -547,8 +545,7 @@ namespace RazzleServer.Game.Maple.Characters
                             oPacket.WriteInt(Parent.Client.Server.ChannelId);
                             oPacket.WriteBool(whisper);
                             oPacket.WriteBytes(Parent.AppearanceToByteArray());
-
-                            //this.Parent.Client.World.Broadcast(oPacket);
+                            this.Parent.Client.Server.World.Send(oPacket);
                         }
 
                         used = true;
@@ -591,7 +588,7 @@ namespace RazzleServer.Game.Maple.Characters
                                 oPacket.WriteBytes(targetItem.ToByteArray(true));
                             }
 
-                            //this.Parent.Client.World.Broadcast(oPacket);
+                            this.Parent.Client.Server.World.Send(oPacket);
                         }
 
                         used = true;
@@ -618,7 +615,7 @@ namespace RazzleServer.Game.Maple.Characters
                         //        oPacket.WriteString(name)
                         //        oPacket.WriteByte();
 
-                        //    this.Parent.Map.Broadcast(oPacket);
+                        //    this.Parent.Map.Send(oPacket);
                         //}
                     }
                     break;

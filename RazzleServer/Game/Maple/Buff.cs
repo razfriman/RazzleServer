@@ -166,7 +166,7 @@ namespace RazzleServer.Game.Maple
                             oPacket.WriteInt(0);
                             oPacket.WriteShort(0);
 
-                            Character.Map.Broadcast(oPacket);
+                            Character.Map.Send(oPacket);
                         }
                     }
                     break;
@@ -190,7 +190,7 @@ namespace RazzleServer.Game.Maple
                 oPacket.WriteLong(PrimaryBuffMask);
                 oPacket.WriteLong(SecondaryBuffMask);
 
-                Character.Map.Broadcast(oPacket);
+                Character.Map.Send(oPacket);
             }
         }
 

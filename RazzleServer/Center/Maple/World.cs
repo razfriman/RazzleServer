@@ -2,6 +2,7 @@
 using System.Linq;
 using Newtonsoft.Json;
 using RazzleServer.Common.Constants;
+using RazzleServer.Common.Packet;
 using RazzleServer.Game;
 
 namespace RazzleServer.Center.Maple
@@ -45,8 +46,12 @@ namespace RazzleServer.Center.Maple
         [JsonIgnore]
         public int Population => this.Sum(x => x.Population);
 
-
-
         protected override byte GetKeyForItem(GameServer item) => item.ChannelId;
+
+        public void Send(PacketWriter pw, GameClient except = null) => this
+        .SelectMany(x => x.Clients.Values)
+        .Where(x => x.Key != except?.Key)
+        .ToList()
+        .ForEach(x => x.Send(pw));
     }
 }

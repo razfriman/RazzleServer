@@ -145,7 +145,7 @@ namespace RazzleServer.Game.Handlers
                         break;
                 }
 
-                client.Character.Map.Broadcast(oPacket, client.Character);
+                client.Character.Map.Send(oPacket, client.Character);
             }
         }
     }

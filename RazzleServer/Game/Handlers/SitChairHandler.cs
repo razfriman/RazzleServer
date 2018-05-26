@@ -20,7 +20,7 @@ namespace RazzleServer.Game.Handlers
             {
                 oPacket.WriteInt(client.Character.Id);
                 oPacket.WriteInt(chairItemId);
-                client.Character.Map.Broadcast(oPacket, client.Character);
+                client.Character.Map.Send(oPacket, client.Character);
             }
         }
     }

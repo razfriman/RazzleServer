@@ -267,7 +267,7 @@ namespace RazzleServer.Game.Handlers
                                     oPacket.WriteByte(1);
                                     oPacket.WriteByte(1);
 
-                                    member.Character.Map.Broadcast(oPacket, member.Character);
+                                    member.Character.Map.Send(oPacket, member.Character);
                                 }
 
                                 member.Character.Buffs.Add(skill, 0);
@@ -350,7 +350,7 @@ namespace RazzleServer.Game.Handlers
                                     oPacket.WriteByte(1);
                                     oPacket.WriteByte(1);
 
-                                    target.Map.Broadcast(oPacket, target);
+                                    target.Map.Send(oPacket, target);
                                 }
 
                                 action(target);
@@ -392,7 +392,7 @@ namespace RazzleServer.Game.Handlers
                 oPacket.WriteByte(1);
                 oPacket.WriteByte(1);
 
-                skill.Character.Map.Broadcast(oPacket, skill.Character);
+                skill.Character.Map.Send(oPacket, skill.Character);
             }
 
             if (skill.HasBuff)

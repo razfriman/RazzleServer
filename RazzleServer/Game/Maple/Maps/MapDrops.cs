@@ -34,7 +34,7 @@ namespace RazzleServer.Game.Maple.Maps
         public override void OnItemRemoved(Drop item)
         {
             item.Expiry?.Dispose();
-            Map.Broadcast(item.GetDestroyPacket());
+            Map.Send(item.GetDestroyPacket());
         }
     }
 }

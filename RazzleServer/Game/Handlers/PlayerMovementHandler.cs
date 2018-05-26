@@ -42,7 +42,7 @@ namespace RazzleServer.Game.Handlers
             //F0 
             //FF FF FF FF 
             //FF FF FF 0F 
-          
+
 
             //2D 00 15 00 
             //2D 00 35 00
@@ -60,7 +60,7 @@ namespace RazzleServer.Game.Handlers
 
                 oPacket.WriteInt(client.Character.Id);
                 oPacket.WriteBytes(movements.ToByteArray());
-                client.Character.Map.Broadcast(oPacket, client.Character);
+                client.Character.Map.Send(oPacket, client.Character);
             }
         }
     }

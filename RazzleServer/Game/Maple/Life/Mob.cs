@@ -285,8 +285,7 @@ namespace RazzleServer.Game.Maple.Life
                 oPacket.WriteInt(skillId);
                 oPacket.WriteByte(0);
                 oPacket.WriteBytes(movements.ToByteArray());
-
-                Map.Broadcast(oPacket, Controller);
+                Map.Send(oPacket, Controller);
             }
         }
 
@@ -305,7 +304,7 @@ namespace RazzleServer.Game.Maple.Life
                 oPacket.WriteShort(0);// Delay
                 oPacket.WriteInt(0);
 
-                Map.Broadcast(oPacket);
+                Map.Send(oPacket);
             }
 
             Delay.Execute(() =>
@@ -318,7 +317,7 @@ namespace RazzleServer.Game.Maple.Life
                     packet.WriteInt((int)buff);
                     packet.WriteInt(0);
 
-                    Map.Broadcast(packet);
+                    Map.Send(packet);
                 }
 
                 Buffs.Remove(buff);
@@ -337,7 +336,7 @@ namespace RazzleServer.Game.Maple.Life
                 packet.WriteByte(0);
                 packet.WriteByte(0);
                 packet.WriteByte(0);
-                Map.Broadcast(packet);
+                Map.Send(packet);
             }
         }
 

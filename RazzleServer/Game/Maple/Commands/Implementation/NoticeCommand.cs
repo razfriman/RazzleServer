@@ -23,15 +23,15 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
                 switch (args[0].ToLower())
                 {
                     case "-map":
-                        caller.Map.Notify(message);
+                        caller.Map.Send(GamePackets.Notify(message));
                         break;
 
                     case "-channel":
-                        //caller.Client.Channel.Notify(message);
+                        caller.Client.Server.Send(GamePackets.Notify(message));
                         break;
 
                     case "-world":
-                        //caller.Client.World.Notify(message);
+                        caller.Client.Server.World.Send(GamePackets.Notify(message));
                         break;
 
                     default:

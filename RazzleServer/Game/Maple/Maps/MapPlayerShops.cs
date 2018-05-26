@@ -10,7 +10,7 @@ namespace RazzleServer.Game.Maple.Maps
         {
             lock (this)
             {
-                Map.Broadcast(item.GetCreatePacket());
+                Map.Send(item.GetCreatePacket());
             }
         }
 
@@ -18,7 +18,7 @@ namespace RazzleServer.Game.Maple.Maps
         {
             lock (this)
             {
-                Map.Broadcast(item.GetDestroyPacket());
+                Map.Send(item.GetDestroyPacket());
             }
         }
     }

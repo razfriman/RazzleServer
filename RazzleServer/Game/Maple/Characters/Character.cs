@@ -506,7 +506,7 @@ namespace RazzleServer.Game.Maple.Characters
                     oPacket.WriteInt(Id);
                     oPacket.WriteBool(!string.IsNullOrEmpty(Chalkboard));
                     oPacket.WriteString(Chalkboard);
-                    Map.Broadcast(oPacket);
+                    Map.Send(oPacket);
                 }
             }
         }
@@ -523,7 +523,7 @@ namespace RazzleServer.Game.Maple.Characters
                     {
                         oPacket.WriteInt(Id);
                         oPacket.WriteInt(itemEffect);
-                        Map.Broadcast(oPacket, this);
+                        Map.Send(oPacket, this);
                     }
                 }
             }
@@ -744,8 +744,7 @@ namespace RazzleServer.Game.Maple.Characters
                 oPacket.WriteBytes(AppearanceToByteArray());
                 oPacket.WriteByte(0);
                 oPacket.WriteShort(0);
-
-                Map.Broadcast(oPacket, this);
+                Map.Send(oPacket, this);
             }
         }
 
@@ -753,19 +752,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Notify(string message, NoticeType type = NoticeType.Pink)
         {
-            using (var oPacket = new PacketWriter(ServerOperationCode.BroadcastMsg))
-            {
-                oPacket.WriteByte((byte)type);
-
-                if (type == NoticeType.Ticker)
-                {
-                    oPacket.WriteBool(!string.IsNullOrEmpty(message));
-                }
-
-                oPacket.WriteString(message);
-
-                Client.Send(oPacket);
-            }
+            Client.Send(GamePackets.Notify(message, type));
         }
 
         public void Revive()
@@ -917,7 +904,7 @@ namespace RazzleServer.Game.Maple.Characters
                     }
                 }
 
-                Map.Broadcast(oPacket, this);
+                Map.Send(oPacket, this);
             }
 
             foreach (var target in attack.Damages)
@@ -946,7 +933,7 @@ namespace RazzleServer.Game.Maple.Characters
                 oPacket.WriteInt(Id);
                 oPacket.WriteBool(IsMaster);
                 oPacket.WriteString(text);
-                Map.Broadcast(oPacket);
+                Map.Send(oPacket);
             }
         }
 
@@ -956,7 +943,7 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 oPacket.WriteInt(Id);
                 oPacket.WriteInt(expressionId);
-                Map.Broadcast(oPacket, this);
+                Map.Send(oPacket, this);
             }
         }
 
@@ -975,7 +962,7 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 oPacket.WriteInt(Id);
                 oPacket.WriteByte((int)effect);
-                Map.Broadcast(oPacket, skipSelf ? this : null);
+                Map.Send(oPacket, skipSelf ? this : null);
             }
         }
 

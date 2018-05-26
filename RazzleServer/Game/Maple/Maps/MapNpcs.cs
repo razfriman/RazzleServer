@@ -11,7 +11,7 @@ namespace RazzleServer.Game.Maple.Maps
         {
             if (DataProvider.IsInitialized)
             {
-                Map.Broadcast(item.GetCreatePacket());
+                Map.Send(item.GetCreatePacket());
                 item.AssignController();
             }
         }
@@ -21,7 +21,7 @@ namespace RazzleServer.Game.Maple.Maps
             if (DataProvider.IsInitialized)
             {
                 item.Controller.ControlledNpcs.Remove(item);
-                Map.Broadcast(item.GetDestroyPacket());
+                Map.Send(item.GetDestroyPacket());
             }
         }
     }

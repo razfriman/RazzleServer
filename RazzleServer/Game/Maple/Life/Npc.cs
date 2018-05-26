@@ -52,7 +52,7 @@ namespace RazzleServer.Game.Maple.Life
                     oPacket.WriteBytes(movements.ToByteArray());
                 }
 
-                Map.Broadcast(oPacket);
+                Map.Send(oPacket);
             }
         }
 

@@ -85,7 +85,7 @@ namespace RazzleServer.Game.Maple.Life
                                 oPacket.WriteByte(0); // NOTE: Event index.
                                 oPacket.WriteByte(4); // NOTE: Delay.
 
-                                Map.Broadcast(oPacket);
+                                Map.Send(oPacket);
                             }
                         }
                     }

@@ -104,18 +104,13 @@ namespace RazzleServer.Game.Maple.Maps
             SpawnPoints.Spawn();
         }
 
-        public void Broadcast(PacketWriter oPacket, Character ignored = null)
+        public void Send(PacketWriter pw, Character except = null)
         {
-            foreach (var character in Characters.Values)
-            {
-                if (character != ignored)
-                {
-                    character.Client.Send(oPacket);
-                }
-            }
+            Characters.Values
+            .Where(x => x.Id != except?.Id)
+            .ToList()
+            .ForEach(x => x.Client.Send(pw));
         }
-
-        public void Notify(string text, NoticeType type = NoticeType.Popup) => Characters.Values.ToList().ForEach(x => x.Notify(text, type));
 
         public int AssignObjectId() => ++mObjectIds;
     }

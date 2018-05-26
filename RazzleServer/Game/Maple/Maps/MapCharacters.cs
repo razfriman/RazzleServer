@@ -89,7 +89,7 @@ namespace RazzleServer.Game.Maple.Maps
                 }
             }
 
-            Map.Broadcast(item.GetCreatePacket());
+            Map.Send(item.GetCreatePacket());
         }
 
         public override void OnItemRemoved(Character item)
@@ -99,7 +99,7 @@ namespace RazzleServer.Game.Maple.Maps
                 item.ControlledMobs.Clear();
                 item.ControlledNpcs.Clear();
 
-                Map.Broadcast(item.GetDestroyPacket(), item);
+                Map.Send(item.GetDestroyPacket(), item);
             }
 
             lock (Map.Mobs)
