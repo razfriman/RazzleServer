@@ -21,7 +21,6 @@ namespace RazzleServer.Game.Maple
         public int AccountId { get; }
         public int MapleId { get; }
         public short Slot { get; set; }
-        private short _maxPerStack;
         private short _quantity;
         public string Creator { get; set; }
         public DateTime Expiration { get; set; }
@@ -153,19 +152,7 @@ namespace RazzleServer.Game.Maple
 
         public Character Character => Parent.Parent;
 
-        public short MaxPerStack
-        {
-            get
-            {
-                if (IsRechargeable && Parent != null)
-                {
-                    return _maxPerStack;
-                }
-
-                return _maxPerStack;
-            }
-            set => _maxPerStack = value;
-        }
+        public short MaxPerStack => CachedReference.MaxPerStack;
 
         public short Quantity
         {
@@ -302,7 +289,6 @@ namespace RazzleServer.Game.Maple
         public Item(int mapleId, short quantity = 1, DateTime? expiration = null, bool equipped = false)
         {
             MapleId = mapleId;
-            MaxPerStack = CachedReference.MaxPerStack;
             Quantity = Type == ItemType.Equipment ? (short)1 : quantity;
             if (equipped)
             {
@@ -390,7 +376,6 @@ namespace RazzleServer.Game.Maple
             Assigned = true;
             AccountId = datum.AccountId;
             MapleId = datum.MapleId;
-            MaxPerStack = CachedReference.MaxPerStack;
             Quantity = datum.Quantity;
             Slot = datum.Slot;
             Creator = datum.Creator;

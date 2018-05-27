@@ -84,7 +84,7 @@ namespace RazzleServer.Game.Maple.Data.Loaders
                .ToList()
                .ForEach(item =>
                {
-                var mapleItem = new ItemReference(item, type);
+                   var mapleItem = new ItemReference(item, type);
                    if (!Data.Data.ContainsKey(mapleItem.MapleId))
                    {
                        Data.Data.Add(mapleItem.MapleId, mapleItem);

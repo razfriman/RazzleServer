@@ -4,6 +4,7 @@ using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Wz;
 using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Game.Maple.Data.References;
 
 namespace RazzleServer.Game.Maple.Life
 {
@@ -28,12 +29,13 @@ namespace RazzleServer.Game.Maple.Life
         public short SummonLimit { get; private set; }
         public short SummonEffect { get; private set; }
 
-        public MobSkill(WzImageProperty img)
+        public MobSkill(MobSkillReference reference)
         {
-            MapleId = (byte)(img["skill"]?.GetInt() ?? 0);
-            Level = (byte)(img["level"]?.GetInt() ?? 0);
-            EffectDelay = img["effectAfter"]?.GetShort() ?? 0;
+            MapleId = reference.MapleId;
+            Level = reference.Level;
+            EffectDelay = reference.EffectDelay;
         }
+
 
         //public void Load(Datum datum)
         //{

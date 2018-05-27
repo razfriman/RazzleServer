@@ -8,37 +8,35 @@ namespace RazzleServer.Game.Maple.Data.References
 {
     public class MapReference
     {
-        public int MapleId { get; }
-        public int ReturnMapId { get; }
-        public int ForcedReturnMapId { get; }
-        public sbyte RegenerationRate { get; private set; }
-        public byte DecreaseHp { get; private set; }
-        public ushort DamagePerSecond { get; private set; }
-        public int ProtectorItemId { get; private set; }
-        public sbyte ShipKind { get; private set; }
-        public byte RequiredLevel { get; private set; }
-        public int TimeLimit { get; private set; }
-        public double SpawnRate { get; }
-        public bool IsTown { get; }
-        public bool HasClock { get; private set; }
-        public bool IsEverlasting { get; private set; }
-        public bool DisablesTownScroll { get; private set; }
-        public bool IsSwim { get; private set; }
-        public bool ShufflesReactors { get; private set; }
-        public string UniqueShuffledReactor { get; private set; }
-        public bool IsShop { get; private set; }
-        public bool NoPartyLeaderPass { get; private set; }
-
-        public MapReference()
-        {
-        }
-
-        public List<Foothold> Footholds { get; } = new List<Foothold>();
+        public int MapleId { get; set; }
+        public int ReturnMapId { get; set; }
+        public int ForcedReturnMapId { get; set; }
+        public sbyte RegenerationRate { get; set; }
+        public byte DecreaseHp { get; set; }
+        public ushort DamagePerSecond { get; set; }
+        public int ProtectorItemId { get; set; }
+        public sbyte ShipKind { get; set; }
+        public byte RequiredLevel { get; set; }
+        public int TimeLimit { get; set; }
+        public double SpawnRate { get; set; }
+        public bool IsTown { get; set; }
+        public bool HasClock { get; set; }
+        public bool IsEverlasting { get; set; }
+        public bool DisablesTownScroll { get; set; }
+        public bool IsSwim { get; set; }
+        public bool ShufflesReactors { get; set; }
+        public string UniqueShuffledReactor { get; set; }
+        public bool IsShop { get; set; }
+        public bool NoPartyLeaderPass { get; set; }
+        public List<Foothold> Footholds { get; set; } = new List<Foothold>();
         public List<Portal> Portals { get; set; } = new List<Portal>();
         public List<Seat> Seats { get; set; } = new List<Seat>();
         public List<SpawnPoint> SpawnPoints { get; set; } = new List<SpawnPoint>();
         public List<Npc> Npcs { get; set; } = new List<Npc>();
 
+        public MapReference()
+        {
+        }
         public MapReference(WzImage img)
         {
             var name = img.Name.Remove(9);

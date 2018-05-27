@@ -8,77 +8,70 @@ namespace RazzleServer.Game.Maple.Data.References
 {
     public class ItemReference
     {
-        public int MapleId { get; }
+        public int MapleId { get; set; }
         public short Slot { get; set; }
         public string Creator { get; set; }
         public DateTime Expiration { get; set; }
         public int? PetId { get; set; }
-
-        public bool IsCash { get; }
-        public bool OnlyOne { get; }
-        public bool PreventsSlipping { get; private set; }
-        public bool PreventsColdness { get; private set; }
-        public bool IsTradeBlocked { get; }
+        public bool IsCash { get; set; }
+        public bool OnlyOne { get; set; }
+        public bool PreventsSlipping { get; set; }
+        public bool PreventsColdness { get; set; }
+        public bool IsTradeBlocked { get; set; }
         public bool IsStored { get; set; }
-        public int SalePrice { get; }
-        public int Meso { get; private set; }
-
-        public byte UpgradesAvailable { get; private set; }
-        public byte UpgradesApplied { get; private set; }
-        public short Strength { get; private set; }
-        public short Dexterity { get; private set; }
-        public short Intelligence { get; private set; }
-        public short Luck { get; private set; }
-        public short Health { get; }
-        public short Mana { get; }
-        public short WeaponAttack { get; private set; }
-        public short MagicAttack { get; private set; }
-        public short WeaponDefense { get; private set; }
-        public short MagicDefense { get; private set; }
-        public short Accuracy { get; private set; }
-        public short Avoidability { get; private set; }
-        public short Agility { get; private set; }
-        public short Speed { get; private set; }
-        public short Jump { get; private set; }
-
-        public byte AttackSpeed { get; }
-        public short RecoveryRate { get; private set; }
-        public short KnockBackChance { get; private set; }
-
-        public short RequiredLevel { get; }
-        public short RequiredStrength { get; }
-        public short RequiredDexterity { get; }
-        public short RequiredIntelligence { get; }
-        public short RequiredLuck { get; }
-        public short RequiredFame { get; }
-        public Job RequiredJob { get; }
+        public int SalePrice { get; set; }
+        public int Meso { get; set; }
+        public byte UpgradesAvailable { get; set; }
+        public byte UpgradesApplied { get; set; }
+        public short Strength { get; set; }
+        public short Dexterity { get; set; }
+        public short Intelligence { get; set; }
+        public short Luck { get; set; }
+        public short Health { get; set; }
+        public short Mana { get; set; }
+        public short WeaponAttack { get; set; }
+        public short MagicAttack { get; set; }
+        public short WeaponDefense { get; set; }
+        public short MagicDefense { get; set; }
+        public short Accuracy { get; set; }
+        public short Avoidability { get; set; }
+        public short Agility { get; set; }
+        public short Speed { get; set; }
+        public short Jump { get; set; }
+        public byte AttackSpeed { get; set; }
+        public short RecoveryRate { get; set; }
+        public short KnockBackChance { get; set; }
+        public short RequiredLevel { get; set; }
+        public short RequiredStrength { get; set; }
+        public short RequiredDexterity { get; set; }
+        public short RequiredIntelligence { get; set; }
+        public short RequiredLuck { get; set; }
+        public short RequiredFame { get; set; }
+        public Job RequiredJob { get; set; }
 
         // Consume data properties are prefixed with 'C'.
-        public int CItemId { get; private set; }
-        public string CFlags { get; private set; }
-        public string CCureAilments { get; private set; }
-        public short CEffect { get; private set; }
-        public short CHealth { get; private set; }
-        public short CMana { get; private set; }
-        public short CHealthPercentage { get; private set; }
-        public short CManaPercentage { get; private set; }
-        public int CMoveTo { get; private set; }
-        public short CProb { get; private set; }
-        public int CBuffTime { get; private set; }
-        public short CWeaponAttack { get; private set; }
-        public short CMagicAttack { get; private set; }
-        public short CWeaponDefense { get; private set; }
-        public short CMagicDefense { get; private set; }
-        public short CAccuracy { get; private set; }
-        public short CAvoid { get; private set; }
-        public short CSpeed { get; private set; }
-        public short CJump { get; private set; }
-        public short CMorph { get; private set; }
-
-        public List<Tuple<int, short>> Summons { get; }
-
-        public short MaxPerStack { get; }
-
+        public int CItemId { get; set; }
+        public string CFlags { get; set; }
+        public string CCureAilments { get; set; }
+        public short CEffect { get; set; }
+        public short CHealth { get; set; }
+        public short CMana { get; set; }
+        public short CHealthPercentage { get; set; }
+        public short CManaPercentage { get; set; }
+        public int CMoveTo { get; set; }
+        public short CProb { get; set; }
+        public int CBuffTime { get; set; }
+        public short CWeaponAttack { get; set; }
+        public short CMagicAttack { get; set; }
+        public short CWeaponDefense { get; set; }
+        public short CMagicDefense { get; set; }
+        public short CAccuracy { get; set; }
+        public short CAvoid { get; set; }
+        public short CSpeed { get; set; }
+        public short CJump { get; set; }
+        public short CMorph { get; set; }
+        public short MaxPerStack { get; set; }
+        public List<Tuple<int, short>> Summons { get; set; }
 
         public ItemReference()
         {

@@ -8,49 +8,44 @@ namespace RazzleServer.Game.Maple.Data.References
 {
     public class MobReference
     {
-        public int MapleId { get; }
-        public SpawnPoint SpawnPoint { get; private set; }
+        public int MapleId { get; set; }
         public byte Stance { get; set; }
         public bool IsProvoked { get; set; }
         public bool CanDrop { get; set; }
-        public List<Loot> Loots { get; }
+        public List<Loot> Loots { get; set; }
         public short Foothold { get; set; }
-        public MobSkills Skills { get; }
-        public Dictionary<MobSkill, DateTime> Cooldowns { get; private set; }
-        public List<MobStatus> Buffs { get; private set; }
-        public List<int> DeathSummons { get; }
-
-        public short Level { get; }
+        public List<MobSkillReference> Skills { get; set; } = new List<MobSkillReference>();
+        public List<MobStatus> Buffs { get; set; }
+        public List<int> DeathSummons { get; set; }
+        public short Level { get; set; }
         public uint Health { get; set; }
         public uint Mana { get; set; }
-        public uint MaxHealth { get; }
-        public uint MaxMana { get; }
-        public uint HealthRecovery { get; }
-        public uint ManaRecovery { get; }
-        public int ExplodeHealth { get; private set; }
-        public uint Experience { get; }
-        public int Link { get; }
-        public short SummonType { get; }
-        public int FixedDamage { get; }
-        public int DeathBuff { get; private set; }
-        public int DeathAfter { get; }
-        public double Traction { get; }
-        public bool DamagedByMobOnly { get; }
-        public int DropItemPeriod { get; }
-        public byte HpBarForeColor { get; }
-        public byte HpBarBackColor { get; }
-        public byte CarnivalPoints { get; private set; }
-        public int WeaponAttack { get; }
-        public int WeaponDefense { get; }
-        public int MagicAttack { get; }
-        public int MagicDefense { get; }
-        public short Accuracy { get; }
-        public short Avoidability { get; }
-        public short Speed { get; }
-        public short ChaseSpeed { get; }
-
+        public uint MaxHealth { get; set; }
+        public uint MaxMana { get; set; }
+        public uint HealthRecovery { get; set; }
+        public uint ManaRecovery { get; set; }
+        public int ExplodeHealth { get; set; }
+        public uint Experience { get; set; }
+        public int Link { get; set; }
+        public short SummonType { get; set; }
+        public int FixedDamage { get; set; }
+        public int DeathBuff { get; set; }
+        public int DeathAfter { get; set; }
+        public double Traction { get; set; }
+        public bool DamagedByMobOnly { get; set; }
+        public int DropItemPeriod { get; set; }
+        public byte HpBarForeColor { get; set; }
+        public byte HpBarBackColor { get; set; }
+        public byte CarnivalPoints { get; set; }
+        public int WeaponAttack { get; set; }
+        public int WeaponDefense { get; set; }
+        public int MagicAttack { get; set; }
+        public int MagicDefense { get; set; }
+        public short Accuracy { get; set; }
+        public short Avoidability { get; set; }
+        public short Speed { get; set; }
+        public short ChaseSpeed { get; set; }
         public bool IsFacingLeft => Stance % 2 == 0;
-
 
         public MobReference()
         {
@@ -108,10 +103,8 @@ namespace RazzleServer.Game.Maple.Data.References
             //buff
 
             Loots = new List<Loot>();
-            Skills = new MobSkills(null);
             DeathSummons = new List<int>();
-
-            img["skill"]?.WzProperties.ForEach(x => Skills.Add(new MobSkill(x)));
+            img["skill"]?.WzProperties.ForEach(x => Skills.Add(new MobSkillReference(x)));
             img["revive"]?.WzProperties?.ForEach(x => DeathSummons.Add(x.GetInt()));
         }
     }

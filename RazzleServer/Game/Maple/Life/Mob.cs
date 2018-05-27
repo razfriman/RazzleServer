@@ -99,7 +99,12 @@ namespace RazzleServer.Game.Maple.Life
             ChaseSpeed = CachedReference.ChaseSpeed;
 
             Loots = CachedReference.Loots;
-            Skills = CachedReference.Skills;
+            Skills = new MobSkills(this);
+            CachedReference.Skills.ForEach(x =>
+            {
+                Skills.Add(new MobSkill(x));
+            });
+
             DeathSummons = CachedReference.DeathSummons;
 
             Attackers = new Dictionary<Character, uint>();

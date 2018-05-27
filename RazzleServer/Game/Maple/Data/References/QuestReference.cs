@@ -6,35 +6,34 @@ namespace RazzleServer.Game.Maple.Data.References
 {
     public class QuestReference
     {
-        public ushort MapleId { get; private set; }
-        public ushort NextQuestId { get; private set; }
-        public sbyte Area { get; private set; }
-        public byte MinimumLevel { get; private set; }
-        public byte MaximumLevel { get; private set; }
-        public short PetCloseness { get; private set; }
-        public sbyte TamingMobLevel { get; private set; }
-        public int RepeatWait { get; private set; }
-        public short Fame { get; private set; }
-        public int TimeLimit { get; private set; }
-        public bool AutoStart { get; private set; }
-        public bool SelectedMob { get; private set; }
+        public ushort MapleId { get; set; }
+        public ushort NextQuestId { get; set; }
+        public sbyte Area { get; set; }
+        public byte MinimumLevel { get; set; }
+        public byte MaximumLevel { get; set; }
+        public short PetCloseness { get; set; }
+        public sbyte TamingMobLevel { get; set; }
+        public int RepeatWait { get; set; }
+        public short Fame { get; set; }
+        public int TimeLimit { get; set; }
+        public bool AutoStart { get; set; }
+        public bool SelectedMob { get; set; }
 
-        public List<ushort> PreRequiredQuests { get; }
-        public List<ushort> PostRequiredQuests { get; }
-        public Dictionary<int, short> PreRequiredItems { get; }
-        public Dictionary<int, short> PostRequiredItems { get; }
-        public Dictionary<int, short> PostRequiredKills { get; }
-        public List<Job> ValidJobs { get; }
+        public List<ushort> PreRequiredQuests { get; set; }
+        public List<ushort> PostRequiredQuests { get; set; }
+        public Dictionary<int, short> PreRequiredItems { get; set; }
+        public Dictionary<int, short> PostRequiredItems { get; set; }
+        public Dictionary<int, short> PostRequiredKills { get; set; }
+        public List<Job> ValidJobs { get; set; }
 
-        // Rewards (Start, End)
         public int[] ExperienceReward { get; set; }
         public int[] MesoReward { get; set; }
         public int[] PetClosenessReward { get; set; }
         public bool[] PetSpeedReward { get; set; }
         public int[] FameReward { get; set; }
         public int[] PetSkillReward { get; set; }
-        public Dictionary<int, short> PreItemRewards { get; }
-        public Dictionary<int, short> PostItemRewards { get; }
+        public Dictionary<int, short> PreItemRewards { get; set; }
+        public Dictionary<int, short> PostItemRewards { get; set; }
         public Dictionary<Skill, Job> PreSkillRewards { get; set; }
         public Dictionary<Skill, Job> PostSkillRewards { get; set; }
 
