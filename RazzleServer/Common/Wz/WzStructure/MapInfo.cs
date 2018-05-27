@@ -262,43 +262,47 @@ namespace RazzleServer.Common.Wz.WzStructure
 
         public void Save(WzImage dest, Rectangle? VR)
         {
-            var info = new WzSubProperty();
-            info["bgm"] = InfoTool.SetString(bgm);
-            info["cloud"] = InfoTool.SetBool(cloud);
-            info["swim"] = InfoTool.SetBool(swim);
-            info["forcedReturn"] = InfoTool.SetInt(forcedReturn);
-            info["hideMinimap"] = InfoTool.SetBool(hideMinimap);
-            info["mapDesc"] = InfoTool.SetOptionalString(mapDesc);
-            info["mapName"] = InfoTool.SetOptionalString(mapDesc);
-            info["mapMark"] = InfoTool.SetString(mapMark);
-            info["mobRate"] = InfoTool.SetFloat(mobRate);
-            info["moveLimit"] = InfoTool.SetOptionalInt(moveLimit);
-            info["returnMap"] = InfoTool.SetInt(returnMap);
-            info["town"] = InfoTool.SetBool(town);
-            info["version"] = InfoTool.SetInt(version);
-            info["fieldLimit"] = InfoTool.SetInt((int)fieldLimit);
-            info["timeLimit"] = InfoTool.SetOptionalInt(timeLimit);
-            info["lvLimit"] = InfoTool.SetOptionalInt(lvLimit);
-            info["onFirstUserEnter"] = InfoTool.SetOptionalString(onFirstUserEnter);
-            info["onUserEnter"] = InfoTool.SetOptionalString(onUserEnter);
-            info["fly"] = InfoTool.SetOptionalBool(fly);
-            info["noMapCmd"] = InfoTool.SetOptionalBool(noMapCmd);
-            info["partyOnly"] = InfoTool.SetOptionalBool(partyOnly);
-            info["fieldType"] = InfoTool.SetOptionalInt((int?)fieldType);
-            info["miniMapOnOff"] = InfoTool.SetOptionalBool(miniMapOnOff);
-            info["reactorShuffle"] = InfoTool.SetOptionalBool(reactorShuffle);
-            info["reactorShuffleName"] = InfoTool.SetOptionalString(reactorShuffleName);
-            info["personalShop"] = InfoTool.SetOptionalBool(personalShop);
-            info["entrustedShop"] = InfoTool.SetOptionalBool(entrustedShop);
-            info["effect"] = InfoTool.SetOptionalString(effect);
-            info["lvForceMove"] = InfoTool.SetOptionalInt(lvForceMove);
+            var info = new WzSubProperty
+            {
+                ["bgm"] = InfoTool.SetString(bgm),
+                ["cloud"] = InfoTool.SetBool(cloud),
+                ["swim"] = InfoTool.SetBool(swim),
+                ["forcedReturn"] = InfoTool.SetInt(forcedReturn),
+                ["hideMinimap"] = InfoTool.SetBool(hideMinimap),
+                ["mapDesc"] = InfoTool.SetOptionalString(mapDesc),
+                ["mapName"] = InfoTool.SetOptionalString(mapDesc),
+                ["mapMark"] = InfoTool.SetString(mapMark),
+                ["mobRate"] = InfoTool.SetFloat(mobRate),
+                ["moveLimit"] = InfoTool.SetOptionalInt(moveLimit),
+                ["returnMap"] = InfoTool.SetInt(returnMap),
+                ["town"] = InfoTool.SetBool(town),
+                ["version"] = InfoTool.SetInt(version),
+                ["fieldLimit"] = InfoTool.SetInt((int) fieldLimit),
+                ["timeLimit"] = InfoTool.SetOptionalInt(timeLimit),
+                ["lvLimit"] = InfoTool.SetOptionalInt(lvLimit),
+                ["onFirstUserEnter"] = InfoTool.SetOptionalString(onFirstUserEnter),
+                ["onUserEnter"] = InfoTool.SetOptionalString(onUserEnter),
+                ["fly"] = InfoTool.SetOptionalBool(fly),
+                ["noMapCmd"] = InfoTool.SetOptionalBool(noMapCmd),
+                ["partyOnly"] = InfoTool.SetOptionalBool(partyOnly),
+                ["fieldType"] = InfoTool.SetOptionalInt((int?) fieldType),
+                ["miniMapOnOff"] = InfoTool.SetOptionalBool(miniMapOnOff),
+                ["reactorShuffle"] = InfoTool.SetOptionalBool(reactorShuffle),
+                ["reactorShuffleName"] = InfoTool.SetOptionalString(reactorShuffleName),
+                ["personalShop"] = InfoTool.SetOptionalBool(personalShop),
+                ["entrustedShop"] = InfoTool.SetOptionalBool(entrustedShop),
+                ["effect"] = InfoTool.SetOptionalString(effect),
+                ["lvForceMove"] = InfoTool.SetOptionalInt(lvForceMove)
+            };
             if (timeMob != null)
             {
-                var prop = new WzSubProperty();
-                prop["startHour"] = InfoTool.SetOptionalInt(timeMob.Value.startHour);
-                prop["endHour"] = InfoTool.SetOptionalInt(timeMob.Value.endHour);
-                prop["id"] = InfoTool.SetOptionalInt(timeMob.Value.id);
-                prop["message"] = InfoTool.SetOptionalString(timeMob.Value.message);
+                var prop = new WzSubProperty
+                {
+                    ["startHour"] = InfoTool.SetOptionalInt(timeMob.Value.startHour),
+                    ["endHour"] = InfoTool.SetOptionalInt(timeMob.Value.endHour),
+                    ["id"] = InfoTool.SetOptionalInt(timeMob.Value.id),
+                    ["message"] = InfoTool.SetOptionalString(timeMob.Value.message)
+                };
                 info["timeMob"] = prop;
             }
             info["help"] = InfoTool.SetOptionalString(help);

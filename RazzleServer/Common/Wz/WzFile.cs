@@ -199,11 +199,13 @@ namespace RazzleServer.Common.Wz
 
             var reader = new WzBinaryReader(File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read), WzIv);
 
-            Header = new WzHeader();
-            Header.Ident = reader.ReadString(4);
-            Header.FSize = reader.ReadUInt64();
-            Header.FStart = reader.ReadUInt32();
-            Header.Copyright = reader.ReadNullTerminatedString();
+            Header = new WzHeader
+            {
+                Ident = reader.ReadString(4),
+                FSize = reader.ReadUInt64(),
+                FStart = reader.ReadUInt32(),
+                Copyright = reader.ReadNullTerminatedString()
+            };
             reader.ReadBytes((int)(Header.FStart - reader.BaseStream.Position));
             reader.Header = Header;
             version = reader.ReadInt16();
@@ -322,8 +324,7 @@ namespace RazzleServer.Common.Wz
             wzDir.GenerateDataFile(tempFile);
             WzTool.StringCache.Clear();
             var totalLen = wzDir.GetImgOffsets(wzDir.GetOffsets(Header.FStart + 2));
-            var wzWriter = new WzBinaryWriter(File.Create(path), WzIv);
-            wzWriter.Hash = versionHash;
+            var wzWriter = new WzBinaryWriter(File.Create(path), WzIv) {Hash = versionHash};
             Header.FSize = totalLen - Header.FStart;
             for (var i = 0; i < 4; i++)
             {

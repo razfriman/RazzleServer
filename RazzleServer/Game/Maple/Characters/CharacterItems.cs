@@ -22,13 +22,15 @@ namespace RazzleServer.Game.Maple.Characters
         {
             Parent = parent;
 
-            MaxSlots = new Dictionary<ItemType, byte>(Enum.GetValues(typeof(ItemType)).Length);
+            MaxSlots = new Dictionary<ItemType, byte>(Enum.GetValues(typeof(ItemType)).Length)
+            {
+                {ItemType.Equipment, equipmentSlots},
+                {ItemType.Usable, usableSlots},
+                {ItemType.Setup, setupSlots},
+                {ItemType.Etcetera, etceteraSlots},
+                {ItemType.Cash, cashSlots}
+            };
 
-            MaxSlots.Add(ItemType.Equipment, equipmentSlots);
-            MaxSlots.Add(ItemType.Usable, usableSlots);
-            MaxSlots.Add(ItemType.Setup, setupSlots);
-            MaxSlots.Add(ItemType.Etcetera, etceteraSlots);
-            MaxSlots.Add(ItemType.Cash, cashSlots);
 
             Items = new List<Item>();
         }

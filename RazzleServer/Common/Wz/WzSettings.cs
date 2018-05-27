@@ -247,8 +247,7 @@ namespace RazzleServer.Common.Wz
             }
             else
             {
-                wzFile = new WzFile(1337, WzMapleVersion.Classic);
-                wzFile.Header.Copyright = "MapleLib";
+                wzFile = new WzFile(1337, WzMapleVersion.Classic) {Header = {Copyright = "MapleLib"}};
                 wzFile.Header.RecalculateFileStart();
                 var US = new WzImage("UserSettings.img") { Changed = true, Parsed = true };
                 var AS = new WzImage("ApplicationSettings.img") { Changed = true, Parsed = true };

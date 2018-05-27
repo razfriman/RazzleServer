@@ -15,7 +15,7 @@ namespace RazzleServer.Common.Wz.WzProperties
     /// </summary>
     public class WzUOLProperty : WzExtended
     {
-        public static ILogger Log = LogManager.Log;
+        private static ILogger Log = LogManager.Log;
 
         #region Fields
         internal string name, val;
@@ -32,8 +32,7 @@ namespace RazzleServer.Common.Wz.WzProperties
 
         public override WzImageProperty DeepClone()
         {
-            var clone = new WzUOLProperty(name, val);
-            clone.linkVal = null;
+            var clone = new WzUOLProperty(name, val) {linkVal = null};
             return clone;
         }
 

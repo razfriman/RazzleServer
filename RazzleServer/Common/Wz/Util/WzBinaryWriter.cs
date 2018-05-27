@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.IO;
+using System.Linq;
 using RazzleServer.Common.Crypto;
 
 namespace RazzleServer.Common.Wz.Util
@@ -71,11 +72,7 @@ namespace RazzleServer.Common.Wz.Util
             }
             else
             {
-                var unicode = false;
-                for (var i = 0; i < value.Length; i++)
-                {
-                    unicode |= value[i] > sbyte.MaxValue;
-                }
+                var unicode = value.Aggregate(false, (current, t) => current | t > sbyte.MaxValue);
 
                 if (unicode)
                 {

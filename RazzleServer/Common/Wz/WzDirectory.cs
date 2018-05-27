@@ -213,12 +213,14 @@ namespace RazzleServer.Common.Wz
                 dirOffset = reader.ReadOffset();
                 if (type == 3)
                 {
-                    var subDir = new WzDirectory(reader, fname, hash, WzIv, wzFile);
-                    subDir.BlockSize = fsize;
-                    subDir.Checksum = dirChecksum;
-                    subDir.Offset = dirOffset;
-                    subDir.Parent = this;
-                    subDirs.Add(subDir);
+	                var subDir = new WzDirectory(reader, fname, hash, WzIv, wzFile)
+	                {
+		                BlockSize = fsize,
+		                Checksum = dirChecksum,
+		                Offset = dirOffset,
+		                Parent = this
+	                };
+	                subDirs.Add(subDir);
                 }
                 else
                 {

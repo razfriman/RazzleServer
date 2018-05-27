@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple.Characters;
@@ -15,22 +16,7 @@ namespace RazzleServer.Game.Maple.Interaction
         public bool Opened { get; private set; }
         public bool IsPrivate { get; private set; } = false;
 
-        public bool IsFull
-        {
-            get
-            {
-                for (var i = 0; i < Visitors.Length; i++)
-                {
-                    if (Visitors[i] == null)
-                    {
-                        return false;
-                    }
-                }
-
-                return true;
-            }
-        }
-
+        public bool IsFull => Visitors.All(t => t != null);
 
         public PlayerShop(Character owner, string description)
         {
@@ -256,9 +242,9 @@ namespace RazzleServer.Game.Maple.Interaction
             {
                 Map.PlayerShops.Remove(this);
 
-                for (var i = 0; i < Visitors.Length; i++)
+                foreach (var visitor in Visitors)
                 {
-                    if (Visitors[i] != null)
+                    if (visitor != null)
                     {
                         using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                         {
@@ -267,10 +253,10 @@ namespace RazzleServer.Game.Maple.Interaction
                             oPacket.WriteByte(1);
                             oPacket.WriteByte(10);
 
-                            Visitors[i].Client.Send(oPacket);
+                            visitor.Client.Send(oPacket);
                         }
 
-                        Visitors[i].PlayerShop = null;
+                        visitor.PlayerShop = null;
                     }
                 }
             }
@@ -306,12 +292,9 @@ namespace RazzleServer.Game.Maple.Interaction
                 Owner.Client.Send(oPacket);
             }
 
-            for (var i = 0; i < Visitors.Length; i++)
+            foreach (var visitor in Visitors)
             {
-                if (Visitors[i] != null)
-                {
-                    Visitors[i].Client.Send(oPacket);
-                }
+                visitor?.Client.Send(oPacket);
             }
         }
 

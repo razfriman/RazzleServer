@@ -144,8 +144,7 @@ namespace RazzleServer.Common.Wz
                 ParseImage();
             }
 
-            var clone = new WzImage(name);
-            clone.changed = true;
+            var clone = new WzImage(name) {changed = true};
             foreach (var prop in properties)
             {
                 clone.AddProperty(prop.DeepClone());
