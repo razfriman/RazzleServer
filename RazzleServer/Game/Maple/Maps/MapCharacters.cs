@@ -1,4 +1,5 @@
-﻿using RazzleServer.Game.Maple.Characters;
+﻿using System.Linq;
+using RazzleServer.Game.Maple.Characters;
 
 namespace RazzleServer.Game.Maple.Maps
 {
@@ -8,18 +9,7 @@ namespace RazzleServer.Game.Maple.Maps
 
         public Character this[string name]
         {
-            get
-            {
-                foreach (var character in Values)
-                {
-                    if (character.Name.ToLower() == name.ToLower())
-                    {
-                        return character;
-                    }
-                }
-
-                return null;
-            }
+            get => Values.FirstOrDefault(x => x.Name.Equals(name, System.StringComparison.InvariantCultureIgnoreCase));
         }
 
         public override void OnItemAdded(Character item)

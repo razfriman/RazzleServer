@@ -131,7 +131,6 @@ namespace RazzleServer.Game.Maple
         {
             using (var oPacket = new PacketWriter())
             {
-
                 oPacket.WritePoint(Origin);
                 oPacket.WriteByte(Count);
 

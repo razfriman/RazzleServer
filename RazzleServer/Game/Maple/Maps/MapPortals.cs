@@ -8,22 +8,14 @@ namespace RazzleServer.Game.Maple.Maps
     {
         public MapPortals(Map map) : base(map) { }
 
-        public MapPortals() : base() { }
+        public MapPortals() { }
 
         [JsonIgnore]
         public Portal this[string label]
         {
             get
             {
-                foreach (var portal in Values)
-                {
-                    if (portal.Label.ToLower() == label.ToLower())
-                    {
-                        return portal;
-                    }
-                }
-
-                return null;
+                return Values.FirstOrDefault(x => x.Label.Equals(label, StringComparison.InvariantCultureIgnoreCase));
             }
         }
 

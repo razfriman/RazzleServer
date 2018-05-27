@@ -115,23 +115,11 @@ namespace RazzleServer.Game.Maple
 
                 if (IsCoolingDown)
                 {
-                    using (var oPacket = new PacketWriter(ServerOperationCode.Cooldown))
-                    {
-                        oPacket.WriteInt(MapleId);
-                        oPacket.WriteShort((short)RemainingCooldownSeconds);
-
-                        Character.Client.Send(oPacket);
-                    }
+                    Character.Client.Send(GamePackets.Cooldown(MapleId, RemainingCooldownSeconds));
 
                     Delay.Execute(() =>
                     {
-                        using (var oPacket = new PacketWriter(ServerOperationCode.Cooldown))
-                        {
-                            oPacket.WriteInt(MapleId);
-                            oPacket.WriteShort(0);
-
-                            Character.Client.Send(oPacket);
-                        }
+                        Character.Client.Send(GamePackets.Cooldown(MapleId, 0));
                     }, RemainingCooldownSeconds * 1000);
                 }
             }
@@ -257,21 +245,9 @@ namespace RazzleServer.Game.Maple
             Assigned = false;
         }
 
-        public void Update()
-        {
-            using (var oPacket = new PacketWriter(ServerOperationCode.ChangeSkillRecordResult))
-            {
-                oPacket.WriteByte(1);
-                oPacket.WriteShort(1);
-                oPacket.WriteInt(MapleId);
-                oPacket.WriteInt(CurrentLevel);
-                oPacket.WriteInt(MaxLevel);
-                oPacket.WriteDateTime(Expiration);
-                oPacket.WriteByte(4);
-
-                Character.Client.Send(oPacket);
-            }
-        }
+        public void Update() => Character.Client.Send(
+            GamePackets.ChangeSkillRecordResult(MapleId, CurrentLevel, MaxLevel, Expiration)
+            );
 
         public void Recalculate()
         {

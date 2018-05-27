@@ -6,11 +6,6 @@ namespace RazzleServer.Game.Maple.Maps
     {
         public List<Foothold> Footholds { get; private set; } = new List<Foothold>();
 
-        public MapFootholds()
-        {
-
-        }
-
         public Point FindFloor(Point position)
         {
             var x = position.X;
