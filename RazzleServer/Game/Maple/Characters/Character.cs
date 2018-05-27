@@ -639,7 +639,7 @@ namespace RazzleServer.Game.Maple.Characters
             oPacket.WriteBool(true);
             oPacket.WriteBool(false);
 
-            var flag = statistics.Aggregate(0, (current, statistic) => current | (int) statistic);
+            var flag = statistics.Aggregate(0, (current, statistic) => current | (int)statistic);
 
             oPacket.WriteInt(flag);
 
@@ -1349,7 +1349,6 @@ namespace RazzleServer.Game.Maple.Characters
         {
             var oPacket = new PacketWriter(ServerOperationCode.UserEnterField);
 
-
             oPacket.WriteInt(Id);
             oPacket.WriteByte(Level);
             oPacket.WriteString(Name);
@@ -1438,7 +1437,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             if (IsInitialized)
             {
-                SpawnPoint = ClosestSpawnPoint.Id;
+                SpawnPoint = ClosestSpawnPoint?.Id ?? 0;
             }
 
             using (var dbContext = new MapleDbContext())
@@ -1587,7 +1586,7 @@ namespace RazzleServer.Game.Maple.Characters
                 _job = (Job)character.Job;
                 _level = character.Level;
                 _luck = character.Luck;
-                Map = Client.Server[character.MapId];
+                Map = Client?.Server[character.MapId] ?? new Map(character.MapId);
                 _maxHealth = character.MaxHealth;
                 _maxMana = character.MaxMana;
                 _meso = character.Meso;

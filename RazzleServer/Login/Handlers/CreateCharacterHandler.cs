@@ -1,9 +1,11 @@
 ﻿using System.Linq;
+using RazzleServer.Center;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
+using RazzleServer.Game.Maple.Maps;
 
 namespace RazzleServer.Login.Handlers
 {
@@ -46,7 +48,8 @@ namespace RazzleServer.Login.Handlers
                 MaxHealth = 50,
                 MaxMana = 5,
                 Health = 50,
-                Mana = 5
+                Mana = 5,
+                Map = new Map(ServerConfig.Instance.DefaultMapId)
             };
 
             character.Items.Add(new Item(topId, equipped: true));

@@ -51,6 +51,11 @@ namespace RazzleServer.Game.Maple.Maps
             SpawnPoints.Spawn();
         }
 
+        public Map(int id)
+        {
+            MapleId = id;
+        }
+
         public void Send(PacketWriter pw, Character except = null)
         {
             Characters.Values

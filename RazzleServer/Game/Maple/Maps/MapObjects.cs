@@ -48,6 +48,7 @@ namespace RazzleServer.Game.Maple.Maps
         public void Add(T item)
         {
             var key = GetId(item);
+            item.Map = Map;
 
             if (!Objects.ContainsKey(key))
             {
