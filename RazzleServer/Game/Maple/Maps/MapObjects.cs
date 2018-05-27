@@ -12,12 +12,12 @@ namespace RazzleServer.Game.Maple.Maps
         [JsonProperty]
         private Dictionary<int, T> Objects { get; set; } = new Dictionary<int, T>();
 
-        public MapObjects()
+        protected MapObjects()
         {
 
         }
 
-        public MapObjects(Map map)
+        protected MapObjects(Map map)
         {
             Map = map;
         }
@@ -45,7 +45,7 @@ namespace RazzleServer.Game.Maple.Maps
 
         public virtual int GetId(T item) => item.ObjectId;
 
-        public bool Add(T item)
+        public void Add(T item)
         {
             var key = GetId(item);
 
@@ -53,10 +53,7 @@ namespace RazzleServer.Game.Maple.Maps
             {
                 Objects[key] = item;
                 OnItemAdded(item);
-                return true;
             }
-
-            return false;
         }
 
         public bool Remove(T item)

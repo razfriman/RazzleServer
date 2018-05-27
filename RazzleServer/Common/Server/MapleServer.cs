@@ -95,7 +95,7 @@ namespace RazzleServer.Common.Server
             catch (Exception e)
             {
                 Log.LogError(e, "Error sending handshake. Disconnecting.");
-                client.Terminate(e.ToString());
+                client?.Terminate(e.ToString());
                 RemoveClient(client);
                 return null;
             }

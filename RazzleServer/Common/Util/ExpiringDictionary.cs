@@ -9,7 +9,7 @@ namespace RazzleServer.Common.Util
     {
         private class ExpiringValueHolder<T>
         {
-            public T Value { get; set; }
+            public T Value { get; }
             public DateTime Expiry { get; private set; }
             public ExpiringValueHolder(T value, TimeSpan expiresAfter)
             {
@@ -17,13 +17,13 @@ namespace RazzleServer.Common.Util
                 Expiry = DateTime.UtcNow.Add(expiresAfter);
             }
 
-            public override string ToString() { return Value.ToString(); }
+            public override string ToString() => Value.ToString();
 
-            public override int GetHashCode() { return Value.GetHashCode(); }
+            public override int GetHashCode() => Value.GetHashCode();
         }
 
-        private Dictionary<TKey, ExpiringValueHolder<TValue>> _innerDictionary;
-        private TimeSpan _expiryTimeSpan;
+        private readonly Dictionary<TKey, ExpiringValueHolder<TValue>> _innerDictionary;
+        private readonly TimeSpan _expiryTimeSpan;
 
         private void DestoryExpiredItems(TKey key)
         {
@@ -78,7 +78,7 @@ namespace RazzleServer.Common.Util
                 value = _innerDictionary[key].Value;
                 returnval = true;
             }
-            else { value = default(TValue); }
+            else { value = default; }
 
             return returnval;
         }

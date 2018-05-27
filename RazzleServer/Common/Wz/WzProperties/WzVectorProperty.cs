@@ -68,7 +68,7 @@ namespace RazzleServer.Common.Wz.WzProperties
 		}
 		public override void ExportXml(StreamWriter writer, int level)
 		{
-			writer.WriteLine(XmlUtil.Indentation(level) + XmlUtil.OpenNamedTag("WzVector", Name, false, false) +
+			writer.WriteLine(XmlUtil.Indentation(level) + XmlUtil.OpenNamedTag("WzVector", Name, false) +
 				XmlUtil.Attrib("X", X.Value.ToString()) + XmlUtil.Attrib("Y", Y.Value.ToString(), true, true));
 		}
 		/// <summary>

@@ -210,7 +210,7 @@ namespace RazzleServer.Tests
         [TestMethod]
         public void Constructor_FromUShort_Succeeds()
         {
-            using (var pw = new PacketWriter((ushort)1))
+            using (var pw = new PacketWriter(1))
             {
                 Assert.AreEqual("01 00", pw.ToPacketString());
             }

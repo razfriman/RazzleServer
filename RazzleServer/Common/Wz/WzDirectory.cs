@@ -315,18 +315,16 @@ namespace RazzleServer.Common.Wz
 				offsetSize += 4;
 				if (img.Changed)
 				{
-					imgWriter.Close();
+					imgWriter?.Close();
 				}
 			}
 			fileWrite.Close();
 
-            WzDirectory dir;
-			for (var i = 0; i < subDirs.Count; i++)
+			foreach (var dir in subDirs)
 			{
-                dir = subDirs[i];
 				var nameLen = WzTool.GetWzObjectValueLength(dir.name, 3);
 				size += nameLen;
-				size += subDirs[i].GenerateDataFile(fileName);
+				size += dir.GenerateDataFile(fileName);
 				size += WzTool.GetCompressedIntLength(dir.size);
 				size += WzTool.GetCompressedIntLength(dir.checksum);
 				size += 4;

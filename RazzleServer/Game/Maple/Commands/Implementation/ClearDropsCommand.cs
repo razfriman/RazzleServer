@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using RazzleServer.Game.Maple.Characters;
-using RazzleServer.Game.Maple.Maps;
 
 namespace RazzleServer.Game.Maple.Commands.Implementation
 {

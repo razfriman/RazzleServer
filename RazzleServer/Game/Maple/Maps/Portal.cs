@@ -31,7 +31,7 @@ namespace RazzleServer.Game.Maple.Maps
         [JsonIgnore]
         public Portal Link => DataProvider.Maps.Data[DestinationMapId].Portals.FirstOrDefault(x => x.Label == DestinationLabel);
 
-        public Portal() : base() { }
+        public Portal() { }
 
         public Portal(WzImageProperty datum)
         {

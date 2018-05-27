@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using RazzleServer.Center;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple;
@@ -70,25 +69,25 @@ namespace RazzleServer.Login.Handlers
 
             if (gender == Gender.Male)
             {
-                error |= !DataProvider.CreationData.MaleSkins.Any(x => x == skin)
-                         || !DataProvider.CreationData.MaleFaces.Any(x => x == face)
-                         || !DataProvider.CreationData.MaleHairs.Any(x => x == hair)
-                         || !DataProvider.CreationData.MaleHairColors.Any(x => x == hairColor)
-                         || !DataProvider.CreationData.MaleTops.Any(x => x == topId)
-                         || !DataProvider.CreationData.MaleBottoms.Any(x => x == bottomId)
-                         || !DataProvider.CreationData.MaleShoes.Any(x => x == shoesId)
-                         || !DataProvider.CreationData.MaleWeapons.Any(x => x == weaponId);
+                error |= DataProvider.CreationData.MaleSkins.All(x => x != skin)
+                         || DataProvider.CreationData.MaleFaces.All(x => x != face)
+                         || DataProvider.CreationData.MaleHairs.All(x => x != hair)
+                         || DataProvider.CreationData.MaleHairColors.All(x => x != hairColor)
+                         || DataProvider.CreationData.MaleTops.All(x => x != topId)
+                         || DataProvider.CreationData.MaleBottoms.All(x => x != bottomId)
+                         || DataProvider.CreationData.MaleShoes.All(x => x != shoesId)
+                         || DataProvider.CreationData.MaleWeapons.All(x => x != weaponId);
             }
             else if (gender == Gender.Female)
             {
-                error |= !DataProvider.CreationData.FemaleSkins.Any(x => x == skin)
-                         || !DataProvider.CreationData.FemaleFaces.Any(x => x == face)
-                         || !DataProvider.CreationData.FemaleHairs.Any(x => x == hair)
-                         || !DataProvider.CreationData.FemaleHairColors.Any(x => x == hairColor)
-                         || !DataProvider.CreationData.FemaleTops.Any(x => x == topId)
-                         || !DataProvider.CreationData.FemaleBottoms.Any(x => x == bottomId)
-                         || !DataProvider.CreationData.FemaleShoes.Any(x => x == shoesId)
-                         || !DataProvider.CreationData.FemaleWeapons.Any(x => x == weaponId);
+                error |= DataProvider.CreationData.FemaleSkins.All(x => x != skin)
+                         || DataProvider.CreationData.FemaleFaces.All(x => x != face)
+                         || DataProvider.CreationData.FemaleHairs.All(x => x != hair)
+                         || DataProvider.CreationData.FemaleHairColors.All(x => x != hairColor)
+                         || DataProvider.CreationData.FemaleTops.All(x => x != topId)
+                         || DataProvider.CreationData.FemaleBottoms.All(x => x != bottomId)
+                         || DataProvider.CreationData.FemaleShoes.All(x => x != shoesId)
+                         || DataProvider.CreationData.FemaleWeapons.All(x => x != weaponId);
             }
 
             return error;

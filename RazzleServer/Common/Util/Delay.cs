@@ -12,7 +12,7 @@ namespace RazzleServer.Common.Util
 
         public static Delay Execute(Action action, int timeout)
         {
-            return new Delay(action, timeout, Timeout.Infinite);
+            return new Delay(action, timeout);
         }
 
         public Delay(Action action, int timeout, int repeat = Timeout.Infinite)

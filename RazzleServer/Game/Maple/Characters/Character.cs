@@ -1118,7 +1118,7 @@ namespace RazzleServer.Game.Maple.Characters
                                 oPacket.WriteString(Name);
                                 oPacket.WriteByte(Client.Server.ChannelId);
                                 oPacket.WriteByte(0);
-                                oPacket.WriteString(text); ;
+                                oPacket.WriteString(text);
                                 target.Client.Send(oPacket);
                             }
                         }

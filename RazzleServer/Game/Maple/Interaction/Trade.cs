@@ -82,7 +82,7 @@ namespace RazzleServer.Game.Maple.Interaction
                                 oPacket.WriteByte((byte)InteractionCode.Invite);
                                 oPacket.WriteByte(3);
                                 oPacket.WriteString(Owner.Name);
-                                oPacket.WriteBytes(new byte[4] { 0xB7, 0x50, 0x00, 0x00 });
+                                oPacket.WriteBytes(new byte[] { 0xB7, 0x50, 0x00, 0x00 });
 
                                 Visitor.Client.Send(oPacket);
                             }

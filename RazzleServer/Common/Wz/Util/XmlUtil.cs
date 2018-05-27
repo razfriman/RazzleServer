@@ -37,7 +37,7 @@
 
         public static string EmptyNamedValuePair(string tag, string name, string value)
         {
-            return OpenNamedTag(tag, name, false, false) + Attrib("value", value, true, true);
+            return OpenNamedTag(tag, name, false) + Attrib("value", value, true, true);
         }
 
         public static string OpenNamedTag(string tag, string name, bool finish, bool empty = false)

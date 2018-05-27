@@ -6,7 +6,7 @@ namespace RazzleServer.Game.Maple.Maps
     {
         public short Id { get; private set; }
 
-        public Seat() : base() { }
+        public Seat() { }
 
         public Seat(WzImageProperty img)
         {

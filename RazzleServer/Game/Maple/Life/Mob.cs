@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Newtonsoft.Json;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
-using RazzleServer.Common.Wz;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Data.References;
@@ -196,10 +193,7 @@ namespace RazzleServer.Game.Maple.Life
                 }
             }
 
-            if (skill != null)
-            {
-                skill.Cast(this);
-            }
+            skill?.Cast(this);
 
             using (var oPacket = new PacketWriter(ServerOperationCode.MobMoveResponse))
             {

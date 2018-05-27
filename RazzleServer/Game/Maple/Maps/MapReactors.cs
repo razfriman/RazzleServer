@@ -1,5 +1,4 @@
 ﻿using RazzleServer.Common.Util;
-using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Life;
 
 namespace RazzleServer.Game.Maple.Maps

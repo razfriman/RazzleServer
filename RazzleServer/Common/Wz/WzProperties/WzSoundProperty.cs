@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-using System.Text;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Util;
 using RazzleServer.Common.Wz.Util;

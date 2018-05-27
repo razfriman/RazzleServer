@@ -56,7 +56,7 @@ namespace RazzleServer.Center
 
         public static ServerConfig GetDefaultConfig()
         {
-            return new ServerConfig()
+            return new ServerConfig
             {
                 Worlds = new List<WorldConfig>
                 {

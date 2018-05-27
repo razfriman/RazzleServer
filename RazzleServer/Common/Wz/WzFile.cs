@@ -219,7 +219,7 @@ namespace RazzleServer.Common.Wz
                     {
                         reader.Hash = versionHash;
                         var position = reader.BaseStream.Position;
-                        WzDirectory testDirectory = null;
+                        WzDirectory testDirectory;
                         try
                         {
                             testDirectory = new WzDirectory(reader, name, versionHash, WzIv, this);
@@ -275,20 +275,17 @@ namespace RazzleServer.Common.Wz
             var VersionNumber = realver;
             var VersionHash = 0;
             var DecryptedVersionNumber = 0;
-            string VersionNumberStr;
-            int a = 0, b = 0, c = 0, d = 0, l = 0;
+            var VersionNumberStr = VersionNumber.ToString();
 
-            VersionNumberStr = VersionNumber.ToString();
-
-            l = VersionNumberStr.Length;
+            var l = VersionNumberStr.Length;
             for (var i = 0; i < l; i++)
             {
                 VersionHash = 32 * VersionHash + VersionNumberStr[i] + 1;
             }
-            a = (VersionHash >> 24) & 0xFF;
-            b = (VersionHash >> 16) & 0xFF;
-            c = (VersionHash >> 8) & 0xFF;
-            d = VersionHash & 0xFF;
+            var a = (VersionHash >> 24) & 0xFF;
+            var b = (VersionHash >> 16) & 0xFF;
+            var c = (VersionHash >> 8) & 0xFF;
+            var d = VersionHash & 0xFF;
             DecryptedVersionNumber = 0xff ^ a ^ b ^ c ^ d;
 
             return EncryptedVersionNumber == DecryptedVersionNumber 
@@ -734,13 +731,15 @@ namespace RazzleServer.Common.Wz
             {
                 return strCompare.Where((t, index) => StrMatch(strWildCard.Substring(1), strCompare.Substring(index))).Any();
             }
-            else if (strWildCard[0] == '*')
+
+            if (strWildCard[0] == '*')
             {
                 {
                     return true;
                 }
             }
-            else if (strWildCard[0] == strCompare[0])
+
+            if (strWildCard[0] == strCompare[0])
             {
                 {
                     return StrMatch(strWildCard.Substring(1), strCompare.Substring(1));

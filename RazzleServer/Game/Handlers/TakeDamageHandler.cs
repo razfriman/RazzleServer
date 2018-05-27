@@ -21,7 +21,7 @@ namespace RazzleServer.Game.Handlers
             var disease = 0;
             byte level = 0;
             short mpBurn = 0;
-            var mobObjectId = 0;
+            int mobObjectId;
             var mobId = 0;
             var noDamageSkillId = 0;
 

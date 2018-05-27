@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Linq;
-using Newtonsoft.Json;
 using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
-using RazzleServer.Common.Wz;
 using RazzleServer.Data;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
