@@ -28,7 +28,7 @@ namespace RazzleServer.Login
                     pw.WriteByte((int)acc.Gender); // set gender // pin select
                     pw.WriteBool(acc.IsMaster);
                     pw.WriteByte(0); // 0x80 == usergm == gmlevel 5
-                    pw.WriteByte(0); // Country code
+                    // pw.WriteByte(0); // Country code
                     pw.WriteString(acc.Username);
                     pw.WriteByte(0);
                     pw.WriteByte(0); // quiet ban reason

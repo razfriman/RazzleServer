@@ -18,7 +18,7 @@ namespace RazzleServer.Game.Maple.Characters
 {
     public sealed class Character : MapObject, IMoveable, ISpawnable, IMapleSavable
     {
-        public GameClient Client { get; private set; }
+        public GameClient Client { get; }
         public int Id { get; set; }
         public int AccountId { get; set; }
         public byte WorldId { get; set; }
@@ -35,16 +35,16 @@ namespace RazzleServer.Game.Maple.Characters
         public int RankMove { get; set; }
         public int JobRank { get; set; }
         public int JobRankMove { get; set; }
-        public CharacterItems Items { get; private set; }
-        public CharacterSkills Skills { get; private set; }
-        public CharacterQuests Quests { get; private set; }
-        public CharacterBuffs Buffs { get; private set; }
-        public CharacterKeymap Keymap { get; private set; }
-        public CharacterTrocks Trocks { get; private set; }
-        public CharacterMemos Memos { get; private set; }
-        public CharacterStorage Storage { get; private set; }
-        public ControlledMobs ControlledMobs { get; private set; }
-        public ControlledNpcs ControlledNpcs { get; private set; }
+        public CharacterItems Items { get; }
+        public CharacterSkills Skills { get; }
+        public CharacterQuests Quests { get; }
+        public CharacterBuffs Buffs { get; }
+        public CharacterKeymap Keymap { get; }
+        public CharacterTrocks Trocks { get; }
+        public CharacterMemos Memos { get; }
+        public CharacterStorage Storage { get; }
+        public ControlledMobs ControlledMobs { get; }
+        public ControlledNpcs ControlledNpcs { get; }
         public Trade Trade { get; set; }
         public PlayerShop PlayerShop { get; set; }
         public CharacterGuild Guild { get; set; }

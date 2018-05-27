@@ -11,7 +11,7 @@ namespace RazzleServer.Game.Maple.Characters
     {
         private const int KeyCount = 90;
 
-        public Character Parent { get; private set; }
+        public Character Parent { get; }
 
         public CharacterKeymap(Character parent)
         {

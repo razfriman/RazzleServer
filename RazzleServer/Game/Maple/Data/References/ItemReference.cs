@@ -8,19 +8,19 @@ namespace RazzleServer.Game.Maple.Data.References
 {
     public class ItemReference
     {
-        public int MapleId { get; private set; }
+        public int MapleId { get; }
         public short Slot { get; set; }
         public string Creator { get; set; }
         public DateTime Expiration { get; set; }
         public int? PetId { get; set; }
 
-        public bool IsCash { get; private set; }
-        public bool OnlyOne { get; private set; }
+        public bool IsCash { get; }
+        public bool OnlyOne { get; }
         public bool PreventsSlipping { get; private set; }
         public bool PreventsColdness { get; private set; }
-        public bool IsTradeBlocked { get; private set; }
+        public bool IsTradeBlocked { get; }
         public bool IsStored { get; set; }
-        public int SalePrice { get; private set; }
+        public int SalePrice { get; }
         public int Meso { get; private set; }
 
         public byte UpgradesAvailable { get; private set; }
@@ -29,8 +29,8 @@ namespace RazzleServer.Game.Maple.Data.References
         public short Dexterity { get; private set; }
         public short Intelligence { get; private set; }
         public short Luck { get; private set; }
-        public short Health { get; private set; }
-        public short Mana { get; private set; }
+        public short Health { get; }
+        public short Mana { get; }
         public short WeaponAttack { get; private set; }
         public short MagicAttack { get; private set; }
         public short WeaponDefense { get; private set; }
@@ -41,17 +41,17 @@ namespace RazzleServer.Game.Maple.Data.References
         public short Speed { get; private set; }
         public short Jump { get; private set; }
 
-        public byte AttackSpeed { get; private set; }
+        public byte AttackSpeed { get; }
         public short RecoveryRate { get; private set; }
         public short KnockBackChance { get; private set; }
 
-        public short RequiredLevel { get; private set; }
-        public short RequiredStrength { get; private set; }
-        public short RequiredDexterity { get; private set; }
-        public short RequiredIntelligence { get; private set; }
-        public short RequiredLuck { get; private set; }
-        public short RequiredFame { get; private set; }
-        public Job RequiredJob { get; private set; }
+        public short RequiredLevel { get; }
+        public short RequiredStrength { get; }
+        public short RequiredDexterity { get; }
+        public short RequiredIntelligence { get; }
+        public short RequiredLuck { get; }
+        public short RequiredFame { get; }
+        public Job RequiredJob { get; }
 
         // Consume data properties are prefixed with 'C'.
         public int CItemId { get; private set; }
@@ -75,9 +75,9 @@ namespace RazzleServer.Game.Maple.Data.References
         public short CJump { get; private set; }
         public short CMorph { get; private set; }
 
-        public List<Tuple<int, short>> Summons { get; private set; }
+        public List<Tuple<int, short>> Summons { get; }
 
-        public short MaxPerStack { get; private set; }
+        public short MaxPerStack { get; }
 
 
         public ItemReference()

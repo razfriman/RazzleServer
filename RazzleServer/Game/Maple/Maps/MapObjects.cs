@@ -7,7 +7,7 @@ namespace RazzleServer.Game.Maple.Maps
     public abstract class MapObjects<T> where T : MapObject
     {
         [JsonIgnore]
-        public Map Map { get; private set; }
+        public Map Map { get; }
 
         [JsonProperty]
         private Dictionary<int, T> Objects { get; set; } = new Dictionary<int, T>();

@@ -5,9 +5,9 @@ namespace RazzleServer.Game.Scripts
 {
     public abstract class ScriptBase
     {
-        public Character Character { get; private set; }
-        public ScriptType Type { get; private set; }
-        public string Name { get; private set; }
+        public Character Character { get; }
+        public ScriptType Type { get; }
+        public string Name { get; }
 
         protected ScriptBase(ScriptType type, string name, Character character)
         {

@@ -10,18 +10,18 @@ namespace RazzleServer.Game.Maple.Maps
     {
         private int _mObjectIds;
 
-        public int MapleId { get; private set; }
+        public int MapleId { get; }
         public GameServer Server { get; set; }
-        public MapCharacters Characters { get; private set; }
-        public MapDrops Drops { get; private set; }
-        public MapMobs Mobs { get; private set; }
-        public MapNpcs Npcs { get; private set; }
-        public MapReactors Reactors { get; private set; }
-        public MapFootholds Footholds { get; private set; }
-        public MapSeats Seats { get; private set; }
-        public MapPortals Portals { get; private set; }
-        public MapSpawnPoints SpawnPoints { get; private set; }
-        public MapPlayerShops PlayerShops { get; private set; }
+        public MapCharacters Characters { get; }
+        public MapDrops Drops { get; }
+        public MapMobs Mobs { get; }
+        public MapNpcs Npcs { get; }
+        public MapReactors Reactors { get; }
+        public MapFootholds Footholds { get; }
+        public MapSeats Seats { get; }
+        public MapPortals Portals { get; }
+        public MapSpawnPoints SpawnPoints { get; }
+        public MapPlayerShops PlayerShops { get; }
         public MapReference CachedReference => DataProvider.Maps.Data[MapleId];
 
 

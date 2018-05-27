@@ -6,12 +6,12 @@ namespace RazzleServer.Game.Maple.Life
 {
     public abstract class LifeObject : MapObject
     {
-        public int MapleId { get; private set; }
-        public short Foothold { get; private set; }
-        public short MinimumClickX { get; private set; }
-        public short MaximumClickX { get; private set; }
-        public bool FacesLeft { get; private set; }
-        public int RespawnTime { get; private set; }
+        public int MapleId { get; }
+        public short Foothold { get; }
+        public short MinimumClickX { get; }
+        public short MaximumClickX { get; }
+        public bool FacesLeft { get; }
+        public int RespawnTime { get; }
         public LifeObjectType Type { get; private set; }
 
         protected LifeObject() { }

@@ -14,12 +14,12 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
         /// Packet crypto, Incomming
         /// </summary>
-        private MapleCipher RecvCipher { get; set; }
+        private MapleCipher RecvCipher { get; }
 
         /// <summary>
         /// Packet crypto, Outgoing
         /// </summary>
-        private MapleCipher SendCipher { get; set; }
+        private MapleCipher SendCipher { get; }
 
         /// <summary>
         /// Waiting state
@@ -41,7 +41,7 @@ namespace RazzleServer.Common.Crypto
         /// </summary>
         private int WaitForData { get; set; }
 
-        private bool ToClient { get; set; }
+        private bool ToClient { get; }
 
         /// <summary>
         /// General locker for adding data
@@ -205,7 +205,7 @@ namespace RazzleServer.Common.Crypto
             }
             else
             {
-                if (!RecvCipher.CheckHeader(in data, ToClient))
+                if (!RecvCipher.CheckHeader(in data, !ToClient))
                 {
                     throw new InvalidOperationException("Packet header mismatch");
                 }

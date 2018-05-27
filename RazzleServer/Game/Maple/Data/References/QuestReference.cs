@@ -19,12 +19,12 @@ namespace RazzleServer.Game.Maple.Data.References
         public bool AutoStart { get; private set; }
         public bool SelectedMob { get; private set; }
 
-        public List<ushort> PreRequiredQuests { get; private set; }
-        public List<ushort> PostRequiredQuests { get; private set; }
-        public Dictionary<int, short> PreRequiredItems { get; private set; }
-        public Dictionary<int, short> PostRequiredItems { get; private set; }
-        public Dictionary<int, short> PostRequiredKills { get; private set; }
-        public List<Job> ValidJobs { get; private set; }
+        public List<ushort> PreRequiredQuests { get; }
+        public List<ushort> PostRequiredQuests { get; }
+        public Dictionary<int, short> PreRequiredItems { get; }
+        public Dictionary<int, short> PostRequiredItems { get; }
+        public Dictionary<int, short> PostRequiredKills { get; }
+        public List<Job> ValidJobs { get; }
 
         // Rewards (Start, End)
         public int[] ExperienceReward { get; set; }
@@ -33,8 +33,8 @@ namespace RazzleServer.Game.Maple.Data.References
         public bool[] PetSpeedReward { get; set; }
         public int[] FameReward { get; set; }
         public int[] PetSkillReward { get; set; }
-        public Dictionary<int, short> PreItemRewards { get; private set; }
-        public Dictionary<int, short> PostItemRewards { get; private set; }
+        public Dictionary<int, short> PreItemRewards { get; }
+        public Dictionary<int, short> PostItemRewards { get; }
         public Dictionary<Skill, Job> PreSkillRewards { get; set; }
         public Dictionary<Skill, Job> PostSkillRewards { get; set; }
 

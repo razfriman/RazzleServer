@@ -15,13 +15,13 @@ namespace RazzleServer.Game.Maple.Maps
     {
         private readonly ILogger _log = LogManager.Log;
 
-        public byte Id { get; private set; }
-        public string Label { get; private set; }
-        public int DestinationMapId { get; private set; }
-        public string DestinationLabel { get; private set; }
-        public string Script { get; private set; }
-        public bool IsOnlyOnce { get; private set; }
-        public int PortalType { get; private set; }
+        public byte Id { get; }
+        public string Label { get; }
+        public int DestinationMapId { get; }
+        public string DestinationLabel { get; }
+        public string Script { get; }
+        public bool IsOnlyOnce { get; }
+        public int PortalType { get; }
 
         public bool IsSpawnPoint => Label == "sp";
 

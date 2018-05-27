@@ -4,10 +4,10 @@ namespace RazzleServer.Game.Maple.Data.Cache
 {
     public sealed class CachedAvailableStyles
     {
-        public List<byte> Skins { get; private set; } = new List<byte>();
-        public List<int> MaleHairs { get; private set; } = new List<int>();
-        public List<int> FemaleHairs { get; private set; } = new List<int>();
-        public List<int> MaleFaces { get; private set; } = new List<int>();
-        public List<int> FemaleFaces { get; private set; } = new List<int>();
+        public List<byte> Skins { get; } = new List<byte>();
+        public List<int> MaleHairs { get; } = new List<int>();
+        public List<int> FemaleHairs { get; } = new List<int>();
+        public List<int> MaleFaces { get; } = new List<int>();
+        public List<int> FemaleFaces { get; } = new List<int>();
     }
 }

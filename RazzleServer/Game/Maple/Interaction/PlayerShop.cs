@@ -9,12 +9,12 @@ namespace RazzleServer.Game.Maple.Interaction
 {
     public sealed class PlayerShop : MapObject, ISpawnable
     {
-        public Character Owner { get; private set; }
-        public string Description { get; private set; }
-        public Character[] Visitors { get; private set; }
-        public List<PlayerShopItem> Items { get; private set; }
+        public Character Owner { get; }
+        public string Description { get; }
+        public Character[] Visitors { get; }
+        public List<PlayerShopItem> Items { get; }
         public bool Opened { get; private set; }
-        public bool IsPrivate { get; private set; } = false;
+        public bool IsPrivate { get; } = false;
 
         public bool IsFull => Visitors.All(t => t != null);
 

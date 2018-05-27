@@ -21,7 +21,7 @@ namespace RazzleServer.Game.Maple.Life
         public int StorageCost { get; set; }
 
         [JsonIgnore]
-        public Dictionary<Character, NpcScript> Scripts { get; private set; }
+        public Dictionary<Character, NpcScript> Scripts { get; }
 
         private readonly ILogger _log = LogManager.Log;
 

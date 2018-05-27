@@ -7,10 +7,10 @@ namespace RazzleServer.Game.Maple.Characters
 {
     public sealed class CharacterTrocks
     {
-        public Character Parent { get; private set; }
+        public Character Parent { get; }
 
-        public List<int> Regular { get; private set; }
-        public List<int> Vip { get; private set; }
+        public List<int> Regular { get; }
+        public List<int> Vip { get; }
 
         public CharacterTrocks(Character parent)
         {

@@ -4,10 +4,10 @@ namespace RazzleServer.Center.Maple
 {
     public sealed class Migration
     {
-        public string Host { get; private set; }
-        public int AccountId { get; private set; }
-        public int CharacterId { get; private set; }
-        public DateTime Expiry { get; private set; }
+        public string Host { get; }
+        public int AccountId { get; }
+        public int CharacterId { get; }
+        public DateTime Expiry { get; }
 
         public Migration(string host, int accountId, int characterId)
         {

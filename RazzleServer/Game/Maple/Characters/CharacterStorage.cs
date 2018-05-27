@@ -9,7 +9,7 @@ namespace RazzleServer.Game.Maple.Characters
 {
     public sealed class CharacterStorage
     {
-        public Character Parent { get; private set; }
+        public Character Parent { get; }
         public Npc Npc { get; private set; }
         public byte Slots { get; private set; }
         public int Meso { get; private set; }

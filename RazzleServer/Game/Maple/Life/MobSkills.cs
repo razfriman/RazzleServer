@@ -5,7 +5,7 @@ namespace RazzleServer.Game.Maple.Life
 {
     public sealed class MobSkills : Collection<MobSkill>
     {
-        public Mob Parent { get; private set; }
+        public Mob Parent { get; }
 
         public MobSkills(Mob parent)
         {

@@ -11,9 +11,9 @@ namespace RazzleServer.Game.Maple.Life
     {
         public static Dictionary<short, List<int>> Summons { get; set; }
 
-        public byte MapleId { get; private set; }
-        public byte Level { get; private set; }
-        public short EffectDelay { get; private set; }
+        public byte MapleId { get; }
+        public byte Level { get; }
+        public short EffectDelay { get; }
 
         public int Duration { get; private set; }
         public short MpCost { get; private set; }

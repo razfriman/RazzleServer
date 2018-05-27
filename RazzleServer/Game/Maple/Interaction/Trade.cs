@@ -11,8 +11,8 @@ namespace RazzleServer.Game.Maple.Interaction
         public Character Visitor { get; private set; }
         public int OwnerMeso { get; private set; }
         public int VisitorMeso { get; private set; }
-        public List<Item> OwnerItems { get; private set; }
-        public List<Item> VisitorItems { get; private set; }
+        public List<Item> OwnerItems { get; }
+        public List<Item> VisitorItems { get; }
         public bool Started { get; private set; }
         public bool OwnerLocked { get; private set; }
         public bool VisitorLocked { get; private set; }

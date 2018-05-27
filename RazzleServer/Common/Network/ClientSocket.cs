@@ -20,7 +20,7 @@ namespace RazzleServer.Common.Network
         private IPEndPoint Endpoint { get; }
         private readonly ILogger _log = LogManager.Log;
 
-        public MapleCipherProvider Crypto { get; private set; }
+        public MapleCipherProvider Crypto { get; }
         public bool Connected => !_disposed;
         public string Host { get; }
         public byte[] HostBytes { get; }

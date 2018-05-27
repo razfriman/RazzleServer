@@ -2,8 +2,8 @@
 {
     public sealed class Line
     {
-        public Point Start { get; private set; }
-        public Point End { get; private set; }
+        public Point Start { get; }
+        public Point End { get; }
 
         public Line(Point start, Point end)
         {

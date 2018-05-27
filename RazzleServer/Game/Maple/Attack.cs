@@ -6,20 +6,20 @@ namespace RazzleServer.Game.Maple
 {
     public sealed class Attack
     {
-        public AttackType Type { get; private set; }
-        public byte Portals { get; private set; }
-        public int Targets { get; private set; }
-        public int Hits { get; private set; }
-        public int SkillId { get; private set; }
+        public AttackType Type { get; }
+        public byte Portals { get; }
+        public int Targets { get; }
+        public int Hits { get; }
+        public int SkillId { get; }
 
-        public byte Display { get; private set; }
-        public byte Animation { get; private set; }
-        public byte WeaponClass { get; private set; }
-        public byte WeaponSpeed { get; private set; }
-        public int Ticks { get; private set; }
+        public byte Display { get; }
+        public byte Animation { get; }
+        public byte WeaponClass { get; }
+        public byte WeaponSpeed { get; }
+        public int Ticks { get; }
 
-        public uint TotalDamage { get; private set; }
-        public Dictionary<int, List<uint>> Damages { get; private set; }
+        public uint TotalDamage { get; }
+        public Dictionary<int, List<uint>> Damages { get; }
 
         public Attack(PacketReader iPacket, AttackType type)
         {

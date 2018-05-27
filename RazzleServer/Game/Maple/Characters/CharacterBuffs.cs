@@ -8,9 +8,9 @@ namespace RazzleServer.Game.Maple.Characters
 {
     public sealed class CharacterBuffs : IEnumerable<Buff>
     {
-        public Character Parent { get; private set; }
+        public Character Parent { get; }
 
-        private List<Buff> Buffs { get; set; }
+        private List<Buff> Buffs { get; }
 
         public Buff this[int mapleId]
         {

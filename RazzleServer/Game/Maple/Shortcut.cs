@@ -5,7 +5,7 @@ namespace RazzleServer.Game.Maple
 {
     public sealed class Shortcut
     {
-        public KeymapKey Key { get; private set; }
+        public KeymapKey Key { get; }
         public KeymapType Type { get; set; }
         public KeymapAction Action { get; set; }
 

@@ -5,7 +5,7 @@ namespace RazzleServer.Game.Maple.Data.Cache
 {
     public sealed class CachedItems
     {
-        public List<int> WizetItemIds { get; private set; } = new List<int>
+        public List<int> WizetItemIds { get; } = new List<int>
         {
             1002140,
             1322013,

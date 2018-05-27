@@ -10,7 +10,7 @@ namespace RazzleServer.Common.Util
         private class ExpiringValueHolder<T>
         {
             public T Value { get; }
-            public DateTime Expiry { get; private set; }
+            public DateTime Expiry { get; }
             public ExpiringValueHolder(T value, TimeSpan expiresAfter)
             {
                 Value = value;

@@ -7,11 +7,11 @@ namespace RazzleServer.Game.Maple.Shops
 {
     public sealed class ShopItem
     {
-        public Shop Parent { get; private set; }
+        public Shop Parent { get; }
 
-        public int MapleId { get; private set; }
-        public short Quantity { get; private set; }
-        public int PurchasePrice { get; private set; }
+        public int MapleId { get; }
+        public short Quantity { get; }
+        public int PurchasePrice { get; }
         public int Sort { get; private set; }
 
         [JsonIgnore]

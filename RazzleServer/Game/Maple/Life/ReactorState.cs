@@ -5,13 +5,13 @@ namespace RazzleServer.Game.Maple.Life
 {
     public sealed class ReactorState
     {
-        public ReactorEventType Type { get; private set; }
-        public byte State { get; private set; }
+        public ReactorEventType Type { get; }
+        public byte State { get; }
         public byte NextState { get; private set; }
         public int Timeout { get; private set; }
         public int ItemId { get; private set; }
         public short Quantity { get; private set; }
-        public Rectangle Boundaries { get; private set; }
+        public Rectangle Boundaries { get; }
 
         public ReactorState(WzImageProperty img)
         {

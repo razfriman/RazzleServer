@@ -6,7 +6,7 @@ namespace RazzleServer.Game.Maple.Characters
 {
     public sealed class CharacterMemos : KeyedCollection<int, Memo>
     {
-        public Character Parent { get; private set; }
+        public Character Parent { get; }
 
         public CharacterMemos(Character parent)
         {

@@ -6,7 +6,7 @@ namespace RazzleServer.Game.Maple.Characters
 {
     public class ControlledMobs : KeyedCollection<int, Mob>
     {
-        public Character Parent { get; private set; }
+        public Character Parent { get; }
 
         public ControlledMobs(Character parent)
         {

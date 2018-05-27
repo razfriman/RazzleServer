@@ -10,10 +10,10 @@ namespace RazzleServer.Game.Maple.Life
 {
     public sealed class Reactor : MapObject, ISpawnable
     {
-        public int MapleId { get; private set; }
-        public string Label { get; private set; }
+        public int MapleId { get; }
+        public string Label { get; }
         public byte State { get; set; }
-        public SpawnPoint SpawnPoint { get; private set; }
+        public SpawnPoint SpawnPoint { get; }
         public List<ReactorState> States { get; set; } = new List<ReactorState>();
         public ReactorReference CachedReference => DataProvider.Reactors.Data[MapleId];
        

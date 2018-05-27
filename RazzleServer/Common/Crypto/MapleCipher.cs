@@ -10,7 +10,7 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
 		/// AES transformer
 		/// </summary>
-		private FastAes Transformer { get; set; }
+		private FastAes Transformer { get; }
 
         /// <summary>
         /// General locker to prevent multithreading
@@ -25,7 +25,7 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
         /// Gameversion of the current <see cref="MapleCipher"/> instance
         /// </summary>
-        public ushort GameVersion { get; private set; }
+        public ushort GameVersion { get; }
 
         /// <summary>
         /// Bool stating if the current instance received its handshake

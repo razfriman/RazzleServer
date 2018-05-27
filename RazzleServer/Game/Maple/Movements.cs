@@ -19,10 +19,10 @@ namespace RazzleServer.Game.Maple
 
     public sealed class Movements : List<Movement>
     {
-        public Point Origin { get; private set; }
-        public Point Position { get; private set; }
-        public short Foothold { get; private set; }
-        public byte Stance { get; private set; }
+        public Point Origin { get; }
+        public Point Position { get; }
+        public short Foothold { get; }
+        public byte Stance { get; }
 
         public Movements(PacketReader iPacket)
         {

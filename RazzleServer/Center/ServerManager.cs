@@ -16,8 +16,8 @@ namespace RazzleServer.Center
         private static ServerManager _instance;
 
         public LoginServer Login { get; set; }
-        public Worlds Worlds { get; private set; } = new Worlds();
-        public Migrations Migrations { get; private set; } = new Migrations();
+        public Worlds Worlds { get; } = new Worlds();
+        public Migrations Migrations { get; } = new Migrations();
 
         private readonly ILogger _log = LogManager.Log;
 

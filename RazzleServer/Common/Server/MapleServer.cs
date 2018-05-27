@@ -19,7 +19,7 @@ namespace RazzleServer.Common.Server
     {
         public Dictionary<string, TClient> Clients { get; set; } = new Dictionary<string, TClient>();
 
-        public Dictionary<ClientOperationCode, List<TPacketHandler>> PacketHandlers { get; private set; } = new Dictionary<ClientOperationCode, List<TPacketHandler>>();
+        public Dictionary<ClientOperationCode, List<TPacketHandler>> PacketHandlers { get; } = new Dictionary<ClientOperationCode, List<TPacketHandler>>();
 
         public ushort Port;
         public ServerManager Manager { get; set; }

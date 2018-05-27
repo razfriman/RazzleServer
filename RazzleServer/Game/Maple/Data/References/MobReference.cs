@@ -8,46 +8,46 @@ namespace RazzleServer.Game.Maple.Data.References
 {
     public class MobReference
     {
-        public int MapleId { get; private set; }
+        public int MapleId { get; }
         public SpawnPoint SpawnPoint { get; private set; }
         public byte Stance { get; set; }
         public bool IsProvoked { get; set; }
         public bool CanDrop { get; set; }
-        public List<Loot> Loots { get; private set; }
+        public List<Loot> Loots { get; }
         public short Foothold { get; set; }
-        public MobSkills Skills { get; private set; }
+        public MobSkills Skills { get; }
         public Dictionary<MobSkill, DateTime> Cooldowns { get; private set; }
         public List<MobStatus> Buffs { get; private set; }
-        public List<int> DeathSummons { get; private set; }
+        public List<int> DeathSummons { get; }
 
-        public short Level { get; private set; }
+        public short Level { get; }
         public uint Health { get; set; }
         public uint Mana { get; set; }
-        public uint MaxHealth { get; private set; }
-        public uint MaxMana { get; private set; }
-        public uint HealthRecovery { get; private set; }
-        public uint ManaRecovery { get; private set; }
+        public uint MaxHealth { get; }
+        public uint MaxMana { get; }
+        public uint HealthRecovery { get; }
+        public uint ManaRecovery { get; }
         public int ExplodeHealth { get; private set; }
-        public uint Experience { get; private set; }
-        public int Link { get; private set; }
-        public short SummonType { get; private set; }
-        public int FixedDamage { get; private set; }
+        public uint Experience { get; }
+        public int Link { get; }
+        public short SummonType { get; }
+        public int FixedDamage { get; }
         public int DeathBuff { get; private set; }
-        public int DeathAfter { get; private set; }
-        public double Traction { get; private set; }
-        public bool DamagedByMobOnly { get; private set; }
-        public int DropItemPeriod { get; private set; }
-        public byte HpBarForeColor { get; private set; }
-        public byte HpBarBackColor { get; private set; }
+        public int DeathAfter { get; }
+        public double Traction { get; }
+        public bool DamagedByMobOnly { get; }
+        public int DropItemPeriod { get; }
+        public byte HpBarForeColor { get; }
+        public byte HpBarBackColor { get; }
         public byte CarnivalPoints { get; private set; }
-        public int WeaponAttack { get; private set; }
-        public int WeaponDefense { get; private set; }
-        public int MagicAttack { get; private set; }
-        public int MagicDefense { get; private set; }
-        public short Accuracy { get; private set; }
-        public short Avoidability { get; private set; }
-        public short Speed { get; private set; }
-        public short ChaseSpeed { get; private set; }
+        public int WeaponAttack { get; }
+        public int WeaponDefense { get; }
+        public int MagicAttack { get; }
+        public int MagicDefense { get; }
+        public short Accuracy { get; }
+        public short Avoidability { get; }
+        public short Speed { get; }
+        public short ChaseSpeed { get; }
 
         public bool IsFacingLeft => Stance % 2 == 0;
 

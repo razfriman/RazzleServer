@@ -17,9 +17,9 @@ namespace RazzleServer.Game.Maple
         public static ItemType GetType(int mapleId) => (ItemType)(mapleId / 1000000);
 
         public CharacterItems Parent { get; set; }
-        public int Id { get; private set; }
-        public int AccountId { get; private set; }
-        public int MapleId { get; private set; }
+        public int Id { get; }
+        public int AccountId { get; }
+        public int MapleId { get; }
         public short Slot { get; set; }
         private short _maxPerStack;
         private short _quantity;
@@ -27,68 +27,68 @@ namespace RazzleServer.Game.Maple
         public DateTime Expiration { get; set; }
         public int? PetId { get; set; }
 
-        public bool IsCash { get; private set; }
-        public bool OnlyOne { get; private set; }
-        public bool PreventsSlipping { get; private set; }
-        public bool PreventsColdness { get; private set; }
-        public bool IsTradeBlocked { get; private set; }
+        public bool IsCash { get; }
+        public bool OnlyOne { get; }
+        public bool PreventsSlipping { get; }
+        public bool PreventsColdness { get; }
+        public bool IsTradeBlocked { get; }
         public bool IsStored { get; set; }
-        public int SalePrice { get; private set; }
-        public int Meso { get; private set; }
+        public int SalePrice { get; }
+        public int Meso { get; }
 
-        public byte UpgradesAvailable { get; private set; }
-        public byte UpgradesApplied { get; private set; }
-        public short Strength { get; private set; }
-        public short Dexterity { get; private set; }
-        public short Intelligence { get; private set; }
-        public short Luck { get; private set; }
-        public short Health { get; private set; }
-        public short Mana { get; private set; }
-        public short WeaponAttack { get; private set; }
-        public short MagicAttack { get; private set; }
-        public short WeaponDefense { get; private set; }
-        public short MagicDefense { get; private set; }
-        public short Accuracy { get; private set; }
-        public short Avoidability { get; private set; }
-        public short Agility { get; private set; }
-        public short Speed { get; private set; }
-        public short Jump { get; private set; }
+        public byte UpgradesAvailable { get; }
+        public byte UpgradesApplied { get; }
+        public short Strength { get; }
+        public short Dexterity { get; }
+        public short Intelligence { get; }
+        public short Luck { get; }
+        public short Health { get; }
+        public short Mana { get; }
+        public short WeaponAttack { get; }
+        public short MagicAttack { get; }
+        public short WeaponDefense { get; }
+        public short MagicDefense { get; }
+        public short Accuracy { get; }
+        public short Avoidability { get; }
+        public short Agility { get; }
+        public short Speed { get; }
+        public short Jump { get; }
 
-        public byte AttackSpeed { get; private set; }
-        public short RecoveryRate { get; private set; }
-        public short KnockBackChance { get; private set; }
+        public byte AttackSpeed { get; }
+        public short RecoveryRate { get; }
+        public short KnockBackChance { get; }
 
-        public short RequiredLevel { get; private set; }
-        public short RequiredStrength { get; private set; }
-        public short RequiredDexterity { get; private set; }
-        public short RequiredIntelligence { get; private set; }
-        public short RequiredLuck { get; private set; }
-        public short RequiredFame { get; private set; }
-        public Job RequiredJob { get; private set; }
+        public short RequiredLevel { get; }
+        public short RequiredStrength { get; }
+        public short RequiredDexterity { get; }
+        public short RequiredIntelligence { get; }
+        public short RequiredLuck { get; }
+        public short RequiredFame { get; }
+        public Job RequiredJob { get; }
 
         // Consume data properties are prefixed with 'C'.
         public int CItemId { get; private set; }
-        public string CFlags { get; private set; }
-        public string CCureAilments { get; private set; }
-        public short CEffect { get; private set; }
-        public short CHealth { get; private set; }
-        public short CMana { get; private set; }
-        public short CHealthPercentage { get; private set; }
-        public short CManaPercentage { get; private set; }
-        public int CMoveTo { get; private set; }
-        public short CProb { get; private set; }
-        public int CBuffTime { get; private set; }
-        public short CWeaponAttack { get; private set; }
-        public short CMagicAttack { get; private set; }
-        public short CWeaponDefense { get; private set; }
-        public short CMagicDefense { get; private set; }
-        public short CAccuracy { get; private set; }
-        public short CAvoid { get; private set; }
-        public short CSpeed { get; private set; }
-        public short CJump { get; private set; }
-        public short CMorph { get; private set; }
+        public string CFlags { get; }
+        public string CCureAilments { get; }
+        public short CEffect { get; }
+        public short CHealth { get; }
+        public short CMana { get; }
+        public short CHealthPercentage { get; }
+        public short CManaPercentage { get; }
+        public int CMoveTo { get; }
+        public short CProb { get; }
+        public int CBuffTime { get; }
+        public short CWeaponAttack { get; }
+        public short CMagicAttack { get; }
+        public short CWeaponDefense { get; }
+        public short CMagicDefense { get; }
+        public short CAccuracy { get; }
+        public short CAvoid { get; }
+        public short CSpeed { get; }
+        public short CJump { get; }
+        public short CMorph { get; }
 
-        public List<Tuple<int, short>> Summons { get; private set; }
+        public List<Tuple<int, short>> Summons { get; }
 
         public ItemType Type => GetType(MapleId);
 

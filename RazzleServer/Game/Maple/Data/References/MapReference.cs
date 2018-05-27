@@ -8,9 +8,9 @@ namespace RazzleServer.Game.Maple.Data.References
 {
     public class MapReference
     {
-        public int MapleId { get; private set; }
-        public int ReturnMapId { get; private set; }
-        public int ForcedReturnMapId { get; private set; }
+        public int MapleId { get; }
+        public int ReturnMapId { get; }
+        public int ForcedReturnMapId { get; }
         public sbyte RegenerationRate { get; private set; }
         public byte DecreaseHp { get; private set; }
         public ushort DamagePerSecond { get; private set; }
@@ -18,8 +18,8 @@ namespace RazzleServer.Game.Maple.Data.References
         public sbyte ShipKind { get; private set; }
         public byte RequiredLevel { get; private set; }
         public int TimeLimit { get; private set; }
-        public double SpawnRate { get; private set; }
-        public bool IsTown { get; private set; }
+        public double SpawnRate { get; }
+        public bool IsTown { get; }
         public bool HasClock { get; private set; }
         public bool IsEverlasting { get; private set; }
         public bool DisablesTownScroll { get; private set; }
@@ -33,7 +33,7 @@ namespace RazzleServer.Game.Maple.Data.References
         {
         }
 
-        public List<Foothold> Footholds { get; private set; } = new List<Foothold>();
+        public List<Foothold> Footholds { get; } = new List<Foothold>();
         public List<Portal> Portals { get; set; } = new List<Portal>();
         public List<Seat> Seats { get; set; } = new List<Seat>();
         public List<SpawnPoint> SpawnPoints { get; set; } = new List<SpawnPoint>();

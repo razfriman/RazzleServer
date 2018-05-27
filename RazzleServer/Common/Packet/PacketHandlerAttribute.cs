@@ -10,6 +10,6 @@ namespace RazzleServer.Common.Packet
             Header = header;
         }
 
-        public ClientOperationCode Header { get; private set; }
+        public ClientOperationCode Header { get; }
     }
 }

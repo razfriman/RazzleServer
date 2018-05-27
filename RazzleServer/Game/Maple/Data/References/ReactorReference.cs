@@ -6,8 +6,8 @@ namespace RazzleServer.Game.Maple.Data.References
 {
     public class ReactorReference
     {
-        public int MapleId { get; private set; }
-        public string Label { get; private set; }
+        public int MapleId { get; }
+        public string Label { get; }
         public byte State { get; set; }
         public SpawnPoint SpawnPoint { get; private set; }
         public List<ReactorState> States { get; set; } = new List<ReactorState>();

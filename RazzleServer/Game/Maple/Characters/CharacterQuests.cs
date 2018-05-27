@@ -10,10 +10,10 @@ namespace RazzleServer.Game.Maple.Characters
 {
     public sealed class CharacterQuests
     {
-        public Character Parent { get; private set; }
+        public Character Parent { get; }
 
-        public Dictionary<ushort, Dictionary<int, short>> Started { get; private set; }
-        public Dictionary<ushort, DateTime> Completed { get; private set; }
+        public Dictionary<ushort, Dictionary<int, short>> Started { get; }
+        public Dictionary<ushort, DateTime> Completed { get; }
 
         public CharacterQuests(Character parent)
         {

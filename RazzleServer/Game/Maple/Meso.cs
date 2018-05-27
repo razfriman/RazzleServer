@@ -6,7 +6,7 @@ namespace RazzleServer.Game.Maple
 {
     public sealed class Meso : Drop
     {
-        public int Amount { get; private set; }
+        public int Amount { get; }
 
         public Meso(int amount)
         {

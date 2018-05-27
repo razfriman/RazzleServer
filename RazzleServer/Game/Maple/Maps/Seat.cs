@@ -4,7 +4,7 @@ namespace RazzleServer.Game.Maple.Maps
 {
     public sealed class Seat : MapObject
     {
-        public short Id { get; private set; }
+        public short Id { get; }
 
         public Seat() { }
 
