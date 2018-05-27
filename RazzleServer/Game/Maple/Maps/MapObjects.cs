@@ -23,18 +23,7 @@ namespace RazzleServer.Game.Maple.Maps
         }
 
 
-        public T this[int key]
-        {
-            get
-            {
-                if (Objects.ContainsKey(key))
-                {
-                    return Objects[key];
-                }
-
-                return null;
-            }
-        }
+        public T this[int key] => Objects.ContainsKey(key) ? Objects[key] : null;
 
         [JsonIgnore]
 

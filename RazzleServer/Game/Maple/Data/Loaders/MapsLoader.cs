@@ -1,15 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Center;
-using RazzleServer.Common.Constants;
 using RazzleServer.Common.Util;
 using RazzleServer.Common.Wz;
+using RazzleServer.Game.Maple.Data.Cache;
+using RazzleServer.Game.Maple.Data.References;
 
-namespace RazzleServer.Game.Maple.Data.Cache
+namespace RazzleServer.Game.Maple.Data.Loaders
 {
     public sealed class MapsLoader : ACachedDataLoader<CachedMaps>
     {

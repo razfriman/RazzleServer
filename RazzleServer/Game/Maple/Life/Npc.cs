@@ -7,8 +7,8 @@ using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
 using RazzleServer.Common.Wz;
 using RazzleServer.Game.Maple.Characters;
-using RazzleServer.Game.Maple.Scripting;
 using RazzleServer.Game.Maple.Shops;
+using RazzleServer.Game.Scripts;
 
 namespace RazzleServer.Game.Maple.Life
 {
@@ -159,10 +159,7 @@ namespace RazzleServer.Game.Maple.Life
                     }
                 }
 
-                if (newController != null)
-                {
-                    newController.ControlledNpcs.Add(this);
-                }
+                newController?.ControlledNpcs.Add(this);
             }
         }
 

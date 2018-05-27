@@ -275,33 +275,30 @@ namespace RazzleServer.Common.Wz
 			offsetSize = WzTool.GetCompressedIntLength(entryCount);
 
 			WzBinaryWriter imgWriter = null;
-			MemoryStream memStream = null;
 			var fileWrite = new FileStream(fileName, FileMode.Append, FileAccess.Write);
-            WzImage img;
-			for (var i = 0; i < images.Count; i++)
+			foreach (var img in images)
 			{
-                img = images[i];
-                if (img.Changed)
-                {
-                    memStream = new MemoryStream();
-                    imgWriter = new WzBinaryWriter(memStream, WzIv);
-                    img.SaveImage(imgWriter);
-                    img.checksum = 0;
-                    foreach (var b in memStream.ToArray())
-                    {
-                        img.checksum += b;
-                    }
-                    img.tempFileStart = fileWrite.Position;
-                    fileWrite.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    img.tempFileEnd = fileWrite.Position;
-                    memStream.Dispose();
-                }
-                else
-                {
-                    img.tempFileStart = img.offset;
-                    img.tempFileEnd = img.offset + img.size;
-                }
-                img.UnparseImage();
+				if (img.Changed)
+				{
+					var memStream = new MemoryStream();
+					imgWriter = new WzBinaryWriter(memStream, WzIv);
+					img.SaveImage(imgWriter);
+					img.checksum = 0;
+					foreach (var b in memStream.ToArray())
+					{
+						img.checksum += b;
+					}
+					img.tempFileStart = fileWrite.Position;
+					fileWrite.Write(memStream.ToArray(), 0, (int)memStream.Length);
+					img.tempFileEnd = fileWrite.Position;
+					memStream.Dispose();
+				}
+				else
+				{
+					img.tempFileStart = img.offset;
+					img.tempFileEnd = img.offset + img.size;
+				}
+				img.UnparseImage();
 
 				var nameLen = WzTool.GetWzObjectValueLength(img.name, 4);
 				size += nameLen;
@@ -314,10 +311,10 @@ namespace RazzleServer.Common.Wz
 				offsetSize += WzTool.GetCompressedIntLength(imgLen);
 				offsetSize += WzTool.GetCompressedIntLength(img.Checksum);
 				offsetSize += 4;
-                if (img.Changed)
-                {
-	                imgWriter.Close();
-                }
+				if (img.Changed)
+				{
+					imgWriter.Close();
+				}
 			}
 			fileWrite.Close();
 

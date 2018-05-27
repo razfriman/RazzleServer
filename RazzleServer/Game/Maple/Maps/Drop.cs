@@ -70,7 +70,7 @@ namespace RazzleServer.Game.Maple.Maps
                 oPacket.WriteInt(((Item)this).MapleId);
             }
 
-            oPacket.WriteInt(Owner != null ? Owner.Id : temporaryOwner.Id);
+            oPacket.WriteInt(Owner?.Id ?? temporaryOwner.Id);
             oPacket.WriteByte(0); // TODO: Type implementation (0 - normal, 1 - party, 2 - FFA, 3 - explosive)
             oPacket.WriteShort(Position.X);
             oPacket.WriteShort(Position.Y);
@@ -99,7 +99,7 @@ namespace RazzleServer.Game.Maple.Maps
 
             oPacket.WriteByte((byte)(Picker == null ? 0 : 2));
             oPacket.WriteInt(ObjectId);
-            oPacket.WriteInt(Picker != null ? Picker.Id : 0);
+            oPacket.WriteInt(Picker?.Id ?? 0);
 
             return oPacket;
         }

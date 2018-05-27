@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Wz;
 
-namespace RazzleServer.Game.Maple.Data
+namespace RazzleServer.Game.Maple.Data.References
 {
     public class ItemReference
     {

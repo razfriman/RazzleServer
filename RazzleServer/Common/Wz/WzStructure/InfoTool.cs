@@ -16,7 +16,7 @@ namespace RazzleServer.Common.Wz.WzStructure
 
         public static string GetOptionalString(WzImageProperty source)
         {
-            return source == null ? null : source.GetString();
+            return source?.GetString();
         }
 
         public static WzStringProperty SetOptionalString(string value)
@@ -46,7 +46,7 @@ namespace RazzleServer.Common.Wz.WzStructure
 
         public static int? GetOptionalInt(WzImageProperty source)
         {
-            return source == null ? (int?)null : source.GetInt();
+            return source?.GetInt();
         }
 
         public static WzIntProperty SetOptionalInt(int? value)
@@ -91,7 +91,7 @@ namespace RazzleServer.Common.Wz.WzStructure
 
         public static float? GetOptionalFloat(WzImageProperty source)
         {
-            return source == null ? (float?)null : source.GetFloat();
+            return source?.GetFloat();
         }
 
         public static WzFloatProperty SetOptionalFloat(float? value)
@@ -112,12 +112,7 @@ namespace RazzleServer.Common.Wz.WzStructure
 
         public static WzStringProperty SetOptionalTranslatedInt(int? value)
         {
-            if (value.HasValue)
-            {
-                return SetString(value.Value.ToString());
-            }
-
-            return null;
+            return value.HasValue ? SetString(value.Value.ToString()) : null;
         }
     }
 }

@@ -8,6 +8,7 @@ using RazzleServer.Common.Wz;
 using RazzleServer.Data;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
+using RazzleServer.Game.Maple.Data.References;
 using RazzleServer.Game.Maple.Maps;
 
 namespace RazzleServer.Game.Maple
@@ -645,9 +646,9 @@ namespace RazzleServer.Game.Maple
 
                 case EquipmentSlot.Top:
                     {
-                        if (IsOverall && bottom != null)
+                        if (IsOverall)
                         {
-                            bottom.Unequip();
+                            bottom?.Unequip();
                         }
                     }
                     break;
@@ -663,9 +664,9 @@ namespace RazzleServer.Game.Maple
 
                 case EquipmentSlot.Weapon:
                     {
-                        if (IsTwoHanded && shield != null)
+                        if (IsTwoHanded)
                         {
-                            shield.Unequip();
+                            shield?.Unequip();
                         }
                     }
                     break;

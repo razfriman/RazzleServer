@@ -6,8 +6,10 @@ using RazzleServer.Center;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Util;
 using RazzleServer.Common.Wz;
+using RazzleServer.Game.Maple.Data.Cache;
+using RazzleServer.Game.Maple.Data.References;
 
-namespace RazzleServer.Game.Maple.Data.Cache
+namespace RazzleServer.Game.Maple.Data.Loaders
 {
     public sealed class SkillsLoader : ACachedDataLoader<CachedSkills>
     {

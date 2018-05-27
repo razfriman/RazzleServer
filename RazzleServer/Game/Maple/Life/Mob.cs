@@ -8,6 +8,7 @@ using RazzleServer.Common.Util;
 using RazzleServer.Common.Wz;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
+using RazzleServer.Game.Maple.Data.References;
 using RazzleServer.Game.Maple.Maps;
 
 namespace RazzleServer.Game.Maple.Life
@@ -308,12 +309,7 @@ namespace RazzleServer.Game.Maple.Life
                     attacker.Client.Send(oPacket);
                 }
 
-                if (Health <= 0)
-                {
-                    return true;
-                }
-
-                return false;
+                return Health <= 0;
             }
         }
 

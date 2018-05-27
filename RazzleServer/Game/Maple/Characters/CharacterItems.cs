@@ -545,7 +545,7 @@ namespace RazzleServer.Game.Maple.Characters
                             oPacket.WriteInt(Parent.Client.Server.ChannelId);
                             oPacket.WriteBool(whisper);
                             oPacket.WriteBytes(Parent.AppearanceToByteArray());
-                            this.Parent.Client.Server.World.Send(oPacket);
+                            Parent.Client.Server.World.Send(oPacket);
                         }
 
                         used = true;
@@ -581,14 +581,14 @@ namespace RazzleServer.Game.Maple.Characters
                             oPacket.WriteString(message);
                             oPacket.WriteByte(Parent.Client.Server.ChannelId);
                             oPacket.WriteBool(whisper);
-                            oPacket.WriteByte((byte)(targetItem != null ? targetItem.Slot : 0));
+                            oPacket.WriteByte((byte)(targetItem?.Slot ?? 0));
 
                             if (targetItem != null)
                             {
                                 oPacket.WriteBytes(targetItem.ToByteArray(true));
                             }
 
-                            this.Parent.Client.Server.World.Send(oPacket);
+                            Parent.Client.Server.World.Send(oPacket);
                         }
 
                         used = true;
@@ -972,12 +972,7 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 foreach (var loopItem in this.Where(x => x.MapleId == item.MapleId && x.Quantity < x.MaxPerStack))
                 {
-                    if (loopItem.Quantity + item.Quantity <= loopItem.MaxPerStack)
-                    {
-                        return 0;
-                    }
-
-                    return 1;
+                    return loopItem.Quantity + item.Quantity <= loopItem.MaxPerStack ? 0 : 1;
                 }
 
                 return 1;

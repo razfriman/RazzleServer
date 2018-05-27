@@ -1,13 +1,12 @@
 using System;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RazzleServer.Center;
 using RazzleServer.Common.Util;
 
-namespace RazzleServer.Game.Maple.Data
+namespace RazzleServer.Game.Maple.Data.Loaders
 {
     public abstract class ACachedDataLoader<T> where T : new()
     {

@@ -2,47 +2,28 @@
 {
 	public class WzHeader
 	{
-        private string ident;
-        private string copyright;
-        private ulong fsize;
-        private uint fstart;
+		public string Ident { get; set; }
 
-        public string Ident
-        {
-            get => ident;
-	        set => ident = value;
-        }
+		public string Copyright { get; set; }
 
-        public string Copyright
-        {
-            get => copyright;
-	        set => copyright = value;
-        }
+		public ulong FSize { get; set; }
 
-        public ulong FSize
-        {
-            get => fsize;
-	        set => fsize = value;
-        }
+		public uint FStart { get; set; }
 
-		public uint FStart 
+		public void RecalculateFileStart()
         {
-            get => fstart;
-			set => fstart = value;
-		}
-
-        public void RecalculateFileStart()
-        {
-            fstart = (uint)(ident.Length + sizeof(ulong) + sizeof(uint) + copyright.Length + 1);
+            FStart = (uint)(Ident.Length + sizeof(ulong) + sizeof(uint) + Copyright.Length + 1);
         }
 
 		public static WzHeader GetDefault()
 		{
-			var header = new WzHeader();
-			header.ident = "PKG1";
-			header.copyright = "Package file v1.0 Copyright 2002 Wizet, ZMS";
-			header.fstart = 60;
-			header.fsize = 0;
+			var header = new WzHeader
+			{
+				Ident = "PKG1",
+				Copyright = "Package file v1.0 Copyright 2002 Wizet, ZMS",
+				FStart = 60,
+				FSize = 0
+			};
 			return header;
 		}
 	}

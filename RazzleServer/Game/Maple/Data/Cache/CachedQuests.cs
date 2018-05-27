@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using Microsoft.Extensions.Logging;
-using RazzleServer.Common.Util;
+using RazzleServer.Game.Maple.Data.References;
 
-namespace RazzleServer.Game.Maple.Data
+namespace RazzleServer.Game.Maple.Data.Cache
 {
     public sealed class CachedQuests
     {

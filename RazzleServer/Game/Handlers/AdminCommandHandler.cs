@@ -152,10 +152,7 @@ namespace RazzleServer.Game.Handlers
 
                         var target = client.Server.GetCharacterByName(name);
 
-                        if (target != null)
-                        {
-                            target.Notify(text, NoticeType.Popup);
-                        }
+                        target?.Notify(text, NoticeType.Popup);
 
                         using (var oPacket = new PacketWriter(ServerOperationCode.AdminResult))
                         {

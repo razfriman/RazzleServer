@@ -26,7 +26,7 @@ namespace RazzleServer.Common.Packet
         /// <summary>
         /// Creates a new instance of PacketReader
         /// </summary>
-        /// <param name="_arrayOfBytes">Starting byte array</param>
+        /// <param name="arrayOfBytes">Starting byte array</param>
         public PacketReader(byte[] arrayOfBytes)
         {
             Buffer = new MemoryStream(arrayOfBytes, false);

@@ -33,12 +33,7 @@ namespace RazzleServer.Login.Handlers
                     return LoginResult.InvalidPassword;
                 }
 
-                if (client.Account.IsBanned)
-                {
-                    return LoginResult.Banned;
-                }
-
-                return LoginResult.Valid;
+                return client.Account.IsBanned ? LoginResult.Banned : LoginResult.Valid;
             }
             catch (NoAccountException)
             {

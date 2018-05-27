@@ -8,6 +8,7 @@ using RazzleServer.Common.Wz;
 using RazzleServer.Data;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
+using RazzleServer.Game.Maple.Data.References;
 
 namespace RazzleServer.Game.Maple
 {

@@ -9,14 +9,13 @@
         public static string SanitizeText(string text)
         {
             var fixedText = "";
-            bool charFixed;
-            for (var i = 0; i < text.Length; i++)
+            foreach (var chr in text)
             {
-                charFixed = false;
+                var charFixed = false;
                 for (var k = 0; k < specialCharacters.Length; k++)
                 {
 
-                    if (text[i] == specialCharacters[k])
+                    if (chr == specialCharacters[k])
                     {
                         fixedText += replacementStrings[k];
                         charFixed = true;
@@ -25,7 +24,7 @@
                 }
                 if (!charFixed)
                 {
-                    fixedText += text[i];
+                    fixedText += chr;
                 }
             }
             return fixedText;

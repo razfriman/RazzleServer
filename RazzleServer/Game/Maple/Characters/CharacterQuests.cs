@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple.Data;
+using RazzleServer.Game.Maple.Data.References;
 using RazzleServer.Game.Maple.Life;
 
 namespace RazzleServer.Game.Maple.Characters
@@ -172,17 +174,7 @@ namespace RazzleServer.Game.Maple.Characters
                     {
                         npcId = iPacket.ReadInt();
 
-                        Npc npc = null;
-
-                        foreach (var loopNpc in Parent.Map.Npcs.Values)
-                        {
-                            if (loopNpc.MapleId == npcId)
-                            {
-                                npc = loopNpc;
-
-                                break;
-                            }
-                        }
+                        var npc = Parent.Map.Npcs.Values.FirstOrDefault(loopNpc => loopNpc.MapleId == npcId);
 
                         if (npc == null)
                         {

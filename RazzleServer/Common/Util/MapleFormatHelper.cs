@@ -19,11 +19,9 @@ namespace RazzleServer.Common.Util
             {
                 return 0x14F373BFDE04000; //1-1-1900 0:00:00
             }
-            if (timeStamp == -3)
-            {
-                return 0x217E57D909BC000; //31-12-2078 0:00:00
-            }
-            return new DateTime(timeStamp).ToFileTimeUtc();
+            return timeStamp == -3 
+                ? 0x217E57D909BC000
+                : new DateTime(timeStamp).ToFileTimeUtc();
         }
 
         public static long GetMapleTimeStamp(DateTime date) => date.ToFileTimeUtc();

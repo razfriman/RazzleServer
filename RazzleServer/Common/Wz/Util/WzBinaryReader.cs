@@ -108,21 +108,13 @@ namespace RazzleServer.Common.Wz.Util
         public int ReadCompressedInt()
         {
             var sb = ReadSByte();
-            if (sb == sbyte.MinValue)
-            {
-                return ReadInt32();
-            }
-            return sb;
+            return sb == sbyte.MinValue ? ReadInt32() : sb;
         }
 
         public long ReadLong()
         {
             var sb = ReadSByte();
-            if (sb == sbyte.MinValue)
-            {
-                return ReadInt64();
-            }
-            return sb;
+            return sb == sbyte.MinValue ? ReadInt64() : sb;
         }
 
         public uint ReadOffset()

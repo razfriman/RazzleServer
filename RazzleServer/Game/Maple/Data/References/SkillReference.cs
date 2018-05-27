@@ -1,7 +1,6 @@
-﻿using System;
-using RazzleServer.Common.Wz;
+﻿using RazzleServer.Common.Wz;
 
-namespace RazzleServer.Game.Maple.Data
+namespace RazzleServer.Game.Maple.Data.References
 {
     public class SkillReference
     {

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using RazzleServer.Game.Maple.Data.References;
 
-namespace RazzleServer.Game.Maple.Data
+namespace RazzleServer.Game.Maple.Data.Cache
 {
     public sealed class CachedItems
     {

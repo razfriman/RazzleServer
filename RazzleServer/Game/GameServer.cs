@@ -17,7 +17,7 @@ namespace RazzleServer.Game
         public byte ChannelId { get; set; }
         public int Population { get; set; }
         public World World { get; set; }
-        public Dictionary<int, Map> Maps { get; set; }
+        public Dictionary<int, Map> Maps { get; set; } = new Dictionary<int, Map>();
         public Map this[int id]
         {
             get
@@ -27,8 +27,8 @@ namespace RazzleServer.Game
                     return Maps[id];
                 }
 
-                // CREATE MAP AND SAVE IT TO DICT
-                return null;
+                var map = new Map(this, id);
+                return Maps[id] = map;
             }
         }
 

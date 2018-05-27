@@ -76,7 +76,7 @@ namespace RazzleServer.Common.Wz
         public override string Name { get => name;
             set => name = value;
         }
-        public override WzFile WzFileParent => Parent != null ? Parent.WzFileParent : null;
+        public override WzFile WzFileParent => Parent?.WzFileParent;
 
         /// <summary>
         /// Is the object parsed
@@ -215,12 +215,12 @@ namespace RazzleServer.Common.Wz
             }
 
             WzImageProperty ret = null;
-            for (var x = 0; x < segments.Length; x++)
+            foreach (var segment in segments)
             {
                 var foundChild = false;
                 foreach (var iwp in ret == null ? properties : ret.WzProperties)
                 {
-                    if (iwp.Name == segments[x])
+                    if (iwp.Name == segment)
                     {
                         ret = iwp;
                         foundChild = true;

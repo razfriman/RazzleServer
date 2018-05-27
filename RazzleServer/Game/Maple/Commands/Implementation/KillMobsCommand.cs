@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Life;
 
@@ -38,12 +39,7 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
 
                 lock (caller.Map.Mobs)
                 {
-                    var toKill = new List<Mob>();
-
-                    foreach (var loopMob in caller.Map.Mobs.Values)
-                    {
-                        toKill.Add(loopMob);
-                    }
+                    var toKill = caller.Map.Mobs.Values.ToList();
 
                     foreach (var loopMob in toKill)
                     {

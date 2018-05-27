@@ -4,7 +4,7 @@ using RazzleServer.Common.Wz;
 using RazzleServer.Game.Maple.Life;
 using RazzleServer.Game.Maple.Maps;
 
-namespace RazzleServer.Game.Maple.Data
+namespace RazzleServer.Game.Maple.Data.References
 {
     public class MapReference
     {

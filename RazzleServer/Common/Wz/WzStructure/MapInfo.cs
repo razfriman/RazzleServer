@@ -20,7 +20,7 @@ namespace RazzleServer.Common.Wz.WzStructure
 
         public MapInfo(WzImage image, string strMapName, string strStreetName, string strCategoryName)
         {
-            this.Image = image;
+            Image = image;
             int? startHour;
             int? endHour;
             this.strMapName = strMapName;

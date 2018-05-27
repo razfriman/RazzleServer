@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using Microsoft.Extensions.Logging;
-using RazzleServer.Center;
-using RazzleServer.Common.Constants;
-using RazzleServer.Common.Util;
-using RazzleServer.Common.Wz;
+﻿using System.Collections.Generic;
+using RazzleServer.Game.Maple.Data.References;
 
-namespace RazzleServer.Game.Maple.Data
+namespace RazzleServer.Game.Maple.Data.Cache
 {
     public sealed class CachedSkills
     {

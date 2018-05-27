@@ -165,10 +165,11 @@ namespace RazzleServer.Common.Wz.Util
 
         public void WriteNullTerminatedString(string value)
         {
-            for (var i = 0; i < value.Length; i++)
+            foreach (var chr in value)
             {
-                Write((byte)value[i]);
+                Write((byte)chr);
             }
+
             Write((byte)0);
         }
 

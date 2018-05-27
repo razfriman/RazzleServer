@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Maps;
 
@@ -38,12 +39,7 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
 
                 lock (caller.Map.Drops)
                 {
-                    var toPick = new List<Drop>();
-
-                    foreach (var loopDrop in caller.Map.Drops.Values)
-                    {
-                        toPick.Add(loopDrop);
-                    }
+                    var toPick = caller.Map.Drops.Values.ToList();
 
                     foreach (var loopDrop in toPick)
                     {

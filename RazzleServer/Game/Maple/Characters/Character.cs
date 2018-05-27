@@ -9,6 +9,7 @@ using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
 using RazzleServer.Data;
 using RazzleServer.Game.Maple.Data;
+using RazzleServer.Game.Maple.Data.References;
 using RazzleServer.Game.Maple.Interaction;
 using RazzleServer.Game.Maple.Life;
 using RazzleServer.Game.Maple.Maps;
@@ -74,7 +75,6 @@ namespace RazzleServer.Game.Maple.Characters
         private short _fame;
         private int _meso;
         private Npc _lastNpc;
-        private QuestReference _lastQuest;
         private string _chalkboard;
         private int _itemEffect;
 
@@ -488,11 +488,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public QuestReference LastQuest
-        {
-            get => _lastQuest;
-            set => _lastQuest = value;
-        }
+        public QuestReference LastQuest { get; set; }
 
         public string Chalkboard
         {
@@ -643,12 +639,7 @@ namespace RazzleServer.Game.Maple.Characters
             oPacket.WriteBool(true);
             oPacket.WriteBool(false);
 
-            var flag = 0;
-
-            foreach (var statistic in statistics)
-            {
-                flag |= (int)statistic;
-            }
+            var flag = statistics.Aggregate(0, (current, statistic) => current | (int) statistic);
 
             oPacket.WriteInt(flag);
 
@@ -1203,9 +1194,9 @@ namespace RazzleServer.Game.Maple.Characters
                         {
                             Trade.Handle(this, code, iPacket);
                         }
-                        else if (PlayerShop != null)
+                        else
                         {
-                            PlayerShop.Handle(this, code, iPacket);
+                            PlayerShop?.Handle(this, code, iPacket);
                         }
                     }
                     break;
@@ -1324,7 +1315,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                 var cashWeapon = Items[EquipmentSlot.CashWeapon];
 
-                oPacket.WriteInt(cashWeapon != null ? cashWeapon.MapleId : 0);
+                oPacket.WriteInt(cashWeapon?.MapleId ?? 0);
 
                 oPacket.WriteInt(0); // pet id
                 oPacket.WriteInt(0); // pet id

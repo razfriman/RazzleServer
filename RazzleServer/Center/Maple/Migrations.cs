@@ -21,12 +21,9 @@ namespace RazzleServer.Center.Maple
             {
                 Remove(migration);
 
-                if ((DateTime.Now - migration.Expiry).TotalSeconds > 30)
-                {
-                    return 0;
-                }
-
-                return migration.AccountId;
+                return (DateTime.Now - migration.Expiry).TotalSeconds > 30 
+                    ? 0 
+                    : migration.AccountId;
             }
 
             return 0;

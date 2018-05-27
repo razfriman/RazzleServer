@@ -69,16 +69,16 @@ namespace RazzleServer.Common.Wz
         {
             writer.Write((ushort)0);
             writer.WriteCompressedInt(properties.Count);
-            for (var i = 0; i < properties.Count; i++)
+            foreach (var property in properties)
             {
-                writer.WriteStringValue(properties[i].Name, 0x00, 0x01);
-                if (properties[i] is WzExtended)
+                writer.WriteStringValue(property.Name, 0x00, 0x01);
+                if (property is WzExtended extended)
                 {
-                    WriteExtendedValue(writer, (WzExtended)properties[i]);
+                    WriteExtendedValue(writer, extended);
                 }
                 else
                 {
-                    properties[i].WriteValue(writer);
+                    property.WriteValue(writer);
                 }
             }
         }

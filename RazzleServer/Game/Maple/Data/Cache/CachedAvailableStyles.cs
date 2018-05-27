@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace RazzleServer.Game.Maple.Data
+namespace RazzleServer.Game.Maple.Data.Cache
 {
     public sealed class CachedAvailableStyles
     {

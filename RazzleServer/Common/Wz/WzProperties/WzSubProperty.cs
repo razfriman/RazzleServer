@@ -103,12 +103,12 @@ namespace RazzleServer.Common.Wz.WzProperties
                 return ((WzImageProperty)Parent)[path.Substring(name.IndexOf('/') + 1)];
             }
             WzImageProperty ret = this;
-            for (var x = 0; x < segments.Length; x++)
+            foreach (var segment in segments)
             {
                 var foundChild = false;
                 foreach (var iwp in ret.WzProperties)
                 {
-                    if (iwp.Name == segments[x])
+                    if (iwp.Name == segment)
                     {
                         ret = iwp;
                         foundChild = true;

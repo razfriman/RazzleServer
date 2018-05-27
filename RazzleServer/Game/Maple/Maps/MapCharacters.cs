@@ -7,10 +7,7 @@ namespace RazzleServer.Game.Maple.Maps
     {
         public MapCharacters(Map map) : base(map) { }
 
-        public Character this[string name]
-        {
-            get => Values.FirstOrDefault(x => x.Name.Equals(name, System.StringComparison.InvariantCultureIgnoreCase));
-        }
+        public Character this[string name] => Values.FirstOrDefault(x => x.Name.Equals(name, System.StringComparison.InvariantCultureIgnoreCase));
 
         public override void OnItemAdded(Character item)
         {

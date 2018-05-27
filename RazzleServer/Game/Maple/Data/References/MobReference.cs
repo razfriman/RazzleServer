@@ -4,7 +4,7 @@ using RazzleServer.Common.Constants;
 using RazzleServer.Common.Wz;
 using RazzleServer.Game.Maple.Life;
 
-namespace RazzleServer.Game.Maple.Data
+namespace RazzleServer.Game.Maple.Data.References
 {
     public class MobReference
     {

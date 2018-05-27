@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Util;
@@ -730,15 +731,7 @@ namespace RazzleServer.Common.Wz
 
             if (strWildCard[0] == '*' && strWildCard.Length > 1)
             {
-                for (var index = 0; index < strCompare.Length; index++)
-                {
-                    if (StrMatch(strWildCard.Substring(1), strCompare.Substring(index)))
-                    {
-                        {
-                            return true;
-                        }
-                    }
-                }
+                return strCompare.Where((t, index) => StrMatch(strWildCard.Substring(1), strCompare.Substring(index))).Any();
             }
             else if (strWildCard[0] == '*')
             {
