@@ -14,7 +14,7 @@ namespace RazzleServer.Login
         {
             using (var pw = new PacketWriter(ServerOperationCode.CheckPasswordResult))
             {
-                pw.WriteShort((int)result);
+                pw.WriteShort((short)result);
                 pw.WriteInt(0);
 
                 if (result == LoginResult.Banned)
