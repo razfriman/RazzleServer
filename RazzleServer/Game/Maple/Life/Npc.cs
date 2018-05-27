@@ -23,7 +23,7 @@ namespace RazzleServer.Game.Maple.Life
         [JsonIgnore]
         public Dictionary<Character, NpcScript> Scripts { get; private set; }
 
-        private readonly ILogger Log = LogManager.Log;
+        private readonly ILogger _log = LogManager.Log;
 
         public Npc() { }
 
@@ -83,7 +83,7 @@ namespace RazzleServer.Game.Maple.Life
                 }
                 catch (Exception ex)
                 {
-                    Log.LogError(ex, "Error executing NPC script");
+                    _log.LogError(ex, "Error executing NPC script");
                 }
             }
         }

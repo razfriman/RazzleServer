@@ -20,7 +20,7 @@ namespace RazzleServer.Common.Network
 
         protected AClient(Socket session, bool toClient = true)
         {
-            Socket = new ClientSocket(session, this, ServerConfig.Instance.Version, ServerConfig.Instance.AESKey, toClient);
+            Socket = new ClientSocket(session, this, ServerConfig.Instance.Version, ServerConfig.Instance.AesKey, toClient);
             Host = Socket.Host;
             Port = Socket.Port;
             Connected = true;
@@ -86,17 +86,17 @@ namespace RazzleServer.Common.Network
                 return;
             }
 
-            var sIV = Functions.RandomUInt();
-            var rIV = Functions.RandomUInt();
+            var sIv = Functions.RandomUInt();
+            var rIv = Functions.RandomUInt();
 
-            Socket.Crypto.SetVectors(sIV, rIV);
+            Socket.Crypto.SetVectors(sIv, rIv);
 
             var writer = new PacketWriter();
             writer.WriteUShort(0x0E);
             writer.WriteUShort(ServerConfig.Instance.Version);
             writer.WriteString(ServerConfig.Instance.SubVersion.ToString());
-            writer.WriteUInt(rIV);
-            writer.WriteUInt(sIV);
+            writer.WriteUInt(rIv);
+            writer.WriteUInt(sIv);
             writer.WriteByte(ServerConfig.Instance.ServerType);
             Socket.SendRawPacket(writer.ToArray());
         }

@@ -15,9 +15,9 @@ namespace RazzleServer.Game.Maple
     {
         public CharacterSkills Parent { get; set; }
 
-        private byte currentLevel;
-        private byte maxLevel;
-        private DateTime cooldownEnd = DateTime.MinValue;
+        private byte _currentLevel;
+        private byte _maxLevel;
+        private DateTime _cooldownEnd = DateTime.MinValue;
 
         public int Id { get; set; }
         public int MapleId { get; set; }
@@ -27,8 +27,8 @@ namespace RazzleServer.Game.Maple
         public sbyte HitCount { get; set; }
         public short Range { get; set; }
         public int BuffTime { get; set; }
-        public short CostMP { get; set; }
-        public short CostHP { get; set; }
+        public short CostMp { get; set; }
+        public short CostHp { get; set; }
         public short Damage { get; set; }
         public int FixedDamage { get; set; }
         public byte CriticalDamage { get; set; }
@@ -49,22 +49,22 @@ namespace RazzleServer.Game.Maple
         public short MagicDefense { get; set; }
         public short Accuracy { get; set; }
         public short Avoidability { get; set; }
-        public short HP { get; set; }
-        public short MP { get; set; }
+        public short Hp { get; set; }
+        public short Mp { get; set; }
         public short Probability { get; set; }
         public short Morph { get; set; }
-        public Point LT { get; private set; }
-        public Point RB { get; private set; }
+        public Point Lt { get; private set; }
+        public Point Rb { get; private set; }
         public int Cooldown { get; set; }
 
         public bool HasBuff => BuffTime > 0;
 
         public byte CurrentLevel
         {
-            get => currentLevel;
+            get => _currentLevel;
             set
             {
-                currentLevel = value;
+                _currentLevel = value;
 
                 if (Parent != null)
                 {
@@ -80,10 +80,10 @@ namespace RazzleServer.Game.Maple
 
         public byte MaxLevel
         {
-            get => maxLevel;
+            get => _maxLevel;
             set
             {
-                maxLevel = value;
+                _maxLevel = value;
 
                 if (Parent != null && Character.IsInitialized)
                 {
@@ -106,10 +106,10 @@ namespace RazzleServer.Game.Maple
 
         public DateTime CooldownEnd
         {
-            get => cooldownEnd;
+            get => _cooldownEnd;
             set
             {
-                cooldownEnd = value;
+                _cooldownEnd = value;
 
                 if (IsCoolingDown)
                 {
@@ -216,8 +216,8 @@ namespace RazzleServer.Game.Maple
             HitCount = CachedReference.HitCount;
             Range = CachedReference.Range;
             BuffTime = CachedReference.BuffTime;
-            CostMP = CachedReference.CostMP;
-            CostHP = CachedReference.CostHP;
+            CostMp = CachedReference.CostMp;
+            CostHp = CachedReference.CostHp;
             Damage = CachedReference.Damage;
             FixedDamage = CachedReference.FixedDamage;
             CriticalDamage = CachedReference.CriticalDamage;
@@ -238,12 +238,12 @@ namespace RazzleServer.Game.Maple
             MagicDefense = CachedReference.MagicDefense;
             Accuracy = CachedReference.Accuracy;
             Avoidability = CachedReference.Avoidability;
-            HP = CachedReference.HP;
-            MP = CachedReference.MP;
+            Hp = CachedReference.Hp;
+            Mp = CachedReference.Mp;
             Probability = CachedReference.Probability;
             Morph = CachedReference.Morph;
-            LT = CachedReference.LT;
-            RB = CachedReference.RB;
+            Lt = CachedReference.Lt;
+            Rb = CachedReference.Rb;
             Cooldown = CachedReference.Cooldown;
         }
 
@@ -254,8 +254,8 @@ namespace RazzleServer.Game.Maple
                 return;
             }
 
-            Character.Health -= CostHP;
-            Character.Mana -= CostMP;
+            Character.Health -= CostHp;
+            Character.Mana -= CostMp;
 
             if (CostItem > 0)
             {

@@ -15,13 +15,13 @@ namespace RazzleServer.Game.Maple.Data.Cache
     {
         public override string CacheName => "Maps";
 
-        private readonly ILogger Log = LogManager.Log;
+        private readonly ILogger _log = LogManager.Log;
 
         public override void LoadFromWz()
         {
-            Log.LogInformation("Loading Maps");
+            _log.LogInformation("Loading Maps");
 
-            using (var file = new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, "Map.wz"), WzMapleVersion.CLASSIC))
+            using (var file = new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, "Map.wz"), WzMapleVersion.Classic))
             {
                 file.ParseWzFile();
                 file.WzDirectory

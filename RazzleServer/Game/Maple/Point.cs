@@ -24,10 +24,10 @@ namespace RazzleServer.Game.Maple
         public double DistanceFrom(Point point) => Math.Sqrt(Math.Pow(X - point.X, 2) + Math.Pow(Y - point.Y, 2));
 
         public bool IsInRectangle(Rectangle rectangle) =>
-                X >= rectangle.LT.X &&
-                Y >= rectangle.LT.Y &&
-                X <= rectangle.RB.X &&
-                Y <= rectangle.RB.Y;
+                X >= rectangle.Lt.X &&
+                Y >= rectangle.Lt.Y &&
+                X <= rectangle.Rb.X &&
+                Y <= rectangle.Rb.Y;
 
         public static Point operator +(Point p1, Point p2) => new Point(p1.X + p2.X, p1.Y + p2.Y);
 

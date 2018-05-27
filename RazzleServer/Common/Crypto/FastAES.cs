@@ -5,15 +5,15 @@ namespace RazzleServer.Common.Crypto
     /// <summary>
     /// FastAES based on the AesFastEngine from bouncy castle
     /// </summary>
-    public class FastAES
+    public class FastAes
     {
-        private uint[][] WorkingKey;
+        private uint[][] _workingKey;
 
         /// <summary>
         /// Creates a new instace of the AES crypto
         /// </summary>
-        /// <param name="Key">Key required by the crypto</param>
-        internal FastAES(byte[] Key) => WorkingKey = GenerateWorkingKey(Key);
+        /// <param name="key">Key required by the crypto</param>
+        internal FastAes(byte[] key) => _workingKey = GenerateWorkingKey(key);
 
         /// <summary>
         /// Transforms <paramref name="block"/> using the current AES instance
@@ -28,55 +28,55 @@ namespace RazzleServer.Common.Crypto
             fixed (byte* pBlock = block)
             {
                 var curRound = 0;
-                var wk = WorkingKey[curRound];
+                var wk = _workingKey[curRound];
 
-                uint C0, C1, C2, C3; //Value holders
+                uint c0, c1, c2, c3; //Value holders
                 uint r0, r1, r2, r3; //Temp value holders
 
-                C0 = *((uint*)pBlock + 0);
-                C1 = *((uint*)pBlock + 1);
-                C2 = *((uint*)pBlock + 2);
-                C3 = *((uint*)pBlock + 3);
+                c0 = *((uint*)pBlock + 0);
+                c1 = *((uint*)pBlock + 1);
+                c2 = *((uint*)pBlock + 2);
+                c3 = *((uint*)pBlock + 3);
 
                 //Initial round of AddRoundKey
-                C0 ^= wk[0];
-                C1 ^= wk[1];
-                C2 ^= wk[2];
-                C3 ^= wk[3];
+                c0 ^= wk[0];
+                c1 ^= wk[1];
+                c2 ^= wk[2];
+                c3 ^= wk[3];
 
                 //Loop 2 rounds of SubBytes, ShiftRows, MixColumns and AddRoundKey
                 while (curRound < Rounds - 2)
                 {
-                    wk = WorkingKey[++curRound];
-                    r0 = Table0[C0 & 255] ^ Table1[(C1 >> 8) & 255] ^ Table2[(C2 >> 16) & 255] ^ Table3[C3 >> 24] ^ wk[0];
-                    r1 = Table0[C1 & 255] ^ Table1[(C2 >> 8) & 255] ^ Table2[(C3 >> 16) & 255] ^ Table3[C0 >> 24] ^ wk[1];
-                    r2 = Table0[C2 & 255] ^ Table1[(C3 >> 8) & 255] ^ Table2[(C0 >> 16) & 255] ^ Table3[C1 >> 24] ^ wk[2];
-                    r3 = Table0[C3 & 255] ^ Table1[(C0 >> 8) & 255] ^ Table2[(C1 >> 16) & 255] ^ Table3[C2 >> 24] ^ wk[3];
-                    wk = WorkingKey[++curRound];
-                    C0 = Table0[r0 & 255] ^ Table1[(r1 >> 8) & 255] ^ Table2[(r2 >> 16) & 255] ^ Table3[r3 >> 24] ^ wk[0];
-                    C1 = Table0[r1 & 255] ^ Table1[(r2 >> 8) & 255] ^ Table2[(r3 >> 16) & 255] ^ Table3[r0 >> 24] ^ wk[1];
-                    C2 = Table0[r2 & 255] ^ Table1[(r3 >> 8) & 255] ^ Table2[(r0 >> 16) & 255] ^ Table3[r1 >> 24] ^ wk[2];
-                    C3 = Table0[r3 & 255] ^ Table1[(r0 >> 8) & 255] ^ Table2[(r1 >> 16) & 255] ^ Table3[r2 >> 24] ^ wk[3];
+                    wk = _workingKey[++curRound];
+                    r0 = Table0[c0 & 255] ^ Table1[(c1 >> 8) & 255] ^ Table2[(c2 >> 16) & 255] ^ Table3[c3 >> 24] ^ wk[0];
+                    r1 = Table0[c1 & 255] ^ Table1[(c2 >> 8) & 255] ^ Table2[(c3 >> 16) & 255] ^ Table3[c0 >> 24] ^ wk[1];
+                    r2 = Table0[c2 & 255] ^ Table1[(c3 >> 8) & 255] ^ Table2[(c0 >> 16) & 255] ^ Table3[c1 >> 24] ^ wk[2];
+                    r3 = Table0[c3 & 255] ^ Table1[(c0 >> 8) & 255] ^ Table2[(c1 >> 16) & 255] ^ Table3[c2 >> 24] ^ wk[3];
+                    wk = _workingKey[++curRound];
+                    c0 = Table0[r0 & 255] ^ Table1[(r1 >> 8) & 255] ^ Table2[(r2 >> 16) & 255] ^ Table3[r3 >> 24] ^ wk[0];
+                    c1 = Table0[r1 & 255] ^ Table1[(r2 >> 8) & 255] ^ Table2[(r3 >> 16) & 255] ^ Table3[r0 >> 24] ^ wk[1];
+                    c2 = Table0[r2 & 255] ^ Table1[(r3 >> 8) & 255] ^ Table2[(r0 >> 16) & 255] ^ Table3[r1 >> 24] ^ wk[2];
+                    c3 = Table0[r3 & 255] ^ Table1[(r0 >> 8) & 255] ^ Table2[(r1 >> 16) & 255] ^ Table3[r2 >> 24] ^ wk[3];
                 }
 
                 //A single round of SubBytes, ShiftRows, MixColumns and AddRoundKey
-                wk = WorkingKey[++curRound];
-                r0 = Table0[C0 & 255] ^ Table1[(C1 >> 8) & 255] ^ Table2[(C2 >> 16) & 255] ^ Table3[C3 >> 24] ^ wk[0];
-                r1 = Table0[C1 & 255] ^ Table1[(C2 >> 8) & 255] ^ Table2[(C3 >> 16) & 255] ^ Table3[C0 >> 24] ^ wk[1];
-                r2 = Table0[C2 & 255] ^ Table1[(C3 >> 8) & 255] ^ Table2[(C0 >> 16) & 255] ^ Table3[C1 >> 24] ^ wk[2];
-                r3 = Table0[C3 & 255] ^ Table1[(C0 >> 8) & 255] ^ Table2[(C1 >> 16) & 255] ^ Table3[C2 >> 24] ^ wk[3];
+                wk = _workingKey[++curRound];
+                r0 = Table0[c0 & 255] ^ Table1[(c1 >> 8) & 255] ^ Table2[(c2 >> 16) & 255] ^ Table3[c3 >> 24] ^ wk[0];
+                r1 = Table0[c1 & 255] ^ Table1[(c2 >> 8) & 255] ^ Table2[(c3 >> 16) & 255] ^ Table3[c0 >> 24] ^ wk[1];
+                r2 = Table0[c2 & 255] ^ Table1[(c3 >> 8) & 255] ^ Table2[(c0 >> 16) & 255] ^ Table3[c1 >> 24] ^ wk[2];
+                r3 = Table0[c3 & 255] ^ Table1[(c0 >> 8) & 255] ^ Table2[(c1 >> 16) & 255] ^ Table3[c2 >> 24] ^ wk[3];
 
                 //Final round of SubBytes, ShiftRows and AddRoundKey
-                wk = WorkingKey[++curRound];
-                C0 = Sbox[r0 & 255] ^ ((uint)Sbox[(r1 >> 8) & 255] << 8) ^ ((uint)Sbox[(r2 >> 16) & 255] << 16) ^ ((uint)Sbox[r3 >> 24] << 24) ^ wk[0];
-                C1 = Sbox[r1 & 255] ^ ((uint)Sbox[(r2 >> 8) & 255] << 8) ^ ((uint)Sbox[(r3 >> 16) & 255] << 16) ^ ((uint)Sbox[r0 >> 24] << 24) ^ wk[1];
-                C2 = Sbox[r2 & 255] ^ ((uint)Sbox[(r3 >> 8) & 255] << 8) ^ ((uint)Sbox[(r0 >> 16) & 255] << 16) ^ ((uint)Sbox[r1 >> 24] << 24) ^ wk[2];
-                C3 = Sbox[r3 & 255] ^ ((uint)Sbox[(r0 >> 8) & 255] << 8) ^ ((uint)Sbox[(r1 >> 16) & 255] << 16) ^ ((uint)Sbox[r2 >> 24] << 24) ^ wk[3];
+                wk = _workingKey[++curRound];
+                c0 = Sbox[r0 & 255] ^ ((uint)Sbox[(r1 >> 8) & 255] << 8) ^ ((uint)Sbox[(r2 >> 16) & 255] << 16) ^ ((uint)Sbox[r3 >> 24] << 24) ^ wk[0];
+                c1 = Sbox[r1 & 255] ^ ((uint)Sbox[(r2 >> 8) & 255] << 8) ^ ((uint)Sbox[(r3 >> 16) & 255] << 16) ^ ((uint)Sbox[r0 >> 24] << 24) ^ wk[1];
+                c2 = Sbox[r2 & 255] ^ ((uint)Sbox[(r3 >> 8) & 255] << 8) ^ ((uint)Sbox[(r0 >> 16) & 255] << 16) ^ ((uint)Sbox[r1 >> 24] << 24) ^ wk[2];
+                c3 = Sbox[r3 & 255] ^ ((uint)Sbox[(r0 >> 8) & 255] << 8) ^ ((uint)Sbox[(r1 >> 16) & 255] << 16) ^ ((uint)Sbox[r2 >> 24] << 24) ^ wk[3];
 
-                *((uint*)pBlock + 0) = C0;
-                *((uint*)pBlock + 1) = C1;
-                *((uint*)pBlock + 2) = C2;
-                *((uint*)pBlock + 3) = C3;
+                *((uint*)pBlock + 0) = c0;
+                *((uint*)pBlock + 1) = c1;
+                *((uint*)pBlock + 2) = c2;
+                *((uint*)pBlock + 3) = c3;
             }
         }
 
@@ -88,40 +88,40 @@ namespace RazzleServer.Common.Crypto
         [SecuritySafeCritical]
         private uint[][] GenerateWorkingKey(byte[] key)
         {
-            var KeyLength = key.Length / 4;  // key length in words
+            var keyLength = key.Length / 4;  // key length in words
 
-            var KeyResult = new uint[Rounds + 1][]; // 4 words in a block
+            var keyResult = new uint[Rounds + 1][]; // 4 words in a block
             for (var i = 0; i <= Rounds; ++i)
             {
-                KeyResult[i] = new uint[4];
+                keyResult[i] = new uint[4];
             }
 
             // copy the key into the round key array
             for (int t = 0, i = 0; i < key.Length; t++)
             {
-                KeyResult[t >> 2][t & 3] = LeToUInt32(key, i);
+                keyResult[t >> 2][t & 3] = LeToUInt32(key, i);
                 i += 4;
             }
 
             // while not enough round key material calculated
             // calculate new values
             var k = (Rounds + 1) << 2;
-            for (var i = KeyLength; i < k; i++)
+            for (var i = keyLength; i < k; i++)
             {
-                var temp = KeyResult[(i - 1) >> 2][(i - 1) & 3];
-                if (i % KeyLength == 0)
+                var temp = keyResult[(i - 1) >> 2][(i - 1) & 3];
+                if (i % keyLength == 0)
                 {
-                    temp = SubWord(Shift(temp, 8)) ^ Rcon[i / KeyLength - 1];
+                    temp = SubWord(Shift(temp, 8)) ^ Rcon[i / keyLength - 1];
                 }
-                else if (KeyLength > 6 && i % KeyLength == 4)
+                else if (keyLength > 6 && i % keyLength == 4)
                 {
                     temp = SubWord(temp);
                 }
 
-                KeyResult[i >> 2][i & 3] = KeyResult[(i - KeyLength) >> 2][(i - KeyLength) & 3] ^ temp;
+                keyResult[i >> 2][i & 3] = keyResult[(i - keyLength) >> 2][(i - keyLength) & 3] ^ temp;
             }
 
-            return KeyResult;
+            return keyResult;
         }
        
         private static uint Shift(uint x, int shift)
@@ -142,9 +142,9 @@ namespace RazzleServer.Common.Crypto
 				| (uint)buffer[off + 2] << 16
 				| (uint)buffer[off + 3] << 24;
 
-        private const uint m1 = 0x80808080;
-        private const uint m2 = 0x7f7f7f7f;
-        private const uint m3 = 0x0000001b;
+        private const uint M1 = 0x80808080;
+        private const uint M2 = 0x7f7f7f7f;
+        private const uint M3 = 0x0000001b;
         private const byte Rounds = 14; //Maplestory uses a 256bit key, thus we dont need support for anything else
 
         private static readonly byte[] Sbox =
@@ -413,7 +413,7 @@ namespace RazzleServer.Common.Crypto
             0x2c3a1616
         };
 
-        private static readonly uint[] invTable0 =
+        private static readonly uint[] InvTable0 =
         {
             0x50a7f451, 0x5365417e, 0xc3a4171a, 0x965e273a, 0xcb6bab3b,
             0xf1459d1f, 0xab58faac, 0x9303e34b, 0x55fa3020, 0xf66d76ad,
@@ -469,7 +469,7 @@ namespace RazzleServer.Common.Crypto
             0x4257b8d0
         };
 
-        private static readonly uint[] invTable1 =
+        private static readonly uint[] InvTable1 =
         {
             0xa7f45150, 0x65417e53, 0xa4171ac3, 0x5e273a96, 0x6bab3bcb,
             0x459d1ff1, 0x58faacab, 0x03e34b93, 0xfa302055, 0x6d76adf6,
@@ -525,7 +525,7 @@ namespace RazzleServer.Common.Crypto
             0x57b8d042
         };
 
-        private static readonly uint[] invTable2 =
+        private static readonly uint[] InvTable2 =
         {
             0xf45150a7, 0x417e5365, 0x171ac3a4, 0x273a965e, 0xab3bcb6b,
             0x9d1ff145, 0xfaacab58, 0xe34b9303, 0x302055fa, 0x76adf66d,
@@ -581,7 +581,7 @@ namespace RazzleServer.Common.Crypto
             0xb8d04257
         };
 
-        private static readonly uint[] invTable3 =
+        private static readonly uint[] InvTable3 =
         {
             0x5150a7f4, 0x7e536541, 0x1ac3a417, 0x3a965e27, 0x3bcb6bab,
             0x1ff1459d, 0xacab58fa, 0x4b9303e3, 0x2055fa30, 0xadf66d76,

@@ -12,7 +12,7 @@ namespace RazzleServer.Game.Maple.Maps
 {
     public class Portal : MapObject
     {
-        private readonly ILogger Log = LogManager.Log;
+        private readonly ILogger _log = LogManager.Log;
 
         public byte Id { get; private set; }
         public string Label { get; private set; }
@@ -46,7 +46,7 @@ namespace RazzleServer.Game.Maple.Maps
 
         public virtual void Enter(Character character)
         {
-            Log.LogWarning($"'{character.Name}' attempted to enter an unimplemented portal '{Script}'");
+            _log.LogWarning($"'{character.Name}' attempted to enter an unimplemented portal '{Script}'");
 
             using (var oPacket = new PacketWriter(ServerOperationCode.TransferFieldReqInogred))
             {
@@ -57,7 +57,7 @@ namespace RazzleServer.Game.Maple.Maps
 
         public void PlaySoundEffect(Character character)
         {
-            character.ShowLocalUserEffect(UserEffect.PlayPortalSE);
+            character.ShowLocalUserEffect(UserEffect.PlayPortalSe);
         }
 
         public void ShowBalloonMessage(Character character, string text, short width, short height)

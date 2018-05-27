@@ -22,7 +22,7 @@ namespace RazzleServer.Center
         public byte ServerType { get; set; } = 8;
         public int PingTimeout { get; set; } = 30;
         public bool PrintPackets { get; set; } = true;
-        public ulong AESKey { get; set; } = 0x52330F1BB4060813;
+        public ulong AesKey { get; set; } = 0x52330F1BB4060813;
         public bool EnableAutoRegister { get; set; } = true;
         public bool EnableMultiLeveling { get; set; } = true;
         public string CommandIndicator { get; set; } = "!";

@@ -16,7 +16,7 @@ namespace RazzleServer.Game.Maple.Scripting
 
         private void PlayPortalSoundEffect()
         {
-            Character.ShowLocalUserEffect(UserEffect.PlayPortalSE);
+            Character.ShowLocalUserEffect(UserEffect.PlayPortalSe);
         }
     }
 }

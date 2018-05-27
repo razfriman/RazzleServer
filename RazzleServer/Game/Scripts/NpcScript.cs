@@ -7,81 +7,81 @@ namespace RazzleServer.Game.Maple.Scripting
 {
     public class NpcScript : ScriptBase
     {
-        private Npc Npc;
-        private string Text;
-        private WaitableResult<int> mResult;
+        private Npc _npc;
+        private string _text;
+        private WaitableResult<int> _mResult;
 
         public NpcScript(Npc npc, Character character)
             : base(ScriptType.Npc, npc.MapleId.ToString(), character) // TODO: Use actual npc script instead of Id.
         {
-            Npc = npc;
+            _npc = npc;
         }
 
         public void SetResult(int value)
         {
-            mResult.Set(value);
+            _mResult.Set(value);
         }
 
         private void AddText(string text)
         {
-            Text += text;
+            _text += text;
         }
 
         private int SendOk()
         {
-            mResult = new WaitableResult<int>();
-            Character.Client.Send(Npc.GetDialogPacket(Text, NpcMessageType.Standard, 0, 0));
-            Text = string.Empty;
-            mResult.Wait();
-            return mResult.Value;
+            _mResult = new WaitableResult<int>();
+            Character.Client.Send(_npc.GetDialogPacket(_text, NpcMessageType.Standard, 0, 0));
+            _text = string.Empty;
+            _mResult.Wait();
+            return _mResult.Value;
         }
 
         private int SendNext()
         {
-            mResult = new WaitableResult<int>();
-            Character.Client.Send(Npc.GetDialogPacket(Text, NpcMessageType.Standard, 0, 1));
-            Text = string.Empty;
+            _mResult = new WaitableResult<int>();
+            Character.Client.Send(_npc.GetDialogPacket(_text, NpcMessageType.Standard, 0, 1));
+            _text = string.Empty;
 
-            mResult.Wait();
+            _mResult.Wait();
 
-            return mResult.Value;
+            return _mResult.Value;
         }
 
         private int SendBackOk()
         {
-            mResult = new WaitableResult<int>();
-            Character.Client.Send(Npc.GetDialogPacket(Text, NpcMessageType.Standard, 1, 0));
-            Text = string.Empty;
-            mResult.Wait();
+            _mResult = new WaitableResult<int>();
+            Character.Client.Send(_npc.GetDialogPacket(_text, NpcMessageType.Standard, 1, 0));
+            _text = string.Empty;
+            _mResult.Wait();
 
-            return mResult.Value;
+            return _mResult.Value;
         }
 
         private int SendBackNext()
         {
-            mResult = new WaitableResult<int>();
-            Character.Client.Send(Npc.GetDialogPacket(Text, NpcMessageType.Standard, 1, 1));
-            Text = string.Empty;
-            mResult.Wait();
-            return mResult.Value;
+            _mResult = new WaitableResult<int>();
+            Character.Client.Send(_npc.GetDialogPacket(_text, NpcMessageType.Standard, 1, 1));
+            _text = string.Empty;
+            _mResult.Wait();
+            return _mResult.Value;
         }
 
         private int AskYesNo()
         {
-            mResult = new WaitableResult<int>();
-            Character.Client.Send(Npc.GetDialogPacket(Text, NpcMessageType.YesNo));
-            Text = string.Empty;
-            mResult.Wait();
-            return mResult.Value;
+            _mResult = new WaitableResult<int>();
+            Character.Client.Send(_npc.GetDialogPacket(_text, NpcMessageType.YesNo));
+            _text = string.Empty;
+            _mResult.Wait();
+            return _mResult.Value;
         }
 
         private int AskAcceptDecline()
         {
-            mResult = new WaitableResult<int>();
-            Character.Client.Send(Npc.GetDialogPacket(Text, NpcMessageType.AcceptDecline));
-            Text = string.Empty;
-            mResult.Wait();
-            return mResult.Value;
+            _mResult = new WaitableResult<int>();
+            Character.Client.Send(_npc.GetDialogPacket(_text, NpcMessageType.AcceptDecline));
+            _text = string.Empty;
+            _mResult.Wait();
+            return _mResult.Value;
         }
 
         private void AskChoice()

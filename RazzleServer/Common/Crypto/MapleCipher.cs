@@ -10,17 +10,17 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
 		/// AES transformer
 		/// </summary>
-		private FastAES Transformer { get; set; }
+		private FastAes Transformer { get; set; }
 
         /// <summary>
         /// General locker to prevent multithreading
         /// </summary>
-        private volatile object Locker = new object();
+        private volatile object _locker = new object();
 
         /// <summary>
         /// Vector to use in the MapleCrypto
         /// </summary>
-        private InitializationVector MapleIV { get; set; }
+        private InitializationVector MapleIv { get; set; }
 
         /// <summary>
         /// Gameversion of the current <see cref="MapleCipher"/> instance
@@ -36,12 +36,12 @@ namespace RazzleServer.Common.Crypto
         /// Creates a new instance of <see cref="MapleCipher"/>
         /// </summary>
         /// <param name="currentGameVersion">The current MapleStory version</param>
-        /// <param name="AESKey">AESKey for the current MapleStory version</param>
-        public MapleCipher(ushort currentGameVersion, ulong AESKey)
+        /// <param name="aesKey">AESKey for the current MapleStory version</param>
+        public MapleCipher(ushort currentGameVersion, ulong aesKey)
         {
             Handshaken = false;
             GameVersion = currentGameVersion;
-            Transformer = new FastAES(ExpandKey(AESKey));
+            Transformer = new FastAes(ExpandKey(aesKey));
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace RazzleServer.Common.Crypto
         /// </summary>
         public ushort? Encrypt(ref byte[] data, bool toClient)
         {
-            if (!Handshaken || MapleIV == null)
+            if (!Handshaken || MapleIv == null)
             {
                 return null;
             }
@@ -70,10 +70,10 @@ namespace RazzleServer.Common.Crypto
 
             EncryptShanda(data);
 
-            lock (Locker)
+            lock (_locker)
             {
                 Transform(data);
-                ret = MapleIV.MustSend ? MapleIV.LOWORD : null as ushort?;
+                ret = MapleIv.MustSend ? MapleIv.Loword : null as ushort?;
             }
 
             Buffer.BlockCopy(data, 0, newData, 4, data.Length);
@@ -88,7 +88,7 @@ namespace RazzleServer.Common.Crypto
         /// <param name="data">Data to decrypt</param>
         public void Decrypt(ref byte[] data)
         {
-            if (!Handshaken || MapleIV == null)
+            if (!Handshaken || MapleIv == null)
             {
                 return;
             }
@@ -98,7 +98,7 @@ namespace RazzleServer.Common.Crypto
             var newData = new byte[length];
             Buffer.BlockCopy(data, 4, newData, 0, length);
 
-            lock (Locker)
+            lock (_locker)
             {
                 Transform(newData);
             }
@@ -109,9 +109,9 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
         /// Manually sets the vector for the current instance
         /// </summary>
-        public void SetIV(uint IV)
+        public void SetIv(uint iv)
         {
-            MapleIV = new InitializationVector(IV);
+            MapleIv = new InitializationVector(iv);
             Handshaken = true;
         }
 
@@ -130,16 +130,16 @@ namespace RazzleServer.Common.Crypto
         /// Expands the key we store as long
         /// </summary>
         /// <returns>The expanded key</returns>
-        private byte[] ExpandKey(ulong AESKey)
+        private byte[] ExpandKey(ulong aesKey)
         {
-            var Expand = BitConverter.GetBytes(AESKey);
-            var Key = new byte[Expand.Length * 4];
-            for (var i = 0; i < Expand.Length; i++)
+            var expand = BitConverter.GetBytes(aesKey);
+            var key = new byte[expand.Length * 4];
+            for (var i = 0; i < expand.Length; i++)
             {
-                Key[i * 4] = Expand[i];
+                key[i * 4] = expand[i];
             }
 
-            return Key;
+            return key;
         }
 
         /// <summary>
@@ -152,14 +152,14 @@ namespace RazzleServer.Common.Crypto
                 start = 0,
                 index;
 
-            byte[] realIV = new byte[sizeof(int) * 4],
-                   IVBytes = MapleIV.Bytes;
+            byte[] realIv = new byte[sizeof(int) * 4],
+                   ivBytes = MapleIv.Bytes;
 
             while (remaining > 0)
             {
-                for (index = 0; index < realIV.Length; ++index)
+                for (index = 0; index < realIv.Length; ++index)
                 {
-                    realIV[index] = IVBytes[index % 4];
+                    realIv[index] = ivBytes[index % 4];
                 }
 
                 if (remaining < length)
@@ -169,18 +169,18 @@ namespace RazzleServer.Common.Crypto
 
                 for (index = start; index < start + length; ++index)
                 {
-                    if ((index - start) % realIV.Length == 0)
+                    if ((index - start) % realIv.Length == 0)
                     {
-                        Transformer.TransformBlock(realIV);
+                        Transformer.TransformBlock(realIv);
                     }
 
-                    buffer[index] ^= realIV[(index - start) % realIV.Length];
+                    buffer[index] ^= realIv[(index - start) % realIv.Length];
                 }
                 start += length;
                 remaining -= length;
                 length = 0x5B4;
             }
-            MapleIV.Shuffle();
+            MapleIv.Shuffle();
         }
 
         /// <summary>
@@ -189,7 +189,7 @@ namespace RazzleServer.Common.Crypto
         private void WriteHeaderToServer(byte[] data)
         {
             var length = data.Length - 4;
-            int a = MapleIV.HIWORD;
+            int a = MapleIv.Hiword;
             a = a ^ GameVersion;
             var b = a ^ length;
             data[0] = (byte)(a % 0x100);
@@ -204,7 +204,7 @@ namespace RazzleServer.Common.Crypto
         private void WriteHeaderToClient(byte[] data)
         {
             var length = data.Length - 4;
-            var a = MapleIV.HIWORD ^ -(GameVersion + 1);
+            var a = MapleIv.Hiword ^ -(GameVersion + 1);
             var b = a ^ length;
             data[0] = (byte)(a % 0x100);
             data[1] = (byte)((a - data[0]) / 0x100);
@@ -226,14 +226,14 @@ namespace RazzleServer.Common.Crypto
         public bool CheckHeaderToServer(in byte[] data)
         {
             var encodedVersion = (ushort)(data[0] + (data[1] << 8));
-            var version = (ushort)(encodedVersion ^ MapleIV.HIWORD);
+            var version = (ushort)(encodedVersion ^ MapleIv.Hiword);
             return version == GameVersion;
         }
 
         public bool CheckHeaderToClient(in byte[] data)
         {
             var encodedVersion = (ushort)(data[0] + (data[1] << 8));
-            var version = (ushort)-((encodedVersion ^ MapleIV.HIWORD) + 1);
+            var version = (ushort)-((encodedVersion ^ MapleIv.Hiword) + 1);
             return version == GameVersion;
         }
 
@@ -251,9 +251,9 @@ namespace RazzleServer.Common.Crypto
                 len = (byte)(length & 0xFF);
                 for (i = length - 1; i >= 0; --i)
                 {
-                    temp = (byte)(ROL(buffer[i], 3) ^ 0x13);
+                    temp = (byte)(Rol(buffer[i], 3) ^ 0x13);
                     save = temp;
-                    temp = ROR((byte)((xorKey ^ temp) - len), 4);
+                    temp = Ror((byte)((xorKey ^ temp) - len), 4);
                     xorKey = save;
                     buffer[i] = temp;
                     --len;
@@ -263,9 +263,9 @@ namespace RazzleServer.Common.Crypto
                 len = (byte)(length & 0xFF);
                 for (i = 0; i < length; ++i)
                 {
-                    temp = ROL((byte)~(buffer[i] - 0x48), len & 0xFF);
+                    temp = Rol((byte)~(buffer[i] - 0x48), len & 0xFF);
                     save = temp;
-                    temp = ROR((byte)((xorKey ^ temp) - len), 3);
+                    temp = Ror((byte)((xorKey ^ temp) - len), 3);
                     xorKey = save;
                     buffer[i] = temp;
                     --len;
@@ -287,9 +287,9 @@ namespace RazzleServer.Common.Crypto
                 len = (byte)(length & 0xFF);
                 for (i = 0; i < length; i++)
                 {
-                    temp = (byte)((ROL(buffer[i], 3) + len) ^ xorKey);
+                    temp = (byte)((Rol(buffer[i], 3) + len) ^ xorKey);
                     xorKey = temp;
-                    temp = (byte)((~ROR(temp, len & 0xFF) & 0xFF) + 0x48);
+                    temp = (byte)((~Ror(temp, len & 0xFF) & 0xFF) + 0x48);
                     buffer[i] = temp;
                     len--;
                 }
@@ -297,9 +297,9 @@ namespace RazzleServer.Common.Crypto
                 len = (byte)(length & 0xFF);
                 for (i = length - 1; i >= 0; i--)
                 {
-                    temp = (byte)(xorKey ^ (len + ROL(buffer[i], 4)));
+                    temp = (byte)(xorKey ^ (len + Rol(buffer[i], 4)));
                     xorKey = temp;
-                    temp = ROR((byte)(temp ^ 0x13), 3);
+                    temp = Ror((byte)(temp ^ 0x13), 3);
                     buffer[i] = temp;
                     len--;
                 }
@@ -309,7 +309,7 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
         /// Bitwise shift left
         /// </summary>
-        private byte ROL(byte b, int count)
+        private byte Rol(byte b, int count)
         {
             var tmp = b << (count & 7);
             return (byte)(tmp | (tmp >> 8));
@@ -318,7 +318,7 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
         /// Bitwise shift right
         /// </summary>
-        private byte ROR(byte b, int count)
+        private byte Ror(byte b, int count)
         {
             var tmp = b << (8 - (count & 7));
             return (byte)(tmp | (tmp >> 8));

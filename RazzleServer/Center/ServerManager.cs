@@ -19,7 +19,7 @@ namespace RazzleServer.Center
         public Worlds Worlds { get; private set; } = new Worlds();
         public Migrations Migrations { get; private set; } = new Migrations();
 
-        private readonly ILogger Log = LogManager.Log;
+        private readonly ILogger _log = LogManager.Log;
 
         public async Task Configure()
         {
@@ -47,7 +47,7 @@ namespace RazzleServer.Center
 
         private void InitializeDatabase()
         {
-            Log.LogInformation("Initializing Database");
+            _log.LogInformation("Initializing Database");
 
             using (var context = new MapleDbContext())
             {

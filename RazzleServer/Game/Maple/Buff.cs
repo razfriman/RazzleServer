@@ -243,11 +243,11 @@ namespace RazzleServer.Game.Maple
 
             switch (MapleId)
             {
-                case (int)SkillNames.SuperGM.HolySymbol:
+                case (int)SkillNames.SuperGm.HolySymbol:
                     SecondaryStatups.Add(SecondaryBuffStat.HolySymbol, skill.ParameterA);
                     break;
 
-                case (int)SkillNames.SuperGM.Hide:
+                case (int)SkillNames.SuperGm.Hide:
                     SecondaryStatups.Add(SecondaryBuffStat.DarkSight, skill.ParameterA);
                     break;
             }

@@ -42,7 +42,7 @@
         ChiefBandit,
         Shadower,
 
-        GM = 500,
-        SuperGM = 510
+        Gm = 500,
+        SuperGm = 510
     }
 }

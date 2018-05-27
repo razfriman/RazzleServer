@@ -102,7 +102,7 @@
         NecpcUnderline = 147,
         JapaneseKanji = 148,
         NecpcStop = 149,
-        JapanAX = 150,
+        JapanAx = 150,
         J3100Unlabeled = 151,
         NumpadEnter = 156,
         RightCtrl = 157,

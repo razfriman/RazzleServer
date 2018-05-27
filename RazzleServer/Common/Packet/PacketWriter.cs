@@ -11,7 +11,7 @@ namespace RazzleServer.Common.Packet
     /// </summary>
     public class PacketWriter : APacket
     {
-        public const int DEFAULT_SIZE = 1024;
+        public const int DefaultSize = 1024;
 
         /// <summary>
         /// The main writer tool
@@ -21,15 +21,15 @@ namespace RazzleServer.Common.Packet
         /// <summary>
         /// Amount of data writen in the writer
         /// </summary>
-        public short Length => (short)_buffer.Length;
+        public short Length => (short)Buffer.Length;
 
         /// <summary>
         /// Creates a new instance of PacketWriter
         /// </summary>
         public PacketWriter()
         {
-            _buffer = new MemoryStream(DEFAULT_SIZE);
-            _binWriter = new BinaryWriter(_buffer, Encoding.ASCII);
+            Buffer = new MemoryStream(DefaultSize);
+            _binWriter = new BinaryWriter(Buffer, Encoding.ASCII);
         }
 
         /// <summary>
@@ -47,15 +47,15 @@ namespace RazzleServer.Common.Packet
         /// </summary>
         public PacketWriter(byte[] data)
         {
-            _buffer = new MemoryStream(data);
-            _binWriter = new BinaryWriter(_buffer, Encoding.ASCII);
+            Buffer = new MemoryStream(data);
+            _binWriter = new BinaryWriter(Buffer, Encoding.ASCII);
         }
 
         /// <summary>
         /// Restart writing from the point specified. This will overwrite data in the packet.
         /// </summary>
         /// <param name="length">The point of the packet to start writing from.</param>
-        public void Reset(int length) => _buffer.Seek(length, SeekOrigin.Begin);
+        public void Reset(int length) => Buffer.Seek(length, SeekOrigin.Begin);
 
         /// <summary>
         /// Writes a byte to the stream
@@ -156,10 +156,10 @@ namespace RazzleServer.Common.Packet
 
         public void WriteBox(Rectangle box)
         {
-            WriteInt(box.LT.X);
-            WriteInt(box.LT.Y);
-            WriteInt(box.RB.X);
-            WriteInt(box.RB.Y);
+            WriteInt(box.Lt.X);
+            WriteInt(box.Lt.Y);
+            WriteInt(box.Rb.X);
+            WriteInt(box.Rb.Y);
         }
 
         public void WriteDateTime(DateTime item) => WriteLong((long)(item.ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds);

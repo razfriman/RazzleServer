@@ -10,14 +10,14 @@ namespace RazzleServer.Game.Maple.Characters
         public Character Parent { get; private set; }
 
         public List<int> Regular { get; private set; }
-        public List<int> VIP { get; private set; }
+        public List<int> Vip { get; private set; }
 
         public CharacterTrocks(Character parent)
         {
             Parent = parent;
 
             Regular = new List<int>();
-            VIP = new List<int>();
+            Vip = new List<int>();
         }
 
         public void Load()
@@ -79,7 +79,7 @@ namespace RazzleServer.Game.Maple.Characters
                 }
             }
 
-            foreach (var map in VIP)
+            foreach (var map in Vip)
             {
                 if (map == mapId)
                 {
@@ -110,14 +110,14 @@ namespace RazzleServer.Game.Maple.Characters
 
                             Regular.Remove(mapId);
                         }
-                        else if (type == TrockType.VIP)
+                        else if (type == TrockType.Vip)
                         {
-                            if (!VIP.Contains(mapId))
+                            if (!Vip.Contains(mapId))
                             {
                                 return;
                             }
 
-                            VIP.Remove(mapId);
+                            Vip.Remove(mapId);
                         }
                     }
                     break;
@@ -134,9 +134,9 @@ namespace RazzleServer.Game.Maple.Characters
                             {
                                 Regular.Add(mapId);
                             }
-                            else if (type == TrockType.VIP)
+                            else if (type == TrockType.Vip)
                             {
-                                VIP.Add(mapId);
+                                Vip.Add(mapId);
                             }
                         }
                     }
@@ -147,7 +147,7 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 oPacket.WriteByte((byte)(action == TrockAction.Remove ? 2 : 3));
                 oPacket.WriteByte((byte)type);
-                oPacket.WriteBytes(type == TrockType.Regular ? RegularToByteArray() : VIPToByteArray());
+                oPacket.WriteBytes(type == TrockType.Regular ? RegularToByteArray() : VipToByteArray());
 
                 Parent.Client.Send(oPacket);
             }
@@ -158,7 +158,7 @@ namespace RazzleServer.Game.Maple.Characters
             var used = false;
             var action = iPacket.ReadByte();
 
-            var type = itemId == 5040000 ? TrockType.Regular : TrockType.VIP;
+            var type = itemId == 5040000 ? TrockType.Regular : TrockType.Vip;
 
             var destinationMapId = -1;
             var result = TrockResult.Success;
@@ -250,15 +250,15 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public byte[] VIPToByteArray()
+        public byte[] VipToByteArray()
         {
             using (var oPacket = new PacketWriter())
             {
                 var remaining = 1;
 
-                while (remaining <= VIP.Count)
+                while (remaining <= Vip.Count)
                 {
-                    oPacket.WriteInt(VIP[remaining - 1]);
+                    oPacket.WriteInt(Vip[remaining - 1]);
 
                     remaining++;
                 }

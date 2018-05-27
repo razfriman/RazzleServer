@@ -11,7 +11,7 @@ namespace RazzleServer.Game.Maple.Maps
 {
     public sealed class Map
     {
-        private int mObjectIds;
+        private int _mObjectIds;
 
         public int MapleId { get; private set; }
         public GameServer Server { get; set; }
@@ -62,6 +62,6 @@ namespace RazzleServer.Game.Maple.Maps
             .ForEach(x => x.Client.Send(pw));
         }
 
-        public int AssignObjectId() => ++mObjectIds;
+        public int AssignObjectId() => ++_mObjectIds;
     }
 }

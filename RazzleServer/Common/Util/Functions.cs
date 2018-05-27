@@ -13,7 +13,7 @@ namespace RazzleServer.Common.Util
         /// <summary>
         /// Global random against time-based seed mistakes
         /// </summary>
-        private static readonly Random r = new Random();
+        private static readonly Random R = new Random();
 
         /// <summary>
         /// Checks whether a string contains only alpha numerical characters
@@ -22,7 +22,7 @@ namespace RazzleServer.Common.Util
         /// <returns></returns>
         public static bool IsAlphaNumerical(string s) => !string.IsNullOrEmpty(s) && new Regex("^[a-zA-Z0-9]*$").IsMatch(s);
 
-        public static byte[] ASCIIToBytes(string s) => Encoding.ASCII.GetBytes(s);
+        public static byte[] AsciiToBytes(string s) => Encoding.ASCII.GetBytes(s);
 
         /// <summary>
         /// Converts a byte array to a hexadecimal string
@@ -125,7 +125,7 @@ namespace RazzleServer.Common.Util
                 return true;
             }
 
-            return r.Next(0, 100) < chance;
+            return R.Next(0, 100) < chance;
         }
 
         public static bool MakeChance(double chance)
@@ -140,18 +140,18 @@ namespace RazzleServer.Common.Util
                 return true;
             }
 
-            return r.NextDouble() * 100 < chance;
+            return R.NextDouble() * 100 < chance;
         }
 
         /// <summary>
         /// Creates a random double between 0.0 and 0.1
         /// </summary>
-        public static double RandomDouble() => r.NextDouble();
+        public static double RandomDouble() => R.NextDouble();
 
         /// <summary>
         /// Creates a random byte
         /// </summary>
-        public static byte RandomByte() => (byte)Math.Floor((double)(r.Next() / 0x1010101));
+        public static byte RandomByte() => (byte)Math.Floor((double)(R.Next() / 0x1010101));
 
         /// <summary>
         /// Creates a random array of bytes
@@ -159,7 +159,7 @@ namespace RazzleServer.Common.Util
         public static byte[] RandomBytes(int length)
         {
             var randomBytes = new byte[length];
-            r.NextBytes(randomBytes);
+            R.NextBytes(randomBytes);
             return randomBytes;
         }
 
@@ -167,7 +167,7 @@ namespace RazzleServer.Common.Util
         /// Creates a boolean that is randomly true or false
         /// </summary>
         /// <returns></returns>
-        public static bool RandomBoolean() => r.Next(0, 100) < 50;
+        public static bool RandomBoolean() => R.Next(0, 100) < 50;
 
         public static uint RandomUInt() => BitConverter.ToUInt32(RandomBytes(4), 0);
 
@@ -176,19 +176,19 @@ namespace RazzleServer.Common.Util
         /// <summary>
         /// Creates a random int
         /// </summary>
-        public static int Random() => (int)Math.Floor((double)r.Next());
+        public static int Random() => (int)Math.Floor((double)R.Next());
 
         /// <summary>
         /// Creates a random with an exclusive upper bound
         /// </summary>
-        public static int Random(int max) => r.Next(max);
+        public static int Random(int max) => R.Next(max);
 
         /// <summary>
         /// Creates a random int with an inclusive min and inclusive max value
         /// </summary>
         /// <param name="min">Lowest value in range</param>
         /// <param name="max">Highest value in range</param>
-        public static int Random(int min, int max) => r.Next(min, max + 1);
+        public static int Random(int min, int max) => R.Next(min, max + 1);
 
         public static string RandomString(int length = 20)
         {
@@ -241,7 +241,7 @@ namespace RazzleServer.Common.Util
         /// <param name="value">Value to be hashed</param>
         /// <param name="key">Key used for the hash</param>
         /// <returns>The HMACSHA512 equivalent of value</returns>
-        public static string GetHMACSha512(string value, string key) => GetHMACSha512(value, Encoding.ASCII.GetBytes(key));
+        public static string GetHmacSha512(string value, string key) => GetHmacSha512(value, Encoding.ASCII.GetBytes(key));
 
         /// <summary>
         /// Creates a HMACSHA512 string
@@ -249,7 +249,7 @@ namespace RazzleServer.Common.Util
         /// <param name="value">Value to be hashed</param>
         /// <param name="key">Key used for the hash</param>
         /// <returns>The HMACSHA512 equivalent of value</returns>
-        public static string GetHMACSha512(string value, byte[] key)
+        public static string GetHmacSha512(string value, byte[] key)
         {
             var data = Encoding.ASCII.GetBytes(value);
             byte[] hashData;
@@ -327,7 +327,7 @@ namespace RazzleServer.Common.Util
             var len = list.Count;
             for (var i = len - 1; i >= 1; --i)
             {
-                var j = r.Next(i);
+                var j = R.Next(i);
                 var tmp = list[i];
                 list[i] = list[j];
                 list[j] = tmp;

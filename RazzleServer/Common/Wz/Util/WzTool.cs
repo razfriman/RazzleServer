@@ -92,7 +92,7 @@ namespace RazzleServer.Common.Wz.Util
             }
             catch
             {
-                return default(T);
+                return default;
             }
         }
 
@@ -100,10 +100,10 @@ namespace RazzleServer.Common.Wz.Util
         {
             switch (ver)
             {
-                case WzMapleVersion.EMS:
-                    return CryptoConstants.WZ_MSEAIV;//?
-                case WzMapleVersion.GMS:
-                    return CryptoConstants.WZ_GMSIV;
+                case WzMapleVersion.Ems:
+                    return CryptoConstants.WzMseaiv;
+                case WzMapleVersion.Gms:
+                    return CryptoConstants.WzGmsiv;
                 default:
                     return new byte[4];
             }
@@ -161,11 +161,11 @@ namespace RazzleServer.Common.Wz.Util
         {
             var mapleVersionSuccessRates = new Hashtable();
             short? version = null;
-            mapleVersionSuccessRates.Add(WzMapleVersion.GMS, GetDecryptionSuccessRate(wzFilePath, WzMapleVersion.GMS, ref version));
-            mapleVersionSuccessRates.Add(WzMapleVersion.EMS, GetDecryptionSuccessRate(wzFilePath, WzMapleVersion.EMS, ref version));
-            mapleVersionSuccessRates.Add(WzMapleVersion.BMS, GetDecryptionSuccessRate(wzFilePath, WzMapleVersion.BMS, ref version));
+            mapleVersionSuccessRates.Add(WzMapleVersion.Gms, GetDecryptionSuccessRate(wzFilePath, WzMapleVersion.Gms, ref version));
+            mapleVersionSuccessRates.Add(WzMapleVersion.Ems, GetDecryptionSuccessRate(wzFilePath, WzMapleVersion.Ems, ref version));
+            mapleVersionSuccessRates.Add(WzMapleVersion.Bms, GetDecryptionSuccessRate(wzFilePath, WzMapleVersion.Bms, ref version));
             fileVersion = (short)version;
-            var mostSuitableVersion = WzMapleVersion.GMS;
+            var mostSuitableVersion = WzMapleVersion.Gms;
             double maxSuccessRate = 0;
 
             foreach (DictionaryEntry mapleVersionEntry in mapleVersionSuccessRates)
@@ -179,7 +179,7 @@ namespace RazzleServer.Common.Wz.Util
 
             if (maxSuccessRate < 0.7 && File.Exists(Path.Combine(Path.GetDirectoryName(wzFilePath), "ZLZ.dll")))
             {
-                return WzMapleVersion.GETFROMZLZ;
+                return WzMapleVersion.GetFromZlz;
             }
 
             return mostSuitableVersion;

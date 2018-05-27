@@ -16,13 +16,13 @@ namespace RazzleServer.Game.Maple.Data.Cache
     {
         public override string CacheName => "Reactors";
 
-        private readonly ILogger Log = LogManager.Log;
+        private readonly ILogger _log = LogManager.Log;
 
         public override void LoadFromWz()
         {
-            Log.LogInformation("Loading Reactors");
+            _log.LogInformation("Loading Reactors");
 
-            using (var file = new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, "Reactor.wz"), WzMapleVersion.CLASSIC))
+            using (var file = new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, "Reactor.wz"), WzMapleVersion.Classic))
             {
                 file.ParseWzFile();
                 file.WzDirectory.WzImages.ForEach(x =>

@@ -76,7 +76,7 @@
         MagicAttack = 0x94,
         MobEnterField = 0x97,
         MobMove = 0x98,
-        MobHPIndicator = 0x99,
+        MobHpIndicator = 0x99,
         MobApplyStatus = 0x9B,
         MobMoveResponse = 0x9D,
         MobDamaged = 0x9E,

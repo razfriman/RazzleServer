@@ -15,13 +15,13 @@ namespace RazzleServer.Game.Maple.Data.Cache
     {
         public override string CacheName => "CreationData";
 
-        private readonly ILogger Log = LogManager.Log;
+        private readonly ILogger _log = LogManager.Log;
 
         public override void LoadFromWz()
         {
-            Log.LogInformation("Loading Character Creation Data");
+            _log.LogInformation("Loading Character Creation Data");
 
-            using (var file = new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, "Etc.wz"), WzMapleVersion.CLASSIC))
+            using (var file = new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, "Etc.wz"), WzMapleVersion.Classic))
             {
                 file.ParseWzFile();
                 var makeCharInfo = file.WzDirectory.GetImageByName("MakeCharInfo.img")["Info"];

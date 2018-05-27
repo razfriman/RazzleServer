@@ -112,7 +112,7 @@ namespace RazzleServer.Common.Wz
             path = filePath;
             fileVersion = -1;
             mapleVersion = version;
-            if (version == WzMapleVersion.GETFROMZLZ)
+            if (version == WzMapleVersion.GetFromZlz)
             {
                 var zlzStream = File.OpenRead(Path.Combine(Path.GetDirectoryName(filePath), "ZLZ.dll"));
                 WzIv = WzKeyGenerator.GetIvFromZlz(zlzStream);
@@ -138,7 +138,7 @@ namespace RazzleServer.Common.Wz
             path = filePath;
             fileVersion = gameVersion;
             mapleVersion = version;
-            if (version == WzMapleVersion.GETFROMZLZ)
+            if (version == WzMapleVersion.GetFromZlz)
             {
                 var zlzStream = File.OpenRead(Path.Combine(Path.GetDirectoryName(filePath), "ZLZ.dll"));
                 WzIv = WzKeyGenerator.GetIvFromZlz(zlzStream);
@@ -157,7 +157,7 @@ namespace RazzleServer.Common.Wz
         /// </summary>
         public void ParseWzFile()
         {
-            if (mapleVersion == WzMapleVersion.GENERATE)
+            if (mapleVersion == WzMapleVersion.Generate)
             {
                 {
                     throw new InvalidOperationException("Cannot call ParseWzFile() if WZ file type is GENERATE");
@@ -169,7 +169,7 @@ namespace RazzleServer.Common.Wz
 
         public void ParseWzFile(byte[] WzIv)
         {
-            if (mapleVersion != WzMapleVersion.GENERATE)
+            if (mapleVersion != WzMapleVersion.Generate)
             {
                 {
                     throw new InvalidOperationException(

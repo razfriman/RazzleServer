@@ -56,7 +56,7 @@ namespace RazzleServer.Game.Maple.Characters
 
             switch (skill.MapleId)
             {
-                case (int)SkillNames.SuperGM.Resurrection:
+                case (int)SkillNames.SuperGm.Resurrection:
                     {
                         var targets = iPacket.ReadByte();
 

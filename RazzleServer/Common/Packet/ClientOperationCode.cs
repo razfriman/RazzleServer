@@ -3,13 +3,13 @@
     public enum ClientOperationCode : ushort
     {
         LeaveCharacterSelect = 0,
-        SelectCharacterByVAC = 0,
-        VACFlagSet = 0,
+        SelectCharacterByVac = 0,
+        VacFlagSet = 0,
         ClientError = 0,
         CharacterSelectRegisterPic = 0,
         CharacterSelectRequestPic = 0,
-        RegisterPicFromVAC = 0,
-        RequestPicFromVAC = 0,
+        RegisterPicFromVac = 0,
+        RequestPicFromVac = 0,
         AccountInfo = 0,
 
         Unknown = 0x00,
@@ -68,7 +68,7 @@
         CancelItemEffect = 0x49,
         UseSummonBag = 0x4B,
 
-        DistributeSP = 0x4D,
+        DistributeSp = 0x4D,
         CancelBuff = 0x4E,
 
         UseCashItem = 0x53,
@@ -80,7 +80,7 @@
         UseItem = 0x63,
         UseReturnScroll = 0x64,
         UseUpgradeScroll = 0x65,
-        DistributeAP = 0x66,
+        DistributeAp = 0x66,
         HealOverTime = 0x67,
         MesoDrop = 0x68,
         GiveFame = 0x69,

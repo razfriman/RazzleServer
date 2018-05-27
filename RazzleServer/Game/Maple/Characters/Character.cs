@@ -54,38 +54,38 @@ namespace RazzleServer.Game.Maple.Characters
         public DateTime LastHealthHealOverTime { get; set; } = new DateTime();
         public DateTime LastManaHealOverTime { get; set; } = new DateTime();
 
-        private Gender gender;
-        private byte skin;
-        private int face;
-        private int hair;
-        private byte level;
-        private Job job;
-        private short strength;
-        private short dexterity;
-        private short intelligence;
-        private short luck;
-        private short health;
-        private short maxHealth;
-        private short mana;
-        private short maxMana;
-        private short abilityPoints;
-        private short skillPoints;
-        private int experience;
-        private short fame;
-        private int meso;
-        private Npc lastNpc;
-        private QuestReference lastQuest;
-        private string chalkboard;
-        private int itemEffect;
+        private Gender _gender;
+        private byte _skin;
+        private int _face;
+        private int _hair;
+        private byte _level;
+        private Job _job;
+        private short _strength;
+        private short _dexterity;
+        private short _intelligence;
+        private short _luck;
+        private short _health;
+        private short _maxHealth;
+        private short _mana;
+        private short _maxMana;
+        private short _abilityPoints;
+        private short _skillPoints;
+        private int _experience;
+        private short _fame;
+        private int _meso;
+        private Npc _lastNpc;
+        private QuestReference _lastQuest;
+        private string _chalkboard;
+        private int _itemEffect;
 
-        private readonly ILogger Log = LogManager.Log;
+        private readonly ILogger _log = LogManager.Log;
 
         public Gender Gender
         {
-            get => gender;
+            get => _gender;
             set
             {
-                gender = value;
+                _gender = value;
 
                 if (IsInitialized)
                 {
@@ -99,7 +99,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public byte Skin
         {
-            get => skin;
+            get => _skin;
             set
             {
                 if (!DataProvider.Styles.Skins.Contains(value))
@@ -107,7 +107,7 @@ namespace RazzleServer.Game.Maple.Characters
                     //throw new StyleUnavailableException();
                 }
 
-                skin = value;
+                _skin = value;
 
                 if (IsInitialized)
                 {
@@ -119,7 +119,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public int Face
         {
-            get => face;
+            get => _face;
             set
             {
                 if (Gender == Gender.Male && !DataProvider.Styles.MaleFaces.Contains(value) ||
@@ -128,7 +128,7 @@ namespace RazzleServer.Game.Maple.Characters
                     //throw new StyleUnavailableException();
                 }
 
-                face = value;
+                _face = value;
 
                 if (IsInitialized)
                 {
@@ -140,7 +140,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public int Hair
         {
-            get => hair;
+            get => _hair;
             set
             {
                 if (Gender == Gender.Male && !DataProvider.Styles.MaleHairs.Contains(value) ||
@@ -149,7 +149,7 @@ namespace RazzleServer.Game.Maple.Characters
                     //throw new StyleUnavailableException();
                 }
 
-                hair = value;
+                _hair = value;
 
                 if (IsInitialized)
                 {
@@ -169,7 +169,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public byte Level
         {
-            get => level;
+            get => _level;
             set
             {
                 if (value > 200)
@@ -181,13 +181,13 @@ namespace RazzleServer.Game.Maple.Characters
 
                 if (!IsInitialized)
                 {
-                    level = value;
+                    _level = value;
                 }
                 else
                 {
                     if (delta < 0)
                     {
-                        level = value;
+                        _level = value;
 
                         Update(StatisticType.Level);
                     }
@@ -195,7 +195,7 @@ namespace RazzleServer.Game.Maple.Characters
                     {
                         for (var i = 0; i < delta; i++)
                         {
-                            level++;
+                            _level++;
 
                             AbilityPoints += 5;
 
@@ -219,10 +219,10 @@ namespace RazzleServer.Game.Maple.Characters
 
         public Job Job
         {
-            get => job;
+            get => _job;
             set
             {
-                job = value;
+                _job = value;
 
                 if (IsInitialized)
                 {
@@ -235,10 +235,10 @@ namespace RazzleServer.Game.Maple.Characters
 
         public short Strength
         {
-            get => strength;
+            get => _strength;
             set
             {
-                strength = value;
+                _strength = value;
 
                 if (IsInitialized)
                 {
@@ -249,10 +249,10 @@ namespace RazzleServer.Game.Maple.Characters
 
         public short Dexterity
         {
-            get => dexterity;
+            get => _dexterity;
             set
             {
-                dexterity = value;
+                _dexterity = value;
 
                 if (IsInitialized)
                 {
@@ -263,10 +263,10 @@ namespace RazzleServer.Game.Maple.Characters
 
         public short Intelligence
         {
-            get => intelligence;
+            get => _intelligence;
             set
             {
-                intelligence = value;
+                _intelligence = value;
 
                 if (IsInitialized)
                 {
@@ -277,10 +277,10 @@ namespace RazzleServer.Game.Maple.Characters
 
         public short Luck
         {
-            get => luck;
+            get => _luck;
             set
             {
-                luck = value;
+                _luck = value;
 
                 if (IsInitialized)
                 {
@@ -291,20 +291,20 @@ namespace RazzleServer.Game.Maple.Characters
 
         public short Health
         {
-            get => health;
+            get => _health;
             set
             {
                 if (value < 0)
                 {
-                    health = 0;
+                    _health = 0;
                 }
                 else if (value > MaxHealth)
                 {
-                    health = MaxHealth;
+                    _health = MaxHealth;
                 }
                 else
                 {
-                    health = value;
+                    _health = value;
                 }
 
                 if (IsInitialized)
@@ -316,10 +316,10 @@ namespace RazzleServer.Game.Maple.Characters
 
         public short MaxHealth
         {
-            get => maxHealth;
+            get => _maxHealth;
             set
             {
-                maxHealth = value;
+                _maxHealth = value;
 
                 if (IsInitialized)
                 {
@@ -330,20 +330,20 @@ namespace RazzleServer.Game.Maple.Characters
 
         public short Mana
         {
-            get => mana;
+            get => _mana;
             set
             {
                 if (value < 0)
                 {
-                    mana = 0;
+                    _mana = 0;
                 }
                 else if (value > MaxMana)
                 {
-                    mana = MaxMana;
+                    _mana = MaxMana;
                 }
                 else
                 {
-                    mana = value;
+                    _mana = value;
                 }
 
                 if (IsInitialized)
@@ -355,10 +355,10 @@ namespace RazzleServer.Game.Maple.Characters
 
         public short MaxMana
         {
-            get => maxMana;
+            get => _maxMana;
             set
             {
-                maxMana = value;
+                _maxMana = value;
 
                 if (IsInitialized)
                 {
@@ -369,10 +369,10 @@ namespace RazzleServer.Game.Maple.Characters
 
         public short AbilityPoints
         {
-            get => abilityPoints;
+            get => _abilityPoints;
             set
             {
-                abilityPoints = value;
+                _abilityPoints = value;
 
                 if (IsInitialized)
                 {
@@ -383,10 +383,10 @@ namespace RazzleServer.Game.Maple.Characters
 
         public short SkillPoints
         {
-            get => skillPoints;
+            get => _skillPoints;
             set
             {
-                skillPoints = value;
+                _skillPoints = value;
 
                 if (IsInitialized)
                 {
@@ -397,34 +397,34 @@ namespace RazzleServer.Game.Maple.Characters
 
         public int Experience
         {
-            get => experience;
+            get => _experience;
             set
             {
-                var delta = value - experience;
+                var delta = value - _experience;
 
-                experience = value;
+                _experience = value;
 
                 if (ServerConfig.Instance.EnableMultiLeveling)
                 {
-                    while (experience >= ExperienceTables.CharacterLevel[Level])
+                    while (_experience >= ExperienceTables.CharacterLevel[Level])
                     {
-                        experience -= ExperienceTables.CharacterLevel[Level];
+                        _experience -= ExperienceTables.CharacterLevel[Level];
 
                         Level++;
                     }
                 }
                 else
                 {
-                    if (experience >= ExperienceTables.CharacterLevel[Level])
+                    if (_experience >= ExperienceTables.CharacterLevel[Level])
                     {
-                        experience -= ExperienceTables.CharacterLevel[Level];
+                        _experience -= ExperienceTables.CharacterLevel[Level];
 
                         Level++;
                     }
 
-                    if (experience >= ExperienceTables.CharacterLevel[Level])
+                    if (_experience >= ExperienceTables.CharacterLevel[Level])
                     {
-                        experience = ExperienceTables.CharacterLevel[Level] - 1;
+                        _experience = ExperienceTables.CharacterLevel[Level] - 1;
                     }
                 }
 
@@ -437,10 +437,10 @@ namespace RazzleServer.Game.Maple.Characters
 
         public short Fame
         {
-            get => fame;
+            get => _fame;
             set
             {
-                fame = value;
+                _fame = value;
 
                 if (IsInitialized)
                 {
@@ -451,10 +451,10 @@ namespace RazzleServer.Game.Maple.Characters
 
         public int Meso
         {
-            get => meso;
+            get => _meso;
             set
             {
-                meso = value;
+                _meso = value;
 
                 if (IsInitialized)
                 {
@@ -473,7 +473,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public Npc LastNpc
         {
-            get => lastNpc;
+            get => _lastNpc;
             set
             {
                 if (value == null)
@@ -484,22 +484,22 @@ namespace RazzleServer.Game.Maple.Characters
                     }
                 }
 
-                lastNpc = value;
+                _lastNpc = value;
             }
         }
 
         public QuestReference LastQuest
         {
-            get => lastQuest;
-            set => lastQuest = value;
+            get => _lastQuest;
+            set => _lastQuest = value;
         }
 
         public string Chalkboard
         {
-            get => chalkboard;
+            get => _chalkboard;
             set
             {
-                chalkboard = value;
+                _chalkboard = value;
 
                 using (var oPacket = new PacketWriter(ServerOperationCode.Chalkboard))
                 {
@@ -513,16 +513,16 @@ namespace RazzleServer.Game.Maple.Characters
 
         public int ItemEffect
         {
-            get => itemEffect;
+            get => _itemEffect;
             set
             {
-                itemEffect = value;
+                _itemEffect = value;
                 if (IsInitialized)
                 {
                     using (var oPacket = new PacketWriter(ServerOperationCode.ItemEffect))
                     {
                         oPacket.WriteInt(Id);
-                        oPacket.WriteInt(itemEffect);
+                        oPacket.WriteInt(_itemEffect);
                         Map.Send(oPacket, this);
                     }
                 }
@@ -767,7 +767,7 @@ namespace RazzleServer.Game.Maple.Characters
 
             if (portal == null)
             {
-                Log.LogWarning($"Character {Id} Attempting to change map to invalid portal: {portalLabel}");
+                _log.LogWarning($"Character {Id} Attempting to change map to invalid portal: {portalLabel}");
                 return;
             }
 
@@ -981,7 +981,7 @@ namespace RazzleServer.Game.Maple.Characters
             LastNpc.Converse(this);
         }
 
-        public void DistributeAP(StatisticType type, short amount = 1)
+        public void DistributeAp(StatisticType type, short amount = 1)
         {
             switch (type)
             {
@@ -1348,7 +1348,7 @@ namespace RazzleServer.Game.Maple.Characters
             pw.WriteShort(0);// NOTE: Rings (2). 
             pw.WriteShort(0);// NOTE: Rings (3).
             pw.WriteBytes(Trocks.RegularToByteArray());
-            pw.WriteBytes(Trocks.VIPToByteArray());
+            pw.WriteBytes(Trocks.VipToByteArray());
             return pw.ToArray();
         }
 
@@ -1363,8 +1363,8 @@ namespace RazzleServer.Game.Maple.Characters
             oPacket.WriteByte(Level);
             oPacket.WriteString(Name);
             oPacket.WriteString(Guild?.Name);
-            oPacket.WriteShort(Guild?.LogoBG ?? 0);
-            oPacket.WriteByte(Guild?.LogoBGColor ?? 0);
+            oPacket.WriteShort(Guild?.LogoBg ?? 0);
+            oPacket.WriteByte(Guild?.LogoBgColor ?? 0);
             oPacket.WriteShort(Guild?.Logo ?? 0);
             oPacket.WriteByte(Guild?.LogoColor ?? 0);
             oPacket.WriteBytes(Buffs.ToByteArray());
@@ -1458,7 +1458,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                 if (character == null)
                 {
-                    Log.LogError($"Cannot find account [{Name}] in World [{WorldId}]");
+                    _log.LogError($"Cannot find account [{Name}] in World [{WorldId}]");
                     return;
                 }
 
@@ -1468,10 +1468,10 @@ namespace RazzleServer.Game.Maple.Characters
                 character.Experience = Experience;
                 character.Face = Face;
                 character.Fame = Fame;
-                character.Gender = (byte)gender;
+                character.Gender = (byte)_gender;
                 character.Hair = Hair;
                 character.Health = Health;
-                character.Intelligence = intelligence;
+                character.Intelligence = _intelligence;
                 character.Job = (short)Job;
                 character.Level = Level;
                 character.Luck = Luck;
@@ -1504,7 +1504,7 @@ namespace RazzleServer.Game.Maple.Characters
             Keymap.Save();
             Trocks.Save();
 
-            Log.LogInformation($"Saved character '{Name}' to database.");
+            _log.LogInformation($"Saved character '{Name}' to database.");
         }
 
         public void Create()
@@ -1517,7 +1517,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                 if (character != null)
                 {
-                    Log.LogError($"Error creating acconut - [{Name}] already exists in World [{WorldId}]");
+                    _log.LogError($"Error creating acconut - [{Name}] already exists in World [{WorldId}]");
                     return;
                 }
 
@@ -1529,10 +1529,10 @@ namespace RazzleServer.Game.Maple.Characters
                     Experience = Experience,
                     Face = Face,
                     Fame = Fame,
-                    Gender = (byte)gender,
+                    Gender = (byte)_gender,
                     Hair = Hair,
                     Health = Health,
-                    Intelligence = intelligence,
+                    Intelligence = _intelligence,
                     Job = (short)Job,
                     Level = Level,
                     Luck = Luck,
@@ -1577,36 +1577,36 @@ namespace RazzleServer.Game.Maple.Characters
 
                 if (character == null)
                 {
-                    Log.LogError($"Cannot find character [{Id}]");
+                    _log.LogError($"Cannot find character [{Id}]");
                     return;
                 }
 
                 Assigned = true;
                 Name = character.Name;
                 AccountId = character.AccountId;
-                abilityPoints = character.AbilityPoints;
-                dexterity = character.Dexterity;
-                experience = character.Experience;
-                face = character.Face;
-                fame = character.Fame;
-                gender = (Gender)character.Gender;
-                hair = character.Hair;
-                health = character.Health;
-                intelligence = character.Intelligence;
-                job = (Job)character.Job;
-                level = character.Level;
-                luck = character.Luck;
+                _abilityPoints = character.AbilityPoints;
+                _dexterity = character.Dexterity;
+                _experience = character.Experience;
+                _face = character.Face;
+                _fame = character.Fame;
+                _gender = (Gender)character.Gender;
+                _hair = character.Hair;
+                _health = character.Health;
+                _intelligence = character.Intelligence;
+                _job = (Job)character.Job;
+                _level = character.Level;
+                _luck = character.Luck;
                 Map = Client.Server[character.MapId];
-                maxHealth = character.MaxHealth;
-                maxMana = character.MaxMana;
-                meso = character.Meso;
-                mana = character.Mana;
-                skin = character.Skin;
-                strength = character.Strength;
-                skillPoints = character.SkillPoints;
+                _maxHealth = character.MaxHealth;
+                _maxMana = character.MaxMana;
+                _meso = character.Meso;
+                _mana = character.Mana;
+                _skin = character.Skin;
+                _strength = character.Strength;
+                _skillPoints = character.SkillPoints;
                 SpawnPoint = character.SpawnPoint;
                 WorldId = character.WorldId;
-                strength = character.Strength;
+                _strength = character.Strength;
                 GuildRank = character.GuildRank;
                 BuddyListSlots = character.BuddyListSlots;
                 Items.MaxSlots[ItemType.Equipment] = character.EquipmentSlots;

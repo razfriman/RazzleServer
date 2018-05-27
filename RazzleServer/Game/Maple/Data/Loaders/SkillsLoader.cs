@@ -13,13 +13,13 @@ namespace RazzleServer.Game.Maple.Data.Cache
     {
         public override string CacheName => "Skills";
 
-        private readonly ILogger Log = LogManager.Log;
+        private readonly ILogger _log = LogManager.Log;
 
         public override void LoadFromWz()
         {
-            Log.LogInformation("Loading Skills");
+            _log.LogInformation("Loading Skills");
 
-            using (var file = new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, "Skill.wz"), WzMapleVersion.CLASSIC))
+            using (var file = new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, "Skill.wz"), WzMapleVersion.Classic))
             {
                 file.ParseWzFile();
 

@@ -32,8 +32,8 @@ namespace RazzleServer.Game.Handlers
                 // TODO: Open mystic door.
             }
 
-            skill.Character.Health -= skill.CostHP;
-            skill.Character.Mana -= skill.CostMP;
+            skill.Character.Health -= skill.CostHp;
+            skill.Character.Mana -= skill.CostMp;
 
             if (skill.Cooldown > 0)
             {
@@ -162,7 +162,7 @@ namespace RazzleServer.Game.Handlers
 
                 case (int)SkillNames.Cleric.Heal:
                     {
-                        var healthRate = skill.HP;
+                        var healthRate = skill.Hp;
 
                         if (healthRate > 100)
                         {
@@ -277,11 +277,11 @@ namespace RazzleServer.Game.Handlers
                     break;
 
                 case (int)SkillNames.Beginner.EchoOfHero:
-                case (int)SkillNames.SuperGM.Haste:
-                case (int)SkillNames.SuperGM.HolySymbol:
-                case (int)SkillNames.SuperGM.Bless:
-                case (int)SkillNames.SuperGM.HealPlusDispel:
-                case (int)SkillNames.SuperGM.Resurrection:
+                case (int)SkillNames.SuperGm.Haste:
+                case (int)SkillNames.SuperGm.HolySymbol:
+                case (int)SkillNames.SuperGm.Bless:
+                case (int)SkillNames.SuperGm.HealPlusDispel:
+                case (int)SkillNames.SuperGm.Resurrection:
                     {
                         var targets = packet.ReadByte();
                         Func<Character, bool> condition = null;
@@ -289,7 +289,7 @@ namespace RazzleServer.Game.Handlers
 
                         switch (skill.MapleId)
                         {
-                            case (int)SkillNames.SuperGM.HealPlusDispel:
+                            case (int)SkillNames.SuperGm.HealPlusDispel:
                                 {
                                     condition = target => target.IsAlive;
                                     action = target =>
@@ -302,7 +302,7 @@ namespace RazzleServer.Game.Handlers
                                 }
                                 break;
 
-                            case (int)SkillNames.SuperGM.Resurrection:
+                            case (int)SkillNames.SuperGm.Resurrection:
                                 {
                                     condition = target => !target.IsAlive;
                                     action = target =>

@@ -19,27 +19,27 @@ namespace RazzleServer.Common.Packet
         /// <summary>
         /// Amount of data left in the reader
         /// </summary>
-        public short Length => (short)_buffer.Length;
+        public short Length => (short)Buffer.Length;
 
-        public long Available => _buffer.Length - _buffer.Position;
+        public long Available => Buffer.Length - Buffer.Position;
 
         /// <summary>
         /// Creates a new instance of PacketReader
         /// </summary>
         /// <param name="_arrayOfBytes">Starting byte array</param>
-        public PacketReader(byte[] _arrayOfBytes)
+        public PacketReader(byte[] arrayOfBytes)
         {
-            _buffer = new MemoryStream(_arrayOfBytes, false);
-            _binReader = new BinaryReader(_buffer, Encoding.ASCII);
+            Buffer = new MemoryStream(arrayOfBytes, false);
+            _binReader = new BinaryReader(Buffer, Encoding.ASCII);
         }
 
         /// <summary>
         /// Restart reading from the point specified.
         /// </summary>
         /// <param name="length">The point of the packet to start reading from.</param>
-        public void Reset(int length) => _buffer.Seek(length, SeekOrigin.Begin);
+        public void Reset(int length) => Buffer.Seek(length, SeekOrigin.Begin);
 
-        public void Skip(int pLength) => _buffer.Position += Math.Min(pLength, Available);
+        public void Skip(int pLength) => Buffer.Position += Math.Min(pLength, Available);
 
         /// <summary>
         /// Reads an unsigned byte from the stream
@@ -115,13 +115,13 @@ namespace RazzleServer.Common.Packet
         /// <returns></returns>       
         public ushort ReadHeader()
         {
-            var oldPos = _buffer.Position;
-            _buffer.Position = 0;
+            var oldPos = Buffer.Position;
+            Buffer.Position = 0;
             var ret = ReadUShort();
 
             if (oldPos != 0)
             {
-                _buffer.Position = oldPos;
+                Buffer.Position = oldPos;
             }
 
             return ret;

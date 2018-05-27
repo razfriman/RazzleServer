@@ -16,13 +16,13 @@ namespace RazzleServer.Game.Maple.Data.Cache
     {
         public override string CacheName => "Mobs";
 
-        private readonly ILogger Log = LogManager.Log;
+        private readonly ILogger _log = LogManager.Log;
 
         public override void LoadFromWz()
         {
-            Log.LogInformation("Loading Mobs");
+            _log.LogInformation("Loading Mobs");
 
-            using (var file = new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, "Mob.wz"), WzMapleVersion.CLASSIC))
+            using (var file = new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, "Mob.wz"), WzMapleVersion.Classic))
             {
                 file.ParseWzFile();
                 file.WzDirectory.WzImages.ForEach(x =>
@@ -32,7 +32,7 @@ namespace RazzleServer.Game.Maple.Data.Cache
                 });
             }
 
-            using (var file = new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, "Skill.wz"), WzMapleVersion.CLASSIC))
+            using (var file = new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, "Skill.wz"), WzMapleVersion.Classic))
             {
                 file.ParseWzFile();
                 file.WzDirectory.GetImageByName("MobSkill.img");

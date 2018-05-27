@@ -22,60 +22,60 @@ namespace RazzleServer.Common.Util
             public override int GetHashCode() { return Value.GetHashCode(); }
         }
 
-        private Dictionary<TKey, ExpiringValueHolder<TValue>> innerDictionary;
-        private TimeSpan expiryTimeSpan;
+        private Dictionary<TKey, ExpiringValueHolder<TValue>> _innerDictionary;
+        private TimeSpan _expiryTimeSpan;
 
         private void DestoryExpiredItems(TKey key)
         {
-            if (innerDictionary.ContainsKey(key))
+            if (_innerDictionary.ContainsKey(key))
             {
-                var value = innerDictionary[key];
+                var value = _innerDictionary[key];
 
                 if (value.Expiry < DateTime.UtcNow)
                 {
                     //Expired, nuke it in the background and continue
-                    innerDictionary.Remove(key);
+                    _innerDictionary.Remove(key);
                 }
             }
         }
 
         public ExpiringDictionary(TimeSpan expiresAfter)
         {
-            expiryTimeSpan = expiresAfter;
-            innerDictionary = new Dictionary<TKey, ExpiringValueHolder<TValue>>();
+            _expiryTimeSpan = expiresAfter;
+            _innerDictionary = new Dictionary<TKey, ExpiringValueHolder<TValue>>();
         }
 
         public void Add(TKey key, TValue value)
         {
             DestoryExpiredItems(key);
 
-            innerDictionary.Add(key, new ExpiringValueHolder<TValue>(value, expiryTimeSpan));
+            _innerDictionary.Add(key, new ExpiringValueHolder<TValue>(value, _expiryTimeSpan));
         }
 
         public bool ContainsKey(TKey key)
         {
             DestoryExpiredItems(key);
 
-            return innerDictionary.ContainsKey(key);
+            return _innerDictionary.ContainsKey(key);
         }
 
         public bool Remove(TKey key)
         {
             DestoryExpiredItems(key);
 
-            return innerDictionary.Remove(key);
+            return _innerDictionary.Remove(key);
         }
 
-        public ICollection<TKey> Keys => innerDictionary.Keys;
+        public ICollection<TKey> Keys => _innerDictionary.Keys;
 
         public bool TryGetValue(TKey key, out TValue value)
         {
             var returnval = false;
             DestoryExpiredItems(key);
 
-            if (innerDictionary.ContainsKey(key))
+            if (_innerDictionary.ContainsKey(key))
             {
-                value = innerDictionary[key].Value;
+                value = _innerDictionary[key].Value;
                 returnval = true;
             }
             else { value = default(TValue); }
@@ -83,19 +83,19 @@ namespace RazzleServer.Common.Util
             return returnval;
         }
 
-        public ICollection<TValue> Values => innerDictionary.Values.Select(vals => vals.Value).ToList();
+        public ICollection<TValue> Values => _innerDictionary.Values.Select(vals => vals.Value).ToList();
 
         public TValue this[TKey key]
         {
             get
             {
                 DestoryExpiredItems(key);
-                return innerDictionary[key].Value;
+                return _innerDictionary[key].Value;
             }
             set
             {
                 DestoryExpiredItems(key);
-                innerDictionary[key] = new ExpiringValueHolder<TValue>(value, expiryTimeSpan);
+                _innerDictionary[key] = new ExpiringValueHolder<TValue>(value, _expiryTimeSpan);
             }
         }
 
@@ -103,26 +103,26 @@ namespace RazzleServer.Common.Util
         {
             DestoryExpiredItems(item.Key);
 
-            innerDictionary.Add(item.Key, new ExpiringValueHolder<TValue>(item.Value, expiryTimeSpan));
+            _innerDictionary.Add(item.Key, new ExpiringValueHolder<TValue>(item.Value, _expiryTimeSpan));
         }
 
-        public void Clear() => innerDictionary.Clear();
+        public void Clear() => _innerDictionary.Clear();
 
-        public int Count => innerDictionary.Count;
+        public int Count => _innerDictionary.Count;
 
         public bool IsReadOnly => false;
 
-        public bool Contains(KeyValuePair<TKey, TValue> item) => innerDictionary.ContainsKey(item.Key);
+        public bool Contains(KeyValuePair<TKey, TValue> item) => _innerDictionary.ContainsKey(item.Key);
 
         public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
         {
             throw new NotImplementedException();
         }
 
-        public bool Remove(KeyValuePair<TKey, TValue> item) => innerDictionary.Remove(item.Key);
+        public bool Remove(KeyValuePair<TKey, TValue> item) => _innerDictionary.Remove(item.Key);
 
-        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => innerDictionary.Select(x => new KeyValuePair<TKey, TValue>(x.Key, x.Value.Value)).GetEnumerator();
+        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => _innerDictionary.Select(x => new KeyValuePair<TKey, TValue>(x.Key, x.Value.Value)).GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator() => innerDictionary.Select(x => new KeyValuePair<TKey, TValue>(x.Key, x.Value.Value)).GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => _innerDictionary.Select(x => new KeyValuePair<TKey, TValue>(x.Key, x.Value.Value)).GetEnumerator();
     }
 }

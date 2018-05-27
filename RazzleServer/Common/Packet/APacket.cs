@@ -6,14 +6,14 @@ namespace RazzleServer.Common.Packet
 {
     public abstract class APacket : IDisposable
     {
-        protected MemoryStream _buffer;
+        protected MemoryStream Buffer;
 
         public void Dispose()
         {
-            _buffer.Close();
+            Buffer.Close();
         }
 
-        public byte[] ToArray() => _buffer.ToArray();
+        public byte[] ToArray() => Buffer.ToArray();
 
         public string ToPacketString() => ToArray().ByteArrayToString();
 

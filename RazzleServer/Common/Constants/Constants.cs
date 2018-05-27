@@ -107,7 +107,7 @@ namespace RazzleServer.Common.Constants
     public enum TrockType : byte
     {
         Regular = 0,
-        VIP = 1
+        Vip = 1
     }
 
     public enum TrockResult : byte
@@ -181,7 +181,7 @@ namespace RazzleServer.Common.Constants
         Cancel = 5
     }
 
-    public enum VACResult : byte
+    public enum VacResult : byte
     {
         CharInfo = 0,
         SendCount = 1,
@@ -307,10 +307,10 @@ namespace RazzleServer.Common.Constants
         DropPickup,
         QuestRecord,
         CashItemExpire,
-        IncreaseEXP,
+        IncreaseExp,
         IncreaseFame,
         IncreaseMeso,
-        IncreaseGP,
+        IncreaseGp,
         GiveBuff,
         GeneralItemExpire,
         System,
@@ -327,7 +327,7 @@ namespace RazzleServer.Common.Constants
         Login,
         Channel,
         Shop,
-        ITC
+        Itc
     }
 
     public enum ScriptType

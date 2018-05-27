@@ -4,8 +4,8 @@ using RazzleServer.Game.Maple;
 
 namespace RazzleServer.Game.Handlers
 {
-    [PacketHandler(ClientOperationCode.DistributeSP)]
-    public class DistributeSPHandler : GamePacketHandler
+    [PacketHandler(ClientOperationCode.DistributeSp)]
+    public class DistributeSpHandler : GamePacketHandler
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
         {

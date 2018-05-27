@@ -22,9 +22,9 @@ namespace RazzleServer.Game.Maple.Life
         public short Chance { get; private set; }
         public short TargetCount { get; private set; }
         public int Cooldown { get; private set; }
-        public Point LT { get; private set; }
-        public Point RB { get; private set; }
-        public short PercentageLimitHP { get; private set; }
+        public Point Lt { get; private set; }
+        public Point Rb { get; private set; }
+        public short PercentageLimitHp { get; private set; }
         public short SummonLimit { get; private set; }
         public short SummonEffect { get; private set; }
 
@@ -238,11 +238,11 @@ namespace RazzleServer.Game.Maple.Life
 
         private IEnumerable<Character> GetAffectedCharacters(Mob caster)
         {
-            var Rectangle = new Rectangle(LT + caster.Position, RB + caster.Position);
+            var rectangle = new Rectangle(Lt + caster.Position, Rb + caster.Position);
 
             foreach (var character in caster.Map.Characters.Values)
             {
-                if (character.Position.IsInRectangle(Rectangle))
+                if (character.Position.IsInRectangle(rectangle))
                 {
                     yield return character;
                 }
@@ -251,11 +251,11 @@ namespace RazzleServer.Game.Maple.Life
 
         private IEnumerable<Mob> GetAffectedMobs(Mob caster)
         {
-            var Rectangle = new Rectangle(LT + caster.Position, RB + caster.Position);
+            var rectangle = new Rectangle(Lt + caster.Position, Rb + caster.Position);
 
             foreach (var mob in caster.Map.Mobs.Values)
             {
-                if (mob.Position.IsInRectangle(Rectangle))
+                if (mob.Position.IsInRectangle(rectangle))
                 {
                     yield return mob;
                 }

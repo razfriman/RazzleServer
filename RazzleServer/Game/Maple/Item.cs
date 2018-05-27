@@ -21,8 +21,8 @@ namespace RazzleServer.Game.Maple
         public int AccountId { get; private set; }
         public int MapleId { get; private set; }
         public short Slot { get; set; }
-        private short maxPerStack;
-        private short quantity;
+        private short _maxPerStack;
+        private short _quantity;
         public string Creator { get; set; }
         public DateTime Expiration { get; set; }
         public int? PetId { get; set; }
@@ -159,17 +159,17 @@ namespace RazzleServer.Game.Maple
             {
                 if (IsRechargeable && Parent != null)
                 {
-                    return maxPerStack;
+                    return _maxPerStack;
                 }
 
-                return maxPerStack;
+                return _maxPerStack;
             }
-            set => maxPerStack = value;
+            set => _maxPerStack = value;
         }
 
         public short Quantity
         {
-            get => quantity;
+            get => _quantity;
             set
             {
                 if (value > MaxPerStack)
@@ -177,7 +177,7 @@ namespace RazzleServer.Game.Maple
                     throw new ArgumentException("Quantity too high.");
                 }
 
-                quantity = value;
+                _quantity = value;
             }
         }
 

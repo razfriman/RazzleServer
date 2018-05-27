@@ -63,24 +63,24 @@
 		/// <summary>
 		/// Default AES Key used to generate a new IV
 		/// </summary>
-		public static byte[] bDefaultAESKeyValue = {
+		public static byte[] BDefaultAesKeyValue = {
 			0xC6, 0x50, 0x53, 0xF2, 0xA8, 0x42, 0x9D, 0x7F, 0x77, 0x09, 0x1D, 0x26, 0x42, 0x53, 0x88, 0x7C
 		};
 
 		/// <summary>
 		/// IV used to create the WzKey for GMS
 		/// </summary>
-		public static byte[] WZ_GMSIV = { 0x4D, 0x23, 0xC7, 0x2B };
+		public static byte[] WzGmsiv = { 0x4D, 0x23, 0xC7, 0x2B };
 
 		/// <summary>
 		/// IV used to create the WzKey for MSEA
 		/// </summary>
-		public static byte[] WZ_MSEAIV = { 0xB9, 0x7D, 0x63, 0xE9 };
+		public static byte[] WzMseaiv = { 0xB9, 0x7D, 0x63, 0xE9 };
 
 		/// <summary>
 		/// Constant used in WZ offset encryption
 		/// </summary>
-		public static uint WZ_OffsetConstant = 0x581C3F6D;
+		public static uint WzOffsetConstant = 0x581C3F6D;
 
 		/// <summary>
 		/// Trims the AES UserKey for use an AES cryptor

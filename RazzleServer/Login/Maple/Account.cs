@@ -24,7 +24,7 @@ namespace RazzleServer.Login.Maple
         public DateTime Creation { get; set; }
         public int MaxCharacters { get; set; }
         private bool Assigned { get; set; }
-        private readonly ILogger Log = LogManager.Log;
+        private readonly ILogger _log = LogManager.Log;
 
         public Account(LoginClient client)
         {
@@ -64,7 +64,7 @@ namespace RazzleServer.Login.Maple
 
                 if (account == null)
                 {
-                    Log.LogError($"Account does not exists with Id [{Id}]");
+                    _log.LogError($"Account does not exists with Id [{Id}]");
                 }
 
                 account.Username = Username;
@@ -90,7 +90,7 @@ namespace RazzleServer.Login.Maple
 
                 if (account != null)
                 {
-                    Log.LogError($"Error creating acconut - account already exists with username [{Username}]");
+                    _log.LogError($"Error creating acconut - account already exists with username [{Username}]");
                     return;
                 }
 

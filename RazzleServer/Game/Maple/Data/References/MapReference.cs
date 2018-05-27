@@ -12,7 +12,7 @@ namespace RazzleServer.Game.Maple.Data
         public int ReturnMapId { get; private set; }
         public int ForcedReturnMapId { get; private set; }
         public sbyte RegenerationRate { get; private set; }
-        public byte DecreaseHP { get; private set; }
+        public byte DecreaseHp { get; private set; }
         public ushort DamagePerSecond { get; private set; }
         public int ProtectorItemId { get; private set; }
         public sbyte ShipKind { get; private set; }

@@ -2,11 +2,11 @@
 {
 	public enum WzMapleVersion
 	{
-		GMS,
-		EMS,
-		BMS,
-		CLASSIC,
-		GENERATE,
-        GETFROMZLZ
+		Gms,
+        Ems,
+		Bms,
+		Classic,
+		Generate,
+        GetFromZlz
 	}
 }

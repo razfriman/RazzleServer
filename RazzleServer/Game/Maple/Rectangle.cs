@@ -2,13 +2,13 @@
 {
     public class Rectangle
     {
-        public Point LT { get; set; }
-        public Point RB { get; set; }
+        public Point Lt { get; set; }
+        public Point Rb { get; set; }
 
         public Rectangle(Point lt, Point rb)
         {
-            LT = lt;
-            RB = rb;
+            Lt = lt;
+            Rb = rb;
         }
     }
 }

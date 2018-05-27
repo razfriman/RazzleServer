@@ -9,8 +9,8 @@ namespace RazzleServer.Game.Maple.Data
         public sbyte HitCount { get; set; }
         public short Range { get; set; }
         public int BuffTime { get; set; }
-        public short CostMP { get; set; }
-        public short CostHP { get; set; }
+        public short CostMp { get; set; }
+        public short CostHp { get; set; }
         public short Damage { get; set; }
         public int FixedDamage { get; set; }
         public byte CriticalDamage { get; set; }
@@ -31,12 +31,12 @@ namespace RazzleServer.Game.Maple.Data
         public short MagicDefense { get; set; }
         public short Accuracy { get; set; }
         public short Avoidability { get; set; }
-        public short HP { get; set; }
-        public short MP { get; set; }
+        public short Hp { get; set; }
+        public short Mp { get; set; }
         public short Probability { get; set; }
         public short Morph { get; set; }
-        public Point LT { get; private set; }
-        public Point RB { get; private set; }
+        public Point Lt { get; private set; }
+        public Point Rb { get; private set; }
         public int Cooldown { get; set; }
 
         public SkillReference()

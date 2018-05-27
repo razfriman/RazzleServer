@@ -187,7 +187,7 @@ namespace RazzleServer.Game.Maple.Life
             MobSkill skill = null;
             if (skill != null)
             {
-                if (Health * 100 / MaxHealth > skill.PercentageLimitHP ||
+                if (Health * 100 / MaxHealth > skill.PercentageLimitHp ||
                     Cooldowns.ContainsKey(skill) && Cooldowns[skill].AddSeconds(skill.Cooldown) >= DateTime.Now ||
                     (MobSkillName)skill.MapleId == MobSkillName.Summon && Map.Mobs.Count >= 100)
                 {
@@ -300,7 +300,7 @@ namespace RazzleServer.Game.Maple.Life
 
                 Health -= amount;
 
-                using (var oPacket = new PacketWriter(ServerOperationCode.MobHPIndicator))
+                using (var oPacket = new PacketWriter(ServerOperationCode.MobHpIndicator))
                 {
                     oPacket.WriteInt(ObjectId);
                     oPacket.WriteByte((byte)(Health * 100 / MaxHealth));

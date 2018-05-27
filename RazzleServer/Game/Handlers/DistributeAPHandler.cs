@@ -3,8 +3,8 @@ using RazzleServer.Common.Packet;
 
 namespace RazzleServer.Game.Handlers
 {
-    [PacketHandler(ClientOperationCode.DistributeAP)]
-    public class DistributeAPHandler : GamePacketHandler
+    [PacketHandler(ClientOperationCode.DistributeAp)]
+    public class DistributeApHandler : GamePacketHandler
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
@@ -12,7 +12,7 @@ namespace RazzleServer.Game.Handlers
 
             var type = (StatisticType)packet.ReadInt();
 
-            client.Character.DistributeAP(type);
+            client.Character.DistributeAp(type);
 
         }
     }

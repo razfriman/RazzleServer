@@ -15,14 +15,14 @@ namespace RazzleServer.Game.Maple.Data.Cache
     {
         public override string CacheName => "Items";
 
-        private readonly ILogger Log = LogManager.Log;
+        private readonly ILogger _log = LogManager.Log;
 
         public override void LoadFromWz()
         {
-            Log.LogInformation("Loading Items from WZ");
+            _log.LogInformation("Loading Items from WZ");
 
-            Log.LogInformation("Loading Regular Items");
-            using (var file = new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, "Item.wz"), WzMapleVersion.CLASSIC))
+            _log.LogInformation("Loading Regular Items");
+            using (var file = new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, "Item.wz"), WzMapleVersion.Classic))
             {
                 file.ParseWzFile();
 
@@ -32,48 +32,48 @@ namespace RazzleServer.Game.Maple.Data.Cache
                 LoadItems(file.WzDirectory.GetDirectoryByName("Install"), ItemType.Setup);
             }
 
-            Log.LogInformation("Loading Equip Items");
-            using (var file = new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, "Character.wz"), WzMapleVersion.CLASSIC))
+            _log.LogInformation("Loading Equip Items");
+            using (var file = new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, "Character.wz"), WzMapleVersion.Classic))
             {
                 file.ParseWzFile();
 
-                Log.LogInformation("Loading Equip Items: Accessory");
+                _log.LogInformation("Loading Equip Items: Accessory");
                 LoadEquipment(file.WzDirectory.GetDirectoryByName("Accessory"));
 
-                Log.LogInformation("Loading Equip Items: Cap");
+                _log.LogInformation("Loading Equip Items: Cap");
                 LoadEquipment(file.WzDirectory.GetDirectoryByName("Cap"));
 
-                Log.LogInformation("Loading Equip Items: Cape");
+                _log.LogInformation("Loading Equip Items: Cape");
                 LoadEquipment(file.WzDirectory.GetDirectoryByName("Cape"));
 
-                Log.LogInformation("Loading Equip Items: Coat");
+                _log.LogInformation("Loading Equip Items: Coat");
                 LoadEquipment(file.WzDirectory.GetDirectoryByName("Coat"));
 
-                Log.LogInformation("Loading Equip Items: Glove");
+                _log.LogInformation("Loading Equip Items: Glove");
                 LoadEquipment(file.WzDirectory.GetDirectoryByName("Glove"));
 
-                Log.LogInformation("Loading Equip Items: Longcoat");
+                _log.LogInformation("Loading Equip Items: Longcoat");
                 LoadEquipment(file.WzDirectory.GetDirectoryByName("Longcoat"));
 
-                Log.LogInformation("Loading Equip Items: Pants");
+                _log.LogInformation("Loading Equip Items: Pants");
                 LoadEquipment(file.WzDirectory.GetDirectoryByName("Pants"));
 
-                Log.LogInformation("Loading Equip Items: PetEquip");
+                _log.LogInformation("Loading Equip Items: PetEquip");
                 LoadEquipment(file.WzDirectory.GetDirectoryByName("PetEquip"));
 
-                Log.LogInformation("Loading Equip Items: Ring");
+                _log.LogInformation("Loading Equip Items: Ring");
                 LoadEquipment(file.WzDirectory.GetDirectoryByName("Ring"));
 
-                Log.LogInformation("Loading Equip Items: Shield");
+                _log.LogInformation("Loading Equip Items: Shield");
                 LoadEquipment(file.WzDirectory.GetDirectoryByName("Shield"));
 
-                Log.LogInformation("Loading Equip Items: Shoes");
+                _log.LogInformation("Loading Equip Items: Shoes");
                 LoadEquipment(file.WzDirectory.GetDirectoryByName("Shoes"));
 
-                Log.LogInformation("Loading Equip Items: TamingMob");
+                _log.LogInformation("Loading Equip Items: TamingMob");
                 LoadEquipment(file.WzDirectory.GetDirectoryByName("TamingMob"));
 
-                Log.LogInformation("Loading Equip Items: Weapon");
+                _log.LogInformation("Loading Equip Items: Weapon");
                 LoadEquipment(file.WzDirectory.GetDirectoryByName("Weapon"));
             }
         }

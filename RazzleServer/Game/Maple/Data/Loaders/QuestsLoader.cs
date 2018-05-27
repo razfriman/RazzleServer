@@ -15,11 +15,11 @@ namespace RazzleServer.Game.Maple.Data.Cache
     {
         public override string CacheName => "Quests";
 
-        private readonly ILogger Log = LogManager.Log;
+        private readonly ILogger _log = LogManager.Log;
 
         public override void LoadFromWz()
         {
-            Log.LogInformation("Loading Quests");
+            _log.LogInformation("Loading Quests");
 
             //    foreach (Datum datum in new Datums("quest_data").Populate())
             //    {

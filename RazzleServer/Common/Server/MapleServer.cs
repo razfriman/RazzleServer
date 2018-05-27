@@ -25,7 +25,7 @@ namespace RazzleServer.Common.Server
         public ServerManager Manager { get; set; }
         private TcpListener _listener;
         private bool _disposed;
-        private const int BACKLOG_SIZE = 50;
+        private const int BacklogSize = 50;
         public ILogger Log { get; protected set; }
 
         protected MapleServer(ServerManager manager)
@@ -127,7 +127,7 @@ namespace RazzleServer.Common.Server
                 Log.LogInformation($"Starting {GetType().Name} on port [{port}]");
                 Port = port;
                 _listener = new TcpListener(ip, port);
-                _listener.Start(BACKLOG_SIZE);
+                _listener.Start(BacklogSize);
             }
             catch (Exception e)
             {

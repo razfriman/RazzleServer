@@ -6,31 +6,31 @@ namespace RazzleServer.Common.Util
 {
     public class PendingKeyedQueue<TKey, TValue> : Dictionary<TKey, TValue>, IDisposable
     {
-        private ManualResetEvent QueueDone = new ManualResetEvent(false);
+        private ManualResetEvent _queueDone = new ManualResetEvent(false);
 
         public void Enqueue(TKey key, TValue value)
         {
             Add(key, value);
 
-            QueueDone.Set();
+            _queueDone.Set();
         }
 
         public TValue Dequeue(TKey key)
         {
             while (!ContainsKey(key))
             {
-                QueueDone.WaitOne();
+                _queueDone.WaitOne();
             }
 
             var value = this[key];
 
             Remove(key);
 
-            QueueDone.Reset();
+            _queueDone.Reset();
 
             return value;
         }
 
-        public void Dispose() => QueueDone.Dispose();
+        public void Dispose() => _queueDone.Dispose();
     }
 }

@@ -203,7 +203,7 @@ namespace RazzleServer.Common.Wz.Util
             var encOffset = (uint)BaseStream.Position;
             encOffset = (encOffset - Header.FStart) ^ 0xFFFFFFFF;
             encOffset *= Hash;
-            encOffset -= CryptoConstants.WZ_OffsetConstant;
+            encOffset -= CryptoConstants.WzOffsetConstant;
             encOffset = WzTool.RotateLeft(encOffset, (byte)(encOffset & 0x1F));
             var writeOffset = encOffset ^ (value - Header.FStart * 2);
             Write(writeOffset);

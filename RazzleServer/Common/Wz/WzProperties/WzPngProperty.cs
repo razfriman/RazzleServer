@@ -443,7 +443,7 @@ namespace RazzleServer.Common.Wz.WzProperties
             if (listWzUsed)
             {
                 var memStream = new MemoryStream();
-                var writer = new WzBinaryWriter(memStream, WzTool.GetIvByMapleVersion(WzMapleVersion.GMS));
+                var writer = new WzBinaryWriter(memStream, WzTool.GetIvByMapleVersion(WzMapleVersion.Gms));
                 writer.Write(2);
                 for (var i = 0; i < 2; i++)
                 {

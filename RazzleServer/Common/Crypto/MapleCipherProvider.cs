@@ -46,9 +46,9 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
         /// General locker for adding data
         /// </summary>
-        private object AddLocker = new object();
+        private object _addLocker = new object();
 
-        private ILogger Log = LogManager.Log;
+        private ILogger _log = LogManager.Log;
 
         public MapleCipherProvider(ushort currentGameVersion, ulong aesKey, ushort initialBufferSize = 0x100, bool toClient = true)
         {
@@ -75,7 +75,7 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
         /// Callback for when a handshake is finished
         /// </summary>
-        public delegate void CallHandshakeFinished(uint SIV, uint RIV);
+        public delegate void CallHandshakeFinished(uint siv, uint riv);
 
         /// <summary>
         /// Event called when a handshake has been handled by the crypto
@@ -87,7 +87,7 @@ namespace RazzleServer.Common.Crypto
         /// </summary>
         public void AddData(byte[] data, int offset, int length)
         {
-            lock (AddLocker)
+            lock (_addLocker)
             {
                 EnsureCapacity(length + AvailableData);
                 Buffer.BlockCopy(data, offset, DataBuffer, AvailableData, length);
@@ -117,10 +117,10 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
         /// Sets the Recv and Send Vectors for the ciphers
         /// </summary>
-        public void SetVectors(uint SIV, uint RIV)
+        public void SetVectors(uint siv, uint riv)
         {
-            SendCipher.SetIV(SIV);
-            RecvCipher.SetIV(RIV);
+            SendCipher.SetIv(siv);
+            RecvCipher.SetIv(riv);
         }
 
         /// <summary>
@@ -198,8 +198,8 @@ namespace RazzleServer.Common.Crypto
                 var siv = pr.ReadUInt();
                 var riv = pr.ReadUInt();
                 var serverType = pr.ReadByte();
-                SendCipher.SetIV(siv);
-                RecvCipher.SetIV(riv);
+                SendCipher.SetIv(siv);
+                RecvCipher.SetIv(riv);
 
                 HandshakeFinished?.Invoke(siv, riv);
             }

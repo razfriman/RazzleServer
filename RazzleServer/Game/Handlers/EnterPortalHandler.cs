@@ -9,7 +9,7 @@ namespace RazzleServer.Game.Handlers
     [PacketHandler(ClientOperationCode.EnterPortal)]
     public class ChangeMapSpecialHandler : GamePacketHandler
     {
-        private readonly ILogger Log = LogManager.Log;
+        private readonly ILogger _log = LogManager.Log;
 
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
@@ -35,7 +35,7 @@ namespace RazzleServer.Game.Handlers
             }
             catch (Exception ex)
             {
-                Log.LogError($"Script error: {ex}");
+                _log.LogError($"Script error: {ex}");
             }
         }
     }

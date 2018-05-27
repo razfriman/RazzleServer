@@ -228,7 +228,7 @@ namespace RazzleServer.Common.Wz
                 return;
             }
          
-            using (var wzFile = new WzFile(wzPath, 1337, WzMapleVersion.CLASSIC))
+            using (var wzFile = new WzFile(wzPath, 1337, WzMapleVersion.Classic))
             {
                 wzFile.ParseWzFile();
                 ExtractSettingsImage((WzImage)wzFile["UserSettings.img"], userSettingsType);
@@ -242,12 +242,12 @@ namespace RazzleServer.Common.Wz
             WzFile wzFile;
             if (settingsExist)
             {
-                wzFile = new WzFile(wzPath, 1337, WzMapleVersion.CLASSIC);
+                wzFile = new WzFile(wzPath, 1337, WzMapleVersion.Classic);
                 wzFile.ParseWzFile();
             }
             else
             {
-                wzFile = new WzFile(1337, WzMapleVersion.CLASSIC);
+                wzFile = new WzFile(1337, WzMapleVersion.Classic);
                 wzFile.Header.Copyright = "MapleLib";
                 wzFile.Header.RecalculateFileStart();
                 var US = new WzImage("UserSettings.img") { Changed = true, Parsed = true };

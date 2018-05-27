@@ -16,18 +16,18 @@ namespace RazzleServer.Game.Maple.Maps
         public Point Origin { get; set; }
         public Delay Expiry { get; set; }
 
-        private MapObject mDropper;
+        private MapObject _mDropper;
 
         [JsonIgnore]
         public MapObject Dropper
         {
-            get => mDropper;
+            get => _mDropper;
             set
             {
-                mDropper = value;
+                _mDropper = value;
 
-                Origin = mDropper.Position;
-                Position = mDropper.Map.Footholds.FindFloor(mDropper.Position);
+                Origin = _mDropper.Position;
+                Position = _mDropper.Map.Footholds.FindFloor(_mDropper.Position);
             }
         }
 

@@ -352,14 +352,14 @@
             VenomousStab = 4220005
         }
 
-        public enum GM
+        public enum Gm
         {
             Haste = 5001000,
             SuperDragonRoar = 5001001,
             Teleport = 5001007
         }
 
-        public enum SuperGM
+        public enum SuperGm
         {
             HealPlusDispel = 5101000,
             Haste = 5101001,
