@@ -87,7 +87,7 @@ namespace RazzleServer.Common.Network
         }
 
         public void SendRawPacket(byte[] final)
-        {
+        {   
             if (!disposed)
             {
                 var offset = 0;

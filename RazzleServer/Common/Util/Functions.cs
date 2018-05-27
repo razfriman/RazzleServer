@@ -61,7 +61,7 @@ namespace RazzleServer.Common.Util
                 length--;
             }
 
-            return new string(ret, 0, length);
+            return (new string(ret, 0, length)).Trim();
         }
 
         private static int GetHexVal(char hex)
