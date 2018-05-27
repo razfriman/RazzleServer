@@ -47,14 +47,7 @@ namespace RazzleServer.Login.Handlers
                 MaxHealth = 50,
                 MaxMana = 5,
                 Health = 50,
-                Mana = 5,
-                AbilityPoints = 0,
-                SkillPoints = 0,
-                Experience = 0,
-                Fame = 0,
-                Map = DataProvider.Maps.Data[ServerConfig.Instance.DefaultMapId],
-                SpawnPoint = 0,
-                Meso = 0
+                Mana = 5
             };
 
             character.Items.Add(new Item(topId, equipped: true));

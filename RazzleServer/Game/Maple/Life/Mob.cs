@@ -64,72 +64,9 @@ namespace RazzleServer.Game.Maple.Life
 
         public int SpawnEffect { get; set; }
 
-        [JsonIgnore]
-        public Mob CachedReference => DataProvider.Mobs.Data[MapleId];
+        public MobReference CachedReference => DataProvider.Mobs.Data[MapleId];
 
-        public Mob()
-        {
 
-        }
-
-        public Mob(WzImage img)
-        {
-            var name = img.Name.Remove(7);
-            if (!int.TryParse(name, out var id))
-            {
-                return;
-            }
-
-            MapleId = id;
-
-            Level = img["level"]?.GetShort() ?? 1;
-            MaxHealth = (uint)(img["maxHP"]?.GetInt() ?? 0);
-            Health = MaxHealth;
-            MaxMana = (uint)(img["maxMP"]?.GetInt() ?? 0);
-            Mana = MaxHealth;
-            Speed = img["speed"]?.GetShort() ?? 0;
-            HpBarForeColor = (byte)(img["hpTagColor"]?.GetInt() ?? 0);
-            HpBarBackColor = (byte)(img["hpTagBgcolor"]?.GetInt() ?? 0);
-            SummonType = img["summonType"]?.GetShort() ?? 0;
-            Link = img["link"]?.GetInt() ?? 0;
-            WeaponAttack = img["PADamage"]?.GetInt() ?? 0;
-            WeaponDefense = img["PDDamage"]?.GetInt() ?? 0;
-            MagicAttack = img["MADamage"]?.GetInt() ?? 0;
-            MagicDefense = img["MDDamage"]?.GetInt() ?? 0;
-            Accuracy = img["acc"]?.GetShort() ?? 0;
-            Avoidability = img["eva"]?.GetShort() ?? 0;
-            Experience = (uint)(img["exp"]?.GetInt() ?? 0);
-            HealthRecovery = (uint)(img["hpRecovery"]?.GetInt() ?? 0);
-            ManaRecovery = (uint)(img["mpRecovery"]?.GetInt() ?? 0);
-            ChaseSpeed = img["chaseSpeed"]?.GetShort() ?? 0;
-            FixedDamage = img["fixedDamage"]?.GetInt() ?? 0;
-            DropItemPeriod = img["dropItemPeriod"]?.GetInt() ?? 0;
-            DamagedByMobOnly = (img["damagedByMob"]?.GetInt() ?? 0) > 0;
-            Traction = img["fs"]?.GetDouble() ?? 0d;
-            DeathAfter = img["removeAfter"]?.GetInt() ?? 0;
-
-            //publicReward
-            //explosiveReward
-            //HPgaugeHide
-            //firstAttack
-            //boss
-            //undead
-            //pushed
-            //bodyAttack
-            //elemAttr
-            //noFlip
-            //damagedBySelectedMob/0 = 9300150
-            //doNotRemove
-            //onlyNormalAttack
-            //buff
-
-            Loots = new List<Loot>();
-            Skills = new MobSkills(this);
-            DeathSummons = new List<int>();
-
-            img["skill"]?.WzProperties.ForEach(x => Skills.Add(new MobSkill(x)));
-            img["revive"]?.WzProperties?.ForEach(x => DeathSummons.Add(x.GetInt()));
-        }
 
         public Mob(int mapleId)
         {

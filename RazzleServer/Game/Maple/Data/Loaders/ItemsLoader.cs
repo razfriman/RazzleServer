@@ -85,7 +85,7 @@ namespace RazzleServer.Game.Maple.Data.Cache
                .ToList()
                .ForEach(item =>
                {
-                   var mapleItem = new Item(item, type);
+                var mapleItem = new ItemReference(item, type);
                    if (!Data.Data.ContainsKey(mapleItem.MapleId))
                    {
                        Data.Data.Add(mapleItem.MapleId, mapleItem);
@@ -98,7 +98,7 @@ namespace RazzleServer.Game.Maple.Data.Cache
             dir.WzImages
             .ForEach(item =>
             {
-                var mapleItem = new Item(item, ItemType.Equipment);
+                var mapleItem = new ItemReference(item, ItemType.Equipment);
 
                 if (!Data.Data.ContainsKey(mapleItem.MapleId))
                 {

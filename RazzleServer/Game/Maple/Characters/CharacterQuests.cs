@@ -195,7 +195,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public void Start(Quest quest, int npcId)
+        public void Start(QuestReference quest, int npcId)
         {
             Started.Add(quest.MapleId, new Dictionary<int, short>());
 
@@ -235,7 +235,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public void Complete(Quest quest, int selection)
+        public void Complete(QuestReference quest, int selection)
         {
             foreach (var item in quest.PostRequiredItems)
             {

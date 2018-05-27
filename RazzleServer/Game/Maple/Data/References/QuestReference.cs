@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Wz;
-using RazzleServer.Game.Maple.Data;
 
-namespace RazzleServer.Game.Maple
+namespace RazzleServer.Game.Maple.Data
 {
-    public class Quest
+    public class QuestReference
     {
         public ushort MapleId { get; private set; }
         public ushort NextQuestId { get; private set; }
@@ -39,8 +38,6 @@ namespace RazzleServer.Game.Maple
         public Dictionary<Skill, Job> PreSkillRewards { get; set; }
         public Dictionary<Skill, Job> PostSkillRewards { get; set; }
 
-        public Quest NextQuest => NextQuestId > 0 ? DataProvider.Quests.Data[NextQuestId] : null;
-
         public byte Flags
         {
             get
@@ -61,7 +58,12 @@ namespace RazzleServer.Game.Maple
             }
         }
 
-        public Quest(WzImageProperty img)
+
+        public QuestReference()
+        {
+        }
+
+        public QuestReference(WzImageProperty img)
         {
             //this.MapleId = (ushort)img["questid"];
             //this.NextQuestId = (ushort)img["next_quest"];

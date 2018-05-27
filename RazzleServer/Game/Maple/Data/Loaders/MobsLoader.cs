@@ -27,7 +27,7 @@ namespace RazzleServer.Game.Maple.Data.Cache
                 file.ParseWzFile();
                 file.WzDirectory.WzImages.ForEach(x =>
                 {
-                    var mob = new Mob(x);
+                    var mob = new MobReference(x);
                     Data.Data.Add(mob.MapleId, mob);
                 });
             }

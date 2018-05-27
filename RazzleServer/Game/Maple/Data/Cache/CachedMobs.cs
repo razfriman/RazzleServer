@@ -11,6 +11,6 @@ namespace RazzleServer.Game.Maple.Data
 {
     public sealed class CachedMobs
     {
-        public Dictionary<int, Mob> Data { get; set; } = new Dictionary<int, Mob>();
+        public Dictionary<int, MobReference> Data { get; set; } = new Dictionary<int, MobReference>();
     }
 }

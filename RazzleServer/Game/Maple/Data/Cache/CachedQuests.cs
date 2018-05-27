@@ -7,6 +7,6 @@ namespace RazzleServer.Game.Maple.Data
 {
     public sealed class CachedQuests
     {
-        public Dictionary<int, Quest> Data { get; set; } = new Dictionary<int, Quest>();
+        public Dictionary<int, QuestReference> Data { get; set; } = new Dictionary<int, QuestReference>();
     }
 }

@@ -64,7 +64,7 @@ namespace RazzleServer.Game.Maple
             PrimaryStatups = new Dictionary<PrimaryBuffStat, short>();
             SecondaryStatups = new Dictionary<SecondaryBuffStat, short>();
 
-            CalculateStatups(skill);
+            CalculateStatups(skill.CachedReference);
 
             Delay.Execute(() =>
             {
@@ -194,7 +194,7 @@ namespace RazzleServer.Game.Maple
             }
         }
 
-        public void CalculateStatups(Skill skill)
+        public void CalculateStatups(SkillReference skill)
         {
             if (skill.WeaponAttack > 0)
             {

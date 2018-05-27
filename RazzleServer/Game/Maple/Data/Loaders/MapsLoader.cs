@@ -32,7 +32,7 @@ namespace RazzleServer.Game.Maple.Data.Cache
                     .ToList()
                     .ForEach(img =>
                     {
-                        var map = new Map(img);
+                    var map = new MapReference(img);
                         Data.Data.Add(map.MapleId, map);
                     });
             }

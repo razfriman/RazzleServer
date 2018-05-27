@@ -25,4 +25,9 @@
   <ItemGroup>
     <ProjectReference Include="..\RazzleServer.DB\RazzleServer.Data.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Game\Maple\Data\Loaders\" />
+    <Folder Include="Game\Maple\Data\Cache\" />
+    <Folder Include="Game\Maple\Data\References\" />
+  </ItemGroup>
 </Project>

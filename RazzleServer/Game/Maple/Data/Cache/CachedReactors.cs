@@ -11,6 +11,6 @@ namespace RazzleServer.Game.Maple.Data
 {
     public sealed class CachedReactors
     {
-        public Dictionary<int, Reactor> Data { get; set; } = new Dictionary<int, Reactor>();
+        public Dictionary<int, ReactorReference> Data { get; set; } = new Dictionary<int, ReactorReference>();
     }
 }

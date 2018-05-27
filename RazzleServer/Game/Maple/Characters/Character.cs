@@ -74,7 +74,7 @@ namespace RazzleServer.Game.Maple.Characters
         private short fame;
         private int meso;
         private Npc lastNpc;
-        private Quest lastQuest;
+        private QuestReference lastQuest;
         private string chalkboard;
         private int itemEffect;
 
@@ -488,7 +488,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public Quest LastQuest
+        public QuestReference LastQuest
         {
             get => lastQuest;
             set => lastQuest = value;
@@ -758,7 +758,7 @@ namespace RazzleServer.Game.Maple.Characters
         public void Revive()
         {
             Health = 50;
-            ChangeMap(Map.ReturnMapId);
+            ChangeMap(Map.CachedReference.ReturnMapId);
         }
 
         public void ChangeMap(int mapId, string portalLabel)
@@ -790,7 +790,7 @@ namespace RazzleServer.Game.Maple.Characters
                 Client.Send(oPacket);
             }
 
-            DataProvider.Maps.Data[mapId].Characters.Add(this);
+            Client.Server[mapId].Characters.Add(this);
         }
 
         public void AddAbility(StatisticType statistic, short mod, bool isReset)
@@ -966,7 +966,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public void Converse(Npc npc, Quest quest = null)
+        public void Converse(Npc npc, QuestReference quest = null)
         {
             LastNpc = npc;
             LastQuest = quest;
@@ -1588,7 +1588,7 @@ namespace RazzleServer.Game.Maple.Characters
                 job = (Job)character.Job;
                 level = character.Level;
                 luck = character.Luck;
-                Map = DataProvider.Maps.Data[character.MapId];
+                Map = Client.Server[character.MapId];
                 maxHealth = character.MaxHealth;
                 maxMana = character.MaxMana;
                 meso = character.Meso;

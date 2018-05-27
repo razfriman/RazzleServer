@@ -2,7 +2,7 @@
 {
     public sealed class MapSeats : MapObjects<Seat>
     {
-        public MapSeats() : base() { }
+        public MapSeats() { }
 
         public MapSeats(Map map) : base(map) { }
     }

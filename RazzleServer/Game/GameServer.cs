@@ -8,6 +8,7 @@ using RazzleServer.Center.Maple;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Server;
 using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Game.Maple.Maps;
 
 namespace RazzleServer.Game
 {
@@ -16,6 +17,20 @@ namespace RazzleServer.Game
         public byte ChannelId { get; set; }
         public int Population { get; set; }
         public World World { get; set; }
+        public Dictionary<int, Map> Maps { get; set; }
+        public Map this[int id]
+        {
+            get
+            {
+                if (Maps.ContainsKey(id))
+                {
+                    return Maps[id];
+                }
+
+                // CREATE MAP AND SAVE IT TO DICT
+                return null;
+            }
+        }
 
         public GameServer(ServerManager manager, World world, ushort port, byte channelId) : base(manager)
         {

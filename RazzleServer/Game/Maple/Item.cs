@@ -16,13 +16,8 @@ namespace RazzleServer.Game.Maple
     {
         public static ItemType GetType(int mapleId) => (ItemType)(mapleId / 1000000);
 
-        [JsonIgnore]
         public CharacterItems Parent { get; set; }
-
-        [JsonIgnore]
         public int Id { get; private set; }
-
-        [JsonIgnore]
         public int AccountId { get; private set; }
         public int MapleId { get; private set; }
         public short Slot { get; set; }
@@ -95,10 +90,8 @@ namespace RazzleServer.Game.Maple
 
         public List<Tuple<int, short>> Summons { get; private set; }
 
-        [JsonIgnore]
         public ItemType Type => GetType(MapleId);
 
-        [JsonIgnore]
         public WeaponType WeaponType
         {
             get
@@ -156,10 +149,8 @@ namespace RazzleServer.Game.Maple
             }
         }
 
-        [JsonIgnore]
-        public Item CachedReference => DataProvider.Items.Data[MapleId];
+        public ItemReference CachedReference => DataProvider.Items.Data[MapleId];
 
-        [JsonIgnore]
         public Character Character => Parent.Parent;
 
         public short MaxPerStack
@@ -190,10 +181,8 @@ namespace RazzleServer.Game.Maple
             }
         }
 
-        [JsonIgnore]
         public bool IsSealed => DataProvider.Items.WizetItemIds.Contains(MapleId);
 
-        [JsonIgnore]
         public byte Flags
         {
             get
@@ -275,10 +264,8 @@ namespace RazzleServer.Game.Maple
             }
         }
 
-        [JsonIgnore]
         public bool IsBlocked => IsCash || IsSealed || IsTradeBlocked;
 
-        [JsonIgnore]
         public byte AbsoluteSlot
         {
             get
@@ -292,7 +279,6 @@ namespace RazzleServer.Game.Maple
             }
         }
 
-        [JsonIgnore]
         public byte ComputedSlot
         {
             get
@@ -311,7 +297,6 @@ namespace RazzleServer.Game.Maple
             }
         }
 
-        [JsonIgnore]
         public bool Assigned { get; set; }
 
         public Item(int mapleId, short quantity = 1, DateTime? expiration = null, bool equipped = false)
@@ -397,69 +382,6 @@ namespace RazzleServer.Game.Maple
             }
 
             Summons = CachedReference.Summons;
-        }
-
-        public Item()
-        {
-
-        }
-
-        public Item(WzImage img, ItemType type)
-        {
-            var name = img.Name.Remove(8);
-            var info = img["info"];
-
-            if (!int.TryParse(name, out var id))
-            {
-                return;
-            }
-
-            MapleId = id;
-            Summons = new List<Tuple<int, short>>();
-            MaxPerStack = info["slotMax"]?.GetShort() ?? 1;
-            IsCash = (info["cash"]?.GetInt() ?? 0) > 0;
-            Mana = info["recoveryMP"]?.GetShort() ?? 0;
-            Health = info["recoveryHP"]?.GetShort() ?? 0;
-            IsTradeBlocked = (info["tradeBlock"]?.GetInt() ?? 0) > 0;
-            SalePrice = info["price"]?.GetInt() ?? 0;
-            OnlyOne = (info["only"]?.GetInt() ?? 0) > 0;
-            RequiredJob = Job.Beginner;
-            RequiredLevel = info["reqLevel"]?.GetShort() ?? 0;
-            RequiredStrength = info["reqSTR"]?.GetShort() ?? 0;
-            RequiredDexterity = info["reqDEX"]?.GetShort() ?? 0;
-            RequiredIntelligence = info["reqINT"]?.GetShort() ?? 0;
-            RequiredLuck = info["reqLUK"]?.GetShort() ?? 0;
-            RequiredFame = info["reqLevel"]?.GetShort() ?? 0;
-            AttackSpeed = (byte)(info["reqLevel"]?.GetInt() ?? 0);
-            //<string name="islot" value="Wp"/>
-            //<string name="vslot" value="Wp"/>
-            //<int name="walk" value="1"/>
-            //<int name="stand" value="1"/>
-            //<short name="attack" value="1"/>
-            //<string name="afterImage" value="swordOL"/>
-            //<string name="sfx" value="swordL"/>
-            //<int name="incPAD" value="17"/>
-            //<int name="tuc" value="7"/>
-        }
-        public Item(WzImageProperty img, ItemType type)
-        {
-            var name = img.Name;
-            var info = img["info"];
-            if (!int.TryParse(name, out var id))
-            {
-                return;
-            }
-
-            MapleId = id;
-            Summons = new List<Tuple<int, short>>();
-            MaxPerStack = info["slotMax"]?.GetShort() ?? 1;
-            IsCash = (info["cash"]?.GetInt() ?? 0) > 0;
-            Mana = info["recoveryMP"]?.GetShort() ?? 0;
-            Health = info["recoveryHP"]?.GetShort() ?? 0;
-            RequiredLevel = info["reqLevel"]?.GetShort() ?? 0;
-            IsTradeBlocked = (info["tradeBlock"]?.GetInt() ?? 0) > 0;
-            SalePrice = info["price"]?.GetInt() ?? 0;
-            OnlyOne = (info["only"]?.GetInt() ?? 0) > 0;
         }
 
         public Item(ItemEntity datum)

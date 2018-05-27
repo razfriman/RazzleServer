@@ -16,34 +16,8 @@ namespace RazzleServer.Game.Maple.Life
         public byte State { get; set; }
         public SpawnPoint SpawnPoint { get; private set; }
         public List<ReactorState> States { get; set; } = new List<ReactorState>();
-
-        [JsonIgnore]
-        public Reactor CachedReference => DataProvider.Reactors.Data[MapleId];
-
-        public Reactor()
-        {
-
-        }
-
-        public Reactor(WzImage img)
-        {
-            var name = img.Name.Remove(7);
-            if (!int.TryParse(name, out var id))
-            {
-                return;
-            }
-            MapleId = id;
-            Label = img["action"]?.GetString();
-
-            foreach (var state in img.WzProperties)
-            {
-                if (int.TryParse(state.Name, out var stateNumber))
-                {
-                    States.Add(new ReactorState(state));
-                }
-            }
-        }
-
+        public ReactorReference CachedReference => DataProvider.Reactors.Data[MapleId];
+       
         public Reactor(int mapleId)
         {
             MapleId = mapleId;

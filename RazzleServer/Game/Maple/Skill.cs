@@ -93,7 +93,7 @@ namespace RazzleServer.Game.Maple
         }
 
         [JsonIgnore]
-        public Skill CachedReference => DataProvider.Skills.Data[MapleId][CurrentLevel];
+        public SkillReference CachedReference => DataProvider.Skills.Data[MapleId][CurrentLevel];
 
         [JsonIgnore]
         public Character Character => Parent.Parent;
@@ -160,44 +160,7 @@ namespace RazzleServer.Game.Maple
             Expiration = (DateTime)expiration;
         }
 
-        public Skill(WzImageProperty img)
-        {
-            //MapleId = (int)datum["skillid"];
-            //CurrentLevel = (byte)(short)datum["skill_level"];
-            //MobCount = (sbyte)datum["mob_count"];
-            //HitCount = (sbyte)datum["hit_count"];
-            //Range = (short)datum["range"];
-            //BuffTime = (int)datum["buff_time"];
-            //CostHP = (short)datum["hp_cost"];
-            //CostMP = (short)datum["mp_cost"];
-            //Damage = (short)datum["damage"];
-            //FixedDamage = (int)datum["fixed_damage"];
-            //CriticalDamage = (byte)datum["critical_damage"];
-            //Mastery = (sbyte)datum["mastery"];
-            //OptionalItemCost = (int)datum["optional_item_cost"];
-            //CostItem = (int)datum["item_cost"];
-            //ItemCount = (short)datum["item_count"];
-            //CostBullet = (short)datum["bullet_cost"];
-            //CostMeso = (short)datum["money_cost"];
-            //ParameterA = (short)datum["x_property"];
-            //ParameterB = (short)datum["y_property"];
-            //Speed = (short)datum["speed"];
-            //Jump = (short)datum["jump"];
-            //Strength = (short)datum["str"];
-            //WeaponAttack = (short)datum["weapon_atk"];
-            //MagicAttack = (short)datum["magic_atk"];
-            //WeaponDefense = (short)datum["weapon_def"];
-            //MagicDefense = (short)datum["magic_def"];
-            //Accuracy = (short)datum["accuracy"];
-            //Avoidability = (short)datum["avoid"];
-            //HP = (short)datum["hp"];
-            //MP = (short)datum["mp"];
-            //Probability = (short)datum["prop"];
-            //Morph = (short)datum["morph"];
-            //LT = new Point((short)datum["ltx"], (short)datum["lty"]);
-            //RB = new Point((short)datum["rbx"], (short)datum["rby"]);
-            //Cooldown = (int)datum["cooldown_time"];
-        }
+       
         public Skill(SkillEntity entity)
         {
             //Id = (int)entity["Id"];

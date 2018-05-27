@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Center;
 using RazzleServer.Common.Constants;
@@ -37,7 +35,7 @@ namespace RazzleServer.Game.Maple.Data.Cache
                             continue;
                         }
 
-                        Data.Data[id] = new Dictionary<byte, Skill>();
+                        Data.Data[id] = new Dictionary<byte, SkillReference>();
 
                         foreach (var levelImg in skillImg["level"].WzProperties)
                         {
@@ -46,7 +44,7 @@ namespace RazzleServer.Game.Maple.Data.Cache
                                 continue;
                             }
 
-                            Data.Data[id][level] = new Skill(levelImg);
+                            Data.Data[id][level] = new SkillReference(levelImg);
                         }
                     }
                 }

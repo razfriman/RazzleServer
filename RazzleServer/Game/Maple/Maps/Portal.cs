@@ -24,7 +24,7 @@ namespace RazzleServer.Game.Maple.Maps
         public bool IsSpawnPoint => Label == "sp";
 
         [JsonIgnore]
-        public Map DestinationMap => DataProvider.Maps.Data[DestinationMapId];
+        public Map DestinationMap => Map.Server[DestinationMapId];
 
         [JsonIgnore]
         public Portal Link => DataProvider.Maps.Data[DestinationMapId].Portals[DestinationLabel];

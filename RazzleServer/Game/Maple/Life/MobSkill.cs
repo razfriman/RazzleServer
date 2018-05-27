@@ -198,7 +198,7 @@ namespace RazzleServer.Game.Maple.Life
 
                 if (banish)
                 {
-                    affectedCharacter.ChangeMap(affectedCharacter.Map.ReturnMapId);
+                    affectedCharacter.ChangeMap(affectedCharacter.Map.CachedReference.ReturnMapId);
                 }
 
                 if (disease != CharacterDisease.None)

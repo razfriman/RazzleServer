@@ -27,7 +27,7 @@ namespace RazzleServer.Game.Maple.Data.Cache
                 file.ParseWzFile();
                 file.WzDirectory.WzImages.ForEach(x =>
                 {
-                    var reactor = new Reactor(x);
+                    var reactor = new ReactorReference(x);
                     Data.Data.Add(reactor.MapleId, reactor);
                 });
             }
