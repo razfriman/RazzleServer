@@ -82,16 +82,6 @@ namespace RazzleServer.Center
             Console.WriteLine($"Unknown command: {line}");
         }
 
-        public static ServerManager Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new ServerManager();
-                }
-                return _instance;
-            }
-        }
+        public static ServerManager Instance => _instance ?? (_instance = new ServerManager());
     }
 }

@@ -72,7 +72,7 @@ namespace RazzleServer.Tests
 
             var checkCrypto = new MapleCipher(version, aesKey);
             checkCrypto.SetIV(iv);
-            Assert.IsTrue(checkCrypto.CheckHeaderToClient(encryptedPacket));
+            Assert.IsTrue(checkCrypto.CheckHeaderToClient(in encryptedPacket));
         }
 
         [TestMethod]
@@ -95,7 +95,7 @@ namespace RazzleServer.Tests
 
             var checkCrypto = new MapleCipher(version, aesKey);
             checkCrypto.SetIV(iv);
-            Assert.IsTrue(checkCrypto.CheckHeaderToServer(encryptedPacket));
+            Assert.IsTrue(checkCrypto.CheckHeaderToServer(in encryptedPacket));
         }
 
         [TestMethod]

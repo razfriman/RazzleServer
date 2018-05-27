@@ -18,16 +18,7 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
             }
             else
             {
-                string query;
-
-                if (args[0].StartsWith("-"))
-                {
-                    query = CombineArgs(args, 1).ToLower();
-                }
-                else
-                {
-                    query = CombineArgs(args).ToLower();
-                }
+                var query = args[0].StartsWith("-") ? CombineArgs(args, 1).ToLower() : CombineArgs(args).ToLower();
 
                 if (query.Length < 2)
                 {
@@ -35,7 +26,7 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
                 }
                 else
                 {
-                    var hasResult = false;
+                    const bool hasResult = false;
 
                     caller.Notify("[Results]");
 

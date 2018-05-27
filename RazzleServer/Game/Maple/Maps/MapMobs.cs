@@ -16,11 +16,8 @@ namespace RazzleServer.Game.Maple.Maps
 
         public override void OnItemAdded(Mob item)
         {
-            if (DataProvider.IsInitialized)
-            {
-                Map.Send(item.GetCreatePacket());
-                item.AssignController();
-            }
+            Map.Send(item.GetCreatePacket());
+            item.AssignController();
         }
 
         public override void OnItemRemoved(Mob item)
@@ -117,11 +114,8 @@ namespace RazzleServer.Game.Maple.Maps
                 }
             }
 
-            if (DataProvider.IsInitialized)
-            {
-                item.Controller.ControlledMobs.Remove(item);
-                Map.Send(item.GetDestroyPacket());
-            }
+            item.Controller.ControlledMobs.Remove(item);
+            Map.Send(item.GetDestroyPacket());
 
             if (item.SpawnPoint != null)
             {

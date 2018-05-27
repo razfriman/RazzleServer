@@ -9,8 +9,6 @@ namespace RazzleServer.Game.Maple.Data
 {
     public static class DataProvider
     {
-        public static bool IsInitialized { get; private set; }
-
         public static CachedAvailableStyles Styles { get; private set; }
         public static CachedItems Items { get; private set; }
         public static CachedSkills Skills { get; private set; }
@@ -24,8 +22,6 @@ namespace RazzleServer.Game.Maple.Data
 
         public static void Initialize()
         {
-            IsInitialized = false;
-
             var sw = new Stopwatch();
 
             sw.Start();
@@ -56,8 +52,6 @@ namespace RazzleServer.Game.Maple.Data
             sw.Stop();
 
             Log.LogInformation("Data loaded in {0}ms.", sw.ElapsedMilliseconds);
-
-            IsInitialized = true;
         }
     }
 }

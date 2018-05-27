@@ -155,6 +155,7 @@ namespace RazzleServer.Common.Wz
 		/// Creates a WzDirectory
 		/// </summary>
 		/// <param name="reader">The BinaryReader that is currently reading the wz file</param>
+		/// <param name="WzIv"></param>
 		/// <param name="wzFile">The parent Wz File</param>
 		/// <param name="dirName"></param>
 		/// <param name="verHash"></param>

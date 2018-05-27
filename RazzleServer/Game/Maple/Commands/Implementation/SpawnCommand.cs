@@ -21,16 +21,7 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
             else
             {
                 var amount = 0;
-                bool isAmountSpecified;
-
-                if (args.Length > 1)
-                {
-                    isAmountSpecified = int.TryParse(args[args.Length - 1], out amount);
-                }
-                else
-                {
-                    isAmountSpecified = false;
-                }
+                var isAmountSpecified = args.Length > 1 && int.TryParse(args[args.Length - 1], out amount);
 
                 if (amount < 1)
                 {

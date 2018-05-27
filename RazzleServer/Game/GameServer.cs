@@ -46,7 +46,7 @@ namespace RazzleServer.Game
 
         public Character GetCharacterByName(string name) => Clients.Values.Select(x => x.Character).FirstOrDefault(x => x.Name == name);
 
-        public void Send(PacketWriter pw, GameClient except = null) => this.Clients.Values
+        public void Send(PacketWriter pw, GameClient except = null) => Clients.Values
         .Where(x => x.Key != except?.Key)
         .ToList()
         .ForEach(x => x.Send(pw));

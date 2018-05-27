@@ -13,11 +13,8 @@ namespace RazzleServer.Game.Maple.Maps
         {
             lock (this)
             {
-                if (DataProvider.IsInitialized)
-                {
-                    var oPacket = item.GetCreatePacket();
-                    Map.Send(oPacket);
-                }
+                var oPacket = item.GetCreatePacket();
+                Map.Send(oPacket);
             }
         }
 
@@ -25,14 +22,11 @@ namespace RazzleServer.Game.Maple.Maps
         {
             lock (this)
             {
-                if (DataProvider.IsInitialized)
-                {
-                    Map.Send(item.GetDestroyPacket());
-                }
+                Map.Send(item.GetDestroyPacket());
 
                 if (item.SpawnPoint != null)
                 {
-                    Delay.Execute(() => item.SpawnPoint.Spawn(), (item.SpawnPoint.RespawnTime <= 0 ? 30 : item.SpawnPoint.RespawnTime) * 100);
+                    Delay.Execute(item.SpawnPoint.Spawn, (item.SpawnPoint.RespawnTime <= 0 ? 30 : item.SpawnPoint.RespawnTime) * 100);
                 }
             }
         }

@@ -191,7 +191,7 @@ namespace RazzleServer.Common.Crypto
             var length = data.Length - 4;
             int a = MapleIV.HIWORD;
             a = a ^ GameVersion;
-            int b = a ^ length;
+            var b = a ^ length;
             data[0] = (byte)(a % 0x100);
             data[1] = (byte)(a / 0x100);
             data[2] = (byte)(b % 0x100);
@@ -312,7 +312,7 @@ namespace RazzleServer.Common.Crypto
         private byte ROL(byte b, int count)
         {
             var tmp = b << (count & 7);
-            return ((byte)(tmp | (tmp >> 8)));
+            return (byte)(tmp | (tmp >> 8));
         }
 
         /// <summary>
@@ -321,7 +321,7 @@ namespace RazzleServer.Common.Crypto
         private byte ROR(byte b, int count)
         {
             var tmp = b << (8 - (count & 7));
-            return ((byte)(tmp | (tmp >> 8)));
+            return (byte)(tmp | (tmp >> 8));
         }
     }
 }

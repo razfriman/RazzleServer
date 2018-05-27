@@ -4,27 +4,25 @@ namespace RazzleServer.Common.Util
 {
     public sealed class WaitableResult<T> where T : struct
     {
-        private T mValue;
-
-        private ManualResetEvent mEvent;
+        private readonly ManualResetEvent _mEvent;
 
         public WaitableResult()
         {
-            mEvent = new ManualResetEvent(false);
+            _mEvent = new ManualResetEvent(false);
         }
 
         public void Wait()
         {
-            mEvent.WaitOne();
+            _mEvent.WaitOne();
         }
 
         public void Set(T value)
         {
-            mValue = value;
+            Value = value;
 
-            mEvent.Set();
+            _mEvent.Set();
         }
 
-        public T Value => mValue;
+        public T Value { get; private set; }
     }
 }

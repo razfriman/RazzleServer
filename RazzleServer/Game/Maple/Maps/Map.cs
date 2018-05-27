@@ -28,9 +28,11 @@ namespace RazzleServer.Game.Maple.Maps
         public MapReference CachedReference => DataProvider.Maps.Data[MapleId];
 
 
-        public Map(GameServer server)
+        public Map(GameServer server, int id)
         {
             Server = server;
+            MapleId = id;
+
             Characters = new MapCharacters(this);
             Drops = new MapDrops(this);
             Mobs = new MapMobs(this);
@@ -41,6 +43,15 @@ namespace RazzleServer.Game.Maple.Maps
             Portals = new MapPortals(this);
             SpawnPoints = new MapSpawnPoints(this);
             PlayerShops = new MapPlayerShops(this);
+
+            var reference = CachedReference;
+            reference.Npcs.ForEach(x => Npcs.Add(x));
+            reference.Footholds.ForEach(x => Footholds.Footholds.Add(x));
+            reference.Npcs.ForEach(x => Npcs.Add(x));
+            reference.SpawnPoints.ForEach(x => SpawnPoints.Add(x));
+            reference.Portals.ForEach(x => Portals.Add(x));
+
+            SpawnPoints.Spawn();
         }
 
         public void Send(PacketWriter pw, Character except = null)

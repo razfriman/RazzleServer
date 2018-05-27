@@ -93,7 +93,7 @@ namespace RazzleServer.Game
 
             if (Socket?.Connected ?? false)
             {
-                Delay.Execute(() => StartPingCheck(), PingDelay);
+                Delay.Execute(StartPingCheck, PingDelay);
             }
         }
 

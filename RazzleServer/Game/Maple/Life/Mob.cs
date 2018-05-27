@@ -15,7 +15,6 @@ namespace RazzleServer.Game.Maple.Life
     public sealed class Mob : MapObject, IMoveable, ISpawnable, IControllable
     {
         public int MapleId { get; private set; }
-        [JsonIgnore]
         public Character Controller { get; set; }
         public Dictionary<Character, uint> Attackers { get; private set; }
         public SpawnPoint SpawnPoint { get; private set; }

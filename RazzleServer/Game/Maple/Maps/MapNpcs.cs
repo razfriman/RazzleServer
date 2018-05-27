@@ -9,20 +9,14 @@ namespace RazzleServer.Game.Maple.Maps
 
         public override void OnItemAdded(Npc item)
         {
-            if (DataProvider.IsInitialized)
-            {
-                Map.Send(item.GetCreatePacket());
-                item.AssignController();
-            }
+            Map.Send(item.GetCreatePacket());
+            item.AssignController();
         }
 
         public override void OnItemRemoved(Npc item)
         {
-            if (DataProvider.IsInitialized)
-            {
-                item.Controller.ControlledNpcs.Remove(item);
-                Map.Send(item.GetDestroyPacket());
-            }
+            item.Controller.ControlledNpcs.Remove(item);
+            Map.Send(item.GetDestroyPacket());
         }
     }
 }

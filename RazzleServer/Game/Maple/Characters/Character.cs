@@ -763,7 +763,15 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void ChangeMap(int mapId, string portalLabel)
         {
-            ChangeMap(mapId, DataProvider.Maps.Data[mapId].Portals[portalLabel].Id);
+            var portal = DataProvider.Maps.Data[mapId].Portals.FirstOrDefault(x => x.Label == portalLabel);
+
+            if (portal == null)
+            {
+                Log.LogWarning($"Character {Id} Attempting to change map to invalid portal: {portalLabel}");
+                return;
+            }
+
+            ChangeMap(mapId, portal.Id);
         }
 
         public void ChangeMap(int mapId, byte? portalId = null, bool fromPosition = false, Point position = null)

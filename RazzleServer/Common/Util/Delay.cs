@@ -5,16 +5,10 @@ namespace RazzleServer.Common.Util
 {
     public sealed class Delay : IDisposable
     {
-        private Action mAction;
-        private TimeSpan mPeriod;
-        private DateTime mNext;
-        private readonly Timer mTimer;
-
-        public TimeSpan Period => mPeriod;
-
-        public DateTime Next => mNext;
-
-        public TimeSpan DueTime => mNext - DateTime.Now;
+        private readonly Action _mAction;
+        private readonly Timer _mTimer;
+        private TimeSpan Period { get; }
+        private DateTime Next { get; set; }
 
         public static Delay Execute(Action action, int timeout)
         {
@@ -23,22 +17,22 @@ namespace RazzleServer.Common.Util
 
         public Delay(Action action, int timeout, int repeat = Timeout.Infinite)
         {
-            mAction = action;
-            mPeriod = TimeSpan.FromMilliseconds(repeat);
-            mNext = DateTime.Now.AddMilliseconds(timeout);
-            mTimer = new Timer(Callback, null, timeout, repeat);
+            _mAction = action;
+            Period = TimeSpan.FromMilliseconds(repeat);
+            Next = DateTime.Now.AddMilliseconds(timeout);
+            _mTimer = new Timer(Callback, null, timeout, repeat);
         }
 
         private void Callback(object state)
         {
-            mNext = DateTime.Now.Add(mPeriod);
+            Next = DateTime.Now.Add(Period);
 
-            mAction();
+            _mAction();
         }
 
         public void Dispose()
         {
-            mTimer.Dispose();
+            _mTimer.Dispose();
         }
     }
 }

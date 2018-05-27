@@ -28,14 +28,9 @@ namespace RazzleServer.Game.Maple.Maps
             {
                 foreach (var drop in Map.Drops.Values)
                 {
-                    if (drop.Owner == null)
-                    {
-                        item.Client.Send(drop.GetSpawnPacket(item));
-                    }
-                    else
-                    {
-                        item.Client.Send(drop.GetSpawnPacket());
-                    }
+                    item.Client.Send(drop.Owner == null 
+                        ? drop.GetSpawnPacket(item) 
+                        : drop.GetSpawnPacket());
                 }
             }
 

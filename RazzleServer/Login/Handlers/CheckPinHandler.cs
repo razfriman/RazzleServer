@@ -41,14 +41,9 @@ namespace RazzleServer.Login.Handlers
             }
             else if (b == 1)
             {
-                if (string.IsNullOrEmpty(client.Account.Pin))
-                {
-                    result = PinResult.Register;
-                }
-                else
-                {
-                    result = PinResult.Request;
-                }
+                result = string.IsNullOrEmpty(client.Account.Pin) 
+                    ? PinResult.Register 
+                    : PinResult.Request;
             }
             else
             {

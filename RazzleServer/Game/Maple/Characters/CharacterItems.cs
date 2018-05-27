@@ -510,7 +510,7 @@ namespace RazzleServer.Game.Maple.Characters
                             oPacket.WriteString(message);
                             oPacket.WriteByte(Parent.Client.Server.ChannelId);
                             oPacket.WriteBool(whisper);
-                            this.Parent.Client.Server.World.Send(oPacket);
+                            Parent.Client.Server.World.Send(oPacket);
                         }
 
                         used = true;

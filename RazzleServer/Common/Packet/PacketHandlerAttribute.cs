@@ -3,7 +3,7 @@ using System;
 namespace RazzleServer.Common.Packet
 {
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
-    sealed class PacketHandlerAttribute : Attribute
+    internal sealed class PacketHandlerAttribute : Attribute
     {
         public PacketHandlerAttribute(ClientOperationCode header)
         {

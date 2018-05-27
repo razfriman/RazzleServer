@@ -31,11 +31,6 @@
             return fixedText;
         }
 
-        public static string OpenNamedTag(string tag, string name, bool finish)
-        {
-            return OpenNamedTag(tag, name, finish, false);
-        }
-
         public static string EmptyNamedTag(string tag, string name)
         {
             return OpenNamedTag(tag, name, true, true);
@@ -46,17 +41,12 @@
             return OpenNamedTag(tag, name, false, false) + Attrib("value", value, true, true);
         }
 
-        public static string OpenNamedTag(string tag, string name, bool finish, bool empty)
+        public static string OpenNamedTag(string tag, string name, bool finish, bool empty = false)
         {
             return "<" + tag + " name=\"" + name + "\"" + (finish ? (empty ? "/>" : ">") : " ");
         }
 
-        public static string Attrib(string name, string value)
-        {
-            return Attrib(name, value, false, false);
-        }
-
-        public static string Attrib(string name, string value, bool closeTag, bool empty)
+        public static string Attrib(string name, string value, bool closeTag = false, bool empty = false)
         {
             return name + "=\"" + SanitizeText(value) + "\"" + (closeTag ? (empty ? "/>" : ">") : " ");
         }

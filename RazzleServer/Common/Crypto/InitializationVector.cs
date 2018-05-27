@@ -20,7 +20,7 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
         /// Gets the HIWORD from the current container
         /// </summary>
-        internal ushort HIWORD => ((ushort)(Value >> 16));
+        internal ushort HIWORD => (ushort)(Value >> 16);
 
         /// <summary>
         /// Gets the LOWORD from the current container

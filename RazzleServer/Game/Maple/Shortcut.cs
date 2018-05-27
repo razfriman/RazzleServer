@@ -20,14 +20,7 @@ namespace RazzleServer.Game.Maple
         {
             Key = key;
 
-            if (type == KeymapType.None)
-            {
-                Type = GetTypeFromAction(action);
-            }
-            else
-            {
-                Type = type;
-            }
+            Type = type == KeymapType.None ? GetTypeFromAction(action) : type;
 
             Action = action;
         }

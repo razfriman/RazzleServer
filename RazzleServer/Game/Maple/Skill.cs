@@ -92,10 +92,8 @@ namespace RazzleServer.Game.Maple
             }
         }
 
-        [JsonIgnore]
         public SkillReference CachedReference => DataProvider.Skills.Data[MapleId][CurrentLevel];
 
-        [JsonIgnore]
         public Character Character => Parent.Parent;
 
         public bool IsFromFourthJob => MapleId > 1000000 && (MapleId / 10000).ToString()[2] == '2'; // TODO: Redo that.

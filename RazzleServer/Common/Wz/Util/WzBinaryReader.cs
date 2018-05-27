@@ -44,14 +44,7 @@ namespace RazzleServer.Common.Wz.Util
             if (smallLength > 0) // Unicode
             {
                 ushort mask = 0xAAAA;
-                if (smallLength == sbyte.MaxValue)
-                {
-                    length = ReadInt32();
-                }
-                else
-                {
-                    length = smallLength;
-                }
+                length = smallLength == sbyte.MaxValue ? ReadInt32() : smallLength;
                 if (length <= 0)
                 {
                     return string.Empty;

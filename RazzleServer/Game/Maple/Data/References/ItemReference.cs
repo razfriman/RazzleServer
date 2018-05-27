@@ -10,7 +10,6 @@ namespace RazzleServer.Game.Maple.Data
     {
         public int MapleId { get; private set; }
         public short Slot { get; set; }
-        private short maxPerStack;
         public string Creator { get; set; }
         public DateTime Expiration { get; set; }
         public int? PetId { get; set; }
@@ -78,11 +77,7 @@ namespace RazzleServer.Game.Maple.Data
 
         public List<Tuple<int, short>> Summons { get; private set; }
 
-        public short MaxPerStack
-        {
-            get => maxPerStack;
-            set => maxPerStack = value;
-        }
+        public short MaxPerStack { get; private set; }
 
 
         public ItemReference()

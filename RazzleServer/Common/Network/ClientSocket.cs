@@ -13,31 +13,27 @@ namespace RazzleServer.Common.Network
     {
         private readonly Socket _socket;
         private readonly byte[] _socketBuffer;
-        private readonly IPEndPoint _endpoint;
-        private readonly string _host;
-        private readonly byte[] _hostBytes;
-        private readonly ushort _port;
         private readonly object _disposeSync;
         private readonly AClient _client;
         private readonly bool _toClient;
-        private bool disposed;
-        private ILogger Log = LogManager.Log;
+        private bool _disposed;
+        private IPEndPoint Endpoint { get; }
+        private readonly ILogger _log = LogManager.Log;
 
         public MapleCipherProvider Crypto { get; private set; }
-        public bool Connected => !disposed;
-        public IPEndPoint Endpoint => _endpoint;
-        public string Host => _host;
-        public byte[] HostBytes => _hostBytes;
-        public ushort Port => _port;
+        public bool Connected => !_disposed;
+        public string Host { get; }
+        public byte[] HostBytes { get; }
+        public ushort Port { get; }
 
         public ClientSocket(Socket socket, AClient client, ushort currentGameVersion, ulong aesKey, bool toClient)
         {
             _socket = socket;
             _socketBuffer = new byte[1024];
-            _endpoint = socket.RemoteEndPoint as IPEndPoint;
-            _host = _endpoint.Address.ToString();
-            _hostBytes = _endpoint.Address.GetAddressBytes();
-            _port = (ushort)((IPEndPoint)socket.LocalEndPoint).Port;
+            Endpoint = socket.RemoteEndPoint as IPEndPoint;
+            Host = Endpoint?.Address.ToString();
+            HostBytes = Endpoint?.Address.GetAddressBytes();
+            Port = (ushort)((IPEndPoint)socket.LocalEndPoint).Port;
             _disposeSync = new object();
             _client = client;
             _toClient = toClient;
@@ -48,7 +44,7 @@ namespace RazzleServer.Common.Network
         }
         private void WaitForData()
         {
-            if (!disposed)
+            if (!_disposed)
             {
                 var error = SocketError.Success;
 
@@ -70,7 +66,7 @@ namespace RazzleServer.Common.Network
 
         private void PacketReceived(object sender, SocketAsyncEventArgs e)
         {
-            if (!disposed)
+            if (!_disposed)
             {
                 var size = e.BytesTransferred;
 
@@ -88,14 +84,13 @@ namespace RazzleServer.Common.Network
 
         public void SendRawPacket(byte[] final)
         {   
-            if (!disposed)
+            if (!_disposed)
             {
                 var offset = 0;
 
                 while (offset < final.Length)
                 {
-                    var outError = SocketError.Success;
-                    var sent = _socket.Send(final, offset, final.Length - offset, SocketFlags.None, out outError);
+                    var sent = _socket.Send(final, offset, final.Length - offset, SocketFlags.None, out var outError);
 
                     if (sent == 0 || outError != SocketError.Success)
                     {
@@ -112,7 +107,7 @@ namespace RazzleServer.Common.Network
 
         public void Send(byte[] data)
         {
-            if (!disposed)
+            if (!_disposed)
             {
                 var buffer = data.ToArray();
                 Crypto.Encrypt(ref buffer, _toClient);
@@ -122,7 +117,7 @@ namespace RazzleServer.Common.Network
 
         public void Disconnect()
         {
-            Log.LogInformation("Client Disconnected");
+            _log.LogInformation("Client Disconnected");
             Dispose();
         }
 
@@ -130,12 +125,12 @@ namespace RazzleServer.Common.Network
         {
             lock (_disposeSync)
             {
-                if (disposed)
+                if (_disposed)
                 {
                     return;
                 }
 
-                disposed = true;
+                _disposed = true;
 
                 try
                 {

@@ -1,4 +1,5 @@
-﻿using RazzleServer.Common.Constants;
+﻿using System.Collections.Generic;
+using RazzleServer.Common.Constants;
 using RazzleServer.Common.Wz;
 using RazzleServer.Game.Maple.Life;
 using RazzleServer.Game.Maple.Maps;
@@ -28,17 +29,15 @@ namespace RazzleServer.Game.Maple.Data
         public bool IsShop { get; private set; }
         public bool NoPartyLeaderPass { get; private set; }
 
-        public MapMobs Mobs { get; private set; }
-        public MapNpcs Npcs { get; private set; }
-        public MapReactors Reactors { get; private set; }
-        public MapFootholds Footholds { get; private set; }
-        public MapSeats Seats { get; private set; }
-        public MapPortals Portals { get; private set; }
-        public MapSpawnPoints SpawnPoints { get; private set; }
-
         public MapReference()
         {
         }
+
+        public List<Foothold> Footholds { get; private set; } = new List<Foothold>();
+        public List<Portal> Portals { get; set; } = new List<Portal>();
+        public List<Seat> Seats { get; set; } = new List<Seat>();
+        public List<SpawnPoint> SpawnPoints { get; set; } = new List<SpawnPoint>();
+        public List<Npc> Npcs { get; set; } = new List<Npc>();
 
         public MapReference(WzImage img)
         {
@@ -48,13 +47,6 @@ namespace RazzleServer.Game.Maple.Data
                 return;
             }
             MapleId = id;
-            Mobs = new MapMobs(null);
-            Npcs = new MapNpcs(null);
-            Footholds = new MapFootholds();
-            Seats = new MapSeats(null);
-            Reactors = new MapReactors(null);
-            Portals = new MapPortals(null);
-            SpawnPoints = new MapSpawnPoints(null);
 
             var info = img["info"];
             IsTown = (info["town"]?.GetInt() ?? 0) > 0;
@@ -64,7 +56,7 @@ namespace RazzleServer.Game.Maple.Data
 
             img["portal"]?.WzProperties?.ForEach(x => Portals.Add(new Portal(x)));
             img["seat"]?.WzProperties?.ForEach(x => Seats.Add(new Seat(x)));
-            // img["foothold"]?.WzProperties?.ForEach(x => Footholds.Footholds.Add(new Foothold(x)));
+            // img["foothold"]?.WzProperties?.ForEach(x => Footholds.Add(new Foothold(x)));
             img["reactor"]?.WzProperties?.ForEach(x => SpawnPoints.Add(new SpawnPoint(x, LifeObjectType.Reactor)));
             img["seat"]?.WzProperties?.ForEach(x => Seats.Add(new Seat(x)));
             img["life"]?.WzProperties?.ForEach(life =>
@@ -81,8 +73,6 @@ namespace RazzleServer.Game.Maple.Data
                         break;
                 }
             });
-
-            SpawnPoints.Spawn();
         }
     }
 }

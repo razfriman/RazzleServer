@@ -86,17 +86,6 @@ namespace RazzleServer.Center
         }
 
         private static ServerConfig _instance;
-        public static ServerConfig Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new ServerConfig();
-                }
-                return _instance;
-            }
-        }
-
+        public static ServerConfig Instance => _instance ?? (_instance = new ServerConfig());
     }
 }

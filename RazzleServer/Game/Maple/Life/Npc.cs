@@ -16,11 +16,16 @@ namespace RazzleServer.Game.Maple.Life
     {
         [JsonIgnore]
         public Character Controller { get; set; }
+
         public Shop Shop { get; set; }
         public int StorageCost { get; set; }
+
+        [JsonIgnore]
         public Dictionary<Character, NpcScript> Scripts { get; private set; }
 
         private readonly ILogger Log = LogManager.Log;
+
+        public Npc() { }
 
         public Npc(WzImageProperty img)
             : base(img, LifeObjectType.Npc)
@@ -127,14 +132,7 @@ namespace RazzleServer.Game.Maple.Life
                     //selection = this.StyleSelectionHelpers[talker][selection];
                 }
 
-                if (selection != -1)
-                {
-                    Scripts[talker].SetResult(selection);
-                }
-                else
-                {
-                    Scripts[talker].SetResult(action);
-                }
+                Scripts[talker].SetResult(selection != -1 ? selection : action);
             }
             else
             {

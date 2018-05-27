@@ -10,7 +10,6 @@ namespace RazzleServer.Game.Maple.Maps
 
         public MapPortals() { }
 
-        [JsonIgnore]
         public Portal this[string label]
         {
             get

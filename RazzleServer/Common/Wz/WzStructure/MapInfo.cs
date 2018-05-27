@@ -14,15 +14,13 @@ namespace RazzleServer.Common.Wz.WzStructure
 
         public static MapInfo Default = new MapInfo();
 
-        private WzImage image;
-
         public MapInfo()
         {
         }
 
         public MapInfo(WzImage image, string strMapName, string strStreetName, string strCategoryName)
         {
-            this.image = image;
+            this.Image = image;
             int? startHour;
             int? endHour;
             this.strMapName = strMapName;
@@ -425,11 +423,7 @@ namespace RazzleServer.Common.Wz.WzStructure
         //Editor related, not actual properties
         public MapType mapType = MapType.RegularMap;
 
-        public WzImage Image
-        {
-            get => image;
-            set => image = value;
-        }
+        public WzImage Image { get; set; }
 
         public struct TimeMob
         {

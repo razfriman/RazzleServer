@@ -288,12 +288,9 @@ namespace RazzleServer.Common.Wz
             d = VersionHash & 0xFF;
             DecryptedVersionNumber = 0xff ^ a ^ b ^ c ^ d;
 
-            if (EncryptedVersionNumber == DecryptedVersionNumber)
-            {
-                return Convert.ToUInt32(VersionHash);
-            }
-
-            return 0;
+            return EncryptedVersionNumber == DecryptedVersionNumber 
+                ? Convert.ToUInt32(VersionHash) 
+                : 0;
         }
 
         private void CreateVersionHash()
@@ -711,10 +708,7 @@ namespace RazzleServer.Common.Wz
                         }
                 }
             }
-            if (curObj == null)
-            {
-                return null;
-            }
+
             return curObj;
         }
 

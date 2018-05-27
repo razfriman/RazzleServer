@@ -14,6 +14,8 @@ namespace RazzleServer.Game.Maple.Life
         public int RespawnTime { get; private set; }
         public LifeObjectType Type { get; private set; }
 
+        public LifeObject() { }
+            
         public LifeObject(WzImageProperty img, LifeObjectType type)
         {
             MapleId = int.Parse(img["id"].GetString());

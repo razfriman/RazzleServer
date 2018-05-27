@@ -126,7 +126,7 @@ namespace RazzleServer.Common.Crypto
        
         private static uint Shift(uint x, int shift)
         {
-            return ((x >> shift) | (x << (32 - shift)));
+            return (x >> shift) | (x << (32 - shift));
         }
 
         private static uint SubWord(uint x)
