@@ -16,7 +16,7 @@ namespace RazzleServer.Tests
             var aesKey = (ulong)0x52330F1BB4060813;
             var iv = (uint)0;
             var cryptoInstance = new MapleCipher(version, aesKey);
-            cryptoInstance.SetIV(iv);
+            cryptoInstance.SetIv(iv);
 
             var packet = new PacketWriter();
             packet.WriteByte(1);
@@ -38,7 +38,7 @@ namespace RazzleServer.Tests
             var aesKey = (ulong)0x52330F1BB4060813;
             var iv = (uint)0;
             var cryptoInstance = new MapleCipher(version, aesKey);
-            cryptoInstance.SetIV(iv);
+            cryptoInstance.SetIv(iv);
 
             var packet = new PacketWriter();
             packet.WriteByte(1);
@@ -59,7 +59,7 @@ namespace RazzleServer.Tests
             var aesKey = (ulong)0x52330F1BB4060813;
             var iv = (uint)0;
             var cryptoInstance = new MapleCipher(version, aesKey);
-            cryptoInstance.SetIV(iv);
+            cryptoInstance.SetIv(iv);
 
             var packet = new PacketWriter();
             packet.WriteByte(1);
@@ -71,7 +71,7 @@ namespace RazzleServer.Tests
             cryptoInstance.Encrypt(ref encryptedPacket, true);
 
             var checkCrypto = new MapleCipher(version, aesKey);
-            checkCrypto.SetIV(iv);
+            checkCrypto.SetIv(iv);
             Assert.IsTrue(checkCrypto.CheckHeaderToClient(in encryptedPacket));
         }
 
@@ -82,7 +82,7 @@ namespace RazzleServer.Tests
             var aesKey = (ulong)0x52330F1BB4060813;
             var iv = (uint)0;
             var cryptoInstance = new MapleCipher(version, aesKey);
-            cryptoInstance.SetIV(iv);
+            cryptoInstance.SetIv(iv);
 
             var packet = new PacketWriter();
             packet.WriteByte(1);
@@ -94,7 +94,7 @@ namespace RazzleServer.Tests
             cryptoInstance.Encrypt(ref encryptedPacket, false);
 
             var checkCrypto = new MapleCipher(version, aesKey);
-            checkCrypto.SetIV(iv);
+            checkCrypto.SetIv(iv);
             Assert.IsTrue(checkCrypto.CheckHeaderToServer(in encryptedPacket));
         }
 
@@ -105,7 +105,7 @@ namespace RazzleServer.Tests
             var aesKey = (ulong)0x52330F1BB4060813;
             var iv = (uint)0;
             var encryptor = new MapleCipher(version, aesKey);
-            encryptor.SetIV(iv);
+            encryptor.SetIv(iv);
 
             var packet = new PacketWriter();
             packet.WriteByte(1);
@@ -117,7 +117,7 @@ namespace RazzleServer.Tests
             encryptor.Encrypt(ref encryptedPacket, true);
 
             var decryptor = new MapleCipher(version, aesKey);
-            decryptor.SetIV(iv);
+            decryptor.SetIv(iv);
             var decryptedPacket = encryptedPacket.ToArray();
             decryptor.Decrypt(ref decryptedPacket);
 
@@ -131,7 +131,7 @@ namespace RazzleServer.Tests
             var aesKey = (ulong)0x52330F1BB4060813;
             var iv = (uint)0;
             var encryptor = new MapleCipher(version, aesKey);
-            encryptor.SetIV(iv);
+            encryptor.SetIv(iv);
 
             var packet = new PacketWriter();
             packet.WriteByte(1);
@@ -143,7 +143,7 @@ namespace RazzleServer.Tests
             encryptor.Encrypt(ref encryptedPacket, false);
 
             var decryptor = new MapleCipher(version, aesKey);
-            decryptor.SetIV(iv);
+            decryptor.SetIv(iv);
             var decryptedPacket = encryptedPacket.ToArray();
             decryptor.Decrypt(ref decryptedPacket);
 

@@ -7,12 +7,12 @@ namespace RazzleServer.Data
         public int Id { get; set; }
         public int Leader { get; set; }
         public int Logo { get; set; }
-        public int LogoBG { get; set; }
+        public int LogoBg { get; set; }
         public int Capacity { get; set; }
-        public int GP { get; set; }
+        public int Gp { get; set; }
         public int Signature { get; set; }
         public short LogoColor { get; set; }
-        public short LogoBGColor { get; set; }
+        public short LogoBgColor { get; set; }
         [MaxLength(45)]
         public string Name { get; set; }
         [MaxLength(101)]
