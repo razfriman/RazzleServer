@@ -58,6 +58,7 @@ namespace RazzleServer.Common.Crypto
 
 
             var newData = new byte[data.Length + 4];
+
             if (toClient)
             {
                 WriteHeaderToClient(newData);
@@ -218,19 +219,22 @@ namespace RazzleServer.Common.Crypto
         /// <returns>Length of <paramref name="data"/></returns>
         public int GetPacketLength(byte[] data) => (data[0] + (data[1] << 8)) ^ (data[2] + (data[3] << 8));
 
-        public bool CheckHeaderToServer(byte[] data)
+        public bool CheckHeader(in byte[] data, bool toClient) => toClient
+                    ? CheckHeaderToClient(data)
+                    : CheckHeaderToServer(data);
+
+        public bool CheckHeaderToServer(in byte[] data)
         {
-            var iv = MapleIV.Bytes;
-            return ((((data[0] ^ iv[2]) & 0xFF) == (GameVersion & 0xFF)) &&
-                    (((data[1] ^ iv[3]) & 0xFF) == ((ROR((byte)GameVersion, 8)) & 0xFF)));
+            var encodedVersion = (ushort)(data[0] + (data[1] << 8));
+            var version = (ushort)(encodedVersion ^ MapleIV.HIWORD);
+            return version == GameVersion;
         }
 
-        public bool CheckHeaderToClient(byte[] data)
+        public bool CheckHeaderToClient(in byte[] data)
         {
-            var iv = MapleIV.Bytes;
-            var version = -(GameVersion + 1);
-            return ((data[0] ^ iv[2]) & 0xFF) == (version & 0xFF)
-                && ((data[1] ^ iv[3]) & 0xFF) == (ROR((byte)version, 8) & 0xFF);
+            var encodedVersion = (ushort)(data[0] + (data[1] << 8));
+            var version = (ushort)-((encodedVersion ^ MapleIV.HIWORD) + 1);
+            return version == GameVersion;
         }
 
         /// <summary>

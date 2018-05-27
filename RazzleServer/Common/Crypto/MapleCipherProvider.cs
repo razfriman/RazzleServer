@@ -205,6 +205,11 @@ namespace RazzleServer.Common.Crypto
             }
             else
             {
+                if (!RecvCipher.CheckHeader(in data, ToClient))
+                {
+                    throw new InvalidOperationException("Packet header mismatch");
+                }
+
                 RecvCipher.Decrypt(ref data);
                 if (data.Length == 0)
                 {

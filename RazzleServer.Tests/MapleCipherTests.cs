@@ -69,7 +69,10 @@ namespace RazzleServer.Tests
             var originalPacket = packet.ToArray();
             var encryptedPacket = packet.ToArray();
             cryptoInstance.Encrypt(ref encryptedPacket, true);
-            Assert.IsTrue(cryptoInstance.CheckHeaderToClient(encryptedPacket));
+
+            var checkCrypto = new MapleCipher(version, aesKey);
+            checkCrypto.SetIV(iv);
+            Assert.IsTrue(checkCrypto.CheckHeaderToClient(encryptedPacket));
         }
 
         [TestMethod]
@@ -89,8 +92,10 @@ namespace RazzleServer.Tests
             var originalPacket = packet.ToArray();
             var encryptedPacket = packet.ToArray();
             cryptoInstance.Encrypt(ref encryptedPacket, false);
-            var decryptedLength = cryptoInstance.GetPacketLength(encryptedPacket);
-            Assert.IsTrue(cryptoInstance.CheckHeaderToServer(encryptedPacket));
+
+            var checkCrypto = new MapleCipher(version, aesKey);
+            checkCrypto.SetIV(iv);
+            Assert.IsTrue(checkCrypto.CheckHeaderToServer(encryptedPacket));
         }
 
         [TestMethod]
