@@ -195,12 +195,13 @@ namespace RazzleServer.Common.Crypto
         private void WriteHeaderToServer(byte[] data)
         {
             var length = data.Length - 4;
-            var a = MapleIV.HIWORD ^ -(GameVersion + 1);
-            var b = a ^ length;
+            int a = MapleIV.HIWORD;
+            a = a ^ GameVersion;
+            int b = a ^ length;
             data[0] = (byte)(a % 0x100);
-            data[1] = (byte)((a - data[0]) / 0x100);
-            data[2] = (byte)(b ^ 0x100);
-            data[3] = (byte)((b - data[2]) / 0x100);
+            data[1] = (byte)(a / 0x100);
+            data[2] = (byte)(b % 0x100);
+            data[3] = (byte)(b / 0x100);
         }
 
         /// <summary>
@@ -209,13 +210,36 @@ namespace RazzleServer.Common.Crypto
         private void WriteHeaderToClient(byte[] data)
         {
             var length = data.Length - 4;
-            int a = MapleIV.HIWORD;
-            a = a ^ GameVersion;
-            int b = a ^ length;
+            var a = MapleIV.HIWORD ^ -(GameVersion + 1);
+            var b = a ^ length;
             data[0] = (byte)(a % 0x100);
-            data[1] = (byte)(a / 0x100);
-            data[2] = (byte)(b % 0x100);
-            data[3] = (byte)(b / 0x100);
+            data[1] = (byte)((a - data[0]) / 0x100);
+            data[2] = (byte)(b ^ 0x100);
+            data[3] = (byte)((b - data[2]) / 0x100);
+        }
+
+        [Obsolete]
+        private unsafe void WriteHeaderToServerUnsafe(byte[] data)
+        {
+            fixed (byte* pData = data)
+            {
+                *(ushort*)pData = (ushort)(GameVersion ^ MapleIV.HIWORD);
+                *((ushort*)pData + 1) = (ushort)(*(ushort*)pData ^ (data.Length - 4));
+            }
+        }
+
+
+        /// <summary>
+        /// Creates a packet header for incoming data
+        /// </summary>
+        [Obsolete]
+        private unsafe void WriteHeaderToClientUnsafe(byte[] data)
+        {
+            fixed (byte* pData = data)
+            {
+                *(ushort*)pData = (ushort)(-(GameVersion + 1) ^ MapleIV.HIWORD);
+                *((ushort*)pData + 1) = (ushort)(*(ushort*)pData ^ (data.Length - 4));
+            }
         }
 
         /// <summary>
