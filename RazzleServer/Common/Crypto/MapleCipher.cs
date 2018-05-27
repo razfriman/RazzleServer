@@ -106,13 +106,6 @@ namespace RazzleServer.Common.Crypto
         }
 
         /// <summary>
-        /// Gets the length of <paramref name="data"/>
-        /// </summary>
-        /// <param name="data">Data to check</param>
-        /// <returns>Length of <paramref name="data"/></returns>
-        public int GetPacketLength(byte[] data) => (data[0] + (data[1] << 8)) ^ (data[2] + (data[3] << 8));
-
-        /// <summary>
         /// Manually sets the vector for the current instance
         /// </summary>
         public void SetIV(uint IV)
@@ -218,28 +211,26 @@ namespace RazzleServer.Common.Crypto
             data[3] = (byte)((b - data[2]) / 0x100);
         }
 
-        [Obsolete]
-        private unsafe void WriteHeaderToServerUnsafe(byte[] data)
+        /// <summary>
+        /// Gets the length of <paramref name="data"/>
+        /// </summary>
+        /// <param name="data">Data to check</param>
+        /// <returns>Length of <paramref name="data"/></returns>
+        public int GetPacketLength(byte[] data) => (data[0] + (data[1] << 8)) ^ (data[2] + (data[3] << 8));
+
+        public bool CheckHeaderToServer(byte[] data)
         {
-            fixed (byte* pData = data)
-            {
-                *(ushort*)pData = (ushort)(GameVersion ^ MapleIV.HIWORD);
-                *((ushort*)pData + 1) = (ushort)(*(ushort*)pData ^ (data.Length - 4));
-            }
+            var iv = MapleIV.Bytes;
+            return ((((data[0] ^ iv[2]) & 0xFF) == (GameVersion & 0xFF)) &&
+                    (((data[1] ^ iv[3]) & 0xFF) == ((ROR((byte)GameVersion, 8)) & 0xFF)));
         }
 
-
-        /// <summary>
-        /// Creates a packet header for incoming data
-        /// </summary>
-        [Obsolete]
-        private unsafe void WriteHeaderToClientUnsafe(byte[] data)
+        public bool CheckHeaderToClient(byte[] data)
         {
-            fixed (byte* pData = data)
-            {
-                *(ushort*)pData = (ushort)(-(GameVersion + 1) ^ MapleIV.HIWORD);
-                *((ushort*)pData + 1) = (ushort)(*(ushort*)pData ^ (data.Length - 4));
-            }
+            var iv = MapleIV.Bytes;
+            var version = -(GameVersion + 1);
+            return ((data[0] ^ iv[2]) & 0xFF) == (version & 0xFF)
+                && ((data[1] ^ iv[3]) & 0xFF) == (ROR((byte)version, 8) & 0xFF);
         }
 
         /// <summary>
