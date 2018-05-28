@@ -1250,8 +1250,10 @@ namespace RazzleServer.Game.Maple.Characters
                 oPacket.WriteShort(SkillPoints);
                 oPacket.WriteInt(Experience);
                 oPacket.WriteShort(Fame);
+                oPacket.WriteInt(0);
                 oPacket.WriteInt(Map.MapleId);
                 oPacket.WriteByte(SpawnPoint);
+                oPacket.WriteInt(0);
 
                 return oPacket.ToArray();
             }

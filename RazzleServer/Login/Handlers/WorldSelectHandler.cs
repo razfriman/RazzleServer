@@ -13,7 +13,7 @@ namespace RazzleServer.Login.Handlers
             var channelExists = Center.ServerManager.Instance.Worlds[client.World].Contains(client.Channel);
             var characters = client.Server.GetCharacters(client.World, client.Account.Id);
 
-            client.Send(LoginPackets.SelectWord(channelExists, characters, client.Account));
+            client.Send(LoginPackets.SelectWorld(channelExists, characters, client.Account));
         }
     }
 }

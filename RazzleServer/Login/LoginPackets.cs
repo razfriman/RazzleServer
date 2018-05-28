@@ -75,7 +75,7 @@ namespace RazzleServer.Login
             }
         }
 
-        public static PacketWriter SelectWord(bool channelExists, List<Character> characters, Account account)
+        public static PacketWriter SelectWorld(bool channelExists, List<Character> characters, Account account)
         {
             using (var pw = new PacketWriter(ServerOperationCode.SelectWorldResult))
             {
