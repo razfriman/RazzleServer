@@ -18,7 +18,7 @@ namespace RazzleServer.Game.Maple.Data.Loaders
         {
             _log.LogInformation("Loading Reactors");
 
-            using (var file = new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, "Reactor.wz"), WzMapleVersion.Gms))
+            using (var file = GetWzFile("Reactor.wz"))
             {
                 file.ParseWzFile();
                 file.WzDirectory.WzImages.ForEach(x =>

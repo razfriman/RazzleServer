@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using RazzleServer.Center.Maple;
 using RazzleServer.Common.Data;
 using RazzleServer.Common.Util;
@@ -30,7 +31,7 @@ namespace RazzleServer.Center
 
         public void Start()
         {
-            var login = new LoginServer(this);
+            Login = new LoginServer(this);
 
             ServerConfig.Instance.Worlds.ForEach(x =>
             {
@@ -73,13 +74,42 @@ namespace RazzleServer.Center
             while (true)
             {
                 var line = Console.ReadLine();
-                ProcessCommandLineComand(line);
+
+                try
+                {
+                    ProcessCommandLineComand(line);
+                }
+                catch (Exception e)
+                {
+                    _log.LogError(e, "Error processing server manager command")
+                }
             }
         }
 
         private void ProcessCommandLineComand(string line)
         {
-            Console.WriteLine($"Unknown command: {line}");
+            if (line == "config")
+            {
+                _log.LogInformation(JsonConvert.SerializeObject(ServerConfig.Instance, Formatting.Indented));
+            }
+            else if (line == "players")
+            {
+                _log.LogInformation($"Login: {Login.Clients.Count}");
+
+                foreach (var world in Worlds)
+                {
+                    _log.LogInformation($"World ({world.Name}): {world.Sum(x => x.Clients.Count)}");
+
+                    foreach (var channel in world)
+                    {
+                        _log.LogInformation($"World ({world.Name}) - Channel {channel.ChannelId + 1}: {channel.Clients.Count}");
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine($"Unknown command: {line}");
+            }
         }
 
         public static ServerManager Instance => _instance ?? (_instance = new ServerManager());

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RazzleServer.Center;
 using RazzleServer.Common.Util;
+using RazzleServer.Common.Wz;
 
 namespace RazzleServer.Game.Maple.Data.Loaders
 {
@@ -59,5 +60,7 @@ namespace RazzleServer.Game.Maple.Data.Loaders
         }
 
         public abstract void LoadFromWz();
+
+        public WzFile GetWzFile(string name) => new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, name), WzMapleVersion.Gms);
     }
 }

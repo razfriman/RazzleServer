@@ -21,7 +21,7 @@ namespace RazzleServer.Game.Maple.Data.Loaders
         {
             _log.LogInformation("Loading Skills");
 
-            using (var file = new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, "Skill.wz"), WzMapleVersion.Gms))
+            using (var file = GetWzFile("Skill.wz"))
             {
                 file.ParseWzFile();
 

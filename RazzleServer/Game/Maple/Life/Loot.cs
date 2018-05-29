@@ -2,12 +2,12 @@
 {
     public sealed class Loot
     {
-        public int MapleId { get; private set; }
-        public int MinimumQuantity { get; private set; }
-        public int MaximumQuantity { get; private set; }
-        public int QuestId { get; private set; }
-        public int Chance { get; private set; }
-        public bool IsMeso { get; private set; }
+        public int MapleId { get; set; }
+        public int MinimumQuantity { get; set; }
+        public int MaximumQuantity { get; set; }
+        public int QuestId { get; set; }
+        public int Chance { get; set; }
+        public bool IsMeso { get; set; }
 
         //public Loot(Datum datum)
         //{

@@ -25,4 +25,12 @@
   <ItemGroup>
     <ProjectReference Include="..\RazzleServer.DB\RazzleServer.Data.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="ServerConfig.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ServerConfig.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

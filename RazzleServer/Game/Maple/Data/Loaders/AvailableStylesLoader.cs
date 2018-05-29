@@ -17,7 +17,7 @@ namespace RazzleServer.Game.Maple.Data.Loaders
         {
             _log.LogInformation("Loading Character Creation Data");
 
-            using (var file = new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, "Character.wz"), WzMapleVersion.Gms))
+            using (var file = GetWzFile("Character.wz"))
             {
                 file.ParseWzFile();
                 LoadSkins();
@@ -60,11 +60,11 @@ namespace RazzleServer.Game.Maple.Data.Loaders
 
                 if (id / 1000 % 10 == 0)
                 {
-                    Data.MaleHairs.Add(id);
+                    Data.MaleFaces.Add(id);
                 }
                 else
                 {
-                    Data.FemaleHairs.Add(id);
+                    Data.FemaleFaces.Add(id);
                 }
             }
         }
