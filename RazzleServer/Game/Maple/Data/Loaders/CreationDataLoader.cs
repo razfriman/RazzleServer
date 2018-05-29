@@ -17,7 +17,7 @@ namespace RazzleServer.Game.Maple.Data.Loaders
         {
             _log.LogInformation("Loading Character Creation Data");
 
-            using (var file = new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, "Etc.wz"), WzMapleVersion.Classic))
+            using (var file = new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, "Etc.wz"), WzMapleVersion.Gms))
             {
                 file.ParseWzFile();
                 var makeCharInfo = file.WzDirectory.GetImageByName("MakeCharInfo.img")["Info"];

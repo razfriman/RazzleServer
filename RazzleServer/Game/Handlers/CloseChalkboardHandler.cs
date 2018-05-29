@@ -2,7 +2,7 @@
 
 namespace RazzleServer.Game.Handlers
 {
-    [PacketHandler(ClientOperationCode.CloseChalkboard)]
+    [PacketHandler(ClientOperationCode.ChalkboardClose)]
     public class CloseChalkboardHandler : GamePacketHandler
     {
         public override void HandlePacket(PacketReader packet, GameClient client)

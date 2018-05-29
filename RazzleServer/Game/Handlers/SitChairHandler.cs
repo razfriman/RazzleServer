@@ -2,7 +2,7 @@
 
 namespace RazzleServer.Game.Handlers
 {
-    [PacketHandler(ClientOperationCode.UseChair)]
+    [PacketHandler(ClientOperationCode.ChairUse)]
     public class SitChairHandler : GamePacketHandler
     {
         public override void HandlePacket(PacketReader packet, GameClient client)

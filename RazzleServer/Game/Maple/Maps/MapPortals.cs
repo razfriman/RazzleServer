@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
 namespace RazzleServer.Game.Maple.Maps
 {
@@ -9,15 +8,9 @@ namespace RazzleServer.Game.Maple.Maps
 
         public MapPortals() { }
 
-        public Portal this[string label]
-        {
-            get
-            {
-                return Values.FirstOrDefault(x => x.Label.Equals(label, StringComparison.InvariantCultureIgnoreCase));
-            }
-        }
+        public Portal this[string label] => Values.FirstOrDefault(x => x.Label == label);
 
-        public bool ContainsPortal(string label) => Values.Any(x => x.Label.Equals(label, StringComparison.InvariantCultureIgnoreCase));
+        public bool ContainsPortal(string label) => Values.Any(x => x.Label == label);
 
         public override int GetId(Portal item) => item.Id;
     }

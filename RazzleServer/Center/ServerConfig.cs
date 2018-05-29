@@ -17,7 +17,7 @@ namespace RazzleServer.Center
         public string DatabaseName { get; set; } = "MapleServer.db";
         public string CacheFolder { get; set; } = "DataCache";
         public string WzFilePath { get; set; } = string.Empty;
-        public ushort Version { get; set; } = 55;
+        public ushort Version { get; set; } = 62;
         public byte SubVersion { get; set; } = 1;
         public byte ServerType { get; set; } = 8;
         public int PingTimeout { get; set; } = 30;
@@ -27,7 +27,7 @@ namespace RazzleServer.Center
         public bool EnableMultiLeveling { get; set; } = true;
         public string CommandIndicator { get; set; } = "!";
         public int DefaultCreationSlots { get; set; } = 3;
-        public bool RequestPin { get; set; }
+        public bool RequestPin { get; set; } = true;
         public List<WorldConfig> Worlds { get; set; }
 
         private static readonly ILogger Log = LogManager.Log;

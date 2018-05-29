@@ -11,67 +11,68 @@ namespace RazzleServer.Game.Maple.Maps
 
         public override void OnItemAdded(Character item)
         {
-            lock (this)
-            {
-                foreach (var character in Values)
-                {
-                    item.Client.Send(character.GetSpawnPacket());
-                }
-            }
+            
+            //lock (this)
+            //{
+            //    foreach (var character in Values.Where(x => x.Id != item.Id))
+            //    {
+            //        item.Client.Send(character.GetSpawnPacket());
+            //    }
+            //}
 
-            item.Position = Map.Portals.Count > 0 ? Map.Portals[item.SpawnPoint].Position : new Point(0, 0);
+            //item.Position = Map.Portals.Count > 0 ? Map.Portals[item.SpawnPoint].Position : new Point(0, 0);
 
-            lock (Map.Drops)
-            {
-                foreach (var drop in Map.Drops.Values)
-                {
-                    item.Client.Send(drop.Owner == null 
-                        ? drop.GetSpawnPacket(item) 
-                        : drop.GetSpawnPacket());
-                }
-            }
+            //lock (Map.Drops)
+            //{
+            //    foreach (var drop in Map.Drops.Values)
+            //    {
+            //        item.Client.Send(drop.Owner == null 
+            //            ? drop.GetSpawnPacket(item) 
+            //            : drop.GetSpawnPacket());
+            //    }
+            //}
 
-            lock (Map.Mobs)
-            {
-                foreach (var mob in Map.Mobs.Values)
-                {
-                    item.Client.Send(mob.GetSpawnPacket());
-                }
-            }
+            //lock (Map.Mobs)
+            //{
+            //    foreach (var mob in Map.Mobs.Values)
+            //    {
+            //        item.Client.Send(mob.GetSpawnPacket());
+            //    }
+            //}
 
-            lock (Map.Npcs)
-            {
-                foreach (var npc in Map.Npcs.Values)
-                {
-                    item.Client.Send(npc.GetSpawnPacket());
-                }
-            }
+            //lock (Map.Npcs)
+            //{
+            //    foreach (var npc in Map.Npcs.Values)
+            //    {
+            //        item.Client.Send(npc.GetSpawnPacket());
+            //    }
+            //}
 
-            lock (Map.Reactors)
-            {
-                foreach (var reactor in Map.Reactors.Values)
-                {
-                    item.Client.Send(reactor.GetSpawnPacket());
-                }
-            }
+            //lock (Map.Reactors)
+            //{
+            //    foreach (var reactor in Map.Reactors.Values)
+            //    {
+            //        item.Client.Send(reactor.GetSpawnPacket());
+            //    }
+            //}
 
-            lock (Map.Mobs)
-            {
-                foreach (var mob in Map.Mobs.Values)
-                {
-                    mob.AssignController();
-                }
-            }
+            //lock (Map.Mobs)
+            //{
+            //    foreach (var mob in Map.Mobs.Values)
+            //    {
+            //        mob.AssignController();
+            //    }
+            //}
 
-            lock (Map.Npcs)
-            {
-                foreach (var npc in Map.Npcs.Values)
-                {
-                    npc.AssignController();
-                }
-            }
+            //lock (Map.Npcs)
+            //{
+            //    foreach (var npc in Map.Npcs.Values)
+            //    {
+            //        npc.AssignController();
+            //    }
+            //}
 
-            Map.Send(item.GetCreatePacket());
+            //Map.Send(item.GetCreatePacket(), item);
         }
 
         public override void OnItemRemoved(Character item)

@@ -185,6 +185,7 @@ namespace RazzleServer.Game.Maple.Life
             oPacket.WriteShort(Foothold);
             oPacket.WriteShort(MinimumClickX);
             oPacket.WriteShort(MaximumClickX);
+            oPacket.WriteBool(true); // Show on minimap
 
             return oPacket;
         }

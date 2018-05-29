@@ -18,7 +18,7 @@ namespace RazzleServer.Game.Maple.Data.Loaders
         {
             _log.LogInformation("Loading Mobs");
 
-            using (var file = new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, "Mob.wz"), WzMapleVersion.Classic))
+            using (var file = new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, "Mob.wz"), WzMapleVersion.Gms))
             {
                 file.ParseWzFile();
                 file.WzDirectory.WzImages.ForEach(x =>
@@ -28,7 +28,7 @@ namespace RazzleServer.Game.Maple.Data.Loaders
                 });
             }
 
-            using (var file = new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, "Skill.wz"), WzMapleVersion.Classic))
+            using (var file = new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, "Skill.wz"), WzMapleVersion.Gms))
             {
                 file.ParseWzFile();
                 file.WzDirectory.GetImageByName("MobSkill.img");

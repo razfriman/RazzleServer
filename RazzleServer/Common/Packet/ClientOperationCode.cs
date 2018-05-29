@@ -5,9 +5,6 @@
         LeaveCharacterSelect = 0,
         SelectCharacterByVac = 0,
         VacFlagSet = 0,
-        ClientError = 0,
-        AccountInfo = 0,
-        PlayerDisconnected = 0xC0,
 
         Unknown = 0x00,
         AccountLogin = 0x01,
@@ -31,130 +28,125 @@
         StrangeData = 0x1A,
         Relogin = 0x1C,
 
-        Storage = 0x20,
-        NpcResult = 0x21,
-        NpcShop = 0x22,
-        NpcConverse = 0x23,
-        NpcAction = 0xBB,
+        ChangeMap = 0x23,
+        ChannelChange = 0x24,
+        CashShopMigration = 0x25,
+        [IgnorePacketPrint] PlayerMovement = 0x26,
+        Sit = 0x27,
+        ChairUse = 0x28,
+        CloseRangeAttack = 0x29,
+        RangedAttack = 0x2A,
+        MagicAttack = 0x2B,
+        EnergyOrbAttack = 0x2C,
+        TakeDamage = 0x2D,
+        PlayerChat = 0x2E,
+        ChalkboardClose = 0x2F,
 
-        ChannelChange = 0x27,
-        CashShopMigration = 0x28,
-        TakeDamage = 0x2A,
-        PlayerChat = 0x2C,
-        UseChair = 0x28,
-        MagicAttack = 0x2E,
-        ChangeMap = 0x2F,
+        FaceExpression = 0x30,
+        UseItemEffect = 0x31,
+        NpcResult = 0x36,
+        NpcConverse = 0x38,
+        NpcShop = 0x39,
+        Storage = 0x3A,
+        HiredMerchant = 0x3B,
+        DueyOperation = 0x3D,
+        ItemSort = 0x40,
+        ItemSort2 = 0x41,
+        InventoryAction = 0x42,
+        UseItem = 0x43,
+        CancelItemEffect = 0x44,
+        UseSummonBag = 0x46,
+        UsePetFood = 0x47,
+        UseMountFood = 0x48,
+        UseCashItem = 0x49,
+        UseCatchItem = 0x4A,
+        UseSkillBook = 0x4B,
+        UseReturnScroll = 0x4E,
+        UseUpgradeScroll = 0x4F,
 
-        PlayerMovement = 0x35,
-        RangedAttack = 0x36,
-        PartyChat = 0x3A,
-        GuildOperation = 0x3C,
+        DistributeAp = 0x50,
+        HealOverTime = 0x51,
+        DistributeSp = 0x52,
+        // /0x53
+        CancelBuff = 0x54,
+        SkillEffect = 0x55,
+        MesoDrop = 0x56,
+        GiveFame = 0x57,
+        // 0x58
+        PlayerInformation = 0x59,
+        PetEnterField = 0x5A,
+        CancelDebuff = 0x5B,
+        UseTeleportRock = 0x5C,
+        UseInnerPortal = 0x5D,
+        TrockAction = 0x5E,
+        // 0x5F
 
-        PartyOperation = 0x31,
-        DenyPartyRequest = 0x32,
-        BuddyListModify = 0x33,
+        QuestAction = 0x62,
+        SkillMacro = 0x65,
+        Report = 0x68,
+        PartyChat = 0x6B,
+        Whisper = 0x6C,
+        SpouseChat = 0x6D,
+        MultiChat = 0x6E,
+        PlayerInteraction = 0x6F,
 
-        Messenger = 0x3D,
-        PlayerInteraction = 0x3E,
-        HiredMerchant = 0x3F,
+        PartyOperation = 0x70,
+        DenyPartyRequest = 0x71,
+        GuildOperation = 0x72,
+        DenyGuildRequest = 0x73,
+        BuddyListModify = 0x76,
+        NoteAction = 0x77,
+        UseDoor = 0x79,
+        ChangeKeymap = 0x7B,
+        RingAction = 0x7D,
 
-        UseDoor = 0x41,
-        PlayerInformation = 0x44,
-        SpawnPet = 0x45,
-        EnterPortal = 0x47,
-        SkillEffect = 0x48,
-        CancelItemEffect = 0x49,
-        UseSummonBag = 0x4B,
+        AllianceOperation = 0x83,
+        BbsOperation = 0x86,
+        MtsMigration = 0x87,
+        UseSolomonItem = 0x89,
+        PetChat = 0x8B,
+        PetMove = 0x8C,
+        PetTalk = 0x8D,
+        PetCommand = 0x8E,
+        PetLoot = 0x8F,
 
-        DistributeSp = 0x4D,
-        CancelBuff = 0x4E,
-
-        UseCashItem = 0x53,
-        CloseRangeAttack = 0x59,
-        FaceExpression = 0x5C,
-        UseItemEffect = 0x5D,
-
-        InventoryAction = 0x62,
-        UseItem = 0x63,
-        UseReturnScroll = 0x64,
-        UseUpgradeScroll = 0x65,
-        DistributeAp = 0x66,
-        HealOverTime = 0x67,
-        MesoDrop = 0x68,
-        GiveFame = 0x69,
-        QuestAction = 0x6B,
-
-        ChangeKeymap = 0x75,
-        MtsMigration = 0x77,
-        DamageSummon = 0x79,
-        SummonAttack = 0x7B,
-        MoveSummon = 0x7C,
-
+        PetAutoPot = 0x90,
+        SummonMove = 0x94,
+        SummonAttack = 0x95,
+        SummonDamage = 0x96,
         MobMovement = 0x9D,
+        MobAutomaticProvoke = 0x9E,
 
-        PetChat = 0x82,
-        PetCommand = 0x80,
-        MovePet = 0x84,
-        DropPickup = 0x89,
-        DamageReactor = 0x8C,
-
-        BbsOperation = 0x98,
-
-        CashShopOperation = 0xAA,
-        BuyCashItem = 0xAB,
-        CouponCode = 0xAC,
-
-
-        //ITEM_MOVE = 0x62
-        //USE_ITEM = ITEM_MOVE 1
-        //SPECIAL_MOVE = 0x51
-        Whisper = 0x58,
-
-        //CANCEL_CHAIR = 0x2B
-        //NPC_ACTION = 0x98
-
-        Sit = 42,
-        CloseChalkboard = 50,
-        UseDeathItem = 0xFF,
-        AdminShopAction = 68,
-        UsePetFood = 0x4C,
-        UseMountFood = 0x4D,
-        UseScriptedItem = 0x4E,
-        UseCatchItem = 0x50,
-        UseSkillBook = 0x51,
-        UseTeleportRock = 84,
-        UseSkill = 0x5B,
-        CancelDebuff = 0x63,
-        UseInnerPortal = 101,
-        TrockAction = 102,
-        Report = 106,
-
-        SpouseChat = 0x6E,
-        UseFishingItem = 0x6F,
-        UseRemote = 0x73,
-        MultiChat = 119,
-        Command = 120,
-        DenyGuildRequest = 127,
-        AdminCommand = 128,
-        AdminLog = 129,
-        NoteAction = 131,
-        MobAutomaticProvoke = 189,
-        NpcMovement = 197,
-        RingAction = 136,
-        PetTalk = 0x9B,
-        UseSolomonItem = 0x9C,
-        PetLoot = 0xA4,
-        PetAutoPot = 0xA5,
-        PetExcludeItems = 0xA6,
-        Beholder = 0xAC,
-        MobDamageModFriendly = 0xB6,
-        MonsterBomb = 0xB7,
-        MobDamageMob = 0xB8,
-        ChangedMap = 0xC4,
-        MonsterCarnival = 0xD0,
-        PlayerUpdate = 0xD5,
-        LeaveField = 0xDF,
+        MobDamageModFriendly = 0xA0, // Guess
+        MobDamageMob = 0xA1,
+        MonsterBomb = 0xA2,
+        NpcAction = 0xA6,
+        DropPickup = 0xAB,
         HitReactor = 0xAE,
-        TouchReactor = 206
+        TouchReactor = 0xAF, // Guess
+        DamageReactor = 0xB0, // Guess
+
+        MonsterCarnival = 0xB9,
+        PartySearchStart = 0xBD,
+        PartySearchRegister = 0xBF,
+
+        PlayerUpdate = 0xC0,
+        CashShopOperation = 0xC5,
+        BuyCashItem = 0xC6,
+        CouponCode = 0xC7,
+
+        MapleTv = 0xD4,
+        MtsOperation = 0xD9,
+
+        Messenger = 0x3D, // Unknown
+        EnterPortal = 0x47, // Unknown
+        UseDeathItem = 0xFF, // Unknown
+        AdminShopAction = 68, // Unknown
+        UseSkill = 0x5B, // Unknown
+        UseRemote = 0x73, // Unknown
+        Command = 120, // Unknown
+        AdminCommand = 128, // Unknown
+        AdminLog = 129, // Unknown 
+        NpcMovement = 197, // Unknown
     }
 }

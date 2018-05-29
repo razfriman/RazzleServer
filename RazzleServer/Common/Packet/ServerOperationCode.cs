@@ -43,7 +43,7 @@
 
         //BOSS_ENV = 0x54
         //MULTICHAT = 0x56
-        ShowApple = 0x5C,
+        ShowApple = 0x63,
         Whisper = 0x65,
 
         Clock = 0x6E,
@@ -73,7 +73,7 @@
         ForeignBuffCancel = 0x9B,
         PartyUpdateHp = 0x9C,
 
-        CancelChair = 0xA0,
+        Sit = 0xA0,
         LuckSackPass = 0xA4,
         LuckSackFail = 0xA5,
         UpdateQuestInfo = 0xA6,
@@ -135,10 +135,6 @@
         MtsOperation2 = 0x113,
         MtsOperation = 0x114,
 
-
-
-
-
         // TODO
         ForcedStatSet = 34,
         ForcedStatReset = 35,
@@ -157,16 +153,12 @@
         RemoteEffect = 198,
         SetTemporaryStat = 199,
         ResetTemporaryStat = 200,
-        Sit = 205,
         Effect = 206,
         Teleport = 207,
         BalloonMsg = 214,
         MobStatSet = 242,
         MobStatReset = 243,
         ScriptMessage = 304,
-
-
-
         AdminShopMessage = 307,
         AdminShop = 308,
         TemporaryStatSet = 333,

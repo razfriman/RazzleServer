@@ -33,16 +33,16 @@ namespace RazzleServer.Game.Maple.Maps
 
         public Portal() { }
 
-        public Portal(WzImageProperty datum)
+        public Portal(WzImageProperty img)
         {
-            Id = byte.Parse(datum.Name);
-            Position = new Point(datum["x"].GetShort(), datum["y"].GetShort());
-            Label = datum["pn"].GetString();
-            DestinationMapId = datum["tm"].GetInt();
-            DestinationLabel = datum["tn"]?.GetString();
-            Script = datum["script"]?.GetString();
-            PortalType = datum["pt"].GetInt();
-            IsOnlyOnce = (datum["onlyOnce"]?.GetInt() ?? 0) > 0;
+            Id = byte.Parse(img.Name);
+            Position = new Point(img["x"].GetShort(), img["y"].GetShort());
+            Label = img["pn"].GetString();
+            DestinationMapId = img["tm"].GetInt();
+            DestinationLabel = img["tn"]?.GetString();
+            Script = img["script"]?.GetString();
+            PortalType = img["pt"].GetInt();
+            IsOnlyOnce = (img["onlyOnce"]?.GetInt() ?? 0) > 0;
         }
 
         public virtual void Enter(Character character)

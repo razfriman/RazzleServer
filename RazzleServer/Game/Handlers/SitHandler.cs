@@ -8,21 +8,22 @@ namespace RazzleServer.Game.Handlers
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
             var seatId = packet.ReadShort();
-            var isSitting = seatId == -1;
-            if (!isSitting)
+            var hasSeat = seatId != -1;
+
+            if (hasSeat)
             {
-                RemoveChair(client);
+                client.Character.Chair = seatId;
             }
             else
             {
-                client.Character.Chair = seatId;
+                RemoveChair(client);
             }
 
             using (var oPacket = new PacketWriter(ServerOperationCode.Sit))
             {
-                oPacket.WriteBool(isSitting);
+                oPacket.WriteBool(hasSeat);
 
-                if (isSitting)
+                if (hasSeat)
                 {
                     oPacket.WriteShort(seatId);
                 }
@@ -35,7 +36,7 @@ namespace RazzleServer.Game.Handlers
         {
             client.Character.Chair = 0;
 
-            using (var oPacket = new PacketWriter(ServerOperationCode.CancelChair))
+            using (var oPacket = new PacketWriter(ServerOperationCode.ShowChair))
             {
                 oPacket.WriteInt(client.Character.Id);
                 oPacket.WriteInt(0);

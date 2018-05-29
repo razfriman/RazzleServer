@@ -20,6 +20,7 @@ namespace RazzleServer.Common.Server
         public Dictionary<string, TClient> Clients { get; set; } = new Dictionary<string, TClient>();
 
         public Dictionary<ClientOperationCode, List<TPacketHandler>> PacketHandlers { get; } = new Dictionary<ClientOperationCode, List<TPacketHandler>>();
+        public HashSet<ClientOperationCode> IgnorePacketPrintSet { get; } = new HashSet<ClientOperationCode>();
 
         public ushort Port;
         public ServerManager Manager { get; set; }
@@ -33,6 +34,7 @@ namespace RazzleServer.Common.Server
             Manager = manager;
             Log = LogManager.LogByName(GetType().FullName);
             RegisterPacketHandlers();
+            RegisterIgnorePacketPrints();
         }
 
         public virtual void RemoveClient(TClient client)
@@ -150,6 +152,24 @@ namespace RazzleServer.Common.Server
                 }
 
                 GenerateClient(socket);
+            }
+        }
+
+        public void RegisterIgnorePacketPrints()
+        {
+            var type = typeof(ClientOperationCode);
+            var members = type.GetMembers();
+
+            foreach (var member in members)
+            {
+                var attribute = member.GetCustomAttributes(typeof(IgnorePacketPrintAttribute), false);
+                if (attribute != null)
+                {
+                    if (Enum.TryParse(type, member.Name, out var result))
+                    {
+                        IgnorePacketPrintSet.Add((ClientOperationCode)result);
+                    }
+                }
             }
         }
 

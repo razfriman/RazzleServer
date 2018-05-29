@@ -599,15 +599,17 @@ namespace RazzleServer.Game.Maple.Characters
                 oPacket.WriteInt(Client.Server.ChannelId);
                 oPacket.WriteByte(++Portals);
                 oPacket.WriteBool(true);
+                oPacket.WriteShort(0);
 
                 for (var i = 0; i < 3; i++)
                 {
                     oPacket.WriteInt(Functions.Random());
                 }
 
-                oPacket.WriteShort(-1);
+                oPacket.WriteLong(-1);
 
                 oPacket.WriteBytes(DataToByteArray());
+
                 oPacket.WriteDateTime(DateTime.UtcNow);
 
                 Client.Send(oPacket);
@@ -617,7 +619,7 @@ namespace RazzleServer.Game.Maple.Characters
 
             Map.Characters.Add(this);
 
-            ShowApple();
+            // ShowApple();
             UpdateStatsForParty();
             Keymap.Send();
             //Memos.Send();
@@ -774,6 +776,7 @@ namespace RazzleServer.Game.Maple.Characters
                 oPacket.WriteInt(Client.Server.ChannelId);
                 oPacket.WriteByte(++Portals);
                 oPacket.WriteBool(false);
+                oPacket.WriteShort(0);
                 oPacket.WriteInt(mapId);
                 oPacket.WriteByte(portalId ?? SpawnPoint);
                 oPacket.WriteShort(Health);
@@ -925,13 +928,14 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public void Talk(string text)
+        public void Talk(string text, bool show = true)
         {
             using (var oPacket = new PacketWriter(ServerOperationCode.UserChat))
             {
                 oPacket.WriteInt(Id);
                 oPacket.WriteBool(IsMaster);
                 oPacket.WriteString(text);
+                oPacket.WriteBool(show);
                 Map.Send(oPacket);
             }
         }
@@ -1333,15 +1337,13 @@ namespace RazzleServer.Game.Maple.Characters
             pw.WriteBytes(StatisticsToByteArray());
             pw.WriteByte(BuddyListSlots);
             pw.WriteInt(Meso);
-            pw.WriteBytes(Items.ToByteArray());
+            pw.WriteBytes(Items.ToByteArray());// OK
             pw.WriteBytes(Skills.ToByteArray());
             pw.WriteBytes(Quests.ToByteArray());
-            pw.WriteShort(0);// NOTE: Mini games record.
-            pw.WriteShort(0);// NOTE: Rings (1).
-            pw.WriteShort(0);// NOTE: Rings (2). 
-            pw.WriteShort(0);// NOTE: Rings (3).
+            pw.WriteLong(0);// Rings
             pw.WriteBytes(Trocks.RegularToByteArray());
             pw.WriteBytes(Trocks.VipToByteArray());
+            pw.WriteInt(0); // OK
             return pw.ToArray();
         }
 

@@ -1,4 +1,5 @@
-﻿using RazzleServer.Common.Constants;
+﻿using RazzleServer.Center;
+using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
 
@@ -9,6 +10,13 @@ namespace RazzleServer.Login.Handlers
     {
         public override void HandlePacket(PacketReader packet, LoginClient client)
         {
+            if (!ServerConfig.Instance.RequestPin)
+            {
+                client.Send(LoginPackets.PinResult(PinResult.Valid));
+                return;
+            }
+
+
             var a = packet.ReadByte();
             var b = packet.ReadByte();
 
@@ -41,8 +49,8 @@ namespace RazzleServer.Login.Handlers
             }
             else if (b == 1)
             {
-                result = string.IsNullOrEmpty(client.Account.Pin) 
-                    ? PinResult.Register 
+                result = string.IsNullOrEmpty(client.Account.Pin)
+                    ? PinResult.Register
                     : PinResult.Request;
             }
             else

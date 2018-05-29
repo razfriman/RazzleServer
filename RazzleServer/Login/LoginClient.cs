@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Sockets;
 using Microsoft.Extensions.Logging;
+using RazzleServer.Center;
 using RazzleServer.Common.Network;
 using RazzleServer.Common.Packet;
 using RazzleServer.Login.Maple;
@@ -34,7 +35,10 @@ namespace RazzleServer.Login
 
                     if (Server.PacketHandlers.ContainsKey(header))
                     {
-                        Log.LogInformation($"Received [{header.ToString()}] {packet.ToPacketString()}");
+                        if (ServerConfig.Instance.PrintPackets && !Server.IgnorePacketPrintSet.Contains(header))
+                        {
+                            Log.LogInformation($"Received [{header.ToString()}] {packet.ToPacketString()}");
+                        }
 
                         foreach (var handler in Server.PacketHandlers[header])
                         {

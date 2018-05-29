@@ -8,6 +8,7 @@
   "ServerType": 8,
   "AESKey": 5923094546581162003,
   "PingTimeout": 30,
+  "RequestPin": false,
   "PrintPackets": true,
   "EnableAutoRegister": true,
   "EnableMultiLeveling": true,
