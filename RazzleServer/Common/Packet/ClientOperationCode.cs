@@ -76,9 +76,9 @@
         PlayerInformation = 0x59,
         PetEnterField = 0x5A,
         CancelDebuff = 0x5B,
-        UseTeleportRock = 0x5C,
+        TeleportRockUse = 0x5C,
         UseInnerPortal = 0x5D,
-        TrockAction = 0x5E,
+        TeleportRockOperation = 0x5E,
         // 0x5F
 
         QuestAction = 0x62,

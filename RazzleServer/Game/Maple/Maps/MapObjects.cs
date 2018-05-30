@@ -48,7 +48,6 @@ namespace RazzleServer.Game.Maple.Maps
 
         public void Add(T item)
         {
-            var key = GetId(item);
             item.Map = Map;
 
             if (!(item is Character) && !(item is Portal))
@@ -56,11 +55,13 @@ namespace RazzleServer.Game.Maple.Maps
                 item.ObjectId = Map.AssignObjectId();
             }
 
-            if (!Objects.ContainsKey(key))
-            {
+            var key = GetId(item);
+
+            //if (!Objects.ContainsKey(key))
+            //{
                 Objects[key] = item;
                 OnItemAdded(item);
-            }
+            //}
         }
 
         public bool Remove(T item)

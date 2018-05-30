@@ -320,33 +320,36 @@ namespace RazzleServer.Game.Maple.Life
 
         private PacketWriter GetInternalPacket(bool requestControl, bool newSpawn)
         {
-            var oPacket = new PacketWriter(requestControl ? ServerOperationCode.MobChangeController : ServerOperationCode.MobEnterField);
+            var pw = new PacketWriter(requestControl ? ServerOperationCode.MobChangeController : ServerOperationCode.MobEnterField);
 
             if (requestControl)
             {
-                oPacket.WriteByte((byte)(IsProvoked ? 2 : 1));
+                pw.WriteByte((byte)(IsProvoked ? 2 : 1));
             }
 
-            oPacket.WriteInt(ObjectId);
-            oPacket.WriteByte((byte)(Controller == null ? 5 : 1));
-            oPacket.WriteInt(MapleId);
-            oPacket.WriteInt(0);
-            oPacket.WritePoint(Position);
-            oPacket.WriteByte((byte)(0x02 | (IsFacingLeft ? 0x01 : 0x00)));
-            oPacket.WriteShort(0);
-            oPacket.WriteShort(Foothold);
+            pw.WriteInt(ObjectId);
+            pw.WriteByte((byte)(Controller == null ? 5 : 1));
+            pw.WriteInt(MapleId);
+            pw.WriteShort(0);
+            pw.WriteByte(0);
+            pw.WriteByte(8);
+            pw.WriteInt(0);
+            pw.WritePoint(Position);
+            pw.WriteByte((byte)(0x02 | (IsFacingLeft ? 0x01 : 0x00)));
+            pw.WriteShort(0);
+            pw.WriteShort(Foothold);
 
             if (SpawnEffect > 0)
             {
-                oPacket.WriteByte((byte)SpawnEffect);
-                oPacket.WriteByte(0);
-                oPacket.WriteShort(0);
+                pw.WriteByte((byte)SpawnEffect);
+                pw.WriteByte(0);
+                pw.WriteShort(0);
             }
 
-            oPacket.WriteByte((byte)(newSpawn ? -2 : -1));
-            oPacket.WriteByte(0);
+            pw.WriteShort((byte)(newSpawn ? -2 : -1));
+            pw.WriteInt(0);
 
-            return oPacket;
+            return pw;
         }
 
         public PacketWriter GetControlCancelPacket()

@@ -42,7 +42,6 @@ namespace RazzleServer.Game.Maple.Maps
             PlayerShops = new MapPlayerShops(this);
 
             var reference = CachedReference;
-            reference.Npcs.ForEach(x => Npcs.Add(x));
             reference.Footholds.ForEach(x => Footholds.Footholds.Add(x));
             reference.Npcs.ForEach(x => Npcs.Add(x));
             reference.SpawnPoints.ForEach(x => SpawnPoints.Add(x));

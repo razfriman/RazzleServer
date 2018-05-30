@@ -8,8 +8,8 @@ namespace RazzleServer.Game.Handlers
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
+
             packet.ReadInt(); // NOTE: Ticks.
-            packet.ReadInt(); // NOTE: Unknown.
             var healthAmount = packet.ReadShort();
             var manaAmount = packet.ReadShort();
 

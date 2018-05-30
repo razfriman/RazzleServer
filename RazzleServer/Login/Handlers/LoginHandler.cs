@@ -57,7 +57,7 @@ namespace RazzleServer.Login.Handlers
             client.Account.Username = username;
             client.Account.Salt = Functions.RandomString();
             client.Account.Password = Functions.GetSha512(password + client.Account.Salt);
-            client.Account.Gender = Gender.Unset;
+            client.Account.Gender = ServerConfig.Instance.RequestPin ? Gender.Unset : Gender.Male;
             client.Account.Pin = string.Empty;
             client.Account.IsBanned = false;
             client.Account.IsMaster = false;

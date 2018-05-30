@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
@@ -447,97 +448,44 @@ namespace RazzleServer.Game.Maple
             Summons = CachedReference.Summons;
         }
 
-        public void LoadConsumeData(WzImageProperty datum)
-        {
-            //this.CFlags = datum["flags"];
-            //this.CCureAilments = datum["cure_ailments"];
-            //CEffect = (byte)datum["effect"];
-            //CHealth = (short)datum["hp"];
-            //CMana = (short)datum["mp"];
-            //CHealthPercentage = (short)datum["hp_percentage"];
-            //CManaPercentage = (short)datum["mp_percentage"];
-            //CMoveTo = (int)datum["move_to"];
-            //CProb = (byte)datum["prob"];
-            //CBuffTime = (int)datum["buff_time"];
-            //CWeaponAttack = (short)datum["weapon_attack"];
-            //CMagicAttack = (short)datum["magic_attack"];
-            //CWeaponDefense = (short)datum["weapon_defense"];
-            //CMagicAttack = (short)datum["magic_attack"];
-            //CAccuracy = (short)datum["accuracy"];
-            //CAvoid = (short)datum["avoid"];
-            //CSpeed = (short)datum["speed"];
-            //CJump = (short)datum["jump"];
-            //CMorph = (short)datum["morph"];
-        }
-
-        public void LoadEquipmentData(WzImageProperty datum)
-        {
-            //RequiredStrength = (short)datum["req_str"];
-            //RequiredDexterity = (short)datum["req_dex"];
-            //RequiredIntelligence = (short)datum["req_int"];
-            //RequiredLuck = (short)datum["req_luk"];
-            //RequiredFame = (short)datum["req_fame"];
-
-            //UpgradesAvailable = (byte)(ushort)datum["scroll_slots"];
-            //UpgradesApplied = 0;
-
-            //Health = (short)datum["hp"];
-            //Mana = (short)datum["mp"];
-            //Strength = (short)datum["strength"];
-            //Dexterity = (short)datum["dexterity"];
-            //Intelligence = (short)datum["intelligence"];
-            //Luck = (short)datum["luck"];
-            //WeaponAttack = (short)datum["weapon_attack"];
-            //WeaponDefense = (short)datum["weapon_defense"];
-            //MagicAttack = (short)datum["magic_attack"];
-            //MagicDefense = (short)datum["magic_defense"];
-            //Accuracy = (short)datum["accuracy"];
-            //Avoidability = (short)datum["avoid"];
-            //Speed = (short)datum["speed"];
-            //Jump = (short)datum["jump"];
-            //Agility = (short)datum["hands"];
-        }
-
         public void Save()
         {
-            //Datum datum = new Datum("items");
+            using (var dbContext = new MapleDbContext())
+            {
+                // TODO Update or create
+                dbContext.Items.Add(new ItemEntity
+                {
+                    AccountId = Character.AccountId,
+                    CharacterId = Character.Id,
+                    MapleId = MapleId,
+                    Accuracy = Accuracy,
+                    Agility = Agility,
+                    Avoidability = Avoidability,
+                    Creator = Creator,
+                    Dexterity = Dexterity,
+                    Expiration = Expiration,
+                    Flags = Flags,
+                    Health = Health,
+                    Intelligence = Intelligence,
+                    MagicAttack = MagicAttack,
+                    MagicDefense = MagicAttack,
+                    WeaponDefense = WeaponDefense,
+                    WeaponAttack = WeaponAttack,
+                    UpgradesAvailable = UpgradesAvailable,
+                    UpgradesApplied = UpgradesApplied,
+                    IsStored = IsStored,
+                    Jump = Jump,
+                    Luck = Luck,
+                    Mana = Mana,
+                    Quantity = Quantity,
+                    Slot = Slot,
+                    Speed = Speed,
+                    Strength = Strength,
+                    PetId = PetId,
+                });
 
-            //datum["AccountId"] = Character.AccountId;
-            //datum["CharacterId"] = Character.Id;
-            //datum["MapleId"] = MapleId;
-            //datum["Quantity"] = Quantity;
-            //datum["Slot"] = Slot;
-            //datum["Creator"] = Creator;
-            //datum["UpgradesAvailable"] = UpgradesAvailable;
-            //datum["UpgradesApplied"] = UpgradesApplied;
-            //datum["Strength"] = Strength;
-            //datum["Dexterity"] = Dexterity;
-            //datum["Intelligence"] = Intelligence;
-            //datum["Luck"] = Luck;
-            //datum["Health"] = Health;
-            //datum["Mana"] = Mana;
-            //datum["WeaponAttack"] = WeaponAttack;
-            //datum["MagicAttack"] = MagicAttack;
-            //datum["WeaponDefense"] = WeaponDefense;
-            //datum["MagicDefense"] = MagicDefense;
-            //datum["Accuracy"] = Accuracy;
-            //datum["Avoidability"] = Avoidability;
-            //datum["Agility"] = Agility;
-            //datum["Speed"] = Speed;
-            //datum["Jump"] = Jump;
-            //datum["IsStored"] = IsStored;
-            //datum["PreventsSlipping"] = PreventsSlipping;
-            //datum["PreventsColdness"] = PreventsColdness;
-
-            //if (Assigned)
-            //{
-            //    datum.Update("Id = {0}", Id);
-            //}
-            //else
-            //{
-            //    Id = datum.InsertAndReturnId();
-            //    Assigned = true;
-            //}
+                dbContext.SaveChanges();
+            }
         }
 
         public void Delete()
@@ -1007,8 +955,6 @@ namespace RazzleServer.Game.Maple
             oPacket.WriteBool(false);
             oPacket.WriteInt(MapleId);
             oPacket.WriteInt(Quantity);
-            oPacket.WriteInt(0);
-            oPacket.WriteInt(0);
 
             return oPacket;
         }

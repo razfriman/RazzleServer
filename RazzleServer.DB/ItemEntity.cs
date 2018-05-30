@@ -17,7 +17,7 @@ namespace RazzleServer.Data
         public string Source { get; set; }
         public bool IsStored { get; set; }
         public int? PetId { get; set; }
-        public byte Slot { get; set; }
+        public short Slot { get; set; }
         public DateTime Expiration { get; set; }
 
         public byte UpgradesAvailable { get; set; }

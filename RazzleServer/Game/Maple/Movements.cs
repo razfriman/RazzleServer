@@ -24,19 +24,19 @@ namespace RazzleServer.Game.Maple
         public short Foothold { get; }
         public byte Stance { get; }
 
-        public Movements(PacketReader iPacket)
+        public Movements(PacketReader packet)
         {
             short foothold = 0;
             byte stance = 0;
-            var position = iPacket.ReadPoint();
+            var position = packet.ReadPoint();
 
             Origin = position;
 
-            var count = iPacket.ReadByte();
+            var count = packet.ReadByte();
 
             while (count-- > 0)
             {
-                var type = (MovementType)iPacket.ReadByte();
+                var type = (MovementType)packet.ReadByte();
 
                 var movement = new Movement
                 {
@@ -50,11 +50,11 @@ namespace RazzleServer.Game.Maple
                     case MovementType.Normal:
                     case MovementType.Normal2:
                         {
-                            movement.Position = iPacket.ReadPoint();
-                            movement.Velocity = iPacket.ReadPoint();
-                            movement.Foothold = iPacket.ReadShort();
-                            movement.Stance = iPacket.ReadByte();
-                            movement.Duration = iPacket.ReadShort();
+                            movement.Position = packet.ReadPoint();
+                            movement.Velocity = packet.ReadPoint();
+                            movement.Foothold = packet.ReadShort();
+                            movement.Stance = packet.ReadByte();
+                            movement.Duration = packet.ReadShort();
                         }
                         break;
                     case MovementType.Jump:
@@ -62,9 +62,9 @@ namespace RazzleServer.Game.Maple
                     case MovementType.FlashJump:
                     case MovementType.ExcessiveKnockback:
                         {
-                            movement.Velocity = iPacket.ReadPoint();
-                            movement.Stance = iPacket.ReadByte();
-                            movement.Duration = iPacket.ReadShort();
+                            movement.Velocity = packet.ReadPoint();
+                            movement.Stance = packet.ReadByte();
+                            movement.Duration = packet.ReadShort();
                         }
                         break;
                     case MovementType.Immediate:
@@ -74,29 +74,29 @@ namespace RazzleServer.Game.Maple
                     case MovementType.Rush:
                     case MovementType.Chair:
                         {
-                            movement.Position = iPacket.ReadPoint();
-                            movement.Foothold = iPacket.ReadShort();
-                            movement.Stance = iPacket.ReadByte();
-                            movement.Duration = iPacket.ReadShort();
+                            movement.Position = packet.ReadPoint();
+                            movement.Foothold = packet.ReadShort();
+                            movement.Stance = packet.ReadByte();
+                            movement.Duration = packet.ReadShort();
                         }
                         break;
                     case MovementType.Falling:
                         {
-                            movement.Statistic = iPacket.ReadByte();
+                            movement.Statistic = packet.ReadByte();
                         }
                         break;
                     case MovementType.Unknown:
                         {
-                            movement.Velocity = iPacket.ReadPoint();
-                            movement.FallStart = iPacket.ReadShort();
-                            movement.Stance = iPacket.ReadByte();
-                            movement.Duration = iPacket.ReadShort();
+                            movement.Velocity = packet.ReadPoint();
+                            movement.FallStart = packet.ReadShort();
+                            movement.Stance = packet.ReadByte();
+                            movement.Duration = packet.ReadShort();
                         }
                         break;
                     default:
                         {
-                            movement.Stance = iPacket.ReadByte();
-                            movement.Duration = iPacket.ReadShort();
+                            movement.Stance = packet.ReadByte();
+                            movement.Duration = packet.ReadShort();
                         }
                         break;
                 }
@@ -108,19 +108,19 @@ namespace RazzleServer.Game.Maple
                 Add(movement);
             }
 
-            var keypadStates = iPacket.ReadByte();
+            var keypadStates = packet.ReadByte();
 
             for (byte i = 0; i < keypadStates; i++)
             {
                 if (i % 2 == 0)
                 {
-                    iPacket.ReadByte(); // NOTE: Unknown.
+                    packet.ReadByte(); // NOTE: Unknown.
                 }
             }
 
             // Rectangle for bounds checking.
-            var lt = iPacket.ReadPoint();
-            var rb = iPacket.ReadPoint();
+            var lt = packet.ReadPoint();
+            var rb = packet.ReadPoint();
 
             Position = position;
             Stance = stance;

@@ -162,13 +162,11 @@ namespace RazzleServer.Common.Server
 
             foreach (var member in members)
             {
-                var attribute = member.GetCustomAttributes(typeof(IgnorePacketPrintAttribute), false);
-                if (attribute != null)
+                var isIgnored = member.GetCustomAttributes(typeof(IgnorePacketPrintAttribute), false).Any();
+
+                if (isIgnored && Enum.TryParse(type, member.Name, out var result))
                 {
-                    if (Enum.TryParse(type, member.Name, out var result))
-                    {
-                        IgnorePacketPrintSet.Add((ClientOperationCode)result);
-                    }
+                    IgnorePacketPrintSet.Add((ClientOperationCode)result);
                 }
             }
         }

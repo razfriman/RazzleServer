@@ -638,8 +638,7 @@ namespace RazzleServer.Game.Maple.Characters
         public void Update(params StatisticType[] statistics)
         {
             var oPacket = new PacketWriter(ServerOperationCode.StatChanged);
-            oPacket.WriteBool(true);
-            oPacket.WriteBool(false);
+            oPacket.WriteBool(true); // itemReaction
 
             var flag = statistics.Aggregate(0, (current, statistic) => current | (int)statistic);
 
@@ -1013,57 +1012,6 @@ namespace RazzleServer.Game.Maple.Characters
             // TODO
         }
 
-
-        public void MultiTalk(PacketReader iPacket)
-        {
-            var type = (MultiChatType)iPacket.ReadByte();
-            var count = iPacket.ReadByte();
-
-            var recipients = new List<int>();
-
-            while (count-- > 0)
-            {
-                var recipientId = iPacket.ReadInt();
-
-                recipients.Add(recipientId);
-            }
-
-            var text = iPacket.ReadString();
-
-            switch (type)
-            {
-                case MultiChatType.Buddy:
-                    {
-
-                    }
-                    break;
-
-                case MultiChatType.Party:
-                    {
-
-                    }
-                    break;
-
-                case MultiChatType.Guild:
-                    {
-
-                    }
-                    break;
-            }
-
-            using (var oPacket = new PacketWriter(ServerOperationCode.GroupMessage))
-            {
-                oPacket.WriteByte((byte)type);
-                oPacket.WriteString(Name);
-                oPacket.WriteString(text);
-
-                foreach (var recipient in recipients)
-                {
-                    Client.Server.GetCharacterById(recipient).Client.Send(oPacket);
-                }
-            }
-        }
-
         public void UseCommand(PacketReader iPacket)
         {
             var type = (CommandType)iPacket.ReadByte();
@@ -1125,82 +1073,6 @@ namespace RazzleServer.Game.Maple.Characters
                                 oPacket.WriteString(text);
                                 target.Client.Send(oPacket);
                             }
-                        }
-                    }
-                    break;
-            }
-        }
-
-        public void Interact(PacketReader iPacket)
-        {
-            var code = (InteractionCode)iPacket.ReadByte();
-
-            switch (code)
-            {
-                case InteractionCode.Create:
-                    {
-                        var type = (InteractionType)iPacket.ReadByte();
-
-                        switch (type)
-                        {
-                            case InteractionType.Omok:
-                                {
-
-                                }
-                                break;
-
-                            case InteractionType.Trade:
-                                {
-                                    if (Trade == null)
-                                    {
-                                        Trade = new Trade(this);
-                                    }
-                                }
-                                break;
-
-                            case InteractionType.PlayerShop:
-                                {
-                                    var description = iPacket.ReadString();
-
-                                    if (PlayerShop == null)
-                                    {
-                                        PlayerShop = new PlayerShop(this, description);
-                                    }
-                                }
-                                break;
-
-                            case InteractionType.HiredMerchant:
-                                {
-
-                                }
-                                break;
-                        }
-                    }
-                    break;
-
-                case InteractionCode.Visit:
-                    {
-                        if (PlayerShop == null)
-                        {
-                            var objectId = iPacket.ReadInt();
-
-                            if (Map.PlayerShops.Contains(objectId))
-                            {
-                                Map.PlayerShops[objectId].AddVisitor(this);
-                            }
-                        }
-                    }
-                    break;
-
-                default:
-                    {
-                        if (Trade != null)
-                        {
-                            Trade.Handle(this, code, iPacket);
-                        }
-                        else
-                        {
-                            PlayerShop?.Handle(this, code, iPacket);
                         }
                     }
                     break;

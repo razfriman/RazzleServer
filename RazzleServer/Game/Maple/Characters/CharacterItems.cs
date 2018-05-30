@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using RazzleServer.Common.Constants;
+using RazzleServer.Common.Data;
 using RazzleServer.Common.Exceptions;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
@@ -37,18 +38,25 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Load()
         {
-            //// TODO: Use JOIN with the pets table.
-            //foreach (Datum datum in new Datums("items").Populate("CharacterId = {0} AND IsStored = 0", Parent.Id))
-            //{
-            //    Item item = new Item(datum);
+            using (var dbContext = new MapleDbContext())
+            {
+                var itemsEntities = dbContext.Items
+                                     .Where(x => x.CharacterId == Parent.Id)
+                                     .Where(x => x.AccountId == Parent.AccountId)
+                                     .ToArray();
 
-            //    Add(item);
+                foreach (var itemEntity in itemsEntities)
+                {
+                    var item = new Item(itemEntity);
 
-            //    if (item.PetId != null)
-            //    {
-            //        //this.Parent.Pets.Add(new Pet(item));
-            //    }
-            //}
+                    Add(item);
+
+                    if (item.PetId != null)
+                    {
+                        //this.Parent.Pets.Add(new Pet(item));
+                    }
+                }
+            }
         }
 
         public void Save()
@@ -841,25 +849,6 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public void Pickup(PacketReader iPacket)
-        {
-            iPacket.Skip(1);
-            iPacket.Skip(4);
-            var position = new Point(iPacket.ReadShort(), iPacket.ReadShort());
-
-            // TODO: Validate position relative to the picker.
-
-            var objectId = iPacket.ReadInt();
-
-            lock (Parent.Map.Drops)
-            {
-                if (Parent.Map.Drops.Contains(objectId))
-                {
-                    Pickup(Parent.Map.Drops[objectId]);
-                }
-            }
-        }
-
         public Item this[ItemType type, short slot]
         {
             get
@@ -1014,6 +1003,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             using (var oPacket = new PacketWriter())
             {
+                //78 00 03 00 00 00 01 09 00 77 69 74 68 69 74 65 6D 73 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 3E DB B4 68 00 00 00 00 00 00 00 00 00 00 00 3E DB B4 68 00 00 00 00 00 00 00 00 00 00 00 3E DB B4 68 00 00 00 00 00 00 00 00 00 00 00 3E DB B4 68 00 00 00 00 00 00 00 00 00 3E DB B4 68 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 3E DB B4 68 00 00 00 00 00 00 00 00 00 00 00 00 00 3E DB B4 68 00 00 00 00 00 00 00 20 4E 00 00 01 4E 75 00 00 FF FF 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 70 00 C5 00 00 00 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
                 oPacket.WriteByte(MaxSlots[ItemType.Equipment]);
                 oPacket.WriteByte(MaxSlots[ItemType.Usable]);
                 oPacket.WriteByte(MaxSlots[ItemType.Setup]);

@@ -43,6 +43,9 @@ namespace RazzleServer.Game.Maple
                 Creation = account.Creation;
                 IsBanned = account.IsBanned;
                 IsMaster = account.IsMaster;
+
+                // Debug
+                IsMaster = true;
             }
         }
     }

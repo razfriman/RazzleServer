@@ -12,25 +12,15 @@ namespace RazzleServer.Game.Maple.Maps
         public override void OnItemAdded(Character item)
         {
             
-            lock (this)
-            {
-                foreach (var character in Values.Where(x => x.Id != item.Id))
-                {
-                    item.Client.Send(character.GetSpawnPacket());
-                }
-            }
-
-            item.Position = Map.Portals.Count > 0 ? Map.Portals[item.SpawnPoint].Position : new Point(0, 0);
-
-            //lock (Map.Drops)
+            //lock (this)
             //{
-            //    foreach (var drop in Map.Drops.Values)
+            //    foreach (var character in Values.Where(x => x.Id != item.Id))
             //    {
-            //        item.Client.Send(drop.Owner == null 
-            //            ? drop.GetSpawnPacket(item) 
-            //            : drop.GetSpawnPacket());
+            //        item.Client.Send(character.GetSpawnPacket());
             //    }
             //}
+
+            item.Position = Map.Portals.Count > 0 ? Map.Portals[item.SpawnPoint].Position : new Point(0, 0);
 
             lock (Map.Mobs)
             {
@@ -40,6 +30,7 @@ namespace RazzleServer.Game.Maple.Maps
                 }
             }
 
+
             lock (Map.Npcs)
             {
                 foreach (var npc in Map.Npcs.Values)
@@ -48,21 +39,21 @@ namespace RazzleServer.Game.Maple.Maps
                 }
             }
 
-            //lock (Map.Reactors)
-            //{
-            //    foreach (var reactor in Map.Reactors.Values)
-            //    {
-            //        item.Client.Send(reactor.GetSpawnPacket());
-            //    }
-            //}
+            lock (Map.Reactors)
+            {
+                foreach (var reactor in Map.Reactors.Values)
+                {
+                    item.Client.Send(reactor.GetSpawnPacket());
+                }
+            }
 
-            //lock (Map.Mobs)
-            //{
-            //    foreach (var mob in Map.Mobs.Values)
-            //    {
-            //        mob.AssignController();
-            //    }
-            //}
+            lock (Map.Mobs)
+            {
+                foreach (var mob in Map.Mobs.Values)
+                {
+                    mob.AssignController();
+                }
+            }
 
             lock (Map.Npcs)
             {

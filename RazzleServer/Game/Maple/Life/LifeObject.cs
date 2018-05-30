@@ -26,6 +26,7 @@ namespace RazzleServer.Game.Maple.Life
             MaximumClickX = img["rx1"]?.GetShort() ?? 0;
             FacesLeft = (img["f"]?.GetInt() ?? 0) > 0;
             Hide = (img["hide"]?.GetInt() ?? 0) > 0;
+            Type = type;
 
             if (type == LifeObjectType.Mob)
             {
