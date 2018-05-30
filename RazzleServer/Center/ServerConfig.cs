@@ -16,6 +16,7 @@ namespace RazzleServer.Center
         public int DefaultMapId { get; set; } = 180000000;
         public string DatabaseName { get; set; } = "MapleServer.db";
         public string CacheFolder { get; set; } = "DataCache";
+        public bool PrettifyCache { get; set; } = false;
         public string WzFilePath { get; set; } = string.Empty;
         public ushort Version { get; set; } = 62;
         public byte SubVersion { get; set; } = 1;

@@ -57,5 +57,20 @@ namespace RazzleServer.Login
                 Log.LogError(e, $"Packet Processing Error [{header.ToString()}] - {e.Message} - {e.StackTrace}");
             }
         }
+
+        public override void Disconnected()
+        {
+            try
+            {
+                Connected = false;
+                Server.RemoveClient(this);
+                Socket?.Dispose();
+            }
+            catch (Exception e)
+            {
+                Log.LogError(e, $"Error while disconnecting. Account [{Account?.Username}]");
+            }
+        }
+
     }
 }

@@ -81,7 +81,7 @@ namespace RazzleServer.Center
                 }
                 catch (Exception e)
                 {
-                    _log.LogError(e, "Error processing server manager command")
+                    _log.LogError(e, "Error processing server manager command");
                 }
             }
         }

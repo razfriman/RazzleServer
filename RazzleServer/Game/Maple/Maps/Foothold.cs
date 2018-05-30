@@ -4,18 +4,24 @@ namespace RazzleServer.Game.Maple.Maps
 {
     public sealed class Foothold
     {
-        public short Id { get; private set; }
-        public Line Line { get; private set; }
-        public short DragForce { get; private set; }
-        public bool ForbidDownwardJump { get; private set; }
+        public short Id { get; set; }
+        public Line Line { get;  set; }
+        public short DragForce { get; set; }
+        public bool ForbidDownwardJump { get; set; }
+
+        public Foothold() { }
 
         public Foothold(WzImageProperty img)
         {
-            // Id = img["id"].GetShort();
-            // Id = (short)img["id"];
-            // Line = new Line(new Point((short)img["x1"], (short)img["y1"]), new Point((short)img["x2"], (short)img["y2"]));
-            // DragForce = (short)img["drag_force"];
-            // ForbidDownwardJump = ((string)img["flags"]).Contains("forbid_downward_jump");
+            if (short.TryParse(img.Name, out var id))
+            {
+                Id = id;
+                Line = new Line(new Point(img["x1"].GetShort(), img["y1"].GetShort()), new Point(img["x2"].GetShort(), img["y2"].GetShort()));
+                // prev
+                // next
+                DragForce = img["force"]?.GetShort() ?? 0;
+                ForbidDownwardJump = (img["forbidFallDown"]?.GetInt() ?? 0) > 0;
+            }
         }
     }
 }

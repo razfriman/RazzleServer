@@ -11,11 +11,16 @@ namespace RazzleServer.Game.Maple.Data.Loaders
 {
     public abstract class ACachedDataLoader<T> where T : new()
     {
-        private readonly ILogger _log = LogManager.Log;
+        private readonly ILogger _log;
 
         public abstract string CacheName { get; }
 
         public T Data { get; private set; } = new T();
+
+        protected ACachedDataLoader()
+        {
+            _log = LogManager.LogByName(GetType().FullName);
+        }
 
         public virtual async Task<T> Load()
         {
@@ -35,7 +40,7 @@ namespace RazzleServer.Game.Maple.Data.Loaders
             }
             else
             {
-                _log.LogInformation($"{CacheName} cache not found, loading from WZ");
+                _log.LogInformation($"[{CacheName}] cache not found, loading from WZ");
                 LoadFromWz();
                 await SaveToCache();
             }
@@ -43,20 +48,40 @@ namespace RazzleServer.Game.Maple.Data.Loaders
             return Data;
         }
 
-        public virtual async Task SaveToCache()
+        public virtual Task SaveToCache()
         {
             Directory.CreateDirectory(ServerConfig.Instance.CacheFolder);
             var path = Path.Combine(ServerConfig.Instance.CacheFolder, $"{CacheName}.cache");
-            await File.WriteAllTextAsync(path, JsonConvert.SerializeObject(Data, Formatting.Indented));
-            _log.LogInformation($"Saving {CacheName} to cached file");
+
+            using (var s = File.OpenWrite(path))
+            using (var sr = new StreamWriter(s))
+            using (var writer = new JsonTextWriter(sr))
+            {
+                var serializer = new JsonSerializer
+                {
+                    Formatting = ServerConfig.Instance.PrettifyCache ? Formatting.Indented : Formatting.None
+                };
+                serializer.Serialize(writer, Data);
+            }
+
+            _log.LogInformation($"Saving [{CacheName}] to cached file");
+            return Task.CompletedTask;
         }
 
-        public virtual async Task LoadFromCache()
+        public virtual Task LoadFromCache()
         {
-            _log.LogInformation($"Loading {CacheName} from cache");
+            _log.LogInformation($"Loading [{CacheName}] from cache");
             var path = Path.Combine(ServerConfig.Instance.CacheFolder, $"{CacheName}.cache");
-            var contents = await File.ReadAllTextAsync(path);
-            Data = JsonConvert.DeserializeObject<T>(contents);
+
+            using (var s = File.OpenRead(path))
+            using (var sr = new StreamReader(s))
+            using (var reader = new JsonTextReader(sr))
+            {
+                var serializer = new JsonSerializer();
+                Data = serializer.Deserialize<T>(reader);
+            }
+
+            return Task.CompletedTask;;
         }
 
         public abstract void LoadFromWz();

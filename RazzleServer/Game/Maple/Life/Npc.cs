@@ -178,6 +178,8 @@ namespace RazzleServer.Game.Maple.Life
                 oPacket.WriteBool(true);
             }
 
+            //  [C2 00] [00 00 00 00] [BE 65 8C 00] [3A 13] [BE 01] [01] [C9 00] [08 13] [6C 13] [01]
+
             oPacket.WriteInt(ObjectId);
             oPacket.WriteInt(MapleId);
             oPacket.WritePoint(Position);
@@ -185,7 +187,7 @@ namespace RazzleServer.Game.Maple.Life
             oPacket.WriteShort(Foothold);
             oPacket.WriteShort(MinimumClickX);
             oPacket.WriteShort(MaximumClickX);
-            oPacket.WriteBool(true); // Show on minimap
+            oPacket.WriteBool(!Hide);
 
             return oPacket;
         }

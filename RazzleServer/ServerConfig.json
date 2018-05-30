@@ -13,6 +13,7 @@
   "EnableAutoRegister": true,
   "EnableMultiLeveling": true,
   "DefaultCreationSlots": 3,
+  "PrettifyCache":  false,
   "CacheFolder": "/Users/razfriman/Desktop/WZ/DataCache",
   "WzFilePath": "/Users/razfriman/Desktop/WZ",
   "Worlds": [

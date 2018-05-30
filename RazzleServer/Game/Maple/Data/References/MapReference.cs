@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Wz;
 using RazzleServer.Game.Maple.Life;
@@ -54,7 +55,7 @@ namespace RazzleServer.Game.Maple.Data.References
 
             img["portal"]?.WzProperties?.ForEach(x => Portals.Add(new Portal(x)));
             img["seat"]?.WzProperties?.ForEach(x => Seats.Add(new Seat(x)));
-            // img["foothold"]?.WzProperties?.ForEach(x => Footholds.Add(new Foothold(x)));
+            img["foothold"]?.WzProperties.SelectMany(x => x.WzProperties).SelectMany(x => x.WzProperties).ToList().ForEach(x => Footholds.Add(new Foothold(x)));
             img["reactor"]?.WzProperties?.ForEach(x => SpawnPoints.Add(new SpawnPoint(x, LifeObjectType.Reactor)));
             img["seat"]?.WzProperties?.ForEach(x => Seats.Add(new Seat(x)));
             img["life"]?.WzProperties?.ForEach(life =>

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using RazzleServer.Game.Maple.Characters;
 
 namespace RazzleServer.Game.Maple.Maps
 {
@@ -50,6 +51,11 @@ namespace RazzleServer.Game.Maple.Maps
             var key = GetId(item);
             item.Map = Map;
 
+            if (!(item is Character) && !(item is Portal))
+            {
+                item.ObjectId = Map.AssignObjectId();
+            }
+
             if (!Objects.ContainsKey(key))
             {
                 Objects[key] = item;
@@ -67,6 +73,13 @@ namespace RazzleServer.Game.Maple.Maps
             if (Objects.ContainsKey(key))
             {
                 var item = Objects[key];
+                item.Map = null;
+
+                if (!(item is Character) && !(item is Portal))
+                {
+                    item.ObjectId = -1;
+                }
+
                 Objects.Remove(key);
                 OnItemRemoved(item);
                 return true;
