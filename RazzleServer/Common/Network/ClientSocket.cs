@@ -14,7 +14,6 @@ namespace RazzleServer.Common.Network
     {
         private readonly Socket _socket;
         private readonly Memory<byte> _socketBuffer;
-        private readonly object _disposeSync;
         private readonly AClient _client;
         private readonly bool _toClient;
         private bool _disposed;
@@ -35,7 +34,6 @@ namespace RazzleServer.Common.Network
             Host = Endpoint?.Address.ToString();
             HostBytes = Endpoint?.Address.GetAddressBytes();
             Port = (ushort)((IPEndPoint)socket.LocalEndPoint).Port;
-            _disposeSync = new object();
             _client = client;
             _toClient = toClient;
 
@@ -96,7 +94,7 @@ namespace RazzleServer.Common.Network
             if (!_disposed)
             {
                 var buffer = data.ToArray();
-                Crypto.Encrypt(ref buffer, _toClient);
+                Crypto.Encrypt(buffer, _toClient);
                 await SendRawPacket(buffer);
             }
         }
@@ -109,24 +107,21 @@ namespace RazzleServer.Common.Network
 
         public void Dispose()
         {
-            lock (_disposeSync)
+            if (_disposed)
             {
-                if (_disposed)
-                {
-                    return;
-                }
+                return;
+            }
 
-                _disposed = true;
+            _disposed = true;
 
-                try
-                {
-                    _socket.Shutdown(SocketShutdown.Both);
-                    _socket.Close();
-                }
-                finally
-                {
-                    _client.Disconnected();
-                }
+            try
+            {
+                _socket.Shutdown(SocketShutdown.Both);
+                _socket.Close();
+            }
+            finally
+            {
+                _client.Disconnected();
             }
         }
     }

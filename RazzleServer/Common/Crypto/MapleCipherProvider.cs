@@ -29,7 +29,7 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
         /// Data buffer
         /// </summary>
-        private byte[] DataBuffer { get; set; }
+        private Memory<byte> DataBuffer { get; set; }
 
         /// <summary>
         /// Current data in buffer
@@ -90,7 +90,11 @@ namespace RazzleServer.Common.Crypto
             lock (_addLocker)
             {
                 EnsureCapacity(length + AvailableData);
-                Buffer.BlockCopy(data.ToArray(), offset, DataBuffer, AvailableData, length);
+
+                var srcSlice = data.Slice(offset, length);
+                var dstSlice = DataBuffer.Slice(AvailableData, length);
+                srcSlice.CopyTo(dstSlice);
+
                 AvailableData += length;
             }
 
@@ -126,7 +130,7 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
         /// Encrypts packet data
         /// </summary>
-        public ushort? Encrypt(ref byte[] data, bool toClient = false) => SendCipher.Encrypt(ref data, toClient);
+        public ushort? Encrypt(Span<byte> data, bool toClient = false) => SendCipher.Encrypt(ref data, toClient);
 
         /// <summary>
         /// Prevents the buffer being to small
@@ -135,13 +139,10 @@ namespace RazzleServer.Common.Crypto
         {
             if (DataBuffer.Length > length)
             {
-                return; //Return as quikly as posible
+                return;
             }
 
-            var newBuffer = new byte[DataBuffer.Length + 0x50];
-            Buffer.BlockCopy(DataBuffer, 0, newBuffer, 0, DataBuffer.Length);
-            DataBuffer = newBuffer;
-            EnsureCapacity(length);
+            DataBuffer = new byte[length];
         }
 
         /// <summary>
@@ -174,11 +175,12 @@ namespace RazzleServer.Common.Crypto
                 return;
             }
 
-            byte[] data;
+            var data = new byte[length + add].AsMemory();
+            DataBuffer.Slice(0, data.Length).CopyTo(data.Slice(0, length));
 
-            data = new byte[length + add];
-            Buffer.BlockCopy(DataBuffer, 0, data, 0, data.Length);
-            Buffer.BlockCopy(DataBuffer, length + add, DataBuffer, 0, DataBuffer.Length - (length + add));
+            var copyLength = DataBuffer.Length - (length + add);
+            DataBuffer.Slice(length + add, length).CopyTo(DataBuffer.Slice(0, copyLength));
+
             AvailableData -= length + add;
 
             Decrypt(data.ToArray());
@@ -187,7 +189,7 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
         /// Decrypts the packet data
         /// </summary>
-        private void Decrypt(byte[] data)
+        private void Decrypt(Span<byte> data)
         {
             if (!RecvCipher.Handshaken)
             {
@@ -211,12 +213,13 @@ namespace RazzleServer.Common.Crypto
                 }
 
                 RecvCipher.Decrypt(ref data);
+
                 if (data.Length == 0)
                 {
                     return;
                 }
 
-                PacketFinished?.Invoke(data);
+                PacketFinished?.Invoke(data.ToArray());
             }
             Wait();
         }
@@ -228,11 +231,11 @@ namespace RazzleServer.Common.Crypto
         {
             if (!RecvCipher.Handshaken)
             {
-                WaitMore(BitConverter.ToUInt16(DataBuffer, 0));
+                WaitMore(BitConverter.ToUInt16(DataBuffer.Slice(0, 2).Span));
             }
             else
             {
-                var packetLength = RecvCipher.GetPacketLength(DataBuffer);
+                var packetLength = RecvCipher.GetPacketLength(DataBuffer.Slice(0, 4).Span);
                 WaitMore(packetLength);
             }
         }

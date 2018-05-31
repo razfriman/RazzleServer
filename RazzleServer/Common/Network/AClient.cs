@@ -27,19 +27,13 @@ namespace RazzleServer.Common.Network
             Log = LogManager.LogByName(GetType().FullName);
         }
 
+        public virtual void Disconnected() => Connected = false;
+
         public abstract void Receive(PacketReader packet);
 
-        public virtual void Send(PacketWriter packet)
-        {
-            if (ServerConfig.Instance.PrintPackets)
-            {
-                Log.LogInformation($"Sending: {packet.ToPacketString()}");
-            }
+        public void Send(PacketWriter packet) => Send(packet.ToArray());
 
-            Socket?.Send(packet);
-        }
-
-        public virtual void Send(byte[] packet)
+        public void Send(byte[] packet)
         {
             if (ServerConfig.Instance.PrintPackets)
             {
@@ -49,26 +43,10 @@ namespace RazzleServer.Common.Network
             Socket?.Send(packet);
         }
 
-        public virtual void Terminate(string message = null)
+        public void Terminate(string message = null)
         {
-            Log.LogInformation($"Disconnecting Client - {Key}");
+            Log.LogInformation($"Disconnecting Client - {Key}. Reason: {message}");
             Socket.Disconnect();
-        }
-
-
-        public virtual void Disconnected()
-        {
-            Connected = false;
-        }
-
-        public virtual void Register()
-        {
-
-        }
-
-        public virtual void Unregister()
-        {
-
         }
 
         public async Task SendHandshake()

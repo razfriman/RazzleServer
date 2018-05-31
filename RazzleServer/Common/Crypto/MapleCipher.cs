@@ -47,7 +47,7 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
         /// Encrypts packet data
         /// </summary>
-        public ushort? Encrypt(ref byte[] data, bool toClient)
+        public ushort? Encrypt(ref Span<byte> data, bool toClient)
         {
             if (!Handshaken || MapleIv == null)
             {
@@ -56,19 +56,22 @@ namespace RazzleServer.Common.Crypto
 
             ushort? ret;
 
+            var newData = new byte[data.Length + 4].AsSpan();
+            var header = newData.Slice(0, 4);
+            var content = newData.Slice(4);
 
-            var newData = new byte[data.Length + 4];
+            data.CopyTo(content);
 
             if (toClient)
             {
-                WriteHeaderToClient(newData);
+                WriteHeaderToClient(header, data.Length);
             }
             else
             {
-                WriteHeaderToServer(newData);
+                WriteHeaderToServer(header, data.Length);
             }
 
-            EncryptShanda(data);
+            EncryptShanda(content);
 
             lock (_locker)
             {
@@ -76,7 +79,6 @@ namespace RazzleServer.Common.Crypto
                 ret = MapleIv.MustSend ? MapleIv.Loword : null as ushort?;
             }
 
-            Buffer.BlockCopy(data, 0, newData, 4, data.Length);
             data = newData;
 
             return ret;
@@ -86,17 +88,16 @@ namespace RazzleServer.Common.Crypto
         /// Decrypts a maple packet contained in <paramref name="data"/>
         /// </summary>
         /// <param name="data">Data to decrypt</param>
-        public void Decrypt(ref byte[] data)
+        public void Decrypt(ref Span<byte> data)
         {
             if (!Handshaken || MapleIv == null)
             {
                 return;
             }
 
-            var length = GetPacketLength(data);
+            var length = GetPacketLength(data.Slice(0, 4));
 
-            var newData = new byte[length];
-            Buffer.BlockCopy(data, 4, newData, 0, length);
+            var newData = data.Slice(4, length);
 
             lock (_locker)
             {
@@ -118,12 +119,11 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
         /// Handles an handshake for the current instance
         /// </summary>
-        public void Handshake(ref byte[] data)
+        public void Handshake(ref Span<byte> data)
         {
-            var length = BitConverter.ToUInt16(data, 0);
+            var length = BitConverter.ToUInt16(data.Slice(0, 2).ToArray(), 0);
             var ret = new byte[length];
-            Buffer.BlockCopy(data, 2, ret, 0, ret.Length);
-            data = ret;
+            data = data.Slice(2, length);
         }
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
         /// Performs Maplestory's AES algo
         /// </summary>
-        private void Transform(byte[] buffer)
+        private void Transform(Span<byte> buffer)
         {
             int remaining = buffer.Length,
                 length = 0x5B0,
@@ -186,9 +186,8 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
         /// Creates a packet header for outgoing data
         /// </summary>
-        private void WriteHeaderToServer(byte[] data)
+        private void WriteHeaderToServer(Span<byte> data, int length)
         {
-            var length = data.Length - 4;
             int a = MapleIv.Hiword;
             a = a ^ GameVersion;
             var b = a ^ length;
@@ -201,9 +200,8 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
         /// Creates a packet header for incoming data
         /// </summary>
-        private void WriteHeaderToClient(byte[] data)
+        private void WriteHeaderToClient(Span<byte> data, int length)
         {
-            var length = data.Length - 4;
             var a = MapleIv.Hiword ^ -(GameVersion + 1);
             var b = a ^ length;
             data[0] = (byte)(a % 0x100);
@@ -217,20 +215,20 @@ namespace RazzleServer.Common.Crypto
         /// </summary>
         /// <param name="data">Data to check</param>
         /// <returns>Length of <paramref name="data"/></returns>
-        public int GetPacketLength(byte[] data) => (data[0] + (data[1] << 8)) ^ (data[2] + (data[3] << 8));
+        public int GetPacketLength(Span<byte> data) => (data[0] + (data[1] << 8)) ^ (data[2] + (data[3] << 8));
 
-        public bool CheckHeader(in byte[] data, bool toClient) => toClient
+        public bool CheckHeader(in Span<byte> data, bool toClient) => toClient
                     ? CheckHeaderToClient(data)
                     : CheckHeaderToServer(data);
 
-        public bool CheckHeaderToServer(in byte[] data)
+        public bool CheckHeaderToServer(in Span<byte> data)
         {
             var encodedVersion = (ushort)(data[0] + (data[1] << 8));
             var version = (ushort)(encodedVersion ^ MapleIv.Hiword);
             return version == GameVersion;
         }
 
-        public bool CheckHeaderToClient(in byte[] data)
+        public bool CheckHeaderToClient(in Span<byte> data)
         {
             var encodedVersion = (ushort)(data[0] + (data[1] << 8));
             var version = (ushort)-((encodedVersion ^ MapleIv.Hiword) + 1);
@@ -240,7 +238,7 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
         /// Decrypts <paramref name="buffer"/> using the custom MapleStory shanda
         /// </summary>
-        private void DecryptShanda(byte[] buffer)
+        private void DecryptShanda(Span<byte> buffer)
         {
             int length = buffer.Length, i;
             byte xorKey, save, len, temp;
@@ -276,7 +274,7 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
         /// Encrypts <paramref name="buffer"/> using the custom MapleStory shanda
         /// </summary>
-        private void EncryptShanda(byte[] buffer)
+        private void EncryptShanda(Span<byte> buffer)
         {
             var length = buffer.Length;
             byte xorKey, len, temp;

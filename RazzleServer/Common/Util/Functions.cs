@@ -23,6 +23,16 @@ namespace RazzleServer.Common.Util
 
         public static byte[] AsciiToBytes(string s) => Encoding.ASCII.GetBytes(s);
 
+        public static string ByteArrayToString(this Memory<byte> bArray, bool endingSpace = true, bool nospace = false)
+        {
+            return ByteArrayToString(bArray.ToArray(), endingSpace, nospace);
+        }
+
+        public static string ByteArrayToString(this Span<byte> bArray, bool endingSpace = true, bool nospace = false)
+        {
+            return ByteArrayToString(bArray.ToArray(), endingSpace, nospace);
+        }
+
         /// <summary>
         /// Converts a byte array to a hexadecimal string
         /// </summary>
