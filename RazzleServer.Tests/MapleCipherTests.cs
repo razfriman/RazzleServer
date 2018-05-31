@@ -132,12 +132,10 @@ namespace RazzleServer.Tests
             packet.WriteInt(4);
             packet.WriteLong(8);
             var originalPacket = packet.ToArray();
-            var encryptedPacket = packet.ToArray().AsSpan();
-            encryptor.Encrypt(encryptedPacket, false);
-
+            var encryptedPacket = encryptor.Encrypt(packet.ToArray().AsSpan(), false);
             var decryptor = new MapleCipher(version, aesKey);
             decryptor.SetIv(iv);
-            var decryptedPacket = decryptor.Decrypt(encryptedPacket.ToArray().AsSpan());
+            var decryptedPacket = decryptor.Decrypt(encryptedPacket);
             Assert.AreEqual(originalPacket.ByteArrayToString(), decryptedPacket.ByteArrayToString());
         }
     }

@@ -56,8 +56,7 @@ namespace RazzleServer.Common.Crypto
 
             var newData = new byte[data.Length + 4].AsSpan();
             var header = newData.Slice(0, 4);
-            var content = newData.Slice(4);
-
+            var content = newData.Slice(4, data.Length);
             data.CopyTo(content);
 
             if (toClient)
@@ -69,11 +68,11 @@ namespace RazzleServer.Common.Crypto
                 WriteHeaderToServer(header, data.Length);
             }
 
-            EncryptShanda(content);
+            content = EncryptShanda(content);
 
             lock (_locker)
             {
-                Transform(data);
+                Transform(content);
             }
 
             return newData;
@@ -92,14 +91,14 @@ namespace RazzleServer.Common.Crypto
 
             var header = data.Slice(0, 4);
             var length = GetPacketLength(header);
-            var content = data.Slice(4);
+            var content = data.Slice(4, length);
 
             lock (_locker)
             {
                 Transform(content);
             }
-            DecryptShanda(content);
 
+            content = DecryptShanda(content);
             return content;
         }
 
@@ -234,7 +233,7 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
         /// Decrypts <paramref name="buffer"/> using the custom MapleStory shanda
         /// </summary>
-        private void DecryptShanda(Span<byte> buffer)
+        private Span<byte> DecryptShanda(Span<byte> buffer)
         {
             int length = buffer.Length, i;
             byte xorKey, save, len, temp;
@@ -265,12 +264,14 @@ namespace RazzleServer.Common.Crypto
                     --len;
                 }
             }
+
+            return buffer;
         }
 
         /// <summary>
         /// Encrypts <paramref name="buffer"/> using the custom MapleStory shanda
         /// </summary>
-        private void EncryptShanda(Span<byte> buffer)
+        private Span<byte> EncryptShanda(Span<byte> buffer)
         {
             var length = buffer.Length;
             byte xorKey, len, temp;
@@ -298,6 +299,8 @@ namespace RazzleServer.Common.Crypto
                     len--;
                 }
             }
+
+            return buffer;
         }
 
         /// <summary>
