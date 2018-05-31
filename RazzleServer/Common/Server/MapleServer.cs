@@ -73,7 +73,7 @@ namespace RazzleServer.Common.Server
 
         public virtual bool AllowConnection(string address) => true;
 
-        public TClient GenerateClient(Socket socket)
+        public async Task<TClient> GenerateClient(Socket socket)
         {
             var ip = ((IPEndPoint)socket.RemoteEndPoint).Address.ToString();
             if (!AllowConnection(ip))
@@ -89,7 +89,7 @@ namespace RazzleServer.Common.Server
 
             try
             {
-                client.SendHandshake();
+                await client.SendHandshake();
                 client.Key = $"{ip}-{Functions.Random()}";
                 AddClient(client);
                 return client;
@@ -151,7 +151,7 @@ namespace RazzleServer.Common.Server
                     break;
                 }
 
-                GenerateClient(socket);
+                await GenerateClient(socket);
             }
         }
 

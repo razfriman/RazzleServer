@@ -6,16 +6,18 @@ namespace RazzleServer.Game.Maple.Maps
     {
         public MapNpcs(Map map) : base(map) { }
 
-        public override void OnItemAdded(Npc item)
+        public override void Add(Npc item)
         {
+            base.Add(item);
             Map.Send(item.GetCreatePacket());
             item.AssignController();
         }
 
-        public override void OnItemRemoved(Npc item)
+        public override void Remove(Npc item)
         {
             item.Controller.ControlledNpcs.Remove(item);
             Map.Send(item.GetDestroyPacket());
+            base.Remove(item);
         }
     }
 }

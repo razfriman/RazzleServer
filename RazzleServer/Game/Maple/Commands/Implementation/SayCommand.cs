@@ -19,8 +19,7 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
             else
             {
                 var message = CombineArgs(args);
-
-                //caller.Client.World.Notify(string.Format("{0}: {1}", caller.Name, message));
+                caller.Client.Server.World.Send(GamePackets.Notify(message));
             }
         }
     }

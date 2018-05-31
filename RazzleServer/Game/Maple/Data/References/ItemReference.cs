@@ -103,16 +103,22 @@ namespace RazzleServer.Game.Maple.Data.References
             RequiredIntelligence = info["reqINT"]?.GetShort() ?? 0;
             RequiredLuck = info["reqLUK"]?.GetShort() ?? 0;
             RequiredFame = info["reqLevel"]?.GetShort() ?? 0;
-            AttackSpeed = (byte)(info["reqLevel"]?.GetInt() ?? 0);
-            //<string name="islot" value="Wp"/>
-            //<string name="vslot" value="Wp"/>
-            //<int name="walk" value="1"/>
-            //<int name="stand" value="1"/>
-            //<short name="attack" value="1"/>
-            //<string name="afterImage" value="swordOL"/>
-            //<string name="sfx" value="swordL"/>
-            //<int name="incPAD" value="17"/>
-            //<int name="tuc" value="7"/>
+            AttackSpeed = (byte)(info["attackSpeed"]?.GetInt() ?? 0);
+            UpgradesAvailable = (byte)(info["tuc"]?.GetInt() ?? 0);
+            WeaponAttack = info["incPAD"]?.GetShort() ?? 0;
+            Accuracy = info["incACC"]?.GetShort() ?? 0;
+            Jump = info["incJump"]?.GetShort() ?? 0;
+            Speed = info["incSpeed"]?.GetShort() ?? 0;
+            Avoidability = info["incEVA"]?.GetShort() ?? 0;
+            MagicDefense = info["incMDD"]?.GetShort() ?? 0;
+            WeaponDefense = info["incPDD"]?.GetShort() ?? 0;
+            MagicAttack = info["incMAD"]?.GetShort() ?? 0;
+            Strength = info["incSTR"]?.GetShort() ?? 0;
+            Dexterity = info["incJump"]?.GetShort() ?? 0;
+            Intelligence = info["incJump"]?.GetShort() ?? 0;;
+            Luck = info["incJump"]?.GetShort() ?? 0;;
+            Health = info["incJump"]?.GetShort() ?? 0;;
+            Mana = info["incJump"]?.GetShort() ?? 0;;
         }
         public ItemReference(WzImageProperty img, ItemType type)
         {

@@ -301,7 +301,7 @@ namespace RazzleServer.Game.Maple
                 expiration = new DateTime(2079, 1, 1, 12, 0, 0); // NOTE: Default expiration time (permanent).
             }
 
-            Expiration = (DateTime)expiration;
+            Expiration = expiration.Value;
 
             IsCash = CachedReference.IsCash;
             OnlyOne = CachedReference.OnlyOne;
@@ -800,6 +800,14 @@ namespace RazzleServer.Game.Maple
 
         public byte[] ToByteArray(bool zeroPosition = false, bool leaveOut = false)
         {
+            //00 00 00 00 01 01 00 00 4E B3 D6 46 E9 60 7A 9B 20 A0 09 E4 FF FF FF FF FF FF FF FF A1 95 04 00 72 61 7A 7A 7A 7A 7A 6C 65 00 00 00 00 00 00 20 4E 00 00 47 75 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 00 00 06 00 04 00 06 00 09 00 32 00 32 00 05 00 05 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 01 00 00 00
+            //14 00 00 00 00 18 18 18 18 60 
+            //      05      01 82 DE 0F 00   00 00 80 05 BB 46 E6 17 02 07 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 06 01 A2 2C 10 00 00 00 80 05 BB 46 E6 17 02 07 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 07 01 81 5B 10 00 00 00 80 05 BB 46 E6 17 02 05 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 0B 01 F0 DD 13 00 00 00 80 05 BB 46 E6 17 02 07 00 00 00 00 00 00 00 00 00 00 00 00 00 11 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 02 97 AB 1E 00 00 00 80 05 BB 46 E6 17 02 01 00 00 00 00 00 00 00 01 02 E9 7D 3F 00 00 00 80 05 BB 46 E6 17 02 01 00 00 00 00 00 00 00 00 00 00 00 01 00 FD 03 00 00 00 00 00 00 00 00 00 00 00 00 FF C9 9A 3B FF C9 9A 3B FF C9 9A 3B FF C9 9A 3B FF C9 9A 3B FF C9 9A 3B FF C9 9A 3B FF C9 9A 3B FF C9 9A 3B FF C9 9A 3B FF C9 9A 3B FF C9 9A 3B FF C9 9A 3B FF C9 9A 3B FF C9 9A 3B 00 00 00 00 70 23 55 B9 CC F7 D3 01
+            //ITEM: 05 {00} 01 82 DE 0F 00 [00] 00 80 5E B2 E1 20 03 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+            //ITEM: 06 00 01 A2 2C 10 00 00 80 5E B2 E1 20 03 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+            //ITEM: 07 00 01 81 5B 10 00 00 80 5E B2 E1 20 03 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+            //ITEM: 0B 00 01 F0 DD 13 00 00 80 5E B2 E1 20 03 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+
             using (var pw = new PacketWriter())
             {
                 if (!zeroPosition && !leaveOut)
@@ -817,13 +825,19 @@ namespace RazzleServer.Game.Maple
 
                     if (Type == ItemType.Equipment)
                     {
-                        pw.WriteShort(slot);
+                        pw.WriteByte(slot);
                     }
                     else
                     {
                         pw.WriteByte(slot);
                     }
                 }
+
+                //      05    01 [82 DE 0F 00] [00] 00 80 05 BB 46 E6 17 02 [07]  00  00  00 00  00 00  00 00  00 00  00 00  00 00  00 00  00  03 00  00 00  00 00  00 00  00 00  00 00  00 00  00 00  00 00  00 00  00 00  00 00  00 00 
+                //      05    01 [82 DE 0F 00] [00] 00 80 5E B2 E1 20 03 00 [00]  00  00  00 00  00 00  00 00  00 00  00 00  00 00  00 00  00  00 00  00 00  00 00  00 00  00 00  00 00  00 00  00 00  00 00  00 00  00 00  00 00  00 00 00 00
+                //      06    01 [A2 2C 10 00] [00] 00 80 05 BB 46 E6 17 02 [07]  00  00  00 00  00 00  00 00  00 00  00 00  00 00  00 00  00  02 00  00 00  00 00  00 00  00 00  00 00  00 00  00 00  00 00  00 00  00 00  00 00  00 00 
+                //      07    01 [81 5B 10 00] [00] 00 80 05 BB 46 E6 17 02 [05]  00  00  00 00  00 00  00 00  00 00  00 00  00 00  00 00  00  02 00  00 00  00 00  00 00  00 00  00 00  00 00  00 00  00 00  00 00  00 00  00 00  00 00
+                //      0B    01 [F0 DD 13 00] [00] 00 80 05 BB 46 E6 17 02 [07]  00  00  00 00  00 00 00 00 00 00 00 00 00 11 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 02 97 AB 1E 00 00 00 80 05 BB 46 E6 17 02 01 00 00 00 00 00 00 00 01 02 E9 7D 3F 00 00 00 80 05 BB 46 E6 17 02 01 00 00 00 00 00 00 00 00 00 00 00 01 00 FD 03 00 00 00 00 00 00 00 00 00 00 00 00 FF C9 9A 3B FF C9 9A 3B FF C9 9A 3B FF C9 9A 3B FF C9 9A 3B FF C9 9A 3B FF C9 9A 3B FF C9 9A 3B FF C9 9A 3B FF C9 9A 3B FF C9 9A 3B FF C9 9A 3B FF C9 9A 3B FF C9 9A 3B FF C9 9A 3B 00 00 00 00 70 23 55 B9 CC F7 D3 01
 
                 pw.WriteByte((byte)(PetId != null ? 3 : Type == ItemType.Equipment ? 1 : 2));
                 pw.WriteInt(MapleId);
@@ -834,7 +848,8 @@ namespace RazzleServer.Game.Maple
                     pw.WriteLong(1); // TODO: Unique Id for cash items.
                 }
 
-                pw.WriteDateTime(Expiration);
+                pw.WriteHexString("00 80 05 BB 46 E6 17 02");
+                //pw.WriteDateTime(Expiration);
 
                 if (PetId != null)
                 {
@@ -861,7 +876,9 @@ namespace RazzleServer.Game.Maple
                     pw.WriteShort(Jump);
                     pw.WriteString(Creator);
                     pw.WriteByte(Flags);
-                    pw.WriteByte(0);
+
+                    // if ring && !equipped
+                    // pw.WriteByte(0);
 
                     if (!IsEquippedCash)
                     {
@@ -881,6 +898,7 @@ namespace RazzleServer.Game.Maple
                         pw.WriteLong(0); // TODO: Unique Id.
                     }
                 }
+
                 return pw.ToArray();
             }
         }

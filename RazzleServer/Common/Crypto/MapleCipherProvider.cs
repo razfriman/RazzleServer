@@ -85,12 +85,12 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
         /// Adds data to the buffer to await decryption
         /// </summary>
-        public void AddData(byte[] data, int offset, int length)
+        public void AddData(Memory<byte> data, int offset, int length)
         {
             lock (_addLocker)
             {
                 EnsureCapacity(length + AvailableData);
-                Buffer.BlockCopy(data, offset, DataBuffer, AvailableData, length);
+                Buffer.BlockCopy(data.ToArray(), offset, DataBuffer, AvailableData, length);
                 AvailableData += length;
             }
 

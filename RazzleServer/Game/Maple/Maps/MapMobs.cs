@@ -14,13 +14,14 @@ namespace RazzleServer.Game.Maple.Maps
     {
         public MapMobs(Map map) : base(map) { }
 
-        public override void OnItemAdded(Mob item)
+        public override void Add(Mob item)
         {
+            base.Add(item);
             Map.Send(item.GetCreatePacket());
             item.AssignController();
         }
 
-        public override void OnItemRemoved(Mob item)
+        public override void Remove(Mob item)
         {
             var mostDamage = 0;
             Character owner = null;
@@ -117,9 +118,11 @@ namespace RazzleServer.Game.Maple.Maps
             item.Controller.ControlledMobs.Remove(item);
             Map.Send(item.GetDestroyPacket());
 
+            base.Remove(item);
+
             if (item.SpawnPoint != null)
             {
-                Delay.Execute(() => item.SpawnPoint.Spawn(), 3 * 1000); // TODO: Actual respawn time.
+                Delay.Execute(item.SpawnPoint.Spawn, 3 * 1000); // TODO: Actual respawn time.
             }
 
             foreach (var summonId in item.DeathSummons)

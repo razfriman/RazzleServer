@@ -6,19 +6,21 @@ namespace RazzleServer.Game.Maple.Maps
     {
         public MapPlayerShops(Map map) : base(map) { }
 
-        public override void OnItemAdded(PlayerShop item)
+        public override void Add(PlayerShop item)
         {
             lock (this)
             {
+                base.Add(item);
                 Map.Send(item.GetCreatePacket());
             }
         }
 
-        public override void OnItemRemoved(PlayerShop item)
+        public override void Remove(PlayerShop item)
         {
             lock (this)
             {
                 Map.Send(item.GetDestroyPacket());
+                base.Remove(item);
             }
         }
     }

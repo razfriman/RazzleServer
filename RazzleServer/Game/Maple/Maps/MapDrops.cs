@@ -6,7 +6,7 @@ namespace RazzleServer.Game.Maple.Maps
     {
         public MapDrops(Map map) : base(map) { }
 
-        public override void OnItemAdded(Drop item)
+        public override void Add(Drop item)
         {
             item.Picker = null;
             item.Expiry?.Dispose();
@@ -31,10 +31,11 @@ namespace RazzleServer.Game.Maple.Maps
             }
         }
 
-        public override void OnItemRemoved(Drop item)
+        public override void Remove(Drop item)
         {
             item.Expiry?.Dispose();
             Map.Send(item.GetDestroyPacket());
+            base.Remove(item);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Center;
 using RazzleServer.Common.Packet;
@@ -70,7 +71,7 @@ namespace RazzleServer.Common.Network
 
         }
 
-        public void SendHandshake()
+        public async Task SendHandshake()
         {
             if (Socket == null)
             {
@@ -89,7 +90,7 @@ namespace RazzleServer.Common.Network
             writer.WriteUInt(rIv);
             writer.WriteUInt(sIv);
             writer.WriteByte(ServerConfig.Instance.ServerType);
-            Socket.SendRawPacket(writer.ToArray());
+            await Socket.SendRawPacket(writer.ToArray());
         }
 
         public void Dispose() => Socket?.Dispose();

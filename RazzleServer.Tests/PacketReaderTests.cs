@@ -176,7 +176,7 @@ namespace RazzleServer.Tests
         [TestMethod]
         public void ReadHeader_Valid_Succeeds()
         {
-            using (var packet = new PacketReader(Functions.HexToBytes("1B 00")))
+            using (var packet = new PacketReader(Functions.HexToBytes("01 00")))
             {
                 var result = packet.ReadHeader();
                 Assert.AreEqual((ushort)ClientOperationCode.AccountLogin, result);

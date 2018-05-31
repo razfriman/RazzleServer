@@ -271,13 +271,7 @@ namespace RazzleServer.Game.Maple.Life
             }
         }
 
-        public void Die()
-        {
-            if (!Map.Mobs.Remove(this))
-            {
-
-            }
-        }
+        public void Die() => Map.Mobs.Remove(this);
 
         public bool Damage(Character attacker, uint amount)
         {

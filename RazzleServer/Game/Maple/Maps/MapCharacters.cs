@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using Microsoft.Extensions.Logging;
 using RazzleServer.Game.Maple.Characters;
 
 namespace RazzleServer.Game.Maple.Maps
@@ -9,19 +11,36 @@ namespace RazzleServer.Game.Maple.Maps
 
         public Character this[string name] => Values.FirstOrDefault(x => x.Name.Equals(name, System.StringComparison.InvariantCultureIgnoreCase));
 
-        public override void OnItemAdded(Character item)
+        public override void Add(Character item)
         {
-            //lock (this)
-            //{
-            //    foreach (var character in Values.Where(x => x.Id != item.Id))
-            //    {
-            //        item.Client.Send(character.GetSpawnPacket());
-            //    }
-            //}
+            lock (this)
+            {
+                foreach (var character in Values)
+                {
+                    item.Client.Send(character.GetSpawnPacket());
+                }
+            }
 
-            item.Position = Map.Portals.Count > 0 
+            item.Position = Map.Portals.Count > 0
                 ? Map.Portals[item.SpawnPoint].Position
                 : new Point(0, 0);
+
+            try
+            {
+                base.Add(item);
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e, "Error adding item to MapCharacters");
+            }
+
+            lock (Map.Drops)
+            {
+                foreach (Drop drop in Map.Drops.Values)
+                {
+                    item.Client.Send(drop.GetSpawnPacket(drop.Owner == null ? item : null));
+                }
+            }
 
             lock (Map.Mobs)
             {
@@ -67,15 +86,16 @@ namespace RazzleServer.Game.Maple.Maps
             Map.Send(item.GetCreatePacket(), item);
         }
 
-        public override void OnItemRemoved(Character item)
+        public override void Remove(Character item)
         {
             lock (this)
             {
                 item.ControlledMobs.Clear();
                 item.ControlledNpcs.Clear();
-
                 Map.Send(item.GetDestroyPacket(), item);
             }
+
+            base.Remove(item);
 
             lock (Map.Mobs)
             {

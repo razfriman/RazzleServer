@@ -169,6 +169,16 @@ namespace RazzleServer.Tests
         }
 
         [TestMethod]
+        public void WriteDateTime_ItemPermanentExpiration_Succeeds()
+        {
+            using (var pw = new PacketWriter())
+            {
+                pw.WriteDateTime(new DateTime(2079, 1, 1, 12, 0, 0));
+                Assert.AreEqual("80 5E B2 E1 20 03 00 00", pw.ToPacketString());
+            }
+        }
+
+        [TestMethod]
         public void WriteHexString_Valid_Succeeds()
         {
             using (var pw = new PacketWriter())

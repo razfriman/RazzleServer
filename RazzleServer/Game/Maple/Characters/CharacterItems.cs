@@ -44,7 +44,6 @@ namespace RazzleServer.Game.Maple.Characters
 
                 foreach (var itemEntity in itemsEntities)
                 {
-                    Console.WriteLine("load item");
                     var item = new Item(itemEntity);
 
                     Add(item);
@@ -67,7 +66,6 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Add(Item item, bool fromDrop = false, bool autoMerge = true, bool forceGetSlot = false)
         {
-            Console.WriteLine("add item");
             if (Available(item.MapleId) % item.MaxPerStack != 0 && autoMerge)
             {
                 foreach (var loopItem in this.Where(x => x.MapleId == item.MapleId && x.Quantity < x.MaxPerStack))
@@ -497,13 +495,11 @@ namespace RazzleServer.Game.Maple.Characters
         {
             using (var oPacket = new PacketWriter())
             {
-                //78 00 03 00 00 00 01 09 00 77 69 74 68 69 74 65 6D 73 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 3E DB B4 68 00 00 00 00 00 00 00 00 00 00 00 3E DB B4 68 00 00 00 00 00 00 00 00 00 00 00 3E DB B4 68 00 00 00 00 00 00 00 00 00 00 00 3E DB B4 68 00 00 00 00 00 00 00 00 00 3E DB B4 68 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 3E DB B4 68 00 00 00 00 00 00 00 00 00 00 00 00 00 3E DB B4 68 00 00 00 00 00 00 00 20 4E 00 00 01 4E 75 00 00 FF FF 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 70 00 C5 00 00 00 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
                 oPacket.WriteByte(MaxSlots[ItemType.Equipment]);
                 oPacket.WriteByte(MaxSlots[ItemType.Usable]);
                 oPacket.WriteByte(MaxSlots[ItemType.Setup]);
                 oPacket.WriteByte(MaxSlots[ItemType.Etcetera]);
                 oPacket.WriteByte(MaxSlots[ItemType.Cash]);
-
 
                 foreach (var item in GetEquipped(EquippedQueryMode.Normal))
                 {

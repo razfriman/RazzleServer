@@ -1,4 +1,5 @@
-﻿using RazzleServer.Game.Maple.Characters;
+﻿using RazzleServer.Common.Constants;
+using RazzleServer.Game.Maple.Characters;
 
 namespace RazzleServer.Game.Maple.Commands.Implementation
 {
@@ -14,7 +15,7 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
         {
             var message = args.Length > 0 ? args[0] : string.Empty;
             caller.Client.Server.World.TickerMessage = message;
-            //caller.Client.World.Notify(message, NoticeType.Ticker);
+            caller.Client.Server.World.Send(GamePackets.Notify(message, NoticeType.Ticker));
         }
     }
 }

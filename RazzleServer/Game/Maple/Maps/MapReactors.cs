@@ -8,20 +8,22 @@ namespace RazzleServer.Game.Maple.Maps
         public MapReactors(Map map) : base(map) { }
 
 
-        public override void OnItemAdded(Reactor item)
+        public override void Add(Reactor item)
         {
             lock (this)
             {
-                var oPacket = item.GetCreatePacket();
-                Map.Send(oPacket);
+                base.Add(item);
+                Map.Send(item.GetCreatePacket());
             }
         }
 
-        public override void OnItemRemoved(Reactor item)
+        public override void Remove(Reactor item)
         {
             lock (this)
             {
                 Map.Send(item.GetDestroyPacket());
+
+                base.Remove(item);
 
                 if (item.SpawnPoint != null)
                 {

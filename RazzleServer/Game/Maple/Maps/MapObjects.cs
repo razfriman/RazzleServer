@@ -1,12 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Characters;
 
 namespace RazzleServer.Game.Maple.Maps
 {
     public abstract class MapObjects<T> where T : MapObject
     {
+        [JsonIgnore]
+        protected readonly ILogger Logger;
+
         [JsonIgnore]
         public Map Map { get; }
 
@@ -15,12 +20,13 @@ namespace RazzleServer.Game.Maple.Maps
 
         protected MapObjects()
         {
-
+            Logger = LogManager.LogByName(GetType().FullName);
         }
 
         protected MapObjects(Map map)
         {
             Map = map;
+            Logger = LogManager.LogByName(GetType().FullName);
         }
 
 
@@ -46,7 +52,7 @@ namespace RazzleServer.Game.Maple.Maps
 
         public virtual int GetId(T item) => item.ObjectId;
 
-        public void Add(T item)
+        public virtual void Add(T item)
         {
             item.Map = Map;
 
@@ -58,22 +64,13 @@ namespace RazzleServer.Game.Maple.Maps
             var key = GetId(item);
 
             Objects[key] = item;
-            OnItemAdded(item);
         }
 
-        public bool Remove(T item)
+        public virtual void Remove(T item)
         {
-            return Remove(GetId(item));
-        }
-
-        public bool Remove(int key)
-        {
-            if (Objects.ContainsKey(key))
+            var key = GetId(item);
+            if (Contains(key))
             {
-                var item = Objects[key];
-
-                OnItemRemoved(item);
-
                 item.Map = null;
 
                 if (!(item is Character) && !(item is Portal))
@@ -82,15 +79,16 @@ namespace RazzleServer.Game.Maple.Maps
                 }
 
                 Objects.Remove(key);
-                return true;
             }
-
-            return false;
         }
 
-        public virtual void OnItemAdded(T item) { }
-
-        public virtual void OnItemRemoved(T item) { }
+        public virtual void Remove(int key)
+        {
+            if (Contains(key))
+            {
+                Remove(this[key]);
+            }
+        }
 
         public bool Contains(int id) => Objects.ContainsKey(id);
     }

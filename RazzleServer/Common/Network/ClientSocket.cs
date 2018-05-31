@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Crypto;
 using RazzleServer.Common.Packet;
@@ -12,7 +13,7 @@ namespace RazzleServer.Common.Network
     public class ClientSocket : IDisposable
     {
         private readonly Socket _socket;
-        private readonly byte[] _socketBuffer;
+        private readonly Memory<byte> _socketBuffer;
         private readonly object _disposeSync;
         private readonly AClient _client;
         private readonly bool _toClient;
@@ -40,59 +41,44 @@ namespace RazzleServer.Common.Network
 
             Crypto = new MapleCipherProvider(currentGameVersion, aesKey);
             Crypto.PacketFinished += data => _client.Receive(new PacketReader(data));
-            WaitForData();
+            Task.Factory.StartNew(WaitForData);
         }
-        private void WaitForData()
+
+        private async Task WaitForData()
         {
-            if (!_disposed)
+            while (!_disposed)
             {
-                var error = SocketError.Success;
-
-                var socketArgs = new SocketAsyncEventArgs
-                {
-                    SocketFlags = SocketFlags.None
-                };
-
-                socketArgs.SetBuffer(_socketBuffer, 0, _socketBuffer.Length);
-                socketArgs.Completed += PacketReceived;
-                _socket.ReceiveAsync(socketArgs);
-
-                if (error != SocketError.Success)
-                {
-                    Disconnect();
-                }
+                var result = await _socket.ReceiveAsync(_socketBuffer, SocketFlags.None);
+                PacketReceived(result);
             }
         }
 
-        private void PacketReceived(object sender, SocketAsyncEventArgs e)
+        private void PacketReceived(int size)
         {
             if (!_disposed)
             {
-                var size = e.BytesTransferred;
-
-                if (size == 0 || e.SocketError != SocketError.Success)
+                if (size == 0)
                 {
                     Disconnect();
                 }
                 else
                 {
                     Crypto.AddData(_socketBuffer, 0, size);
-                    WaitForData();
                 }
             }
         }
 
-        public void SendRawPacket(byte[] final)
-        {   
+        public async Task SendRawPacket(ReadOnlyMemory<byte> final)
+        {
             if (!_disposed)
             {
                 var offset = 0;
 
                 while (offset < final.Length)
                 {
-                    var sent = _socket.Send(final, offset, final.Length - offset, SocketFlags.None, out var outError);
+                    var sent = await _socket.SendAsync(final.Slice(offset), SocketFlags.None);
 
-                    if (sent == 0 || outError != SocketError.Success)
+                    if (sent == 0)
                     {
                         Disconnect();
                         return;
@@ -103,15 +89,15 @@ namespace RazzleServer.Common.Network
             }
         }
 
-        public void Send(PacketWriter data) => Send(data.ToArray());
+        public async Task Send(PacketWriter data) => await Send(data.ToArray());
 
-        public void Send(byte[] data)
+        public async Task Send(byte[] data)
         {
             if (!_disposed)
             {
                 var buffer = data.ToArray();
                 Crypto.Encrypt(ref buffer, _toClient);
-                SendRawPacket(buffer);
+                await SendRawPacket(buffer);
             }
         }
 
