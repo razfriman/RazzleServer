@@ -68,7 +68,7 @@ namespace RazzleServer.Common.Crypto
                 WriteHeaderToServer(header, data.Length);
             }
 
-            content = EncryptShanda(content);
+            EncryptShanda(content);
 
             lock (_locker)
             {
@@ -98,7 +98,8 @@ namespace RazzleServer.Common.Crypto
                 Transform(content);
             }
 
-            content = DecryptShanda(content);
+            DecryptShanda(content);
+
             return content;
         }
 
@@ -233,7 +234,7 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
         /// Decrypts <paramref name="buffer"/> using the custom MapleStory shanda
         /// </summary>
-        private Span<byte> DecryptShanda(Span<byte> buffer)
+        private void DecryptShanda(Span<byte> buffer)
         {
             int length = buffer.Length, i;
             byte xorKey, save, len, temp;
@@ -264,14 +265,12 @@ namespace RazzleServer.Common.Crypto
                     --len;
                 }
             }
-
-            return buffer;
         }
 
         /// <summary>
         /// Encrypts <paramref name="buffer"/> using the custom MapleStory shanda
         /// </summary>
-        private Span<byte> EncryptShanda(Span<byte> buffer)
+        private void EncryptShanda(Span<byte> buffer)
         {
             var length = buffer.Length;
             byte xorKey, len, temp;
@@ -299,8 +298,6 @@ namespace RazzleServer.Common.Crypto
                     len--;
                 }
             }
-
-            return buffer;
         }
 
         /// <summary>
