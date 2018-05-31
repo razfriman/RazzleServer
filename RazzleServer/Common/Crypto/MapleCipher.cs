@@ -47,14 +47,12 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
         /// Encrypts packet data
         /// </summary>
-        public ushort? Encrypt(ref Span<byte> data, bool toClient)
+        public Span<byte> Encrypt(Span<byte> data, bool toClient)
         {
             if (!Handshaken || MapleIv == null)
             {
                 return null;
             }
-
-            ushort? ret;
 
             var newData = new byte[data.Length + 4].AsSpan();
             var header = newData.Slice(0, 4);
@@ -76,35 +74,33 @@ namespace RazzleServer.Common.Crypto
             lock (_locker)
             {
                 Transform(data);
-                ret = MapleIv.MustSend ? MapleIv.Loword : null as ushort?;
             }
 
-            data = newData;
-
-            return ret;
+            return newData;
         }
 
         /// <summary>
         /// Decrypts a maple packet contained in <paramref name="data"/>
         /// </summary>
         /// <param name="data">Data to decrypt</param>
-        public void Decrypt(ref Span<byte> data)
+        public Span<byte> Decrypt(Span<byte> data)
         {
             if (!Handshaken || MapleIv == null)
             {
-                return;
+                return data;
             }
 
-            var length = GetPacketLength(data.Slice(0, 4));
-
-            var newData = data.Slice(4, length);
+            var header = data.Slice(0, 4);
+            var length = GetPacketLength(header);
+            var content = data.Slice(4);
 
             lock (_locker)
             {
-                Transform(newData);
+                Transform(content);
             }
-            DecryptShanda(newData);
-            data = newData;
+            DecryptShanda(content);
+
+            return content;
         }
 
         /// <summary>
@@ -119,11 +115,11 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
         /// Handles an handshake for the current instance
         /// </summary>
-        public void Handshake(ref Span<byte> data)
+        public Span<byte> Handshake(Span<byte> data)
         {
             var length = BitConverter.ToUInt16(data.Slice(0, 2).ToArray(), 0);
             var ret = new byte[length];
-            data = data.Slice(2, length);
+            return data.Slice(2, length);
         }
 
         /// <summary>
@@ -217,18 +213,18 @@ namespace RazzleServer.Common.Crypto
         /// <returns>Length of <paramref name="data"/></returns>
         public int GetPacketLength(Span<byte> data) => (data[0] + (data[1] << 8)) ^ (data[2] + (data[3] << 8));
 
-        public bool CheckHeader(in Span<byte> data, bool toClient) => toClient
+        public bool CheckHeader(in ReadOnlySpan<byte> data, bool toClient) => toClient
                     ? CheckHeaderToClient(data)
                     : CheckHeaderToServer(data);
 
-        public bool CheckHeaderToServer(in Span<byte> data)
+        public bool CheckHeaderToServer(in ReadOnlySpan<byte> data)
         {
             var encodedVersion = (ushort)(data[0] + (data[1] << 8));
             var version = (ushort)(encodedVersion ^ MapleIv.Hiword);
             return version == GameVersion;
         }
 
-        public bool CheckHeaderToClient(in Span<byte> data)
+        public bool CheckHeaderToClient(in ReadOnlySpan<byte> data)
         {
             var encodedVersion = (ushort)(data[0] + (data[1] << 8));
             var version = (ushort)-((encodedVersion ^ MapleIv.Hiword) + 1);

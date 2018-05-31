@@ -130,7 +130,7 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
         /// Encrypts packet data
         /// </summary>
-        public ushort? Encrypt(Span<byte> data, bool toClient = false) => SendCipher.Encrypt(ref data, toClient);
+        public Span<byte> Encrypt(Span<byte> data, bool toClient = false) => SendCipher.Encrypt(data, toClient);
 
         /// <summary>
         /// Prevents the buffer being to small
@@ -193,8 +193,7 @@ namespace RazzleServer.Common.Crypto
         {
             if (!RecvCipher.Handshaken)
             {
-                RecvCipher.Handshake(ref data);
-                var pr = new PacketReader(data);
+                var pr = new PacketReader(RecvCipher.Handshake(data));
                 var version = pr.ReadShort();
                 var subVersion = pr.ReadString();
                 var siv = pr.ReadUInt();
@@ -202,17 +201,16 @@ namespace RazzleServer.Common.Crypto
                 var serverType = pr.ReadByte();
                 SendCipher.SetIv(siv);
                 RecvCipher.SetIv(riv);
-
                 HandshakeFinished?.Invoke(siv, riv);
             }
             else
             {
-                if (!RecvCipher.CheckHeader(in data, !ToClient))
+                if (!RecvCipher.CheckHeader(data, !ToClient))
                 {
                     throw new InvalidOperationException("Packet header mismatch");
                 }
 
-                RecvCipher.Decrypt(ref data);
+                RecvCipher.Decrypt(data);
 
                 if (data.Length == 0)
                 {
