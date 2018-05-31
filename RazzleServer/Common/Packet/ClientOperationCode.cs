@@ -95,7 +95,7 @@
         GuildOperation = 0x72,
         DenyGuildRequest = 0x73,
         BuddyListModify = 0x76,
-        NoteAction = 0x77,
+        MemoOperation = 0x77,
         UseDoor = 0x79,
         ChangeKeymap = 0x7B,
         RingAction = 0x7D,
@@ -114,7 +114,7 @@
         SummonMove = 0x94,
         SummonAttack = 0x95,
         SummonDamage = 0x96,
-        MobMovement = 0x9D,
+        [IgnorePacketPrint] MobMovement = 0x9D,
         MobAutomaticProvoke = 0x9E,
 
         MobDamageModFriendly = 0xA0, // Guess

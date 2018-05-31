@@ -121,20 +121,6 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public void Cancel(PacketReader iPacket)
-        {
-            var mapleId = iPacket.ReadInt();
-
-            switch (mapleId)
-            {
-                // TODO: Handle special skills.
-
-                default:
-                    Remove(mapleId);
-                    break;
-            }
-        }
-
         public IEnumerator<Buff> GetEnumerator()
         {
             return Buffs.GetEnumerator();

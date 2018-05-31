@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RazzleServer.Common.Constants;
@@ -149,7 +150,7 @@ namespace RazzleServer.Game.Maple.Life
 
                 lock (Map.Characters)
                 {
-                    foreach (var character in Map.Characters.Values)
+                    foreach (var character in Map.Characters.Values.Where(x => x.Client.Connected))
                     {
                         if (character.ControlledNpcs.Count < leastControlled)
                         {

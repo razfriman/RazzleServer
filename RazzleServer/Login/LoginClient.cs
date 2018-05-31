@@ -62,9 +62,8 @@ namespace RazzleServer.Login
         {
             try
             {
-                Connected = false;
+                base.Disconnected();
                 Server.RemoveClient(this);
-                Socket?.Dispose();
             }
             catch (Exception e)
             {

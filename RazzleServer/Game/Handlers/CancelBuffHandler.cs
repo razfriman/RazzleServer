@@ -7,7 +7,16 @@ namespace RazzleServer.Game.Handlers
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
+            var mapleId = packet.ReadInt();
 
+            switch (mapleId)
+            {
+                // TODO: Handle special skills.
+
+                default:
+                    client.Character.Buffs.Remove(mapleId);
+                    break;
+            }
         }
     }
 }

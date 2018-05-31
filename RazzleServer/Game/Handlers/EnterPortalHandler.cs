@@ -7,7 +7,7 @@ using RazzleServer.Game.Scripts;
 namespace RazzleServer.Game.Handlers
 {
     [PacketHandler(ClientOperationCode.EnterPortal)]
-    public class ChangeMapSpecialHandler : GamePacketHandler
+    public class EnterPortalHandler : GamePacketHandler
     {
         private readonly ILogger _log = LogManager.Log;
 

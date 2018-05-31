@@ -91,52 +91,6 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public void Change(PacketReader iPacket)
-        {
-            var mode = iPacket.ReadInt();
-            var count = iPacket.ReadInt();
-
-            if (mode == 0)
-            {
-                if (count == 0)
-                {
-                    return;
-                }
-
-                for (var i = 0; i < count; i++)
-                {
-                    var key = (KeymapKey)iPacket.ReadInt();
-                    var type = (KeymapType)iPacket.ReadByte();
-                    var action = (KeymapAction)iPacket.ReadInt();
-
-                    if (Contains(key))
-                    {
-                        if (type == KeymapType.None)
-                        {
-                            Remove(key);
-                        }
-                        else
-                        {
-                            this[key].Type = type;
-                            this[key].Action = action;
-                        }
-                    }
-                    else
-                    {
-                        Add(new Shortcut(key, action, type));
-                    }
-                }
-            }
-            else if (mode == 1) // NOTE: Pet automatic mana potion.
-            {
-
-            }
-            else if (mode == 2) // NOTE: Pet automatic mana potion.
-            {
-
-            }
-        }
-
         protected override KeymapKey GetKeyForItem(Shortcut item) => item.Key;
     }
 }

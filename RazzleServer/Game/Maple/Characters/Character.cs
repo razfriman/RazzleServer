@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Center;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Data;
+using RazzleServer.Common.Exceptions;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
 using RazzleServer.Data;
@@ -104,7 +106,7 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 if (!DataProvider.Styles.Skins.Contains(value))
                 {
-                    //throw new StyleUnavailableException();
+                    throw new StyleUnavailableException();
                 }
 
                 _skin = value;
@@ -125,7 +127,7 @@ namespace RazzleServer.Game.Maple.Characters
                 if (Gender == Gender.Male && !DataProvider.Styles.MaleFaces.Contains(value) ||
                     Gender == Gender.Female && !DataProvider.Styles.FemaleFaces.Contains(value))
                 {
-                    //throw new StyleUnavailableException();
+                    throw new StyleUnavailableException();
                 }
 
                 _face = value;
@@ -619,17 +621,17 @@ namespace RazzleServer.Game.Maple.Characters
 
             Map.Characters.Add(this);
 
-            // ShowApple();
+            ShowApple();
             UpdateStatsForParty();
             Keymap.Send();
-            //Memos.Send();
+            // Memos.Send();
 
-            //Task.Factory.StartNew(() => { Client.StartPingCheck(); });
+            Task.Factory.StartNew(Client.StartPingCheck);
         }
 
         private void ShowApple()
         {
-            if (Map.MapleId == 1 || Map.MapleId == 2)
+            if (Map.MapleId == 1 || Map.MapleId == 2 || Map.MapleId == 809000101 || Map.MapleId == 809000201)
             {
                 Client.Send(new PacketWriter(ServerOperationCode.ShowApple));
             }

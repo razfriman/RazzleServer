@@ -11,7 +11,6 @@ namespace RazzleServer.Game.Maple.Maps
 
         public override void OnItemAdded(Character item)
         {
-            
             //lock (this)
             //{
             //    foreach (var character in Values.Where(x => x.Id != item.Id))
@@ -20,7 +19,9 @@ namespace RazzleServer.Game.Maple.Maps
             //    }
             //}
 
-            item.Position = Map.Portals.Count > 0 ? Map.Portals[item.SpawnPoint].Position : new Point(0, 0);
+            item.Position = Map.Portals.Count > 0 
+                ? Map.Portals[item.SpawnPoint].Position
+                : new Point(0, 0);
 
             lock (Map.Mobs)
             {

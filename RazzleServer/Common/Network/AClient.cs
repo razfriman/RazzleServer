@@ -57,15 +57,7 @@ namespace RazzleServer.Common.Network
 
         public virtual void Disconnected()
         {
-            try
-            {
-                Connected = false;
-                Socket?.Dispose();
-            }
-            catch (Exception e)
-            {
-                Log.LogError(e, $"Error while disconnecting. Client [{Key}]");
-            }
+            Connected = false;
         }
 
         public virtual void Register()

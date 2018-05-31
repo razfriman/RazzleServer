@@ -66,10 +66,8 @@ namespace RazzleServer.Game
             var save = Character;
             try
             {
-                Connected = false;
+                base.Disconnected();
                 Server.RemoveClient(this);
-                Socket?.Dispose();
-
                 Character?.Save();
                 Character?.Map?.Characters?.Remove(Character.Id);
                 Character = null;

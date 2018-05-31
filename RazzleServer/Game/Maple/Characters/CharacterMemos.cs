@@ -1,5 +1,7 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
 using RazzleServer.Common.Constants;
+using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
 
 namespace RazzleServer.Game.Maple.Characters
@@ -15,48 +17,17 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Load()
         {
-            //foreach (Datum datum in new Datums("memos").Populate("CharacterId = {0}", this.Parent.Id))
-            //{
-            //    this.Add(new Memo(datum));
-            //}
-        }
-
-        // NOTE: Memos are inserted straight into the database.
-        // Therefore, there is no need for a save method.
-
-        public void Handle(PacketReader iPacket)
-        {
-            var action = (MemoAction)iPacket.ReadByte();
-
-            switch (action)
+            using (var dbContext = new MapleDbContext())
             {
-                case MemoAction.Send:
-                    {
-                        // TODO: This is occured when you send a note from the Cash Shop.
-                        // As we don't have Cash Shop implemented yet, this remains unhandled.
-                    }
-                    break;
+                var memos = dbContext
+                    .MemoEntities
+                    .Where(x => x.CharacterId == Parent.Id)
+                    .ToArray();
 
-                case MemoAction.Delete:
-                    {
-                        var count = iPacket.ReadByte();
-                        var a = iPacket.ReadByte();
-                        var b = iPacket.ReadByte();
-
-                        for (byte i = 0; i < count; i++)
-                        {
-                            var id = iPacket.ReadInt();
-
-                            if (!Contains(id))
-                            {
-                                continue;
-                            }
-
-                            this[id].Delete();
-                        }
-
-                    }
-                    break;
+                foreach (var memo in memos)
+                {
+                    Add(new Memo(memo));
+                }
             }
         }
 
@@ -76,9 +47,6 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        protected override int GetKeyForItem(Memo item)
-        {
-            return item.Id;
-        }
+        protected override int GetKeyForItem(Memo item) => item.Id;
     }
 }

@@ -18,7 +18,7 @@ namespace RazzleServer.Game.Maple
         public static ItemType GetType(int mapleId) => (ItemType)(mapleId / 1000000);
 
         public CharacterItems Parent { get; set; }
-        public int Id { get; }
+        public int Id { get; private set; }
         public int AccountId { get; }
         public int MapleId { get; }
         public short Slot { get; set; }
@@ -371,22 +371,22 @@ namespace RazzleServer.Game.Maple
             Summons = CachedReference.Summons;
         }
 
-        public Item(ItemEntity datum)
+        public Item(ItemEntity entity)
         {
-            Id = datum.Id;
+            Id = entity.Id;
             Assigned = true;
-            AccountId = datum.AccountId;
-            MapleId = datum.MapleId;
-            Quantity = datum.Quantity;
-            Slot = datum.Slot;
-            Creator = datum.Creator;
-            Expiration = datum.Expiration;
-            PetId = datum.PetId;
+            AccountId = entity.AccountId;
+            MapleId = entity.MapleId;
+            Quantity = entity.Quantity;
+            Slot = entity.Slot;
+            Creator = entity.Creator;
+            Expiration = entity.Expiration;
+            PetId = entity.PetId;
 
             IsCash = CachedReference.IsCash;
             OnlyOne = CachedReference.OnlyOne;
             IsTradeBlocked = CachedReference.IsTradeBlocked;
-            IsStored = datum.IsStored;
+            IsStored = entity.IsStored;
             SalePrice = CachedReference.SalePrice;
             RequiredLevel = CachedReference.RequiredLevel;
             Meso = CachedReference.Meso;
@@ -404,23 +404,23 @@ namespace RazzleServer.Game.Maple
                 RequiredFame = CachedReference.RequiredFame;
                 RequiredJob = CachedReference.RequiredJob;
 
-                UpgradesAvailable = datum.UpgradesAvailable;
-                UpgradesApplied = datum.UpgradesApplied;
-                Strength = datum.Strength;
-                Dexterity = datum.Dexterity;
-                Intelligence = datum.Intelligence;
-                Luck = datum.Luck;
-                Health = datum.Health;
-                Mana = datum.Mana;
-                WeaponAttack = datum.WeaponAttack;
-                MagicAttack = datum.MagicAttack;
-                WeaponDefense = datum.WeaponDefense;
-                MagicDefense = datum.MagicDefense;
-                Accuracy = datum.Accuracy;
-                Avoidability = datum.Avoidability;
-                Agility = datum.Agility;
-                Speed = datum.Speed;
-                Jump = datum.Jump;
+                UpgradesAvailable = entity.UpgradesAvailable;
+                UpgradesApplied = entity.UpgradesApplied;
+                Strength = entity.Strength;
+                Dexterity = entity.Dexterity;
+                Intelligence = entity.Intelligence;
+                Luck = entity.Luck;
+                Health = entity.Health;
+                Mana = entity.Mana;
+                WeaponAttack = entity.WeaponAttack;
+                MagicAttack = entity.MagicAttack;
+                WeaponDefense = entity.WeaponDefense;
+                MagicDefense = entity.MagicDefense;
+                Accuracy = entity.Accuracy;
+                Avoidability = entity.Avoidability;
+                Agility = entity.Agility;
+                Speed = entity.Speed;
+                Jump = entity.Jump;
             }
             else if (IsConsumable)
             {
@@ -452,39 +452,53 @@ namespace RazzleServer.Game.Maple
         {
             using (var dbContext = new MapleDbContext())
             {
-                // TODO Update or create
-                dbContext.Items.Add(new ItemEntity
+                var item = dbContext.Items.Find(Id);
+                var isNewItem = item == null;
+
+                if (isNewItem)
                 {
-                    AccountId = Character.AccountId,
-                    CharacterId = Character.Id,
-                    MapleId = MapleId,
-                    Accuracy = Accuracy,
-                    Agility = Agility,
-                    Avoidability = Avoidability,
-                    Creator = Creator,
-                    Dexterity = Dexterity,
-                    Expiration = Expiration,
-                    Flags = Flags,
-                    Health = Health,
-                    Intelligence = Intelligence,
-                    MagicAttack = MagicAttack,
-                    MagicDefense = MagicAttack,
-                    WeaponDefense = WeaponDefense,
-                    WeaponAttack = WeaponAttack,
-                    UpgradesAvailable = UpgradesAvailable,
-                    UpgradesApplied = UpgradesApplied,
-                    IsStored = IsStored,
-                    Jump = Jump,
-                    Luck = Luck,
-                    Mana = Mana,
-                    Quantity = Quantity,
-                    Slot = Slot,
-                    Speed = Speed,
-                    Strength = Strength,
-                    PetId = PetId,
-                });
+                    item = new ItemEntity();
+                }
+
+                item.AccountId = Character.AccountId;
+                item.CharacterId = Character.Id;
+                item.MapleId = MapleId;
+                item.Accuracy = Accuracy;
+                item.Agility = Agility;
+                item.Avoidability = Avoidability;
+                item.Creator = Creator;
+                item.Dexterity = Dexterity;
+                item.Expiration = Expiration;
+                item.Flags = Flags;
+                item.Health = Health;
+                item.Intelligence = Intelligence;
+                item.MagicAttack = MagicAttack;
+                item.MagicDefense = MagicAttack;
+                item.WeaponDefense = WeaponDefense;
+                item.WeaponAttack = WeaponAttack;
+                item.UpgradesAvailable = UpgradesAvailable;
+                item.UpgradesApplied = UpgradesApplied;
+                item.IsStored = IsStored;
+                item.Jump = Jump;
+                item.Luck = Luck;
+                item.Mana = Mana;
+                item.Quantity = Quantity;
+                item.Slot = Slot;
+                item.Speed = Speed;
+                item.Strength = Strength;
+                item.PetId = PetId;
+
+                if (isNewItem)
+                {
+                    dbContext.Items.Add(item);
+                }
 
                 dbContext.SaveChanges();
+
+                if (isNewItem)
+                {
+                    Id = item.Id;
+                }
             }
         }
 
@@ -786,7 +800,7 @@ namespace RazzleServer.Game.Maple
 
         public byte[] ToByteArray(bool zeroPosition = false, bool leaveOut = false)
         {
-            using (var oPacket = new PacketWriter())
+            using (var pw = new PacketWriter())
             {
                 if (!zeroPosition && !leaveOut)
                 {
@@ -803,24 +817,24 @@ namespace RazzleServer.Game.Maple
 
                     if (Type == ItemType.Equipment)
                     {
-                        oPacket.WriteShort(slot);
+                        pw.WriteShort(slot);
                     }
                     else
                     {
-                        oPacket.WriteByte(slot);
+                        pw.WriteByte(slot);
                     }
                 }
 
-                oPacket.WriteByte((byte)(PetId != null ? 3 : Type == ItemType.Equipment ? 1 : 2));
-                oPacket.WriteInt(MapleId);
-                oPacket.WriteBool(IsCash);
+                pw.WriteByte((byte)(PetId != null ? 3 : Type == ItemType.Equipment ? 1 : 2));
+                pw.WriteInt(MapleId);
+                pw.WriteBool(IsCash);
 
                 if (IsCash)
                 {
-                    oPacket.WriteLong(1); // TODO: Unique Id for cash items.
+                    pw.WriteLong(1); // TODO: Unique Id for cash items.
                 }
 
-                oPacket.WriteDateTime(Expiration);
+                pw.WriteDateTime(Expiration);
 
                 if (PetId != null)
                 {
@@ -828,53 +842,46 @@ namespace RazzleServer.Game.Maple
                 }
                 else if (Type == ItemType.Equipment)
                 {
-                    oPacket.WriteByte(UpgradesAvailable);
-                    oPacket.WriteByte(UpgradesApplied);
-                    oPacket.WriteShort(Strength);
-                    oPacket.WriteShort(Dexterity);
-                    oPacket.WriteShort(Intelligence);
-                    oPacket.WriteShort(Luck);
-                    oPacket.WriteShort(Health);
-                    oPacket.WriteShort(Mana);
-                    oPacket.WriteShort(WeaponAttack);
-                    oPacket.WriteShort(MagicAttack);
-                    oPacket.WriteShort(WeaponDefense);
-                    oPacket.WriteShort(MagicDefense);
-                    oPacket.WriteShort(Accuracy);
-                    oPacket.WriteShort(Avoidability);
-                    oPacket.WriteShort(Agility);
-                    oPacket.WriteShort(Speed);
-                    oPacket.WriteShort(Jump);
-                    oPacket.WriteString(Creator);
-                    oPacket.WriteByte(Flags);
-                    oPacket.WriteByte(0);
+                    pw.WriteByte(UpgradesAvailable);
+                    pw.WriteByte(UpgradesApplied);
+                    pw.WriteShort(Strength);
+                    pw.WriteShort(Dexterity);
+                    pw.WriteShort(Intelligence);
+                    pw.WriteShort(Luck);
+                    pw.WriteShort(Health);
+                    pw.WriteShort(Mana);
+                    pw.WriteShort(WeaponAttack);
+                    pw.WriteShort(MagicAttack);
+                    pw.WriteShort(WeaponDefense);
+                    pw.WriteShort(MagicDefense);
+                    pw.WriteShort(Accuracy);
+                    pw.WriteShort(Avoidability);
+                    pw.WriteShort(Agility);
+                    pw.WriteShort(Speed);
+                    pw.WriteShort(Jump);
+                    pw.WriteString(Creator);
+                    pw.WriteByte(Flags);
+                    pw.WriteByte(0);
 
                     if (!IsEquippedCash)
                     {
-                        oPacket.WriteByte(0);
-                        oPacket.WriteByte(0);
-                        oPacket.WriteShort(0);
-                        oPacket.WriteShort(0);
-                        oPacket.WriteInt(0);
-                        oPacket.WriteLong(0);
-                        oPacket.WriteLong(0);
-                        oPacket.WriteInt(-1);
+                        pw.WriteByte(0);
+                        pw.WriteLong(0);
                     }
                 }
                 else
                 {
-                    oPacket.WriteShort(Quantity);
-                    oPacket.WriteString(Creator);
-                    oPacket.WriteByte(Flags);
-                    oPacket.WriteByte(0);
+                    pw.WriteShort(Quantity);
+                    pw.WriteString(Creator);
+                    pw.WriteByte(Flags);
+                    pw.WriteByte(0);
 
                     if (IsRechargeable)
                     {
-                        oPacket.WriteLong(0); // TODO: Unique Id.
+                        pw.WriteLong(0); // TODO: Unique Id.
                     }
                 }
-
-                return oPacket.ToArray();
+                return pw.ToArray();
             }
         }
 

@@ -8,10 +8,7 @@ namespace RazzleServer.Common.Packet
     {
         protected MemoryStream Buffer;
 
-        public void Dispose()
-        {
-            Buffer.Close();
-        }
+        public void Dispose() => Buffer?.Close();
 
         public byte[] ToArray() => Buffer.ToArray();
 

@@ -131,12 +131,6 @@ namespace RazzleServer.Common.Packet
         /// Reads a point from the stream     
         /// </summary>        
         /// <returns>A point</returns>        
-        public Point ReadPoint()
-        {
-            var x = ReadShort();
-            var y = ReadShort();
-            var ret = new Point(x, y);
-            return ret;
-        }
+        public Point ReadPoint() => new Point(ReadShort(), ReadShort());
     }
 }

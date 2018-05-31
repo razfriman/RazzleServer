@@ -8,8 +8,11 @@ namespace RazzleServer.Game.Handlers
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
             var objectId = packet.ReadInt();
-            var mob = client.Character.ControlledMobs[objectId];
-            mob?.Move(packet);
+            if (client.Character.ControlledMobs.Contains(objectId))
+            {
+                var mob = client.Character.ControlledMobs[objectId];
+                mob?.Move(packet);
+            }
         }
     }
 }

@@ -57,11 +57,8 @@ namespace RazzleServer.Game.Maple.Maps
 
             var key = GetId(item);
 
-            //if (!Objects.ContainsKey(key))
-            //{
-                Objects[key] = item;
-                OnItemAdded(item);
-            //}
+            Objects[key] = item;
+            OnItemAdded(item);
         }
 
         public bool Remove(T item)
@@ -74,6 +71,9 @@ namespace RazzleServer.Game.Maple.Maps
             if (Objects.ContainsKey(key))
             {
                 var item = Objects[key];
+
+                OnItemRemoved(item);
+
                 item.Map = null;
 
                 if (!(item is Character) && !(item is Portal))
@@ -82,7 +82,6 @@ namespace RazzleServer.Game.Maple.Maps
                 }
 
                 Objects.Remove(key);
-                OnItemRemoved(item);
                 return true;
             }
 

@@ -166,7 +166,6 @@ namespace RazzleServer.Game.Maple.Life
                 if (Controller != newController)
                 {
                     Controller.ControlledMobs.Remove(this);
-
                     newController.ControlledMobs.Add(this);
                 }
             }
@@ -207,8 +206,7 @@ namespace RazzleServer.Game.Maple.Life
                 oPacket.WriteBool(skill != null); // use skills
                 oPacket.WriteShort((short)Mana);
                 oPacket.WriteShort(0); // skill id, skill level
-
-                Controller.Client.Send(oPacket);
+                Controller?.Client?.Send(oPacket);
             }
 
             using (var oPacket = new PacketWriter(ServerOperationCode.MobMove))

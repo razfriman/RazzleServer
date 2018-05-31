@@ -2,12 +2,12 @@
 
 namespace RazzleServer.Game.Handlers
 {
-    [PacketHandler(ClientOperationCode.NoteAction)]
-    public class NoteActionHandler : GamePacketHandler
+    [PacketHandler(ClientOperationCode.ChalkboardClose)]
+    public class ChalkboardCloseHandler : GamePacketHandler
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
-
+            client.Character.Chalkboard = string.Empty;
         }
     }
 }
