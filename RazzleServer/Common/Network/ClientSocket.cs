@@ -87,15 +87,11 @@ namespace RazzleServer.Common.Network
             }
         }
 
-        public async Task Send(PacketWriter data) => await Send(data.ToArray());
-
         public async Task Send(byte[] data)
         {
             if (!_disposed)
             {
-                var buffer = data.ToArray();
-                Crypto.Encrypt(buffer, _toClient);
-                await SendRawPacket(buffer);
+                await SendRawPacket(Crypto.Encrypt(data, _toClient).ToArray());
             }
         }
 

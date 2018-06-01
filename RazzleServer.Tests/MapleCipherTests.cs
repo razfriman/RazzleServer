@@ -3,6 +3,7 @@ using RazzleServer.Common.Crypto;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
 using System;
+using System.Threading;
 
 namespace RazzleServer.Tests
 {
@@ -137,6 +138,74 @@ namespace RazzleServer.Tests
             decryptor.SetIv(iv);
             var decryptedPacket = decryptor.Decrypt(encryptedPacket);
             Assert.AreEqual(originalPacket.ByteArrayToString(), decryptedPacket.ByteArrayToString());
+        }
+
+        [TestMethod]
+        public void EncryptDecryptProvider_ToServer_Succeeds()
+        {
+            var version = (ushort)55;
+            var aesKey = (ulong)0x52330F1BB4060813;
+            var iv = (uint)0;
+            var encryptor = new MapleCipher(version, aesKey);
+            encryptor.SetIv(iv);
+
+            var packet = new PacketWriter();
+            packet.WriteByte(1);
+            packet.WriteShort(2);
+            packet.WriteInt(4);
+            packet.WriteLong(8);
+            var originalPacket = packet.ToArray();
+            var encryptedPacket = encryptor.Encrypt(packet.ToArray().AsSpan(), false);
+
+
+            var waiter = new ManualResetEventSlim();
+
+            var provider = new MapleCipherProvider(version, aesKey);
+            provider.SetVectors(0, 0);
+            var buffer = encryptedPacket.ToArray().AsMemory();
+            provider.PacketFinished += (byte[] received) =>
+            {
+                Assert.AreEqual(originalPacket.Length, received.Length, "Packet length should match");
+                Assert.AreEqual(originalPacket.ByteArrayToString(), received.ByteArrayToString());
+                waiter.Set();
+            };
+            provider.AddData(buffer, 0, encryptedPacket.Length);
+
+            waiter.Wait();
+        }
+
+        [TestMethod]
+        public void EncryptDecryptProvider_ToClient_Succeeds()
+        {
+            var version = (ushort)55;
+            var aesKey = (ulong)0x52330F1BB4060813;
+            var iv = (uint)0;
+            var encryptor = new MapleCipher(version, aesKey);
+            encryptor.SetIv(iv);
+
+            var packet = new PacketWriter();
+            packet.WriteByte(1);
+            packet.WriteShort(2);
+            packet.WriteInt(4);
+            packet.WriteLong(8);
+            var originalPacket = packet.ToArray();
+            var encryptedPacket = encryptor.Encrypt(packet.ToArray().AsSpan(), true);
+
+
+            var waiter = new ManualResetEventSlim();
+
+            var provider = new MapleCipherProvider(version, aesKey, toClient: false);
+            provider.SetVectors(0, 0);
+            var buffer = encryptedPacket.ToArray().AsMemory();
+            provider.PacketFinished += (byte[] received) =>
+            {
+                Assert.AreEqual(originalPacket.Length, received.Length, "Packet length should match");
+                Assert.AreEqual(originalPacket.ByteArrayToString(), received.ByteArrayToString());
+                waiter.Set();
+            };
+            provider.AddData(buffer, 0, encryptedPacket.Length);
+
+            waiter.Wait();
         }
     }
 }

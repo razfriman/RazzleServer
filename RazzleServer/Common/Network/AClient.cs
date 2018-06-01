@@ -40,7 +40,10 @@ namespace RazzleServer.Common.Network
                 Log.LogInformation($"Sending: {packet.ByteArrayToString()}");
             }
 
-            Socket?.Send(packet);
+            if (Socket != null)
+            {
+                Socket.Send(packet).GetAwaiter().GetResult();
+            }
         }
 
         public void Terminate(string message = null)

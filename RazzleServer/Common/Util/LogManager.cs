@@ -7,7 +7,7 @@ namespace RazzleServer.Common.Util
     {
         private static readonly ILoggerFactory Factory = new LoggerFactory()
             .AddConsole()
-            .AddDebug();
+            .AddDebug((s, x) => true);
 
         public static ILogger Log => Factory.CreateLogger(new StackFrame(1, false).GetMethod().DeclaringType.FullName);
 

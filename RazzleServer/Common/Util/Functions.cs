@@ -342,5 +342,19 @@ namespace RazzleServer.Common.Util
                 list[j] = tmp;
             }
         }
+
+        public static void SpanCopy<T>(Span<T> src, int srcOffset, Span<T> dest, int destOffset, int length)
+        {
+            var srcSlice = src.Slice(srcOffset, length);
+            var dstSlice = dest.Slice(destOffset, length);
+            srcSlice.CopyTo(dstSlice);
+        }
+
+        public static void MemoryCopy<T>(Memory<T> src, int srcOffset, Memory<T> dest, int destOffset, int length)
+        {
+            var srcSlice = src.Slice(srcOffset, length);
+            var dstSlice = dest.Slice(destOffset, length);
+            srcSlice.CopyTo(dstSlice);
+        }
     }
 }

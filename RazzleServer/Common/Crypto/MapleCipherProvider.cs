@@ -54,7 +54,6 @@ namespace RazzleServer.Common.Crypto
         {
             RecvCipher = new MapleCipher(currentGameVersion, aesKey);
             SendCipher = new MapleCipher(currentGameVersion, aesKey);
-
             DataBuffer = new byte[initialBufferSize];
             AvailableData = 0;
             WaitForData = 0;
@@ -90,11 +89,7 @@ namespace RazzleServer.Common.Crypto
             lock (_addLocker)
             {
                 EnsureCapacity(length + AvailableData);
-
-                var srcSlice = data.Slice(offset, length);
-                var dstSlice = DataBuffer.Slice(AvailableData, length);
-                srcSlice.CopyTo(dstSlice);
-
+                Functions.MemoryCopy(data, offset, DataBuffer, AvailableData, length);
                 AvailableData += length;
             }
 
@@ -112,6 +107,7 @@ namespace RazzleServer.Common.Crypto
                     WaitMore(w);
                 }
             }
+
             if (IsWaiting)
             {
                 Wait();
@@ -176,14 +172,11 @@ namespace RazzleServer.Common.Crypto
             }
 
             var data = new byte[length + add].AsMemory();
-            DataBuffer.Slice(0, data.Length).CopyTo(data.Slice(0, length));
-
-            var copyLength = DataBuffer.Length - (length + add);
-            DataBuffer.Slice(length + add, length).CopyTo(DataBuffer.Slice(0, copyLength));
-
+            Functions.MemoryCopy(DataBuffer, 0, data, 0, data.Length);
+            DataBuffer.Slice(0, length + add).Span.Fill(0);
             AvailableData -= length + add;
 
-            Decrypt(data.ToArray());
+            Decrypt(data.Span);
         }
 
         /// <summary>
@@ -210,14 +203,14 @@ namespace RazzleServer.Common.Crypto
                     throw new InvalidOperationException("Packet header mismatch");
                 }
 
-                RecvCipher.Decrypt(data);
+                var decrypted = RecvCipher.Decrypt(data);
 
-                if (data.Length == 0)
+                if (decrypted.Length == 0)
                 {
                     return;
                 }
 
-                PacketFinished?.Invoke(data.ToArray());
+                PacketFinished?.Invoke(decrypted.ToArray());
             }
             Wait();
         }
@@ -227,15 +220,12 @@ namespace RazzleServer.Common.Crypto
         /// </summary>
         private void GetHeader()
         {
-            if (!RecvCipher.Handshaken)
-            {
-                WaitMore(BitConverter.ToUInt16(DataBuffer.Slice(0, 2).Span));
-            }
-            else
-            {
-                var packetLength = RecvCipher.GetPacketLength(DataBuffer.Slice(0, 4).Span);
-                WaitMore(packetLength);
-            }
+            var packetLength = RecvCipher
+                .Handshaken
+                ? RecvCipher.GetPacketLength(DataBuffer.Slice(0, 4).Span)
+                : BitConverter.ToUInt16(DataBuffer.Slice(0, 2).Span);
+
+            WaitMore(packetLength);
         }
     }
 }
