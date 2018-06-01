@@ -8,7 +8,7 @@ project.lock.json
 .vscode/
 .vs/
 .idea/
-
+RazzleServer.Benchmarks/BenchmarkDotNet.Artifacts/
 RazzleServer/*.db
 # Autosave files
 *~

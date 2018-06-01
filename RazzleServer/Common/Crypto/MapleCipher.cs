@@ -23,6 +23,12 @@ namespace RazzleServer.Common.Crypto
         private InitializationVector MapleIv { get; set; }
 
         /// <summary>
+        /// IV to use in the Maple AES section
+        /// </summary>
+        /// <value>The real iv.</value>
+        private byte[] RealIv { get; set; } = new byte[sizeof(int) * 4];
+
+        /// <summary>
         /// Gameversion of the current <see cref="MapleCipher"/> instance
         /// </summary>
         public ushort GameVersion { get; }
@@ -118,7 +124,6 @@ namespace RazzleServer.Common.Crypto
         public Span<byte> Handshake(Span<byte> data)
         {
             var length = BitConverter.ToUInt16(data.Slice(0, 2).ToArray(), 0);
-            var ret = new byte[length];
             return data.Slice(2, length);
         }
 
@@ -148,14 +153,14 @@ namespace RazzleServer.Common.Crypto
                 start = 0,
                 index;
 
-            byte[] realIv = new byte[sizeof(int) * 4],
-                   ivBytes = MapleIv.Bytes;
+            RealIv.AsSpan().Fill(0);
+            var ivBytes = MapleIv.Bytes;
 
             while (remaining > 0)
             {
-                for (index = 0; index < realIv.Length; ++index)
+                for (index = 0; index < RealIv.Length; ++index)
                 {
-                    realIv[index] = ivBytes[index % 4];
+                    RealIv[index] = ivBytes[index % 4];
                 }
 
                 if (remaining < length)
@@ -165,12 +170,12 @@ namespace RazzleServer.Common.Crypto
 
                 for (index = start; index < start + length; ++index)
                 {
-                    if ((index - start) % realIv.Length == 0)
+                    if ((index - start) % RealIv.Length == 0)
                     {
-                        Transformer.TransformBlock(realIv);
+                        Transformer.TransformBlock(RealIv);
                     }
 
-                    buffer[index] ^= realIv[(index - start) % realIv.Length];
+                    buffer[index] ^= RealIv[(index - start) % RealIv.Length];
                 }
                 start += length;
                 remaining -= length;
@@ -211,7 +216,7 @@ namespace RazzleServer.Common.Crypto
         /// </summary>
         /// <param name="data">Data to check</param>
         /// <returns>Length of <paramref name="data"/></returns>
-        public int GetPacketLength(Span<byte> data) => (data[0] + (data[1] << 8)) ^ (data[2] + (data[3] << 8));
+        public int GetPacketLength(in ReadOnlySpan<byte> data) => (data[0] + (data[1] << 8)) ^ (data[2] + (data[3] << 8));
 
         public bool CheckHeader(in ReadOnlySpan<byte> data, bool toClient) => toClient
                     ? CheckHeaderToClient(data)

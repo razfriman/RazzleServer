@@ -1,4 +1,5 @@
-﻿using BenchmarkDotNet.Attributes;
+﻿using System;
+using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 using RazzleServer.Common.Crypto;
 using RazzleServer.Common.Packet;
@@ -13,9 +14,10 @@ namespace RazzleServer.Benchmarks
 
     public class Test {
 
-        private MapleCipher cipher = new MapleCipher((ushort)55, (ulong)0x52330F1BB4060813);
+        private MapleCipher encryptor = new MapleCipher((ushort)55, (ulong)0x52330F1BB4060813);
+        private MapleCipher decryptor = new MapleCipher((ushort)55, (ulong)0x52330F1BB4060813);
         private byte[] data;
-
+        private int N = 10;
         public Test()
         {
             var packet = new PacketWriter();
@@ -24,22 +26,34 @@ namespace RazzleServer.Benchmarks
             packet.WriteInt(4);
             packet.WriteLong(8);
             data = packet.ToArray();
+            encryptor.SetIv(0);
+            decryptor.SetIv(0);
         }
 
         [Benchmark]
-        public byte[] Encrypt() {
-            cipher.SetIv(0);
-            var encryptedPacket = cipher.Encrypt(data, false);
-            return encryptedPacket.ToArray();
+        public Span<byte> Encrypt() {
+            var encryptedPacket = encryptor.Encrypt(data, false);
+
+            for (int i = 0; i < N; i++)
+            {
+                encryptedPacket = encryptor.Encrypt(data, false);
+            }
+
+            return encryptedPacket;
         } 
 
         [Benchmark]
-        public byte[] EncryptDecrypt() {
-            cipher.SetIv(0);
-            var encryptedPacket = cipher.Encrypt(data, false);
-            cipher.SetIv(0);
-            var decryptedPacket = cipher.Decrypt(encryptedPacket);
-            return decryptedPacket.ToArray();
+        public Span<byte> EncryptDecrypt() {
+            var encryptedPacket = encryptor.Encrypt(data, false);
+            var decryptedPacket = decryptor.Decrypt(encryptedPacket);
+
+            for (int i = 0; i < N; i++)
+            {
+                encryptedPacket = encryptor.Encrypt(data, false);
+                decryptedPacket = decryptor.Decrypt(encryptedPacket);
+            }
+
+            return decryptedPacket;
         } 
         
     }
