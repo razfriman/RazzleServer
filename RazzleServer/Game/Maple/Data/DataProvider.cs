@@ -18,6 +18,7 @@ namespace RazzleServer.Game.Maple.Data
         public static CachedQuests Quests { get; private set; }
         public static CachedCreationData CreationData { get; private set; }
         public static CachedMaps Maps { get; private set; }
+        public static CachedStrings Strings { get; private set; }
 
         private static readonly ILogger Log = LogManager.Log;
 
@@ -37,6 +38,7 @@ namespace RazzleServer.Game.Maple.Data
             Quests = new CachedQuests();
             CreationData = new CachedCreationData();
             Maps = new CachedMaps();
+            Strings = new CachedStrings();
 
             Task.WaitAll(
                 Task.Run(async () => Styles = await new AvailableStylesDataLoader().Load()),
@@ -47,6 +49,7 @@ namespace RazzleServer.Game.Maple.Data
                 Task.Run(async () => Reactors = await new ReactorsLoader().Load()),
                 Task.Run(async () => Quests = await new QuestsLoader().Load()),
                 Task.Run(async () => Maps = await new MapsLoader().Load()),
+                Task.Run(async () => Strings = await new StringLoader().Load()),
                 Task.Run(() => CommandFactory.Initialize())
             );
 
