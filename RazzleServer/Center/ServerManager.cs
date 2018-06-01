@@ -96,11 +96,11 @@ namespace RazzleServer.Center
             {
                 _log.LogInformation($"Login: {Login.Clients.Count}");
 
-                foreach (var world in Worlds)
+                foreach (var world in Worlds.Values)
                 {
-                    _log.LogInformation($"World ({world.Name}): {world.Sum(x => x.Clients.Count)}");
+                    _log.LogInformation($"World ({world.Name}): {world.Values.Sum(x => x.Clients.Count)}");
 
-                    foreach (var channel in world)
+                    foreach (var channel in world.Values)
                     {
                         _log.LogInformation($"World ({world.Name}) - Channel {channel.ChannelId + 1}: {channel.Clients.Count}");
                     }

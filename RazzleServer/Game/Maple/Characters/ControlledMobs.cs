@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Life;
 
 namespace RazzleServer.Game.Maple.Characters
 {
-    public class ControlledMobs : KeyedCollection<int, Mob>
+    public class ControlledMobs : MapleKeyedCollection<int, Mob>
     {
         public Character Parent { get; }
 
@@ -13,7 +12,7 @@ namespace RazzleServer.Game.Maple.Characters
             Parent = parent;
         }
 
-        protected override void InsertItem(int index, Mob item)
+        public override void Add(Mob item)
         {
             lock (this)
             {
@@ -21,7 +20,7 @@ namespace RazzleServer.Game.Maple.Characters
                 {
                     item.Controller = Parent;
 
-                    base.InsertItem(index, item);
+                    base.Add(item);
 
                     Parent.Client.Send(item.GetControlRequestPacket());
                 }
@@ -32,41 +31,20 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        protected override void RemoveItem(int index)
+        public override void Remove(Mob item)
         {
             lock (this)
             {
-                var item = Items[index];
-
                 if (Parent.Client.Connected)
                 {
                     Parent.Client.Send(item.GetControlCancelPacket());
                 }
 
                 item.Controller = null;
-
-                base.RemoveItem(index);
+                base.Remove(item);
             }
         }
 
-        protected override void ClearItems()
-        {
-            lock (this)
-            {
-                var toRemove = new List<Mob>();
-
-                foreach (var mob in this)
-                {
-                    toRemove.Add(mob);
-                }
-
-                foreach (var mob in toRemove)
-                {
-                    Remove(mob);
-                }
-            }
-        }
-
-        protected override int GetKeyForItem(Mob item) => item.ObjectId;
+        public override int GetKey(Mob item) => item.ObjectId;
     }
 }

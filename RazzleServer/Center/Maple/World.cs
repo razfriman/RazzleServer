@@ -1,13 +1,13 @@
-﻿using System.Collections.ObjectModel;
-using System.Linq;
+﻿using System.Linq;
 using Newtonsoft.Json;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
+using RazzleServer.Common.Util;
 using RazzleServer.Game;
 
 namespace RazzleServer.Center.Maple
 {
-    public sealed class World : KeyedCollection<byte, GameServer>
+    public sealed class World : MapleKeyedCollection<byte, GameServer>
     {
         public byte Id { get; set; }
         public string Name { get; set; }
@@ -44,11 +44,11 @@ namespace RazzleServer.Center.Maple
         public bool IsFull => Count == Channels;
 
         [JsonIgnore]
-        public int Population => this.Sum(x => x.Population);
+        public int Population => Values.Sum(x => x.Population);
 
-        protected override byte GetKeyForItem(GameServer item) => item.ChannelId;
+        public override byte GetKey(GameServer item) => item.ChannelId;
 
-        public void Send(PacketWriter pw, GameClient except = null) => this
+        public void Send(PacketWriter pw, GameClient except = null) => Values
         .SelectMany(x => x.Clients.Values)
         .Where(x => x.Key != except?.Key)
         .ToList()

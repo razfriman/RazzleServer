@@ -1,43 +1,21 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Characters;
 
 namespace RazzleServer.Game.Maple.Maps
 {
-    public abstract class MapObjects<T> where T : MapObject
+    public abstract class MapObjects<T> : MapleKeyedCollection<int, T> where T : MapObject
     {
-        [JsonIgnore]
-        protected readonly ILogger Logger;
-
         [JsonIgnore]
         public Map Map { get; }
 
-        [JsonProperty]
-        private Dictionary<int, T> Objects { get; set; } = new Dictionary<int, T>();
+        protected MapObjects() { }
 
-        protected MapObjects()
-        {
-            Logger = LogManager.LogByName(GetType().FullName);
-        }
-
-        protected MapObjects(Map map)
+        protected MapObjects(Map map) : this()
         {
             Map = map;
-            Logger = LogManager.LogByName(GetType().FullName);
         }
-
-
-        public T this[int key] => Objects.ContainsKey(key) ? Objects[key] : null;
-
-        [JsonIgnore]
-
-        public IEnumerable<T> Values => Objects.Values;
-
-        [JsonIgnore]
-        public int Count => Values.Count();
 
         public IEnumerable<T> GetInRange(MapObject reference, int range)
         {
@@ -50,9 +28,9 @@ namespace RazzleServer.Game.Maple.Maps
             }
         }
 
-        public virtual int GetId(T item) => item.ObjectId;
+        public override int GetKey(T item) => item.ObjectId;
 
-        public virtual void Add(T item)
+        public override void Add(T item)
         {
             item.Map = Map;
 
@@ -61,14 +39,14 @@ namespace RazzleServer.Game.Maple.Maps
                 item.ObjectId = Map.AssignObjectId();
             }
 
-            var key = GetId(item);
+            var key = GetKey(item);
 
             Objects[key] = item;
         }
 
-        public virtual void Remove(T item)
+        public override void Remove(T item)
         {
-            var key = GetId(item);
+            var key = GetKey(item);
             if (Contains(key))
             {
                 item.Map = null;
@@ -82,14 +60,12 @@ namespace RazzleServer.Game.Maple.Maps
             }
         }
 
-        public virtual void Remove(int key)
+        public override void Remove(int key)
         {
             if (Contains(key))
             {
                 Remove(this[key]);
             }
         }
-
-        public bool Contains(int id) => Objects.ContainsKey(id);
     }
 }

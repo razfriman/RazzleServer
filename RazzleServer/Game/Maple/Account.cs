@@ -8,7 +8,6 @@ namespace RazzleServer.Game.Maple
     public sealed class Account
     {
         public GameClient Client { get; }
-
         public int Id { get; set; }
         public string Username { get; set; }
         public Gender Gender { get; set; }

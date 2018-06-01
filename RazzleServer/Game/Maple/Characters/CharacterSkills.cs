@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
+using RazzleServer.Common.Util;
 
 namespace RazzleServer.Game.Maple.Characters
 {
-    public sealed class CharacterSkills : KeyedCollection<int, Skill>
+    public sealed class CharacterSkills : MapleKeyedCollection<int, Skill>
     {
         public Character Parent { get; }
 
@@ -24,7 +24,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Save()
         {
-            foreach (var skill in this)
+            foreach (var skill in Values)
             {
                 skill.Save();
             }
@@ -32,7 +32,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Delete()
         {
-            foreach (var skill in this)
+            foreach (var skill in Values)
             {
                 skill.Delete();
             }
@@ -84,7 +84,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                 var cooldownSkills = new List<Skill>();
 
-                foreach (var loopSkill in this)
+                foreach (var loopSkill in Values)
                 {
                     oPacket.WriteBytes(loopSkill.ToByteArray());
 
@@ -107,23 +107,19 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        protected override void InsertItem(int index, Skill item)
+        public override void Add( Skill item)
         {
             item.Parent = this;
-
-            base.InsertItem(index, item);
+            base.Add(item);
         }
 
-        protected override void RemoveItem(int index)
+        public override void Remove(Skill item)
         {
-            var item = Items[index];
-
             item.Parent = null;
-
-            base.RemoveItem(index);
+            base.Remove(item);
         }
 
-        protected override int GetKeyForItem(Skill item) => item.MapleId;
+        public override int GetKey(Skill item) => item.MapleId;
 
         public int GetCurrentLevel(int id) {
 

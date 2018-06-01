@@ -1,9 +1,9 @@
-﻿using System.Collections.ObjectModel;
-using RazzleServer.Common.Constants;
+﻿using RazzleServer.Common.Constants;
+using RazzleServer.Common.Util;
 
 namespace RazzleServer.Center.Maple
 {
-    public sealed class Worlds : KeyedCollection<byte, World>
+    public sealed class Worlds : MapleKeyedCollection<byte, World>
     {
         internal Worlds() { }
 
@@ -11,7 +11,7 @@ namespace RazzleServer.Center.Maple
         {
             lock (this)
             {
-                foreach (var loopWorld in this)
+                foreach (var loopWorld in Values)
                 {
                     if (type == ServerType.Channel && loopWorld.IsFull)
                     {
@@ -25,6 +25,6 @@ namespace RazzleServer.Center.Maple
             }
         }
 
-        protected override byte GetKeyForItem(World item) => item.Id;
+        public override byte GetKey(World item) => item.Id;
     }
 }

@@ -1,13 +1,13 @@
-﻿using System.Collections.ObjectModel;
-using System.Linq;
+﻿using System.Linq;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
+using RazzleServer.Common.Util;
 using RazzleServer.Data;
 
 namespace RazzleServer.Game.Maple.Characters
 {
-    public sealed class CharacterKeymap : KeyedCollection<KeymapKey, Shortcut>
+    public sealed class CharacterKeymap : MapleKeyedCollection<KeymapKey, Shortcut>
     {
         private const int KeyCount = 90;
 
@@ -37,7 +37,7 @@ namespace RazzleServer.Game.Maple.Characters
 
             using (var dbContext = new MapleDbContext())
             {
-                foreach (var entry in this)
+                foreach (var entry in Values)
                 {
                     dbContext.KeyMaps.Add(new KeyMapEntity
                     {
@@ -91,6 +91,6 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        protected override KeymapKey GetKeyForItem(Shortcut item) => item.Key;
+        public override KeymapKey GetKey(Shortcut item) => item.Key;
     }
 }

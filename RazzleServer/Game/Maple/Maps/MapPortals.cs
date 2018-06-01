@@ -12,6 +12,6 @@ namespace RazzleServer.Game.Maple.Maps
 
         public bool ContainsPortal(string label) => Values.Any(x => x.Label == label);
 
-        public override int GetId(Portal item) => item.Id;
+        public override int GetKey(Portal item) => item.Id;
     }
 }

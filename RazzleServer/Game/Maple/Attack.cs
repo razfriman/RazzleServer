@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
+using static RazzleServer.Common.Constants.SkillNames;
 
 namespace RazzleServer.Game.Maple
 {
@@ -11,7 +12,6 @@ namespace RazzleServer.Game.Maple
         public int Targets { get; }
         public int Hits { get; }
         public int SkillId { get; }
-
         public byte Display { get; }
         public byte Animation { get; }
         public byte WeaponClass { get; }
@@ -30,25 +30,22 @@ namespace RazzleServer.Game.Maple
             Hits = tByte % 0x10;
             SkillId = packet.ReadInt();
 
-
-
             switch (SkillId)
             {
-                case 2121001:
-                case 2221001:
-                case 2321001:
-                case 5101004:
-                case 5201002:
+                case (int)FirePoisonArchMage.BigBang:
+                case (int)IceLightningArchMage.BigBang:
+                case (int)Bishop.BigBang:
+                case (int)SuperGm.Hide:
                     var charge = packet.ReadInt();
                     break;
             }
 
-            if (SkillId == 1221011)
+            if (SkillId == (int)Paladin.HeavensHammer)
             {
                 //isHH = true;
             }
 
-            if (SkillId == 4211006) 
+            if (SkillId == (int)ChiefBandit.MesoExplosion) 
             {
                 // parseMesoExplosion(lea, ret);
             }
@@ -65,10 +62,6 @@ namespace RazzleServer.Game.Maple
                 var cashStarSlot = packet.ReadShort();
                 packet.ReadByte(); // NOTE: Unknown.
             }
-
-            // [29 00] [01] [11] [00 00 00 00]
-            // [00] [85] [01] [04] [67 77 19 02]
-            // [1A 00 00 00] [06 80 01 01] [61 00 12 01] [63 00 12 01] [89 01] [01 00 00 00] [CF 99 F9 DF] [9F 00 12 01]
 
             Damages = new Dictionary<int, List<uint>>();
 

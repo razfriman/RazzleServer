@@ -251,12 +251,12 @@ namespace RazzleServer.Game.Maple.Characters
                 maxMp += Functions.Random(14, 16);
             }
           
-            if (Skills.GetCurrentLevel(1000001) > 0)
+            if (Skills.GetCurrentLevel((int)SkillNames.Swordsman.ImprovedMaxHpIncrease) > 0)
             {
-                maxHp += Skills[1000001].ParameterA;
+                maxHp += Skills[(int)SkillNames.Swordsman.ImprovedMaxHpIncrease].ParameterA;
             }
 
-            if (Skills.GetCurrentLevel(2000001) > 0)
+            if (Skills.GetCurrentLevel((int)SkillNames.Magician.ImprovedMaxMpIncrease) > 0)
             {
                 maxMp += Skills[2000001].ParameterA;
             }
@@ -1066,12 +1066,9 @@ namespace RazzleServer.Game.Maple.Characters
                     else if (IsBaseJob(Job.Warrior))
                     {
                         maxHp += Functions.Random(20, 24);
+                        var skill = Skills[(int)SkillNames.Swordsman.ImprovedMaxHpIncrease];
+                        maxHp += skill?.ParameterB ?? 0;
 
-                        var improvingMaxHp = Skills.GetCurrentLevel(1000001);
-                        if (improvingMaxHp >= 1)
-                        {
-                            maxHp += Skills[1000001].ParameterB;
-                        }
                     }
                     else if (IsBaseJob(Job.Magician))
                     {
@@ -1105,20 +1102,13 @@ namespace RazzleServer.Game.Maple.Characters
                     else if (IsBaseJob(Job.Warrior))
                     {
                         maxMp += Functions.Random(2, 4);
-
-
-
-
                     }
                     else if (IsBaseJob(Job.Magician))
                     {
                         maxMp += Functions.Random(18, 20);
 
-                        var improvingMaxMp = Skills.GetCurrentLevel(2000001);
-                        if (improvingMaxMp >= 1)
-                        {
-                            maxMp += Skills[2000001].ParameterB;
-                        }
+                        var skill = Skills[(int)SkillNames.Magician.ImprovedMaxMpIncrease];
+                        maxMp += skill?.ParameterB ?? 0;
                     }
                     else if (IsBaseJob(Job.Bowman))
                     {

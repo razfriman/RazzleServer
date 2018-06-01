@@ -21,7 +21,7 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
             {
                 caller.Notify("[Help]");
 
-                foreach (var command in CommandFactory.Commands)
+                foreach (var command in CommandFactory.Commands.Values)
                 {
                     if (command.IsRestricted && caller.IsMaster || !command.IsRestricted && !(command is HelpCommand))
                     {

@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Linq;
+﻿using System.Linq;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
+using RazzleServer.Common.Util;
 
 namespace RazzleServer.Game.Maple.Characters
 {
-    public sealed class CharacterMemos : KeyedCollection<int, Memo>
+    public sealed class CharacterMemos : MapleKeyedCollection<int, Memo>
     {
         public Character Parent { get; }
 
@@ -39,7 +38,7 @@ namespace RazzleServer.Game.Maple.Characters
                 oPacket.WriteByte((byte)MemoResult.Send);
                 oPacket.WriteByte((byte)Count);
 
-                foreach (var memo in this)
+                foreach (var memo in Values)
                 {
                     oPacket.WriteBytes(memo.ToByteArray());
                 }
@@ -48,7 +47,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        protected override int GetKeyForItem(Memo item) => item.Id;
+        public override int GetKey(Memo item) => item.Id;
 
         internal bool Create(string targetName, string message)
         {

@@ -1,12 +1,9 @@
-﻿using System.Collections.ObjectModel;
+﻿using RazzleServer.Common.Util;
 
 namespace RazzleServer.Game.Maple.Commands
 {
-    public sealed class Commands : KeyedCollection<string, Command>
+    public sealed class Commands : MapleKeyedCollection<string, Command>
     {
-        protected override string GetKeyForItem(Command item)
-        {
-            return item.Name;
-        }
+        public override string GetKey(Command item) => item.Name;
     }
 }

@@ -298,7 +298,7 @@ namespace RazzleServer.Game.Maple
 
             if (!expiration.HasValue)
             {
-                expiration = new DateTime(2079, 1, 1, 12, 0, 0); // NOTE: Default expiration time (permanent).
+                expiration = DateConstants.Permanent;
             }
 
             Expiration = expiration.Value;

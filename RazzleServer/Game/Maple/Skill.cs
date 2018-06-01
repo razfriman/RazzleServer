@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using RazzleServer.Common.Constants;
 using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
@@ -124,23 +125,12 @@ namespace RazzleServer.Game.Maple
 
         private bool Assigned { get; set; }
 
-        public Skill()
-        {
-
-        }
-
         public Skill(int mapleId, DateTime? expiration = null)
         {
             MapleId = mapleId;
             CurrentLevel = 0;
             MaxLevel = (byte)DataProvider.Skills.Data[MapleId].Count;
-
-            if (!expiration.HasValue)
-            {
-                expiration = new DateTime(2079, 1, 1, 12, 0, 0); // NOTE: Default expiration time (permanent).
-            }
-
-            Expiration = (DateTime)expiration;
+            Expiration = expiration ?? DateConstants.Permanent;
         }
 
         public Skill(int mapleId, byte currentLevel, byte maxLevel, DateTime? expiration = null)
@@ -148,25 +138,18 @@ namespace RazzleServer.Game.Maple
             MapleId = mapleId;
             CurrentLevel = currentLevel;
             MaxLevel = maxLevel;
-
-            if (!expiration.HasValue)
-            {
-                expiration = new DateTime(2079, 1, 1, 12, 0, 0); // NOTE: Default expiration time (permanent).
-            }
-
-            Expiration = (DateTime)expiration;
+            Expiration = expiration ?? DateConstants.Permanent;
         }
 
-       
+
         public Skill(SkillEntity entity)
         {
-            //Id = (int)entity["Id"];
-            //Assigned = true;
-            //MapleId = (int)entity["MapleId"];
-            //CurrentLevel = (byte)entity["CurrentLevel"];
-            //MaxLevel = (byte)entity["MaxLevel"];
-            //Expiration = (DateTime)entity["Expiration"];
-            //CooldownEnd = (DateTime)entity["CooldownEnd"];
+            Id = entity.Id;
+            Assigned = true;
+            MapleId = entity.SkillId;
+            CurrentLevel = entity.Level;
+            MaxLevel = entity.MasterLevel;
+            Expiration = entity.Expiration;
         }
 
         public void Save()

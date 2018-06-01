@@ -178,7 +178,7 @@ namespace RazzleServer.Game.Handlers
 
                             var members = new List<PartyMember>();
 
-                            foreach (var member in skill.Character.Party)
+                            foreach (var member in skill.Character.Party.Values)
                             {
                                 if (member.Character != null && member.Character.Map.MapleId == skill.Character.Map.MapleId)
                                 {

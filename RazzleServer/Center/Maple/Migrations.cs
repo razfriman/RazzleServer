@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Linq;
+using RazzleServer.Common.Util;
 
 namespace RazzleServer.Center.Maple
 {
-    public sealed class Migrations : KeyedCollection<string, Migration>
+    public sealed class Migrations : MapleKeyedCollection<string, Migration>
     {
         public int Validate(string host, int characterId)
         {
-            var migration = this
+            var migration = Values
                 .Where(x => x.Host == host)
                 .FirstOrDefault(x => x.CharacterId == characterId);
             
@@ -29,6 +29,6 @@ namespace RazzleServer.Center.Maple
             return 0;
         }
 
-        protected override string GetKeyForItem(Migration item) => item.Host;
+        public override string GetKey(Migration item) => item.Host;
     }
 }
