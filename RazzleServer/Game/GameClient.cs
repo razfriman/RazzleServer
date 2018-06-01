@@ -100,5 +100,15 @@ namespace RazzleServer.Game
         }
 
         public void Ping() => Send(GamePackets.Ping());
+
+        public void Release()
+        {
+            using (var oPacket = new PacketWriter(ServerOperationCode.StatChanged))
+            {
+                oPacket.WriteBool(true);
+                oPacket.WriteInt(0);
+                Send(oPacket);
+            }
+        }
     }
 }

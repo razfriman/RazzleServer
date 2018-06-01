@@ -91,6 +91,7 @@ namespace RazzleServer.Common.Crypto
                 EnsureCapacity(length + AvailableData);
                 Functions.MemoryCopy(data, offset, DataBuffer, AvailableData, length);
                 AvailableData += length;
+                Console.WriteLine("ADDING: " + length);
             }
 
             if (WaitForData != 0)
@@ -138,7 +139,9 @@ namespace RazzleServer.Common.Crypto
                 return;
             }
 
-            DataBuffer = new byte[length];
+            var newBuffer = new byte[length].AsMemory();
+            Functions.MemoryCopy(DataBuffer, 0, newBuffer, 0, DataBuffer.Length);
+            DataBuffer = newBuffer;
         }
 
         /// <summary>
@@ -151,7 +154,7 @@ namespace RazzleServer.Common.Crypto
                 IsWaiting = true;
             }
 
-            if (AvailableData >= 4)
+            if (AvailableData > 4)
             {
                 IsWaiting = false;
                 GetHeader();
@@ -171,9 +174,11 @@ namespace RazzleServer.Common.Crypto
                 return;
             }
 
+            Console.WriteLine("WAITMORE: " + length);
+
             var data = new byte[length + add].AsMemory();
             Functions.MemoryCopy(DataBuffer, 0, data, 0, data.Length);
-            DataBuffer.Slice(0, length + add).Span.Fill(0);
+            Functions.MemoryCopy(DataBuffer, length + add, DataBuffer, 0, DataBuffer.Length - (length + add));
             AvailableData -= length + add;
 
             Decrypt(data.Span);
@@ -200,6 +205,7 @@ namespace RazzleServer.Common.Crypto
             {
                 if (!RecvCipher.CheckHeader(data, !ToClient))
                 {
+
                     throw new InvalidOperationException("Packet header mismatch");
                 }
 

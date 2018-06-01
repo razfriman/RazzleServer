@@ -46,23 +46,30 @@ namespace RazzleServer.Common.Network
         {
             while (!_disposed)
             {
-                var result = await _socket.ReceiveAsync(_socketBuffer, SocketFlags.None);
-                PacketReceived(result);
+                try
+                {
+                    var result = await _socket.ReceiveAsync(_socketBuffer, SocketFlags.None);
+                    PacketReceived(result);
+                }
+                catch (Exception e)
+                {
+                    _log.LogError(e, "Error receiving data");
+                }
             }
         }
 
         private void PacketReceived(int size)
         {
+            Console.WriteLine("PACKET: " + size);
             if (!_disposed)
             {
                 if (size == 0)
                 {
                     Disconnect();
+                    return;
                 }
-                else
-                {
-                    Crypto.AddData(_socketBuffer, 0, size);
-                }
+
+                Crypto.AddData(_socketBuffer, 0, size);
             }
         }
 

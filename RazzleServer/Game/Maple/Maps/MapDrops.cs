@@ -9,6 +9,7 @@ namespace RazzleServer.Game.Maple.Maps
         public override void Add(Drop item)
         {
             item.Picker = null;
+            base.Add(item);
             item.Expiry?.Dispose();
 
             item.Expiry = new Delay(() =>
