@@ -1,5 +1,6 @@
 ﻿using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace RazzleServer.Game.Maple.Commands.Implementation
@@ -8,7 +9,7 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
     {
         public override string Name => "search";
 
-        public override string Parameters => "[ -item | -map | -mob | -npc | -quest ] label";
+        public override string Parameters => "[ -item | -map | -mob | -npc | -quest | -pet ] label";
 
         public override bool IsRestricted => true;
 
@@ -19,8 +20,8 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
                 ShowSyntax(caller);
                 return;
             }
-            var type = args[0];
-            var query = CombineArgs(args, 1).ToLower();
+            var type = args[0].Substring(1);
+            var query = CombineArgs(args, 1);
 
             if (query.Length < 2)
             {
@@ -28,33 +29,55 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
                 return;
             }
 
-            if (type == "-item")
+            Dictionary<int, string> lookup = null;
+
+            if (type == "item")
             {
-                //SearchItems(args[1]);
+                lookup = DataProvider.Strings.Items;
             }
-            else if (type == "-map")
+            else if (type == "map")
             {
-                //SearchMaps(args[1]);
+                lookup = DataProvider.Strings.Maps;
+
             }
-            else if (type == "-mob")
+            else if (type == "mob")
             {
-                //SearchMobs(args[1]);
+                lookup = DataProvider.Strings.Mobs;
+
             }
-            else if (type == "-npc")
+            else if (type == "npc")
             {
-                //SearchMobs(args[1]);
+                lookup = DataProvider.Strings.Npcs;
             }
-            else if (type == "-quest")
+            else if (type == "pet")
             {
-                //Search(args[1]);
+                lookup = DataProvider.Strings.Pets;
+            }
+            else if (type == "skill")
+            {
+                lookup = DataProvider.Strings.Skills;
+            }
+            else if (type == "quest")
+            {
+                lookup = DataProvider.Quests.Data.Values.ToDictionary(x => (int)x.MapleId, x => x.Name);
             }
 
-            const bool hasResult = false;
-
-            if (hasResult)
+            if (lookup == null)
             {
-                caller.Notify("[Results]");
+                caller.Notify($"Invalid search type [{type}]");
+            }
 
+            var results = lookup
+                .Where(x => x.Value.Contains(query, System.StringComparison.InvariantCultureIgnoreCase))
+                .ToList();
+
+            if (results.Any())
+            {
+                caller.Notify($"Results [{type}]");
+                results.ForEach(x =>
+                {
+                    caller.Notify($"[{x.Key}] - {x.Value}");
+                });
             }
             else
             {
