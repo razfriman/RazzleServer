@@ -977,9 +977,11 @@ namespace RazzleServer.Game.Maple
             var oPacket = new PacketWriter(ServerOperationCode.Message);
 
             oPacket.WriteByte((byte)MessageType.DropPickup);
-            oPacket.WriteBool(false);
+            oPacket.WriteBool(false);// is Meso
             oPacket.WriteInt(MapleId);
             oPacket.WriteInt(Quantity);
+            oPacket.WriteInt(0);
+            oPacket.WriteInt(0);
 
             return oPacket;
         }

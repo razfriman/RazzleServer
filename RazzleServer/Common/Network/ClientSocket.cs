@@ -60,7 +60,6 @@ namespace RazzleServer.Common.Network
 
         private void PacketReceived(int size)
         {
-            Console.WriteLine("PACKET: " + size);
             if (!_disposed)
             {
                 if (size == 0)

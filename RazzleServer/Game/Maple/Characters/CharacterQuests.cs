@@ -238,7 +238,7 @@ namespace RazzleServer.Game.Maple.Characters
             using (var oPacket = new PacketWriter(ServerOperationCode.Message))
             {
                 oPacket.WriteByte((byte)MessageType.IncreaseExp);
-                oPacket.WriteBool(true);
+                oPacket.WriteBool(true); // white
                 oPacket.WriteInt(quest.ExperienceReward[1]);
                 oPacket.WriteBool(true);
                 oPacket.WriteInt(0); // NOTE: Monster Book bonus.

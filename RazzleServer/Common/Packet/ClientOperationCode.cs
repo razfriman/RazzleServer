@@ -76,7 +76,7 @@
         PlayerInformation = 0x59,
         PetEnterField = 0x5A,
         CancelDebuff = 0x5B,
-        TeleportRockUse = 0x5C,
+        EnterPortal = 0x5C,
         UseInnerPortal = 0x5D,
         TeleportRockOperation = 0x5E,
         // 0x5F
@@ -84,10 +84,10 @@
         QuestAction = 0x62,
         SkillMacro = 0x65,
         Report = 0x68,
-        PartyChat = 0x6B,
+        MultiChat = 0x6B,
         Whisper = 0x6C,
         SpouseChat = 0x6D,
-        MultiChat = 0x6E,
+        Messenger = 0x6E,
         PlayerInteraction = 0x6F,
 
         PartyOperation = 0x70,
@@ -138,8 +138,7 @@
         MapleTv = 0xD4,
         MtsOperation = 0xD9,
 
-        Messenger = 0x3D, // Unknown
-        EnterPortal = 0x47, // Unknown
+        TeleportRockUse = 0x5C,
         UseDeathItem = 0xFF, // Unknown
         AdminShopAction = 68, // Unknown
         UseSkill = 0x5B, // Unknown

@@ -1,4 +1,5 @@
-﻿using RazzleServer.Common.Constants;
+﻿using System;
+using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple;
 
@@ -263,17 +264,7 @@ namespace RazzleServer.Game.Handlers
                 case 5200002: // NOTE: Gold Sack of Meso.
                     {
                         client.Character.Meso += item.Meso;
-
-                        // TODO: We definitely need a GainMeso method with inChat parameter.
-                        using (var oPacket = new PacketWriter(ServerOperationCode.Message))
-                        {
-                            oPacket.WriteByte((byte)MessageType.IncreaseMeso);
-                            oPacket.WriteInt(item.Meso);
-                            oPacket.WriteShort(0);
-
-                            client.Character.Client.Send(oPacket);
-                        }
-
+                        client.Send(GamePackets.ShowStatusInfo(MessageType.IncreaseMeso, true, item.Meso));
                         used = true;
                     }
                     break;
@@ -297,62 +288,12 @@ namespace RazzleServer.Game.Handlers
 
                 case 5090000: // NOTE: Note (Memo).
                     {
-                        //string targetName = iPacket.ReadString();
-                        //string message = iPacket.ReadString();
-
-                        //if (this.client.Character.Client.World.IsCharacterOnline(targetName))
-                        //{
-                        //    using (var oPacket = new PacketWriter(ServerOperationCode.MemoResult))
-                        //    {
-                        //        oPacket
-                        //            oPacket.WriteByte((byte)MemoResult.Error)
-                        //            oPacket.WriteByte((byte)MemoError.ReceiverOnline);
-
-                        //        this.client.Character.Client.Send(oPacket);
-                        //    }
-                        //}
-                        //else if (!Database.Exists("characters", "Name = {0}", targetName))
-                        //{
-                        //    using (var oPacket = new PacketWriter(ServerOperationCode.MemoResult))
-                        //    {
-                        //        oPacket
-                        //            oPacket.WriteByte((byte)MemoResult.Error)
-                        //            oPacket.WriteByte((byte)MemoError.ReceiverInvalidName);
-
-                        //        this.client.Character.Client.Send(oPacket);
-                        //    }
-                        //}
-                        //else if (false) // TODO: Receiver's inbox is full. I believe the maximum amount is 5, but need to verify.
-                        //{
-                        //    using (var oPacket = new PacketWriter(ServerOperationCode.MemoResult))
-                        //    {
-                        //        oPacket
-                        //            oPacket.WriteByte((byte)MemoResult.Error)
-                        //            oPacket.WriteByte((byte)MemoError.ReceiverInboxFull);
-
-                        //        this.client.Character.Client.Send(oPacket);
-                        //    }
-                        //}
-                        //else
-                        //{
-                        //    Datum datum = new Datum("memos");
-
-                        //    datum["CharacterId"] = Database.Fetch("characters", "Id", "Name = {0}", targetName);
-                        //    datum["Sender"] = this.client.Character.Name;
-                        //    datum["Message"] = message;
-                        //    datum["Received"] = DateTime.Now;
-
-                        //    datum.Insert();
-
-                        //    using (var oPacket = new PacketWriter(ServerOperationCode.MemoResult))
-                        //    {
-                        //        oPacket.WriteByte((byte)MemoResult.Sent);
-
-                        //        this.client.Character.Client.Send(oPacket);
-                        //    }
-
-                        //    used = true;
-                        //}
+                        string targetName = packet.ReadString();
+                        string message = packet.ReadString();
+                        if (client.Character.Memos.Create(targetName, message))
+                        {
+                            used = true;
+                        }
                     }
                     break;
 

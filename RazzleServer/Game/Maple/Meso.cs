@@ -15,15 +15,7 @@ namespace RazzleServer.Game.Maple
 
         public override PacketWriter GetShowGainPacket()
         {
-            var oPacket = new PacketWriter(ServerOperationCode.Message);
-
-            oPacket.WriteByte((byte)MessageType.DropPickup);
-            oPacket.WriteBool(true);
-            oPacket.WriteByte(0); // NOTE: Unknown.
-            oPacket.WriteInt(Amount);
-            oPacket.WriteShort(0);
-
-            return oPacket;
+            return GamePackets.ShowStatusInfo(MessageType.DropPickup, true, Amount);
         }
     }
 }

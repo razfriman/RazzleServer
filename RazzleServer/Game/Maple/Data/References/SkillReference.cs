@@ -44,10 +44,31 @@ namespace RazzleServer.Game.Maple.Data.References
 
         public SkillReference(WzImageProperty img)
         {
-            //MapleId = (int)datum["skillid"];
-            //CurrentLevel = (byte)(short)datum["skill_level"];
-            //MobCount = (sbyte)datum["mob_count"];
-            //HitCount = (sbyte)datum["hit_count"];
+            ParameterA = img["x"]?.GetShort() ?? 0;
+            ParameterB = img["y"]?.GetShort() ?? 0;
+            CostMp = img["mpCon"]?.GetShort() ?? 0;
+            CostHp = img["hpCon"]?.GetShort() ?? 0;
+            WeaponDefense = img["pdd"]?.GetShort() ?? 0;
+            MagicDefense = img["mdd"]?.GetShort() ?? 0;
+            WeaponAttack = img["pad"]?.GetShort() ?? 0;
+            MagicAttack = img["mad"]?.GetShort() ?? 0;
+            BuffTime = img["time"]?.GetInt() ?? 0;
+            Damage = img["damage"]?.GetShort() ?? 0;
+            Range = img["range"]?.GetShort() ?? 0;
+            MobCount = (sbyte)(img["mobCount"]?.GetShort() ?? 0);
+            HitCount = (sbyte)(img["attackCount"]?.GetShort() ?? 0);
+            Lt = img["lt"]?.GetPoint();
+            Rb = img["rb"]?.GetPoint();
+            Mastery = (sbyte)(img["mastery"]?.GetShort() ?? 0);
+            Speed = img["speed"]?.GetShort() ?? 0;
+            CostItem = img["itemCon"]?.GetInt() ?? 0;
+            ItemCount = img["itemConNo"]?.GetShort() ?? 0;
+            CostBullet = img["bulletCount"]?.GetShort() ?? 0;
+            Jump = img["jump"]?.GetShort() ?? 0;
+            Accuracy = img["acc"]?.GetShort() ?? 0;
+            Avoidability = img["eva"]?.GetShort() ?? 0;
+            Cooldown = img["cooltime"]?.GetInt() ?? 0;
+            Probability = img["prop"]?.GetShort() ?? 0;
             //Range = (short)datum["range"];
             //BuffTime = (int)datum["buff_time"];
             //CostHP = (short)datum["hp_cost"];
@@ -55,30 +76,14 @@ namespace RazzleServer.Game.Maple.Data.References
             //Damage = (short)datum["damage"];
             //FixedDamage = (int)datum["fixed_damage"];
             //CriticalDamage = (byte)datum["critical_damage"];
-            //Mastery = (sbyte)datum["mastery"];
-            //OptionalItemCost = (int)datum["optional_item_cost"];
-            //CostItem = (int)datum["item_cost"];
             //ItemCount = (short)datum["item_count"];
-            //CostBullet = (short)datum["bullet_cost"];
             //CostMeso = (short)datum["money_cost"];
-            //ParameterA = (short)datum["x_property"];
-            //ParameterB = (short)datum["y_property"];
             //Speed = (short)datum["speed"];
             //Jump = (short)datum["jump"];
             //Strength = (short)datum["str"];
-            //WeaponAttack = (short)datum["weapon_atk"];
-            //MagicAttack = (short)datum["magic_atk"];
-            //WeaponDefense = (short)datum["weapon_def"];
-            //MagicDefense = (short)datum["magic_def"];
-            //Accuracy = (short)datum["accuracy"];
-            //Avoidability = (short)datum["avoid"];
             //HP = (short)datum["hp"];
             //MP = (short)datum["mp"];
-            //Probability = (short)datum["prop"];
             //Morph = (short)datum["morph"];
-            //LT = new Point((short)datum["ltx"], (short)datum["lty"]);
-            //RB = new Point((short)datum["rbx"], (short)datum["rby"]);
-            //Cooldown = (int)datum["cooldown_time"];
         }
     }
 }

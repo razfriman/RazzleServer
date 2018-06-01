@@ -123,9 +123,16 @@ namespace RazzleServer.Game.Maple.Characters
             base.RemoveItem(index);
         }
 
-        protected override int GetKeyForItem(Skill item)
-        {
-            return item.MapleId;
+        protected override int GetKeyForItem(Skill item) => item.MapleId;
+
+        public int GetCurrentLevel(int id) {
+
+            if(!Contains(id))
+            {
+                return 0;
+            }
+
+            return this[id].CurrentLevel;
         }
     }
 }

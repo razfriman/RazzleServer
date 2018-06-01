@@ -57,7 +57,8 @@ namespace RazzleServer.Game.Maple.Maps
         {
             var oPacket = new PacketWriter(ServerOperationCode.DropEnterField);
 
-            oPacket.WriteByte((byte)(dropped ? 1 : 2)); // TODO: Other types; 3 = disappearing, and 0 probably is something as well.
+
+			oPacket.WriteByte((byte)(dropped ? 1 : 2)); // TODO: Other types; 3 = disappearing, and 0 probably is something as well.
             oPacket.WriteInt(ObjectId);
             oPacket.WriteBool(this is Meso);
 

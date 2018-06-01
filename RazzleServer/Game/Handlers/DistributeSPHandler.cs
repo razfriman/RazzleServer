@@ -24,16 +24,27 @@ namespace RazzleServer.Game.Handlers
 
             var skill = client.Character.Skills[mapleId];
 
-            if (skill.CurrentLevel + 1 <= skill.MaxLevel)
+            if (skill.IsFromBeginner)
             {
-                if (!skill.IsFromBeginner)
+                var totalUsed = client.Character.Skills.GetCurrentLevel(1000)
+                                      + client.Character.Skills.GetCurrentLevel(1001)
+                                      + client.Character.Skills.GetCurrentLevel(1002);
+
+                if (totalUsed < 6 && skill.CurrentLevel + 1 <= skill.MaxLevel)
                 {
                     client.Character.SkillPoints--;
+                    client.Character.Release();
+                    skill.CurrentLevel++;
                 }
-
-                client.Character.Release();
-
-                skill.CurrentLevel++;
+            }
+            else
+            {
+                if (skill.CurrentLevel + 1 <= skill.MaxLevel)
+                {
+                    client.Character.SkillPoints--;
+                    client.Character.Release();
+                    skill.CurrentLevel++;
+                }
             }
         }
     }

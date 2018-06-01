@@ -91,7 +91,6 @@ namespace RazzleServer.Common.Crypto
                 EnsureCapacity(length + AvailableData);
                 Functions.MemoryCopy(data, offset, DataBuffer, AvailableData, length);
                 AvailableData += length;
-                Console.WriteLine("ADDING: " + length);
             }
 
             if (WaitForData != 0)
@@ -173,8 +172,6 @@ namespace RazzleServer.Common.Crypto
                 WaitForData = length + add;
                 return;
             }
-
-            Console.WriteLine("WAITMORE: " + length);
 
             var data = new byte[length + add].AsMemory();
             Functions.MemoryCopy(DataBuffer, 0, data, 0, data.Length);

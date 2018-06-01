@@ -24,10 +24,10 @@
         BuffGive = 0x1D,
         BuffCancel = 0x1E,
 
-        SkillsUpdate = 0x21,
+        ChangeSkillRecordResult = 0x21,
         FameResponse = 0x23,
-        ShowStatusInfo = 0x24,
-        Notes = 0x26,
+        Message = 0x24,
+        MemoResult = 0x26,
         TeleportRockLocations = 0x27,
         MountUpdate = 0x2D,
         QuestClear = 0x2E,
@@ -83,12 +83,12 @@
         ItemEffect = 0x96,
         ShowChair = 0x97,
         AvatarModified = 0x98,
-        ForeignEffectShow = 0x99,
-        ForeignBuffCancel = 0x9B,
+        RemoteEffect = 0x99,
+        RemoteEffectCancel = 0x9B,
         PartyUpdateHp = 0x9C,
 
         Sit = 0xA0,
-        Message = 0xA1,
+        Effect = 0xA1,
         LuckSackPass = 0xA4,
         LuckSackFail = 0xA5,
         QuestResult = 0xA6,
@@ -155,17 +155,11 @@
         MtsOperation = 0x114,
 
         // TODO
-        ChangeSkillRecordResult = 36,
-        MemoResult = 41,
         MapTransferResult = 42,
         SueCharacterResult = 55,
         TransferFieldReqInogred = 131,
         AdminResult = 144,
         AnnounceBox = 165,
-        RemoteEffect = 198,
-        SetTemporaryStat = 199,
-        ResetTemporaryStat = 200,
-        Effect = 206,
         Teleport = 207,
         BalloonMsg = 214,
         MobStatSet = 242,
@@ -173,6 +167,10 @@
         ScriptMessage = 304,
         AdminShopMessage = 307,
         AdminShop = 308,
+
+        SetTemporaryStat = 199,
+        ResetTemporaryStat = 200,
+
         TemporaryStatSet = 333,
         TemporaryStatReset = 333
     }

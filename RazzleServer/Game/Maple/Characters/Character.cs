@@ -197,18 +197,7 @@ namespace RazzleServer.Game.Maple.Characters
                     {
                         for (var i = 0; i < delta; i++)
                         {
-                            _level++;
-
-                            AbilityPoints += 5;
-
-                            if (Job != Job.Beginner)
-                            {
-                                SkillPoints += 3;
-                            }
-
-                            Update(StatisticType.Level);
-
-                            ShowRemoteUserEffect(UserEffect.LevelUp);
+                            LevelUp();
                         }
 
                         Health = MaxHealth;
@@ -217,6 +206,71 @@ namespace RazzleServer.Game.Maple.Characters
                     UpdateStatsForParty();
                 }
             }
+        }
+
+        private void LevelUp()
+        {
+            _level++;
+
+            _abilityPoints += 5;
+
+            if (Job == Job.Beginner)
+            {
+                var totalUsed = Skills.GetCurrentLevel(1000) + Skills.GetCurrentLevel(1001) + Skills.GetCurrentLevel(1002);
+                if (totalUsed < 6)
+                {
+                    _skillPoints += 1;
+                }
+            }
+            else
+            {
+                _skillPoints += 3;
+            }
+
+            var maxHp = (int)_maxHealth;
+            var maxMp = (int)_maxMana;
+
+            if (Job == Job.Beginner)
+            {
+                maxHp += Functions.Random(12, 16);
+                maxMp += Functions.Random(10, 12);
+            }
+            else if (IsBaseJob(Job.Warrior))
+            {
+                maxHp += Functions.Random(24, 28);
+                maxMp += Functions.Random(4, 6);
+            }
+            else if (IsBaseJob(Job.Magician))
+            {
+                maxHp += Functions.Random(10, 14);
+                maxMp += Functions.Random(22, 24);
+            }
+            else if (IsBaseJob(Job.Bowman) || IsBaseJob(Job.Thief) || IsBaseJob(Job.Gm))
+            {
+                maxHp += Functions.Random(20, 24);
+                maxMp += Functions.Random(14, 16);
+            }
+          
+            if (Skills.GetCurrentLevel(1000001) > 0)
+            {
+                maxHp += Skills[1000001].ParameterA;
+            }
+
+            if (Skills.GetCurrentLevel(2000001) > 0)
+            {
+                maxMp += Skills[2000001].ParameterA;
+            }
+
+            maxMp += Intelligence / 10;
+
+            maxHp = Math.Min(30000, maxHp);
+            maxMp = Math.Min(30000, maxMp);
+
+            _maxHealth = (short)maxHp;
+            _maxMana = (short)maxMp;
+
+            Update(StatisticType.Level, StatisticType.MaxHealth, StatisticType.MaxMana, StatisticType.AbilityPoints, StatisticType.SkillPoints);
+            ShowRemoteUserEffect(UserEffect.LevelUp);
         }
 
         public Job Job
@@ -998,15 +1052,97 @@ namespace RazzleServer.Game.Maple.Characters
                     break;
 
                 case StatisticType.MaxHealth:
-                    // TODO: Get addition based on other factors.
+                    var maxHp = (int)MaxHealth;
+
+                    if (MaxHealth >= 30000)
+                    {
+                        return;
+                    }
+
+                    if (Job == Job.Beginner)
+                    {
+                        maxHp += Functions.Random(8, 12);
+                    }
+                    else if (IsBaseJob(Job.Warrior))
+                    {
+                        maxHp += Functions.Random(20, 24);
+
+                        var improvingMaxHp = Skills.GetCurrentLevel(1000001);
+                        if (improvingMaxHp >= 1)
+                        {
+                            maxHp += Skills[1000001].ParameterB;
+                        }
+                    }
+                    else if (IsBaseJob(Job.Magician))
+                    {
+                        maxHp += Functions.Random(6, 10);
+                    }
+                    else if (IsBaseJob(Job.Bowman))
+                    {
+                        maxHp += Functions.Random(16, 20);
+                    }
+                    else if (IsBaseJob(Job.Thief))
+                    {
+                        maxHp += Functions.Random(20, 24);
+                    }
+
+                    maxHp = Math.Min(30000, maxHp);
+                    MaxHealth = (short)maxHp;
                     break;
 
                 case StatisticType.MaxMana:
-                    // TODO: Get addition based on other factors.
+                    var maxMp = (int)MaxMana;
+
+                    if (MaxMana >= 30000)
+                    {
+                        return;
+                    }
+
+                    if (Job == Job.Beginner)
+                    {
+                        maxMp += Functions.Random(6, 8);
+                    }
+                    else if (IsBaseJob(Job.Warrior))
+                    {
+                        maxMp += Functions.Random(2, 4);
+
+
+
+
+                    }
+                    else if (IsBaseJob(Job.Magician))
+                    {
+                        maxMp += Functions.Random(18, 20);
+
+                        var improvingMaxMp = Skills.GetCurrentLevel(2000001);
+                        if (improvingMaxMp >= 1)
+                        {
+                            maxMp += Skills[2000001].ParameterB;
+                        }
+                    }
+                    else if (IsBaseJob(Job.Bowman))
+                    {
+                        maxMp += Functions.Random(10, 12);
+
+                    }
+                    else if (IsBaseJob(Job.Thief))
+                    {
+                        maxMp += Functions.Random(10, 12);
+                    }
+
+
+                    maxMp = Math.Min(30000, maxMp);
+                    MaxMana = (short)maxMp;
                     break;
             }
 
             AbilityPoints -= amount;
+        }
+
+        private bool IsBaseJob(Job baseJob)
+        {
+            var currentBaseJob = (((int)Job / 100) * 100);
+            return currentBaseJob == (int)baseJob;
         }
 
         private void UpdateStatsForParty()

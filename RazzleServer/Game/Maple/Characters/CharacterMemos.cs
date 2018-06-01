@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Data;
@@ -48,5 +49,58 @@ namespace RazzleServer.Game.Maple.Characters
         }
 
         protected override int GetKeyForItem(Memo item) => item.Id;
+
+        internal bool Create(string targetName, string message)
+        {
+            //if (Parent.Client.Server.World.IsCharacterOnline(targetName))
+            //{
+            //    using (var oPacket = new PacketWriter(ServerOperationCode.MemoResult))
+            //    {
+            //        oPacket.WriteByte((byte)MemoResult.Error);
+            //        oPacket.WriteByte((byte)MemoError.ReceiverOnline);
+            //        client.Send(oPacket);
+            //    }
+            //}
+            //else if (!Database.Exists("characters", "Name = {0}", targetName))
+            //{
+            //    using (var oPacket = new PacketWriter(ServerOperationCode.MemoResult))
+            //    {
+            //        oPacket.WriteByte((byte)MemoResult.Error);
+            //        oPacket.WriteByte((byte)MemoError.ReceiverInvalidName);
+
+            //        client.Send(oPacket);
+            //    }
+            //}
+            //else if (isReceiverInboxFull) // TODO: Receiver's inbox is full. I believe the maximum amount is 5, but need to verify.
+            //{
+            //    using (var oPacket = new PacketWriter(ServerOperationCode.MemoResult))
+            //    {
+            //        oPacket.WriteByte((byte)MemoResult.Error);
+            //        oPacket.WriteByte((byte)MemoError.ReceiverInboxFull);
+            //        client.Send(oPacket);
+            //    }
+            //}
+            //else
+            //{
+            //    Datum datum = new Datum("memos");
+
+            //    datum["CharacterId"] = Database.Fetch("characters", "Id", "Name = {0}", targetName);
+            //    datum["Sender"] = client.Character.Name;
+            //    datum["Message"] = message;
+            //    datum["Received"] = DateTime.Now;
+
+            //    datum.Insert();
+
+            //    using (var oPacket = new PacketWriter(ServerOperationCode.MemoResult))
+            //    {
+            //        oPacket.WriteByte((byte)MemoResult.Sent);
+
+            //        client.Send(oPacket);
+            //    }
+            //    return true;
+            //}
+
+            return false;
+        }
     }
 }
