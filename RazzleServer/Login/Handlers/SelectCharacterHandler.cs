@@ -16,7 +16,17 @@ namespace RazzleServer.Login.Handlers
             var host = client.Socket.HostBytes;
             var port = client.Server.Manager.Worlds[client.World][client.Channel].Port;
 
-            client.Send(LoginPackets.SelectCharacterResult(characterId, host, port));
+            using (var pw = new PacketWriter(ServerOperationCode.SelectCharacterResult))
+            {
+                pw.WriteByte(0);
+                pw.WriteByte(0);
+                pw.WriteBytes(host);
+                pw.WriteUShort(port);
+                pw.WriteInt(characterId);
+                pw.WriteInt(0);
+                pw.WriteByte(0);
+                client.Send(pw);
+            }
         }
     }
 }

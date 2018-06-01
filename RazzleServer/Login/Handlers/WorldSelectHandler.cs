@@ -13,7 +13,22 @@ namespace RazzleServer.Login.Handlers
             var channelExists = Center.ServerManager.Instance.Worlds[client.World].Contains(client.Channel);
             var characters = client.Server.GetCharacters(client.World, client.Account.Id);
 
-            client.Send(LoginPackets.SelectWorld(channelExists, characters, client.Account));
+            using (var pw = new PacketWriter(ServerOperationCode.SelectWorldResult))
+            {
+                if (!channelExists)
+                {
+                    pw.WriteByte(0);
+                    pw.WriteByte((byte)characters.Count);
+                    characters.ForEach(x => pw.WriteBytes(x.ToByteArray()));
+                    pw.WriteInt(client.Account.MaxCharacters);
+                }
+                else
+                {
+                    pw.WriteByte(8); // Channel offline
+                }
+
+                client.Send(pw);
+            }
         }
     }
 }

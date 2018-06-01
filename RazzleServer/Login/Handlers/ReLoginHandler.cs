@@ -7,7 +7,11 @@ namespace RazzleServer.Login.Handlers
     {
         public override void HandlePacket(PacketReader packet, LoginClient client)
         {
-            client.Send(LoginPackets.ReloginResult());
+            using (var pw = new PacketWriter(ServerOperationCode.ReloginResponse))
+            {
+                pw.WriteByte(1);
+                client.Send(pw);
+            }
         }
     }
 }

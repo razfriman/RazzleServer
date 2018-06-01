@@ -60,7 +60,12 @@ namespace RazzleServer.Login.Handlers
             character.Keymap.CreateDefaultKeymap();
             character.Create();
 
-            client.Send(LoginPackets.CreateNewCharacterResult(error, character));
+            using (var pw = new PacketWriter(ServerOperationCode.CreateNewCharacterResult))
+            {
+                pw.WriteBool(error);
+                pw.WriteBytes(character.ToByteArray());
+                client.Send(pw);
+            }
         }
 
         private bool ValidateCharacterCreation(LoginServer server, byte world, string name, int face, int hair, int hairColor, byte skin, int topId, int bottomId, int shoesId, int weaponId, Gender gender)

@@ -12,7 +12,12 @@ namespace RazzleServer.Login.Handlers
             if (client.Server.Manager.Worlds.Contains(worldId))
             {
                 var world = client.Server.Manager.Worlds[worldId];
-                client.Send(LoginPackets.SendWorldStatus(world));
+
+                using (var pw = new PacketWriter(ServerOperationCode.CheckUserLimitResult))
+                {
+                    pw.WriteShort((short)world.Flag);
+                    client.Send(pw);
+                }
             }
         }
     }

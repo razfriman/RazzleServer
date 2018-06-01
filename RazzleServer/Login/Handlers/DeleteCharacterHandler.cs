@@ -12,7 +12,13 @@ namespace RazzleServer.Login.Handlers
             var characterId = packet.ReadInt();
             var result = CharacterDeletionResult.Valid;
             Character.Delete(characterId);
-            client.Send(LoginPackets.DeleteCharacterResult(characterId, result));
+
+            using (var pw = new PacketWriter(ServerOperationCode.DeleteCharacterResult))
+            {
+                pw.WriteInt(characterId);
+                pw.WriteByte((byte)result);
+                client.Send(pw);
+            }
         }
     }
 }

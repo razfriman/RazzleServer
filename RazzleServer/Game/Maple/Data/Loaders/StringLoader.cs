@@ -23,7 +23,7 @@ namespace RazzleServer.Game.Maple.Data.Loaders
                 ProcessItems(file.WzDirectory.GetImageByName("Ins.img"));
                 ProcessItems(file.WzDirectory.GetImageByName("Etc.img"));
                 ProcessItems(file.WzDirectory.GetImageByName("Cash.img"));
-                ProcessItems(file.WzDirectory.GetImageByName("Eqp.img"));
+                ProcessEquips(file.WzDirectory.GetImageByName("Eqp.img"));
                 ProcessItems(file.WzDirectory.GetImageByName("Consume.img"));
                 ProcessMaps(file.WzDirectory.GetImageByName("Map.img"));
                 ProcessMobs(file.WzDirectory.GetImageByName("Mob.img"));
@@ -125,6 +125,26 @@ namespace RazzleServer.Game.Maple.Data.Loaders
         {
             wzImage
                 .WzProperties
+                .ForEach(x =>
+                {
+                    if (int.TryParse(x.Name, out var id))
+                    {
+                        var name = x["name"]?.GetString() ?? null;
+                        if (name != null)
+                        {
+                            Data.Items[id] = name;
+                        }
+                    }
+                });
+        }
+
+        private void ProcessEquips(WzImage wzImage)
+        {
+            wzImage
+                .WzProperties
+                .SelectMany(x => x.WzProperties)
+                .SelectMany(x => x.WzProperties)
+                .ToList()
                 .ForEach(x =>
                 {
                     if (int.TryParse(x.Name, out var id))

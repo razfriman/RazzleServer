@@ -51,6 +51,7 @@ namespace RazzleServer.Game.Maple.Characters
         public PlayerShop PlayerShop { get; set; }
         public CharacterGuild Guild { get; set; }
         public CharacterParty Party { get; set; }
+        public CharacterSkillMacros SkillMacros { get; set; }
 
         private bool Assigned { get; set; }
 
@@ -623,6 +624,7 @@ namespace RazzleServer.Game.Maple.Characters
             Items = new CharacterItems(this, 24, 24, 24, 24, 48);
             Skills = new CharacterSkills(this);
             Quests = new CharacterQuests(this);
+            SkillMacros = new CharacterSkillMacros(this);
             Buffs = new CharacterBuffs(this);
             Keymap = new CharacterKeymap(this);
             Trocks = new CharacterTrocks(this);
@@ -662,6 +664,7 @@ namespace RazzleServer.Game.Maple.Characters
             UpdateStatsForParty();
             Keymap.Send();
             Memos.Send();
+            SkillMacros.Send();
 
             Task.Factory.StartNew(Client.StartPingCheck);
         }
@@ -1415,6 +1418,7 @@ namespace RazzleServer.Game.Maple.Characters
             Buffs.Save();
             Keymap.Save();
             Trocks.Save();
+            SkillMacros.Save();
 
             _log.LogInformation($"Saved character '{Name}' to database.");
         }
@@ -1536,6 +1540,7 @@ namespace RazzleServer.Game.Maple.Characters
             Keymap.Load();
             Trocks.Load();
             Memos.Load();
+            SkillMacros.Load();
         }
     }
 }

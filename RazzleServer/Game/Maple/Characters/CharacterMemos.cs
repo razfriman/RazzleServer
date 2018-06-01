@@ -35,7 +35,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             using (var oPacket = new PacketWriter(ServerOperationCode.MemoResult))
             {
-                oPacket.WriteByte((byte)MemoResult.Send);
+                oPacket.WriteByte((byte)MemoResult.Load);
                 oPacket.WriteByte((byte)Count);
 
                 foreach (var memo in Values)

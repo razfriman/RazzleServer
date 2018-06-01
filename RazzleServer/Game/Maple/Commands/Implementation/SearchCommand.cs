@@ -20,7 +20,7 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
                 ShowSyntax(caller);
                 return;
             }
-            var type = args[0].Substring(1);
+            var type = args[0].StartsWith('-') ? args[0].Substring(1) : args[0];
             var query = CombineArgs(args, 1);
 
             if (query.Length < 2)
