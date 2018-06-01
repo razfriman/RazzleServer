@@ -1,4 +1,6 @@
 ﻿using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Game.Maple.Data;
+using System.Linq;
 
 namespace RazzleServer.Game.Maple.Commands.Implementation
 {
@@ -12,36 +14,52 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
 
         public override void Execute(Character caller, string[] args)
         {
-            if (args.Length == 0)
+            if (args.Length < 2)
             {
                 ShowSyntax(caller);
+                return;
+            }
+            var type = args[0];
+            var query = CombineArgs(args, 1).ToLower();
+
+            if (query.Length < 2)
+            {
+                caller.Notify("[Command] Please enter at least 2 characters.");
+                return;
+            }
+
+            if (type == "-item")
+            {
+                //SearchItems(args[1]);
+            }
+            else if (type == "-map")
+            {
+                //SearchMaps(args[1]);
+            }
+            else if (type == "-mob")
+            {
+                //SearchMobs(args[1]);
+            }
+            else if (type == "-npc")
+            {
+                //SearchMobs(args[1]);
+            }
+            else if (type == "-quest")
+            {
+                //Search(args[1]);
+            }
+
+            const bool hasResult = false;
+
+            if (hasResult)
+            {
+                caller.Notify("[Results]");
+
             }
             else
             {
-                var query = args[0].StartsWith("-") ? CombineArgs(args, 1).ToLower() : CombineArgs(args).ToLower();
+                caller.Notify("No result found.");
 
-                if (query.Length < 2)
-                {
-                    caller.Notify("[Command] Please enter at least 2 characters.");
-                }
-                else
-                {
-                    const bool hasResult = false;
-
-                    caller.Notify("[Results]");
-
-                    //foreach (Datum datum in new Datums("strings").Populate("`label` LIKE '%{0}%'", query))
-                    //{
-                    //    caller.Notify(string.Format("   -{0}: {1}", (string)datum["label"], (int)datum["objectid"]));
-
-                    //    hasResult = true;
-                    //}
-
-                    if (!hasResult)
-                    {
-                        caller.Notify("   No result found.");
-                    }
-                }
             }
         }
     }

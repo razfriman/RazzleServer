@@ -1,9 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Newtonsoft.Json;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
 using RazzleServer.Game;
+using RazzleServer.Game.Maple.Characters;
 
 namespace RazzleServer.Center.Maple
 {
@@ -53,5 +55,15 @@ namespace RazzleServer.Center.Maple
         .Where(x => x.Key != except?.Key)
         .ToList()
         .ForEach(x => x.Send(pw));
+
+        public Character GetCharacterById(int id) => Values
+            .SelectMany(x => x.Clients.Values)
+            .Select(x => x.Character)
+            .FirstOrDefault(x => x.Id == id);
+
+        public Character GetCharacterByName(string name) => Values
+            .SelectMany(x => x.Clients.Values)
+            .Select(x => x.Character)
+            .FirstOrDefault(x => x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
     }
 }

@@ -1,5 +1,4 @@
 ﻿using RazzleServer.Common.Packet;
-using RazzleServer.Game.Maple.Characters;
 
 namespace RazzleServer.Login.Handlers
 {
@@ -9,7 +8,7 @@ namespace RazzleServer.Login.Handlers
         public override void HandlePacket(PacketReader packet, LoginClient client)
         {
             var name = packet.ReadString();
-            var characterExists = Character.CharacterExists(name);
+            var characterExists = client.Server.CharacterExists(name, client.World);
             client.Send(LoginPackets.CharacterNameResult(name, characterExists));
         }
     }

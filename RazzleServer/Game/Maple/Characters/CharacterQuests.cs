@@ -233,34 +233,16 @@ namespace RazzleServer.Game.Maple.Characters
                 Parent.Items.Remove(item.Key, item.Value);
             }
 
+            var mesoReward = quest.MesoReward[1] * Parent.Client.Server.World.MesoRate;
+
+
             Parent.Experience += quest.ExperienceReward[1];
-
-            using (var oPacket = new PacketWriter(ServerOperationCode.Message))
-            {
-                oPacket.WriteByte((byte)MessageType.IncreaseExp);
-                oPacket.WriteBool(true); // white
-                oPacket.WriteInt(quest.ExperienceReward[1]);
-                oPacket.WriteBool(true);
-                oPacket.WriteInt(0); // NOTE: Monster Book bonus.
-                oPacket.WriteShort(0); // NOTE: Unknown.
-                oPacket.WriteInt(0); // NOTE: Wedding bonus.
-                oPacket.WriteByte(0); // NOTE: Party bonus.
-                oPacket.WriteInt(0); // NOTE: Party bonus.
-                oPacket.WriteInt(0); // NOTE: Equip bonus.
-                oPacket.WriteInt(0); // NOTE: Internet Cafe bonus.
-                oPacket.WriteInt(0); // NOTE: Rainbow Week bonus.
-                oPacket.WriteByte(0); // NOTE: Unknown.
-
-                Parent.Client.Send(oPacket);
-            }
-
             Parent.Fame += (short)quest.FameReward[1];
+            Parent.Meso += mesoReward;
 
-            // TODO: Fame gain packet in chat.
-
-            Parent.Meso += quest.MesoReward[1] * Parent.Client.Server.World.MesoRate;
-
-            // TODO: Meso gain packet in chat.
+            Parent.Client.Send(GamePackets.ShowStatusInfo(MessageType.IncreaseExp, amount: quest.ExperienceReward[1], isWhite: true, inChat: true));
+            Parent.Client.Send(GamePackets.ShowStatusInfo(MessageType.IncreaseFame, amount: quest.FameReward[1]));
+            Parent.Client.Send(GamePackets.ShowStatusInfo(MessageType.IncreaseMeso, amount: mesoReward));
 
             foreach (var skill in quest.PostSkillRewards)
             {
@@ -324,11 +306,8 @@ namespace RazzleServer.Game.Maple.Characters
             }
 
             Update(quest.MapleId, QuestStatus.Complete);
-
             Delete(quest.MapleId);
-
             Completed.Add(quest.MapleId, DateTime.UtcNow);
-
             Parent.ShowLocalUserEffect(UserEffect.QuestComplete);
             Parent.ShowRemoteUserEffect(UserEffect.QuestComplete, true);
         }
@@ -336,29 +315,12 @@ namespace RazzleServer.Game.Maple.Characters
         public void Forfeit(ushort questId)
         {
             Delete(questId);
-
             Update(questId, QuestStatus.NotStarted);
         }
 
         private void Update(ushort questId, QuestStatus status, string progress = "")
         {
-            using (var oPacket = new PacketWriter(ServerOperationCode.Message))
-            {
-                oPacket.WriteByte((byte)MessageType.QuestRecord);
-                oPacket.WriteUShort(questId);
-                oPacket.WriteByte((byte)status);
-
-                if (status == QuestStatus.InProgress)
-                {
-                    oPacket.WriteString(progress);
-                }
-                else if (status == QuestStatus.Complete)
-                {
-                    oPacket.WriteDateTime(DateTime.Now);
-                }
-
-                Parent.Client.Send(oPacket);
-            }
+            Parent.Client.Send(GamePackets.ShowStatusInfo(MessageType.QuestRecord, mapleId: questId, questStatus: status, questString: progress));
         }
 
         public bool CanComplete(ushort questId, bool onlyOnFinalKill = false)

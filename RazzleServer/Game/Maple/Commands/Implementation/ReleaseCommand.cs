@@ -12,14 +12,7 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
 
         public override void Execute(Character caller, string[] args)
         {
-            if (args.Length != 0)
-            {
-                ShowSyntax(caller);
-            }
-            else
-            {
-                caller.Release();
-            }
+            caller.Release();
         }
     }
 }

@@ -42,16 +42,15 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
                             }
 
                             var targetName = args[1];
+                            var target = caller.Map.Characters[targetName];
 
-                            Character target;
-
-                            target = caller.Map.Characters[targetName];
-
-                            if(target == null) {
+                            if (target == null)
+                            {
                                 caller.Notify("[Command] " + targetName + " cannot be found.");
-                            } else {
+                            }
+                            else
+                            {
                                 target.Health = 0;
-
                             }
                         }
                         break;

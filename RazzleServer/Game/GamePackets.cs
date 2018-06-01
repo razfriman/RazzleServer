@@ -53,7 +53,7 @@ namespace RazzleServer.Game
             }
         }
 
-        public static PacketWriter ShowStatusInfo(MessageType type, bool isMeso = false, int amount = 0, bool isWhite = false, bool inChat = false, int mapleId = 0, byte questAction = 0, string questString = null)
+        public static PacketWriter ShowStatusInfo(MessageType type, bool isMeso = false, int amount = 0, bool isWhite = false, bool inChat = false, int mapleId = 0, QuestStatus questStatus = QuestStatus.NotStarted, string questString = null)
         {
             var pw = new PacketWriter(ServerOperationCode.Message);
 
@@ -97,18 +97,16 @@ namespace RazzleServer.Game
             else if (type == MessageType.QuestRecord)
             {
                 pw.WriteShort(mapleId);
-                pw.WriteByte(questAction);
+                pw.WriteByte((byte)questStatus);
 
-                if (questAction == 0)
+                if (questStatus == QuestStatus.NotStarted)
                 {
-                    // Cancel Quest
                     pw.WriteByte(0);
                     pw.WriteByte(0);
                     pw.WriteLong(0);
                 }
-                else if (questAction == 1)
+                else if (questStatus == QuestStatus.InProgress)
                 {
-                    // Start Quest
                     pw.WriteString(questString);
 
                     if (questString != null)
@@ -116,9 +114,8 @@ namespace RazzleServer.Game
                         pw.WriteLong(0);
                     }
                 }
-                else if (questAction == 2)
+                else if (questStatus == QuestStatus.Complete)
                 {
-                    // Complete Quest
                     pw.WriteByte(0);
                     pw.WriteDateTime(DateTime.Now);
                 }

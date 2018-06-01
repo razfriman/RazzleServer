@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using RazzleServer.Common.Util;
+﻿using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Life;
 
 namespace RazzleServer.Game.Maple.Characters

@@ -85,7 +85,7 @@
         SkillMacro = 0x65,
         Report = 0x68,
         MultiChat = 0x6B,
-        Whisper = 0x6C,
+        Command = 0x6C,
         SpouseChat = 0x6D,
         Messenger = 0x6E,
         PlayerInteraction = 0x6F,
@@ -143,7 +143,6 @@
         AdminShopAction = 68, // Unknown
         UseSkill = 0x5B, // Unknown
         UseRemote = 0x73, // Unknown
-        Command = 120, // Unknown
         AdminCommand = 128, // Unknown
         AdminLog = 129, // Unknown 
         NpcMovement = 197, // Unknown

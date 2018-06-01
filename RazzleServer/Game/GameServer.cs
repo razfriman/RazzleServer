@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using RazzleServer.Center;
@@ -40,11 +41,18 @@ namespace RazzleServer.Game
 
         public override void Dispose() => ShutDown();
 
-        public Character GetCharacterById(int id) => Clients.Values.Select(x => x.Character).FirstOrDefault(x => x.Id == id);
+        public Character GetCharacterById(int id) => Clients
+            .Values
+            .Select(x => x.Character)
+            .FirstOrDefault(x => x.Id == id);
 
-        public Character GetCharacterByName(string name) => Clients.Values.Select(x => x.Character).FirstOrDefault(x => x.Name == name);
+        public Character GetCharacterByName(string name) => Clients
+            .Values
+            .Select(x => x.Character)
+            .FirstOrDefault(x => x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
 
-        public void Send(PacketWriter pw, GameClient except = null) => Clients.Values
+        public void Send(PacketWriter pw, GameClient except = null) => Clients.
+        Values
         .Where(x => x.Key != except?.Key)
         .ToList()
         .ForEach(x => x.Send(pw));

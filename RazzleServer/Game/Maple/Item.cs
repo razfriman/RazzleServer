@@ -158,15 +158,7 @@ namespace RazzleServer.Game.Maple
         public short Quantity
         {
             get => _quantity;
-            set
-            {
-                if (value > MaxPerStack)
-                {
-                    throw new ArgumentException("Quantity too high.");
-                }
-
-                _quantity = value;
-            }
+            set => _quantity = Math.Min(value, MaxPerStack);
         }
 
         public bool IsSealed => DataProvider.Items.WizetItemIds.Contains(MapleId);
@@ -974,16 +966,7 @@ namespace RazzleServer.Game.Maple
 
         public override PacketWriter GetShowGainPacket()
         {
-            var oPacket = new PacketWriter(ServerOperationCode.Message);
-
-            oPacket.WriteByte((byte)MessageType.DropPickup);
-            oPacket.WriteBool(false);// is Meso
-            oPacket.WriteInt(MapleId);
-            oPacket.WriteInt(Quantity);
-            oPacket.WriteInt(0);
-            oPacket.WriteInt(0);
-
-            return oPacket;
+            return GamePackets.ShowStatusInfo(MessageType.DropPickup, false, Quantity, false, true, MapleId);
         }
     }
 }

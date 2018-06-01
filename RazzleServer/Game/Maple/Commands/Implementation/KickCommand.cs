@@ -19,16 +19,15 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
             else
             {
                 var name = args[0];
-                Character target = null;// caller.Client.World.GetCharacter(name);
+                var target = caller.Client.Server.World.GetCharacterByName(name);
 
                 if (target == null)
                 {
                     caller.Notify($"[Command] Character '{name}' could not be found.");
-
                     return;
                 }
 
-                target.Client.Terminate("Player was kicked");
+                target.Client.Terminate($"Player was kicked by {caller.Name}");
             }
         }
     }

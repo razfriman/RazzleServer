@@ -20,16 +20,13 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
             {
                 caller.Notify("[Online]");
 
-                //foreach (WorldServer world in MasterServer.Worlds)
-                //{
-                //    foreach (ChannelServer channel in world)
-                //    {
-                //        foreach (Character loopCharacter in channel.Characters)
-                //        {
-                //            caller.Notify("   -" + loopCharacter.Name);
-                //        }
-                //    }
-                //}
+                foreach (var channel in caller.Client.Server.World.Values)
+                {
+                    foreach (var channelClient in channel.Clients.Values)
+                    {
+                        caller.Notify("   -" + channelClient.Character.Name);
+                    }
+                }
             }
         }
     }

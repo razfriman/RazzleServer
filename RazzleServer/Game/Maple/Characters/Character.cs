@@ -174,11 +174,7 @@ namespace RazzleServer.Game.Maple.Characters
             get => _level;
             set
             {
-                if (value > 200)
-                {
-                    throw new ArgumentException("Level cannot exceed 200.");
-                }
-
+                value = Math.Min(value, (byte)200);
                 var delta = value - Level;
 
                 if (!IsInitialized)
@@ -250,7 +246,7 @@ namespace RazzleServer.Game.Maple.Characters
                 maxHp += Functions.Random(20, 24);
                 maxMp += Functions.Random(14, 16);
             }
-          
+
             if (Skills.GetCurrentLevel((int)SkillNames.Swordsman.ImprovedMaxHpIncrease) > 0)
             {
                 maxHp += Skills[(int)SkillNames.Swordsman.ImprovedMaxHpIncrease].ParameterA;
@@ -389,18 +385,10 @@ namespace RazzleServer.Game.Maple.Characters
             get => _mana;
             set
             {
-                if (value < 0)
-                {
-                    _mana = 0;
-                }
-                else if (value > MaxMana)
-                {
-                    _mana = MaxMana;
-                }
-                else
-                {
-                    _mana = value;
-                }
+                _mana = value;
+                _mana = Math.Max(_mana, (short)0);
+                _mana = Math.Min(_mana, (short)30000);
+                _mana = Math.Min(_mana, _maxMana);
 
                 if (IsInitialized)
                 {
@@ -511,6 +499,7 @@ namespace RazzleServer.Game.Maple.Characters
             set
             {
                 _meso = value;
+                _meso = Math.Max(_meso, 0);
 
                 if (IsInitialized)
                 {
@@ -569,14 +558,11 @@ namespace RazzleServer.Game.Maple.Characters
             set
             {
                 _itemEffect = value;
-                if (IsInitialized)
+                using (var oPacket = new PacketWriter(ServerOperationCode.ItemEffect))
                 {
-                    using (var oPacket = new PacketWriter(ServerOperationCode.ItemEffect))
-                    {
-                        oPacket.WriteInt(Id);
-                        oPacket.WriteInt(_itemEffect);
-                        Map.Send(oPacket, this);
-                    }
+                    oPacket.WriteInt(Id);
+                    oPacket.WriteInt(_itemEffect);
+                    Map.Send(oPacket, this);
                 }
             }
         }
@@ -651,7 +637,6 @@ namespace RazzleServer.Game.Maple.Characters
         {
             using (var oPacket = new PacketWriter(ServerOperationCode.SetField))
             {
-
                 oPacket.WriteInt(Client.Server.ChannelId);
                 oPacket.WriteByte(++Portals);
                 oPacket.WriteBool(true);
@@ -663,9 +648,7 @@ namespace RazzleServer.Game.Maple.Characters
                 }
 
                 oPacket.WriteLong(-1);
-
                 oPacket.WriteBytes(DataToByteArray());
-
                 oPacket.WriteDateTime(DateTime.UtcNow);
 
                 Client.Send(oPacket);
@@ -678,7 +661,7 @@ namespace RazzleServer.Game.Maple.Characters
             ShowApple();
             UpdateStatsForParty();
             Keymap.Send();
-            // Memos.Send();
+            Memos.Send();
 
             Task.Factory.StartNew(Client.StartPingCheck);
         }
@@ -896,10 +879,20 @@ namespace RazzleServer.Game.Maple.Characters
                         break;
 
                     case StatisticType.MaxHealth:
-                    case StatisticType.MaxMana:
+                        if (MaxHealth >= 30000)
                         {
-                            // TODO: This is way too complicated for now.
+                            return;
                         }
+
+                        MaxHealth += mod;
+                        break;
+                    case StatisticType.MaxMana:
+                        if (MaxMana >= 30000)
+                        {
+                            return;
+                        }
+
+                        MaxMana += mod;
                         break;
                 }
 
@@ -907,8 +900,6 @@ namespace RazzleServer.Game.Maple.Characters
                 {
                     AbilityPoints -= mod;
                 }
-
-                // TODO: Update bonuses.
             }
         }
 
@@ -1140,73 +1131,6 @@ namespace RazzleServer.Game.Maple.Characters
             // TODO
         }
 
-        public void UseCommand(PacketReader iPacket)
-        {
-            var type = (CommandType)iPacket.ReadByte();
-            var targetName = iPacket.ReadString();
-            var target = Client.Server.GetCharacterByName(targetName);
-
-            switch (type)
-            {
-                case CommandType.Find:
-                    {
-                        if (target == null)
-                        {
-                            using (var oPacket = new PacketWriter(ServerOperationCode.Whisper))
-                            {
-                                oPacket.WriteByte(0x0A);
-                                oPacket.WriteString(targetName);
-                                oPacket.WriteBool(false);
-                                Client.Send(oPacket);
-                            }
-                        }
-                        else
-                        {
-                            var isInSameChannel = Client.Server.ChannelId == target.Client.Server.ChannelId;
-
-                            using (var oPacket = new PacketWriter(ServerOperationCode.Whisper))
-                            {
-                                oPacket.WriteByte(0x09);
-                                oPacket.WriteString(targetName);
-                                oPacket.WriteByte((byte)(isInSameChannel ? 1 : 3));
-                                oPacket.WriteInt(isInSameChannel ? target.Map.MapleId : target.Client.Server.ChannelId);
-                                oPacket.WriteInt(0); // NOTE: Unknown.
-                                oPacket.WriteInt(0); // NOTE: Unknown.
-                                Client.Send(oPacket);
-                            }
-                        }
-                    }
-                    break;
-
-                case CommandType.Whisper:
-                    {
-                        var text = iPacket.ReadString();
-
-                        using (var oPacket = new PacketWriter(ServerOperationCode.Whisper))
-                        {
-                            oPacket.WriteByte(10);
-                            oPacket.WriteString(targetName);
-                            oPacket.WriteBool(target != null);
-                            Client.Send(oPacket);
-                        }
-
-                        if (target != null)
-                        {
-                            using (var oPacket = new PacketWriter(ServerOperationCode.Whisper))
-                            {
-                                oPacket.WriteByte(18);
-                                oPacket.WriteString(Name);
-                                oPacket.WriteByte(Client.Server.ChannelId);
-                                oPacket.WriteByte(0);
-                                oPacket.WriteString(text);
-                                target.Client.Send(oPacket);
-                            }
-                        }
-                    }
-                    break;
-            }
-        }
-
         public byte[] ToByteArray(bool viewAllCharacters = false)
         {
             using (var oPacket = new PacketWriter())
@@ -1411,16 +1335,10 @@ namespace RazzleServer.Game.Maple.Characters
 
         public PacketWriter GetDestroyPacket()
         {
-            var oPacket = new PacketWriter(ServerOperationCode.UserLeaveField);
-            oPacket.WriteInt(Id);
-            return oPacket;
-        }
-
-        internal static bool CharacterExists(string name)
-        {
-            using (var dbContext = new MapleDbContext())
+            using (var pw = new PacketWriter(ServerOperationCode.UserLeaveField))
             {
-                return dbContext.Characters.Any(x => x.Name == name);
+                pw.WriteInt(Id);
+                return pw;
             }
         }
 

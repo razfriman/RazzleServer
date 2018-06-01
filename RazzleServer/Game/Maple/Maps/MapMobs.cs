@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using RazzleServer.Center;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
@@ -86,29 +87,18 @@ namespace RazzleServer.Game.Maple.Maps
                         {
                             loopStarted.Value[item.MapleId]++;
 
-                            using (var oPacket = new PacketWriter(ServerOperationCode.Message))
+                            var kills = string.Empty;
+
+                            foreach (int kill in loopStarted.Value.Values)
                             {
-                                oPacket.WriteByte((byte)MessageType.QuestRecord);
-                                oPacket.WriteUShort(loopStarted.Key);
-                                oPacket.WriteByte(1);
+                                kills += kill.ToString().PadLeft(3, '0');
+                            }
 
-                                var kills = string.Empty;
+                            owner.Client.Send(GamePackets.ShowStatusInfo(MessageType.QuestRecord, mapleId: loopStarted.Key, questStatus: QuestStatus.InProgress, questString: kills));
 
-                                foreach (int kill in loopStarted.Value.Values)
-                                {
-                                    kills += kill.ToString().PadLeft(3, '0');
-                                }
-
-                                oPacket.WriteString(kills);
-                                oPacket.WriteInt(0);
-                                oPacket.WriteInt(0);
-
-                                owner.Client.Send(oPacket);
-
-                                if (owner.Quests.CanComplete(loopStarted.Key, true))
-                                {
-                                    owner.Quests.NotifyComplete(loopStarted.Key);
-                                }
+                            if (owner.Quests.CanComplete(loopStarted.Key, true))
+                            {
+                                owner.Quests.NotifyComplete(loopStarted.Key);
                             }
                         }
                     }

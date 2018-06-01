@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using RazzleServer.Center;
@@ -14,6 +15,16 @@ namespace RazzleServer.Login
         {
             Port = ServerConfig.Instance.LoginPort;
             Start(new IPAddress(new byte[] { 0, 0, 0, 0 }), Port);
+        }
+
+        internal bool CharacterExists(string name, byte world)
+        {
+            using (var dbContext = new MapleDbContext())
+            {
+                return dbContext.Characters
+                                .Where(x => x.WorldId == world)
+                                .Any(x => x.Name == name);
+            }
         }
 
         internal List<Character> GetCharacters(byte worldId, int accountId)

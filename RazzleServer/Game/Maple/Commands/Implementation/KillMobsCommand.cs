@@ -30,7 +30,6 @@ namespace RazzleServer.Game.Maple.Commands.Implementation
                     else
                     {
                         ShowSyntax(caller);
-
                         return;
                     }
                 }

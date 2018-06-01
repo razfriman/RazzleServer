@@ -16,7 +16,6 @@ namespace RazzleServer.Login.Handlers
                 return;
             }
 
-
             var a = packet.ReadByte();
             var b = packet.ReadByte();
 
