@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using RazzleServer.Common;
-using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
 using RazzleServer.Data;
 using RazzleServer.Game.Maple.Items;

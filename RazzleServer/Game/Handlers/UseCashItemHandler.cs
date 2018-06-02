@@ -1,7 +1,5 @@
-﻿using System;
-using RazzleServer.Common.Constants;
+﻿using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
-using RazzleServer.Game.Maple;
 using RazzleServer.Game.Maple.Items;
 
 namespace RazzleServer.Game.Handlers

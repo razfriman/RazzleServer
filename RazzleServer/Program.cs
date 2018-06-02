@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using RazzleServer.Common;
-using RazzleServer.Common.Server;
 
 namespace RazzleServer
 {

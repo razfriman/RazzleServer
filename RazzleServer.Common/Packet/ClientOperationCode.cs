@@ -145,6 +145,6 @@
         UseRemote = 0x73, // Unknown
         AdminCommand = 128, // Unknown
         AdminLog = 129, // Unknown 
-        NpcMovement = 197, // Unknown
+        NpcMovement = 197 // Unknown
     }
 }

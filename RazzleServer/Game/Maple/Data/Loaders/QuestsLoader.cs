@@ -1,7 +1,5 @@
-using System.IO;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Util;
-using RazzleServer.Common.Wz;
 using RazzleServer.Game.Maple.Data.Cache;
 using RazzleServer.Game.Maple.Data.References;
 

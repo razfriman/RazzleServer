@@ -13,10 +13,8 @@ namespace RazzleServer.Common.Wz
 {
     public abstract class ProgressingWzSerializer
     {
-        protected int total;
-        protected int curr;
-        public int Total => total;
-        public int Current => curr;
+        public int Total { get; internal set; }
+        public int Current { get; internal set; }
 
         protected static void CreateDirSafe(ref string path)
         {
@@ -40,20 +38,20 @@ namespace RazzleServer.Common.Wz
 
     public abstract class WzXmlSerializer : ProgressingWzSerializer
     {
-        protected string indent;
-        protected string lineBreak;
-        public static NumberFormatInfo formattingInfo;
+        protected string Indent;
+        protected string LineBreak;
+        public static NumberFormatInfo FormattingInfo;
         protected bool ExportBase64Data;
 
-        protected static char[] amp = "&amp;".ToCharArray();
-        protected static char[] lt = "&lt;".ToCharArray();
-        protected static char[] gt = "&gt;".ToCharArray();
-        protected static char[] apos = "&apos;".ToCharArray();
-        protected static char[] quot = "&quot;".ToCharArray();
+        protected static char[] Amp = "&amp;".ToCharArray();
+        protected static char[] Lt = "&lt;".ToCharArray();
+        protected static char[] Gt = "&gt;".ToCharArray();
+        protected static char[] Apos = "&apos;".ToCharArray();
+        protected static char[] Quot = "&quot;".ToCharArray();
 
         static WzXmlSerializer()
         {
-            formattingInfo = new NumberFormatInfo
+            FormattingInfo = new NumberFormatInfo
             {
                 NumberDecimalSeparator = ".",
                 NumberGroupSeparator = ","
@@ -64,14 +62,14 @@ namespace RazzleServer.Common.Wz
         {
             switch (lineBreakType)
             {
-                case LineBreak.None:
-                    lineBreak = "";
+                case Wz.LineBreak.None:
+                    LineBreak = "";
                     break;
-                case LineBreak.Windows:
-                    lineBreak = "\r\n";
+                case Wz.LineBreak.Windows:
+                    LineBreak = "\r\n";
                     break;
-                case LineBreak.Unix:
-                    lineBreak = "\n";
+                case Wz.LineBreak.Unix:
+                    LineBreak = "\n";
                     break;
             }
             var indentArray = new char[indentation];
@@ -82,10 +80,10 @@ namespace RazzleServer.Common.Wz
                 }
             }
 
-            indent = new string(indentArray);
+            Indent = new string(indentArray);
         }
 
-        protected void WritePropertyToXML(TextWriter tw, string depth, WzImageProperty prop)
+        protected void WritePropertyToXml(TextWriter tw, string depth, WzImageProperty prop)
         {
             if (prop is WzCanvasProperty property3)
             {
@@ -95,89 +93,89 @@ namespace RazzleServer.Common.Wz
                     property3.PngProperty.GetPNG(false).Save(stream, ImageFormat.Png);
                     var pngbytes = stream.ToArray();
                     stream.Close();
-                    tw.Write(string.Concat(depth, "<canvas name=\"", XmlUtil.SanitizeText(property3.Name), "\" width=\"", property3.PngProperty.Width, "\" height=\"", property3.PngProperty.Height, "\" basedata=\"", Convert.ToBase64String(pngbytes), "\">") + lineBreak);
+                    tw.Write(string.Concat(depth, "<canvas name=\"", XmlUtil.SanitizeText(property3.Name), "\" width=\"", property3.PngProperty.Width, "\" height=\"", property3.PngProperty.Height, "\" basedata=\"", Convert.ToBase64String(pngbytes), "\">") + LineBreak);
                 }
                 else
                 {
                     {
-                        tw.Write(string.Concat(depth, "<canvas name=\"", XmlUtil.SanitizeText(property3.Name), "\" width=\"", property3.PngProperty.Width, "\" height=\"", property3.PngProperty.Height, "\">") + lineBreak);
+                        tw.Write(string.Concat(depth, "<canvas name=\"", XmlUtil.SanitizeText(property3.Name), "\" width=\"", property3.PngProperty.Width, "\" height=\"", property3.PngProperty.Height, "\">") + LineBreak);
                     }
                 }
 
-                var newDepth = depth + indent;
+                var newDepth = depth + Indent;
                 foreach (var property in property3.WzProperties)
                 {
                     {
-                        WritePropertyToXML(tw, newDepth, property);
+                        WritePropertyToXml(tw, newDepth, property);
                     }
                 }
 
-                tw.Write(depth + "</canvas>" + lineBreak);
+                tw.Write(depth + "</canvas>" + LineBreak);
             }
             else if (prop is WzIntProperty property4)
             {
-                tw.Write(string.Concat(depth, "<int name=\"", XmlUtil.SanitizeText(property4.Name), "\" value=\"", property4.Value, "\"/>") + lineBreak);
+                tw.Write(string.Concat(depth, "<int name=\"", XmlUtil.SanitizeText(property4.Name), "\" value=\"", property4.Value, "\"/>") + LineBreak);
             }
             else if (prop is WzDoubleProperty property5)
             {
-                tw.Write(string.Concat(depth, "<double name=\"", XmlUtil.SanitizeText(property5.Name), "\" value=\"", property5.Value, "\"/>") + lineBreak);
+                tw.Write(string.Concat(depth, "<double name=\"", XmlUtil.SanitizeText(property5.Name), "\" value=\"", property5.Value, "\"/>") + LineBreak);
             }
             else if (prop is WzNullProperty property6)
             {
-                tw.Write(depth + "<null name=\"" + XmlUtil.SanitizeText(property6.Name) + "\"/>" + lineBreak);
+                tw.Write(depth + "<null name=\"" + XmlUtil.SanitizeText(property6.Name) + "\"/>" + LineBreak);
             }
             else if (prop is WzSoundProperty property7)
             {
                 if (ExportBase64Data)
                 {
                     {
-                        tw.Write(string.Concat(new object[] { depth, "<sound name=\"", XmlUtil.SanitizeText(property7.Name), "\" length=\"", property7.Length.ToString(), "\" basehead=\"", Convert.ToBase64String(property7.Header), "\" basedata=\"", Convert.ToBase64String(property7.GetBytes(false)), "\"/>" }) + lineBreak);
+                        tw.Write(string.Concat(new object[] { depth, "<sound name=\"", XmlUtil.SanitizeText(property7.Name), "\" length=\"", property7.Length.ToString(), "\" basehead=\"", Convert.ToBase64String(property7.Header), "\" basedata=\"", Convert.ToBase64String(property7.GetBytes(false)), "\"/>" }) + LineBreak);
                     }
                 }
                 else
                 {
                     {
-                        tw.Write(depth + "<sound name=\"" + XmlUtil.SanitizeText(property7.Name) + "\"/>" + lineBreak);
+                        tw.Write(depth + "<sound name=\"" + XmlUtil.SanitizeText(property7.Name) + "\"/>" + LineBreak);
                     }
                 }
             }
             else if (prop is WzStringProperty property8)
             {
                 var str = XmlUtil.SanitizeText(property8.Value);
-                tw.Write(depth + "<string name=\"" + XmlUtil.SanitizeText(property8.Name) + "\" value=\"" + str + "\"/>" + lineBreak);
+                tw.Write(depth + "<string name=\"" + XmlUtil.SanitizeText(property8.Name) + "\" value=\"" + str + "\"/>" + LineBreak);
             }
             else if (prop is WzSubProperty property9)
             {
-                tw.Write(depth + "<imgdir name=\"" + XmlUtil.SanitizeText(property9.Name) + "\">" + lineBreak);
-                var newDepth = depth + indent;
+                tw.Write(depth + "<imgdir name=\"" + XmlUtil.SanitizeText(property9.Name) + "\">" + LineBreak);
+                var newDepth = depth + Indent;
                 foreach (var property in property9.WzProperties)
                 {
                     {
-                        WritePropertyToXML(tw, newDepth, property);
+                        WritePropertyToXml(tw, newDepth, property);
                     }
                 }
 
-                tw.Write(depth + "</imgdir>" + lineBreak);
+                tw.Write(depth + "</imgdir>" + LineBreak);
             }
             else if (prop is WzShortProperty property10)
             {
-                tw.Write(string.Concat(depth, "<short name=\"", XmlUtil.SanitizeText(property10.Name), "\" value=\"", property10.Value, "\"/>") + lineBreak);
+                tw.Write(string.Concat(depth, "<short name=\"", XmlUtil.SanitizeText(property10.Name), "\" value=\"", property10.Value, "\"/>") + LineBreak);
             }
-            else if (prop is WzLongProperty long_prop)
+            else if (prop is WzLongProperty longProp)
             {
-                tw.Write(string.Concat(depth, "<long name=\"", XmlUtil.SanitizeText(long_prop.Name), "\" value=\"", long_prop.Value, "\"/>") + lineBreak);
+                tw.Write(string.Concat(depth, "<long name=\"", XmlUtil.SanitizeText(longProp.Name), "\" value=\"", longProp.Value, "\"/>") + LineBreak);
             }
             else if (prop is WzUOLProperty property11)
             {
-                tw.Write(depth + "<uol name=\"" + property11.Name + "\" value=\"" + XmlUtil.SanitizeText(property11.Value) + "\"/>" + lineBreak);
+                tw.Write(depth + "<uol name=\"" + property11.Name + "\" value=\"" + XmlUtil.SanitizeText(property11.Value) + "\"/>" + LineBreak);
             }
             else if (prop is WzVectorProperty property12)
             {
-                tw.Write(string.Concat(depth, "<vector name=\"", XmlUtil.SanitizeText(property12.Name), "\" x=\"", property12.X.Value, "\" y=\"", property12.Y.Value, "\"/>") + lineBreak);
+                tw.Write(string.Concat(depth, "<vector name=\"", XmlUtil.SanitizeText(property12.Name), "\" x=\"", property12.X.Value, "\" y=\"", property12.Y.Value, "\"/>") + LineBreak);
             }
             else if (prop is WzFloatProperty property13)
             {
-                var str2 = Convert.ToString(property13.Value, formattingInfo);
+                var str2 = Convert.ToString(property13.Value, FormattingInfo);
                 if (!str2.Contains("."))
                 {
                     {
@@ -185,20 +183,20 @@ namespace RazzleServer.Common.Wz
                     }
                 }
 
-                tw.Write(depth + "<float name=\"" + XmlUtil.SanitizeText(property13.Name) + "\" value=\"" + str2 + "\"/>" + lineBreak);
+                tw.Write(depth + "<float name=\"" + XmlUtil.SanitizeText(property13.Name) + "\" value=\"" + str2 + "\"/>" + LineBreak);
             }
             else if (prop is WzConvexProperty property14)
             {
-                tw.Write(depth + "<extended name=\"" + XmlUtil.SanitizeText(prop.Name) + "\">" + lineBreak);
-                var newDepth = depth + indent;
+                tw.Write(depth + "<extended name=\"" + XmlUtil.SanitizeText(prop.Name) + "\">" + LineBreak);
+                var newDepth = depth + Indent;
                 foreach (var property in property14.WzProperties)
                 {
                     {
-                        WritePropertyToXML(tw, newDepth, property);
+                        WritePropertyToXml(tw, newDepth, property);
                     }
                 }
 
-                tw.Write(depth + "</extended>" + lineBreak);
+                tw.Write(depth + "</extended>" + LineBreak);
             }
         }
     }
@@ -245,7 +243,7 @@ namespace RazzleServer.Common.Wz
         private byte[] SerializeImageInternal(WzImage img)
         {
             var stream = new MemoryStream();
-            var wzWriter = new WzBinaryWriter(stream, ((WzDirectory)img.parent).WzIv);
+            var wzWriter = new WzBinaryWriter(stream, ((WzDirectory)img.Parent).WzIv);
             img.SaveImage(wzWriter);
             var result = stream.ToArray();
             wzWriter.Close();
@@ -255,20 +253,20 @@ namespace RazzleServer.Common.Wz
         private void SerializeImageInternal(WzImage img, string outPath)
         {
             var stream = File.Create(outPath);
-            var wzWriter = new WzBinaryWriter(stream, ((WzDirectory)img.parent).WzIv);
+            var wzWriter = new WzBinaryWriter(stream, ((WzDirectory)img.Parent).WzIv);
             img.SaveImage(wzWriter);
             wzWriter.Close();
         }
 
         public byte[] SerializeImage(WzImage img)
         {
-            total = 1; curr = 0;
+            Total = 1; Current = 0;
             return SerializeImageInternal(img);
         }
 
         public void SerializeImage(WzImage img, string outPath)
         {
-            total = 1; curr = 0;
+            Total = 1; Current = 0;
             if (Path.GetExtension(outPath) != ".img")
             {
                 {
@@ -281,8 +279,8 @@ namespace RazzleServer.Common.Wz
 
         public void SerializeDirectory(WzDirectory dir, string outPath)
         {
-            total = dir.CountImages();
-            curr = 0;
+            Total = dir.CountImages();
+            Current = 0;
             if (!Directory.Exists(outPath))
             {
                 {
@@ -321,14 +319,14 @@ namespace RazzleServer.Common.Wz
 
     public class WzImgDeserializer : ProgressingWzSerializer
     {
-        private readonly bool freeResources;
+        private readonly bool _freeResources;
 
         public WzImgDeserializer(bool freeResources)
         {
-            this.freeResources = freeResources;
+            _freeResources = freeResources;
         }
 
-        public WzImage WzImageFromIMGBytes(byte[] bytes, WzMapleVersion version, string name, bool freeResources)
+        public WzImage WzImageFromImgBytes(byte[] bytes, WzMapleVersion version, string name, bool freeResources)
         {
             var iv = WzTool.GetIvByMapleVersion(version);
             var stream = new MemoryStream(bytes);
@@ -355,7 +353,7 @@ namespace RazzleServer.Common.Wz
             return img;
         }
 
-        public WzImage WzImageFromIMGFile(string inPath, byte[] iv, string name)
+        public WzImage WzImageFromImgFile(string inPath, byte[] iv, string name)
         {
             var stream = File.OpenRead(inPath);
             var wzReader = new WzBinaryReader(stream, iv);
@@ -375,7 +373,7 @@ namespace RazzleServer.Common.Wz
             }
 
             img.Offset = 0;
-            if (freeResources)
+            if (_freeResources)
             {
                 img.ParseImage(true);
                 img.Changed = true;
@@ -389,13 +387,13 @@ namespace RazzleServer.Common.Wz
     public class WzPngMp3Serializer : ProgressingWzSerializer, IWzImageSerializer, IWzObjectSerializer
     {
         //List<WzImage> imagesToUnparse = new List<WzImage>();
-        private string outPath;
+        private string _outPath;
 
         public void SerializeObject(WzObject obj, string outPath)
         {
             //imagesToUnparse.Clear();
-            total = 0; curr = 0;
-            this.outPath = outPath;
+            Total = 0; Current = 0;
+            _outPath = outPath;
             if (!Directory.Exists(outPath))
             {
                 {
@@ -410,7 +408,7 @@ namespace RazzleServer.Common.Wz
                 }
             }
 
-            total = CalculateTotal(obj);
+            Total = CalculateTotal(obj);
             Export(obj, outPath);
             /*foreach (WzImage img in imagesToUnparse)
                 img.UnparseImage();
@@ -462,7 +460,8 @@ namespace RazzleServer.Common.Wz
                         continue;
                     }
                 }
-                else if (currObj is WzDirectory directory)
+
+                if (currObj is WzDirectory directory)
                 {
                     exportOutPath += directory.Name + @"\";
                     if (!Directory.Exists(exportOutPath))
@@ -491,7 +490,7 @@ namespace RazzleServer.Common.Wz
                     var bmp = property.PngProperty.GetPNG(false);
                     var path = exportOutPath + property.Name + ".png";
                     bmp.Save(path, ImageFormat.Png);
-                    //curr++;
+                    //Current++;
                 }
                 else if (currObj is WzSoundProperty soundProperty)
                 {
@@ -530,7 +529,7 @@ namespace RazzleServer.Common.Wz
                         }
                     }
 
-                    curr++;
+                    Current++;
                 }
                 else if (currObj is IPropertyContainer container)
                 {
@@ -571,18 +570,18 @@ namespace RazzleServer.Common.Wz
                 }
             }
 
-            curr++;
+            Current++;
             TextWriter tw = new StreamWriter(path);
-            tw.Write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" + lineBreak);
-            tw.Write("<imgdir name=\"" + XmlUtil.SanitizeText(img.Name) + "\">" + lineBreak);
+            tw.Write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" + LineBreak);
+            tw.Write("<imgdir name=\"" + XmlUtil.SanitizeText(img.Name) + "\">" + LineBreak);
             foreach (var property in img.WzProperties)
             {
                 {
-                    WritePropertyToXML(tw, indent, property);
+                    WritePropertyToXml(tw, Indent, property);
                 }
             }
 
-            tw.Write("</imgdir>" + lineBreak);
+            tw.Write("</imgdir>" + LineBreak);
             tw.Close();
             if (!parsed)
             {
@@ -611,7 +610,7 @@ namespace RazzleServer.Common.Wz
             foreach (var subdir in dir.WzDirectories)
             {
                 {
-                    ExportDirXmlInternal(subdir, path + subdir.name + @"\");
+                    ExportDirXmlInternal(subdir, path + subdir.Name + @"\");
                 }
             }
 
@@ -625,7 +624,7 @@ namespace RazzleServer.Common.Wz
 
         public void SerializeImage(WzImage img, string path)
         {
-            total = 1; curr = 0;
+            Total = 1; Current = 0;
             if (Path.GetExtension(path) != ".xml")
             {
                 {
@@ -638,7 +637,7 @@ namespace RazzleServer.Common.Wz
 
         public void SerializeDirectory(WzDirectory dir, string path)
         {
-            total = dir.CountImages(); curr = 0;
+            Total = dir.CountImages(); Current = 0;
             ExportDirXmlInternal(dir, path);
         }
 
@@ -654,7 +653,7 @@ namespace RazzleServer.Common.Wz
             : base(indentation, lineBreakType)
         { }
 
-        internal void DumpImageToXML(TextWriter tw, string depth, WzImage img)
+        internal void DumpImageToXml(TextWriter tw, string depth, WzImage img)
         {
             var parsed = img.Parsed || img.Changed;
             if (!parsed)
@@ -664,13 +663,13 @@ namespace RazzleServer.Common.Wz
                 }
             }
 
-            curr++;
-            tw.Write(depth + "<wzimg name=\"" + XmlUtil.SanitizeText(img.Name) + "\">" + lineBreak);
-            var newDepth = depth + indent;
+            Current++;
+            tw.Write(depth + "<wzimg name=\"" + XmlUtil.SanitizeText(img.Name) + "\">" + LineBreak);
+            var newDepth = depth + Indent;
             foreach (var property in img.WzProperties)
             {
                 {
-                    WritePropertyToXML(tw, newDepth, property);
+                    WritePropertyToXml(tw, newDepth, property);
                 }
             }
 
@@ -683,29 +682,29 @@ namespace RazzleServer.Common.Wz
             }
         }
 
-        internal void DumpDirectoryToXML(TextWriter tw, string depth, WzDirectory dir)
+        internal void DumpDirectoryToXml(TextWriter tw, string depth, WzDirectory dir)
         {
-            tw.Write(depth + "<wzdir name=\"" + XmlUtil.SanitizeText(dir.Name) + "\">" + lineBreak);
+            tw.Write(depth + "<wzdir name=\"" + XmlUtil.SanitizeText(dir.Name) + "\">" + LineBreak);
             foreach (var subdir in dir.WzDirectories)
             {
                 {
-                    DumpDirectoryToXML(tw, depth + indent, subdir);
+                    DumpDirectoryToXml(tw, depth + Indent, subdir);
                 }
             }
 
             foreach (var img in dir.WzImages)
             {
                 {
-                    DumpImageToXML(tw, depth + indent, img);
+                    DumpImageToXml(tw, depth + Indent, img);
                 }
             }
 
-            tw.Write(depth + "</wzdir>" + lineBreak);
+            tw.Write(depth + "</wzdir>" + LineBreak);
         }
 
         public void ExportCombinedXml(List<WzObject> objects, string path)
         {
-            total = 1; curr = 0;
+            Total = 1; Current = 0;
             if (Path.GetExtension(path) != ".xml")
             {
                 {
@@ -718,84 +717,84 @@ namespace RazzleServer.Common.Wz
                 if (obj is WzImage)
                 {
                     {
-                        total++;
+                        Total++;
                     }
                 }
                 else if (obj is WzDirectory directory)
                 {
                     {
-                        total += directory.CountImages();
+                        Total += directory.CountImages();
                     }
                 }
             }
 
             ExportBase64Data = true;
             TextWriter tw = new StreamWriter(path);
-            tw.Write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" + lineBreak);
-            tw.Write("<xmldump>" + lineBreak);
+            tw.Write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" + LineBreak);
+            tw.Write("<xmldump>" + LineBreak);
             foreach (var obj in objects)
             {
                 if (obj is WzDirectory directory)
                 {
                     {
-                        DumpDirectoryToXML(tw, indent, directory);
+                        DumpDirectoryToXml(tw, Indent, directory);
                     }
                 }
                 else if (obj is WzImage image)
                 {
                     {
-                        DumpImageToXML(tw, indent, image);
+                        DumpImageToXml(tw, Indent, image);
                     }
                 }
                 else if (obj is WzImageProperty property)
                 {
                     {
-                        WritePropertyToXML(tw, indent, property);
+                        WritePropertyToXml(tw, Indent, property);
                     }
                 }
             }
-            tw.Write("</xmldump>" + lineBreak);
+            tw.Write("</xmldump>" + LineBreak);
             tw.Close();
         }
     }
 
     public class WzXmlDeserializer : ProgressingWzSerializer
     {
-        public static NumberFormatInfo formattingInfo;
+        public static NumberFormatInfo FormattingInfo;
 
-        private bool useMemorySaving;
-        private byte[] iv;
-        private WzImgDeserializer imgDeserializer = new WzImgDeserializer(false);
+        private readonly bool _useMemorySaving;
+        private readonly byte[] _iv;
+        private readonly WzImgDeserializer _imgDeserializer = new WzImgDeserializer(false);
 
         public WzXmlDeserializer(bool useMemorySaving, byte[] iv)
         {
-            this.useMemorySaving = useMemorySaving;
-            this.iv = iv;
+            _useMemorySaving = useMemorySaving;
+            _iv = iv;
         }
 
         #region Public Functions
-        public List<WzObject> ParseXML(string path)
+        public List<WzObject> ParseXml(string path)
         {
             var result = new List<WzObject>();
             var doc = new XmlDocument();
             doc.Load(path);
             var mainElement = (XmlElement)doc.ChildNodes[1];
-            curr = 0;
+            Current = 0;
             if (mainElement.Name == "xmldump")
             {
-                total = CountImgs(mainElement);
+                Total = CountImgs(mainElement);
                 foreach (XmlElement subelement in mainElement)
                 {
                     if (subelement.Name == "wzdir")
                     {
                         {
-                            result.Add(ParseXMLWzDir(subelement));
+                            result.Add(ParseXmlWzDir(subelement));
                         }
                     }
                     else if (subelement.Name == "wzimg")
                     {
                         {
-                            result.Add(ParseXMLWzImg(subelement));
+                            result.Add(ParseXmlWzImg(subelement));
                         }
                     }
                     else
@@ -808,9 +807,9 @@ namespace RazzleServer.Common.Wz
             }
             else if (mainElement.Name == "imgdir")
             {
-                total = 1;
-                result.Add(ParseXMLWzImg(mainElement));
-                curr++;
+                Total = 1;
+                result.Add(ParseXmlWzImg(mainElement));
+                Current++;
             }
             else
             {
@@ -845,7 +844,7 @@ namespace RazzleServer.Common.Wz
             return result;
         }
 
-        internal WzDirectory ParseXMLWzDir(XmlElement dirElement)
+        internal WzDirectory ParseXmlWzDir(XmlElement dirElement)
         {
             var result = new WzDirectory(dirElement.GetAttribute("name"));
             foreach (XmlElement subelement in dirElement)
@@ -853,13 +852,13 @@ namespace RazzleServer.Common.Wz
                 if (subelement.Name == "wzdir")
                 {
                     {
-                        result.AddDirectory(ParseXMLWzDir(subelement));
+                        result.AddDirectory(ParseXmlWzDir(subelement));
                     }
                 }
                 else if (subelement.Name == "wzimg")
                 {
                     {
-                        result.AddImage(ParseXMLWzImg(subelement));
+                        result.AddImage(ParseXmlWzImg(subelement));
                     }
                 }
                 else
@@ -872,31 +871,31 @@ namespace RazzleServer.Common.Wz
             return result;
         }
 
-        internal WzImage ParseXMLWzImg(XmlElement imgElement)
+        internal WzImage ParseXmlWzImg(XmlElement imgElement)
         {
             var name = imgElement.GetAttribute("name");
             var result = new WzImage(name);
             foreach (XmlElement subelement in imgElement)
             {
                 {
-                    result.WzProperties.Add(ParsePropertyFromXMLElement(subelement));
+                    result.WzProperties.Add(ParsePropertyFromXmlElement(subelement));
                 }
             }
 
             result.Changed = true;
-            if (useMemorySaving)
+            if (_useMemorySaving)
             {
                 var path = Path.GetTempFileName();
-                var wzWriter = new WzBinaryWriter(File.Create(path), iv);
+                var wzWriter = new WzBinaryWriter(File.Create(path), _iv);
                 result.SaveImage(wzWriter);
                 wzWriter.Close();
                 result.Dispose();
-                result = imgDeserializer.WzImageFromIMGFile(path, iv, name);
+                result = _imgDeserializer.WzImageFromImgFile(path, _iv, name);
             }
             return result;
         }
 
-        internal WzImageProperty ParsePropertyFromXMLElement(XmlElement element)
+        internal WzImageProperty ParsePropertyFromXmlElement(XmlElement element)
         {
             switch (element.Name)
             {
@@ -905,7 +904,7 @@ namespace RazzleServer.Common.Wz
                     foreach (XmlElement subelement in element)
                     {
                         {
-                            sub.AddProperty(ParsePropertyFromXMLElement(subelement));
+                            sub.AddProperty(ParsePropertyFromXmlElement(subelement));
                         }
                     }
 
@@ -926,18 +925,18 @@ namespace RazzleServer.Common.Wz
                     foreach (XmlElement subelement in element)
                     {
                         {
-                            canvas.AddProperty(ParsePropertyFromXMLElement(subelement));
+                            canvas.AddProperty(ParsePropertyFromXmlElement(subelement));
                         }
                     }
 
                     return canvas;
 
                 case "int":
-                    var compressedInt = new WzIntProperty(element.GetAttribute("name"), int.Parse(element.GetAttribute("value"), formattingInfo));
+                    var compressedInt = new WzIntProperty(element.GetAttribute("name"), int.Parse(element.GetAttribute("value"), FormattingInfo));
                     return compressedInt;
 
                 case "double":
-                    var doubleProp = new WzDoubleProperty(element.GetAttribute("name"), double.Parse(element.GetAttribute("value"), formattingInfo));
+                    var doubleProp = new WzDoubleProperty(element.GetAttribute("name"), double.Parse(element.GetAttribute("value"), FormattingInfo));
                     return doubleProp;
 
                 case "null":
@@ -963,11 +962,11 @@ namespace RazzleServer.Common.Wz
                     return stringProp;
 
                 case "short":
-                    var shortProp = new WzShortProperty(element.GetAttribute("name"), short.Parse(element.GetAttribute("value"), formattingInfo));
+                    var shortProp = new WzShortProperty(element.GetAttribute("name"), short.Parse(element.GetAttribute("value"), FormattingInfo));
                     return shortProp;
 
                 case "long":
-                    var longProp = new WzLongProperty(element.GetAttribute("name"), long.Parse(element.GetAttribute("value"), formattingInfo));
+                    var longProp = new WzLongProperty(element.GetAttribute("name"), long.Parse(element.GetAttribute("value"), FormattingInfo));
                     return longProp;
 
                 case "uol":
@@ -979,7 +978,7 @@ namespace RazzleServer.Common.Wz
                     return vector;
 
                 case "float":
-                    var floatProp = new WzFloatProperty(element.GetAttribute("name"), float.Parse(element.GetAttribute("value"), formattingInfo));
+                    var floatProp = new WzFloatProperty(element.GetAttribute("name"), float.Parse(element.GetAttribute("value"), FormattingInfo));
                     return floatProp;
 
                 case "extended":
@@ -987,7 +986,7 @@ namespace RazzleServer.Common.Wz
                     foreach (XmlElement subelement in element)
                     {
                         {
-                            convex.AddProperty(ParsePropertyFromXMLElement(subelement));
+                            convex.AddProperty(ParsePropertyFromXmlElement(subelement));
                         }
                     }
 

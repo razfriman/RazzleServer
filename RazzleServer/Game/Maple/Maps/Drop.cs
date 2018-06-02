@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using RazzleServer.Common;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Characters;

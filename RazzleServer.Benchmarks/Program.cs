@@ -3,7 +3,6 @@ using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 using RazzleServer.Common.Crypto;
 using RazzleServer.Common.Packet;
-using RazzleServer.Common.Util;
 
 namespace RazzleServer.Benchmarks
 {

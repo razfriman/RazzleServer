@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using RazzleServer.Common.Server;
 using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Maps;

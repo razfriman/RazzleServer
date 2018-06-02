@@ -3,26 +3,32 @@
 	public enum WzPropertyType
 	{
 		#region Regular
-		Null,
+		
+        Null,
 		Short,
 		Int,
         Long,
 		Float,
 		Double,
 		String,
+
 		#endregion
 
 		#region Extended
-		SubProperty,
+		
+        SubProperty,
 		Canvas,
 		Vector,
 		Convex,
 		Sound,
 		UOL,
+
 		#endregion
 
 		#region Png
-		PNG
-		#endregion
+		
+        PNG
+		
+        #endregion
 	}
 }

@@ -11,31 +11,20 @@ namespace RazzleServer.Common.Wz
 	public class WzDirectory : WzObject
 	{
 		#region Fields
-		internal List<WzImage> images = new List<WzImage>();
+		
+        internal List<WzImage> images = new List<WzImage>();
 		internal List<WzDirectory> subDirs = new List<WzDirectory>();
 		internal WzBinaryReader reader;
 		internal uint offset;
-		internal string name;
 		internal uint hash;
 		internal int size, checksum, offsetSize;
 		internal byte[] WzIv;
-		internal WzObject parent;
         internal WzFile wzFile;
-		#endregion
+		
+        #endregion
 
 		#region Inherited Members
-		/// <summary>  
-		/// The parent of the object
-		/// </summary>
-		public override WzObject Parent { get => parent;
-			internal set => parent = value;
-		}
-		/// <summary>
-		/// The name of the directory
-		/// </summary>
-		public override string Name { get => name;
-			set => name = value;
-		}
+		
 		/// <summary>
 		/// The WzObjectType of the directory
 		/// </summary>
@@ -48,7 +37,7 @@ namespace RazzleServer.Common.Wz
 		/// </summary>
 		public override void Dispose()
 		{
-			name = null;
+            Name = null;
 			reader = null;
             images?.ForEach(x => x.Dispose());
             subDirs?.ForEach(x => x.Dispose());
@@ -148,7 +137,7 @@ namespace RazzleServer.Common.Wz
 		/// <param name="name">The name of the directory</param>
 		public WzDirectory(string name)
 		{
-			this.name = name;
+            Name = name;
 		}
 
 		/// <summary>
@@ -162,7 +151,7 @@ namespace RazzleServer.Common.Wz
 		internal WzDirectory(WzBinaryReader reader, string dirName, uint verHash, byte[] WzIv, WzFile wzFile)
 		{
 			this.reader = reader;
-			name = dirName;
+			Name = dirName;
 			hash = verHash;
 			this.WzIv = WzIv;
             this.wzFile = wzFile;
@@ -202,8 +191,6 @@ namespace RazzleServer.Common.Wz
                     case 4:
                         fname = reader.ReadString();
                         rememberPos = reader.BaseStream.Position;
-                        break;
-                    default:
                         break;
                 }
 
@@ -302,7 +289,7 @@ namespace RazzleServer.Common.Wz
 				}
 				img.UnparseImage();
 
-				var nameLen = WzTool.GetWzObjectValueLength(img.name, 4);
+                var nameLen = WzTool.GetWzObjectValueLength(img.Name, 4);
 				size += nameLen;
 				var imgLen = img.size;
 				size += WzTool.GetCompressedIntLength(imgLen);
@@ -322,7 +309,7 @@ namespace RazzleServer.Common.Wz
 
 			foreach (var dir in subDirs)
 			{
-				var nameLen = WzTool.GetWzObjectValueLength(dir.name, 3);
+                var nameLen = WzTool.GetWzObjectValueLength(dir.Name, 3);
 				size += nameLen;
 				size += dir.GenerateDataFile(fileName);
 				size += WzTool.GetCompressedIntLength(dir.size);
@@ -347,14 +334,14 @@ namespace RazzleServer.Common.Wz
 			writer.WriteCompressedInt(entryCount);
 			foreach (var img in images)
 			{
-				writer.WriteWzObjectValue(img.name, 4);
+                writer.WriteWzObjectValue(img.Name, 4);
 				writer.WriteCompressedInt(img.BlockSize);
 				writer.WriteCompressedInt(img.Checksum);
 				writer.WriteOffset(img.Offset);
 			}
 			foreach (var dir in subDirs)
 			{
-				writer.WriteWzObjectValue(dir.name, 3);
+                writer.WriteWzObjectValue(dir.Name, 3);
 				writer.WriteCompressedInt(dir.BlockSize);
 				writer.WriteCompressedInt(dir.Checksum);
 				writer.WriteOffset(dir.Offset);
@@ -400,7 +387,7 @@ namespace RazzleServer.Common.Wz
 			{
 				if (isDirectory)
 				{
-					writer.WriteLine(XmlUtil.Indentation(level) + XmlUtil.OpenNamedTag("WzDirectory", name, true));
+                    writer.WriteLine(XmlUtil.Indentation(level) + XmlUtil.OpenNamedTag("WzDirectory", Name, true));
 				}
 				foreach (var subDir in WzDirectories)
 				{

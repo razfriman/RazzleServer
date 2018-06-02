@@ -2,7 +2,7 @@
 
 namespace RazzleServer.Common.Packet
 {
-    [AttributeUsage(AttributeTargets.Field, Inherited = false, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
     public sealed class IgnorePacketPrintAttribute : Attribute
     {
     }

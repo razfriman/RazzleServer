@@ -18,9 +18,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         public static ILogger Log = LogManager.Log;
 
         #region Fields
-        internal string name;
         internal byte[] mp3bytes;
-        internal WzObject parent;
         internal int len_ms;
         internal byte[] header;
         //internal WzImage imgParent;
@@ -45,7 +43,7 @@ namespace RazzleServer.Common.Wz.WzProperties
 
         public override WzImageProperty DeepClone()
         {
-            var clone = new WzSoundProperty(name, len_ms, header, mp3bytes);
+            var clone = new WzSoundProperty(Name, len_ms, header, mp3bytes);
             return clone;
         }
 
@@ -54,26 +52,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         public override void SetValue(object value)
         {
         }
-        /// <summary>
-        /// The parent of the object
-        /// </summary>
-        public override WzObject Parent
-        {
-            get => parent;
-            internal set => parent = value;
-        }
-        /*/// <summary>
-		/// The image that this property is contained in
-		/// </summary>
-		public override WzImage ParentImage { get { return imgParent; } internal set { imgParent = value; } }*/
-        /// <summary>
-        /// The name of the property
-        /// </summary>
-        public override string Name
-        {
-            get => name;
-            set => name = value;
-        }
+       
         /// <summary>
         /// The WzPropertyType of the property
         /// </summary>
@@ -98,7 +77,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// </summary>
         public override void Dispose()
         {
-            name = null;
+            Name = null;
             mp3bytes = null;
         }
         #endregion
@@ -129,7 +108,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// <param name="parseNow">Indicating whether to parse the property now</param>
         public WzSoundProperty(string name, WzBinaryReader reader, bool parseNow)
         {
-            this.name = name;
+            Name = name;
             wzReader = reader;
             reader.BaseStream.Position++;
 
@@ -174,7 +153,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// <param name="data">The sound data</param>
         public WzSoundProperty(string name, int len_ms, byte[] header, byte[] data)
         {
-            this.name = name;
+            Name = name;
             this.len_ms = len_ms;
             this.header = header;
             mp3bytes = data;

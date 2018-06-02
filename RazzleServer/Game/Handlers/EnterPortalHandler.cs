@@ -1,7 +1,4 @@
-﻿using System;
-using Microsoft.Extensions.Logging;
-using RazzleServer.Common.Packet;
-using RazzleServer.Common.Util;
+﻿using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple.Scripting;
 
 namespace RazzleServer.Game.Handlers

@@ -18,9 +18,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         private static ILogger Log = LogManager.Log;
 
         #region Fields
-        internal string name, val;
-        internal WzObject parent;
-        //internal WzImage imgParent;
+        internal string val;
         internal WzObject linkVal;
         #endregion
 
@@ -32,7 +30,7 @@ namespace RazzleServer.Common.Wz.WzProperties
 
         public override WzImageProperty DeepClone()
         {
-            var clone = new WzUOLProperty(name, val) {linkVal = null};
+            var clone = new WzUOLProperty(Name, val) {linkVal = null};
             return clone;
         }
 
@@ -46,24 +44,6 @@ namespace RazzleServer.Common.Wz.WzProperties
                 return this;
 #endif
             }
-        }
-        /// <summary>
-        /// The parent of the object
-        /// </summary>
-        public override WzObject Parent { get => parent;
-            internal set => parent = value;
-        }
-
-        /*/// <summary>
-		/// The image that this property is contained in
-		/// </summary>
-		public override WzImage ParentImage { get { return imgParent; } internal set { imgParent = value; } }*/
-
-        /// <summary>
-        /// The name of the property
-        /// </summary>
-        public override string Name { get => name;
-            set => name = value;
         }
 
 #if UOLRES
@@ -100,7 +80,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// </summary>
         public override void Dispose()
         {
-            name = null;
+            Name = null;
             val = null;
         }
         #endregion
@@ -121,8 +101,8 @@ namespace RazzleServer.Common.Wz.WzProperties
                 if (linkVal == null)
                 {
                     var paths = val.Split('/');
-                    linkVal = parent;
-                    var asdf = parent.FullPath;
+                    linkVal = Parent;
+                    var asdf = Parent.FullPath;
                     foreach (var path in paths)
                     {
                         if (path == "..")
@@ -167,7 +147,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// <param name="name">The name of the property</param>
         public WzUOLProperty(string name)
         {
-            this.name = name;
+            Name = name;
         }
 
         /// <summary>
@@ -177,7 +157,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// <param name="value">The value of the property</param>
         public WzUOLProperty(string name, string value)
         {
-            this.name = name;
+            Name = name;
             val = value;
         }
         #endregion

@@ -81,7 +81,7 @@ namespace RazzleServer.Game.Maple.Data.Loaders
                 Data = serializer.Deserialize<T>(reader);
             }
 
-            return Task.CompletedTask;;
+            return Task.CompletedTask;
         }
 
         public abstract void LoadFromWz();

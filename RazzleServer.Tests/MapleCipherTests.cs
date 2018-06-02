@@ -163,7 +163,7 @@ namespace RazzleServer.Tests
             var provider = new MapleCipherProvider(version, aesKey);
             provider.SetVectors(0, 0);
             var buffer = encryptedPacket.ToArray().AsMemory();
-            provider.PacketFinished += (byte[] received) =>
+            provider.PacketFinished += received =>
             {
                 Assert.AreEqual(originalPacket.Length, received.Length, "Packet length should match");
                 Assert.AreEqual(originalPacket.ByteArrayToString(), received.ByteArrayToString());
@@ -197,7 +197,7 @@ namespace RazzleServer.Tests
             var provider = new MapleCipherProvider(version, aesKey, toClient: false);
             provider.SetVectors(0, 0);
             var buffer = encryptedPacket.ToArray().AsMemory();
-            provider.PacketFinished += (byte[] received) =>
+            provider.PacketFinished += received =>
             {
                 Assert.AreEqual(originalPacket.Length, received.Length, "Packet length should match");
                 Assert.AreEqual(originalPacket.ByteArrayToString(), received.ByteArrayToString());

@@ -21,10 +21,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         internal int width, height, format, format2;
         internal byte[] compressedBytes;
         internal Bitmap png;
-        internal WzObject parent;
-        //internal WzImage imgParent;
         internal bool listWzUsed;
-
         internal WzBinaryReader wzReader;
         internal long offs;
         #endregion
@@ -50,23 +47,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         }
 
         public override object WzValue => GetPNG(false);
-
-        /// <summary>
-        /// The parent of the object
-        /// </summary>
-        public override WzObject Parent
-        {
-            get => parent;
-            internal set => parent = value;
-        }
-        /*/// <summary>
-        /// The image that this property is contained in
-        /// </summary>
-        public override WzImage ParentImage { get { return imgParent; } internal set { imgParent = value; } }*/
-        /// <summary>
-        /// The name of the property
-        /// </summary>
-        public override string Name { get => "PNG"; set { } }
+       
         /// <summary>
         /// The WzPropertyType of the property
         /// </summary>

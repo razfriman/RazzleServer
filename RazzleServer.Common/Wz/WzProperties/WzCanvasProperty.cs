@@ -14,9 +14,6 @@ namespace RazzleServer.Common.Wz.WzProperties
         #region Fields
         internal List<WzImageProperty> properties = new List<WzImageProperty>();
         internal WzPngProperty imageProp;
-        internal string name;
-        internal WzObject parent;
-        //internal WzImage imgParent;
         #endregion
 
         #region Inherited Members
@@ -27,7 +24,7 @@ namespace RazzleServer.Common.Wz.WzProperties
 
         public override WzImageProperty DeepClone()
         {
-            var clone = new WzCanvasProperty(name);
+            var clone = new WzCanvasProperty(Name);
             foreach (var prop in properties)
             {
                 clone.AddProperty(prop.DeepClone());
@@ -40,12 +37,6 @@ namespace RazzleServer.Common.Wz.WzProperties
         public override object WzValue => PngProperty;
 
         /// <summary>
-        /// The parent of the object
-        /// </summary>
-        public override WzObject Parent { get => parent;
-            internal set => parent = value;
-        }
-        /// <summary>
         /// The WzPropertyType of the property
         /// </summary>
         public override WzPropertyType PropertyType => WzPropertyType.Canvas;
@@ -55,12 +46,6 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// </summary>
         public override List<WzImageProperty> WzProperties => properties;
 
-        /// <summary>
-        /// The name of the property
-        /// </summary>
-        public override string Name { get => name;
-            set => name = value;
-        }
         /// <summary>
         /// Gets a wz property by it's name
         /// </summary>
@@ -122,7 +107,7 @@ namespace RazzleServer.Common.Wz.WzProperties
             var segments = path.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
             if (segments[0] == "..")
             {
-                return ((WzImageProperty)Parent)[path.Substring(name.IndexOf('/') + 1)];
+                return ((WzImageProperty)Parent)[path.Substring(Name.IndexOf('/') + 1)];
             }
             WzImageProperty ret = this;
             foreach (var segment in segments)
@@ -184,7 +169,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// </summary>
         public override void Dispose()
         {
-            name = null;
+            Name = null;
             imageProp.Dispose();
             imageProp = null;
             properties?.ForEach(x => x.Dispose());
@@ -210,7 +195,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// <param name="name">The name of the property</param>
         public WzCanvasProperty(string name)
         {
-            this.name = name;
+            Name = name;
         }
         /// <summary>
         /// Adds a property to the property list of this property

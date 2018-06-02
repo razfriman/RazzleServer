@@ -9,10 +9,7 @@ namespace RazzleServer.Common.Wz.WzProperties
     public class WzShortProperty : WzImageProperty
     {
         #region Fields
-        internal string name;
         internal short val;
-        internal WzObject parent;
-        //internal WzImage imgParent;
         #endregion
 
         #region Inherited Members
@@ -23,33 +20,17 @@ namespace RazzleServer.Common.Wz.WzProperties
 
         public override WzImageProperty DeepClone()
         {
-            var clone = new WzShortProperty(name, val);
+            var clone = new WzShortProperty(Name, val);
             return clone;
         }
 
         public override object WzValue => Value;
 
         /// <summary>
-        /// The parent of the object
-        /// </summary>
-        public override WzObject Parent { get => parent;
-            internal set => parent = value;
-        }
-        /*/// <summary>
-		/// The image that this property is contained in
-		/// </summary>
-		public override WzImage ParentImage { get { return imgParent; } internal set { imgParent = value; } }*/
-        /// <summary>
         /// The WzPropertyType of the property
         /// </summary>
         public override WzPropertyType PropertyType => WzPropertyType.Short;
 
-        /// <summary>
-        /// The name of the property
-        /// </summary>
-        public override string Name { get => name;
-            set => name = value;
-        }
         public override void WriteValue(WzBinaryWriter writer)
         {
             writer.Write((byte)2);
@@ -64,7 +45,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// </summary>
         public override void Dispose()
         {
-            name = null;
+            Name = null;
         }
         #endregion
 
@@ -85,7 +66,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// <param name="name">The name of the property</param>
         public WzShortProperty(string name)
         {
-            this.name = name;
+            Name = name;
         }
         /// <summary>
         /// Creates a WzUnsignedShortProperty with the specified name and value
@@ -94,7 +75,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// <param name="value">The value of the property</param>
         public WzShortProperty(string name, short value)
         {
-            this.name = name;
+            Name = name;
             val = value;
         }
         #endregion

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Security;
+﻿using System.Security;
 
 namespace RazzleServer.Common.Crypto
 {
@@ -8,7 +7,7 @@ namespace RazzleServer.Common.Crypto
     /// </summary>
     public class FastAes
     {
-        private uint[][] _workingKey;
+        private readonly uint[][] _workingKey;
 
         /// <summary>
         /// Creates a new instace of the AES crypto
@@ -31,13 +30,12 @@ namespace RazzleServer.Common.Crypto
                 var curRound = 0;
                 var wk = _workingKey[curRound];
 
-                uint c0, c1, c2, c3; //Value holders
                 uint r0, r1, r2, r3; //Temp value holders
 
-                c0 = *((uint*)pBlock + 0);
-                c1 = *((uint*)pBlock + 1);
-                c2 = *((uint*)pBlock + 2);
-                c3 = *((uint*)pBlock + 3);
+                var c0 = *((uint*)pBlock + 0);
+                var c1 = *((uint*)pBlock + 1);
+                var c2 = *((uint*)pBlock + 2);
+                var c3 = *((uint*)pBlock + 3);
 
                 //Initial round of AddRoundKey
                 c0 ^= wk[0];

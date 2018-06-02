@@ -7,10 +7,7 @@ namespace RazzleServer.Common.Wz.WzProperties
     internal class WzLongProperty : WzImageProperty
     {
         #region Fields
-        internal string name;
         internal long val;
-        internal WzObject parent;
-        //internal WzImage imgParent;
         #endregion
 
         #region Inherited Members
@@ -21,33 +18,18 @@ namespace RazzleServer.Common.Wz.WzProperties
 
         public override WzImageProperty DeepClone()
         {
-            var clone = new WzLongProperty(name, val);
+            var clone = new WzLongProperty(Name, val);
             return clone;
         }
 
         public override object WzValue => Value;
 
-        /// <summary>
-        /// The parent of the object
-        /// </summary>
-        public override WzObject Parent { get => parent;
-            internal set => parent = value;
-        }
-        /*/// <summary>
-        /// The image that this property is contained in
-        /// </summary>
-        public override WzImage ParentImage { get { return imgParent; } internal set { imgParent = value; } }*/
+
         /// <summary>
         /// The WzPropertyType of the property
         /// </summary>
         public override WzPropertyType PropertyType => WzPropertyType.Long;
 
-        /// <summary>
-        /// The name of the property
-        /// </summary>
-        public override string Name { get => name;
-            set => name = value;
-        }
         public override void WriteValue(WzBinaryWriter writer)
         {
             writer.Write((byte)20);
@@ -62,7 +44,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// </summary>
         public override void Dispose()
         {
-            name = null;
+            Name = null;
         }
         #endregion
 
@@ -83,7 +65,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// <param name="name">The name of the property</param>
         public WzLongProperty(string name)
         {
-            this.name = name;
+            Name = name;
         }
         /// <summary>
         /// Creates a WzCompressedIntProperty with the specified name and value
@@ -92,7 +74,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// <param name="value">The value of the property</param>
         public WzLongProperty(string name, long value)
         {
-            this.name = name;
+            Name = name;
             val = value;
         }
         #endregion

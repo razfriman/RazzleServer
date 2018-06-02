@@ -9,12 +9,6 @@ namespace RazzleServer.Common.Wz.WzProperties
 	/// </summary>
 	public class WzNullProperty : WzImageProperty
 	{
-		#region Fields
-		internal string name;
-		internal WzObject parent;
-		//internal WzImage imgParent;
-		#endregion
-
 		#region Inherited Members
         public override void SetValue(object value)
         {
@@ -23,32 +17,15 @@ namespace RazzleServer.Common.Wz.WzProperties
 
         public override WzImageProperty DeepClone()
         {
-            var clone = new WzNullProperty(name);
+            var clone = new WzNullProperty(Name);
             return clone;
         }
 
-		/// <summary>
-		/// The parent of the object
-		/// </summary>
-		public override WzObject Parent { get => parent;
-			internal set => parent = value;
-		}
-		/*/// <summary>
-		/// The image that this property is contained in
-		/// </summary>
-		public override WzImage ParentImage { get { return imgParent; } internal set { imgParent = value; } }*/
 		/// <summary>
 		/// The WzPropertyType of the property
 		/// </summary>
 		public override WzPropertyType PropertyType => WzPropertyType.Null;
 
-		/// <summary>
-		/// The name of the property
-		/// </summary>
-		/// 
-		public override string Name { get => name;
-			set => name = value;
-		}
 		/// <summary>
 		/// The WzObjectType of the property
 		/// </summary>
@@ -67,7 +44,7 @@ namespace RazzleServer.Common.Wz.WzProperties
 		/// </summary>
 		public override void Dispose()
 		{
-			name = null;
+            Name = null;
 		}
 		#endregion
 
@@ -82,7 +59,7 @@ namespace RazzleServer.Common.Wz.WzProperties
 		/// <param name="propName">The name of the property</param>
 		public WzNullProperty(string propName)
 		{
-			name = propName;
+            Name = propName;
 		}
 		#endregion
 

@@ -21,7 +21,6 @@ namespace RazzleServer.Common.Wz
         internal string path;
         internal WzDirectory wzDir;
         internal WzHeader header;
-        internal string name = "";
         internal short version;
         internal uint versionHash;
         internal short fileVersion;
@@ -33,15 +32,6 @@ namespace RazzleServer.Common.Wz
         /// The parsed IWzDir after having called ParseWzDirectory(), this can either be a WzDirectory or a WzListDirectory
         /// </summary>
         public WzDirectory WzDirectory => wzDir;
-
-        /// <summary>
-        /// Name of the WzFile
-        /// </summary>
-        public override string Name
-        {
-            get => name;
-            set => name = value;
-        }
 
         /// <summary>
         /// The WzObjectType of the file
@@ -75,12 +65,6 @@ namespace RazzleServer.Common.Wz
             set => mapleVersion = value;
         }
 
-        public override WzObject Parent
-        {
-            get => null;
-            internal set { }
-        }
-
         public override WzFile WzFileParent => this;
 
         public override void Dispose()
@@ -88,7 +72,7 @@ namespace RazzleServer.Common.Wz
             wzDir?.reader?.Close();
             Header = null;
             path = null;
-            name = null;
+            Name = null;
             WzDirectory?.Dispose();
         }
 
@@ -109,7 +93,7 @@ namespace RazzleServer.Common.Wz
         /// <param name="version"></param>
         public WzFile(string filePath, WzMapleVersion version)
         {
-            name = Path.GetFileName(filePath);
+            Name = Path.GetFileName(filePath);
             path = filePath;
             fileVersion = -1;
             mapleVersion = version;
@@ -135,7 +119,7 @@ namespace RazzleServer.Common.Wz
         /// <param name="version"></param>
         public WzFile(string filePath, short gameVersion, WzMapleVersion version)
         {
-            name = Path.GetFileName(filePath);
+            Name = Path.GetFileName(filePath);
             path = filePath;
             fileVersion = gameVersion;
             mapleVersion = version;
@@ -222,7 +206,7 @@ namespace RazzleServer.Common.Wz
                         WzDirectory testDirectory;
                         try
                         {
-                            testDirectory = new WzDirectory(reader, name, versionHash, WzIv, this);
+                            testDirectory = new WzDirectory(reader, Name, versionHash, WzIv, this);
                             testDirectory.ParseDirectory();
                         }
                         catch
@@ -243,7 +227,7 @@ namespace RazzleServer.Common.Wz
                                 case 0x73:
                                 case 0x1b:
                                     {
-                                        var directory = new WzDirectory(reader, name, versionHash, WzIv, this);
+                                        var directory = new WzDirectory(reader, Name, versionHash, WzIv, this);
                                         directory.ParseDirectory();
                                         wzDir = directory;
                                         return;
@@ -263,7 +247,7 @@ namespace RazzleServer.Common.Wz
             {
                 versionHash = GetVersionHash(version, fileVersion);
                 reader.Hash = versionHash;
-                var directory = new WzDirectory(reader, name, versionHash, WzIv, this);
+                var directory = new WzDirectory(reader, Name, versionHash, WzIv, this);
                 directory.ParseDirectory();
                 wzDir = directory;
             }
@@ -356,11 +340,11 @@ namespace RazzleServer.Common.Wz
         {
             if (oneFile)
             {
-                var fs = File.Create(path + "/" + name + ".xml");
+                var fs = File.Create(path + "/" + Name + ".xml");
                 var writer = new StreamWriter(fs);
 
                 var level = 0;
-                writer.WriteLine(XmlUtil.Indentation(level) + XmlUtil.OpenNamedTag("WzFile", name, true));
+                writer.WriteLine(XmlUtil.Indentation(level) + XmlUtil.OpenNamedTag("WzFile", Name, true));
                 wzDir.ExportXml(writer, oneFile, level, false);
                 writer.WriteLine(XmlUtil.Indentation(level) + XmlUtil.CloseTag("WzFile"));
 
@@ -382,7 +366,7 @@ namespace RazzleServer.Common.Wz
         /// <returns>An array of IWzObjects containing the found objects</returns>
         public List<WzObject> GetObjectsFromWildcardPath(string path)
         {
-            if (path.ToLower() == name.ToLower())
+            if (path.ToLower() == Name.ToLower())
             {
                 {
                     return new List<WzObject> { WzDirectory };
@@ -418,7 +402,7 @@ namespace RazzleServer.Common.Wz
             foreach (var img in WzDirectory.WzImages)
             {
                 {
-                    foreach (var spath in GetPathsFromImage(img, name + "/" + img.Name))
+                    foreach (var spath in GetPathsFromImage(img, Name + "/" + img.Name))
                     {
                         {
                             if (StrMatch(path, spath))
@@ -435,7 +419,7 @@ namespace RazzleServer.Common.Wz
             foreach (var dir in wzDir.WzDirectories)
             {
                 {
-                    foreach (var spath in GetPathsFromDirectory(dir, name + "/" + dir.Name))
+                    foreach (var spath in GetPathsFromDirectory(dir, Name + "/" + dir.Name))
                     {
                         {
                             if (StrMatch(path, spath))
@@ -456,7 +440,7 @@ namespace RazzleServer.Common.Wz
 
         public List<WzObject> GetObjectsFromRegexPath(string path)
         {
-            if (path.ToLower() == name.ToLower())
+            if (path.ToLower() == Name.ToLower())
             {
                 {
                     return new List<WzObject> { WzDirectory };
@@ -467,7 +451,7 @@ namespace RazzleServer.Common.Wz
             foreach (var img in WzDirectory.WzImages)
             {
                 {
-                    foreach (var spath in GetPathsFromImage(img, name + "/" + img.Name))
+                    foreach (var spath in GetPathsFromImage(img, Name + "/" + img.Name))
                     {
                         {
                             if (Regex.Match(spath, path).Success)
@@ -484,7 +468,7 @@ namespace RazzleServer.Common.Wz
             foreach (var dir in wzDir.WzDirectories)
             {
                 {
-                    foreach (var spath in GetPathsFromDirectory(dir, name + "/" + dir.Name))
+                    foreach (var spath in GetPathsFromDirectory(dir, Name + "/" + dir.Name))
                     {
                         {
                             if (Regex.Match(spath, path).Success)
@@ -648,7 +632,7 @@ namespace RazzleServer.Common.Wz
         public WzObject GetObjectFromPath(string path)
         {
             var seperatedPath = path.Split("/".ToCharArray());
-            if (seperatedPath[0].ToLower() != wzDir.name.ToLower() && seperatedPath[0].ToLower() != wzDir.name.Substring(0, wzDir.name.Length - 3).ToLower())
+            if (seperatedPath[0].ToLower() != wzDir.Name.ToLower() && seperatedPath[0].ToLower() != wzDir.Name.Substring(0, wzDir.Name.Length - 3).ToLower())
             {
                 {
                     return null;

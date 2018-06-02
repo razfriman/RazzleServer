@@ -10,9 +10,7 @@ namespace RazzleServer.Common.Wz.WzProperties
     public class WzFloatProperty : WzImageProperty
     {
         #region Fields
-        internal string name;
         internal float val;
-        internal WzObject parent;
         //internal WzImage imgParent;
         #endregion
 
@@ -24,18 +22,12 @@ namespace RazzleServer.Common.Wz.WzProperties
 
         public override WzImageProperty DeepClone()
         {
-            var clone = new WzFloatProperty(name, val);
+            var clone = new WzFloatProperty(Name, val);
             return clone;
         }
 
         public override object WzValue => Value;
 
-        /// <summary>
-        /// The parent of the object
-        /// </summary>
-        public override WzObject Parent { get => parent;
-            internal set => parent = value;
-        }
         /*/// <summary>
 		/// The image that this property is contained in
 		/// </summary>
@@ -45,12 +37,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// </summary>
         public override WzPropertyType PropertyType => WzPropertyType.Float;
 
-        /// <summary>
-        /// The name of the property
-        /// </summary>
-        public override string Name { get => name;
-            set => name = value;
-        }
+
         public override void WriteValue(WzBinaryWriter writer)
         {
             writer.Write((byte)4);
@@ -73,7 +60,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// </summary>
         public override void Dispose()
         {
-            name = null;
+            Name = null;
         }
         #endregion
 
@@ -93,7 +80,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// <param name="name">The name of the property</param>
         public WzFloatProperty(string name)
         {
-            this.name = name;
+            Name = name;
         }
         /// <summary>
         /// Creates a WzByteFloatProperty with the specified name and value
@@ -102,7 +89,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// <param name="value">The value of the property</param>
         public WzFloatProperty(string name, float value)
         {
-            this.name = name;
+            Name = name;
             val = value;
         }
         #endregion

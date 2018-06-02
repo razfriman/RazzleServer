@@ -11,10 +11,7 @@ namespace RazzleServer.Common.Wz.WzProperties
     public class WzIntProperty : WzImageProperty
     {
         #region Fields
-        internal string name;
         internal int val;
-        internal WzObject parent;
-        //internal WzImage imgParent;
         #endregion
 
         #region Inherited Members
@@ -25,18 +22,12 @@ namespace RazzleServer.Common.Wz.WzProperties
 
         public override WzImageProperty DeepClone()
         {
-            var clone = new WzIntProperty(name, val);
+            var clone = new WzIntProperty(Name, val);
             return clone;
         }
 
         public override object WzValue => Value;
 
-        /// <summary>
-        /// The parent of the object
-        /// </summary>
-        public override WzObject Parent { get => parent;
-            internal set => parent = value;
-        }
         /*/// <summary>
 		/// The image that this property is contained in
 		/// </summary>
@@ -46,12 +37,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// </summary>
         public override WzPropertyType PropertyType => WzPropertyType.Int;
 
-        /// <summary>
-        /// The name of the property
-        /// </summary>
-        public override string Name { get => name;
-            set => name = value;
-        }
+
         public override void WriteValue(WzBinaryWriter writer)
         {
             writer.Write((byte)3);
@@ -66,7 +52,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// </summary>
         public override void Dispose()
         {
-            name = null;
+            Name = null;
         }
         #endregion
 
@@ -87,7 +73,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// <param name="name">The name of the property</param>
         public WzIntProperty(string name)
         {
-            this.name = name;
+            Name = name;
         }
         /// <summary>
         /// Creates a WzCompressedIntProperty with the specified name and value
@@ -96,7 +82,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// <param name="value">The value of the property</param>
         public WzIntProperty(string name, int value)
         {
-            this.name = name;
+            Name = name;
             val = value;
         }
         #endregion

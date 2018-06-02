@@ -15,12 +15,10 @@ namespace RazzleServer.Common.Wz
 
         #region Fields
         internal bool parsed;
-        internal string name;
         internal int size, checksum;
         internal uint offset;
         internal WzBinaryReader reader;
         internal List<WzImageProperty> properties = new List<WzImageProperty>();
-        internal WzObject parent;
         internal int blockStart;
         internal long tempFileStart;
         internal long tempFileEnd;
@@ -39,23 +37,23 @@ namespace RazzleServer.Common.Wz
         /// <param name="name">The name of the image</param>
         public WzImage(string name)
         {
-            this.name = name;
+            Name = name;
         }
         public WzImage(string name, Stream dataStream, WzMapleVersion mapleVersion)
         {
-            this.name = name;
+            Name = name;
             reader = new WzBinaryReader(dataStream, WzTool.GetIvByMapleVersion(mapleVersion));
         }
         internal WzImage(string name, WzBinaryReader reader)
         {
-            this.name = name;
+            Name = name;
             this.reader = reader;
             blockStart = (int)reader.BaseStream.Position;
         }
 
         public override void Dispose()
         {
-            name = null;
+            Name = null;
             reader = null;
 			properties?.ForEach(x => x.Dispose());
 			properties?.Clear();
@@ -64,18 +62,7 @@ namespace RazzleServer.Common.Wz
         #endregion
 
         #region Inherited Members
-        /// <summary>
-		/// The parent of the object
-		/// </summary>
-		public override WzObject Parent { get => parent;
-            internal set => parent = value;
-        }
-        /// <summary>
-        /// The name of the image
-        /// </summary>
-        public override string Name { get => name;
-            set => name = value;
-        }
+       
         public override WzFile WzFileParent => Parent?.WzFileParent;
 
         /// <summary>
@@ -144,7 +131,7 @@ namespace RazzleServer.Common.Wz
                 ParseImage();
             }
 
-            var clone = new WzImage(name) {changed = true};
+            var clone = new WzImage(Name) {changed = true};
             foreach (var prop in properties)
             {
                 clone.AddProperty(prop.DeepClone());
@@ -384,7 +371,7 @@ namespace RazzleServer.Common.Wz
         {
             if (oneFile)
             {
-                writer.WriteLine(XmlUtil.Indentation(level) + XmlUtil.OpenNamedTag("WzImage", name, true));
+                writer.WriteLine(XmlUtil.Indentation(level) + XmlUtil.OpenNamedTag("WzImage", Name, true));
                 WzImageProperty.DumpPropertyList(writer, level, WzProperties);
                 writer.WriteLine(XmlUtil.Indentation(level) + XmlUtil.CloseTag("WzImage"));
             }

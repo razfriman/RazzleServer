@@ -159,6 +159,8 @@ namespace RazzleServer.Common.Wz.Util
 
         public static WzMapleVersion DetectMapleVersion(string wzFilePath, out short fileVersion)
         {
+            fileVersion = 0;
+
             var mapleVersionSuccessRates = new Hashtable();
             short? version = null;
             mapleVersionSuccessRates.Add(WzMapleVersion.Gms, GetDecryptionSuccessRate(wzFilePath, WzMapleVersion.Gms, ref version));

@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using RazzleServer.Common;
 using RazzleServer.Common.Constants;
-using RazzleServer.Common.Data;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
 using RazzleServer.Data;

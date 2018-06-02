@@ -10,10 +10,7 @@ namespace RazzleServer.Common.Wz.WzProperties
 	public class WzVectorProperty : WzExtended
 	{
 		#region Fields
-		internal string name;
 		internal WzIntProperty x, y;
-		internal WzObject parent;
-		//internal WzImage imgParent;
 		#endregion
 
 		#region Inherited Members
@@ -28,28 +25,12 @@ namespace RazzleServer.Common.Wz.WzProperties
 
         public override WzImageProperty DeepClone()
         {
-            var clone = new WzVectorProperty(name, x, y);
+            var clone = new WzVectorProperty(Name, x, y);
             return clone;
         }
 
 		public override object WzValue => new Point(x.Value, y.Value);
 
-		/// <summary>
-		/// The parent of the object
-		/// </summary>
-		public override WzObject Parent { get => parent;
-			internal set => parent = value;
-		}
-		/*/// <summary>
-		/// The image that this property is contained in
-		/// </summary>
-		public override WzImage ParentImage { get { return imgParent; } internal set { imgParent = value; } }*/
-		/// <summary>
-		/// The name of the property
-		/// </summary>
-		public override string Name { get => name;
-			set => name = value;
-		}
 		/// <summary>
 		/// The WzPropertyType of the property
 		/// </summary>
@@ -71,7 +52,7 @@ namespace RazzleServer.Common.Wz.WzProperties
 		/// </summary>
 		public override void Dispose()
 		{
-			name = null;
+            Name = null;
 			x.Dispose();
 			x = null;
 			y.Dispose();
@@ -107,7 +88,7 @@ namespace RazzleServer.Common.Wz.WzProperties
 		/// <param name="name">The name of the property</param>
 		public WzVectorProperty(string name)
 		{
-			this.name = name;
+            Name = name;
 		}
 		/// <summary>
 		/// Creates a WzVectorProperty with the specified name, x and y
@@ -117,7 +98,7 @@ namespace RazzleServer.Common.Wz.WzProperties
 		/// <param name="y">The y value of the vector</param>
 		public WzVectorProperty(string name, WzIntProperty x, WzIntProperty y)
 		{
-			this.name = name;
+            Name = name;
 			this.x = x;
 			this.y = y;
 		}

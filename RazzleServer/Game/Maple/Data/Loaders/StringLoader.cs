@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Util;
 using RazzleServer.Common.Wz;
@@ -129,7 +128,7 @@ namespace RazzleServer.Game.Maple.Data.Loaders
                 {
                     if (int.TryParse(x.Name, out var id))
                     {
-                        var name = x["name"]?.GetString() ?? null;
+                        var name = x["name"]?.GetString();
                         if (name != null)
                         {
                             Data.Items[id] = name;
@@ -149,7 +148,7 @@ namespace RazzleServer.Game.Maple.Data.Loaders
                 {
                     if (int.TryParse(x.Name, out var id))
                     {
-                        var name = x["name"]?.GetString() ?? null;
+                        var name = x["name"]?.GetString();
                         if (name != null)
                         {
                             Data.Items[id] = name;
