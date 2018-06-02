@@ -29,4 +29,15 @@
   <ItemGroup>
     <Folder Include="Game\Data\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="MapleServer.db" />
+    <None Remove="Game\Data\loot.json" />
+    <None Remove="InitialData\loot.json" />
+    <None Remove="Logs\RazzleServer-20180602.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Game\Data\loot.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

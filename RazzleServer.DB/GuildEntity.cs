@@ -4,6 +4,7 @@ namespace RazzleServer.Data
 {
     public class GuildEntity
     {
+        [Key]
         public int Id { get; set; }
         public int Leader { get; set; }
         public int Logo { get; set; }

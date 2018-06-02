@@ -22,7 +22,7 @@ namespace RazzleServer.Login
                 else if (result == LoginResult.Valid)
                 {
                     pw.WriteInt(acc.Id);
-                    pw.WriteByte((int)acc.Gender); // set gender // pin select
+                    pw.WriteByte((int)acc.Gender);
                     pw.WriteBool(acc.IsMaster);
                     pw.WriteByte(0); // 0x80 == usergm == gmlevel 5
                     pw.WriteString(acc.Username);

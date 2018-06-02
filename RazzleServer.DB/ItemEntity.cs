@@ -5,6 +5,7 @@ namespace RazzleServer.Data
 {
     public class ItemEntity
     {
+        [Key]
         public int Id { get; set; }
         public int MapleId { get; set; }
         public int AccountId { get; set; }
@@ -19,7 +20,6 @@ namespace RazzleServer.Data
         public int? PetId { get; set; }
         public short Slot { get; set; }
         public DateTime Expiration { get; set; }
-
         public byte UpgradesAvailable { get; set; }
         public byte UpgradesApplied { get; set; }
         public short Strength { get; set; }

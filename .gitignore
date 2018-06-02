@@ -10,6 +10,7 @@ project.lock.json
 .idea/
 RazzleServer.Benchmarks/BenchmarkDotNet.Artifacts/
 RazzleServer/*.db
+RazzleServer/*.db-journal
 # Autosave files
 *~
 

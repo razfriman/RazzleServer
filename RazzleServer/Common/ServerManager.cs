@@ -26,10 +26,10 @@ namespace RazzleServer.Common
         {
             await ServerConfig.LoadFromFile("ServerConfig.json");
             InitializeDatabase();
-            DataProvider.Initialize();
-            ScriptProvider.Initialize();
-            LootProvider.Initialize();
-            ShopProvider.Initialize();
+            await DataProvider.Initialize();
+            await ScriptProvider.Initialize();
+            await LootProvider.Initialize();
+            await ShopProvider.Initialize();
         }
 
         public void Start()

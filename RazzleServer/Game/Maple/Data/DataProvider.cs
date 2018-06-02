@@ -21,15 +21,11 @@ namespace RazzleServer.Game.Maple.Data
 
         private static readonly ILogger Log = LogManager.Log;
 
-        public static void Initialize()
+        public static async Task Initialize()
         {
-            var sw = new Stopwatch();
+            var sw = Stopwatch.StartNew();
 
-            sw.Start();
-
-            Log.LogInformation("Loading data...");
-
-            Task.WaitAll(
+            await Task.WhenAll(
                 Task.Run(async () => Styles = await new AvailableStylesDataLoader().Load()),
                 Task.Run(async () => Items = await new ItemsLoader().Load()),
                 Task.Run(async () => CreationData = await new CreationDataLoader().Load()),

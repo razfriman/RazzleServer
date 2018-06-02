@@ -1,9 +1,11 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace RazzleServer.Data
 {
     public class AccountEntity
     {
+        [Key]
         public int Id { get; private set; }
         public string Username { get; set; }
         public string Password { get; set; }

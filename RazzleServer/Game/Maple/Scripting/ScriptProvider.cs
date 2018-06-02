@@ -17,7 +17,7 @@ namespace RazzleServer.Game.Maple.Scripting
 
         private static readonly ILogger Log = LogManager.Log;
 
-        public static void Initialize()
+        public static async Task Initialize()
         {
             var sw = new Stopwatch();
 
@@ -25,7 +25,7 @@ namespace RazzleServer.Game.Maple.Scripting
 
             Log.LogInformation("Loading scripts...");
 
-            Task.WaitAll(
+            await Task.WhenAll(
                 Task.Run(async () => Commands = await new CommandScriptLoader().Load()),
                 Task.Run(async () => Portals = await new PortalScriptLoader().Load()),
                 Task.Run(async () => Npcs = await new NpcScriptLoader().Load()),
