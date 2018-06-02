@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Util;
 
-namespace RazzleServer.Game.Maple.Scripts
+namespace RazzleServer.Game.Maple.Scripting
 {
     public abstract class AScriptLoader<T> where T : new()
     {

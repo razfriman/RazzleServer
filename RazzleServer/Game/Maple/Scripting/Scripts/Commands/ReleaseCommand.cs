@@ -1,6 +1,6 @@
 ﻿using RazzleServer.Game.Maple.Characters;
 
-namespace RazzleServer.Game.Maple.Scripts.Command{
+namespace RazzleServer.Game.Maple.Scripting.Scripts.Commands{
     public sealed class ReleaseCommand : ACommandScript
     {
         public override string Name => "release";

@@ -1,6 +1,6 @@
 ﻿using RazzleServer.Common.Server;
 using RazzleServer.Common.Packet;
-using RazzleServer.Game.Maple.Scripts;
+using RazzleServer.Game.Maple.Scripting;
 
 namespace RazzleServer.Game.Handlers
 {

@@ -2,6 +2,7 @@
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
+using RazzleServer.Game.Maple.Skills;
 
 namespace RazzleServer.Game.Maple.Characters
 {
@@ -121,15 +122,9 @@ namespace RazzleServer.Game.Maple.Characters
 
         public override int GetKey(Skill item) => item.MapleId;
 
-        public int GetCurrentLevel(int id) {
-
-            if(!Contains(id))
-            {
-                return 0;
-            }
-
-            return this[id].CurrentLevel;
-        }
+        public int GetCurrentLevel(int id) => Contains(id)
+            ? this[id].CurrentLevel
+            : 0;
     }
 }
 

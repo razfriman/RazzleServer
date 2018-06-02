@@ -14,10 +14,12 @@ using RazzleServer.Data;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Data.References;
 using RazzleServer.Game.Maple.Interaction;
+using RazzleServer.Game.Maple.Items;
 using RazzleServer.Game.Maple.Life;
 using RazzleServer.Game.Maple.Maps;
-using RazzleServer.Game.Scripts;
+using RazzleServer.Game.Maple.Scripting;
 using RazzleServer.Game.Maple.Shops;
+using RazzleServer.Game.Maple.Skills;
 
 namespace RazzleServer.Game.Maple.Characters
 {
@@ -1110,7 +1112,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         private bool IsBaseJob(Job baseJob)
         {
-            var currentBaseJob = (((int)Job / 100) * 100);
+            var currentBaseJob = (int)Job / 100 * 100;
             return currentBaseJob == (int)baseJob;
         }
 

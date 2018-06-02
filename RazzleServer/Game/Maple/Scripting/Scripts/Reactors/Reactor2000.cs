@@ -1,6 +1,4 @@
-﻿using RazzleServer.Game.Scripting;
-
-namespace RazzleServer.Game.Scripting.Scripts.Reactors
+﻿namespace RazzleServer.Game.Maple.Scripting.Scripts.Reactors
 {
     public class Reactor2000 : AReactorScript
     {

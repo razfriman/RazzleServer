@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Wz;
+using RazzleServer.Game.Maple.Skills;
 
 namespace RazzleServer.Game.Maple.Data.References
 {

@@ -1,7 +1,7 @@
 ﻿using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Life;
 
-namespace RazzleServer.Game.Maple.Scripts.Command{
+namespace RazzleServer.Game.Maple.Scripting.Scripts.Commands{
     public sealed class ZakumCommand : ACommandScript
     {
         public override string Name => "zakum";

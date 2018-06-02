@@ -2,7 +2,7 @@
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Maps;
 
-namespace RazzleServer.Game.Scripts
+namespace RazzleServer.Game.Maple.Scripting
 {
     public abstract class APortalScript
     {

@@ -8,7 +8,7 @@ using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
 using RazzleServer.Common.Wz;
 using RazzleServer.Game.Maple.Characters;
-using RazzleServer.Game.Maple.Scripts;
+using RazzleServer.Game.Maple.Scripting;
 using RazzleServer.Game.Maple.Shops;
 using RazzleServer.Game.Maple.Util;
 

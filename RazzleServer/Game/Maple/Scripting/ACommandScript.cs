@@ -1,7 +1,7 @@
 ﻿using RazzleServer.Common.Server;
 using RazzleServer.Game.Maple.Characters;
 
-namespace RazzleServer.Game.Maple.Scripts
+namespace RazzleServer.Game.Maple.Scripting
 {
     public abstract class ACommandScript
     {

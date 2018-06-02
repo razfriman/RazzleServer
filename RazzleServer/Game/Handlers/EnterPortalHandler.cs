@@ -2,8 +2,7 @@
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
-using RazzleServer.Game.Maple.Scripts;
-using RazzleServer.Game.Scripts;
+using RazzleServer.Game.Maple.Scripting;
 
 namespace RazzleServer.Game.Handlers
 {

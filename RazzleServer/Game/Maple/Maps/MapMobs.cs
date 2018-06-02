@@ -9,6 +9,7 @@ using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Life;
 using RazzleServer.Common;
+using RazzleServer.Game.Maple.Items;
 
 namespace RazzleServer.Game.Maple.Maps
 {

@@ -2,6 +2,7 @@
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple;
+using RazzleServer.Game.Maple.Items;
 
 namespace RazzleServer.Game.Handlers
 {
@@ -288,8 +289,8 @@ namespace RazzleServer.Game.Handlers
 
                 case 5090000: // NOTE: Note (Memo).
                     {
-                        string targetName = packet.ReadString();
-                        string message = packet.ReadString();
+                        var targetName = packet.ReadString();
+                        var message = packet.ReadString();
                         if (client.Character.Memos.Create(targetName, message))
                         {
                             used = true;

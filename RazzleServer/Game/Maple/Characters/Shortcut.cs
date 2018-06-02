@@ -1,7 +1,7 @@
 ﻿using RazzleServer.Common.Constants;
 using RazzleServer.Data;
 
-namespace RazzleServer.Game.Maple
+namespace RazzleServer.Game.Maple.Characters
 {
     public sealed class Shortcut
     {

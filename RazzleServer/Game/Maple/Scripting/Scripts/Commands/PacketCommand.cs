@@ -2,12 +2,12 @@
 using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Characters;
 
-namespace RazzleServer.Game.Maple.Scripts.Command{
+namespace RazzleServer.Game.Maple.Scripting.Scripts.Commands{
     public class PacketCommand : ACommandScript
     {
-        public override bool IsRestricted { get { return true; } }
-        public override string Name { get { return "packet"; } }
-        public override string Parameters { get { return "{ client | server } packet"; } }
+        public override bool IsRestricted => true;
+        public override string Name => "packet";
+        public override string Parameters => "{ client | server } packet";
 
         public override void Execute(Character caller, string[] args)
         {
@@ -17,7 +17,7 @@ namespace RazzleServer.Game.Maple.Scripts.Command{
             }
             else
             {
-                var packet = Functions.Fuse(args, 1);
+                var packet = args.Fuse(1);
                 if (args[0].ToLower() == "server")
                 {
                     caller.Client.Send(Functions.HexToBytes(packet));

@@ -1,7 +1,7 @@
 ﻿using RazzleServer.Common.Constants;
 using RazzleServer.Game.Maple.Characters;
 
-namespace RazzleServer.Game.Maple.Scripts.Command
+namespace RazzleServer.Game.Maple.Scripting.Scripts.Commands
 {
     public sealed class TickerCommand : ACommandScript
     {

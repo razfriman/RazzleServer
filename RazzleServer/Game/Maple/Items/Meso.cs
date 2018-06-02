@@ -2,7 +2,7 @@
 using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple.Maps;
 
-namespace RazzleServer.Game.Maple
+namespace RazzleServer.Game.Maple.Items
 {
     public sealed class Meso : Drop
     {

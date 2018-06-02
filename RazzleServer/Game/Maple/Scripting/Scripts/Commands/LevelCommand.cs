@@ -1,6 +1,6 @@
 ﻿using RazzleServer.Game.Maple.Characters;
 
-namespace RazzleServer.Game.Maple.Scripts.Command{
+namespace RazzleServer.Game.Maple.Scripting.Scripts.Commands{
     public sealed class LevelCommand : ACommandScript
     {
         public override string Name => "level";

@@ -1,4 +1,4 @@
-﻿namespace RazzleServer.Game.Maple
+﻿namespace RazzleServer.Game.Maple.Skills
 {
     public class SkillMacro
     {

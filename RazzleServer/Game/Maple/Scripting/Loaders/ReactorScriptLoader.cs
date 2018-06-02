@@ -2,11 +2,9 @@
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using RazzleServer.Game.Maple.Scripts.Cache;
-using RazzleServer.Game.Scripting;
-using RazzleServer.Game.Scripts;
+using RazzleServer.Game.Maple.Scripting.Cache;
 
-namespace RazzleServer.Game.Maple.Scripts.Loaders
+namespace RazzleServer.Game.Maple.Scripting.Loaders
 {
     public class ReactorScriptLoader : AScriptLoader<ReactorScripts>
     {

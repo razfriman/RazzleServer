@@ -1,7 +1,8 @@
 ﻿using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
+using RazzleServer.Game.Maple.Items;
 
-namespace RazzleServer.Game.Maple.Scripts.Command{
+namespace RazzleServer.Game.Maple.Scripting.Scripts.Commands{
     public sealed class ItemCommand : ACommandScript
     {
         public override string Name => "item";

@@ -1,9 +1,9 @@
 ﻿using System;
-using RazzleServer.Common.Data;
+using RazzleServer.Common;
 using RazzleServer.Common.Packet;
 using RazzleServer.Data;
 
-namespace RazzleServer.Game.Maple
+namespace RazzleServer.Game.Maple.Characters
 {
     public sealed class Memo
     {

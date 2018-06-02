@@ -164,7 +164,12 @@ namespace RazzleServer.Common.Wz.Util
             mapleVersionSuccessRates.Add(WzMapleVersion.Gms, GetDecryptionSuccessRate(wzFilePath, WzMapleVersion.Gms, ref version));
             mapleVersionSuccessRates.Add(WzMapleVersion.Ems, GetDecryptionSuccessRate(wzFilePath, WzMapleVersion.Ems, ref version));
             mapleVersionSuccessRates.Add(WzMapleVersion.Bms, GetDecryptionSuccessRate(wzFilePath, WzMapleVersion.Bms, ref version));
-            fileVersion = (short)version;
+            
+            if (version != null)
+            {
+                fileVersion = (short) version;
+            }
+
             var mostSuitableVersion = WzMapleVersion.Gms;
             double maxSuccessRate = 0;
 

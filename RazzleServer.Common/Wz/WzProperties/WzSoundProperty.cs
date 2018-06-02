@@ -120,22 +120,7 @@ namespace RazzleServer.Common.Wz.WzProperties
             get => len_ms;
             set => len_ms = value;
         }
-
-
-
-        /// <summary>
-        /// Frequency of the mp3 file in Hz
-        /// </summary>
-        // TODO - Wait for .NET Core Audio library
-        //public int Frequency
-        //{
-        //    get { return wavFormat != null ? wavFormat.SampleRate : 0; }
-        //}
-
-        /// <summary>
-        /// BPS of the mp3 file
-        /// </summary>
-        //public byte BPS { get { return bps; } set { bps = value; } }
+      
         /// <summary>
         /// Creates a WzSoundProperty with the specified name
         /// </summary>

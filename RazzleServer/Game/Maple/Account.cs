@@ -1,4 +1,5 @@
 ﻿using System;
+using RazzleServer.Common;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Data;
 using RazzleServer.Common.Exceptions;

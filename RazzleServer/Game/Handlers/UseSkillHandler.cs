@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple.Characters;
@@ -176,15 +177,10 @@ namespace RazzleServer.Game.Handlers
                         {
                             var experience = 0;
 
-                            var members = new List<PartyMember>();
-
-                            foreach (var member in skill.Character.Party.Values)
-                            {
-                                if (member.Character != null && member.Character.Map.MapleId == skill.Character.Map.MapleId)
-                                {
-                                    members.Add(member);
-                                }
-                            }
+                            var members = skill.Character.Party.Values
+                                .Where(member => member.Character != null)
+                                .Where(member => member.Character.Map.MapleId == skill.Character.Map.MapleId)
+                                .ToList();
 
                             foreach (var member in members)
                             {

@@ -12,6 +12,7 @@ namespace RazzleServer.Common.Wz.WzStructure
 
         [DataMember]
         private byte val { get; set; }
+
         public static implicit operator MapleBool(byte value)
         {
             return new MapleBool
@@ -40,7 +41,7 @@ namespace RazzleServer.Common.Wz.WzStructure
 
         public override bool Equals(object obj)
         {
-            return obj is MapleBool && ((MapleBool)obj).val.Equals(val);
+            return obj is MapleBool b && b.val.Equals(val);
         }
 
         public override int GetHashCode()

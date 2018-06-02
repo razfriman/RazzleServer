@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
-using static RazzleServer.Common.Constants.SkillNames;
 
-namespace RazzleServer.Game.Maple
+namespace RazzleServer.Game.Maple.Characters
 {
     public sealed class Attack
     {
@@ -32,20 +31,20 @@ namespace RazzleServer.Game.Maple
 
             switch (SkillId)
             {
-                case (int)FirePoisonArchMage.BigBang:
-                case (int)IceLightningArchMage.BigBang:
-                case (int)Bishop.BigBang:
-                case (int)SuperGm.Hide:
+                case (int)SkillNames.FirePoisonArchMage.BigBang:
+                case (int)SkillNames.IceLightningArchMage.BigBang:
+                case (int)SkillNames.Bishop.BigBang:
+                case (int)SkillNames.SuperGm.Hide:
                     var charge = packet.ReadInt();
                     break;
             }
 
-            if (SkillId == (int)Paladin.HeavensHammer)
+            if (SkillId == (int)SkillNames.Paladin.HeavensHammer)
             {
                 //isHH = true;
             }
 
-            if (SkillId == (int)ChiefBandit.MesoExplosion) 
+            if (SkillId == (int)SkillNames.ChiefBandit.MesoExplosion) 
             {
                 // parseMesoExplosion(lea, ret);
             }

@@ -3,9 +3,8 @@ using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Maps;
-using RazzleServer.Game.Scripts;
 
-namespace RazzleServer.Game.Maple.Scripts.Cache
+namespace RazzleServer.Game.Maple.Scripting.Cache
 {
     public sealed class PortalScripts : MapleKeyedCollection<string, APortalScript>
     {

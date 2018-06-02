@@ -14,10 +14,11 @@ namespace RazzleServer.Benchmarks
 
     public class Test {
 
-        private MapleCipher encryptor = new MapleCipher((ushort)55, (ulong)0x52330F1BB4060813);
-        private MapleCipher decryptor = new MapleCipher((ushort)55, (ulong)0x52330F1BB4060813);
-        private byte[] data;
-        private int N = 10;
+        private readonly MapleCipher _encryptor = new MapleCipher(55, 0x52330F1BB4060813);
+        private readonly MapleCipher _decryptor = new MapleCipher(55, 0x52330F1BB4060813);
+        private readonly byte[] _data;
+        private readonly int _n = 10;
+        
         public Test()
         {
             var packet = new PacketWriter();
@@ -25,18 +26,18 @@ namespace RazzleServer.Benchmarks
             packet.WriteShort(2);
             packet.WriteInt(4);
             packet.WriteLong(8);
-            data = packet.ToArray();
-            encryptor.SetIv(0);
-            decryptor.SetIv(0);
+            _data = packet.ToArray();
+            _encryptor.SetIv(0);
+            _decryptor.SetIv(0);
         }
 
         [Benchmark]
         public Span<byte> Encrypt() {
-            var encryptedPacket = encryptor.Encrypt(data, false);
+            var encryptedPacket = _encryptor.Encrypt(_data, false);
 
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < _n; i++)
             {
-                encryptedPacket = encryptor.Encrypt(data, false);
+                encryptedPacket = _encryptor.Encrypt(_data, false);
             }
 
             return encryptedPacket;
@@ -44,13 +45,13 @@ namespace RazzleServer.Benchmarks
 
         [Benchmark]
         public Span<byte> EncryptDecrypt() {
-            var encryptedPacket = encryptor.Encrypt(data, false);
-            var decryptedPacket = decryptor.Decrypt(encryptedPacket);
+            var encryptedPacket = _encryptor.Encrypt(_data, false);
+            var decryptedPacket = _decryptor.Decrypt(encryptedPacket);
 
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < _n; i++)
             {
-                encryptedPacket = encryptor.Encrypt(data, false);
-                decryptedPacket = decryptor.Decrypt(encryptedPacket);
+                encryptedPacket = _encryptor.Encrypt(_data, false);
+                decryptedPacket = _decryptor.Decrypt(encryptedPacket);
             }
 
             return decryptedPacket;

@@ -1,7 +1,7 @@
 ﻿using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Characters;
 
-namespace RazzleServer.Game.Maple.Scripts.Command{
+namespace RazzleServer.Game.Maple.Scripting.Scripts.Commands{
     public sealed class NoticeCommand : ACommandScript
     {
         public override string Name => "notice";
@@ -18,7 +18,7 @@ namespace RazzleServer.Game.Maple.Scripts.Command{
             }
             else
             {
-                var message = Functions.Fuse(args, 1);
+                var message = args.Fuse(1);
 
                 switch (args[0].ToLower())
                 {

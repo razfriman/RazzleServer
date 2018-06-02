@@ -37,7 +37,7 @@ namespace RazzleServer.Game.Maple.Maps
 
             lock (Map.Drops)
             {
-                foreach (Drop drop in Map.Drops.Values)
+                foreach (var drop in Map.Drops.Values)
                 {
                     item.Client.Send(drop.GetSpawnPacket(drop.Owner == null ? item : null));
                 }

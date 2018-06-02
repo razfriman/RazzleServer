@@ -4,11 +4,11 @@ using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
 using RazzleServer.Data;
-using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Data.References;
+using RazzleServer.Game.Maple.Skills;
 
-namespace RazzleServer.Game.Maple
+namespace RazzleServer.Game.Maple.Characters
 {
     public sealed class Buff
     {

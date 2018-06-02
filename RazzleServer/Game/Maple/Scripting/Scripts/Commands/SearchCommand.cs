@@ -1,10 +1,11 @@
-﻿using RazzleServer.Common.Util;
-using RazzleServer.Game.Maple.Characters;
-using RazzleServer.Game.Maple.Data;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using RazzleServer.Common.Util;
+using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Game.Maple.Data;
 
-namespace RazzleServer.Game.Maple.Scripts.Command
+namespace RazzleServer.Game.Maple.Scripting.Scripts.Commands
 {
     public sealed class SearchCommand : ACommandScript
     {
@@ -22,7 +23,7 @@ namespace RazzleServer.Game.Maple.Scripts.Command
                 return;
             }
             var type = args[0].StartsWith('-') ? args[0].Substring(1) : args[0];
-            var query = Functions.Fuse(args, 1);
+            var query = args.Fuse(1);
 
             if (query.Length < 2)
             {
@@ -66,10 +67,11 @@ namespace RazzleServer.Game.Maple.Scripts.Command
             if (lookup == null)
             {
                 caller.Notify($"Invalid search type [{type}]");
+                return;
             }
 
             var results = lookup
-                .Where(x => x.Value.Contains(query, System.StringComparison.InvariantCultureIgnoreCase))
+                .Where(x => x.Value.Contains(query, StringComparison.InvariantCultureIgnoreCase))
                 .ToList();
 
             if (results.Any())

@@ -411,7 +411,7 @@ namespace RazzleServer.Common.Wz
             }
 
             total = CalculateTotal(obj);
-            ExportRecursion(obj, outPath);
+            Export(obj, outPath);
             /*foreach (WzImage img in imagesToUnparse)
                 img.UnparseImage();
             imagesToUnparse.Clear();*/
@@ -451,99 +451,106 @@ namespace RazzleServer.Common.Wz
             return result;
         }
 
-        private void ExportRecursion(WzObject currObj, string exportOutPath)
+        private void Export(WzObject currObj, string exportOutPath)
         {
-            if (currObj is WzFile)
+            while (true)
             {
-                {
-                    ExportRecursion(((WzFile)currObj).WzDirectory, exportOutPath);
-                }
-            }
-            else if (currObj is WzDirectory)
-            {
-                exportOutPath += currObj.Name + @"\";
-                if (!Directory.Exists(exportOutPath))
+                if (currObj is WzFile)
                 {
                     {
-                        Directory.CreateDirectory(exportOutPath);
+                        currObj = ((WzFile) currObj).WzDirectory;
+                        continue;
+                    }
+                }
+                else if (currObj is WzDirectory directory)
+                {
+                    exportOutPath += directory.Name + @"\";
+                    if (!Directory.Exists(exportOutPath))
+                    {
+                        {
+                            Directory.CreateDirectory(exportOutPath);
+                        }
+                    }
+
+                    foreach (var subdir in directory.WzDirectories)
+                    {
+                        {
+                            Export(subdir, exportOutPath + subdir.Name + @"\");
+                        }
+                    }
+
+                    foreach (var subimg in directory.WzImages)
+                    {
+                        {
+                            Export(subimg, exportOutPath + subimg.Name + @"\");
+                        }
+                    }
+                }
+                else if (currObj is WzCanvasProperty property)
+                {
+                    var bmp = property.PngProperty.GetPNG(false);
+                    var path = exportOutPath + property.Name + ".png";
+                    bmp.Save(path, ImageFormat.Png);
+                    //curr++;
+                }
+                else if (currObj is WzSoundProperty soundProperty)
+                {
+                    var path = exportOutPath + soundProperty.Name + ".mp3";
+                    soundProperty.SaveToFile(path);
+                }
+                else if (currObj is WzImage image)
+                {
+                    exportOutPath += image.Name + @"\";
+                    if (!Directory.Exists(exportOutPath))
+                    {
+                        {
+                            Directory.CreateDirectory(exportOutPath);
+                        }
+                    }
+
+                    var parse = image.Parsed || image.Changed;
+                    if (!parse)
+                    {
+                        {
+                            image.ParseImage();
+                        }
+                    }
+
+                    foreach (var subprop in image.WzProperties)
+                    {
+                        {
+                            Export(subprop, exportOutPath);
+                        }
+                    }
+
+                    if (!parse)
+                    {
+                        {
+                            image.UnparseImage();
+                        }
+                    }
+
+                    curr++;
+                }
+                else if (currObj is IPropertyContainer container)
+                {
+                    exportOutPath += currObj.Name + ".";
+                    foreach (var subprop in container.WzProperties)
+                    {
+                        {
+                            Export(subprop, exportOutPath);
+                        }
+                    }
+                }
+                else if (currObj is WzUOLProperty)
+                {
+                    {
+                        currObj = ((WzUOLProperty) currObj).LinkValue;
+                        continue;
                     }
                 }
 
-                foreach (var subdir in ((WzDirectory)currObj).WzDirectories)
-                {
-                    {
-                        ExportRecursion(subdir, exportOutPath + subdir.Name + @"\");
-                    }
-                }
-
-                foreach (var subimg in ((WzDirectory)currObj).WzImages)
-                {
-                    {
-                        ExportRecursion(subimg, exportOutPath + subimg.Name + @"\");
-                    }
-                }
-            }
-            else if (currObj is WzCanvasProperty)
-            {
-                var bmp = ((WzCanvasProperty)currObj).PngProperty.GetPNG(false);
-                var path = exportOutPath + currObj.Name + ".png";
-                bmp.Save(path, ImageFormat.Png);
-                //curr++;
-            }
-            else if (currObj is WzSoundProperty)
-            {
-                var path = exportOutPath + currObj.Name + ".mp3";
-                ((WzSoundProperty)currObj).SaveToFile(path);
-            }
-            else if (currObj is WzImage)
-            {
-                exportOutPath += currObj.Name + @"\";
-                if (!Directory.Exists(exportOutPath))
-                {
-                    {
-                        Directory.CreateDirectory(exportOutPath);
-                    }
-                }
-
-                var parse = ((WzImage)currObj).Parsed || ((WzImage)currObj).Changed;
-                if (!parse)
-                {
-                    {
-                        ((WzImage)currObj).ParseImage();
-                    }
-                }
-
-                foreach (var subprop in ((IPropertyContainer)currObj).WzProperties)
-                {
-                    {
-                        ExportRecursion(subprop, exportOutPath);
-                    }
-                }
-
-                if (!parse)
-                {
-                    {
-                        ((WzImage)currObj).UnparseImage();
-                    }
-                }
-
-                curr++;
-            }
-            else if (currObj is IPropertyContainer)
-            {
-                exportOutPath += currObj.Name + ".";
-                foreach (var subprop in ((IPropertyContainer)currObj).WzProperties)
-                {
-                    {
-                        ExportRecursion(subprop, exportOutPath);
-                    }
-                }
-            }
-            else if (currObj is WzUOLProperty)
-            {
-                {
-                    ExportRecursion(((WzUOLProperty)currObj).LinkValue, exportOutPath);
-                }
+                break;
             }
         }
     }
@@ -714,10 +721,10 @@ namespace RazzleServer.Common.Wz
                         total++;
                     }
                 }
-                else if (obj is WzDirectory)
+                else if (obj is WzDirectory directory)
                 {
                     {
-                        total += ((WzDirectory)obj).CountImages();
+                        total += directory.CountImages();
                     }
                 }
             }
@@ -728,22 +735,22 @@ namespace RazzleServer.Common.Wz
             tw.Write("<xmldump>" + lineBreak);
             foreach (var obj in objects)
             {
-                if (obj is WzDirectory)
+                if (obj is WzDirectory directory)
                 {
                     {
-                        DumpDirectoryToXML(tw, indent, (WzDirectory)obj);
+                        DumpDirectoryToXML(tw, indent, directory);
                     }
                 }
-                else if (obj is WzImage)
+                else if (obj is WzImage image)
                 {
                     {
-                        DumpImageToXML(tw, indent, (WzImage)obj);
+                        DumpImageToXML(tw, indent, image);
                     }
                 }
-                else if (obj is WzImageProperty)
+                else if (obj is WzImageProperty property)
                 {
                     {
-                        WritePropertyToXML(tw, indent, (WzImageProperty)obj);
+                        WritePropertyToXML(tw, indent, property);
                     }
                 }
             }

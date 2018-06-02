@@ -2,7 +2,9 @@
 using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple;
 using RazzleServer.Game.Maple.Data;
+using RazzleServer.Game.Maple.Items;
 using RazzleServer.Game.Maple.Life;
+using RazzleServer.Game.Maple.Skills;
 
 namespace RazzleServer.Game.Handlers
 {

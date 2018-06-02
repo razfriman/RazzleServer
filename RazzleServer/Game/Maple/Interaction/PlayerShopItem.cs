@@ -1,4 +1,6 @@
-﻿namespace RazzleServer.Game.Maple.Interaction
+﻿using RazzleServer.Game.Maple.Items;
+
+namespace RazzleServer.Game.Maple.Interaction
 {
     public sealed class PlayerShopItem : Item
     {

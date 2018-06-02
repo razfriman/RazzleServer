@@ -2,10 +2,10 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Util;
-using RazzleServer.Game.Maple.Scripts.Cache;
-using RazzleServer.Game.Maple.Scripts.Loaders;
+using RazzleServer.Game.Maple.Scripting.Cache;
+using RazzleServer.Game.Maple.Scripting.Loaders;
 
-namespace RazzleServer.Game.Maple.Scripts
+namespace RazzleServer.Game.Maple.Scripting
 {
 
     public static class ScriptProvider

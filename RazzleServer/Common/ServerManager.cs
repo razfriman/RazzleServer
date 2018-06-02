@@ -8,7 +8,7 @@ using RazzleServer.Common.Server;
 using RazzleServer.Common.Util;
 using RazzleServer.Game;
 using RazzleServer.Game.Maple.Data;
-using RazzleServer.Game.Maple.Scripts;
+using RazzleServer.Game.Maple.Scripting;
 using RazzleServer.Login;
 
 namespace RazzleServer.Common

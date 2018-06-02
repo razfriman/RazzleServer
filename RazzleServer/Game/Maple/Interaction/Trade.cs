@@ -2,6 +2,7 @@
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Game.Maple.Items;
 
 namespace RazzleServer.Game.Maple.Interaction
 {

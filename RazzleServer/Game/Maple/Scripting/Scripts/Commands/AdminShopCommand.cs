@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple.Characters;
-using RazzleServer.Game.Maple.Scripts;
 
-namespace RazzleServer.Game.Maple.Scripts.Command{
+namespace RazzleServer.Game.Maple.Scripting.Scripts.Commands{
     public sealed class AdminShopCommand : ACommandScript
     {
         // NOTE: The Npc that is the shop owner.

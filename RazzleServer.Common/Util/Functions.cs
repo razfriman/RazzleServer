@@ -292,6 +292,7 @@ namespace RazzleServer.Common.Util
         /// </summary>
         /// <param name="arr">The array to be fused</param>
         /// <param name="startIndex">The index in the array to start at</param>
+        /// <param name="length"></param>
         /// <param name="separator"></param>
         /// <returns>A string with all the strings from the startindex appended with a space between them</returns>
         public static string Fuse(this string[] arr, int startIndex = 0, int? length = null, string separator = " ")

@@ -45,11 +45,8 @@ namespace RazzleServer.Game.Handlers
             {
                 // TODO: Add buff.
             }
-
-            if (false)
-            {
-                // TODO: Add Monster Book card.
-            }
+            
+            // TODO: Add Monster Book card.
         }
     }
 }

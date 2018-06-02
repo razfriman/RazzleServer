@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using RazzleServer.Game.Maple.Characters;
 
-namespace RazzleServer.Game.Maple.Scripts.Command{
+namespace RazzleServer.Game.Maple.Scripting.Scripts.Commands{
     public sealed class KillMobsCommand : ACommandScript
     {
         public override string Name => "killmobs";
