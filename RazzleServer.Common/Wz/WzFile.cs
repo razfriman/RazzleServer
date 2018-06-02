@@ -42,6 +42,7 @@ namespace RazzleServer.Common.Wz
         /// <returns>WzDirectory[name]</returns>
         public new WzObject this[string name] => WzDirectory[name];
 
+        [JsonIgnore]
         public WzHeader Header { get; set; }
 
         public short Version { get; set; }

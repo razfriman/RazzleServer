@@ -10,10 +10,6 @@ namespace RazzleServer.Common.Wz.WzProperties
     /// </summary>
     public class WzSubProperty : WzExtended, IPropertyContainer
     {
-        #region Fields
-        internal List<WzImageProperty> properties = new List<WzImageProperty>();
-        #endregion
-
         #region Inherited Members
         public override void SetValue(object value)
         {
@@ -23,7 +19,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         public override WzImageProperty DeepClone()
         {
             var clone = new WzSubProperty(Name);
-            foreach (var prop in properties)
+            foreach (var prop in WzProperties)
             {
                 clone.AddProperty(prop.DeepClone());
             }
@@ -37,11 +33,6 @@ namespace RazzleServer.Common.Wz.WzProperties
         public override WzPropertyType PropertyType => WzPropertyType.SubProperty;
 
         /// <summary>
-        /// The wz properties contained in the property
-        /// </summary>
-        public override List<WzImageProperty> WzProperties => properties;
-
-        /// <summary>
         /// Gets a wz property by it's name
         /// </summary>
         /// <param name="name">The name of the property</param>
@@ -51,7 +42,7 @@ namespace RazzleServer.Common.Wz.WzProperties
             get
             {
 
-                foreach (var iwp in properties)
+                foreach (var iwp in WzProperties)
                 {
                     if (iwp.Name.ToLower() == name.ToLower())
                     {
@@ -106,7 +97,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         public override void WriteValue(WzBinaryWriter writer)
         {
             writer.WriteStringValue("Property", 0x73, 0x1B);
-            WritePropertyList(writer, properties);
+            WritePropertyList(writer, WzProperties);
         }
 
         /// <summary>
@@ -115,13 +106,13 @@ namespace RazzleServer.Common.Wz.WzProperties
         public override void Dispose()
         {
             Name = null;
-            foreach (var prop in properties)
+            foreach (var prop in WzProperties)
             {
                 prop.Dispose();
             }
 
-            properties.Clear();
-            properties = null;
+            WzProperties.Clear();
+            WzProperties = null;
         }
         #endregion
 
@@ -145,7 +136,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         public void AddProperty(WzImageProperty prop)
         {
             prop.Parent = this;
-            properties.Add(prop);
+            WzProperties.Add(prop);
         }
         public void AddProperties(List<WzImageProperty> props)
         {
@@ -157,19 +148,19 @@ namespace RazzleServer.Common.Wz.WzProperties
         public void RemoveProperty(WzImageProperty prop)
         {
             prop.Parent = null;
-            properties.Remove(prop);
+            WzProperties.Remove(prop);
         }
         /// <summary>
         /// Clears the list of properties
         /// </summary>
         public void ClearProperties()
         {
-            foreach (var prop in properties)
+            foreach (var prop in WzProperties)
             {
                 prop.Parent = null;
             }
 
-            properties.Clear();
+            WzProperties.Clear();
         }
         #endregion
     }

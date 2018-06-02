@@ -326,6 +326,7 @@ namespace RazzleServer.Common.Wz
             Parsed = true;
         }
 
+        [JsonIgnore]
         public byte[] DataBlock
         {
             get

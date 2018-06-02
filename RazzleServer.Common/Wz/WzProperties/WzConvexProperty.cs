@@ -37,11 +37,6 @@ namespace RazzleServer.Common.Wz.WzProperties
         public override WzPropertyType PropertyType => WzPropertyType.Convex;
 
         /// <summary>
-        /// The properties contained in the property
-        /// </summary>
-        public override List<WzImageProperty> WzProperties => properties;
-
-        /// <summary>
         /// Gets a wz property by it's name
         /// </summary>
         /// <param name="name">The name of the property</param>

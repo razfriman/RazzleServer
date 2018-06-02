@@ -143,22 +143,26 @@ namespace RazzleServer.Game.Maple.Data.References
             if (type == ItemType.Usable)
             {
                 var spec = img["spec"];
-                CHealth = spec["hp"]?.GetShort() ?? 0;
-                CMana = spec["mp"]?.GetShort() ?? 0;
-                CHealthPercentage = spec["hpR"]?.GetShort() ?? 0;
-                CManaPercentage = spec["mpR"]?.GetShort() ?? 0;
-                CBuffTime = spec["time"]?.GetInt() ?? 0;
-                CMagicAttack = spec["mad"]?.GetShort() ?? 0;
-                CMagicDefense = spec["mdd"]?.GetShort() ?? 0;
-                CWeaponDefense = spec["pdd"]?.GetShort() ?? 0;
-                CWeaponAttack = spec["pad"]?.GetShort() ?? 0;
-                CAccuracy = spec["acc"]?.GetShort() ?? 0;
-                CAvoid = spec["eva"]?.GetShort() ?? 0;
-                CSpeed = spec["speed"]?.GetShort() ?? 0;
-                CJump = spec["jump"]?.GetShort() ?? 0;
-                CMorph = spec["morph"]?.GetShort() ?? 0;
-                CProb = spec["prob"]?.GetShort() ?? 0;
-                CMoveTo = spec["moveTo"]?.GetInt() ?? 0;
+            
+                if (spec != null)
+                {
+                    CHealth = spec["hp"]?.GetShort() ?? 0;
+                    CMana = spec["mp"]?.GetShort() ?? 0;
+                    CHealthPercentage = spec["hpR"]?.GetShort() ?? 0;
+                    CManaPercentage = spec["mpR"]?.GetShort() ?? 0;
+                    CBuffTime = spec["time"]?.GetInt() ?? 0;
+                    CMagicAttack = spec["mad"]?.GetShort() ?? 0;
+                    CMagicDefense = spec["mdd"]?.GetShort() ?? 0;
+                    CWeaponDefense = spec["pdd"]?.GetShort() ?? 0;
+                    CWeaponAttack = spec["pad"]?.GetShort() ?? 0;
+                    CAccuracy = spec["acc"]?.GetShort() ?? 0;
+                    CAvoid = spec["eva"]?.GetShort() ?? 0;
+                    CSpeed = spec["speed"]?.GetShort() ?? 0;
+                    CJump = spec["jump"]?.GetShort() ?? 0;
+                    CMorph = spec["morph"]?.GetShort() ?? 0;
+                    CProb = spec["prob"]?.GetShort() ?? 0;
+                    CMoveTo = spec["moveTo"]?.GetInt() ?? 0;
+                }
             }
         }
 

@@ -11,10 +11,6 @@ namespace RazzleServer.Common.Wz.WzProperties
     /// </summary>
     public class WzCanvasProperty : WzExtended, IPropertyContainer
     {
-        #region Fields
-        internal List<WzImageProperty> properties = new List<WzImageProperty>();
-        #endregion
-
         #region Inherited Members
         public override void SetValue(object value)
         {
@@ -24,7 +20,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         public override WzImageProperty DeepClone()
         {
             var clone = new WzCanvasProperty(Name);
-            foreach (var prop in properties)
+            foreach (var prop in WzProperties)
             {
                 clone.AddProperty(prop.DeepClone());
             }
@@ -41,11 +37,6 @@ namespace RazzleServer.Common.Wz.WzProperties
         public override WzPropertyType PropertyType => WzPropertyType.Canvas;
 
         /// <summary>
-        /// The properties contained in this property
-        /// </summary>
-        public override List<WzImageProperty> WzProperties => properties;
-
-        /// <summary>
         /// Gets a wz property by it's name
         /// </summary>
         /// <param name="name">The name of the property</param>
@@ -59,7 +50,7 @@ namespace RazzleServer.Common.Wz.WzProperties
                     return PngProperty;
                 }
 
-                foreach (var iwp in properties)
+                foreach (var iwp in WzProperties)
                 {
                     if (iwp.Name.ToLower() == name.ToLower())
                     {
@@ -86,7 +77,7 @@ namespace RazzleServer.Common.Wz.WzProperties
 
         public WzImageProperty GetProperty(string name)
         {
-            foreach (var iwp in properties)
+            foreach (var iwp in WzProperties)
             {
                 if (iwp.Name.ToLower() == name.ToLower())
                 {
@@ -136,10 +127,10 @@ namespace RazzleServer.Common.Wz.WzProperties
         {
             writer.WriteStringValue("Canvas", 0x73, 0x1B);
             writer.Write((byte)0);
-            if (properties.Count > 0)
+            if (WzProperties.Count > 0)
             {
                 writer.Write((byte)1);
-                WritePropertyList(writer, properties);
+                WritePropertyList(writer, WzProperties);
             }
             else
             {
@@ -164,9 +155,9 @@ namespace RazzleServer.Common.Wz.WzProperties
             Name = null;
             PngProperty.Dispose();
             PngProperty = null;
-            properties?.ForEach(x => x.Dispose());
-            properties.Clear();
-            properties = null;
+            WzProperties?.ForEach(x => x.Dispose());
+            WzProperties.Clear();
+            WzProperties = null;
         }
         #endregion
 
@@ -194,7 +185,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         public void AddProperty(WzImageProperty prop)
         {
             prop.Parent = this;
-            properties.Add(prop);
+            WzProperties.Add(prop);
         }
         public void AddProperties(List<WzImageProperty> props)
         {
@@ -209,7 +200,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         public void RemoveProperty(WzImageProperty prop)
         {
             prop.Parent = null;
-            properties.Remove(prop);
+            WzProperties.Remove(prop);
         }
 
         /// <summary>
@@ -217,12 +208,12 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// </summary>
         public void ClearProperties()
         {
-            foreach (var prop in properties)
+            foreach (var prop in WzProperties)
             {
                 prop.Parent = null;
             }
 
-            properties.Clear();
+            WzProperties.Clear();
         }
         #endregion
 

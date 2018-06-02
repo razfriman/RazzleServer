@@ -2,7 +2,6 @@
 
 using System.Collections.Generic;
 using System.DrawingCore;
-using System.IO;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Util;
 using RazzleServer.Common.Wz.Util;
@@ -47,8 +46,8 @@ namespace RazzleServer.Common.Wz.WzProperties
         }
 
 #if UOLRES
-        public override List<WzImageProperty> WzProperties => LinkValue is WzImageProperty ? ((WzImageProperty)LinkValue).WzProperties : null;
 
+        public override List<WzImageProperty> WzProperties => LinkValue is WzImageProperty ? ((WzImageProperty)LinkValue).WzProperties : null;
 
         public override WzImageProperty this[string name] => LinkValue is WzImageProperty ? ((WzImageProperty)LinkValue)[name] : LinkValue is WzImage ? ((WzImage)LinkValue)[name] : null;
 

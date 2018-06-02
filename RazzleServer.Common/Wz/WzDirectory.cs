@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Newtonsoft.Json;
 using RazzleServer.Common.Wz.Util;
 
 namespace RazzleServer.Common.Wz
@@ -51,11 +52,13 @@ namespace RazzleServer.Common.Wz
         /// <summary>
         /// The size of the directory in the wz file
         /// </summary>
+        [JsonIgnore]
         public int BlockSize { get; set; }
 
         /// <summary>
         /// The directory's chceksum
         /// </summary>
+        [JsonIgnore]
         public int Checksum { get; set; }
 
         /// <summary>
