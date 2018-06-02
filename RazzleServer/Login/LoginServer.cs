@@ -5,7 +5,6 @@ using System.Net;
 using RazzleServer.Common.Server;
 using RazzleServer.Common;
 using RazzleServer.Common.Data;
-using RazzleServer.Common.Server;
 using RazzleServer.Game.Maple.Characters;
 
 namespace RazzleServer.Login

@@ -14,20 +14,16 @@
   <ItemGroup>
     <PackageReference Include="ZKWeb.System.Drawing" Version="4.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.0.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.1.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RazzleServer.DB\RazzleServer.Data.csproj" />
     <ProjectReference Include="..\RazzleServer.Common\RazzleServer.Common.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Center\Maple\Migration.cs" />
-    <Compile Remove="Common\Constants\AdminCommandType.cs" />
   </ItemGroup>
 </Project>

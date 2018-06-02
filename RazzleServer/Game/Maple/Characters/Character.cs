@@ -81,7 +81,6 @@ namespace RazzleServer.Game.Maple.Characters
         private int _experience;
         private short _fame;
         private int _meso;
-        private Npc _lastNpc;
         private string _chalkboard;
         private int _itemEffect;
 
