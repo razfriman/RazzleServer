@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Util;
 using RazzleServer.Common.Wz.WzProperties;
@@ -245,9 +244,9 @@ namespace RazzleServer.Common.Wz.WzStructure
             }
         }
 
-        public static Rectangle? GetVR(WzImage image)
+        public static Rectangle GetVR(WzImage image)
         {
-            Rectangle? result = null;
+            Rectangle result = null;
             if (image["info"]["VRLeft"] != null)
             {
                 var info = image["info"];
@@ -255,12 +254,12 @@ namespace RazzleServer.Common.Wz.WzStructure
                 var right = InfoTool.GetInt(info["VRRight"]);
                 var top = InfoTool.GetInt(info["VRTop"]);
                 var bottom = InfoTool.GetInt(info["VRBottom"]);
-                result = new Rectangle(left, top, right - left, bottom - top);
+                result = new Rectangle(left, top, right, bottom);
             }
             return result;
         }
 
-        public void Save(WzImage dest, Rectangle? VR)
+        public void Save(WzImage dest, Rectangle VR)
         {
             var info = new WzSubProperty
             {
@@ -342,12 +341,12 @@ namespace RazzleServer.Common.Wz.WzStructure
             {
                 info.AddProperty(prop);
             }
-            if (VR.HasValue)
+            if (VR != null)
             {
-                info["VRLeft"] = InfoTool.SetInt(VR.Value.Left);
-                info["VRRight"] = InfoTool.SetInt(VR.Value.Right);
-                info["VRTop"] = InfoTool.SetInt(VR.Value.Top);
-                info["VRBottom"] = InfoTool.SetInt(VR.Value.Bottom);
+                info["VRLeft"] = InfoTool.SetInt(VR.Lt.X);
+                info["VRRight"] = InfoTool.SetInt(VR.Rb.X);
+                info["VRTop"] = InfoTool.SetInt(VR.Lt.Y);
+                info["VRBottom"] = InfoTool.SetInt(VR.Rb.Y);
             }
             dest["info"] = info;
         }

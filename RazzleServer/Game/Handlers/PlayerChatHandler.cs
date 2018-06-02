@@ -1,6 +1,6 @@
 ﻿using RazzleServer.Center;
 using RazzleServer.Common.Packet;
-using RazzleServer.Game.Maple.Commands;
+using RazzleServer.Game.Maple.Scripts;
 
 namespace RazzleServer.Game.Handlers
 {
@@ -13,7 +13,7 @@ namespace RazzleServer.Game.Handlers
 
             if (text.StartsWith(ServerConfig.Instance.CommandIndicator))
             {
-                CommandFactory.Execute(client.Character, text);
+                ScriptProvider.Commands.Execute(client.Character, text);
             }
             else
             {

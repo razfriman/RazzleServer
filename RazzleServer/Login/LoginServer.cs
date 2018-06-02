@@ -38,16 +38,17 @@ namespace RazzleServer.Login
                     .Where(x => x.AccountId == accountId)
                     .Where(x => x.WorldId == worldId);
 
-                characters.ToList()
-                          .ForEach(x =>
+                characters
+                    .ToList()
+                    .ForEach(x =>
+                      {
+                          var c = new Character
                           {
-                              var c = new Character
-                              {
-                                  Id = x.Id
-                              };
-                              c.Load();
-                              result.Add(c);
-                          });
+                              Id = x.Id
+                          };
+                          c.Load();
+                          result.Add(c);
+                      });
 
                 return result;
             }

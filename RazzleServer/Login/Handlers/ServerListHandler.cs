@@ -10,7 +10,7 @@ namespace RazzleServer.Login.Handlers
         {
             using (var pw = new PacketWriter(ServerOperationCode.WorldInformation))
             {
-                foreach (var world in worlds.Values)
+                foreach (var world in client.Server.Manager.Worlds.Values)
                 {
                     pw.WriteByte(world.Id);
                     pw.WriteString(world.Name);

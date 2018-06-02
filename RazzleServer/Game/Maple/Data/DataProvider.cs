@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Util;
-using RazzleServer.Game.Maple.Commands;
 using RazzleServer.Game.Maple.Data.Cache;
 using RazzleServer.Game.Maple.Data.Loaders;
 
@@ -30,16 +29,6 @@ namespace RazzleServer.Game.Maple.Data
 
             Log.LogInformation("Loading data...");
 
-            Styles = new CachedAvailableStyles();
-            Items = new CachedItems();
-            Skills = new CachedSkills();
-            Mobs = new CachedMobs();
-            Reactors = new CachedReactors();
-            Quests = new CachedQuests();
-            CreationData = new CachedCreationData();
-            Maps = new CachedMaps();
-            Strings = new CachedStrings();
-
             Task.WaitAll(
                 Task.Run(async () => Styles = await new AvailableStylesDataLoader().Load()),
                 Task.Run(async () => Items = await new ItemsLoader().Load()),
@@ -49,8 +38,7 @@ namespace RazzleServer.Game.Maple.Data
                 Task.Run(async () => Reactors = await new ReactorsLoader().Load()),
                 Task.Run(async () => Quests = await new QuestsLoader().Load()),
                 Task.Run(async () => Maps = await new MapsLoader().Load()),
-                Task.Run(async () => Strings = await new StringLoader().Load()),
-                Task.Run(() => CommandFactory.Initialize())
+                Task.Run(async () => Strings = await new StringLoader().Load())
             );
 
             sw.Stop();

@@ -1,0 +1,26 @@
+﻿using RazzleServer.Common.Util;
+using RazzleServer.Game.Maple.Characters;
+
+namespace RazzleServer.Game.Maple.Scripts.Command{
+    public sealed class SayCommand : ACommandScript
+    {
+        public override string Name => "say";
+
+        public override string Parameters => "message";
+
+        public override bool IsRestricted => true;
+
+        public override void Execute(Character caller, string[] args)
+        {
+            if (args.Length < 1)
+            {
+                ShowSyntax(caller);
+            }
+            else
+            {
+                var message = Functions.Fuse(args);
+                caller.Client.Server.World.Send(GamePackets.Notify(message));
+            }
+        }
+    }
+}

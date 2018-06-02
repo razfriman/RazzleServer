@@ -1,4 +1,5 @@
-﻿using RazzleServer.Common.Wz;
+﻿using RazzleServer.Common.Util;
+using RazzleServer.Common.Wz;
 
 namespace RazzleServer.Game.Maple.Maps
 {

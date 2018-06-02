@@ -9,6 +9,7 @@ using RazzleServer.Common.Util;
 using RazzleServer.Common.Wz;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Shops;
+using RazzleServer.Game.Maple.Util;
 using RazzleServer.Game.Scripts;
 
 namespace RazzleServer.Game.Maple.Life
@@ -22,7 +23,7 @@ namespace RazzleServer.Game.Maple.Life
         public int StorageCost { get; set; }
 
         [JsonIgnore]
-        public Dictionary<Character, NpcScript> Scripts { get; }
+        public Dictionary<Character, ANpcScript> Scripts { get; }
 
         private readonly ILogger _log = LogManager.Log;
 
@@ -31,7 +32,7 @@ namespace RazzleServer.Game.Maple.Life
         public Npc(WzImageProperty img)
             : base(img, LifeObjectType.Npc)
         {
-            Scripts = new Dictionary<Character, NpcScript>();
+            Scripts = new Dictionary<Character, ANpcScript>();
         }
 
         public void Move(PacketReader iPacket)
@@ -39,16 +40,12 @@ namespace RazzleServer.Game.Maple.Life
             var action1 = iPacket.ReadByte();
             var action2 = iPacket.ReadByte();
 
-            Movements movements = null;
-
-            if (iPacket.Available > 0)
-            {
-                movements = new Movements(iPacket);
-            }
+            var movements = iPacket.Available > 0
+                                   ? new Movements(iPacket)
+                                   : null;
 
             using (var oPacket = new PacketWriter(ServerOperationCode.NpcMove))
             {
-
                 oPacket.WriteInt(ObjectId);
                 oPacket.WriteByte(action1);
                 oPacket.WriteByte(action2);
@@ -74,7 +71,7 @@ namespace RazzleServer.Game.Maple.Life
             }
             else
             {
-                var script = new NpcScript(this, talker);
+                var script = new ANpcScript(this, talker);
 
                 Scripts[talker] = script;
 

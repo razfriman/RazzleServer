@@ -1,28 +1,28 @@
 ﻿using System;
 using System.DrawingCore;
-using Point = RazzleServer.Game.Maple.Point;
+using Point = RazzleServer.Common.Util.Point;
 
 namespace RazzleServer.Common.Wz
 {
-	/// <summary>
-	/// An abstract class for wz objects
-	/// </summary>
-	public abstract class WzObject : IDisposable
-	{
-		public abstract void Dispose();
+    /// <summary>
+    /// An abstract class for wz objects
+    /// </summary>
+    public abstract class WzObject : IDisposable
+    {
+        public abstract void Dispose();
 
-		/// <summary>
-		/// The name of the object
-		/// </summary>
-		public abstract string Name { get; set; }
-		/// <summary>
-		/// The WzObjectType of the object
-		/// </summary>
-		public abstract WzObjectType ObjectType { get; }
-		/// <summary>
-		/// Returns the parent object
-		/// </summary>
-		public abstract WzObject Parent { get; internal set; }
+        /// <summary>
+        /// The name of the object
+        /// </summary>
+        public abstract string Name { get; set; }
+        /// <summary>
+        /// The WzObjectType of the object
+        /// </summary>
+        public abstract WzObjectType ObjectType { get; }
+        /// <summary>
+        /// Returns the parent object
+        /// </summary>
+        public abstract WzObject Parent { get; internal set; }
         /// <summary>
         /// Returns the parent WZ File
         /// </summary>
@@ -74,7 +74,7 @@ namespace RazzleServer.Common.Wz
 
         public virtual object WzValue => null;
 
-	    public abstract void Remove();
+        public abstract void Remove();
 
         //Credits to BluePoop for the idea of using cast overriding
         //2015 - That is the worst idea ever, removed and replaced with Get* methods
@@ -125,5 +125,5 @@ namespace RazzleServer.Common.Wz
         }
         #endregion
 
-	}
+    }
 }

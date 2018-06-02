@@ -115,10 +115,10 @@ namespace RazzleServer.Game.Maple.Data.References
             MagicAttack = info["incMAD"]?.GetShort() ?? 0;
             Strength = info["incSTR"]?.GetShort() ?? 0;
             Dexterity = info["incJump"]?.GetShort() ?? 0;
-            Intelligence = info["incJump"]?.GetShort() ?? 0;;
-            Luck = info["incJump"]?.GetShort() ?? 0;;
-            Health = info["incJump"]?.GetShort() ?? 0;;
-            Mana = info["incJump"]?.GetShort() ?? 0;;
+            Intelligence = info["incJump"]?.GetShort() ?? 0;
+            Luck = info["incJump"]?.GetShort() ?? 0;
+            Health = info["incJump"]?.GetShort() ?? 0;
+            Mana = info["incJump"]?.GetShort() ?? 0;
         }
         public ItemReference(WzImageProperty img, ItemType type)
         {
@@ -139,6 +139,27 @@ namespace RazzleServer.Game.Maple.Data.References
             IsTradeBlocked = (info["tradeBlock"]?.GetInt() ?? 0) > 0;
             SalePrice = info["price"]?.GetInt() ?? 0;
             OnlyOne = (info["only"]?.GetInt() ?? 0) > 0;
+
+            if (type == ItemType.Usable)
+            {
+                var spec = img["spec"];
+                CHealth = spec["hp"]?.GetShort() ?? 0;
+                CMana = spec["mp"]?.GetShort() ?? 0;
+                CHealthPercentage = spec["hpR"]?.GetShort() ?? 0;
+                CManaPercentage = spec["mpR"]?.GetShort() ?? 0;
+                CBuffTime = spec["time"]?.GetInt() ?? 0;
+                CMagicAttack = spec["mad"]?.GetShort() ?? 0;
+                CMagicDefense = spec["mdd"]?.GetShort() ?? 0;
+                CWeaponDefense = spec["pdd"]?.GetShort() ?? 0;
+                CWeaponAttack = spec["pad"]?.GetShort() ?? 0;
+                CAccuracy = spec["acc"]?.GetShort() ?? 0;
+                CAvoid = spec["eva"]?.GetShort() ?? 0;
+                CSpeed = spec["speed"]?.GetShort() ?? 0;
+                CJump = spec["jump"]?.GetShort() ?? 0;
+                CMorph = spec["morph"]?.GetShort() ?? 0;
+                CProb = spec["prob"]?.GetShort() ?? 0;
+                CMoveTo = spec["moveTo"]?.GetInt() ?? 0;
+            }
         }
 
         [JsonIgnore]

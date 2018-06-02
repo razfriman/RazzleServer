@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using RazzleServer.Common.Util;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
-using RazzleServer.Common.Wz;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data.References;
 

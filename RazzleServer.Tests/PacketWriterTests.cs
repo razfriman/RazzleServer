@@ -93,7 +93,7 @@ namespace RazzleServer.Tests
         {
             using (var pw = new PacketWriter())
             {
-                pw.WriteBox(new Game.Maple.Rectangle(new Game.Maple.Point(1, 2), new Game.Maple.Point(3, 4)));
+                pw.WriteBox(new Common.Util.Rectangle(new Common.Util.Point(1, 2), new Common.Util.Point(3, 4)));
                 Assert.AreEqual("01 00 00 00 02 00 00 00 03 00 00 00 04 00 00 00", pw.ToPacketString());
             }
         }
@@ -123,7 +123,7 @@ namespace RazzleServer.Tests
         {
             using (var pw = new PacketWriter())
             {
-                pw.WritePoint(new Game.Maple.Point(1, 2));
+                pw.WritePoint(new Common.Util.Point(1, 2));
                 Assert.AreEqual("01 00 02 00", pw.ToPacketString());
             }
         }

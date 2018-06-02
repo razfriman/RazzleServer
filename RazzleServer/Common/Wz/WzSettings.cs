@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Drawing;
+using System.DrawingCore;
 using System.IO;
 using System.Reflection;
 using RazzleServer.Common.Wz.WzProperties;
@@ -52,17 +52,7 @@ namespace RazzleServer.Common.Wz
                 {
                     switch (fieldInfo.FieldType.FullName)
                     {
-                        //case "Microsoft.Xna.Framework.Graphics.Color":
-                        case "Microsoft.Xna.Framework.Color":
-                            if (xnaColorType == null)
-                            {
-                                throw new InvalidDataException("XNA color detected, but XNA type activator is null");
-                            }
-
-                            argb = BitConverter.GetBytes((uint)((WzDoubleProperty)settingProp).Value);
-                            fieldInfo.SetValue(null, Activator.CreateInstance(xnaColorType, argb[0], argb[1], argb[2], argb[3]));
-                            break;
-                        case "System.Drawing.Color":
+                        case "System.DrawingCore.Color":
                             argb = BitConverter.GetBytes((uint)((WzDoubleProperty)settingProp).Value);
                             fieldInfo.SetValue(null, Color.FromArgb(argb[3], argb[2], argb[1], argb[0]));
                             break;
@@ -79,19 +69,10 @@ namespace RazzleServer.Common.Wz
                         case "System.Single":
                             fieldInfo.SetValue(null, ((WzFloatProperty)settingProp).Value);
                             break;
-                        /*case "WzMapleVersion":
-                            fieldInfo.SetValue(null, (WzMapleVersion)InfoTool.GetInt(settingProp));
-                            break;
-                        case "ItemTypes":
-                            fieldInfo.SetValue(null, (ItemTypes)InfoTool.GetInt(settingProp));
-                            break;*/
-                        case "System.Drawing.Size":
-                            fieldInfo.SetValue(null, new Size(((WzVectorProperty)settingProp).X.Value, ((WzVectorProperty)settingProp).Y.Value));
-                            break;
                         case "System.String":
                             fieldInfo.SetValue(null, InfoTool.GetString(settingProp));
                             break;
-                        case "System.Drawing.Bitmap":
+                        case "System.DrawingCore.Imaging.Bitmap":
                             fieldInfo.SetValue(null, ((WzCanvasProperty)settingProp).PngProperty.GetPNG(false));
                             break;
                         default:
@@ -186,14 +167,7 @@ namespace RazzleServer.Common.Wz
             {
                 switch (fieldInfo.FieldType.FullName)
                 {
-                    //case "Microsoft.Xna.Framework.Graphics.Color":
-                    case "Microsoft.Xna.Framework.Color":
-                        var xnaColor = fieldInfo.GetValue(null);
-                        //for some odd reason .NET requires casting the result to uint before it can be
-                        //casted to double
-                        SetWzProperty(settingsImage, settingName, WzPropertyType.Double, (double)(uint)xnaColor.GetType().GetProperty("PackedValue").GetValue(xnaColor, null));
-                        break;
-                    case "System.Drawing.Color":
+                    case "System.DrawingCore.Color":
                         SetWzProperty(settingsImage, settingName, WzPropertyType.Double, (double)((Color)fieldInfo.GetValue(null)).ToArgb());
                         break;
                     case "System.Int32":
@@ -205,13 +179,10 @@ namespace RazzleServer.Common.Wz
                     case "Single":
                         SetWzProperty(settingsImage, settingName, WzPropertyType.Float, fieldInfo.GetValue(null));
                         break;
-                    case "System.Drawing.Size":
-                        SetWzProperty(settingsImage, settingName, WzPropertyType.Vector, fieldInfo.GetValue(null));
-                        break;
                     case "System.String":
                         SetWzProperty(settingsImage, settingName, WzPropertyType.String, fieldInfo.GetValue(null));
                         break;
-                    case "System.Drawing.Bitmap":
+                    case "System.DrawingCore.Imaging.Bitmap":
                         SetWzProperty(settingsImage, settingName, WzPropertyType.Canvas, fieldInfo.GetValue(null));
                         break;
                     case "System.Boolean":

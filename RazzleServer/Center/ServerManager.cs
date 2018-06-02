@@ -8,6 +8,7 @@ using RazzleServer.Common.Data;
 using RazzleServer.Common.Util;
 using RazzleServer.Game;
 using RazzleServer.Game.Maple.Data;
+using RazzleServer.Game.Maple.Scripts;
 using RazzleServer.Login;
 
 namespace RazzleServer.Center
@@ -26,6 +27,7 @@ namespace RazzleServer.Center
         {
             await ServerConfig.LoadFromFile("ServerConfig.json");
             DataProvider.Initialize();
+            ScriptProvider.Initialize();
             InitializeDatabase();
         }
 

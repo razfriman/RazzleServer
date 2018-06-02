@@ -60,7 +60,7 @@ namespace RazzleServer.Game.Maple.Maps
                         }
                         else
                         {
-                            drops.Add(new Item(loopLoot.MapleId, (short)Functions.Random(loopLoot.MinimumQuantity, loopLoot.MaximumQuantity))
+                            drops.Add(new Item(loopLoot.ItemId, (short)Functions.Random(loopLoot.MinimumQuantity, loopLoot.MaximumQuantity))
                             {
                                 Dropper = item,
                                 Owner = owner

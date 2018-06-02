@@ -26,11 +26,11 @@
     <ProjectReference Include="..\RazzleServer.DB\RazzleServer.Data.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="ServerConfig.json" />
+    <Folder Include="Game\Maple\Util\" />
+    <Folder Include="Game\Maple\Scripts\" />
+    <Folder Include="Game\Maple\Scripts\Loaders\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ServerConfig.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Remove="ServerConfig.json" />
   </ItemGroup>
 </Project>

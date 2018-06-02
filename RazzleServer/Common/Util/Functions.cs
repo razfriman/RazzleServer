@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using RazzleServer.Common;
 
 namespace RazzleServer.Common.Util
 {
@@ -288,39 +288,18 @@ namespace RazzleServer.Common.Util
         public static bool InRange<T>(this T inputValue, T from, T to) where T : IComparable<T> => inputValue.CompareTo(from) >= 1 && inputValue.CompareTo(to) <= -1;
 
         /// <summary>
-        /// Method to compare the 2D distance between two Point structs
-        /// </summary>   
-        /// <param name="a">The first nullable Point</param>
-        /// <param name="b">The second nullable Point</param>
-        /// <returns>A double representing the distance between the two points</returns>
-        public static double Distance(Point? a, Point? b) => Distance(a.Value, b.Value);
-
-        /// <summary>
-        /// Method to compare the 2D distance between two Point structs
-        /// </summary>   
-        /// <param name="a">The first Point</param>
-        /// <param name="b">The second Point</param>
-        /// <returns>A double representing the distance between the two points</returns>
-        public static double Distance(Point a, Point b)
-        {
-            var distX = a.X - b.X;
-            var distY = a.Y - b.Y;
-            return Math.Sqrt(distX * distX + distY * distY);
-        }
-
-        public static double DistanceTo(this Point a, Point b) => Distance(a, b);
-
-        /// <summary>
         /// Creates a string by combining the strings from an array with a separator (default: space) between them
         /// </summary>
         /// <param name="arr">The array to be fused</param>
         /// <param name="startIndex">The index in the array to start at</param>
         /// <param name="separator"></param>
         /// <returns>A string with all the strings from the startindex appended with a space between them</returns>
-        public static string Fuse(this string[] arr, int startIndex = 0, string separator = " ")
+        public static string Fuse(this string[] arr, int startIndex = 0, int? length = null, string separator = " ")
         {
             var ret = new StringBuilder();
-            for (var i = startIndex; i < arr.Length; i++)
+            var loopLength = length ?? arr.Length;
+
+            for (var i = startIndex; i < loopLength; i++)
             {
                 ret.Append(arr[i]);
                 if (i != arr.Length - 1)
@@ -328,6 +307,7 @@ namespace RazzleServer.Common.Util
                     ret.Append(separator);
                 }
             }
+
             return ret.ToString();
         }
 

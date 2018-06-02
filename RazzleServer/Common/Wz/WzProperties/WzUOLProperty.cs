@@ -6,7 +6,7 @@ using System.IO;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Util;
 using RazzleServer.Common.Wz.Util;
-using Point = RazzleServer.Game.Maple.Point;
+using Point = RazzleServer.Common.Util.Point;
 
 namespace RazzleServer.Common.Wz.WzProperties
 {

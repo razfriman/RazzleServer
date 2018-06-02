@@ -1,5 +1,5 @@
-﻿using System.Drawing;
-using System.IO;
+﻿using System.IO;
+using RazzleServer.Common.Util;
 using RazzleServer.Common.Wz.Util;
 
 namespace RazzleServer.Common.Wz.WzProperties
@@ -23,11 +23,6 @@ namespace RazzleServer.Common.Wz.WzProperties
             {
                 x.val = ((Point)value).X;
                 y.val = ((Point)value).Y;
-            }
-            else
-            {
-                x.val = ((Size)value).Width;
-                y.val = ((Size)value).Height;
             }
         }
 
@@ -129,9 +124,9 @@ namespace RazzleServer.Common.Wz.WzProperties
 		#endregion
 
         #region Cast Values
-        public override Game.Maple.Point GetPoint()
+        public override Point GetPoint()
         {
-            return new Game.Maple.Point(x.val, y.val);
+            return new Point(x.val, y.val);
         }
 
         public override string ToString()

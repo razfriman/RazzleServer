@@ -31,7 +31,7 @@ namespace RazzleServer.Game.Handlers
 
             try
             {
-                new PortalScript(portal, client.Character).Execute();
+                new APortalScript(portal, client.Character).Execute();
             }
             catch (Exception ex)
             {

@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Text;
-using RazzleServer.Game.Maple;
+using RazzleServer.Common.Util;
 
 namespace RazzleServer.Common.Packet
 {
