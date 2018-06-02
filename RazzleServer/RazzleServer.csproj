@@ -34,9 +34,13 @@
     <None Remove="Game\Data\loot.json" />
     <None Remove="InitialData\loot.json" />
     <None Remove="Logs\RazzleServer-20180602.txt" />
+    <None Remove="Game\Data\shop.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game\Data\loot.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Game\Data\shop.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

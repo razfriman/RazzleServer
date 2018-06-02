@@ -11,6 +11,7 @@ using RazzleServer.Common;
 using RazzleServer.Common.Util;
 using RazzleServer.Data;
 using RazzleServer.Game.Maple.Life;
+using RazzleServer.Game.Maple.Shops;
 
 namespace RazzleServer.Game.Maple.Data
 {
@@ -26,7 +27,7 @@ namespace RazzleServer.Game.Maple.Data
                 if (!context.Shops.Any())
                 {
                     Log.LogInformation("Cannot find any shops in the database, attempting to load from JSON");
-                    //await LoadShopsFromJson();
+                    await LoadShopsFromJson();
                 }
 
                 if (!context.ShopItems.Any())
@@ -49,43 +50,32 @@ namespace RazzleServer.Game.Maple.Data
             }
         }
 
+        private static Task LoadShopsFromJson()
+        {
+            throw new NotImplementedException();
+        }
+
         private static async Task LoadFromDatabase(MapleDbContext context)
         {
             Log.LogInformation("Loading Shops from database");
 
-            //var entities = await context
-            //.Loots
-            //.GroupBy(x => x.MobId)
-            //.ToListAsync();
+            var shops = await context
+                .Shops
+                .Include(x => x.ShopItems)
+                .ToListAsync();
 
-            //entities
-            //.ForEach(x =>
-            //{
-            //    if (!DataProvider.Mobs?.Data?.ContainsKey(x.Key) ?? true)
-            //    {
-            //        Log.LogWarning($"Skipping loot - Cannot find Mob with ID={x.Key} in DataProvider");
-            //        return;
-            //    }
+            shops
+                .ForEach(x =>
+                {
+                    if (!DataProvider.Npcs?.Data?.ContainsKey(x.NpcId) ?? true)
+                    {
+                        Log.LogWarning($"Skipping shop - Cannot find Npc with ID={x.Id} in DataProvider");
+                        return;
+                    }
 
-            //    var loots = DataProvider.Mobs.Data[x.Key].Loots;
-            //    loots.Clear();
+                    DataProvider.Shops.Data[x.NpcId] = new Shop(x);
 
-            //    x
-            //    .ToList()
-            //    .ForEach(item =>
-            //    {
-            //        loots.Add(new Loot
-            //        {
-            //            Chance = item.Chance,
-            //            IsMeso = item.IsMeso,
-            //            ItemId = item.ItemId,
-            //            MaximumQuantity = item.MaximumQuantity,
-            //            MinimumQuantity = item.MinimumQuantity,
-            //            MobId = item.MobId,
-            //            QuestId = item.QuestId
-            //        });
-            //    });
-            //});
+                });
         }
 
         private static async Task LoadFromJson()

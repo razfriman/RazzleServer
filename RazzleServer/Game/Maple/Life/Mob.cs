@@ -98,7 +98,6 @@ namespace RazzleServer.Game.Maple.Life
             Avoidability = CachedReference.Avoidability;
             Speed = CachedReference.Speed;
             ChaseSpeed = CachedReference.ChaseSpeed;
-
             Loots = CachedReference.Loots;
             Skills = new MobSkills(this);
             CachedReference.Skills.ForEach(x =>

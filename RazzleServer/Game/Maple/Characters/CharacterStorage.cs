@@ -72,24 +72,21 @@ namespace RazzleServer.Game.Maple.Characters
 
             Load();
 
-            using (var oPacket = new PacketWriter(ServerOperationCode.Storage))
+            using (var pw = new PacketWriter(ServerOperationCode.Storage))
             {
-                oPacket.WriteByte(22);
-                oPacket.WriteInt(npc.MapleId);
-                oPacket.WriteByte(Slots);
-                oPacket.WriteShort(126);
-                oPacket.WriteShort(0);
-                oPacket.WriteInt(0);
-                oPacket.WriteInt(Meso);
-                oPacket.WriteShort(0);
-                oPacket.WriteByte((byte)Items.Count);
-
+                pw.WriteByte(22);
+                pw.WriteInt(npc.MapleId);
+                pw.WriteByte(Slots);
+                pw.WriteShort(126);
+                pw.WriteShort(0);
+                pw.WriteInt(0);
+                pw.WriteInt(Meso);
+                pw.WriteShort(0);
+                pw.WriteByte((byte)Items.Count);
                 Items.ForEach(item => item.ToByteArray(true, true));
-
-                oPacket.WriteShort(0);
-                oPacket.WriteByte(0);
-
-                Parent.Client.Send(oPacket);
+                pw.WriteShort(0);
+                pw.WriteByte(0);
+                Parent.Client.Send(pw);
             }
         }
     }

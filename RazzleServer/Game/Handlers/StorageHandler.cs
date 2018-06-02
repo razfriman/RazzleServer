@@ -83,14 +83,13 @@ namespace RazzleServer.Game.Handlers
                             return;
                         }
 
-                        if (client.Character.Meso <= client.Character.Storage.Npc.StorageCost)
+                        if (client.Character.Meso <= client.Character.Storage.Npc.CachedReference.StorageCost)
                         {
                             client.Character.Notify("You don't have enough meso to store the item.", NoticeType.Popup); // TOOD: Is there a packet for client.Character?
-
                             return;
                         }
 
-                        client.Character.Meso -= client.Character.Storage.Npc.StorageCost;
+                        client.Character.Meso -= client.Character.Storage.Npc.CachedReference.StorageCost;
 
                         client.Character.Items.Remove(item, true);
 

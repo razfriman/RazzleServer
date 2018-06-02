@@ -3,13 +3,13 @@ using Newtonsoft.Json;
 using RazzleServer.Common.Packet;
 using RazzleServer.Data;
 using RazzleServer.Game.Maple.Data;
+using RazzleServer.Game.Maple.Data.References;
 
 namespace RazzleServer.Game.Maple.Shops
 {
     public sealed class ShopItem
     {
         public Shop Parent { get; }
-
         public int MapleId { get; }
         public short Quantity { get; }
         public int PurchasePrice { get; }
@@ -39,7 +39,6 @@ namespace RazzleServer.Game.Maple.Shops
         public ShopItem(Shop parent, int mapleId)
         {
             Parent = parent;
-
             MapleId = mapleId;
             Quantity = 1;
             PurchasePrice = 0;
@@ -57,7 +56,6 @@ namespace RazzleServer.Game.Maple.Shops
 
                 if (IsRecharageable)
                 {
-
                     oPacket.WriteShort(0);
                     oPacket.WriteInt(0);
                     oPacket.WriteShort((short)(BitConverter.DoubleToInt64Bits(UnitPrice) >> 48));

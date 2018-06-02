@@ -1,0 +1,517 @@
+﻿[
+  {
+    "ShopId": 11000,
+    "NpcId": 11000,
+    "RechargeTier": 0
+  },
+  {
+    "ShopId": 11100,
+    "NpcId": 11100,
+    "RechargeTier": 0
+  },
+  {
+    "ShopId": 21000,
+    "NpcId": 21000,
+    "RechargeTier": 0
+  },
+  {
+    "ShopId": 1001000,
+    "NpcId": 1001000,
+    "RechargeTier": 1
+  },
+  {
+    "ShopId": 1001001,
+    "NpcId": 1001001,
+    "RechargeTier": 1
+  },
+  {
+    "ShopId": 1001100,
+    "NpcId": 1001100,
+    "RechargeTier": 1
+  },
+  {
+    "ShopId": 1011000,
+    "NpcId": 1011000,
+    "RechargeTier": 1
+  },
+  {
+    "ShopId": 1011001,
+    "NpcId": 1011001,
+    "RechargeTier": 1
+  },
+  {
+    "ShopId": 1011100,
+    "NpcId": 1011100,
+    "RechargeTier": 1
+  },
+  {
+    "ShopId": 1011101,
+    "NpcId": 1011101,
+    "RechargeTier": 1
+  },
+  {
+    "ShopId": 1012004,
+    "NpcId": 1012004,
+    "RechargeTier": 0
+  },
+  {
+    "ShopId": 1021000,
+    "NpcId": 1021000,
+    "RechargeTier": 1
+  },
+  {
+    "ShopId": 1021001,
+    "NpcId": 1021001,
+    "RechargeTier": 1
+  },
+  {
+    "ShopId": 1021100,
+    "NpcId": 1021100,
+    "RechargeTier": 1
+  },
+  {
+    "ShopId": 1031000,
+    "NpcId": 1031000,
+    "RechargeTier": 1
+  },
+  {
+    "ShopId": 1031001,
+    "NpcId": 1031001,
+    "RechargeTier": 1
+  },
+  {
+    "ShopId": 1031100,
+    "NpcId": 1031100,
+    "RechargeTier": 1
+  },
+  {
+    "ShopId": 1032103,
+    "NpcId": 1032103,
+    "RechargeTier": 0
+  },
+  {
+    "ShopId": 1051000,
+    "NpcId": 1051000,
+    "RechargeTier": 1
+  },
+  {
+    "ShopId": 1051001,
+    "NpcId": 1051001,
+    "RechargeTier": 1
+  },
+  {
+    "ShopId": 1051002,
+    "NpcId": 1051002,
+    "RechargeTier": 1
+  },
+  {
+    "ShopId": 1052104,
+    "NpcId": 1052104,
+    "RechargeTier": 0
+  },
+  {
+    "ShopId": 1061001,
+    "NpcId": 1061001,
+    "RechargeTier": 2
+  },
+  {
+    "ShopId": 1061002,
+    "NpcId": 1061002,
+    "RechargeTier": 3
+  },
+  {
+    "ShopId": 1081000,
+    "NpcId": 1081000,
+    "RechargeTier": 4
+  },
+  {
+    "ShopId": 1091000,
+    "NpcId": 1091000,
+    "RechargeTier": 1
+  },
+  {
+    "ShopId": 1091001,
+    "NpcId": 1091001,
+    "RechargeTier": 1
+  },
+  {
+    "ShopId": 1091002,
+    "NpcId": 1091002,
+    "RechargeTier": 1
+  },
+  {
+    "ShopId": 1093000,
+    "NpcId": 1093000,
+    "RechargeTier": 1
+  },
+  {
+    "ShopId": 1100001,
+    "NpcId": 1100001,
+    "RechargeTier": 5
+  },
+  {
+    "ShopId": 1100002,
+    "NpcId": 1100002,
+    "RechargeTier": 6
+  },
+  {
+    "ShopId": 1200001,
+    "NpcId": 1200001,
+    "RechargeTier": 5
+  },
+  {
+    "ShopId": 1200002,
+    "NpcId": 1200002,
+    "RechargeTier": 6
+  },
+  {
+    "ShopId": 1301000,
+    "NpcId": 1301000,
+    "RechargeTier": 1
+  },
+  {
+    "ShopId": 2010004,
+    "NpcId": 2010004,
+    "RechargeTier": 0
+  },
+  {
+    "ShopId": 2012003,
+    "NpcId": 2012003,
+    "RechargeTier": 4
+  },
+  {
+    "ShopId": 2012004,
+    "NpcId": 2012004,
+    "RechargeTier": 4
+  },
+  {
+    "ShopId": 2012005,
+    "NpcId": 2012005,
+    "RechargeTier": 4
+  },
+  {
+    "ShopId": 2020001,
+    "NpcId": 2020001,
+    "RechargeTier": 4
+  },
+  {
+    "ShopId": 2022000,
+    "NpcId": 2022000,
+    "RechargeTier": 4
+  },
+  {
+    "ShopId": 2022001,
+    "NpcId": 2022001,
+    "RechargeTier": 7
+  },
+  {
+    "ShopId": 2022002,
+    "NpcId": 2022002,
+    "RechargeTier": 0
+  },
+  {
+    "ShopId": 2030009,
+    "NpcId": 2030009,
+    "RechargeTier": 7
+  },
+  {
+    "ShopId": 2040049,
+    "NpcId": 2040049,
+    "RechargeTier": 4
+  },
+  {
+    "ShopId": 2040051,
+    "NpcId": 2040051,
+    "RechargeTier": 4
+  },
+  {
+    "ShopId": 2041002,
+    "NpcId": 2041002,
+    "RechargeTier": 4
+  },
+  {
+    "ShopId": 2041003,
+    "NpcId": 2041003,
+    "RechargeTier": 8
+  },
+  {
+    "ShopId": 2041006,
+    "NpcId": 2041006,
+    "RechargeTier": 8
+  },
+  {
+    "ShopId": 2041014,
+    "NpcId": 2041014,
+    "RechargeTier": 0
+  },
+  {
+    "ShopId": 2041016,
+    "NpcId": 2041016,
+    "RechargeTier": 0
+  },
+  {
+    "ShopId": 2050000,
+    "NpcId": 2050000,
+    "RechargeTier": 4
+  },
+  {
+    "ShopId": 2050003,
+    "NpcId": 2050003,
+    "RechargeTier": 4
+  },
+  {
+    "ShopId": 2051000,
+    "NpcId": 2051000,
+    "RechargeTier": 4
+  },
+  {
+    "ShopId": 2060003,
+    "NpcId": 2060003,
+    "RechargeTier": 4
+  },
+  {
+    "ShopId": 2060004,
+    "NpcId": 2060004,
+    "RechargeTier": 4
+  },
+  {
+    "ShopId": 2060007,
+    "NpcId": 2060007,
+    "RechargeTier": 9
+  },
+  {
+    "ShopId": 2070001,
+    "NpcId": 2070001,
+    "RechargeTier": 9
+  },
+  {
+    "ShopId": 2070002,
+    "NpcId": 2070002,
+    "RechargeTier": 9
+  },
+  {
+    "ShopId": 2070003,
+    "NpcId": 2070003,
+    "RechargeTier": 9
+  },
+  {
+    "ShopId": 2080001,
+    "NpcId": 2080001,
+    "RechargeTier": 4
+  },
+  {
+    "ShopId": 2080002,
+    "NpcId": 2080002,
+    "RechargeTier": 4
+  },
+  {
+    "ShopId": 2080003,
+    "NpcId": 2080003,
+    "RechargeTier": 0
+  },
+  {
+    "ShopId": 2080004,
+    "NpcId": 2080004,
+    "RechargeTier": 0
+  },
+  {
+    "ShopId": 2090001,
+    "NpcId": 2090001,
+    "RechargeTier": 4
+  },
+  {
+    "ShopId": 2090002,
+    "NpcId": 2090002,
+    "RechargeTier": 4
+  },
+  {
+    "ShopId": 2090003,
+    "NpcId": 2090003,
+    "RechargeTier": 4
+  },
+  {
+    "ShopId": 2090006,
+    "NpcId": 2090006,
+    "RechargeTier": 0
+  },
+  {
+    "ShopId": 2093000,
+    "NpcId": 2093000,
+    "RechargeTier": 4
+  },
+  {
+    "ShopId": 2093001,
+    "NpcId": 2093001,
+    "RechargeTier": 4
+  },
+  {
+    "ShopId": 2093002,
+    "NpcId": 2093002,
+    "RechargeTier": 4
+  },
+  {
+    "ShopId": 2100002,
+    "NpcId": 2100002,
+    "RechargeTier": 1
+  },
+  {
+    "ShopId": 2100003,
+    "NpcId": 2100003,
+    "RechargeTier": 1
+  },
+  {
+    "ShopId": 2100004,
+    "NpcId": 2100004,
+    "RechargeTier": 1
+  },
+  {
+    "ShopId": 2110001,
+    "NpcId": 2110001,
+    "RechargeTier": 1
+  },
+  {
+    "ShopId": 2130000,
+    "NpcId": 2130000,
+    "RechargeTier": 5
+  },
+  {
+    "ShopId": 9110003,
+    "NpcId": 9110003,
+    "RechargeTier": 0
+  },
+  {
+    "ShopId": 9110004,
+    "NpcId": 9110004,
+    "RechargeTier": 0
+  },
+  {
+    "ShopId": 9110005,
+    "NpcId": 9110005,
+    "RechargeTier": 0
+  },
+  {
+    "ShopId": 9110006,
+    "NpcId": 9110006,
+    "RechargeTier": 0
+  },
+  {
+    "ShopId": 9110007,
+    "NpcId": 9110007,
+    "RechargeTier": 0
+  },
+  {
+    "ShopId": 9110100,
+    "NpcId": 9110100,
+    "RechargeTier": 0
+  },
+  {
+    "ShopId": 9110101,
+    "NpcId": 9110101,
+    "RechargeTier": 0
+  },
+  {
+    "ShopId": 9120000,
+    "NpcId": 9120000,
+    "RechargeTier": 10
+  },
+  {
+    "ShopId": 9120002,
+    "NpcId": 9120002,
+    "RechargeTier": 10
+  },
+  {
+    "ShopId": 9120004,
+    "NpcId": 9120004,
+    "RechargeTier": 10
+  },
+  {
+    "ShopId": 9120019,
+    "NpcId": 9120019,
+    "RechargeTier": 10
+  },
+  {
+    "ShopId": 9201020,
+    "NpcId": 9201020,
+    "RechargeTier": 0
+  },
+  {
+    "ShopId": 9201058,
+    "NpcId": 9201058,
+    "RechargeTier": 11
+  },
+  {
+    "ShopId": 9201059,
+    "NpcId": 9201059,
+    "RechargeTier": 12
+  },
+  {
+    "ShopId": 9201060,
+    "NpcId": 9201060,
+    "RechargeTier": 7
+  },
+  {
+    "ShopId": 9270019,
+    "NpcId": 9270019,
+    "RechargeTier": 13
+  },
+  {
+    "ShopId": 9270020,
+    "NpcId": 9270020,
+    "RechargeTier": 13
+  },
+  {
+    "ShopId": 9270021,
+    "NpcId": 9270021,
+    "RechargeTier": 14
+  },
+  {
+    "ShopId": 9270022,
+    "NpcId": 9270022,
+    "RechargeTier": 14
+  },
+  {
+    "ShopId": 9270027,
+    "NpcId": 9270027,
+    "RechargeTier": 0
+  },
+  {
+    "ShopId": 9999992,
+    "NpcId": 9001002,
+    "RechargeTier": 0
+  },
+  {
+    "ShopId": 9999993,
+    "NpcId": 9001002,
+    "RechargeTier": 1
+  },
+  {
+    "ShopId": 9999994,
+    "NpcId": 9001002,
+    "RechargeTier": 1
+  },
+  {
+    "ShopId": 9999995,
+    "NpcId": 9001002,
+    "RechargeTier": 1
+  },
+  {
+    "ShopId": 9999996,
+    "NpcId": 9001002,
+    "RechargeTier": 1
+  },
+  {
+    "ShopId": 9999997,
+    "NpcId": 9001002,
+    "RechargeTier": 1
+  },
+  {
+    "ShopId": 9999998,
+    "NpcId": 9001002,
+    "RechargeTier": 1
+  },
+  {
+    "ShopId": 9999999,
+    "NpcId": 9001002,
+    "RechargeTier": 1
+  }
+]

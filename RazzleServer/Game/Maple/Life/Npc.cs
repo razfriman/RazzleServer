@@ -6,6 +6,8 @@ using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
 using RazzleServer.Common.Wz;
 using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Game.Maple.Data;
+using RazzleServer.Game.Maple.Data.References;
 using RazzleServer.Game.Maple.Scripting;
 using RazzleServer.Game.Maple.Shops;
 using RazzleServer.Game.Maple.Util;
@@ -17,8 +19,11 @@ namespace RazzleServer.Game.Maple.Life
         [JsonIgnore]
         public Character Controller { get; set; }
 
-        public Shop Shop { get; set; }
-        public int StorageCost { get; set; }
+        [JsonIgnore]
+        public Shop Shop => DataProvider.Shops.Data[MapleId];
+
+        [JsonIgnore]
+        public NpcReference CachedReference => DataProvider.Npcs.Data[MapleId];
 
         private readonly ILogger _log = LogManager.Log;
 
@@ -60,7 +65,7 @@ namespace RazzleServer.Game.Maple.Life
                 talker.CurrentNpcShop = Shop;
                 Shop.Show(talker);
             }
-            else if (StorageCost > 0)
+            else if (CachedReference.StorageCost > 0)
             {
                 talker.Storage.Show(this);
             }

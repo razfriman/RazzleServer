@@ -16,9 +16,12 @@ namespace RazzleServer.Game.Maple.Data
         public static CachedMobSkills MobSkills { get; private set; }
         public static CachedReactors Reactors { get; private set; }
         public static CachedQuests Quests { get; private set; }
+        public static CachedNpcs Npcs { get; private set; }
         public static CachedCreationData CreationData { get; private set; }
         public static CachedMaps Maps { get; private set; }
         public static CachedStrings Strings { get; private set; }
+        public static CachedShops Shops { get; private set; }
+        public static CachedRechargeTiers RechargeTiers { get; private set; }
 
         private static readonly ILogger Log = LogManager.Log;
 
@@ -32,6 +35,7 @@ namespace RazzleServer.Game.Maple.Data
                 Task.Run(async () => CreationData = await new CreationDataLoader().Load()),
                 Task.Run(async () => Skills = await new SkillsLoader().Load()),
                 Task.Run(async () => Mobs = await new MobsLoader().Load()),
+                Task.Run(async () => Npcs = await new NpcsLoader().Load()),
                 Task.Run(async () => MobSkills = await new MobSkillsLoader().Load()),
                 Task.Run(async () => Reactors = await new ReactorsLoader().Load()),
                 Task.Run(async () => Quests = await new QuestsLoader().Load()),
