@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using RazzleServer.Common;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
@@ -38,13 +40,12 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Load()
         {
-            //foreach (Datum datum in new Datums("buffs").Populate("CharacterId = {0}", Parent.Id))
-            //{
-            //    if ((DateTime)datum["End"] > DateTime.Now)
-            //    {
-            //        Add(new Buff(this, datum));
-            //    }
-            //}
+            using (var dbContext = new MapleDbContext())
+            {
+                var buffs = dbContext.Buffs.Where(x => x.CharacterId == Parent.Id).ToList();
+
+                buffs.ForEach(x => Add(new Buff(this, x)));
+            }
         }
 
         public void Save()
@@ -59,13 +60,14 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Delete()
         {
-            //Database.Delete("buffs", "CharacterId = {0}", this.Parent.Id);
+            using (var dbContext = new MapleDbContext())
+            {
+                dbContext.Buffs.RemoveRange(dbContext.Buffs.Where(x => x.CharacterId == Parent.Id).ToList());
+                dbContext.SaveChanges();
+            }
         }
 
-        public bool Contains(Buff buff)
-        {
-            return Buffs.Contains(buff);
-        }
+        public bool Contains(Buff buff) => Buffs.Contains(buff);
 
         public bool Contains(int mapleId)
         {
@@ -80,10 +82,7 @@ namespace RazzleServer.Game.Maple.Characters
             return false;
         }
 
-        public void Add(Skill skill, int value)
-        {
-            Add(new Buff(this, skill, value));
-        }
+        public void Add(Skill skill, int value) => Add(new Buff(this, skill, value));
 
         public void Add(Buff buff)
         {
@@ -107,10 +106,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public void Remove(int mapleId)
-        {
-            Remove(this[mapleId]);
-        }
+        public void Remove(int mapleId) => Remove(this[mapleId]);
 
         public void Remove(Buff buff)
         {
@@ -122,15 +118,9 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public IEnumerator<Buff> GetEnumerator()
-        {
-            return Buffs.GetEnumerator();
-        }
+        public IEnumerator<Buff> GetEnumerator() => Buffs.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return ((IEnumerable)Buffs).GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)Buffs).GetEnumerator();
 
         public byte[] ToByteArray()
         {

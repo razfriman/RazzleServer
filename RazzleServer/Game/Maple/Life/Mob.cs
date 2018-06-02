@@ -190,8 +190,8 @@ namespace RazzleServer.Game.Maple.Life
             MobSkill skill = null;
             if (skill != null)
             {
-                if (Health * 100 / MaxHealth > skill.PercentageLimitHp ||
-                    Cooldowns.ContainsKey(skill) && Cooldowns[skill].AddSeconds(skill.Cooldown) >= DateTime.Now ||
+                if (Health * 100 / MaxHealth > skill.CachedReference.PercentageLimitHp ||
+                    Cooldowns.ContainsKey(skill) && Cooldowns[skill].AddSeconds(skill.CachedReference.Cooldown) >= DateTime.Now ||
                     (MobSkillName)skill.MapleId == MobSkillName.Summon && Map.Mobs.Count >= 100)
                 {
                     skill = null;
@@ -253,7 +253,7 @@ namespace RazzleServer.Game.Maple.Life
                 }
 
                 Buffs.Remove(buff);
-            }, skill.Duration * 1000);
+            }, skill.CachedReference.Duration * 1000);
         }
 
         public void Heal(uint hp, int range)

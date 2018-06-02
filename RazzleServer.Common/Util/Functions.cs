@@ -1,13 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace RazzleServer.Common.Util
 {
     public static class Functions
     {
+        private static readonly ILogger Log = LogManager.Log;
+
         /// <summary>
         /// Global random against time-based seed mistakes
         /// </summary>
@@ -335,6 +341,48 @@ namespace RazzleServer.Common.Util
             var srcSlice = src.Slice(srcOffset, length);
             var dstSlice = dest.Slice(destOffset, length);
             srcSlice.CopyTo(dstSlice);
+        }
+
+        public static void SaveToJson<T>(string path, T data) where T : class
+        {
+            using (var s = File.OpenWrite(path))
+            using (var sw = new StreamWriter(s))
+            using (var writer = new JsonTextWriter(sw))
+            {
+                try
+                {
+                    var serializer = new JsonSerializer();
+                    serializer.Serialize(writer, data);
+                }
+                catch (Exception e)
+                {
+                    Log.LogError(e, "Error while saving to JSON");
+                }
+            }
+        }
+
+        public static T LoadFromJson<T>(string path) where T : class
+        {
+            if (!File.Exists(path))
+            {
+                return null;
+            }
+
+            using (var s = File.OpenRead(path))
+            using (var sr = new StreamReader(s))
+            using (var reader = new JsonTextReader(sr))
+            {
+                try
+                {
+                    var serializer = new JsonSerializer();
+                    return serializer.Deserialize<T>(reader);
+                }
+                catch (Exception e)
+                {
+                    Log.LogError(e, "Error while loading changes from JSON");
+                    return null;
+                }
+            }
         }
     }
 }

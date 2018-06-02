@@ -1,8 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using RazzleServer.Common;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
+using RazzleServer.Data;
 
 namespace RazzleServer.Game.Maple.Characters
 {
@@ -49,57 +51,100 @@ namespace RazzleServer.Game.Maple.Characters
 
         public override int GetKey(Memo item) => item.Id;
 
-        internal bool Create(string targetName, string message)
+        public bool Create(string targetName, string message)
         {
-            //if (Parent.Client.Server.World.IsCharacterOnline(targetName))
-            //{
-            //    using (var oPacket = new PacketWriter(ServerOperationCode.MemoResult))
-            //    {
-            //        oPacket.WriteByte((byte)MemoResult.Error);
-            //        oPacket.WriteByte((byte)MemoError.ReceiverOnline);
-            //        client.Send(oPacket);
-            //    }
-            //}
-            //else if (!Database.Exists("characters", "Name = {0}", targetName))
-            //{
-            //    using (var oPacket = new PacketWriter(ServerOperationCode.MemoResult))
-            //    {
-            //        oPacket.WriteByte((byte)MemoResult.Error);
-            //        oPacket.WriteByte((byte)MemoError.ReceiverInvalidName);
+            if (Parent.Client.Server.World.GetCharacterByName(targetName) != null)
+            {
+                using (var oPacket = new PacketWriter(ServerOperationCode.MemoResult))
+                {
+                    oPacket.WriteByte((byte)MemoResult.Error);
+                    oPacket.WriteByte((byte)MemoError.ReceiverOnline);
+                    Parent.Client.Send(oPacket);
+                }
+            }
+            else if (!IsCharacterExists(targetName, Parent.WorldId))
+            {
+                using (var oPacket = new PacketWriter(ServerOperationCode.MemoResult))
+                {
+                    oPacket.WriteByte((byte)MemoResult.Error);
+                    oPacket.WriteByte((byte)MemoError.ReceiverInvalidName);
 
-            //        client.Send(oPacket);
-            //    }
-            //}
-            //else if (isReceiverInboxFull) // TODO: Receiver's inbox is full. I believe the maximum amount is 5, but need to verify.
-            //{
-            //    using (var oPacket = new PacketWriter(ServerOperationCode.MemoResult))
-            //    {
-            //        oPacket.WriteByte((byte)MemoResult.Error);
-            //        oPacket.WriteByte((byte)MemoError.ReceiverInboxFull);
-            //        client.Send(oPacket);
-            //    }
-            //}
-            //else
-            //{
-            //    Datum datum = new Datum("memos");
+                    Parent.Client.Send(oPacket);
+                }
+            }
+            else if (IsReceiverInboxFull(targetName, Parent.WorldId)) // TODO: Receiver's inbox is full. I believe the maximum amount is 5, but need to verify.
+            {
+                using (var oPacket = new PacketWriter(ServerOperationCode.MemoResult))
+                {
+                    oPacket.WriteByte((byte)MemoResult.Error);
+                    oPacket.WriteByte((byte)MemoError.ReceiverInboxFull);
+                    Parent.Client.Send(oPacket);
+                }
+            }
+            else
+            {
+                var targetId = GetCharacterIdByName(targetName, Parent.WorldId);
+                Insert(message, targetId);
 
-            //    datum["CharacterId"] = Database.Fetch("characters", "Id", "Name = {0}", targetName);
-            //    datum["Sender"] = client.Character.Name;
-            //    datum["Message"] = message;
-            //    datum["Received"] = DateTime.Now;
-
-            //    datum.Insert();
-
-            //    using (var oPacket = new PacketWriter(ServerOperationCode.MemoResult))
-            //    {
-            //        oPacket.WriteByte((byte)MemoResult.Sent);
-
-            //        client.Send(oPacket);
-            //    }
-            //    return true;
-            //}
+                using (var oPacket = new PacketWriter(ServerOperationCode.MemoResult))
+                {
+                    oPacket.WriteByte((byte)MemoResult.Sent);
+                    Parent.Client.Send(oPacket);
+                }
+                return true;
+            }
 
             return false;
+        }
+
+        private bool IsCharacterExists(string targetName, byte worldId)
+        {
+            using (var dbContext = new MapleDbContext())
+            {
+                return dbContext
+                  .Characters
+                  .Where(x => x.WorldId == worldId)
+                    .Any(x => x.Name == targetName);
+            }
+        }
+
+        private bool IsReceiverInboxFull(string targetName, byte worldId)
+        {
+            var id = GetCharacterIdByName(targetName, worldId);
+            using (var dbContext = new MapleDbContext())
+            {
+                return dbContext
+                    .Memos
+                    .Count(x => x.CharacterId == id) > 5;
+            }
+        }
+
+        private int GetCharacterIdByName(string targetName, byte worldId)
+        {
+            using (var dbContext = new MapleDbContext())
+            {
+                return dbContext
+                    .Characters
+                    .Where(x => x.WorldId == worldId)
+                    .Where(x => x.Name == targetName)
+                    .Select(x => x.Id)
+                    .FirstOrDefault();
+            }
+        }
+
+        private void Insert(string message, int targetId)
+        {
+            using (var dbContext = new MapleDbContext())
+            {
+                dbContext.Memos.Add(new MemoEntity
+                {
+                    CharacterId = targetId,
+                    Message = message,
+                    Received = DateTime.Now,
+                    Sender = Parent.Name
+                });
+                dbContext.SaveChanges();
+            }
         }
     }
 }

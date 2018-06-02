@@ -39,6 +39,13 @@ namespace RazzleServer.Game
 
         public override void Dispose() => ShutDown();
 
+        public void Send(PacketWriter pw, GameClient except = null) => 
+        Clients
+            .Values
+            .Where(x => x.Key != except?.Key)
+            .ToList()
+            .ForEach(x => x.Send(pw));
+
         public Character GetCharacterById(int id) => Clients
             .Values
             .Select(x => x.Character)
@@ -49,10 +56,14 @@ namespace RazzleServer.Game
             .Select(x => x.Character)
             .FirstOrDefault(x => x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
 
-        public void Send(PacketWriter pw, GameClient except = null) => Clients.
-        Values
-        .Where(x => x.Key != except?.Key)
-        .ToList()
-        .ForEach(x => x.Send(pw));
+        public bool CharacterExists(string name)
+        {
+            using (var dbContext = new MapleDbContext())
+            {
+                return dbContext.Characters
+                                .Where(x => x.WorldId == World.Id)
+                                .Any(x => x.Name == name);
+            }
+        }
     }
 }

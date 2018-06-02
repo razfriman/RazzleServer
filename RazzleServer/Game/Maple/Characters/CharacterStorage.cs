@@ -55,12 +55,13 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Save()
         {
-            //Datum datum = new Datum("storages");
-
-            //datum["Slots"] = Slots;
-            //datum["Meso"] = Meso;
-
-            //datum.Update("AccountId = {0}", Parent.AccountId);
+            using (var dbContext = new MapleDbContext())
+            {
+                var entity = dbContext.CharacterStorages.FirstOrDefault(x => x.AccountId == Parent.AccountId);
+                entity.Slots = Slots;
+                entity.Meso = Meso;
+                dbContext.SaveChanges();
+            }
 
             Items.ForEach(item => item.Save());
         }

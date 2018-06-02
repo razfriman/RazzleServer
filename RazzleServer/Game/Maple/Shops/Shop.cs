@@ -60,12 +60,7 @@ namespace RazzleServer.Game.Maple.Shops
             {
                 oPacket.WriteInt(Id);
                 oPacket.WriteShort((short)Items.Count);
-
-                foreach (var loopShopItem in Items)
-                {
-                    oPacket.WriteBytes(loopShopItem.ToByteArray());
-                }
-
+                Items.ForEach(x => oPacket.WriteBytes(x.ToByteArray()));
                 customer.Client.Send(oPacket);
             }
         }

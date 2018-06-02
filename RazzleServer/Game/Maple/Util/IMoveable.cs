@@ -1,6 +1,6 @@
 ﻿using RazzleServer.Common.Util;
 
-namespace RazzleServer.Game.Maple
+namespace RazzleServer.Game.Maple.Util
 {
     public interface IMoveable
     {

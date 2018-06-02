@@ -5,29 +5,16 @@ using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data.References;
+using RazzleServer.Game.Maple.Data;
 
 namespace RazzleServer.Game.Maple.Life
 {
     public sealed class MobSkill
     {
-        public static Dictionary<short, List<int>> Summons { get; set; }
-
         public byte MapleId { get; }
         public byte Level { get; }
         public short EffectDelay { get; }
-
-        public int Duration { get; private set; }
-        public short MpCost { get; private set; }
-        public int ParameterA { get; private set; }
-        public int ParameterB { get; private set; }
-        public short Chance { get; private set; }
-        public short TargetCount { get; private set; }
-        public int Cooldown { get; private set; }
-        public Point Lt { get; private set; }
-        public Point Rb { get; private set; }
-        public short PercentageLimitHp { get; private set; }
-        public short SummonLimit { get; private set; }
-        public short SummonEffect { get; private set; }
+        public MobSkillDataReference CachedReference => DataProvider.MobSkills.Data[MapleId][Level];
 
         public MobSkill(MobSkillReference reference)
         {
@@ -35,23 +22,6 @@ namespace RazzleServer.Game.Maple.Life
             Level = reference.Level;
             EffectDelay = reference.EffectDelay;
         }
-
-
-        //public void Load(Datum datum)
-        //{
-        //    Duration = (short)datum["buff_time"];
-        //    MpCost = (short)datum["mp_cost"];
-        //    ParameterA = (int)datum["x_property"];
-        //    ParameterB = (int)datum["y_property"];
-        //    Chance = (short)datum["chance"];
-        //    TargetCount = (short)datum["target_count"];
-        //    Cooldown = (int)datum["cooldown"];
-        //    LT = new Point((short)datum["ltx"], (short)datum["lty"]);
-        //    RB = new Point((short)datum["rbx"], (short)datum["rby"]);
-        //    PercentageLimitHP = (short)datum["hp_limit_percentage"];
-        //    SummonLimit = (short)datum["summon_limit"];
-        //    SummonEffect = (short)datum["summon_effect"];
-        //}
 
         public void Cast(Mob caster)
         {
@@ -165,12 +135,12 @@ namespace RazzleServer.Game.Maple.Life
 
                 case MobSkillName.Summon:
 
-                    foreach (var mobId in Summons[Level])
+                    foreach (var mobId in CachedReference.Summons)
                     {
                         var summon = new Mob(mobId)
                         {
                             Position = caster.Position,
-                            SpawnEffect = SummonEffect
+                            SpawnEffect = CachedReference.SummonEffect
                         };
 
                         caster.Map.Mobs.Add(summon);
@@ -182,12 +152,12 @@ namespace RazzleServer.Game.Maple.Life
             {
                 if (heal)
                 {
-                    affectedMob.Heal((uint)ParameterA, ParameterB);
+                    affectedMob.Heal((uint)CachedReference.ParameterA, CachedReference.ParameterB);
                 }
 
                 if (status != MobStatus.None && !affectedMob.Buffs.Contains(status))
                 {
-                    affectedMob.Buff(status, (short)ParameterA, this);
+                    affectedMob.Buff(status, (short)CachedReference.ParameterA, this);
                 }
             }
 
@@ -210,10 +180,10 @@ namespace RazzleServer.Game.Maple.Life
                         oPacket.WriteLong(0);
                         oPacket.WriteLong((long)disease);
 
-                        oPacket.WriteShort((short)ParameterA);
+                        oPacket.WriteShort((short)CachedReference.ParameterA);
                         oPacket.WriteShort(MapleId);
                         oPacket.WriteShort(Level);
-                        oPacket.WriteInt(Duration);
+                        oPacket.WriteInt(CachedReference.Duration);
 
                         oPacket.WriteShort(0);
                         oPacket.WriteShort(900);
@@ -226,7 +196,7 @@ namespace RazzleServer.Game.Maple.Life
                 }
             }
 
-            caster.Mana -= (uint)MpCost;
+            caster.Mana -= (uint)CachedReference.MpCost;
 
             if (caster.Cooldowns.ContainsKey(this))
             {
@@ -240,7 +210,7 @@ namespace RazzleServer.Game.Maple.Life
 
         private IEnumerable<Character> GetAffectedCharacters(Mob caster)
         {
-            var rectangle = new Rectangle(Lt + caster.Position, Rb + caster.Position);
+            var rectangle = new Rectangle(CachedReference.Lt + caster.Position, CachedReference.Rb + caster.Position);
 
             foreach (var character in caster.Map.Characters.Values)
             {
@@ -253,7 +223,7 @@ namespace RazzleServer.Game.Maple.Life
 
         private IEnumerable<Mob> GetAffectedMobs(Mob caster)
         {
-            var rectangle = new Rectangle(Lt + caster.Position, Rb + caster.Position);
+            var rectangle = new Rectangle(CachedReference.Lt + caster.Position, CachedReference.Rb + caster.Position);
 
             foreach (var mob in caster.Map.Mobs.Values)
             {

@@ -5,6 +5,7 @@ using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Items;
 using RazzleServer.Game.Maple.Maps;
+using RazzleServer.Game.Maple.Util;
 
 namespace RazzleServer.Game.Maple.Interaction
 {

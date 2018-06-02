@@ -23,10 +23,22 @@ namespace RazzleServer.Game.Maple.Data
         {
             using (var context = new MapleDbContext())
             {
-                if (!context.Loots.Any())
+                if (!context.Shops.Any())
                 {
-                    Log.LogInformation("Cannot find any loot in the database, attempting to load from JSON");
-                    await LoadFromJson();
+                    Log.LogInformation("Cannot find any shops in the database, attempting to load from JSON");
+                    //await LoadShopsFromJson();
+                }
+
+                if (!context.ShopItems.Any())
+                {
+                    Log.LogInformation("Cannot find any shop items in the database, attempting to load from JSON");
+                    //await LoadShopItemsFromJson();
+                }
+
+                if (!context.ShopRecharges.Any())
+                {
+                    Log.LogInformation("Cannot find any shop recharges in the database, attempting to load from JSON");
+                    //await LoadShopRechargesFromJson();
                 }
 
                 var sw = Stopwatch.StartNew();
@@ -94,6 +106,8 @@ namespace RazzleServer.Game.Maple.Data
                     var sw = Stopwatch.StartNew();
 
                     var serializer = new JsonSerializer();
+                    //RechargeTiers = new Dictionary<byte, Dictionary<int, double>>();
+                    //
                     //var data = serializer.Deserialize<Dictionary<int, List<Loot>>>(reader);
 
                     //foreach (var item in data.Values.SelectMany(x => x))

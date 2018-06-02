@@ -6,11 +6,6 @@ namespace RazzleServer.Game
 {
     public static class GamePackets
     {
-        public static PacketWriter Ping()
-        {
-            return new PacketWriter(ServerOperationCode.Ping);
-        }
-
         public static PacketWriter Notify(string message, NoticeType type = NoticeType.Popup)
         {
             using (var pw = new PacketWriter(ServerOperationCode.BroadcastMsg))
@@ -33,22 +28,6 @@ namespace RazzleServer.Game
             {
                 pw.WriteInt(skillId);
                 pw.WriteShort((short)cooldownSeconds);
-                return pw;
-            }
-        }
-
-        public static PacketWriter ChangeSkillRecordResult(int skillId, int level, int maxLevel, DateTime expiration)
-        {
-
-            using (var pw = new PacketWriter(ServerOperationCode.ChangeSkillRecordResult))
-            {
-                pw.WriteByte(1);
-                pw.WriteShort(1);
-                pw.WriteInt(skillId);
-                pw.WriteInt(level);
-                pw.WriteInt(maxLevel);
-                pw.WriteDateTime(expiration);
-                pw.WriteByte(4);
                 return pw;
             }
         }

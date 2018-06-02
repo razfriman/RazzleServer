@@ -8,6 +8,7 @@ namespace RazzleServer.Data
         [Key]
         public int Id { get; set; }
         public DateTime Expiration { get; set; }
+        public DateTime CooldownEnd { get; set; }
         public int CharacterId { get; set; }
         public int SkillId { get; set; }
         public byte Level { get; set; }

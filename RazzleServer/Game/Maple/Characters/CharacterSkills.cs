@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using RazzleServer.Common;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
@@ -17,10 +19,11 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Load()
         {
-            //foreach (Datum datum in new Datums("skills").Populate("CharacterId = {0}", Parent.Id))
-            //{
-            //    Add(new Skill(datum));
-            //}
+            using (var dbContext = new MapleDbContext())
+            {
+                var skills = dbContext.Skills.Where(x => x.CharacterId == Parent.Id).ToList();
+                skills.ForEach(x => Add(new Skill(x)));
+            }
         }
 
         public void Save()

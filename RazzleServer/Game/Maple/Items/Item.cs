@@ -444,6 +444,7 @@ namespace RazzleServer.Game.Maple.Items
                 if (isNewItem)
                 {
                     item = new ItemEntity();
+                    dbContext.Items.Add(item);
                 }
 
                 item.AccountId = Character.AccountId;
@@ -473,11 +474,6 @@ namespace RazzleServer.Game.Maple.Items
                 item.Speed = Speed;
                 item.Strength = Strength;
                 item.PetId = PetId;
-
-                if (isNewItem)
-                {
-                    dbContext.Items.Add(item);
-                }
 
                 dbContext.SaveChanges();
 

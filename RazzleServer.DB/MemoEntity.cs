@@ -8,8 +8,8 @@ namespace RazzleServer.Data
         [Key]
         public int Id { get; set; }
         public int CharacterId { get; set; }
-        public string Sender { get; private set; }
-        public string Message { get; private set; }
-        public DateTime Received { get; private set; }
+        public string Sender { get; set; }
+        public string Message { get; set; }
+        public DateTime Received { get; set; }
     }
 }

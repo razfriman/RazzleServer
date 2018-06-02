@@ -22,6 +22,7 @@ namespace RazzleServer.Common
         public DbSet<MemoEntity> Memos { get; set; }
         public DbSet<ShopEntity> Shops { get; set; }
         public DbSet<ShopItemEntity> ShopItems { get; set; }
+        public DbSet<ShopRechargeEntity> ShopRecharges { get; set; }
         public DbSet<LootEntity> Loots { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

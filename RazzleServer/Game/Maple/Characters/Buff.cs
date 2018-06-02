@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using RazzleServer.Common;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
@@ -76,14 +77,14 @@ namespace RazzleServer.Game.Maple.Characters
             }, (int)(End - DateTime.Now).TotalMilliseconds);
         }
 
-        public Buff(CharacterBuffs parent, BuffEntity datum)
+        public Buff(CharacterBuffs parent, BuffEntity entity)
         {
             Parent = parent;
-            //MapleId = (int)datum["MapleId"];
-            //SkillLevel = (byte)datum["SkillLevel"];
-            //Type = (byte)datum["Type"];
-            //Value = (int)datum["Value"];
-            //End = (DateTime)datum["End"];
+            MapleId = entity.SkillId;
+            SkillLevel = entity.SkillLevel;
+            Type = entity.Type;
+            Value = entity.Value;
+            End = entity.End;
             PrimaryStatups = new Dictionary<PrimaryBuffStat, short>();
             SecondaryStatups = new Dictionary<SecondaryBuffStat, short>();
 
@@ -103,16 +104,19 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Save()
         {
-            //Datum datum = new Datum("buffs");
-
-            //datum["CharacterId"] = Character.Id;
-            //datum["MapleId"] = MapleId;
-            //datum["SkillLevel"] = SkillLevel;
-            //datum["Type"] = Type;
-            //datum["Value"] = Value;
-            //datum["End"] = End;
-
-            //datum.Insert();
+            using (var dbContext = new MapleDbContext())
+            {
+                dbContext.Buffs.Add(new BuffEntity
+                {
+                    CharacterId = Character.Id,
+                    SkillId = MapleId,
+                    SkillLevel = SkillLevel,
+                    Type = Type,
+                    Value = Value,
+                    End = End
+                });
+                dbContext.SaveChanges();
+            }
         }
 
         public void Apply()

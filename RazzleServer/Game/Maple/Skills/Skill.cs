@@ -154,43 +154,63 @@ namespace RazzleServer.Game.Maple.Skills
 
         public void Save()
         {
-            //Datum datum = new Datum("skills");
+            using (var dbContext = new MapleDbContext())
+            {
+                var item = dbContext.Skills.Find(Id);
+                var isNew = item == null;
 
-            //datum["CharacterId"] = Character.Id;
-            //datum["MapleId"] = MapleId;
-            //datum["CurrentLevel"] = CurrentLevel;
-            //datum["MaxLevel"] = MaxLevel;
-            //datum["Expiration"] = Expiration;
-            //datum["CooldownEnd"] = CooldownEnd;
+                if (isNew)
+                {
+                    item = new SkillEntity();
+                    dbContext.Skills.Add(item);
+                }
 
-            //if (Assigned)
-            //{
-            //    datum.Update("Id = {0}", Id);
-            //}
-            //else
-            //{
-            //    Id = datum.InsertAndReturnId();
-            //    Assigned = true;
-            //}
+                item.CharacterId = Character.Id;
+                item.SkillId = MapleId;
+                item.Level = CurrentLevel;
+                item.MasterLevel = MaxLevel;
+                item.Expiration = Expiration;
+                item.CooldownEnd = CooldownEnd;
+
+                dbContext.SaveChanges();
+
+                if (isNew)
+                {
+                    Id = item.Id;
+                }
+            }
         }
 
         public void Delete()
         {
             using (var dbContext = new MapleDbContext())
             {
-                var skill = dbContext.Skills.FirstOrDefault(x => x.Id == Id);
+                var skill = dbContext.Skills.Find(Id);
+
                 if (skill != null)
                 {
                     dbContext.Skills.Remove(skill);
+                    dbContext.SaveChanges();
                 }
-            }
 
-            Assigned = false;
+                Assigned = false;
+            }
         }
 
-        public void Update() => Character.Client.Send(
-            GamePackets.ChangeSkillRecordResult(MapleId, CurrentLevel, MaxLevel, Expiration)
-            );
+        public void Update()
+        {
+            using (var pw = new PacketWriter(ServerOperationCode.ChangeSkillRecordResult))
+            {
+                pw.WriteByte(1);
+                pw.WriteShort(1);
+                pw.WriteInt(MapleId);
+                pw.WriteInt(CurrentLevel);
+                pw.WriteInt(MaxLevel);
+                pw.WriteDateTime(Expiration);
+                pw.WriteByte(4);
+                Character.Client.Send(pw);
+            }
+        }
 
         public void Recalculate()
         {

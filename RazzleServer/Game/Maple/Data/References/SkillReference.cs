@@ -70,21 +70,13 @@ namespace RazzleServer.Game.Maple.Data.References
             Avoidability = img["eva"]?.GetShort() ?? 0;
             Cooldown = img["cooltime"]?.GetInt() ?? 0;
             Probability = img["prop"]?.GetShort() ?? 0;
-            //Range = (short)datum["range"];
-            //BuffTime = (int)datum["buff_time"];
-            //CostHP = (short)datum["hp_cost"];
-            //CostMP = (short)datum["mp_cost"];
-            //Damage = (short)datum["damage"];
-            //FixedDamage = (int)datum["fixed_damage"];
-            //CriticalDamage = (byte)datum["critical_damage"];
-            //ItemCount = (short)datum["item_count"];
-            //CostMeso = (short)datum["money_cost"];
-            //Speed = (short)datum["speed"];
-            //Jump = (short)datum["jump"];
-            //Strength = (short)datum["str"];
-            //HP = (short)datum["hp"];
-            //MP = (short)datum["mp"];
-            //Morph = (short)datum["morph"];
+            FixedDamage = img["fixDamage"]?.GetInt() ?? 0;
+            CriticalDamage = (byte)(img["criticalDamage"]?.GetInt() ?? 0);
+            CostMeso = img["moneyCon"]?.GetShort() ?? 0;
+            Hp = img["hp"]?.GetShort() ?? 0;
+            Mp = img["mp"]?.GetShort() ?? 0;
+            //Strength = "str";
+            //Morph = "morph";
         }
     }
 }
