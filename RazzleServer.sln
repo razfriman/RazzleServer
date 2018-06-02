@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazzleServer.Benchmarks", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazzleServer.Common", "RazzleServer.Common\RazzleServer.Common.csproj", "{DC2A8698-60A1-4D25-B6DE-D44DDDC74B45}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParseDrops", "ParseDrops\ParseDrops.csproj", "{97929BDE-7EF7-4348-83D8-B03B18B5FEB3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{DC2A8698-60A1-4D25-B6DE-D44DDDC74B45}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC2A8698-60A1-4D25-B6DE-D44DDDC74B45}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DC2A8698-60A1-4D25-B6DE-D44DDDC74B45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97929BDE-7EF7-4348-83D8-B03B18B5FEB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97929BDE-7EF7-4348-83D8-B03B18B5FEB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97929BDE-7EF7-4348-83D8-B03B18B5FEB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97929BDE-7EF7-4348-83D8-B03B18B5FEB3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

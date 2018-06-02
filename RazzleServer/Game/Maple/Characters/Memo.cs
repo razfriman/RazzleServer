@@ -24,7 +24,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             using (var dbContext = new MapleDbContext())
             {
-                var item = dbContext.MemoEntities.Find(Id);
+                var item = dbContext.Memos.Find(Id);
                 if (item != null)
                 {
                     dbContext.Remove(item);

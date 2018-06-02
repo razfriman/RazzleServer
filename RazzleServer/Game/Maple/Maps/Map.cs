@@ -43,7 +43,7 @@ namespace RazzleServer.Game.Maple.Maps
 
             var reference = CachedReference;
             reference.Footholds.ForEach(x => Footholds.Footholds.Add(x));
-            //reference.Npcs.ForEach(x => Npcs.Add(x));
+            reference.Npcs.ForEach(x => Npcs.Add(x));
             reference.SpawnPoints.ForEach(x => SpawnPoints.Add(x));
             reference.Portals.ForEach(x => Portals.Add(x));
 

@@ -19,7 +19,10 @@ namespace RazzleServer.Common
         public DbSet<QuestCustomDataEntity> QuestCustomData { get; set; }
         public DbSet<SkillEntity> Skills { get; set; }
         public DbSet<BuffEntity> Buffs { get; set; }
-        public DbSet<MemoEntity> MemoEntities { get; set; }
+        public DbSet<MemoEntity> Memos { get; set; }
+        public DbSet<ShopEntity> Shops { get; set; }
+        public DbSet<ShopItemEntity> ShopItems { get; set; }
+        public DbSet<LootEntity> Loots { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

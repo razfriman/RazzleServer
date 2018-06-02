@@ -20,7 +20,7 @@ namespace RazzleServer.Game.Maple.Characters
             using (var dbContext = new MapleDbContext())
             {
                 var memos = dbContext
-                    .MemoEntities
+                    .Memos
                     .Where(x => x.CharacterId == Parent.Id)
                     .ToArray();
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 using RazzleServer.Common.Packet;
+using RazzleServer.Data;
 using RazzleServer.Game.Maple.Data;
 
 namespace RazzleServer.Game.Maple.Shops
@@ -26,15 +27,14 @@ namespace RazzleServer.Game.Maple.Shops
         [JsonIgnore]
         public bool IsRecharageable => DataProvider.Items.Data[MapleId].IsRechargeable;
 
-        //public ShopItem(Shop parent, Datum datum)
-        //{
-        //    this.Parent = parent;
-
-        //    this.MapleId = (int)datum["itemid"];
-        //    this.Quantity = (short)datum["quantity"];
-        //    this.PurchasePrice = (int)datum["price"];
-        //    this.Sort = (int)datum["sort"];
-        //}
+        public ShopItem(Shop parent, ShopItemEntity entity)
+        {
+            Parent = parent;
+            MapleId = entity.ItemId;
+            Quantity = entity.Quantity;
+            PurchasePrice = entity.Price;
+            Sort = entity.Sort;
+        }
 
         public ShopItem(Shop parent, int mapleId)
         {

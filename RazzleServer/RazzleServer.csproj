@@ -26,4 +26,7 @@
     <ProjectReference Include="..\RazzleServer.DB\RazzleServer.Data.csproj" />
     <ProjectReference Include="..\RazzleServer.Common\RazzleServer.Common.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Game\Data\" />
+  </ItemGroup>
 </Project>

@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using RazzleServer.Common.Packet;
+using RazzleServer.Data;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Life;
 
@@ -18,7 +20,7 @@ namespace RazzleServer.Game.Maple.Shops
         {
             RechargeTiers = new Dictionary<byte, Dictionary<int, double>>();
 
-            //foreach (Datum datum in new Datums("shop_recharge_data").Populate())
+            //foreach (var  datum in new Datums("shop_recharge_data").Populate())
             //{
             //    if (!RechargeTiers.ContainsKey((byte)(int)datum["tierid"]))
             //    {
@@ -29,28 +31,28 @@ namespace RazzleServer.Game.Maple.Shops
             //}
         }
 
-        //public Shop(Npc parent, Datum datum)
-        //{
-        //    Parent = parent;
+        public Shop(Npc parent, ShopEntity entity)
+        {
+            Parent = parent;
 
-        //    Id = (int)datum["shopid"];
-        //    RechargeTierId = (byte)(int)datum["recharge_tier"];
+            Id = entity.Id;
+            RechargeTierId = entity.RechargeTier;
 
-        //    Items = new List<ShopItem>();
+            Items = new List<ShopItem>();
 
-        //    foreach (Datum itemDatum in new Datums("shop_items").Populate("shopid = {0} ORDER BY sort DESC", Id))
-        //    {
-        //        Items.Add(new ShopItem(this, itemDatum));
-        //    }
+            foreach (var item in entity.ShopItems.OrderBy(x => x.Sort))
+            {
+                Items.Add(new ShopItem(this, item));
+            }
 
-        //    if (RechargeTierId > 0)
-        //    {
-        //        foreach (KeyValuePair<int, double> rechargeable in UnitPrices)
-        //        {
-        //            Items.Add(new ShopItem(this, rechargeable.Key));
-        //        }
-        //    }
-        //}
+            if (RechargeTierId > 0)
+            {
+                foreach (KeyValuePair<int, double> rechargeable in UnitPrices)
+                {
+                    Items.Add(new ShopItem(this, rechargeable.Key));
+                }
+            }
+        }
 
         public void Show(Character customer)
         {

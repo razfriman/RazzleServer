@@ -25,9 +25,11 @@ namespace RazzleServer.Common
         public async Task Configure()
         {
             await ServerConfig.LoadFromFile("ServerConfig.json");
+            InitializeDatabase();
             DataProvider.Initialize();
             ScriptProvider.Initialize();
-            InitializeDatabase();
+            LootProvider.Initialize();
+            ShopProvider.Initialize();
         }
 
         public void Start()
@@ -54,7 +56,6 @@ namespace RazzleServer.Common
             using (var context = new MapleDbContext())
             {
                 context.Database.EnsureCreated();
-                var _ = context.Accounts.ToArray();
             }
         }
 
