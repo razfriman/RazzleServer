@@ -27,8 +27,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Game\Maple\Util\" />
-    <Folder Include="Game\Maple\Scripts\" />
-    <Folder Include="Game\Maple\Scripts\Loaders\" />
+    <Folder Include="Game\Maple\Scripting\" />
+    <Folder Include="Game\Maple\Scripting\Loaders\" />
+    <Folder Include="Game\Maple\Scripting\Cache\" />
+    <Folder Include="Game\Maple\Scripting\Scripts\" />
+    <Folder Include="Game\Maple\Scripting\Scripts\Commands\" />
+    <Folder Include="Game\Maple\Scripting\Scripts\Reactors\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="ServerConfig.json" />

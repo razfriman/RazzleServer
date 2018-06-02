@@ -4,7 +4,7 @@ using RazzleServer.Center;
 using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Characters;
 
-namespace RazzleServer.Game.Maple.Scripts
+namespace RazzleServer.Game.Maple.Scripts.Cache
 {
     public sealed class CommandScripts : MapleKeyedCollection<string, ACommandScript>
     {

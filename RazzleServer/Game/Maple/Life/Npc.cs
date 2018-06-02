@@ -8,6 +8,7 @@ using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
 using RazzleServer.Common.Wz;
 using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Game.Maple.Scripts;
 using RazzleServer.Game.Maple.Shops;
 using RazzleServer.Game.Maple.Util;
 using RazzleServer.Game.Scripts;
@@ -22,8 +23,8 @@ namespace RazzleServer.Game.Maple.Life
         public Shop Shop { get; set; }
         public int StorageCost { get; set; }
 
-        [JsonIgnore]
-        public Dictionary<Character, ANpcScript> Scripts { get; }
+        // [JsonIgnore]
+        //public Dictionary<Character, ANpcScript> Scripts { get; }
 
         private readonly ILogger _log = LogManager.Log;
 
@@ -71,18 +72,7 @@ namespace RazzleServer.Game.Maple.Life
             }
             else
             {
-                var script = new ANpcScript(this, talker);
-
-                Scripts[talker] = script;
-
-                try
-                {
-                    script.Execute();
-                }
-                catch (Exception ex)
-                {
-                    _log.LogError(ex, "Error executing NPC script");
-                }
+                ScriptProvider.Npcs.Execute(this, talker);
             }
         }
 

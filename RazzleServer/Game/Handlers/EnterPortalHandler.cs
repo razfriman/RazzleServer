@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
+using RazzleServer.Game.Maple.Scripts;
 using RazzleServer.Game.Scripts;
 
 namespace RazzleServer.Game.Handlers
@@ -9,8 +10,6 @@ namespace RazzleServer.Game.Handlers
     [PacketHandler(ClientOperationCode.EnterPortal)]
     public class EnterPortalHandler : GamePacketHandler
     {
-        private readonly ILogger _log = LogManager.Log;
-
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
             var portals = packet.ReadByte();
@@ -29,14 +28,7 @@ namespace RazzleServer.Game.Handlers
                 return;
             }
 
-            try
-            {
-                new APortalScript(portal, client.Character).Execute();
-            }
-            catch (Exception ex)
-            {
-                _log.LogError($"Script error: {ex}");
-            }
+            ScriptProvider.Portals.Execute(portal, client.Character);
         }
     }
 }

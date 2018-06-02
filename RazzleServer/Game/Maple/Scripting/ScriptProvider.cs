@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Util;
+using RazzleServer.Game.Maple.Scripts.Cache;
 using RazzleServer.Game.Maple.Scripts.Loaders;
 
 namespace RazzleServer.Game.Maple.Scripts
@@ -10,6 +11,9 @@ namespace RazzleServer.Game.Maple.Scripts
     public static class ScriptProvider
     {
         public static CommandScripts Commands { get; private set; }
+        public static NpcScripts Npcs { get; private set; }
+        public static ReactorScripts Reactors { get; private set; }
+        public static PortalScripts Portals { get; private set; }
 
         private static readonly ILogger Log = LogManager.Log;
 
@@ -22,7 +26,10 @@ namespace RazzleServer.Game.Maple.Scripts
             Log.LogInformation("Loading scripts...");
 
             Task.WaitAll(
-                Task.Run(async () => Commands = await new CommandScriptLoader().Load())
+                Task.Run(async () => Commands = await new CommandScriptLoader().Load()),
+                Task.Run(async () => Portals = await new PortalScriptLoader().Load()),
+                Task.Run(async () => Npcs = await new NpcScriptLoader().Load()),
+                Task.Run(async () => Reactors = await new ReactorScriptLoader().Load())
             );
 
             sw.Stop();

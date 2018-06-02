@@ -4,15 +4,14 @@ using RazzleServer.Game.Maple.Maps;
 
 namespace RazzleServer.Game.Scripts
 {
-    public class APortalScript : ScriptBase
+    public abstract class APortalScript
     {
-        private Portal _portal;
+        public Character Character { get; }
+        public Portal Portal { get; }
 
-        public APortalScript(Portal portal, Character character)
-            : base(ScriptType.Portal, portal.Script, character)
-        {
-            _portal = portal;
-        }
+        public abstract string Name { get; }
+
+        public abstract void Execute();
 
         private void PlayPortalSoundEffect()
         {

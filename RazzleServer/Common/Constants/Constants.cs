@@ -331,12 +331,6 @@ namespace RazzleServer.Common.Constants
         Itc
     }
 
-    public enum ScriptType
-    {
-        Npc,
-        Portal
-    }
-
     public enum NoticeType : byte
     {
         Notice,

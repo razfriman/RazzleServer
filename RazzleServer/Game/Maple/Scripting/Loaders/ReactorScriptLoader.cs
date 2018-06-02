@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using RazzleServer.Game.Maple.Scripts.Cache;
+using RazzleServer.Game.Scripting;
 using RazzleServer.Game.Scripts;
 
 namespace RazzleServer.Game.Maple.Scripts.Loaders
