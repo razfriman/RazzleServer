@@ -19,6 +19,10 @@ namespace RazzleServer.Game.Maple.Data.Loaders
             using (var file = GetWzFile("String.wz"))
             {
                 file.ParseWzFile();
+
+                file.Export("/Users/razfriman/Desktop/a.json");
+
+
                 ProcessItems(file.WzDirectory.GetImageByName("Ins.img"));
                 ProcessItems(file.WzDirectory.GetImageByName("Etc.img"));
                 ProcessItems(file.WzDirectory.GetImageByName("Cash.img"));

@@ -28,10 +28,6 @@ namespace RazzleServer.Common.Wz.WzProperties
 
         public override object WzValue => Value;
 
-        /*/// <summary>
-		/// The image that this property is contained in
-		/// </summary>
-		public override WzImage ParentImage { get { return imgParent; } internal set { imgParent = value; } }*/
         /// <summary>
         /// The WzPropertyType of the property
         /// </summary>
@@ -43,10 +39,7 @@ namespace RazzleServer.Common.Wz.WzProperties
             writer.Write((byte)3);
             writer.WriteCompressedInt(Value);
         }
-        public override void ExportXml(StreamWriter writer, int level)
-        {
-            writer.WriteLine(XmlUtil.Indentation(level) + XmlUtil.EmptyNamedValuePair("WzCompressedInt", Name, Value.ToString()));
-        }
+       
         /// <summary>
         /// Dispose the object
         /// </summary>

@@ -36,10 +36,7 @@ namespace RazzleServer.Common.Wz.WzProperties
             writer.Write((byte)2);
             writer.Write(Value);
         }
-        public override void ExportXml(StreamWriter writer, int level)
-        {
-            writer.WriteLine(XmlUtil.Indentation(level) + XmlUtil.EmptyNamedValuePair("WzUnsignedShort", Name, Value.ToString()));
-        }
+
         /// <summary>
         /// Disposes the object
         /// </summary>

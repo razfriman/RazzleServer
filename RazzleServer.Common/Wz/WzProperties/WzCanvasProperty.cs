@@ -13,13 +13,12 @@ namespace RazzleServer.Common.Wz.WzProperties
     {
         #region Fields
         internal List<WzImageProperty> properties = new List<WzImageProperty>();
-        internal WzPngProperty imageProp;
         #endregion
 
         #region Inherited Members
         public override void SetValue(object value)
         {
-            imageProp.SetValue(value);
+            PngProperty = (WzPngProperty)value;
         }
 
         public override WzImageProperty DeepClone()
@@ -30,7 +29,7 @@ namespace RazzleServer.Common.Wz.WzProperties
                 clone.AddProperty(prop.DeepClone());
             }
 
-            clone.imageProp = (WzPngProperty)imageProp.DeepClone();
+            clone.PngProperty = (WzPngProperty)PngProperty.DeepClone();
             return clone;
         }
 
@@ -57,7 +56,7 @@ namespace RazzleServer.Common.Wz.WzProperties
             {
                 if (name == "PNG")
                 {
-                    return imageProp;
+                    return PngProperty;
                 }
 
                 foreach (var iwp in properties)
@@ -76,7 +75,7 @@ namespace RazzleServer.Common.Wz.WzProperties
                 {
                     if (name == "PNG")
                     {
-                        imageProp = (WzPngProperty)value;
+                        PngProperty = (WzPngProperty)value;
                         return;
                     }
                     value.Name = name;
@@ -115,7 +114,7 @@ namespace RazzleServer.Common.Wz.WzProperties
                 var foundChild = false;
                 if (segment == "PNG")
                 {
-                    return imageProp;
+                    return PngProperty;
                 }
                 foreach (var iwp in ret.WzProperties)
                 {
@@ -156,22 +155,15 @@ namespace RazzleServer.Common.Wz.WzProperties
             writer.Write((byte)0);
             writer.Write(bytes);
         }
-        public override void ExportXml(StreamWriter writer, int level)
-        {
-            writer.WriteLine(XmlUtil.Indentation(level) + XmlUtil.OpenNamedTag("WzCanvas", Name, false) +
-            XmlUtil.Attrib("width", PngProperty.Width.ToString()) +
-            XmlUtil.Attrib("height", PngProperty.Height.ToString(), true));
-            DumpPropertyList(writer, level, WzProperties);
-            writer.WriteLine(XmlUtil.Indentation(level) + XmlUtil.CloseTag("WzCanvas"));
-        }
+
         /// <summary>
         /// Dispose the object
         /// </summary>
         public override void Dispose()
         {
             Name = null;
-            imageProp.Dispose();
-            imageProp = null;
+            PngProperty.Dispose();
+            PngProperty = null;
             properties?.ForEach(x => x.Dispose());
             properties.Clear();
             properties = null;
@@ -182,9 +174,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// <summary>
         /// The png image for this canvas property
         /// </summary>
-        public WzPngProperty PngProperty { get => imageProp;
-            set => imageProp = value;
-        }
+        public WzPngProperty PngProperty { get; set; }
         /// <summary>
         /// Creates a blank WzCanvasProperty
         /// </summary>
@@ -238,10 +228,8 @@ namespace RazzleServer.Common.Wz.WzProperties
 
         #region Cast Values
 
-        public override Bitmap GetBitmap()
-        {
-            return imageProp.GetPNG(false);
-        }
+        public override Bitmap GetBitmap() => PngProperty.GetPNG(false);
+
         #endregion
     }
 }

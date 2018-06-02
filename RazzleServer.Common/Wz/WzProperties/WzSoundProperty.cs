@@ -68,10 +68,7 @@ namespace RazzleServer.Common.Wz.WzProperties
             writer.Write(header);
             writer.Write(data);
         }
-        public override void ExportXml(StreamWriter writer, int level)
-        {
-            writer.WriteLine(XmlUtil.Indentation(level) + XmlUtil.EmptyNamedTag("WzSound", Name));
-        }
+
         /// <summary>
         /// Disposes the object
         /// </summary>

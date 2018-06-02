@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using RazzleServer.Common.Wz.Util;
 using RazzleServer.Common.Wz.WzProperties;
 
@@ -19,11 +21,13 @@ namespace RazzleServer.Common.Wz
 
         public virtual WzImageProperty GetFromPath(string path) => null;
 
+        [JsonConverter(typeof(StringEnumConverter))]
         public abstract WzPropertyType PropertyType { get; }
 
         /// <summary>
         /// The image that this property is contained in
         /// </summary>
+        [JsonIgnore]
         public WzImage ParentImage
         {
             get
@@ -54,12 +58,6 @@ namespace RazzleServer.Common.Wz
             ((IPropertyContainer)Parent).RemoveProperty(this);
         }
 
-        public virtual void ExportXml(StreamWriter writer, int level)
-        {
-            writer.WriteLine(XmlUtil.Indentation(level) + XmlUtil.OpenNamedTag(PropertyType.ToString(), Name, true));
-            writer.WriteLine(XmlUtil.Indentation(level) + XmlUtil.CloseTag(PropertyType.ToString()));
-        }
-
         public override WzFile WzFileParent => ParentImage.WzFileParent;
 
         #endregion
@@ -80,14 +78,6 @@ namespace RazzleServer.Common.Wz
                 {
                     property.WriteValue(writer);
                 }
-            }
-        }
-
-        internal static void DumpPropertyList(StreamWriter writer, int level, List<WzImageProperty> properties)
-        {
-            foreach (var prop in properties)
-            {
-                prop.ExportXml(writer, level + 1);
             }
         }
 

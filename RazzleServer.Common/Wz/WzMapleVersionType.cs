@@ -1,6 +1,6 @@
 ﻿namespace RazzleServer.Common.Wz
 {
-	public enum WzMapleVersion
+	public enum WzMapleVersionType
 	{
 		Gms,
         Ems,

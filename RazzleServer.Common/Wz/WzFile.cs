@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using RazzleServer.Common.Util;
 using RazzleServer.Common.Wz.Util;
 using RazzleServer.Common.Wz.WzProperties;
@@ -18,20 +20,15 @@ namespace RazzleServer.Common.Wz
         public static ILogger Log = LogManager.Log;
 
         #region Fields
-        internal string path;
-        internal WzDirectory wzDir;
-        internal WzHeader header;
-        internal short version;
         internal uint versionHash;
-        internal short fileVersion;
-        internal WzMapleVersion mapleVersion;
+        internal int version;
         internal byte[] WzIv;
         #endregion
 
         /// <summary>
         /// The parsed IWzDir after having called ParseWzDirectory(), this can either be a WzDirectory or a WzListDirectory
         /// </summary>
-        public WzDirectory WzDirectory => wzDir;
+        public WzDirectory WzDirectory { get; private set; }
 
         /// <summary>
         /// The WzObjectType of the file
@@ -45,45 +42,34 @@ namespace RazzleServer.Common.Wz
         /// <returns>WzDirectory[name]</returns>
         public new WzObject this[string name] => WzDirectory[name];
 
-        public WzHeader Header
-        {
-            get => header;
-            set => header = value;
-        }
+        public WzHeader Header { get; set; }
 
-        public short Version
-        {
-            get => fileVersion;
-            set => fileVersion = value;
-        }
+        public short Version { get; set; }
 
-        public string FilePath => path;
+        public string FilePath { get; private set; }
 
-        public WzMapleVersion MapleVersion
-        {
-            get => mapleVersion;
-            set => mapleVersion = value;
-        }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public WzMapleVersionType MapleVersionType { get; set; }
 
         public override WzFile WzFileParent => this;
 
         public override void Dispose()
         {
-            wzDir?.reader?.Close();
+            WzDirectory?.reader?.Close();
             Header = null;
-            path = null;
+            FilePath = null;
             Name = null;
             WzDirectory?.Dispose();
         }
 
-        public WzFile(short gameVersion, WzMapleVersion version)
+        public WzFile(short gameVersion, WzMapleVersionType version)
         {
-            wzDir = new WzDirectory();
+            WzDirectory = new WzDirectory();
             Header = WzHeader.GetDefault();
-            fileVersion = gameVersion;
-            mapleVersion = version;
+            Version = gameVersion;
+            MapleVersionType = version;
             WzIv = WzTool.GetIvByMapleVersion(version);
-            wzDir.WzIv = WzIv;
+            WzDirectory.WzIv = WzIv;
         }
 
         /// <summary>
@@ -91,13 +77,13 @@ namespace RazzleServer.Common.Wz
         /// </summary>
         /// <param name="filePath">Path to the wz file</param>
         /// <param name="version"></param>
-        public WzFile(string filePath, WzMapleVersion version)
+        public WzFile(string filePath, WzMapleVersionType version)
         {
             Name = Path.GetFileName(filePath);
-            path = filePath;
-            fileVersion = -1;
-            mapleVersion = version;
-            if (version == WzMapleVersion.GetFromZlz)
+            FilePath = filePath;
+            Version = -1;
+            MapleVersionType = version;
+            if (version == WzMapleVersionType.GetFromZlz)
             {
                 var zlzStream = File.OpenRead(Path.Combine(Path.GetDirectoryName(filePath), "ZLZ.dll"));
                 WzIv = WzKeyGenerator.GetIvFromZlz(zlzStream);
@@ -117,13 +103,13 @@ namespace RazzleServer.Common.Wz
         /// <param name="filePath">Path to the wz file</param>
         /// <param name="gameVersion"></param>
         /// <param name="version"></param>
-        public WzFile(string filePath, short gameVersion, WzMapleVersion version)
+        public WzFile(string filePath, short gameVersion, WzMapleVersionType version)
         {
             Name = Path.GetFileName(filePath);
-            path = filePath;
-            fileVersion = gameVersion;
-            mapleVersion = version;
-            if (version == WzMapleVersion.GetFromZlz)
+            FilePath = filePath;
+            Version = gameVersion;
+            MapleVersionType = version;
+            if (version == WzMapleVersionType.GetFromZlz)
             {
                 var zlzStream = File.OpenRead(Path.Combine(Path.GetDirectoryName(filePath), "ZLZ.dll"));
                 WzIv = WzKeyGenerator.GetIvFromZlz(zlzStream);
@@ -142,7 +128,7 @@ namespace RazzleServer.Common.Wz
         /// </summary>
         public void ParseWzFile()
         {
-            if (mapleVersion == WzMapleVersion.Generate)
+            if (MapleVersionType == WzMapleVersionType.Generate)
             {
                 {
                     throw new InvalidOperationException("Cannot call ParseWzFile() if WZ file type is GENERATE");
@@ -154,7 +140,7 @@ namespace RazzleServer.Common.Wz
 
         public void ParseWzFile(byte[] WzIv)
         {
-            if (mapleVersion != WzMapleVersion.Generate)
+            if (MapleVersionType != WzMapleVersionType.Generate)
             {
                 {
                     throw new InvalidOperationException(
@@ -168,20 +154,20 @@ namespace RazzleServer.Common.Wz
 
         internal void ParseMainWzDirectory()
         {
-            if (path == null)
+            if (FilePath == null)
             {
                 Log.LogCritical("Path is null");
                 return;
             }
 
-            if (!File.Exists(path))
+            if (!File.Exists(FilePath))
             {
-                var message = $"WZ File does not exist at path: '{path}'";
+                var message = $"WZ File does not exist at path: '{FilePath}'";
                 Log.LogCritical(message);
                 throw new FileNotFoundException(message);
             }
 
-            var reader = new WzBinaryReader(File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read), WzIv);
+            var reader = new WzBinaryReader(File.Open(FilePath, FileMode.Open, FileAccess.Read, FileShare.Read), WzIv);
 
             Header = new WzHeader
             {
@@ -193,12 +179,12 @@ namespace RazzleServer.Common.Wz
             reader.ReadBytes((int)(Header.FStart - reader.BaseStream.Position));
             reader.Header = Header;
             version = reader.ReadInt16();
-            if (fileVersion == -1)
+            if (Version == -1)
             {
                 for (var j = 0; j < short.MaxValue; j++)
                 {
-                    fileVersion = (short)j;
-                    versionHash = GetVersionHash(version, fileVersion);
+                    Version = (short)j;
+                    versionHash = GetVersionHash(version, Version);
                     if (versionHash != 0)
                     {
                         reader.Hash = versionHash;
@@ -229,7 +215,7 @@ namespace RazzleServer.Common.Wz
                                     {
                                         var directory = new WzDirectory(reader, Name, versionHash, WzIv, this);
                                         directory.ParseDirectory();
-                                        wzDir = directory;
+                                        WzDirectory = directory;
                                         return;
                                     }
                             }
@@ -245,11 +231,11 @@ namespace RazzleServer.Common.Wz
             }
 
             {
-                versionHash = GetVersionHash(version, fileVersion);
+                versionHash = GetVersionHash(version, Version);
                 reader.Hash = versionHash;
                 var directory = new WzDirectory(reader, Name, versionHash, WzIv, this);
                 directory.ParseDirectory();
-                wzDir = directory;
+                WzDirectory = directory;
             }
         }
 
@@ -272,15 +258,15 @@ namespace RazzleServer.Common.Wz
             var d = VersionHash & 0xFF;
             DecryptedVersionNumber = 0xff ^ a ^ b ^ c ^ d;
 
-            return EncryptedVersionNumber == DecryptedVersionNumber 
-                ? Convert.ToUInt32(VersionHash) 
+            return EncryptedVersionNumber == DecryptedVersionNumber
+                ? Convert.ToUInt32(VersionHash)
                 : 0;
         }
 
         private void CreateVersionHash()
         {
             versionHash = 0;
-            foreach (var ch in fileVersion.ToString())
+            foreach (var ch in Version.ToString())
             {
                 versionHash = versionHash * 32 + (byte)ch + 1;
             }
@@ -297,15 +283,15 @@ namespace RazzleServer.Common.Wz
         /// <param name="path">Path to the output wz file</param>
         public void SaveToDisk(string path)
         {
-            WzIv = WzTool.GetIvByMapleVersion(mapleVersion);
+            WzIv = WzTool.GetIvByMapleVersion(MapleVersionType);
             CreateVersionHash();
-            wzDir.SetHash(versionHash);
+            WzDirectory.SetHash(versionHash);
             var tempFile = Path.GetFileNameWithoutExtension(path) + ".TEMP";
             File.Create(tempFile).Close();
-            wzDir.GenerateDataFile(tempFile);
+            WzDirectory.GenerateDataFile(tempFile);
             WzTool.StringCache.Clear();
-            var totalLen = wzDir.GetImgOffsets(wzDir.GetOffsets(Header.FStart + 2));
-            var wzWriter = new WzBinaryWriter(File.Create(path), WzIv) {Hash = versionHash};
+            var totalLen = WzDirectory.GetImgOffsets(WzDirectory.GetOffsets(Header.FStart + 2));
+            var wzWriter = new WzBinaryWriter(File.Create(path), WzIv) { Hash = versionHash };
             Header.FSize = totalLen - Header.FStart;
             for (var i = 0; i < 4; i++)
             {
@@ -324,36 +310,16 @@ namespace RazzleServer.Common.Wz
             }
             wzWriter.Write(version);
             wzWriter.Header = Header;
-            wzDir.SaveDirectory(wzWriter);
+            WzDirectory.SaveDirectory(wzWriter);
             wzWriter.StringCache.Clear();
             var fs = File.OpenRead(tempFile);
-            wzDir.SaveImages(wzWriter, fs);
+            WzDirectory.SaveImages(wzWriter, fs);
             fs.Close();
             File.Delete(tempFile);
             wzWriter.StringCache.Clear();
             wzWriter.Close();
             GC.Collect();
             GC.WaitForPendingFinalizers();
-        }
-
-        public void ExportXml(string path, bool oneFile)
-        {
-            if (oneFile)
-            {
-                var fs = File.Create(path + "/" + Name + ".xml");
-                var writer = new StreamWriter(fs);
-
-                var level = 0;
-                writer.WriteLine(XmlUtil.Indentation(level) + XmlUtil.OpenNamedTag("WzFile", Name, true));
-                wzDir.ExportXml(writer, oneFile, level, false);
-                writer.WriteLine(XmlUtil.Indentation(level) + XmlUtil.CloseTag("WzFile"));
-
-                writer.Close();
-            }
-            else
-            {
-                throw new Exception("Under Construction");
-            }
         }
 
         /// <summary>
@@ -416,7 +382,7 @@ namespace RazzleServer.Common.Wz
                 }
             }
 
-            foreach (var dir in wzDir.WzDirectories)
+            foreach (var dir in WzDirectory.WzDirectories)
             {
                 {
                     foreach (var spath in GetPathsFromDirectory(dir, Name + "/" + dir.Name))
@@ -465,7 +431,7 @@ namespace RazzleServer.Common.Wz
                 }
             }
 
-            foreach (var dir in wzDir.WzDirectories)
+            foreach (var dir in WzDirectory.WzDirectories)
             {
                 {
                     foreach (var spath in GetPathsFromDirectory(dir, Name + "/" + dir.Name))
@@ -632,7 +598,7 @@ namespace RazzleServer.Common.Wz
         public WzObject GetObjectFromPath(string path)
         {
             var seperatedPath = path.Split("/".ToCharArray());
-            if (seperatedPath[0].ToLower() != wzDir.Name.ToLower() && seperatedPath[0].ToLower() != wzDir.Name.Substring(0, wzDir.Name.Length - 3).ToLower())
+            if (seperatedPath[0].ToLower() != WzDirectory.Name.ToLower() && seperatedPath[0].ToLower() != WzDirectory.Name.Substring(0, WzDirectory.Name.Length - 3).ToLower())
             {
                 {
                     return null;

@@ -14,7 +14,7 @@ namespace RazzleServer.Common.Wz
         /// </summary>
         /// <param name="filePath">Path to the wz file</param>
         /// <param name="version"></param>
-        public static List<string> ParseListFile(string filePath, WzMapleVersion version)
+        public static List<string> ParseListFile(string filePath, WzMapleVersionType version)
         {
             return ParseListFile(filePath, WzTool.GetIvByMapleVersion(version));
         }
@@ -49,7 +49,7 @@ namespace RazzleServer.Common.Wz
             return listEntries;
         }
 
-        public static void SaveToDisk(string path, WzMapleVersion version, List<string> listEntries)
+        public static void SaveToDisk(string path, WzMapleVersionType version, List<string> listEntries)
         {
             SaveToDisk(path, WzTool.GetIvByMapleVersion(version), listEntries);
         }

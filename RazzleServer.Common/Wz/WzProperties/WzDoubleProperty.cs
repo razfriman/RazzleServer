@@ -8,19 +8,15 @@ namespace RazzleServer.Common.Wz.WzProperties
 	/// </summary>
 	public class WzDoubleProperty : WzImageProperty
 	{
-		#region Fields
-		internal double val;
-		#endregion
-
 		#region Inherited Members
         public override void SetValue(object value)
         {
-            val = (double)value;
+            Value = (double)value;
         }
 
         public override WzImageProperty DeepClone()
         {
-            var clone = new WzDoubleProperty(Name, val);
+            var clone = new WzDoubleProperty(Name, Value);
             return clone;
         }
 
@@ -36,10 +32,7 @@ namespace RazzleServer.Common.Wz.WzProperties
 			writer.Write((byte)5);
 			writer.Write(Value);
 		}
-		public override void ExportXml(StreamWriter writer, int level)
-		{
-			writer.WriteLine(XmlUtil.Indentation(level) + XmlUtil.EmptyNamedValuePair("WzDouble", Name, Value.ToString()));
-		}
+		
 		public override void Dispose()
 		{
             Name = null;
@@ -50,9 +43,8 @@ namespace RazzleServer.Common.Wz.WzProperties
 		/// <summary>
 		/// The value of this property
 		/// </summary>
-		public double Value { get => val;
-			set => val = value;
-		}
+        public double Value { get; set; }
+
 		/// <summary>
 		/// Creates a blank WzDoubleProperty
 		/// </summary>
@@ -73,39 +65,39 @@ namespace RazzleServer.Common.Wz.WzProperties
 		public WzDoubleProperty(string name, double value)
 		{
             Name = name;
-			val = value;
+			Value = value;
 		}
 		#endregion
 
         #region Cast Values
         public override float GetFloat()
         {
-            return (float)val;
+            return (float)Value;
         }
 
         public override double GetDouble()
         {
-            return val;
+            return Value;
         }
 
         public override int GetInt()
         {
-            return (int)val;
+            return (int)Value;
         }
 
         public override short GetShort()
         {
-            return (short)val;
+            return (short)Value;
         }
 
         public override long GetLong()
         {
-            return (long)val;
+            return (long)Value;
         }
 
         public override string ToString()
         {
-            return val.ToString();
+            return Value.ToString();
         }
         #endregion
 	}

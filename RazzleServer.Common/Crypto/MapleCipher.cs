@@ -250,9 +250,9 @@ namespace RazzleServer.Common.Crypto
                 len = (byte)(length & 0xFF);
                 for (i = length - 1; i >= 0; --i)
                 {
-                    temp = (byte)(RollLeft(buffer[i], 3) ^ 0x13);
+                    temp = (byte)(RotateLeft(buffer[i], 3) ^ 0x13);
                     save = temp;
-                    temp = RollRight((byte)((xorKey ^ temp) - len), 4);
+                    temp = RotateRight((byte)((xorKey ^ temp) - len), 4);
                     xorKey = save;
                     buffer[i] = temp;
                     --len;
@@ -262,9 +262,9 @@ namespace RazzleServer.Common.Crypto
                 len = (byte)(length & 0xFF);
                 for (i = 0; i < length; ++i)
                 {
-                    temp = RollLeft((byte)~(buffer[i] - 0x48), len & 0xFF);
+                    temp = RotateLeft((byte)~(buffer[i] - 0x48), len & 0xFF);
                     save = temp;
-                    temp = RollRight((byte)((xorKey ^ temp) - len), 3);
+                    temp = RotateRight((byte)((xorKey ^ temp) - len), 3);
                     xorKey = save;
                     buffer[i] = temp;
                     --len;
@@ -286,9 +286,9 @@ namespace RazzleServer.Common.Crypto
                 len = (byte)(length & 0xFF);
                 for (i = 0; i < length; i++)
                 {
-                    temp = (byte)((RollLeft(buffer[i], 3) + len) ^ xorKey);
+                    temp = (byte)((RotateLeft(buffer[i], 3) + len) ^ xorKey);
                     xorKey = temp;
-                    temp = (byte)((~RollRight(temp, len & 0xFF) & 0xFF) + 0x48);
+                    temp = (byte)((~RotateRight(temp, len & 0xFF) & 0xFF) + 0x48);
                     buffer[i] = temp;
                     len--;
                 }
@@ -296,9 +296,9 @@ namespace RazzleServer.Common.Crypto
                 len = (byte)(length & 0xFF);
                 for (i = length - 1; i >= 0; i--)
                 {
-                    temp = (byte)(xorKey ^ (len + RollLeft(buffer[i], 4)));
+                    temp = (byte)(xorKey ^ (len + RotateLeft(buffer[i], 4)));
                     xorKey = temp;
-                    temp = RollRight((byte)(temp ^ 0x13), 3);
+                    temp = RotateRight((byte)(temp ^ 0x13), 3);
                     buffer[i] = temp;
                     len--;
                 }
@@ -308,7 +308,7 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
         /// Bitwise shift left
         /// </summary>
-        private static byte RollLeft(byte b, int count)
+        private static byte RotateLeft(byte b, int count)
         {
             var tmp = b << (count & 7);
             return (byte)(tmp | (tmp >> 8));
@@ -317,7 +317,7 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
         /// Bitwise shift right
         /// </summary>
-        private static byte RollRight(byte b, int count)
+        private static byte RotateRight(byte b, int count)
         {
             var tmp = b << (8 - (count & 7));
             return (byte)(tmp | (tmp >> 8));

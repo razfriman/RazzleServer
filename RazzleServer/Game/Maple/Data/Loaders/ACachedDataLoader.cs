@@ -86,6 +86,6 @@ namespace RazzleServer.Game.Maple.Data.Loaders
 
         public abstract void LoadFromWz();
 
-        public WzFile GetWzFile(string name) => new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, name), WzMapleVersion.Gms);
+        public WzFile GetWzFile(string name) => new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, name), WzMapleVersionType.Gms);
     }
 }

@@ -1,5 +1,8 @@
 ﻿using System;
 using System.DrawingCore;
+using System.IO;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Point = RazzleServer.Common.Util.Point;
 
 namespace RazzleServer.Common.Wz
@@ -12,6 +15,7 @@ namespace RazzleServer.Common.Wz
         /// <summary>
         /// Returns the parent object
         /// </summary>
+        [JsonIgnore]
         public WzObject Parent { get; internal set; }
 
         /// <summary>
@@ -22,11 +26,13 @@ namespace RazzleServer.Common.Wz
         /// <summary>
         /// The WzObjectType of the object
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public abstract WzObjectType ObjectType { get; }
 
         /// <summary>
         /// Returns the parent WZ File
         /// </summary>
+        [JsonIgnore]
         public abstract WzFile WzFileParent { get; }
 
         public abstract void Dispose();
@@ -58,6 +64,7 @@ namespace RazzleServer.Common.Wz
             }
         }
 
+        [JsonIgnore]
         public string FullPath
         {
             get
@@ -78,6 +85,7 @@ namespace RazzleServer.Common.Wz
             }
         }
 
+        [JsonIgnore]
         public virtual object WzValue => null;
 
         #region Cast Values
@@ -128,5 +136,19 @@ namespace RazzleServer.Common.Wz
         }
 
         #endregion
+
+        public void Export(string path)
+        {
+            using (var s = File.OpenWrite(path))
+            using (var sr = new StreamWriter(s))
+            using (var writer = new JsonTextWriter(sr))
+            {
+                var serializer = new JsonSerializer
+                {
+                    Formatting = Formatting.Indented
+                };
+                serializer.Serialize(writer, this);
+            }
+        }
     }
 }

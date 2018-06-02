@@ -125,12 +125,7 @@ namespace RazzleServer.Common.Wz.WzProperties
                 properties[i].WriteValue(writer);
             }
         }
-        public override void ExportXml(StreamWriter writer, int level)
-        {
-            writer.WriteLine(XmlUtil.Indentation(level) + XmlUtil.OpenNamedTag("WzConvex", Name, true));
-            DumpPropertyList(writer, level, WzProperties);
-            writer.WriteLine(XmlUtil.Indentation(level) + XmlUtil.CloseTag("WzConvex"));
-        }
+
         public override void Dispose()
         {
             Name = null;
@@ -138,6 +133,7 @@ namespace RazzleServer.Common.Wz.WzProperties
             properties.Clear();
             properties = null;
         }
+
         #endregion
 
         #region Custom Members

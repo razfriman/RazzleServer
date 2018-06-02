@@ -7,17 +7,13 @@ namespace RazzleServer.Common.Wz.Util
 {
     public static class WzTool
     {
+        public const int WzHeader = 0x31474B50; //PKG1
+
         public static Hashtable StringCache = new Hashtable();
 
-        public static uint RotateLeft(uint x, byte n)
-        {
-            return (x << n) | (x >> (32 - n));
-        }
+        public static uint RotateLeft(uint x, byte n) => (x << n) | (x >> (32 - n));
 
-        public static uint RotateRight(uint x, byte n)
-        {
-            return (x >> n) | (x << (32 - n));
-        }
+        public static uint RotateRight(uint x, byte n) => (x >> n) | (x << (32 - n));
 
         public static int GetCompressedIntLength(int i)
         {
@@ -96,13 +92,13 @@ namespace RazzleServer.Common.Wz.Util
             }
         }
 
-        public static byte[] GetIvByMapleVersion(WzMapleVersion ver)
+        public static byte[] GetIvByMapleVersion(WzMapleVersionType ver)
         {
             switch (ver)
             {
-                case WzMapleVersion.Ems:
+                case WzMapleVersionType.Ems:
                     return CryptoConstants.WzMseaiv;
-                case WzMapleVersion.Gms:
+                case WzMapleVersionType.Gms:
                     return CryptoConstants.WzGmsiv;
                 default:
                     return new byte[4];
@@ -123,7 +119,7 @@ namespace RazzleServer.Common.Wz.Util
             return result;
         }
 
-        private static double GetDecryptionSuccessRate(string wzPath, WzMapleVersion encVersion, ref short? version)
+        private static double GetDecryptionSuccessRate(string wzPath, WzMapleVersionType encVersion, ref short? version)
         {
             var wzf = version == null 
                 ? new WzFile(wzPath, encVersion)
@@ -157,56 +153,46 @@ namespace RazzleServer.Common.Wz.Util
             }
         }
 
-        public static WzMapleVersion DetectMapleVersion(string wzFilePath, out short fileVersion)
+        public static WzMapleVersionType DetectMapleVersion(string wzFilePath, out short fileVersion)
         {
             fileVersion = 0;
 
             var mapleVersionSuccessRates = new Hashtable();
             short? version = null;
-            mapleVersionSuccessRates.Add(WzMapleVersion.Gms, GetDecryptionSuccessRate(wzFilePath, WzMapleVersion.Gms, ref version));
-            mapleVersionSuccessRates.Add(WzMapleVersion.Ems, GetDecryptionSuccessRate(wzFilePath, WzMapleVersion.Ems, ref version));
-            mapleVersionSuccessRates.Add(WzMapleVersion.Bms, GetDecryptionSuccessRate(wzFilePath, WzMapleVersion.Bms, ref version));
+            mapleVersionSuccessRates.Add(WzMapleVersionType.Gms, GetDecryptionSuccessRate(wzFilePath, WzMapleVersionType.Gms, ref version));
+            mapleVersionSuccessRates.Add(WzMapleVersionType.Ems, GetDecryptionSuccessRate(wzFilePath, WzMapleVersionType.Ems, ref version));
+            mapleVersionSuccessRates.Add(WzMapleVersionType.Bms, GetDecryptionSuccessRate(wzFilePath, WzMapleVersionType.Bms, ref version));
             
             if (version != null)
             {
                 fileVersion = (short) version;
             }
 
-            var mostSuitableVersion = WzMapleVersion.Gms;
+            var mostSuitableVersion = WzMapleVersionType.Gms;
             double maxSuccessRate = 0;
 
             foreach (DictionaryEntry mapleVersionEntry in mapleVersionSuccessRates)
             {
                 if ((double)mapleVersionEntry.Value > maxSuccessRate)
                 {
-                    mostSuitableVersion = (WzMapleVersion)mapleVersionEntry.Key;
+                    mostSuitableVersion = (WzMapleVersionType)mapleVersionEntry.Key;
                     maxSuccessRate = (double)mapleVersionEntry.Value;
                 }
             }
 
             if (maxSuccessRate < 0.7 && File.Exists(Path.Combine(Path.GetDirectoryName(wzFilePath), "ZLZ.dll")))
             {
-                return WzMapleVersion.GetFromZlz;
+                return WzMapleVersionType.GetFromZlz;
             }
 
             return mostSuitableVersion;
         }
-
-        public const int WzHeader = 0x31474B50; //PKG1
 
         public static bool IsListFile(string path)
         {
             var reader = new BinaryReader(File.OpenRead(path));
             var result = reader.ReadInt32() != WzHeader;
             reader.Close();
-            return result;
-        }
-
-        private static byte[] Combine(byte[] a, byte[] b)
-        {
-            var result = new byte[a.Length + b.Length];
-            Array.Copy(a, 0, result, 0, a.Length);
-            Array.Copy(b, 0, result, a.Length, b.Length);
             return result;
         }
     }
