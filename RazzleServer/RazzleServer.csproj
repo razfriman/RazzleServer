@@ -40,7 +40,7 @@
     <Content Include="Game\Data\loot.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Game\Data\shop.json">
+    <Content Include="Game\Data\shops.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

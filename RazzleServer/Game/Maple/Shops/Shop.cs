@@ -18,7 +18,7 @@ namespace RazzleServer.Game.Maple.Shops
 
         public Shop(ShopEntity entity)
         {
-            Id = entity.Id;
+            Id = entity.ShopId;
             RechargeTier = entity.RechargeTier;
             Items = new List<ShopItem>();
 
