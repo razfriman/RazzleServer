@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RazzleServer.Center;
+using RazzleServer.Common.Server;
 using RazzleServer.Data;
 
 namespace RazzleServer.Common.Data

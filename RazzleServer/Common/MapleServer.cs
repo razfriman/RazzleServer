@@ -6,12 +6,11 @@ using System.Net.Sockets;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using RazzleServer.Center;
 using RazzleServer.Common.Network;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
 
-namespace RazzleServer.Common.Server
+namespace RazzleServer.Common
 {
     public abstract class MapleServer<TClient, TPacketHandler>
     where TClient : AClient

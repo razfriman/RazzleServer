@@ -1,7 +1,7 @@
 ﻿using RazzleServer.Common.Constants;
 using RazzleServer.Common.Util;
 
-namespace RazzleServer.Center.Maple
+namespace RazzleServer.Common
 {
     public sealed class Worlds : MapleKeyedCollection<byte, World>
     {

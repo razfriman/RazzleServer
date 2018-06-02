@@ -1,4 +1,5 @@
-﻿using RazzleServer.Common.Packet;
+﻿using RazzleServer.Common;
+using RazzleServer.Common.Packet;
 
 namespace RazzleServer.Login.Handlers
 {
@@ -10,7 +11,7 @@ namespace RazzleServer.Login.Handlers
             client.World = packet.ReadByte();
             client.Channel = packet.ReadByte();
 
-            var channelExists = Center.ServerManager.Instance.Worlds[client.World].Contains(client.Channel);
+            var channelExists = client.Server.Manager.Worlds[client.World].Contains(client.Channel);
             var characters = client.Server.GetCharacters(client.World, client.Account.Id);
 
             using (var pw = new PacketWriter(ServerOperationCode.SelectWorldResult))

@@ -1,9 +1,6 @@
 using System;
-using System.Collections.Generic;
-using RazzleServer.Center.Maple;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
-using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Login.Maple;
 
 namespace RazzleServer.Login

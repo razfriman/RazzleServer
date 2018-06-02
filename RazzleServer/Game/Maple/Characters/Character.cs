@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using RazzleServer.Center;
+using RazzleServer.Common.Server;
 using RazzleServer.Common;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Data;
@@ -16,6 +16,8 @@ using RazzleServer.Game.Maple.Data.References;
 using RazzleServer.Game.Maple.Interaction;
 using RazzleServer.Game.Maple.Life;
 using RazzleServer.Game.Maple.Maps;
+using RazzleServer.Game.Scripts;
+using RazzleServer.Game.Maple.Shops;
 
 namespace RazzleServer.Game.Maple.Characters
 {
@@ -53,7 +55,8 @@ namespace RazzleServer.Game.Maple.Characters
         public CharacterGuild Guild { get; set; }
         public CharacterParty Party { get; set; }
         public CharacterSkillMacros SkillMacros { get; set; }
-
+        public ANpcScript NpcScript { get; set; }
+        public Shop CurrentNpcShop { get; set; }
         private bool Assigned { get; set; }
 
         public DateTime LastHealthHealOverTime { get; set; } = new DateTime();
@@ -517,23 +520,6 @@ namespace RazzleServer.Game.Maple.Characters
         public bool FacesLeft => Stance % 2 == 0;
 
         public bool IsRanked => Level >= 30;
-
-        public Npc LastNpc
-        {
-            get => _lastNpc;
-            set
-            {
-                if (value == null)
-                {
-                    if (value.Scripts.ContainsKey(this))
-                    {
-                        value.Scripts.Remove(this);
-                    }
-                }
-
-                _lastNpc = value;
-            }
-        }
 
         public QuestReference LastQuest { get; set; }
 
@@ -1021,9 +1007,8 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Converse(Npc npc, QuestReference quest = null)
         {
-            LastNpc = npc;
             LastQuest = quest;
-            LastNpc.Converse(this);
+            npc.Converse(this);
         }
 
         public void DistributeAp(StatisticType type, short amount = 1)

@@ -3,11 +3,12 @@ using System.Linq;
 using Newtonsoft.Json;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
+using RazzleServer.Common.Server;
 using RazzleServer.Common.Util;
 using RazzleServer.Game;
 using RazzleServer.Game.Maple.Characters;
 
-namespace RazzleServer.Center.Maple
+namespace RazzleServer.Common
 {
     public sealed class World : MapleKeyedCollection<byte, GameServer>
     {

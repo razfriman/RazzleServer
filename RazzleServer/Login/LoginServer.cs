@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using RazzleServer.Center;
+using RazzleServer.Common.Server;
+using RazzleServer.Common;
 using RazzleServer.Common.Data;
 using RazzleServer.Common.Server;
 using RazzleServer.Game.Maple.Characters;

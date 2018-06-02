@@ -1,4 +1,5 @@
-﻿using RazzleServer.Common.Constants;
+﻿using System;
+using RazzleServer.Common.Constants;
 using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Life;
@@ -14,10 +15,10 @@ namespace RazzleServer.Game.Scripts
 
         public abstract void Execute();
 
-        //public void SetResult(int value)
-        //{
-        //    _mResult.Set(value);
-        //}
+        public void SetResult(int value)
+        {
+            //_mResult.Set(value);
+        }
 
         //private int SendOk(string text)
         //{

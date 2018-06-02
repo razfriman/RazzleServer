@@ -3,15 +3,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using RazzleServer.Center.Maple;
 using RazzleServer.Common.Data;
+using RazzleServer.Common.Server;
 using RazzleServer.Common.Util;
 using RazzleServer.Game;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Scripts;
 using RazzleServer.Login;
 
-namespace RazzleServer.Center
+namespace RazzleServer.Common
 {
     public class ServerManager
     {

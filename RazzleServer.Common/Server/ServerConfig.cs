@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Util;
 
-namespace RazzleServer.Center
+namespace RazzleServer.Common.Server
 {
     public class ServerConfig
     {

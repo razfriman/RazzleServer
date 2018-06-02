@@ -11,7 +11,6 @@ using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Scripts;
 using RazzleServer.Game.Maple.Shops;
 using RazzleServer.Game.Maple.Util;
-using RazzleServer.Game.Scripts;
 
 namespace RazzleServer.Game.Maple.Life
 {
@@ -23,9 +22,6 @@ namespace RazzleServer.Game.Maple.Life
         public Shop Shop { get; set; }
         public int StorageCost { get; set; }
 
-        // [JsonIgnore]
-        //public Dictionary<Character, ANpcScript> Scripts { get; }
-
         private readonly ILogger _log = LogManager.Log;
 
         public Npc() { }
@@ -33,7 +29,6 @@ namespace RazzleServer.Game.Maple.Life
         public Npc(WzImageProperty img)
             : base(img, LifeObjectType.Npc)
         {
-            Scripts = new Dictionary<Character, ANpcScript>();
         }
 
         public void Move(PacketReader iPacket)
@@ -64,6 +59,7 @@ namespace RazzleServer.Game.Maple.Life
         {
             if (Shop != null)
             {
+                talker.CurrentNpcShop = Shop;
                 Shop.Show(talker);
             }
             else if (StorageCost > 0)
@@ -78,7 +74,7 @@ namespace RazzleServer.Game.Maple.Life
 
         public void Handle(Character talker, PacketReader iPacket)
         {
-            if (talker.LastNpc == null)
+            if (talker.NpcScript == null)
             {
                 return;
             }
@@ -104,8 +100,14 @@ namespace RazzleServer.Game.Maple.Life
                     break;
             }
 
-            if (action != endTalkByte)
+            if (action == endTalkByte)
             {
+                talker.NpcScript = null;
+
+            }
+            else
+            {
+
                 if (iPacket.Available >= 4)
                 {
                     selection = iPacket.ReadInt();
@@ -120,11 +122,7 @@ namespace RazzleServer.Game.Maple.Life
                     //selection = this.StyleSelectionHelpers[talker][selection];
                 }
 
-                Scripts[talker].SetResult(selection != -1 ? selection : action);
-            }
-            else
-            {
-                talker.LastNpc = null;
+                talker.NpcScript.SetResult(selection != -1 ? selection : action);
             }
         }
 

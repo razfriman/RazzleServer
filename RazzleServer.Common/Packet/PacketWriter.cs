@@ -2,7 +2,6 @@
 using System.IO;
 using System.Text;
 using RazzleServer.Common.Util;
-using RazzleServer.Game.Maple;
 
 namespace RazzleServer.Common.Packet
 {

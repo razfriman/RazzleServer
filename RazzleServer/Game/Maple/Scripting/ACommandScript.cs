@@ -1,4 +1,4 @@
-﻿using RazzleServer.Center;
+﻿using RazzleServer.Common.Server;
 using RazzleServer.Game.Maple.Characters;
 
 namespace RazzleServer.Game.Maple.Scripts

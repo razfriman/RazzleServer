@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RazzleServer.Center.Maple
+namespace RazzleServer.Common.Server
 {
     public sealed class Migration
     {
