@@ -77,7 +77,10 @@ namespace RazzleServer.Game.Maple.Life
 
         public void Handle(Character talker, PacketReader packet)
         {
-            if (talker.NpcScript == null)
+            var script = talker.NpcScript;
+
+
+            if (script == null)
             {
                 return;
             }
@@ -88,39 +91,64 @@ namespace RazzleServer.Game.Maple.Life
             switch (lastMessageType)
             {
                 case NpcMessageType.Standard:
-                    //
+                    if (action == 0)
+                    {
+                        if (script.State == 0)
+                        {
+                            script = null;
+                            return;
+                        }
+                        script.State--;
+                        script.Send(script.States[script.State]);
+                    }
+                    else if (action == 1)
+                    {
+                        script.State++;
+                        if (script.State < script.States.Count)
+                        {
+                            script.Send(script.States[script.State]);
+                        }
+                        else
+                        {
+                            script.SetResult(1);
+                        }
+                    }
+                    else
+                    {
+                        script = null;
+                    }
                     break;
                 case NpcMessageType.YesNo:
                 case NpcMessageType.AcceptDecline:
                 case NpcMessageType.AcceptDeclineNoExit:
                     if (action == 0)
                     {
-                        talker.NpcScript.SetResult(0);
+                        script.SetResult(0);
                     }
                     else if (action == 1)
                     {
-                        talker.NpcScript.SetResult(1);
+                        script.SetResult(1);
                     }
                     else
                     {
-                        talker.NpcScript = null;
+                        script = null;
                         return;
                     }
                     break;
                 case NpcMessageType.RequestText:
                     if (action != 0)
                     {
-                        talker.NpcScript.SetResult(packet.ReadString());
+                        script.SetResult(packet.ReadString());
                     }
                     break;
                 case NpcMessageType.RequestNumber:
                     if (action == 1)
                     {
-                        talker.NpcScript.SetResult(packet.ReadInt());
+                        script.SetResult(packet.ReadInt());
                     }
                     else
                     {
-                        talker.NpcScript = null;
+                        script = null;
                         return;
                     }
                     break;
@@ -129,11 +157,11 @@ namespace RazzleServer.Game.Maple.Life
                 case NpcMessageType.RequestStyle:
                     if (action != 0)
                     {
-                        talker.NpcScript.SetResult(packet.ReadInt());
+                        script.SetResult(packet.ReadInt());
                     }
                     else
                     {
-                        talker.NpcScript = null;
+                        script = null;
                         return;
                     }
                     break;
