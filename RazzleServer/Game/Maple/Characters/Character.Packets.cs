@@ -30,7 +30,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public PacketWriter SendHint(string text, int width = 0, int height = 0)
+        public void SendHint(string text, int width = 0, int height = 0)
         {
             using (var pw = new PacketWriter(ServerOperationCode.Hint))
             {
