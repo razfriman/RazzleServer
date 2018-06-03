@@ -1,6 +1,7 @@
 ﻿using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Life;
+using RazzleServer.Game.Maple.Scripting;
 
 namespace RazzleServer.Game.Scripts.Commands{
     public sealed class SpawnCommand : ACommandScript
