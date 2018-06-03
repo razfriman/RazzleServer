@@ -1,4 +1,6 @@
-﻿namespace RazzleServer.Game.Maple.Scripting.Scripts.Portals
+﻿using RazzleServer.Game.Maple.Scripting;
+
+namespace RazzleServer.Game.Scripts.Portals
 {
     [PortalScript("advice00")]
     public class Advice00 : APortalScript

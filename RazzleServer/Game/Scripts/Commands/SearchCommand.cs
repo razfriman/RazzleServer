@@ -4,8 +4,9 @@ using System.Linq;
 using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
+using RazzleServer.Game.Maple.Scripting;
 
-namespace RazzleServer.Game.Maple.Scripting.Scripts.Commands
+namespace RazzleServer.Game.Scripts.Commands
 {
     public sealed class SearchCommand : ACommandScript
     {

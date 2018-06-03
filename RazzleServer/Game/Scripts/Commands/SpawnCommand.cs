@@ -2,7 +2,7 @@
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Life;
 
-namespace RazzleServer.Game.Maple.Scripting.Scripts.Commands{
+namespace RazzleServer.Game.Scripts.Commands{
     public sealed class SpawnCommand : ACommandScript
     {
         public override string Name => "spawn";

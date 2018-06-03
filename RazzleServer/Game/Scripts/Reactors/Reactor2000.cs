@@ -1,4 +1,6 @@
-﻿namespace RazzleServer.Game.Maple.Scripting.Scripts.Reactors
+﻿using RazzleServer.Game.Maple.Scripting;
+
+namespace RazzleServer.Game.Scripts.Reactors
 {
     [ReactorScript("2000")]
     public class Reactor2000 : AReactorScript

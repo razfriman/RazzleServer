@@ -1,8 +1,10 @@
 ﻿using System;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
+using RazzleServer.Game.Maple.Scripting;
 
-namespace RazzleServer.Game.Maple.Scripting.Scripts.Commands{
+namespace RazzleServer.Game.Scripts.Commands
+{
     public class MapCommand : ACommandScript
     {
         public override string Name => "map";
