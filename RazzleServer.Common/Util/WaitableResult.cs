@@ -2,7 +2,7 @@
 
 namespace RazzleServer.Common.Util
 {
-    public sealed class WaitableResult<T> where T : struct
+    public sealed class WaitableResult<T>
     {
         private readonly ManualResetEvent _mEvent;
 

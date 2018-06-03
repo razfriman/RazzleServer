@@ -85,61 +85,58 @@ namespace RazzleServer.Game.Maple.Life
             var lastMessageType = (NpcMessageType)packet.ReadByte();
             var action = packet.ReadByte();
 
-            var selection = -1;
-
-            byte endTalkByte;
-
             switch (lastMessageType)
             {
+                case NpcMessageType.Standard:
+                    //
+                    break;
+                case NpcMessageType.YesNo:
+                case NpcMessageType.AcceptDecline:
+                case NpcMessageType.AcceptDeclineNoExit:
+                    if (action == 0)
+                    {
+                        talker.NpcScript.SetResult(0);
+                    }
+                    else if (action == 1)
+                    {
+                        talker.NpcScript.SetResult(1);
+                    }
+                    else
+                    {
+                        talker.NpcScript = null;
+                        return;
+                    }
+                    break;
                 case NpcMessageType.RequestText:
+                    if (action != 0)
+                    {
+                        talker.NpcScript.SetResult(packet.ReadString());
+                    }
+                    break;
                 case NpcMessageType.RequestNumber:
-                case NpcMessageType.RequestStyle:
+                    if (action == 1)
+                    {
+                        talker.NpcScript.SetResult(packet.ReadInt());
+                    }
+                    else
+                    {
+                        talker.NpcScript = null;
+                        return;
+                    }
+                    break;
                 case NpcMessageType.Choice:
-                    endTalkByte = 0;
+                case NpcMessageType.Quiz:
+                case NpcMessageType.RequestStyle:
+                    if (action != 0)
+                    {
+                        talker.NpcScript.SetResult(packet.ReadInt());
+                    }
+                    else
+                    {
+                        talker.NpcScript = null;
+                        return;
+                    }
                     break;
-
-                default:
-                    endTalkByte = byte.MaxValue;
-                    break;
-            }
-
-            if (lastMessageType == NpcMessageType.Standard)
-            {
-                if (action == 0)
-                {
-                    // prev
-                    // cm.sendDialog(c.getPlayer().getNpcScriptInfo().getPreviousStates().get(c.getPlayer().getNpcScriptInfo().getState()));
-                }
-                else if (action == 1)
-                {
-                    // next
-                    // next/prev
-                }
-            }
-
-            if (action == endTalkByte)
-            {
-                talker.NpcScript.SetResult(-1);
-                talker.NpcScript = null;
-            }
-            else
-            {
-
-                if (packet.Available >= 4)
-                {
-                    selection = packet.ReadInt();
-                }
-                else if (packet.Available > 0)
-                {
-                    selection = packet.ReadByte();
-                }
-
-                if (lastMessageType == NpcMessageType.RequestStyle)
-                {
-                    //selection = this.StyleSelectionHelpers[talker][selection];
-                }
-
-                talker.NpcScript.SetResult(selection != -1 ? selection : action);
             }
         }
 
@@ -232,7 +229,7 @@ namespace RazzleServer.Game.Maple.Life
                     pw.WriteInt(0);
                     break;
                 case NpcMessageType.AcceptDecline:
-                case NpcMessageType.Simple:
+                case NpcMessageType.Choice:
                 case NpcMessageType.YesNo:
                     break;
             }

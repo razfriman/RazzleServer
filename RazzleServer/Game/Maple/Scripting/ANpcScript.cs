@@ -10,6 +10,7 @@ namespace RazzleServer.Game.Maple.Scripting
     public abstract class ANpcScript
     {
         private WaitableResult<int> _result;
+        private WaitableResult<string> _stringResult;
 
         public Character Character { get; set; }
 
@@ -22,6 +23,11 @@ namespace RazzleServer.Game.Maple.Scripting
         public void SetResult(int value)
         {
             _result?.Set(value);
+        }
+
+        public void SetResult(string value)
+        {
+            _stringResult?.Set(value);
         }
 
         protected int SendOk(string text) => Send(new NpcStateInfo
