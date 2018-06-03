@@ -6,23 +6,17 @@ namespace RazzleServer.Common.Util
     {
         private readonly ManualResetEvent _mEvent;
 
-        public WaitableResult()
-        {
-            _mEvent = new ManualResetEvent(false);
-        }
+        public T Value { get; private set; }
 
-        public void Wait()
-        {
-            _mEvent.WaitOne();
-        }
+        public WaitableResult() => _mEvent = new ManualResetEvent(false);
+
+        public void Wait() => _mEvent.WaitOne();
 
         public void Set(T value)
         {
             Value = value;
-
             _mEvent.Set();
         }
 
-        public T Value { get; private set; }
     }
 }

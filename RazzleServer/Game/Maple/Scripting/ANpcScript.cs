@@ -1,78 +1,71 @@
-﻿using RazzleServer.Game.Maple.Characters;
+﻿using RazzleServer.Common.Constants;
+using RazzleServer.Common.Util;
+using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Life;
 
 namespace RazzleServer.Game.Maple.Scripting
 {
     public abstract class ANpcScript
     {
-        public Character Character { get; }
-        public Npc Npc { get; }
-
-        public abstract string Name { get; }
+        private WaitableResult<int> _result;
+        public Character Character;
+        public Npc Npc;
 
         public abstract void Execute();
 
         public void SetResult(int value)
         {
-            //_mResult.Set(value);
+            _result?.Set(value);
         }
 
-        //private int SendOk(string text)
-        //{
-        //    _mResult = new WaitableResult<int>();
-        //    Character.Client.Send(_npc.GetDialogPacket(_text, NpcMessageType.Standard, 0, 0));
-        //    _text = string.Empty;
-        //    _mResult.Wait();
-        //    return _mResult.Value;
-        //}
+        protected int SendOk(string text)
+        {
+            _result = new WaitableResult<int>();
+            Character.Client.Send(Npc.GetDialogPacket(text, NpcMessageType.Standard, 0, 0));
+            _result.Wait();
+            return _result.Value;
+        }
 
-        //private int SendNext()
-        //{
-        //    _mResult = new WaitableResult<int>();
-        //    Character.Client.Send(_npc.GetDialogPacket(_text, NpcMessageType.Standard, 0, 1));
-        //    _text = string.Empty;
+        protected int SendNext(string text)
+        {
+            _result = new WaitableResult<int>();
+            Character.Client.Send(Npc.GetDialogPacket(text, NpcMessageType.Standard, 0, 1));
+            _result.Wait();
+            return _result.Value;
+        }
 
-        //    _mResult.Wait();
+        protected int SendBackOk(string text)
+        {
+            _result = new WaitableResult<int>();
+            Character.Client.Send(Npc.GetDialogPacket(text, NpcMessageType.Standard, 1, 0));
+            _result.Wait();
 
-        //    return _mResult.Value;
-        //}
+            return _result.Value;
+        }
 
-        //private int SendBackOk()
-        //{
-        //    _mResult = new WaitableResult<int>();
-        //    Character.Client.Send(_npc.GetDialogPacket(_text, NpcMessageType.Standard, 1, 0));
-        //    _text = string.Empty;
-        //    _mResult.Wait();
+        protected int SendBackNext(string text)
+        {
+            _result = new WaitableResult<int>();
+            Character.Client.Send(Npc.GetDialogPacket(text, NpcMessageType.Standard, 1, 1));
+            _result.Wait();
+            return _result.Value;
+        }
 
-        //    return _mResult.Value;
-        //}
+        private int AskYesNo(string text)
+        {
+            _result = new WaitableResult<int>();
+            Character.Client.Send(Npc.GetDialogPacket(text, NpcMessageType.YesNo));
+            _result.Wait();
+            return _result.Value;
+        }
 
-        //private int SendBackNext()
-        //{
-        //    _mResult = new WaitableResult<int>();
-        //    Character.Client.Send(_npc.GetDialogPacket(_text, NpcMessageType.Standard, 1, 1));
-        //    _text = string.Empty;
-        //    _mResult.Wait();
-        //    return _mResult.Value;
-        //}
-
-        //private int AskYesNo()
-        //{
-        //    _mResult = new WaitableResult<int>();
-        //    Character.Client.Send(Npc.GetDialogPacket(_text, NpcMessageType.YesNo));
-        //    _text = string.Empty;
-        //    _mResult.Wait();
-        //    return _mResult.Value;
-        //}
-
-        //private int AskAcceptDecline()
-        //{
-        //    _mResult = new WaitableResult<int>();
-        //    Character.Client.Send(_npc.GetDialogPacket(_text, NpcMessageType.AcceptDecline));
-        //    _text = string.Empty;
-        //    _mResult.Wait();
-        //    return _mResult.Value;
-        //}
+        protected int AskAcceptDecline(string text)
+        {
+            _result = new WaitableResult<int>();
+            Character.Client.Send(Npc.GetDialogPacket(text, NpcMessageType.AcceptDecline));
+            _result.Wait();
+            return _result.Value;
+        }
 
         //private void AskChoice()
         //{

@@ -195,7 +195,6 @@ namespace RazzleServer.Game.Maple.Life
         {
             var oPacket = new PacketWriter(ServerOperationCode.ScriptMessage);
 
-
             oPacket.WriteByte(4); // NOTE: Unknown.
             oPacket.WriteInt(MapleId);
             oPacket.WriteByte((byte)messageType);

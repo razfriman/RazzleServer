@@ -9,17 +9,17 @@ namespace RazzleServer.Game.Maple.Data
 {
     public static class DataProvider
     {
-        public static CachedAvailableStyles Styles { get; private set; }
-        public static CachedItems Items { get; private set; }
-        public static CachedSkills Skills { get; private set; }
-        public static CachedMobs Mobs { get; private set; }
-        public static CachedMobSkills MobSkills { get; private set; }
-        public static CachedReactors Reactors { get; private set; }
-        public static CachedQuests Quests { get; private set; }
-        public static CachedNpcs Npcs { get; private set; }
-        public static CachedCreationData CreationData { get; private set; }
-        public static CachedMaps Maps { get; private set; }
-        public static CachedStrings Strings { get; private set; }
+        public static CachedAvailableStyles Styles { get; private set; } = new CachedAvailableStyles();
+        public static CachedItems Items { get; private set; } = new CachedItems();
+        public static CachedSkills Skills { get; private set; } = new CachedSkills();
+        public static CachedMobs Mobs { get; private set; } = new CachedMobs();
+        public static CachedMobSkills MobSkills { get; private set; } = new CachedMobSkills();
+        public static CachedReactors Reactors { get; private set; } = new CachedReactors();
+        public static CachedQuests Quests { get; private set; } = new CachedQuests();
+        public static CachedNpcs Npcs { get; private set; } = new CachedNpcs();
+        public static CachedCreationData CreationData { get; private set; } = new CachedCreationData();
+        public static CachedMaps Maps { get; private set; } = new CachedMaps();
+        public static CachedStrings Strings { get; private set; } = new CachedStrings();
         public static CachedShops Shops { get; private set; } = new CachedShops();
         public static CachedRechargeTiers RechargeTiers { get; private set; } = new CachedRechargeTiers();
 

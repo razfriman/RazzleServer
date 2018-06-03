@@ -45,11 +45,6 @@
     "RechargeTier": 1
   },
   {
-    "ShopId": 1011101,
-    "NpcId": 1011101,
-    "RechargeTier": 1
-  },
-  {
     "ShopId": 1012004,
     "NpcId": 1012004,
     "RechargeTier": 0
@@ -142,31 +137,6 @@
   {
     "ShopId": 1093000,
     "NpcId": 1093000,
-    "RechargeTier": 1
-  },
-  {
-    "ShopId": 1100001,
-    "NpcId": 1100001,
-    "RechargeTier": 5
-  },
-  {
-    "ShopId": 1100002,
-    "NpcId": 1100002,
-    "RechargeTier": 6
-  },
-  {
-    "ShopId": 1200001,
-    "NpcId": 1200001,
-    "RechargeTier": 5
-  },
-  {
-    "ShopId": 1200002,
-    "NpcId": 1200002,
-    "RechargeTier": 6
-  },
-  {
-    "ShopId": 1301000,
-    "NpcId": 1301000,
     "RechargeTier": 1
   },
   {
@@ -402,11 +372,6 @@
   {
     "ShopId": 9110100,
     "NpcId": 9110100,
-    "RechargeTier": 0
-  },
-  {
-    "ShopId": 9110101,
-    "NpcId": 9110101,
     "RechargeTier": 0
   },
   {

@@ -8,6 +8,7 @@ namespace RazzleServer.Game.Handlers
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
             var objectId = packet.ReadInt();
+            var playerPosition = packet.ReadPoint();
             client.Character.Converse(client.Character.Map.Npcs[objectId]);
         }
     }

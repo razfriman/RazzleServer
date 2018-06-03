@@ -44,8 +44,8 @@
 
         FaceExpression = 0x30,
         UseItemEffect = 0x31,
-        NpcResult = 0x36,
-        NpcConverse = 0x38,
+        NpcConverse = 0x36,
+        NpcResult = 0x38,
         NpcShop = 0x39,
         Storage = 0x3A,
         HiredMerchant = 0x3B,

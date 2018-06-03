@@ -6,6 +6,7 @@ namespace RazzleServer.Game.Maple.Data.References
     {
         public int MapleId { get; set; }
         public int StorageCost { get; set; }
+        public string Script { get; set; }
 
         public NpcReference() { }
 
@@ -18,7 +19,14 @@ namespace RazzleServer.Game.Maple.Data.References
             }
 
             MapleId = id;
-            StorageCost = img["info"]?["trunkPut"]?.GetInt() ?? 0;
+            var info = img["info"];
+
+            if (info != null)
+            {
+                StorageCost = info["trunkPut"]?.GetInt() ?? 0;
+                Script = info["0"]?["script"]?.GetString();
+            }
+
         }
     }
 }

@@ -89,7 +89,8 @@ namespace RazzleServer.Game.Maple.Data
                 {
                     Log.LogError(e, "Error while loading changes from JSON");
                 }
-            }        }
+            }
+        }
 
         private static async Task LoadShopsFromJson()
         {
@@ -113,6 +114,12 @@ namespace RazzleServer.Game.Maple.Data
 
                     foreach (var item in data)
                     {
+                        if (!DataProvider.Npcs?.Data?.ContainsKey(item.NpcId) ?? true)
+                        {
+                            Log.LogWarning($"Skipping shop - Cannot find Npc with ID={item.NpcId} in DataProvider");
+                            continue;
+                        }
+
                         context.Shops.Add(new ShopEntity
                         {
                             ShopId = item.ShopId,
@@ -150,9 +157,15 @@ namespace RazzleServer.Game.Maple.Data
 
                     var serializer = new JsonSerializer();
                     var data = serializer.Deserialize<List<ShopItemEntity>>(reader);
-
+                    var shops = context.Shops.Select(x => x.ShopId).ToHashSet();
                     foreach (var item in data)
                     {
+                        if (!shops.Contains(item.ShopId))
+                        {
+                            Log.LogWarning($"Skipping shop item - Cannot find Shop with ID={item.ShopId} in DataProvider");
+                            continue;
+                        }
+
                         context.ShopItems.Add(new ShopItemEntity
                         {
                             ItemId = item.ItemId,
@@ -199,7 +212,7 @@ namespace RazzleServer.Game.Maple.Data
                 {
                     if (!DataProvider.Npcs?.Data?.ContainsKey(x.NpcId) ?? true)
                     {
-                    Log.LogWarning($"Skipping shop - Cannot find Npc with ID={x.NpcId} in DataProvider");
+                        Log.LogWarning($"Skipping shop - Cannot find Npc with ID={x.NpcId} in DataProvider");
                         return;
                     }
 

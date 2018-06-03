@@ -63,6 +63,14 @@ namespace RazzleServer.Game.Maple.Data
                 .ToList()
                 .ForEach(item =>
                 {
+
+                    if (!item.IsMeso && !DataProvider.Items.Data.ContainsKey(item.ItemId))
+                    {
+                        Log.LogWarning($"Removing loot - Cannot find Item with ID={item.ItemId} in DataProvider");
+                        context.Loots.Remove(item);
+                        return;
+                    }
+
                     loots.Add(new Loot
                     {
                         Chance = item.Chance,
@@ -101,9 +109,15 @@ namespace RazzleServer.Game.Maple.Data
 
                     foreach (var item in data.Values.SelectMany(x => x))
                     {
-                        if (!DataProvider.Mobs?.Data?.ContainsKey(item.MobId) ?? true)
+                        if (!DataProvider.Mobs.Data.ContainsKey(item.MobId))
                         {
                             Log.LogWarning($"Skipping loot - Cannot find Mob with ID={item.MobId} in DataProvider");
+                            continue;
+                        }
+
+                        if (!item.IsMeso && !DataProvider.Items.Data.ContainsKey(item.ItemId))
+                        {
+                            Log.LogWarning($"Skipping loot - Cannot find Item with ID={item.ItemId} in DataProvider");
                             continue;
                         }
 

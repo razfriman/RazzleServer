@@ -479,7 +479,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                 if (IsInitialized && delta != 0)
                 {
-                    Client.Send(GamePackets.ShowStatusInfo(MessageType.IncreaseExp, amount: delta));
+                    Client.Send(GamePackets.ShowStatusInfo(MessageType.IncreaseExp, amount: delta, isWhite: true));
                     Update(StatisticType.Experience);
                 }
             }

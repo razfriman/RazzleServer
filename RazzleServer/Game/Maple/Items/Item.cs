@@ -276,6 +276,12 @@ namespace RazzleServer.Game.Maple.Items
         public Item(int mapleId, short quantity = 1, DateTime? expiration = null, bool equipped = false)
         {
             MapleId = mapleId;
+
+            if (!DataProvider.Items.Data.ContainsKey(MapleId))
+            {
+                throw new KeyNotFoundException($"Item does not exist with ID={MapleId}");
+            }
+
             Quantity = Type == ItemType.Equipment ? (short)1 : quantity;
             if (equipped)
             {

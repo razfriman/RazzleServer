@@ -8,17 +8,26 @@ namespace RazzleServer.Game.Maple.Scripting.Loaders
 {
     public class NpcScriptLoader : AScriptLoader<NpcScripts>
     {
-        public override string CacheName => "Npcs";
+        public override string CacheName => "Npc Scripts";
 
         public override Task LoadScripts()
         {
-            Assembly
-                .GetExecutingAssembly()
+            var types = Assembly
+                .GetEntryAssembly()
                 .GetTypes()
                 .Where(x => x.IsSubclassOf(typeof(ANpcScript)))
-                .ToList()
-                .ForEach(x => Data.Add((ANpcScript)Activator.CreateInstance(x)));
+                .ToList();
 
+            types.ForEach(type =>
+            {
+                type
+                    .GetTypeInfo()
+                    .GetCustomAttributes()
+                    .OfType<NpcScriptAttribute>()
+                    .ToList()
+                    .ForEach(x => Data.Data[x.Script] = type);
+            });
+                
             return Task.CompletedTask;
         }
     }
