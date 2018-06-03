@@ -120,6 +120,7 @@ namespace RazzleServer.Game.Maple.Data.References
             Health = info["incJump"]?.GetShort() ?? 0;
             Mana = info["incJump"]?.GetShort() ?? 0;
             MaxPerStack = 1;
+
         }
         public ItemReference(WzImageProperty img, ItemType type)
         {

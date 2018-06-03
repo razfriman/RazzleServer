@@ -37,7 +37,6 @@
     <None Remove="MapleServer.db" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Game\Maple\Scripting\Scripts\Npcs\" />
-    <Folder Include="Game\Maple\Scripting\Scripts\Portals\" />
+    <Folder Include="Game\Scripts\" />
   </ItemGroup>
 </Project>

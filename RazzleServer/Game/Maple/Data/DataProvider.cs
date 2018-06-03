@@ -22,6 +22,7 @@ namespace RazzleServer.Game.Maple.Data
         public static CachedStrings Strings { get; private set; } = new CachedStrings();
         public static CachedShops Shops { get; private set; } = new CachedShops();
         public static CachedRechargeTiers RechargeTiers { get; private set; } = new CachedRechargeTiers();
+        public static CachedQuizzes Quizzes { get; private set; } = new CachedQuizzes();
 
         private static readonly ILogger Log = LogManager.Log;
 
@@ -40,7 +41,8 @@ namespace RazzleServer.Game.Maple.Data
                 Task.Run(async () => Reactors = await new ReactorsLoader().Load()),
                 Task.Run(async () => Quests = await new QuestsLoader().Load()),
                 Task.Run(async () => Maps = await new MapsLoader().Load()),
-                Task.Run(async () => Strings = await new StringLoader().Load())
+                Task.Run(async () => Strings = await new StringLoader().Load()),
+                Task.Run(async () => Quizzes = await new QuizzesLoader().Load())
             );
 
             sw.Stop();

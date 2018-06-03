@@ -256,6 +256,14 @@ namespace RazzleServer.Game.Maple.Life
                     pw.WriteInt(0);
                     pw.WriteInt(0);
                     break;
+                case NpcMessageType.Quiz:
+                    pw.WriteByte(0);
+                    pw.WriteInt((int)stateInfo.NpcQuizType);
+                    pw.WriteInt(stateInfo.QuizObjectId);
+                    pw.WriteInt(stateInfo.QuizCorrect);
+                    pw.WriteInt(stateInfo.QuizQuestions);
+                    pw.WriteInt(stateInfo.QuizTime);
+                    break;
                 case NpcMessageType.AcceptDecline:
                 case NpcMessageType.Choice:
                 case NpcMessageType.YesNo:

@@ -20,5 +20,15 @@ namespace RazzleServer.Game.Maple.Scripting
         public int NumberMinimum { get; set; }
 
         public int NumberMaximum { get; set; }
+
+        public NpcQuizType NpcQuizType { get; set; }
+
+        public int QuizObjectId { get; set; }
+
+        public int QuizCorrect { get; set; }
+
+        public int QuizQuestions { get; set; }
+
+        public int QuizTime { get; set; }
     }
 }
