@@ -12,7 +12,7 @@ namespace RazzleServer.Game
             {
                 pw.WriteByte((byte)type);
 
-                if (type == NoticeType.Ticker)
+                if (type == NoticeType.ScrollingText)
                 {
                     pw.WriteBool(!string.IsNullOrEmpty(message));
                 }

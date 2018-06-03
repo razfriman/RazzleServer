@@ -1,4 +1,5 @@
-﻿using RazzleServer.Common.Packet;
+﻿using RazzleServer.Common.Constants;
+using RazzleServer.Common.Packet;
 
 namespace RazzleServer.Login.Handlers
 {
@@ -10,20 +11,18 @@ namespace RazzleServer.Login.Handlers
             client.World = packet.ReadByte();
             client.Channel = packet.ReadByte();
 
-            var channelExists = client.Server.Manager.Worlds[client.World].Contains(client.Channel);
+            var channelResult = client.Server.Manager.Worlds[client.World].CheckChannel(client.Channel);
             var characters = client.Server.GetCharacters(client.World, client.Account.Id);
 
             var pw = new PacketWriter(ServerOperationCode.SelectWorldResult);
-            if (!channelExists)
+
+            pw.WriteByte((byte)channelResult);
+
+            if (channelResult == SelectChannelResult.Online)
             {
-                pw.WriteByte(0);
                 pw.WriteByte((byte)characters.Count);
                 characters.ForEach(x => pw.WriteBytes(x.ToByteArray()));
                 pw.WriteInt(client.Account.MaxCharacters);
-            }
-            else
-            {
-                pw.WriteByte(8); // Channel offline
             }
 
             client.Send(pw);

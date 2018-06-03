@@ -772,7 +772,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Release() => Update();
 
-        public void Notify(string message, NoticeType type = NoticeType.Pink)
+        public void Notify(string message, NoticeType type = NoticeType.PinkText)
         {
             Client.Send(GamePackets.Notify(message, type));
         }

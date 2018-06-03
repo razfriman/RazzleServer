@@ -29,7 +29,8 @@
       "QuestExperienceRate": 10,
       "PartyQuestExperienceRate": 10,
       "MesoRate": 10,
-      "DropRate": 10
+      "DropRate": 10,
+      "MaxCharacterLimit": 2000
     }
   ]
 }

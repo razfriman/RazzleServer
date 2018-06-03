@@ -15,7 +15,7 @@ namespace RazzleServer.Game.Maple.Scripting.Scripts.Commands
         {
             var message = args.Length > 0 ? args[0] : string.Empty;
             caller.Client.Server.World.TickerMessage = message;
-            caller.Client.Server.World.Send(GamePackets.Notify(message, NoticeType.Ticker));
+            caller.Client.Server.World.Send(GamePackets.Notify(message, NoticeType.ScrollingText));
         }
     }
 }

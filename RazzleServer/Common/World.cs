@@ -26,6 +26,7 @@ namespace RazzleServer.Common
         public int DropRate { get; set; }
         public int EventDropRate { get; set; } = 100;
         public int EventExperienceRate { get; set; } = 100;
+        public int MaxCharacterLimit { get; set; } = 2000;
 
         public World(WorldConfig config)
         {
@@ -44,10 +45,29 @@ namespace RazzleServer.Common
         }
 
         [JsonIgnore]
-        public bool IsFull => Count == Channels;
+        public int Population => Values.Sum(x => x.Population);
 
         [JsonIgnore]
-        public int Population => Values.Sum(x => x.Population);
+        public WorldStatus Status
+        {
+            get
+            {
+                var population = Population;
+                var totalMax = MaxCharacterLimit * Channels;
+
+                if (population >= totalMax)
+                {
+                    return WorldStatus.Full;
+                }
+
+                if (population > totalMax / 2)
+                {
+                    return WorldStatus.HighlyPopulated;
+                }
+
+                return WorldStatus.Normal;
+            }
+        }
 
         public override byte GetKey(GameServer item) => item.ChannelId;
 
@@ -66,5 +86,15 @@ namespace RazzleServer.Common
             .SelectMany(x => x.Clients.Values)
             .Select(x => x.Character)
             .FirstOrDefault(x => x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+
+        public SelectChannelResult CheckChannel(byte channel)
+        {
+            if (Contains(channel))
+            {
+                return SelectChannelResult.Online;
+            }
+
+            return SelectChannelResult.Offline;
+        }
     }
 }

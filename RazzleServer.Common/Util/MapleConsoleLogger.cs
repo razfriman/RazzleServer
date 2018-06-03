@@ -12,8 +12,6 @@ namespace RazzleServer.Common.Util
         private static readonly string _loglevelPadding = ": ";
         private static readonly string _newLineWithMessagePadding;
 
-        private readonly ConsoleColor? DefaultConsoleColor;
-
         private readonly ConsoleLoggerProcessor _queueProcessor;
         private Func<string, LogLevel, bool> _filter;
 
@@ -134,7 +132,7 @@ namespace RazzleServer.Common.Util
                 _queueProcessor.EnqueueMessage(new LogMessageEntry()
                 {
                     Message = logBuilder.ToString(),
-                    MessageColor = DefaultConsoleColor,
+                    MessageColor = null,
                     LevelString = hasLevel ? logLevelString : null,
                     LevelBackground = hasLevel ? logLevelColors.Background : null,
                     LevelForeground = hasLevel ? logLevelColors.Foreground : null
@@ -206,7 +204,7 @@ namespace RazzleServer.Common.Util
                 case LogLevel.Trace:
                     return new ConsoleColors(ConsoleColor.Gray, ConsoleColor.Black);
                 default:
-                    return new ConsoleColors(DefaultConsoleColor, DefaultConsoleColor);
+                    return new ConsoleColors(null, null);
             }
         }
 

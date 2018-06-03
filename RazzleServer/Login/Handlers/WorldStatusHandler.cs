@@ -15,7 +15,7 @@ namespace RazzleServer.Login.Handlers
 
                 using (var pw = new PacketWriter(ServerOperationCode.CheckUserLimitResult))
                 {
-                    pw.WriteShort((short)world.Flag);
+                    pw.WriteShort((short)world.Status);
                     client.Send(pw);
                 }
             }
