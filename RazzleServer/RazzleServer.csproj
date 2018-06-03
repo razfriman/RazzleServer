@@ -38,5 +38,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Game\Maple\Scripting\Scripts\Npcs\" />
+    <Folder Include="Game\Maple\Scripting\Scripts\Portals\" />
   </ItemGroup>
 </Project>

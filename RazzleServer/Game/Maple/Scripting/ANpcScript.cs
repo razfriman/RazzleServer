@@ -8,8 +8,10 @@ namespace RazzleServer.Game.Maple.Scripting
     public abstract class ANpcScript
     {
         private WaitableResult<int> _result;
-        public Character Character;
-        public Npc Npc;
+
+        public Character Character { get; set; }
+
+        public Npc Npc { get; set; }
 
         public abstract void Execute();
 

@@ -6,16 +6,14 @@ namespace RazzleServer.Game.Maple.Scripting
 {
     public abstract class APortalScript
     {
-        public Character Character { get; }
-        public Portal Portal { get; }
+        public Character Character { get; set; }
 
-        public abstract string Name { get; }
+        public Portal Portal { get; set; }
 
         public abstract void Execute();
 
-        private void PlayPortalSoundEffect()
-        {
-            Character.ShowLocalUserEffect(UserEffect.PlayPortalSe);
-        }
+        protected void PlayPortalSoundEffect() => Character.ShowLocalUserEffect(UserEffect.PlayPortalSe);
+
+        protected void ShowInstruction(string text, int width = 0, int height = 0) => Character.SendHint(text, width, height);
     }
 }

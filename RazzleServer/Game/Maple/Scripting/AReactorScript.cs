@@ -5,10 +5,9 @@ namespace RazzleServer.Game.Maple.Scripting
 {
     public abstract class AReactorScript
     {
-        public Character Character { get; }
-        public Reactor Reactor { get; }
+        public Character Character { get; set; }
 
-        public abstract string Name { get; }
+        public Reactor Reactor { get; set; }
 
         public abstract void Execute();
     }

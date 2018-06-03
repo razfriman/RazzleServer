@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple.Interaction;
@@ -11,21 +12,47 @@ namespace RazzleServer.Game.Maple.Characters
     {
         public byte[] ToByteArray(bool viewAllCharacters = false)
         {
-            using (var oPacket = new PacketWriter())
+            using (var pw = new PacketWriter())
             {
-                oPacket.WriteBytes(StatisticsToByteArray());
-                oPacket.WriteBytes(AppearanceToByteArray());
-                oPacket.WriteBool(IsRanked);
+                pw.WriteBytes(StatisticsToByteArray());
+                pw.WriteBytes(AppearanceToByteArray());
+                pw.WriteBool(IsRanked);
 
                 if (IsRanked)
                 {
-                    oPacket.WriteInt(Rank);
-                    oPacket.WriteInt(RankMove);
-                    oPacket.WriteInt(JobRank);
-                    oPacket.WriteInt(JobRankMove);
+                    pw.WriteInt(Rank);
+                    pw.WriteInt(RankMove);
+                    pw.WriteInt(JobRank);
+                    pw.WriteInt(JobRankMove);
                 }
 
-                return oPacket.ToArray();
+                return pw.ToArray();
+            }
+        }
+
+        public PacketWriter SendHint(string text, int width = 0, int height = 0)
+        {
+            using (var pw = new PacketWriter(ServerOperationCode.Hint))
+            {
+                if (width < 1)
+                {
+                    width = text.Length * 10;
+                    if (width < 40)
+                    {
+                        width = 40;
+                    }
+                }
+
+                if (height < 5)
+                {
+                    height = 5;
+                }
+
+                pw.WriteString(text);
+                pw.WriteShort(width);
+                pw.WriteShort(height);
+                pw.WriteByte(1);
+                Client.Send(pw);
             }
         }
 
