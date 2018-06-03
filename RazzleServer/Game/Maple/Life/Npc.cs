@@ -75,15 +75,15 @@ namespace RazzleServer.Game.Maple.Life
             }
         }
 
-        public void Handle(Character talker, PacketReader iPacket)
+        public void Handle(Character talker, PacketReader packet)
         {
             if (talker.NpcScript == null)
             {
                 return;
             }
 
-            var lastMessageType = (NpcMessageType)iPacket.ReadByte();
-            var action = iPacket.ReadByte();
+            var lastMessageType = (NpcMessageType)packet.ReadByte();
+            var action = packet.ReadByte();
 
             var selection = -1;
 
@@ -103,21 +103,35 @@ namespace RazzleServer.Game.Maple.Life
                     break;
             }
 
+            if (lastMessageType == NpcMessageType.Standard)
+            {
+                if (action == 0)
+                {
+                    // prev
+                    // cm.sendDialog(c.getPlayer().getNpcScriptInfo().getPreviousStates().get(c.getPlayer().getNpcScriptInfo().getState()));
+                }
+                else if (action == 1)
+                {
+                    // next
+                    // next/prev
+                }
+            }
+
             if (action == endTalkByte)
             {
+                talker.NpcScript.SetResult(-1);
                 talker.NpcScript = null;
-
             }
             else
             {
 
-                if (iPacket.Available >= 4)
+                if (packet.Available >= 4)
                 {
-                    selection = iPacket.ReadInt();
+                    selection = packet.ReadInt();
                 }
-                else if (iPacket.Available > 0)
+                else if (packet.Available > 0)
                 {
-                    selection = iPacket.ReadByte();
+                    selection = packet.ReadByte();
                 }
 
                 if (lastMessageType == NpcMessageType.RequestStyle)
@@ -167,8 +181,6 @@ namespace RazzleServer.Game.Maple.Life
                 oPacket.WriteBool(true);
             }
 
-            //  [C2 00] [00 00 00 00] [BE 65 8C 00] [3A 13] [BE 01] [01] [C9 00] [08 13] [6C 13] [01]
-
             oPacket.WriteInt(ObjectId);
             oPacket.WriteInt(MapleId);
             oPacket.WritePoint(Position);
@@ -191,18 +203,40 @@ namespace RazzleServer.Game.Maple.Life
             return oPacket;
         }
 
-        public PacketWriter GetDialogPacket(string text, NpcMessageType messageType, params byte[] footer)
+        public PacketWriter GetDialogPacket(NpcStateInfo stateInfo)
         {
-            var oPacket = new PacketWriter(ServerOperationCode.ScriptMessage);
+            var pw = new PacketWriter(ServerOperationCode.ScriptMessage);
 
-            oPacket.WriteByte(4); // NOTE: Unknown.
-            oPacket.WriteInt(MapleId);
-            oPacket.WriteByte((byte)messageType);
-            oPacket.WriteByte(0); // NOTE: Speaker.
-            oPacket.WriteString(text);
-            oPacket.WriteBytes(footer);
+            pw.WriteByte(4); // NOTE: Unknown.
+            pw.WriteInt(MapleId);
+            pw.WriteByte((byte)stateInfo.Type);
+            pw.WriteString(stateInfo.Text);
 
-            return oPacket;
+            switch (stateInfo.Type)
+            {
+                case NpcMessageType.Standard:
+                    pw.WriteBool(stateInfo.IsPrevious);
+                    pw.WriteBool(stateInfo.IsNext);
+                    break;
+                case NpcMessageType.RequestStyle:
+                    stateInfo.Styles.ForEach(pw.WriteInt);
+                    break;
+                case NpcMessageType.RequestNumber:
+                    pw.WriteInt(stateInfo.NumberDefault);
+                    pw.WriteInt(stateInfo.NumberMinimum);
+                    pw.WriteInt(stateInfo.NumberMaximum);
+                    pw.WriteInt(0);
+                    break;
+                case NpcMessageType.RequestText:
+                    pw.WriteInt(0);
+                    pw.WriteInt(0);
+                    break;
+                case NpcMessageType.AcceptDecline:
+                case NpcMessageType.Simple:
+                case NpcMessageType.YesNo:
+                    break;
+            }
+            return pw;
         }
 
         public PacketWriter GetDestroyPacket()

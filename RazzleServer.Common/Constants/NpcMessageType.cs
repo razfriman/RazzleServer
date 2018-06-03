@@ -6,8 +6,10 @@
         YesNo,
         RequestText,
         RequestNumber,
-        Choice,
+        Simple,
+        Quiz = 6,
         RequestStyle = 7,
-        AcceptDecline = 12
+        AcceptDecline = 12,
+        AcceptDeclineNoExit = 13
     }
 }

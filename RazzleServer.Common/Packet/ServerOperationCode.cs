@@ -134,7 +134,7 @@
         MonsterCarnivalDied = 0xE7,
         AriantPqStart = 0xEA,
         ZakumShrine = 0xEC,
-        NpcTalk = 0xED,
+        ScriptMessage = 0xED,
         OpenNpcShop = 0xEE,
         ConfirmShopTransaction = 0xEF,
 
@@ -164,13 +164,10 @@
         BalloonMsg = 214,
         MobStatSet = 242,
         MobStatReset = 243,
-        ScriptMessage = 304,
         AdminShopMessage = 307,
         AdminShop = 308,
-
         SetTemporaryStat = 199,
         ResetTemporaryStat = 200,
-
         TemporaryStatSet = 333,
         TemporaryStatReset = 333
     }

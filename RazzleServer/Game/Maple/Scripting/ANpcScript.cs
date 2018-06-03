@@ -1,4 +1,6 @@
-﻿using RazzleServer.Common.Constants;
+﻿using System;
+using System.Collections.Generic;
+using RazzleServer.Common.Constants;
 using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Life;
@@ -13,6 +15,8 @@ namespace RazzleServer.Game.Maple.Scripting
 
         public Npc Npc { get; set; }
 
+        public List<NpcStateInfo> States { get; set; } = new List<NpcStateInfo>();
+
         public abstract void Execute();
 
         public void SetResult(int value)
@@ -20,58 +24,64 @@ namespace RazzleServer.Game.Maple.Scripting
             _result?.Set(value);
         }
 
-        protected int SendOk(string text)
+        protected int SendOk(string text) => Send(new NpcStateInfo
+        {
+            Type = NpcMessageType.Standard,
+            Text = text,
+            IsPrevious = false,
+            IsNext = false
+        });
+
+        protected int SendNext(string text) => Send(new NpcStateInfo
+        {
+            Type = NpcMessageType.Standard,
+            Text = text,
+            IsPrevious = false,
+            IsNext = true
+        });
+
+        protected int SendBackOk(string text) => Send(new NpcStateInfo
+        {
+            Type = NpcMessageType.Standard,
+            Text = text,
+            IsPrevious = true,
+            IsNext = false
+        });
+
+        protected int SendBackNext(string text) => Send(new NpcStateInfo
+        {
+            Type = NpcMessageType.Standard,
+            Text = text,
+            IsPrevious = true,
+            IsNext = true
+        });
+
+        protected int AskYesNo(string text) => Send(new NpcStateInfo
+        {
+            Type = NpcMessageType.YesNo,
+            Text = text
+        });
+
+        protected int SendAcceptDecline(string text) => Send(new NpcStateInfo
+        {
+            Type = NpcMessageType.AcceptDecline,
+            Text = text
+        });
+
+        protected int SendAcceptDeclineNoExit(string text) => Send(new NpcStateInfo
+        {
+            Type = NpcMessageType.AcceptDeclineNoExit,
+            Text = text
+        });
+
+        private int Send(NpcStateInfo state)
         {
             _result = new WaitableResult<int>();
-            Character.Client.Send(Npc.GetDialogPacket(text, NpcMessageType.Standard, 0, 0));
+            States.Add(state);
+            Character.Client.Send(Npc.GetDialogPacket(state));
             _result.Wait();
             return _result.Value;
+
         }
-
-        protected int SendNext(string text)
-        {
-            _result = new WaitableResult<int>();
-            Character.Client.Send(Npc.GetDialogPacket(text, NpcMessageType.Standard, 0, 1));
-            _result.Wait();
-            return _result.Value;
-        }
-
-        protected int SendBackOk(string text)
-        {
-            _result = new WaitableResult<int>();
-            Character.Client.Send(Npc.GetDialogPacket(text, NpcMessageType.Standard, 1, 0));
-            _result.Wait();
-
-            return _result.Value;
-        }
-
-        protected int SendBackNext(string text)
-        {
-            _result = new WaitableResult<int>();
-            Character.Client.Send(Npc.GetDialogPacket(text, NpcMessageType.Standard, 1, 1));
-            _result.Wait();
-            return _result.Value;
-        }
-
-        private int AskYesNo(string text)
-        {
-            _result = new WaitableResult<int>();
-            Character.Client.Send(Npc.GetDialogPacket(text, NpcMessageType.YesNo));
-            _result.Wait();
-            return _result.Value;
-        }
-
-        protected int AskAcceptDecline(string text)
-        {
-            _result = new WaitableResult<int>();
-            Character.Client.Send(Npc.GetDialogPacket(text, NpcMessageType.AcceptDecline));
-            _result.Wait();
-            return _result.Value;
-        }
-
-        //private void AskChoice()
-        //{
-
-        //}
     }
 }

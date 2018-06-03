@@ -315,21 +315,20 @@ namespace RazzleServer.Game.Maple.Characters
                 {
                     drop.Picker = Parent;
 
-                    if (drop is Meso)
+                    if (drop is Meso meso)
                     {
-                        Parent.Meso += ((Meso)drop).Amount; // TODO: Check for max meso.
+                        Parent.Meso += meso.Amount; // TODO: Check for max meso.
                     }
-                    else if (drop is Item)
+                    else if (drop is Item item)
                     {
-                        if (((Item)drop).OnlyOne)
+                        if (item.OnlyOne)
                         {
                             // TODO: Appropriate message.
-
                             return;
                         }
 
-                        ((Item)drop).Slot = GetNextFreeSlot(((Item)drop).Type); // TODO: Check for inv. full. 
-                        Add((Item)drop, true);
+                        item.Slot = GetNextFreeSlot(item.Type); // TODO: Check for inv. full. 
+                        Add(item, true);
                     }
 
                     Parent.Map.Drops.Remove(drop);

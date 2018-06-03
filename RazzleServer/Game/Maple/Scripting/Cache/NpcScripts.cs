@@ -29,6 +29,7 @@ namespace RazzleServer.Game.Maple.Scripting.Cache
                 var npcScript = Activator.CreateInstance(Data[script]) as ANpcScript;
                 npcScript.Character = character;
                 npcScript.Npc = npc;
+                character.NpcScript = npcScript;
                 Task.Factory.StartNew(npcScript.Execute);
             }
             catch (Exception e)
