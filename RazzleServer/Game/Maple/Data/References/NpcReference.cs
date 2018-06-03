@@ -24,7 +24,7 @@ namespace RazzleServer.Game.Maple.Data.References
             if (info != null)
             {
                 StorageCost = info["trunkPut"]?.GetInt() ?? 0;
-                Script = info["0"]?["script"]?.GetString();
+                Script = info["script"]?["0"]?["script"]?.GetString();
             }
 
         }

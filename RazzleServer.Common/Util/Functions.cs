@@ -361,28 +361,9 @@ namespace RazzleServer.Common.Util
             }
         }
 
-        public static T LoadFromJson<T>(string path) where T : class
+        public static TValue GetValueOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
         {
-            if (!File.Exists(path))
-            {
-                return null;
-            }
-
-            using (var s = File.OpenRead(path))
-            using (var sr = new StreamReader(s))
-            using (var reader = new JsonTextReader(sr))
-            {
-                try
-                {
-                    var serializer = new JsonSerializer();
-                    return serializer.Deserialize<T>(reader);
-                }
-                catch (Exception e)
-                {
-                    Log.LogError(e, "Error while loading changes from JSON");
-                    return null;
-                }
-            }
+            return dictionary.TryGetValue(key, out var value) ? value : default;
         }
     }
 }

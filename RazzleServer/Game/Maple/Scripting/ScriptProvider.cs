@@ -23,8 +23,6 @@ namespace RazzleServer.Game.Maple.Scripting
 
             sw.Start();
 
-            Log.LogInformation("Loading scripts...");
-
             await Task.WhenAll(
                 Task.Run(async () => Commands = await new CommandScriptLoader().Load()),
                 Task.Run(async () => Portals = await new PortalScriptLoader().Load()),

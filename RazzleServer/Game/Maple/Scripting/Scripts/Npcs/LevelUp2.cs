@@ -1,6 +1,6 @@
 ﻿namespace RazzleServer.Game.Maple.Scripting.Scripts.Npcs
 {
-    [NpcScript("LevelUP2")]
+    [NpcScript("levelUP2")]
     public class LevelUp2 : ANpcScript
     {
         public override void Execute()

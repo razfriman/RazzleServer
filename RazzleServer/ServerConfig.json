@@ -1,6 +1,6 @@
 {
   "LoginPort": 8484,
-  "ChannelPort": 8585,
+  "ChannelPort": 7575,
   "DefaultMapID": 180000000,
   "DatabaseName": "MapleServer.db",
   "Version": 62,

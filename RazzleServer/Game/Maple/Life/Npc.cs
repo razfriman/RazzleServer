@@ -20,7 +20,7 @@ namespace RazzleServer.Game.Maple.Life
         public Character Controller { get; set; }
 
         [JsonIgnore]
-        public Shop Shop => DataProvider.Shops.Data[MapleId];
+        public Shop Shop => DataProvider.Shops.Data.GetValueOrDefault(MapleId);
 
         [JsonIgnore]
         public NpcReference CachedReference => DataProvider.Npcs.Data[MapleId];

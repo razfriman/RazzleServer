@@ -10,7 +10,6 @@ using Newtonsoft.Json;
 using RazzleServer.Common;
 using RazzleServer.Common.Util;
 using RazzleServer.Data;
-using RazzleServer.Game.Maple.Data.References;
 using RazzleServer.Game.Maple.Shops;
 
 namespace RazzleServer.Game.Maple.Data

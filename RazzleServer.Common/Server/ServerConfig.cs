@@ -12,7 +12,7 @@ namespace RazzleServer.Common.Server
     public class ServerConfig
     {
         public ushort LoginPort { get; set; } = 8484;
-        public ushort ChannelPort { get; set; } = 8585;
+        public ushort ChannelPort { get; set; } = 7575;
         public int DefaultMapId { get; set; } = 180000000;
         public string DatabaseName { get; set; } = "MapleServer.db";
         public string CacheFolder { get; set; } = "DataCache";

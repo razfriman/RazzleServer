@@ -24,7 +24,6 @@ namespace RazzleServer.Game.Maple.Maps
         public MapPlayerShops PlayerShops { get; }
         public MapReference CachedReference => DataProvider.Maps.Data[MapleId];
 
-
         public Map(GameServer server, int id)
         {
             Server = server;

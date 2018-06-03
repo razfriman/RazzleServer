@@ -1,4 +1,5 @@
 ﻿using RazzleServer.Common.Packet;
+using RazzleServer.Game.Maple.Scripting;
 
 namespace RazzleServer.Game.Handlers
 {
@@ -13,43 +14,58 @@ namespace RazzleServer.Game.Handlers
             {
                 return;
             }
+
             var mapId = packet.ReadInt();
             var portalLabel = packet.ReadString();
 
             switch (mapId)
             {
-                case 0: // NOTE: Death.
-                    {
-                        if (client.Character.IsAlive)
-                        {
-                            return;
-                        }
-
-                        client.Character.Revive();
-                    }
+                case 0:
+                    Revive(client);
                     break;
-
-                case -1: // NOTE: Portal.
-                    {
-
-                        if (client.Character.Map.Portals.ContainsPortal(portalLabel))
-                        {
-                            var portal = client.Character.Map.Portals[portalLabel];
-                            client.Character.ChangeMap(portal.DestinationMapId, portal.Link.Id);
-                        }
-                    }
+                case -1:
+                    UsePortal(client, portalLabel);
                     break;
-
-                default: // NOTE: Admin '/m' command.
-                    {
-                        if (!client.Account.IsMaster)
-                        {
-                            return;
-                        }
-
-                        client.Character.ChangeMap(mapId);
-                    }
+                default:
+                    ChangeMapAdmin(client, mapId);
                     break;
+            }
+        }
+
+        private static void Revive(GameClient client)
+        {
+            if (client.Character.IsAlive)
+            {
+                return;
+            }
+
+            client.Character.Revive();
+        }
+
+        private static void ChangeMapAdmin(GameClient client, int mapId)
+        {
+            if (!client.Account.IsMaster)
+            {
+                return;
+            }
+
+            client.Character.ChangeMap(mapId);
+        }
+
+        private static void UsePortal(GameClient client, string portalLabel)
+        {
+            if (client.Character.Map.Portals.ContainsPortal(portalLabel))
+            {
+                var portal = client.Character.Map.Portals[portalLabel];
+
+                if (portal.DestinationMapId == 999999999)
+                {
+                    ScriptProvider.Portals.Execute(portal, client.Character);
+                }
+                else
+                {
+                    client.Character.ChangeMap(portal.DestinationMapId, portal.Link.Id);
+                }
             }
         }
     }
