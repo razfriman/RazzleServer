@@ -5,7 +5,9 @@ namespace RazzleServer.Game.Maple.Data.References
     public class NpcReference
     {
         public int MapleId { get; set; }
-        public int StorageCost { get; set; } //trunkPut
+        public int StorageCost { get; set; }
+
+        public NpcReference() { }
 
         public NpcReference(WzImage img)
         {
@@ -16,7 +18,7 @@ namespace RazzleServer.Game.Maple.Data.References
             }
 
             MapleId = id;
-            StorageCost = img["trunkPut"]?.GetInt() ?? 0;
+            StorageCost = img["info"]?["trunkPut"]?.GetInt() ?? 0;
         }
     }
 }

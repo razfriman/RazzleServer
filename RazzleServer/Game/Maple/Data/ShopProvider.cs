@@ -199,12 +199,11 @@ namespace RazzleServer.Game.Maple.Data
                 {
                     if (!DataProvider.Npcs?.Data?.ContainsKey(x.NpcId) ?? true)
                     {
-                        Log.LogWarning($"Skipping shop - Cannot find Npc with ID={x.Id} in DataProvider");
+                    Log.LogWarning($"Skipping shop - Cannot find Npc with ID={x.NpcId} in DataProvider");
                         return;
                     }
 
                     DataProvider.Shops.Data[x.NpcId] = new Shop(x);
-
                 });
         }
 

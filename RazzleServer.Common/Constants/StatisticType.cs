@@ -5,6 +5,7 @@ namespace RazzleServer.Common.Constants
     [Flags]
     public enum StatisticType
     {
+        None = 0x0,
         Skin = 0x1,
         Face = 0x2,
         Hair = 0x4,

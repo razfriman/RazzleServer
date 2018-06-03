@@ -15,26 +15,11 @@ namespace RazzleServer.Game.Maple.Characters
 
         private List<Buff> Buffs { get; }
 
-        public Buff this[int mapleId]
-        {
-            get
-            {
-                foreach (var loopBuff in Buffs)
-                {
-                    if (loopBuff.MapleId == mapleId)
-                    {
-                        return loopBuff;
-                    }
-                }
-
-                return null;
-            }
-        }
+        public Buff this[int mapleId] => Buffs.FirstOrDefault(x => x.MapleId == mapleId);
 
         public CharacterBuffs(Character parent)
         {
             Parent = parent;
-
             Buffs = new List<Buff>();
         }
 

@@ -20,8 +20,8 @@ namespace RazzleServer.Game.Maple.Data
         public static CachedCreationData CreationData { get; private set; }
         public static CachedMaps Maps { get; private set; }
         public static CachedStrings Strings { get; private set; }
-        public static CachedShops Shops { get; private set; }
-        public static CachedRechargeTiers RechargeTiers { get; private set; }
+        public static CachedShops Shops { get; private set; } = new CachedShops();
+        public static CachedRechargeTiers RechargeTiers { get; private set; } = new CachedRechargeTiers();
 
         private static readonly ILogger Log = LogManager.Log;
 

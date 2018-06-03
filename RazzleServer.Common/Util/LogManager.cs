@@ -6,7 +6,7 @@ namespace RazzleServer.Common.Util
     public static class LogManager
     {
         private static readonly ILoggerFactory Factory = new LoggerFactory()
-            .AddConsole()
+            .AddMapleConsole()
             .AddFile("Logs/RazzleServer-{Date}.txt")
             .AddDebug((s, x) => true);
 

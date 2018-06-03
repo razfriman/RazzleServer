@@ -27,21 +27,15 @@
     <ProjectReference Include="..\RazzleServer.Common\RazzleServer.Common.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Game\Data\" />
-  </ItemGroup>
-  <ItemGroup>
     <None Remove="MapleServer.db" />
     <None Remove="Game\Data\loot.json" />
     <None Remove="InitialData\loot.json" />
     <None Remove="Logs\RazzleServer-20180602.txt" />
     <None Remove="Game\Data\shop.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Game\Data\loot.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Game\Data\shops.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <None Remove="Game\Data\shopItems.json" />
+    <None Remove="Game\Data\rechargeTier.json" />
+    <None Remove="InitialData\rechargeTiers.json" />
+    <None Remove="InitialData\shopItems.json" />
+    <None Remove="InitialData\shops.json" />
   </ItemGroup>
 </Project>

@@ -26,6 +26,7 @@ namespace RazzleServer.Game.Maple.Life
         public Dictionary<MobSkill, DateTime> Cooldowns { get; }
         public List<MobStatus> Buffs { get; }
         public List<int> DeathSummons { get; }
+        public DeathEffect DeathEffect { get; set; } = DeathEffect.FadeOut;
 
         public short Level { get; }
         public uint Health { get; set; }
@@ -347,20 +348,16 @@ namespace RazzleServer.Game.Maple.Life
         public PacketWriter GetControlCancelPacket()
         {
             var oPacket = new PacketWriter(ServerOperationCode.MobChangeController);
-
             oPacket.WriteBool(false);
             oPacket.WriteInt(ObjectId);
-
             return oPacket;
         }
 
         public PacketWriter GetDestroyPacket()
         {
             var oPacket = new PacketWriter(ServerOperationCode.MobLeaveField);
-            var animated = true;
             oPacket.WriteInt(ObjectId);
-            oPacket.WriteBool(animated);
-
+            oPacket.WriteByte((byte)DeathEffect);
             return oPacket;
         }
     }
