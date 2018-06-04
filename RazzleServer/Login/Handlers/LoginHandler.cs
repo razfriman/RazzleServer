@@ -33,7 +33,9 @@ namespace RazzleServer.Login.Handlers
                     return LoginResult.InvalidPassword;
                 }
 
-                return client.Account.IsBanned ? LoginResult.Banned : LoginResult.Valid;
+                return client.Account.BanReason != BanReasonType.None
+                             ? LoginResult.Banned
+                             : LoginResult.Valid;
             }
             catch (NoAccountException)
             {
@@ -59,8 +61,6 @@ namespace RazzleServer.Login.Handlers
             client.Account.Password = Functions.GetSha512(password + client.Account.Salt);
             client.Account.Gender = ServerConfig.Instance.RequestPin ? Gender.Unset : Gender.Male;
             client.Account.Pin = string.Empty;
-            client.Account.IsBanned = false;
-            client.Account.IsMaster = false;
             client.Account.Birthday = DateTime.UtcNow;
             client.Account.Creation = DateTime.UtcNow;
             client.Account.MaxCharacters = ServerConfig.Instance.DefaultCreationSlots;

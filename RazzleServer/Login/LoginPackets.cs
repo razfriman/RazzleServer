@@ -1,4 +1,3 @@
-using System;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 using RazzleServer.Login.Maple;
@@ -16,8 +15,8 @@ namespace RazzleServer.Login
 
                 if (result == LoginResult.Banned)
                 {
-                    pw.WriteByte(1); // ban reason
-                    pw.WriteDateTime(DateTime.Now.AddYears(2)); // ban expiration time. Over 2 years = permanent
+                    pw.WriteByte((byte)acc.BanReason);
+                    pw.WriteDateTime(acc.PermanentBanDate);
                 }
                 else if (result == LoginResult.Valid)
                 {

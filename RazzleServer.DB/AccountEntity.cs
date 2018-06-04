@@ -12,7 +12,7 @@ namespace RazzleServer.Data
         public string Salt { get; set; }
         public byte Gender { get; set; }
         public string Pin { get; set; }
-        public bool IsBanned { get; set; }
+        public byte BanReason { get; set; }
         public bool IsMaster { get; set; }
         public DateTime Birthday { get; set; }
         public DateTime Creation { get; set; }

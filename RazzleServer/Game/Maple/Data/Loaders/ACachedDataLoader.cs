@@ -33,14 +33,14 @@ namespace RazzleServer.Game.Maple.Data.Loaders
                 }
                 catch (Exception e)
                 {
-                    _log.LogError(e, "Error loading cache data. Attempting to load from WZ");
+                    _log.LogError(e, $"Error loading [{CacheName}] cache. Attempting to load from WZ");
                     LoadFromWz();
                     await SaveToCache();
                 }
             }
             else
             {
-                _log.LogInformation($"[{CacheName}] cache not found, loading from WZ");
+                _log.LogInformation($"[{CacheName}] cache not found. Attempting to load from WZ");
                 LoadFromWz();
                 await SaveToCache();
             }
@@ -70,7 +70,7 @@ namespace RazzleServer.Game.Maple.Data.Loaders
 
         public virtual Task LoadFromCache()
         {
-            _log.LogInformation($"Loading [{CacheName}] from cache");
+            
             var path = Path.Combine(ServerConfig.Instance.CacheFolder, $"{CacheName}.cache");
 
             using (var s = File.OpenRead(path))
@@ -79,6 +79,7 @@ namespace RazzleServer.Game.Maple.Data.Loaders
             {
                 var serializer = new JsonSerializer();
                 Data = serializer.Deserialize<T>(reader);
+                _log.LogInformation($"Loaded [{CacheName}] from cache");
             }
 
             return Task.CompletedTask;

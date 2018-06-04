@@ -12,7 +12,7 @@ namespace RazzleServer.Game.Maple
         public string Username { get; set; }
         public Gender Gender { get; set; }
         public bool IsMaster { get; set; }
-        public bool IsBanned { get; set; }
+        public BanReasonType BanReason { get; set; }
         public DateTime Birthday { get; set; }
         public DateTime Creation { get; set; }
 
@@ -40,11 +40,8 @@ namespace RazzleServer.Game.Maple
                 Gender = (Gender)account.Gender;
                 Birthday = account.Birthday;
                 Creation = account.Creation;
-                IsBanned = account.IsBanned;
+                BanReason = (BanReasonType)account.BanReason;
                 IsMaster = account.IsMaster;
-
-                // Debug
-                IsMaster = true;
             }
         }
     }

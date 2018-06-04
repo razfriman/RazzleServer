@@ -2,7 +2,5 @@
 
 namespace RazzleServer.Login
 {
-    public abstract class LoginPacketHandler : APacketHandler<LoginClient>
-    {
-    }
+    public abstract class LoginPacketHandler : APacketHandler<LoginClient> { }
 }
