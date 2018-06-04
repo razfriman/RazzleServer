@@ -24,11 +24,15 @@ namespace RazzleServer.Game.Maple.Maps
                 Map.Send(item.GetDestroyPacket());
 
                 base.Remove(item);
+                ScheduleRespawn(item);
+            }
+        }
 
-                if (item.SpawnPoint != null)
-                {
-                    Delay.Execute(item.SpawnPoint.Spawn, (item.SpawnPoint.RespawnTime <= 0 ? 30 : item.SpawnPoint.RespawnTime) * 100);
-                }
+        private static void ScheduleRespawn(Reactor item)
+        {
+            if (item.SpawnPoint != null)
+            {
+                Delay.Execute(item.SpawnPoint.Spawn, (item.SpawnPoint.RespawnTime <= 0 ? 30 : item.SpawnPoint.RespawnTime) * 100);
             }
         }
     }

@@ -2,11 +2,11 @@
 {
     public enum DatabaseConnectionType
     {
-        SqlServer,
         Sqlite,
-        InMemory,
-        PostgreSql,
-        MySql,
-        MariaDb
+        InMemory
+        //SqlServer,
+        //PostgreSql,
+        //MySql,
+        //MariaDb
     }
 }

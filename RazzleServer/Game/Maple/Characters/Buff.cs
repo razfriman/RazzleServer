@@ -67,7 +67,11 @@ namespace RazzleServer.Game.Maple.Characters
             SecondaryStatups = new Dictionary<SecondaryBuffStat, short>();
 
             CalculateStatups(skill.CachedReference);
+            ScheduleExpiration();
+        }
 
+        private void ScheduleExpiration()
+        {
             Delay.Execute(() =>
             {
                 if (Parent.Contains(this))
@@ -93,13 +97,7 @@ namespace RazzleServer.Game.Maple.Characters
                 CalculateStatups(DataProvider.Skills.Data[MapleId][SkillLevel]);
             }
 
-            Delay.Execute(() =>
-            {
-                if (Parent.Contains(this))
-                {
-                    Parent.Remove(this);
-                }
-            }, (int)(End - DateTime.Now).TotalMilliseconds);
+            ScheduleExpiration();
         }
 
         public void Save()

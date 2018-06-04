@@ -93,20 +93,22 @@ namespace RazzleServer.Game.Maple.Life
                 case NpcMessageType.Standard:
                     if (action == 0)
                     {
-                        if (script.State == 0)
+                        script.State--;
+
+                        if (script.State <= 0)
                         {
                             script = null;
                             return;
                         }
-                        script.State--;
-                        script.Send(script.States[script.State]);
+
+                        script.Send(script.States[script.State], false);
                     }
                     else if (action == 1)
                     {
                         script.State++;
                         if (script.State < script.States.Count)
                         {
-                            script.Send(script.States[script.State]);
+                            script.Send(script.States[script.State - 1], false);
                         }
                         else
                         {
@@ -124,10 +126,12 @@ namespace RazzleServer.Game.Maple.Life
                     if (action == 0)
                     {
                         script.SetResult(0);
+                        script.State++;
                     }
                     else if (action == 1)
                     {
                         script.SetResult(1);
+                        script.State++;
                     }
                     else
                     {
@@ -139,12 +143,19 @@ namespace RazzleServer.Game.Maple.Life
                     if (action != 0)
                     {
                         script.SetResult(packet.ReadString());
+                        script.State++;
+                    }
+                    else
+                    {
+                        script = null;
+                        return;
                     }
                     break;
                 case NpcMessageType.RequestNumber:
                     if (action == 1)
                     {
                         script.SetResult(packet.ReadInt());
+                        script.State++;
                     }
                     else
                     {
@@ -158,6 +169,7 @@ namespace RazzleServer.Game.Maple.Life
                     if (action != 0)
                     {
                         script.SetResult(packet.ReadInt());
+                        script.State++;
                     }
                     else
                     {

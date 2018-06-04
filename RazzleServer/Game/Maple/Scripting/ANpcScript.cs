@@ -32,9 +32,13 @@ namespace RazzleServer.Game.Maple.Scripting
             _stringResult?.Set(value);
         }
 
-        public void Send(NpcStateInfo state)
+        public void Send(NpcStateInfo state, bool addState = true)
         {
-            States.Add(state);
+            if (addState)
+            {
+                States.Add(state);
+            }
+
             Character.Client.Send(Npc.GetDialogPacket(state));
         }
 

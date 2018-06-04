@@ -239,6 +239,11 @@ namespace RazzleServer.Game.Maple.Life
                 Map.Send(oPacket);
             }
 
+            ScheduleBuffExpiration(buff, skill);
+        }
+
+        private void ScheduleBuffExpiration(MobStatus buff, MobSkill skill)
+        {
             Delay.Execute(() =>
             {
                 using (var packet = new PacketWriter(ServerOperationCode.MobStatReset))

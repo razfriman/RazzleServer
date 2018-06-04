@@ -22,24 +22,71 @@ namespace RazzleServer.Game.Maple.Maps
 
         public override void Remove(Mob item)
         {
-            var mostDamage = 0;
-            Character owner = null;
+            var owner = GiveExperience(item);
+            item.Attackers.Clear();
+            GiveDrops(item, owner);
+            UpdateQuestKills(item, owner);
 
-            foreach (var attacker in item.Attackers)
+            item.Controller.ControlledMobs.Remove(item);
+            Map.Send(item.GetDestroyPacket());
+            base.Remove(item);
+
+            ScheduleRespawn(item);
+            ProcessDeathSummons(item);
+        }
+
+        private void ProcessDeathSummons(Mob item)
+        {
+            foreach (var summonId in item.DeathSummons)
             {
-                if (attacker.Key.Map == Map)
+                Map.Mobs.Add(new Mob(summonId)
                 {
-                    if (attacker.Value > mostDamage)
-                    {
-                        owner = attacker.Key;
-                    }
+                    Position = item.Position
+                });
+            }
+        }
 
-                    attacker.Key.Experience += (int)Math.Min(item.Experience, attacker.Value * item.Experience / item.MaxHealth) * attacker.Key.Client.Server.World.ExperienceRate;
+        private static void UpdateQuestKills(Mob item, Character owner)
+        {
+            if (owner != null)
+            {
+                foreach (var loopStarted in owner.Quests.Started)
+                {
+                    if (loopStarted.Value.ContainsKey(item.MapleId))
+                    {
+                        if (loopStarted.Value[item.MapleId] < DataProvider.Quests.Data[loopStarted.Key].PostRequiredKills[item.MapleId])
+                        {
+                            loopStarted.Value[item.MapleId]++;
+
+                            var kills = string.Empty;
+
+                            foreach (int kill in loopStarted.Value.Values)
+                            {
+                                kills += kill.ToString().PadLeft(3, '0');
+                            }
+
+                            owner.Client.Send(GamePackets.ShowStatusInfo(MessageType.QuestRecord, mapleId: loopStarted.Key, questStatus: QuestStatus.InProgress, questString: kills));
+
+                            if (owner.Quests.CanComplete(loopStarted.Key, true))
+                            {
+                                owner.Quests.NotifyComplete(loopStarted.Key);
+                            }
+                        }
+                    }
                 }
             }
+        }
 
-            item.Attackers.Clear();
+        private static void ScheduleRespawn(Mob item)
+        {
+            if (item.SpawnPoint != null)
+            {
+                Delay.Execute(item.SpawnPoint.Spawn, 3 * 1000); // TODO: Actual respawn time.
+            }
+        }
 
+        private void GiveDrops(Mob item, Character owner)
+        {
             if (item.CanDrop)
             {
                 var drops = new List<Drop>();
@@ -74,52 +121,28 @@ namespace RazzleServer.Game.Maple.Maps
                     Map.Drops.Add(loopDrop);
                 }
             }
+        }
 
-            if (owner != null)
+        private Character GiveExperience(Mob item)
+        {
+            Character owner = null;
+            var mostDamage = 0u;
+
+            foreach (var attacker in item.Attackers)
             {
-                foreach (var loopStarted in owner.Quests.Started)
+                if (attacker.Key.Map == Map)
                 {
-                    if (loopStarted.Value.ContainsKey(item.MapleId))
+                    if (attacker.Value > mostDamage)
                     {
-                        if (loopStarted.Value[item.MapleId] < DataProvider.Quests.Data[loopStarted.Key].PostRequiredKills[item.MapleId])
-                        {
-                            loopStarted.Value[item.MapleId]++;
-
-                            var kills = string.Empty;
-
-                            foreach (int kill in loopStarted.Value.Values)
-                            {
-                                kills += kill.ToString().PadLeft(3, '0');
-                            }
-
-                            owner.Client.Send(GamePackets.ShowStatusInfo(MessageType.QuestRecord, mapleId: loopStarted.Key, questStatus: QuestStatus.InProgress, questString: kills));
-
-                            if (owner.Quests.CanComplete(loopStarted.Key, true))
-                            {
-                                owner.Quests.NotifyComplete(loopStarted.Key);
-                            }
-                        }
+                        owner = attacker.Key;
+                        mostDamage = attacker.Value;
                     }
+
+                    attacker.Key.Experience += (int)Math.Min(item.Experience, attacker.Value * item.Experience / item.MaxHealth) * attacker.Key.Client.Server.World.ExperienceRate;
                 }
             }
 
-            item.Controller.ControlledMobs.Remove(item);
-            Map.Send(item.GetDestroyPacket());
-
-            base.Remove(item);
-
-            if (item.SpawnPoint != null)
-            {
-                Delay.Execute(item.SpawnPoint.Spawn, 3 * 1000); // TODO: Actual respawn time.
-            }
-
-            foreach (var summonId in item.DeathSummons)
-            {
-                Map.Mobs.Add(new Mob(summonId)
-                {
-                    Position = item.Position // TODO: Set owner as well.
-                });
-            }
+            return owner;
         }
     }
 }

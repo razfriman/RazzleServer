@@ -114,13 +114,17 @@ namespace RazzleServer.Game.Maple.Skills
                 if (IsCoolingDown)
                 {
                     Character.Client.Send(GamePackets.Cooldown(MapleId, RemainingCooldownSeconds));
-
-                    Delay.Execute(() =>
-                    {
-                        Character.Client.Send(GamePackets.Cooldown(MapleId, 0));
-                    }, RemainingCooldownSeconds * 1000);
+                    ScheduleCooldownExpiration();
                 }
             }
+        }
+
+        private void ScheduleCooldownExpiration()
+        {
+            Delay.Execute(() =>
+            {
+                Character.Client.Send(GamePackets.Cooldown(MapleId, 0));
+            }, RemainingCooldownSeconds * 1000);
         }
 
         private bool Assigned { get; set; }

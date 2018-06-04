@@ -8,14 +8,20 @@ namespace RazzleServer.Game.Maple.Maps
 
         public override void Add(Summon item)
         {
-            base.Add(item);
-            Map.Send(item.GetCreatePacket());
+            lock (this)
+            {
+                base.Add(item);
+                Map.Send(item.GetCreatePacket());
+            }
         }
 
         public override void Remove(Summon item)
         {
-            Map.Send(item.GetDestroyPacket());
-            base.Remove(item);
+            lock (this)
+            {
+                Map.Send(item.GetDestroyPacket());
+                base.Remove(item);
+            }
         }
     }
 }

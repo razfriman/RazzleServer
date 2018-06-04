@@ -27,7 +27,16 @@ namespace RazzleServer.Common
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite($"Filename=./{ServerConfig.Instance.DatabaseConnection}");
+            var config = ServerConfig.Instance;
+
+            if (config.DatabaseConnectionType == Constants.DatabaseConnectionType.Sqlite)
+            {
+                optionsBuilder.UseSqlite($"Filename=./{ServerConfig.Instance.DatabaseConnection}");
+            }
+            else if (config.DatabaseConnectionType == Constants.DatabaseConnectionType.InMemory)
+            {
+                optionsBuilder.UseInMemoryDatabase("RazzleServer");
+            }
         }
     }
 }

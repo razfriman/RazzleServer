@@ -10,15 +10,7 @@ namespace RazzleServer.Game.Maple.Maps
         {
             item.Picker = null;
             base.Add(item);
-            item.Expiry?.Dispose();
-
-            item.Expiry = new Delay(() =>
-            {
-                if (item.Map == Map)
-                {
-                    Remove(item);
-                }
-            }, Drop.ExpiryTime);
+            ScheduleExpiration(item);
 
             lock (Map.Characters)
             {
@@ -30,6 +22,20 @@ namespace RazzleServer.Game.Maple.Maps
                     }
                 }
             }
+        }
+
+        private void ScheduleExpiration(Drop item)
+        {
+            item.Expiry?.Dispose();
+
+            item.Expiry = new Delay(() =>
+            {
+                if (item.Map == Map)
+                {
+                    item.Picker = null;
+                    Remove(item);
+                }
+            }, Drop.ExpiryTime);
         }
 
         public override void Remove(Drop item)
