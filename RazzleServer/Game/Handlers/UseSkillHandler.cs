@@ -5,6 +5,7 @@ using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Interaction;
+using RazzleServer.Game.Maple.Skills;
 
 namespace RazzleServer.Game.Handlers
 {
@@ -13,9 +14,15 @@ namespace RazzleServer.Game.Handlers
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
-            // TODO - WHICH SKILL?
-            var skill = client.Character.Skills[0];
+            packet.ReadInt();
+            var skillId = packet.ReadInt();
+            var skillLevel = packet.ReadByte();
+            var skill = client.Character.Skills[skillId];
 
+            if (skill.CurrentLevel != skillLevel)
+            {
+                return;
+            }
 
             if (!client.Character.IsAlive)
             {
@@ -25,12 +32,6 @@ namespace RazzleServer.Game.Handlers
             if (skill.IsCoolingDown)
             {
                 return;
-            }
-
-            if (skill.MapleId == (int)SkillNames.Priest.MysticDoor)
-            {
-                var origin = packet.ReadPoint();
-                // TODO: Open mystic door.
             }
 
             skill.Character.Health -= skill.CostHp;
@@ -44,37 +45,24 @@ namespace RazzleServer.Game.Handlers
             // TODO: Money cost.
 
             byte type = 0;
-            byte direction = 0;
             short addedInfo = 0;
 
             switch (skill.MapleId)
             {
                 case (int)SkillNames.Priest.MysticDoor:
-                    // NOTe: Prevents the default case from executing, there's no packet data left for it.
+
+                    HandleMysticDoor(packet);
                     break;
 
                 case (int)SkillNames.Shadower.Smokescreen:
-                    {
-                        var origin = packet.ReadPoint();
-                        // TODO: Mists.
-                    }
+                    HandleMist(packet);
                     break;
 
                 case (int)SkillNames.Crusader.ArmorCrash:
                 case (int)SkillNames.WhiteKnight.MagicCrash:
                 case (int)SkillNames.DragonKnight.PowerCrash:
                     {
-                        packet.ReadInt(); // NOTE: Unknown, probably CRC.
-                        var mobs = packet.ReadByte();
-
-                        for (byte i = 0; i < mobs; i++)
-                        {
-                            var objectId = packet.ReadInt();
-
-                            var mob = skill.Character.Map.Mobs[objectId];
-
-                            // TODO: Mob crash skill.
-                        }
+                        HandleMobCrash(packet, skill);
                     }
                     break;
 
@@ -82,20 +70,7 @@ namespace RazzleServer.Game.Handlers
                 case (int)SkillNames.Paladin.MonsterMagnet:
                 case (int)SkillNames.DarkKnight.MonsterMagnet:
                     {
-                        var mobs = packet.ReadInt();
-
-                        for (var i = 0; i < mobs; i++)
-                        {
-                            var objectId = packet.ReadInt();
-
-                            var mob = skill.Character.Map.Mobs[objectId];
-
-                            var success = packet.ReadBool();
-
-                            // TODO: Packet.
-                        }
-
-                        direction = packet.ReadByte();
+                        HandleMonsterMagnet(packet, client.Character, skill);
                     }
                     break;
 
@@ -149,8 +124,6 @@ namespace RazzleServer.Game.Handlers
                 case (int)SkillNames.Bowmaster.HerosWill:
                 case (int)SkillNames.Marksman.HerosWill:
                     {
-                        // TODO: Add Buccaneer & Corsair.
-
                         // TODO: Remove Sedcude debuff.
                     }
                     break;
@@ -162,51 +135,7 @@ namespace RazzleServer.Game.Handlers
                     break;
 
                 case (int)SkillNames.Cleric.Heal:
-                    {
-                        var healthRate = skill.Hp;
-
-                        if (healthRate > 100)
-                        {
-                            healthRate = 100;
-                        }
-
-                        var partyPlayers = skill.Character.Party?.Count ?? 1;
-                        var healthMod = (short)(healthRate * skill.Character.MaxHealth / 100 / partyPlayers);
-
-                        if (skill.Character.Party != null)
-                        {
-                            var experience = 0;
-
-                            var members = skill.Character.Party.Values
-                                .Where(member => member.Character != null)
-                                .Where(member => member.Character.Map.MapleId == skill.Character.Map.MapleId)
-                                .ToList();
-
-                            foreach (var member in members)
-                            {
-                                var memberHealth = member.Character.Health;
-
-                                if (memberHealth > 0 && memberHealth < member.Character.MaxHealth)
-                                {
-                                    member.Character.Health += healthMod;
-
-                                    if (member.Character != skill.Character)
-                                    {
-                                        experience += 20 * (member.Character.Health - memberHealth) / (8 * member.Character.Level + 190);
-                                    }
-                                }
-                            }
-
-                            if (experience > 0)
-                            {
-                                skill.Character.Experience += experience;
-                            }
-                        }
-                        else
-                        {
-                            skill.Character.Health += healthRate;
-                        }
-                    }
+                    HandleHeal(skill);
                     break;
 
                 case (int)SkillNames.Fighter.Rage:
@@ -292,7 +221,6 @@ namespace RazzleServer.Game.Handlers
                                     {
                                         target.Health = target.MaxHealth;
                                         target.Mana = target.MaxMana;
-
                                         // TODO: Use dispell.
                                     };
                                 }
@@ -345,7 +273,6 @@ namespace RazzleServer.Game.Handlers
                                     oPacket.WriteInt(skill.MapleId);
                                     oPacket.WriteByte(1);
                                     oPacket.WriteByte(1);
-
                                     target.Map.Send(oPacket, target);
                                 }
 
@@ -375,19 +302,16 @@ namespace RazzleServer.Game.Handlers
                 oPacket.WriteInt(skill.MapleId);
                 oPacket.WriteByte(1);
                 oPacket.WriteByte(1);
-
                 skill.Character.Client.Send(oPacket);
             }
 
             using (var oPacket = new PacketWriter(ServerOperationCode.RemoteEffect))
             {
-
                 oPacket.WriteInt(client.Character.Id);
                 oPacket.WriteByte((byte)UserEffect.SkillUse);
                 oPacket.WriteInt(skill.MapleId);
                 oPacket.WriteByte(1);
                 oPacket.WriteByte(1);
-
                 skill.Character.Map.Send(oPacket, skill.Character);
             }
 
@@ -395,6 +319,94 @@ namespace RazzleServer.Game.Handlers
             {
                 skill.Character.Buffs.Add(skill, 0);
             }
+        }
+
+        private static void HandleMysticDoor(PacketReader packet)
+        {
+            var origin = packet.ReadPoint();
+            // NOTe: Prevents the default case from executing, there's no packet data left for it.
+        }
+
+        private static void HandleHeal(Skill skill)
+        {
+            var healthRate = skill.Hp;
+
+            if (healthRate > 100)
+            {
+                healthRate = 100;
+            }
+
+            var partyPlayers = skill.Character.Party?.Count ?? 1;
+            var healthMod = (short)(healthRate * skill.Character.MaxHealth / 100 / partyPlayers);
+
+            if (skill.Character.Party != null)
+            {
+                var experience = 0;
+
+                var members = skill.Character.Party.Values
+                    .Where(member => member.Character != null)
+                    .Where(member => member.Character.Map.MapleId == skill.Character.Map.MapleId)
+                    .ToList();
+
+                foreach (var member in members)
+                {
+                    var memberHealth = member.Character.Health;
+
+                    if (memberHealth > 0 && memberHealth < member.Character.MaxHealth)
+                    {
+                        member.Character.Health += healthMod;
+
+                        if (member.Character != skill.Character)
+                        {
+                            experience += 20 * (member.Character.Health - memberHealth) / (8 * member.Character.Level + 190);
+                        }
+                    }
+                }
+
+                if (experience > 0)
+                {
+                    skill.Character.Experience += experience;
+                }
+            }
+            else
+            {
+                skill.Character.Health += healthRate;
+            }
+        }
+
+        private static void HandleMobCrash(PacketReader packet, Skill skill)
+        {
+            packet.ReadInt(); // NOTE: Unknown, probably CRC.
+            var mobs = packet.ReadByte();
+
+            for (byte i = 0; i < mobs; i++)
+            {
+                var objectId = packet.ReadInt();
+                var mob = skill.Character.Map.Mobs[objectId];
+                // TODO: Mob crash skill.
+            }
+        }
+
+        private static void HandleMist(PacketReader packet)
+        {
+            var origin = packet.ReadPoint();
+        }
+
+        private static void HandleMonsterMagnet(PacketReader packet, Character character, Skill skill)
+        {
+            var mobs = packet.ReadInt();
+
+            for (var i = 0; i < mobs; i++)
+            {
+                var objectId = packet.ReadInt();
+                var mob = skill.Character.Map.Mobs[objectId];
+                var success = packet.ReadBool();
+                mob?.SwitchController(character);
+            }
+
+            var direction = packet.ReadByte();
+            //player.getMap().broadcastMessage(player, MaplePacketCreator.showBuffeffect(player.getId(), skillId, 1, direction), false);
+            //c.getSession().write(MaplePacketCreator.enableActions());
         }
     }
 }

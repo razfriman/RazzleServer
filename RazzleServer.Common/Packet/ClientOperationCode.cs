@@ -67,7 +67,7 @@
         DistributeAp = 0x50,
         HealOverTime = 0x51,
         DistributeSp = 0x52,
-        // /0x53
+        UseSkill = 0x53,
         CancelBuff = 0x54,
         SkillEffect = 0x55,
         MesoDrop = 0x56,
@@ -141,7 +141,6 @@
         TeleportRockUse = 0x5C,
         UseDeathItem = 0xFF, // Unknown
         AdminShopAction = 68, // Unknown
-        UseSkill = 0x5B, // Unknown
         UseRemote = 0x73, // Unknown
         AdminCommand = 128, // Unknown
         AdminLog = 129, // Unknown 

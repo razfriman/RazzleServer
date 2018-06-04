@@ -105,13 +105,14 @@ namespace RazzleServer.Game.Maple.Life
                     }
                     else if (action == 1)
                     {
-                        script.State++;
-                        if (script.State < script.States.Count)
+                        if (script.State + 1 < script.States.Count)
                         {
-                            script.Send(script.States[script.State - 1], false);
+                            script.State++;
+                            script.Send(script.States[script.State], false);
                         }
                         else
                         {
+                            script.State++;
                             script.SetResult(1);
                         }
                     }
