@@ -7,7 +7,10 @@ namespace RazzleServer.Game.Maple.Maps
     {
         [JsonIgnore]
         public Map Map { get; set; }
+
+        [JsonIgnore]
         public int ObjectId { get; set; }
+
         public Point Position { get; set; }
     }
 }

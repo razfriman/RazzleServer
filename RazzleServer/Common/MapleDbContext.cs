@@ -27,7 +27,7 @@ namespace RazzleServer.Common
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite($"Filename=./{ServerConfig.Instance.DatabaseName}");
+            optionsBuilder.UseSqlite($"Filename=./{ServerConfig.Instance.DatabaseConnection}");
         }
     }
 }

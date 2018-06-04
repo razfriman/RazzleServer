@@ -14,7 +14,8 @@ namespace RazzleServer.Common.Server
         public ushort LoginPort { get; set; } = 8484;
         public ushort ChannelPort { get; set; } = 7575;
         public int DefaultMapId { get; set; } = 180000000;
-        public string DatabaseName { get; set; } = "MapleServer.db";
+        public string DatabaseConnection { get; set; } = "MapleServer.db";
+        public DatabaseConnectionType DatabaseConnectionType { get; set; } = DatabaseConnectionType.Sqlite;
         public string CacheFolder { get; set; } = "DataCache";
         public bool PrettifyCache { get; set; } = false;
         public string WzFilePath { get; set; } = string.Empty;
@@ -52,6 +53,8 @@ namespace RazzleServer.Common.Server
             catch (Exception e)
             {
                 Log.LogError(e, "Error deserializing ServerConfig");
+                _instance = GetDefaultConfig();
+                await _instance.SaveToFile(path);
             }
         }
 

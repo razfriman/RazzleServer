@@ -22,6 +22,8 @@ namespace RazzleServer.Game.Maple.Maps
         public MapPortals Portals { get; }
         public MapSpawnPoints SpawnPoints { get; }
         public MapPlayerShops PlayerShops { get; }
+        public MapMists Mists { get; }
+        public MapSummons Summons { get; }
         public MapReference CachedReference => DataProvider.Maps.Data[MapleId];
 
         public Map(GameServer server, int id)
@@ -39,6 +41,8 @@ namespace RazzleServer.Game.Maple.Maps
             Portals = new MapPortals(this);
             SpawnPoints = new MapSpawnPoints(this);
             PlayerShops = new MapPlayerShops(this);
+            Summons = new MapSummons(this);
+            Mists = new MapMists(this);
 
             var reference = CachedReference;
             reference.Footholds.ForEach(x => Footholds.Footholds.Add(x));
