@@ -43,7 +43,6 @@ namespace RazzleServer.Game.Maple.Data
                     await LoadShopRechargesFromJson();
                 }
 
-
                 var sw = Stopwatch.StartNew();
 
                 await LoadFromDatabase(context);
@@ -154,7 +153,6 @@ namespace RazzleServer.Game.Maple.Data
                 try
                 {
                     var sw = Stopwatch.StartNew();
-
                     var serializer = new JsonSerializer();
                     var data = serializer.Deserialize<List<ShopItemEntity>>(reader);
                     var shops = context.Shops.Select(x => x.ShopId).ToHashSet();
