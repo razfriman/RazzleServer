@@ -5,6 +5,7 @@ using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Data.References;
 using RazzleServer.Game.Maple.Maps;
+using RazzleServer.Game.Maple.Scripting;
 using RazzleServer.Game.Maple.Util;
 
 namespace RazzleServer.Game.Maple.Life
@@ -12,59 +13,84 @@ namespace RazzleServer.Game.Maple.Life
     public sealed class Reactor : MapObject, ISpawnable
     {
         public int MapleId { get; }
-        public string Label { get; }
-        public byte State { get; set; }
+        public sbyte State { get; set; }
         public SpawnPoint SpawnPoint { get; }
-        public List<ReactorState> States { get; set; } = new List<ReactorState>();
         public ReactorReference CachedReference => DataProvider.Reactors.Data[MapleId];
-       
-        public Reactor(int mapleId)
-        {
-            MapleId = mapleId;
-            Label = CachedReference.Label;
-            State = CachedReference.State;
-            States = CachedReference.States;
-        }
 
         public Reactor(SpawnPoint spawnPoint)
-            : this(spawnPoint.MapleId)
         {
+            MapleId = spawnPoint.MapleId;
             SpawnPoint = spawnPoint;
             Position = spawnPoint.Position;
         }
 
+        public ReactorStateReference CurrentState =>
+        CachedReference.States.GetValueOrDefault(State);
+
         public void Hit(Character character, short actionDelay)
         {
-            var state = States[State];
+            var currentState = CurrentState;
 
-            // TODO - Reactor scripts
-            switch (state.Type)
+            switch (currentState.Type)
             {
+                case ReactorEventType.Dummy:
+                    System.Console.WriteLine("Dummy reactor");
+                    Map.Send(TriggerReactorPacket(actionDelay));
+                    ScriptProvider.Reactors.Execute(this, character);
+                    break;
+                case ReactorEventType.HitFromLeft:
+                case ReactorEventType.HitFromRight:
                 case ReactorEventType.PlainAdvanceState:
-                    {
-                        State = state.NextState;
+                    
+                    State = currentState.NextState;
+                    var nextState = CurrentState;
 
-                        if (State == States.Count - 1)
+                    if (nextState == null)
+                    {
+                        // Reactor is destroyed
+                        if (currentState.Type != ReactorEventType.HitByItem)
                         {
-                            Map.Reactors.Remove(this);
+                            if (actionDelay > 0)
+                            {
+                                Map.Reactors.Remove(ObjectId);
+                            }
+                            else
+                            {
+                                Map.Send(TriggerReactorPacket(actionDelay));
+                            }
                         }
                         else
                         {
-                            using (var oPacket = new PacketWriter(ServerOperationCode.ReactorChangeState))
-                            {
-                                oPacket.WriteInt(ObjectId);
-                                oPacket.WriteByte(State);
-                                oPacket.WritePoint(Position);
-                                oPacket.WriteShort(actionDelay);
-                                oPacket.WriteByte(0); // NOTE: Event index.
-                                oPacket.WriteByte(4); // NOTE: Delay.
-
-                                Map.Send(oPacket);
-                            }
+                            // Item triggered on final step
+                            Map.Send(TriggerReactorPacket(actionDelay));
+                        }
+                        System.Console.WriteLine("Script on last state");
+                        ScriptProvider.Reactors.Execute(this, character);
+                    }
+                    else
+                    {
+                        Map.Send(TriggerReactorPacket(actionDelay));
+                        if (currentState.State == currentState.NextState)
+                        {
+                            // Looping reactor
+                            System.Console.WriteLine("Looping reactor");
+                            ScriptProvider.Reactors.Execute(this, character);
                         }
                     }
                     break;
             }
+        }
+
+        private PacketWriter TriggerReactorPacket(short actionDelay)
+        {
+            var oPacket = new PacketWriter(ServerOperationCode.ReactorChangeState);
+            oPacket.WriteInt(ObjectId);
+            oPacket.WriteByte(State);
+            oPacket.WritePoint(Position);
+            oPacket.WriteShort(actionDelay);
+            oPacket.WriteByte(0); // NOTE: Event index.
+            oPacket.WriteByte(4); // NOTE: Delay.
+            return oPacket;
         }
 
         public PacketWriter GetCreatePacket() => GetSpawnPacket();
@@ -72,26 +98,20 @@ namespace RazzleServer.Game.Maple.Life
         public PacketWriter GetSpawnPacket()
         {
             var oPacket = new PacketWriter(ServerOperationCode.ReactorEnterField);
-
             oPacket.WriteInt(ObjectId);
             oPacket.WriteInt(MapleId);
             oPacket.WriteByte(State);
             oPacket.WritePoint(Position);
-            oPacket.WriteShort(0); // NOTE: Flags (not sure).
-            oPacket.WriteBool(false); // NOTE: Unknown
-            oPacket.WriteString(Label);
-
+            oPacket.WriteByte(0);
             return oPacket;
         }
 
         public PacketWriter GetDestroyPacket()
         {
             var oPacket = new PacketWriter(ServerOperationCode.ReactorLeaveField);
-
             oPacket.WriteInt(ObjectId);
             oPacket.WriteByte(State);
             oPacket.WritePoint(Position);
-
             return oPacket;
         }
     }

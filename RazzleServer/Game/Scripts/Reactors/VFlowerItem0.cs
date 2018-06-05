@@ -2,8 +2,8 @@
 
 namespace RazzleServer.Game.Scripts.Reactors
 {
-    [ReactorScript("mBoxItem0")]
-    public class Reactor2000 : AReactorScript
+    [ReactorScript("vFlowerItem0")]
+    public class VFlowerItem0 : AReactorScript
     {
         public override void Execute()
         {

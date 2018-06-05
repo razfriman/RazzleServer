@@ -17,7 +17,6 @@ namespace RazzleServer.Game.Handlers
 
             var characterPosition = packet.ReadPoint();
             var actionDelay = packet.ReadShort();
-
             var reactor = reactors[objectId];
             reactor.Hit(client.Character, actionDelay);
         }

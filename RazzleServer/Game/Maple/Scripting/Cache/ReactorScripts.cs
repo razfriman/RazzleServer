@@ -19,11 +19,11 @@ namespace RazzleServer.Game.Maple.Scripting.Cache
         {
             try
             {
-                var script = reactor.Label;
+                var script = reactor.CachedReference.Script ?? reactor.MapleId.ToString();
 
                 if (!Data.ContainsKey(script))
                 {
-                    _log.LogWarning($"Script not implemented for Reactor={reactor.Label} on Map={reactor.Map.MapleId}");
+                    _log.LogWarning($"Script not implemented for Reactor={reactor.MapleId} Script={script} on Map={reactor.Map.MapleId}");
                     return;
                 }
 
@@ -34,7 +34,7 @@ namespace RazzleServer.Game.Maple.Scripting.Cache
             }
             catch (Exception e)
             {
-                _log.LogError(e, $"Script error for Reactor={reactor.Label} on Map={reactor.Map.MapleId}");
+                _log.LogError(e, $"Script error for Reactor={reactor.MapleId} on Map={reactor.Map.MapleId}");
             }
         }
     }
