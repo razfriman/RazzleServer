@@ -58,6 +58,7 @@ namespace RazzleServer.Game.Maple.Characters
         public CharacterSkillMacros SkillMacros { get; set; }
         public ANpcScript NpcScript { get; set; }
         public Shop CurrentNpcShop { get; set; }
+        public CharacterDamage Damage { get; set; }
         private bool Assigned { get; set; }
 
         public DateTime LastHealthHealOverTime { get; set; } = new DateTime();
@@ -621,6 +622,7 @@ namespace RazzleServer.Game.Maple.Characters
             Position = new Point(0, 0);
             ControlledMobs = new ControlledMobs(this);
             ControlledNpcs = new ControlledNpcs(this);
+            Damage = new CharacterDamage(this);
         }
 
         public void Initialize()
@@ -631,12 +633,9 @@ namespace RazzleServer.Game.Maple.Characters
                 oPacket.WriteByte(++Portals);
                 oPacket.WriteBool(true);
                 oPacket.WriteShort(0);
-
-                for (var i = 0; i < 3; i++)
-                {
-                    oPacket.WriteInt(Functions.Random());
-                }
-
+                oPacket.WriteInt(Damage.Random.OriginalSeed1);
+                oPacket.WriteInt(Damage.Random.OriginalSeed2);
+                oPacket.WriteInt(Damage.Random.OriginalSeed3);
                 oPacket.WriteLong(-1);
                 oPacket.WriteBytes(DataToByteArray());
                 oPacket.WriteDateTime(DateTime.UtcNow);
@@ -1120,8 +1119,6 @@ namespace RazzleServer.Game.Maple.Characters
         {
             // TODO
         }
-
-       
 
         internal static void Delete(int characterId)
         {
