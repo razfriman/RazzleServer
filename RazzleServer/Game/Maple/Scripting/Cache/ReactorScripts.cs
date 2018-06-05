@@ -18,28 +18,32 @@ namespace RazzleServer.Game.Maple.Scripting.Cache
         public void Execute(Reactor reactor, Character character)
         {
             var script = reactor.CachedReference.Script ?? reactor.MapleId.ToString();
-            
-            try
-            {
-                if (!Data.ContainsKey(script))
-                {
-                    _log.LogWarning($"Script not implemented for Reactor={reactor.MapleId} Script={script} on Map={reactor.Map.MapleId}");
-                    return;
-                }
 
-                var reactorScript = Activator.CreateInstance(Data[script]) as AReactorScript;
-                reactorScript.Character = character;
-                reactorScript.Reactor = reactor;
-                Task.Factory.StartNew(reactorScript.Execute);
-            }
-            catch (NotImplementedException)
+            if (!Data.ContainsKey(script))
             {
                 _log.LogWarning($"Script not implemented for Reactor={reactor.MapleId} Script={script} on Map={reactor.Map.MapleId}");
+                return;
             }
-            catch (Exception e)
+
+            var reactorScript = Activator.CreateInstance(Data[script]) as AReactorScript;
+            reactorScript.Character = character;
+            reactorScript.Reactor = reactor;
+            Task.Factory.StartNew(reactorScript.Execute)
+            .ContinueWith(x =>
             {
-                _log.LogError(e, $"Script error for Reactor={reactor.MapleId} on Map={reactor.Map.MapleId}");
-            }
+                var ex = x.Exception.Flatten().InnerException;
+
+                if (ex is NotImplementedException)
+                {
+                    _log.LogWarning($"Script not implemented for Reactor={reactor.MapleId} Script={script} on Map={reactor.Map.MapleId}");
+                }
+                else
+                {
+                    _log.LogError(ex, $"Script error for Reactor={reactor.MapleId} on Map={reactor.Map.MapleId}");
+                }
+
+            }, TaskContinuationOptions.OnlyOnFaulted);
+            Task.Factory.StartNew(reactorScript.Execute);
         }
     }
 }

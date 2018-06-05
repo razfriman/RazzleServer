@@ -23,7 +23,8 @@ namespace RazzleServer.Login
                     pw.WriteInt(acc.Id);
                     pw.WriteByte((int)acc.Gender);
                     pw.WriteBool(acc.IsMaster);
-                    pw.WriteByte(0); // 0x80 == usergm == gmlevel 5
+                    //pw.WriteByte((byte) (acc.IsMaster ? AdminLevel.LevelFour : AdminLevel.None));
+                    pw.WriteByte(0x40);
                     pw.WriteString(acc.Username);
                     pw.WriteByte(0);
                     pw.WriteByte(0); // quiet ban reason

@@ -22,8 +22,8 @@ namespace RazzleServer.Game.Maple.Maps
                 }
             }
 
-            item.Position = Map.Portals.Count > 0
-                ? Map.Portals[item.SpawnPoint].Position
+            item.Position = Map.Portals.Count > item.SpawnPoint
+                ? Map.Portals[item.SpawnPoint]?.Position
                 : new Point(0, 0);
 
             try

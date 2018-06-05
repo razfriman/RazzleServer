@@ -48,7 +48,6 @@ namespace RazzleServer.Game.Handlers
 
             hit = packet.ReadByte();
             var reduction = packet.ReadByte();
-            packet.ReadByte(); // NOTE: Unknown.
 
             if (reduction != 0)
             {

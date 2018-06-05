@@ -14,7 +14,7 @@ namespace RazzleServer.Game.Handlers
             {
                 return;
             }
-
+            // 23 00 [01] [00 95 BA 0A] [00 00 00 00 00 
             var mapId = packet.ReadInt();
             var portalLabel = packet.ReadString();
 

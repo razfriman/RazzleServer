@@ -16,30 +16,35 @@ namespace RazzleServer.Game.Maple.Scripting.Cache
 
         public void Execute(Npc npc, Character character)
         {
-            try
-            {
-                var script = npc.CachedReference.Script ?? npc.MapleId.ToString();
+            var script = npc.CachedReference.Script ?? npc.MapleId.ToString();
 
-                if (!Data.ContainsKey(script))
+            if (!Data.ContainsKey(script))
+            {
+                _log.LogWarning($"Script not implemented for Npc={npc.MapleId} Script={npc.CachedReference.Script} on Map={npc.Map.MapleId}");
+                return;
+            }
+
+            var npcScript = Activator.CreateInstance(Data[script]) as ANpcScript;
+            npcScript.Character = character;
+            npcScript.Npc = npc;
+            character.NpcScript = npcScript;
+            Task.Factory.StartNew(npcScript.Execute)
+            .ContinueWith(x =>
+            {
+                var ex = x.Exception.Flatten().InnerException;
+
+                if (ex is NotImplementedException)
                 {
                     _log.LogWarning($"Script not implemented for Npc={npc.MapleId} Script={npc.CachedReference.Script} on Map={npc.Map.MapleId}");
-                    return;
+                    character.Release();
+                }
+                else
+                {
+                    _log.LogError(ex, $"Script error for Npc={npc.MapleId} Script={npc.CachedReference.Script} on Map={npc.Map.MapleId}");
+                    character.Release();
                 }
 
-                var npcScript = Activator.CreateInstance(Data[script]) as ANpcScript;
-                npcScript.Character = character;
-                npcScript.Npc = npc;
-                character.NpcScript = npcScript;
-                Task.Factory.StartNew(npcScript.Execute);
-            }
-            catch (NotImplementedException)
-            {
-                _log.LogWarning($"Script not implemented  for Npc={npc.MapleId} Script={npc.CachedReference.Script} on Map={npc.Map.MapleId}");
-            }
-            catch (Exception e)
-            {
-                _log.LogError(e, $"Script error for Npc={npc.MapleId} Script={npc.CachedReference.Script} on Map={npc.Map.MapleId}");
-            }
+            }, TaskContinuationOptions.OnlyOnFaulted);
         }
     }
 }
