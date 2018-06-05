@@ -43,6 +43,7 @@ namespace RazzleServer.Game.Maple.Data
                     await LoadShopRechargesFromJson();
                 }
 
+
                 var sw = Stopwatch.StartNew();
 
                 await LoadFromDatabase(context);
@@ -145,7 +146,7 @@ namespace RazzleServer.Game.Maple.Data
                 return;
             }
 
-            using (var s = File.OpenRead(ShopsDataFile))
+            using (var s = File.OpenRead(ShopItemsDataFile))
             using (var sr = new StreamReader(s))
             using (var reader = new JsonTextReader(sr))
             using (var context = new MapleDbContext())
