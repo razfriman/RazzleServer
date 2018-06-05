@@ -9,6 +9,7 @@ namespace RazzleServer.Game.Maple.Maps
         public Line Line { get;  set; }
         public short DragForce { get; set; }
         public bool ForbidDownwardJump { get; set; }
+        public bool IsWall => Line.Start.X == Line.End.X;
 
         public Foothold() { }
 

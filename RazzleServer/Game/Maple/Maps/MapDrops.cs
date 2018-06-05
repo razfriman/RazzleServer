@@ -1,4 +1,6 @@
-﻿using RazzleServer.Common.Util;
+﻿using System;
+using System.Collections.Generic;
+using RazzleServer.Common.Util;
 
 namespace RazzleServer.Game.Maple.Maps
 {
@@ -43,6 +45,54 @@ namespace RazzleServer.Game.Maple.Maps
             item.Expiry?.Dispose();
             Map.Send(item.GetDestroyPacket());
             base.Remove(item);
+        }
+
+        public void SpawnDrops(List<Drop> drops, Point origin)
+        {
+            var isRight = true;
+            var offset = 25;
+            var expansionCount = 0;
+            var leftX = origin.X;
+            var rightX = origin.X;
+            var currentY = origin.Y;
+            var foundWallLeft = false;
+            var foundWallRight = false;
+            foreach (var drop in drops)
+            {
+                if (isRight && !foundWallRight)
+                {
+                    rightX += (short)(offset * expansionCount);
+                }
+
+                if (!isRight && !foundWallLeft)
+                {
+                    leftX -= (short)(offset * expansionCount);
+                }
+
+                var currentX = isRight ? rightX : leftX;
+
+                if (Map.Footholds.HasWallBetween(origin, new Point(currentX, currentY)))
+                {
+                    if (isRight)
+                    {
+                        foundWallRight = true;
+                    }
+                    else
+                    {
+                        foundWallLeft = true;
+                    }
+                }
+
+                drop.Position = Map.Footholds.FindFloor(new Point(currentX, currentY));
+                Map.Drops.Add(drop);
+
+                if (isRight)
+                {
+                    expansionCount++;
+                }
+
+                isRight = !isRight;
+            }
         }
     }
 }

@@ -45,26 +45,22 @@ namespace RazzleServer.Game.Maple.Maps
             Mists = new MapMists(this);
 
             var reference = CachedReference;
-            reference.Footholds.ForEach(x => Footholds.Footholds.Add(x));
-            reference.Npcs.ForEach(x => Npcs.Add(x));
-            reference.SpawnPoints.ForEach(x => SpawnPoints.Add(x));
-            reference.Portals.ForEach(x => Portals.Add(x));
+            reference.Footholds.ForEach(Footholds.Footholds.Add);
+            reference.Npcs.ForEach(Npcs.Add);
+            reference.SpawnPoints.ForEach(SpawnPoints.Add);
+            reference.Portals.ForEach(Portals.Add);
 
+            Footholds.CalculateBounds();
             SpawnPoints.Spawn();
         }
 
-        public Map(int id)
-        {
-            MapleId = id;
-        }
+        public Map(int id) => MapleId = id;
 
-        public void Send(PacketWriter pw, Character except = null)
-        {
+        public void Send(PacketWriter pw, Character except = null) =>
             Characters.Values
-            .Where(x => x.Id != except?.Id)
-            .ToList()
-            .ForEach(x => x.Client.Send(pw));
-        }
+                .Where(x => x.Id != except?.Id)
+                .ToList()
+                .ForEach(x => x.Client.Send(pw));
 
         public int AssignObjectId() => ++_mObjectIds;
     }

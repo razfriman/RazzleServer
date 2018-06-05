@@ -11,7 +11,7 @@
   "SubVersion": 1,
   "ServerType": 8,
   "PingTimeout": 30,
-  "PrintPackets": true,
+  "PrintPackets": false,
   "AesKey": 5923094546581162003,
   "EnableAutoRegister": true,
   "EnableMultiLeveling": true,

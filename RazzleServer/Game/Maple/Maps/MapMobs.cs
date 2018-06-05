@@ -14,7 +14,7 @@ namespace RazzleServer.Game.Maple.Maps
         public MapMobs(Map map) : base(map) { }
 
         public override void Add(Mob item)
-        {
+        { 
             base.Add(item);
             Map.Send(item.GetCreatePacket());
             item.AssignController();
@@ -89,38 +89,39 @@ namespace RazzleServer.Game.Maple.Maps
         {
             if (item.CanDrop)
             {
-                var drops = new List<Drop>();
+                var drops = CalculateDrops(item, owner);
+                Map.Drops.SpawnDrops(drops, item.Position);
+            }
+        }
 
-                foreach (var loopLoot in item.Loots)
+        private List<Drop> CalculateDrops(Mob item, Character owner)
+        {
+            var drops = new List<Drop>();
+
+            foreach (var loopLoot in item.Loots)
+            {
+                if (Functions.Random(1000000) / Map.Server.World.DropRate <= loopLoot.Chance)
                 {
-                    if (Functions.Random(1000000) / Map.Server.World.DropRate <= loopLoot.Chance)
+                    if (loopLoot.IsMeso)
                     {
-                        if (loopLoot.IsMeso)
+                        drops.Add(new Meso((short)(Functions.Random(loopLoot.MinimumQuantity, loopLoot.MaximumQuantity) * Map.Server.World.MesoRate))
                         {
-                            drops.Add(new Meso((short)(Functions.Random(loopLoot.MinimumQuantity, loopLoot.MaximumQuantity) * Map.Server.World.MesoRate))
-                            {
-                                Dropper = item,
-                                Owner = owner
-                            });
-                        }
-                        else
+                            Dropper = item,
+                            Owner = owner
+                        });
+                    }
+                    else
+                    {
+                        drops.Add(new Item(loopLoot.ItemId, (short)Functions.Random(loopLoot.MinimumQuantity, loopLoot.MaximumQuantity))
                         {
-                            drops.Add(new Item(loopLoot.ItemId, (short)Functions.Random(loopLoot.MinimumQuantity, loopLoot.MaximumQuantity))
-                            {
-                                Dropper = item,
-                                Owner = owner
-                            });
-                        }
+                            Dropper = item,
+                            Owner = owner
+                        });
                     }
                 }
-
-                foreach (var loopDrop in drops)
-                {
-                    // TODO: Space out drops.
-
-                    Map.Drops.Add(loopDrop);
-                }
             }
+
+            return drops;
         }
 
         private Character GiveExperience(Mob item)
