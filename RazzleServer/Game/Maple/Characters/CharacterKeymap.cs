@@ -42,7 +42,7 @@ namespace RazzleServer.Game.Maple.Characters
                     dbContext.KeyMaps.Add(new KeyMapEntity
                     {
                         CharacterId = Parent.Id,
-                        Action = (byte)entry.Action,
+                        Action = (int)entry.Action,
                         Key = (byte)entry.Key,
                         Type = (byte)entry.Type
                     });
