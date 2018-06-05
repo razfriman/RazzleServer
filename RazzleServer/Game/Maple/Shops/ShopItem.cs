@@ -50,10 +50,6 @@ namespace RazzleServer.Game.Maple.Shops
             {
                 oPacket.WriteInt(MapleId);
                 oPacket.WriteInt(PurchasePrice);
-                oPacket.WriteInt(0); // NOTE: Perfect Pitch.
-                oPacket.WriteInt(0); // NOTE: Time limit.
-                oPacket.WriteInt(0); // NOTE: Unknown.
-
                 if (IsRecharageable)
                 {
                     oPacket.WriteShort(0);

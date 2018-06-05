@@ -56,12 +56,7 @@ namespace RazzleServer.Game.Handlers
                 // TODO: Return damage (Power Guard).
             }
 
-            if (type == MapDamage)
-            {
-                level = packet.ReadByte();
-                disease = packet.ReadInt();
-            }
-            else
+            if (type != MapDamage)
             {
                 stance = packet.ReadByte();
 

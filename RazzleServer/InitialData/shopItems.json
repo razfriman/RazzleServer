@@ -64,13 +64,6 @@
   },
   {
     "ShopId": 11100,
-    "ItemId": 2460000,
-    "Quantity": 1,
-    "Price": 2000,
-    "Sort": 124
-  },
-  {
-    "ShopId": 11100,
     "ItemId": 2460001,
     "Quantity": 1,
     "Price": 8000,
@@ -593,13 +586,6 @@
     "Quantity": 2000,
     "Price": 1400,
     "Sort": 188
-  },
-  {
-    "ShopId": 1001100,
-    "ItemId": 2460000,
-    "Quantity": 1,
-    "Price": 2000,
-    "Sort": 192
   },
   {
     "ShopId": 1001100,
@@ -1555,13 +1541,6 @@
   },
   {
     "ShopId": 1011100,
-    "ItemId": 2460000,
-    "Quantity": 1,
-    "Price": 2000,
-    "Sort": 204
-  },
-  {
-    "ShopId": 1011100,
     "ItemId": 2460001,
     "Quantity": 1,
     "Price": 8000,
@@ -1965,13 +1944,6 @@
     "Quantity": 1,
     "Price": 40000,
     "Sort": 164
-  },
-  {
-    "ShopId": 1021000,
-    "ItemId": 1342000,
-    "Quantity": 1,
-    "Price": 10000,
-    "Sort": 168
   },
   {
     "ShopId": 1021000,
@@ -2724,13 +2696,6 @@
   },
   {
     "ShopId": 1021100,
-    "ItemId": 2460000,
-    "Quantity": 1,
-    "Price": 2000,
-    "Sort": 200
-  },
-  {
-    "ShopId": 1021100,
     "ItemId": 2460001,
     "Quantity": 1,
     "Price": 8000,
@@ -3424,13 +3389,6 @@
   },
   {
     "ShopId": 1031100,
-    "ItemId": 2460000,
-    "Quantity": 1,
-    "Price": 2000,
-    "Sort": 204
-  },
-  {
-    "ShopId": 1031100,
     "ItemId": 2460001,
     "Quantity": 1,
     "Price": 8000,
@@ -3673,13 +3631,6 @@
     "Quantity": 1,
     "Price": 3000,
     "Sort": 172
-  },
-  {
-    "ShopId": 1051000,
-    "ItemId": 1342000,
-    "Quantity": 1,
-    "Price": 10000,
-    "Sort": 176
   },
   {
     "ShopId": 1051000,
@@ -4600,13 +4551,6 @@
   },
   {
     "ShopId": 1051002,
-    "ItemId": 2460000,
-    "Quantity": 1,
-    "Price": 2000,
-    "Sort": 200
-  },
-  {
-    "ShopId": 1051002,
     "ItemId": 2460001,
     "Quantity": 1,
     "Price": 8000,
@@ -4873,13 +4817,6 @@
   },
   {
     "ShopId": 1061001,
-    "ItemId": 2460000,
-    "Quantity": 1,
-    "Price": 2000,
-    "Sort": 160
-  },
-  {
-    "ShopId": 1061001,
     "ItemId": 2460001,
     "Quantity": 1,
     "Price": 8000,
@@ -5038,13 +4975,6 @@
     "Quantity": 2000,
     "Price": 1400,
     "Sort": 172
-  },
-  {
-    "ShopId": 1061002,
-    "ItemId": 2460000,
-    "Quantity": 1,
-    "Price": 2000,
-    "Sort": 176
   },
   {
     "ShopId": 1061002,
@@ -5227,13 +5157,6 @@
     "Quantity": 1,
     "Price": 4000,
     "Sort": 184
-  },
-  {
-    "ShopId": 1081000,
-    "ItemId": 2460000,
-    "Quantity": 1,
-    "Price": 2000,
-    "Sort": 188
   },
   {
     "ShopId": 1081000,
@@ -5591,13 +5514,6 @@
     "Quantity": 2000,
     "Price": 1400,
     "Sort": 188
-  },
-  {
-    "ShopId": 1091002,
-    "ItemId": 2460000,
-    "Quantity": 1,
-    "Price": 2000,
-    "Sort": 192
   },
   {
     "ShopId": 1091002,
@@ -6690,13 +6606,6 @@
     "Quantity": 2000,
     "Price": 1400,
     "Sort": 220
-  },
-  {
-    "ShopId": 2012005,
-    "ItemId": 2460000,
-    "Quantity": 1,
-    "Price": 2000,
-    "Sort": 224
   },
   {
     "ShopId": 2012005,
@@ -7834,13 +7743,6 @@
   },
   {
     "ShopId": 2022001,
-    "ItemId": 2460000,
-    "Quantity": 1,
-    "Price": 2000,
-    "Sort": 240
-  },
-  {
-    "ShopId": 2022001,
     "ItemId": 2460001,
     "Quantity": 1,
     "Price": 8000,
@@ -8261,13 +8163,6 @@
   },
   {
     "ShopId": 2030009,
-    "ItemId": 2460000,
-    "Quantity": 1,
-    "Price": 2000,
-    "Sort": 220
-  },
-  {
-    "ShopId": 2030009,
     "ItemId": 2460001,
     "Quantity": 1,
     "Price": 8000,
@@ -8569,13 +8464,6 @@
   },
   {
     "ShopId": 2040049,
-    "ItemId": 2460000,
-    "Quantity": 1,
-    "Price": 2000,
-    "Sort": 256
-  },
-  {
-    "ShopId": 2040049,
     "ItemId": 2460001,
     "Quantity": 1,
     "Price": 8000,
@@ -8832,13 +8720,6 @@
     "Quantity": 1,
     "Price": 400,
     "Sort": 236
-  },
-  {
-    "ShopId": 2040051,
-    "ItemId": 2460000,
-    "Quantity": 1,
-    "Price": 2000,
-    "Sort": 240
   },
   {
     "ShopId": 2040051,
@@ -10043,13 +9924,6 @@
     "Quantity": 1,
     "Price": 10,
     "Sort": 232
-  },
-  {
-    "ShopId": 2041006,
-    "ItemId": 2460000,
-    "Quantity": 1,
-    "Price": 2000,
-    "Sort": 236
   },
   {
     "ShopId": 2041006,
@@ -11607,13 +11481,6 @@
   },
   {
     "ShopId": 2051000,
-    "ItemId": 2460000,
-    "Quantity": 1,
-    "Price": 2000,
-    "Sort": 232
-  },
-  {
-    "ShopId": 2051000,
     "ItemId": 2460001,
     "Quantity": 1,
     "Price": 8000,
@@ -12643,13 +12510,6 @@
   },
   {
     "ShopId": 2060004,
-    "ItemId": 2460000,
-    "Quantity": 1,
-    "Price": 2000,
-    "Sort": 236
-  },
-  {
-    "ShopId": 2060004,
     "ItemId": 2460001,
     "Quantity": 1,
     "Price": 8000,
@@ -13298,13 +13158,6 @@
     "Quantity": 1,
     "Price": 10,
     "Sort": 224
-  },
-  {
-    "ShopId": 2070001,
-    "ItemId": 2460000,
-    "Quantity": 1,
-    "Price": 2000,
-    "Sort": 228
   },
   {
     "ShopId": 2070001,
@@ -14383,13 +14236,6 @@
     "Quantity": 1,
     "Price": 10,
     "Sort": 220
-  },
-  {
-    "ShopId": 2080001,
-    "ItemId": 2460000,
-    "Quantity": 1,
-    "Price": 2000,
-    "Sort": 224
   },
   {
     "ShopId": 2080001,
@@ -16619,13 +16465,6 @@
   },
   {
     "ShopId": 2090003,
-    "ItemId": 2460000,
-    "Quantity": 1,
-    "Price": 2000,
-    "Sort": 232
-  },
-  {
-    "ShopId": 2090003,
     "ItemId": 2460001,
     "Quantity": 1,
     "Price": 8000,
@@ -17704,13 +17543,6 @@
   },
   {
     "ShopId": 2093002,
-    "ItemId": 2460000,
-    "Quantity": 1,
-    "Price": 2000,
-    "Sort": 224
-  },
-  {
-    "ShopId": 2093002,
     "ItemId": 2460001,
     "Quantity": 1,
     "Price": 8000,
@@ -18537,13 +18369,6 @@
   },
   {
     "ShopId": 2100004,
-    "ItemId": 2460000,
-    "Quantity": 1,
-    "Price": 2000,
-    "Sort": 224
-  },
-  {
-    "ShopId": 2100004,
     "ItemId": 2460001,
     "Quantity": 1,
     "Price": 8000,
@@ -18793,13 +18618,6 @@
     "Quantity": 2000,
     "Price": 1400,
     "Sort": 220
-  },
-  {
-    "ShopId": 2110001,
-    "ItemId": 2460000,
-    "Quantity": 1,
-    "Price": 2000,
-    "Sort": 224
   },
   {
     "ShopId": 2110001,
@@ -19066,13 +18884,6 @@
     "Quantity": 2000,
     "Price": 1400,
     "Sort": 228
-  },
-  {
-    "ShopId": 2130000,
-    "ItemId": 2460000,
-    "Quantity": 1,
-    "Price": 2000,
-    "Sort": 232
   },
   {
     "ShopId": 2130000,

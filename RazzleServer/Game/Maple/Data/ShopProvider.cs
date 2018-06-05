@@ -166,6 +166,12 @@ namespace RazzleServer.Game.Maple.Data
                             continue;
                         }
 
+                        if (!DataProvider.Items.Data.ContainsKey(item.ItemId))
+                        {
+                            Log.LogWarning($"Skipping shop item - Cannot find Item with ID={item.ItemId} in DataProvider");
+                            continue;
+                        }
+
                         context.ShopItems.Add(new ShopItemEntity
                         {
                             ItemId = item.ItemId,

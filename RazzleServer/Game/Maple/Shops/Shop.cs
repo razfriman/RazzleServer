@@ -24,7 +24,10 @@ namespace RazzleServer.Game.Maple.Shops
 
             foreach (var item in entity.ShopItems.OrderBy(x => x.Sort))
             {
-                Items.Add(new ShopItem(this, item));
+                if (DataProvider.Items.Data.ContainsKey(item.ItemId))
+                {
+                    Items.Add(new ShopItem(this, item));
+                }
             }
 
             if (RechargeTier > 0)
