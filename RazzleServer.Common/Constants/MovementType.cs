@@ -16,6 +16,9 @@
         Chair = 11,
         ExcessiveKnockback = 12,
         RecoilShot = 13,
-        Unknown = 14
+        UnknownTeleport = 14,
+        JumpDown = 15,
+        RelativeFloat = 16,
+        NormalFloat = 17
     }
 }
