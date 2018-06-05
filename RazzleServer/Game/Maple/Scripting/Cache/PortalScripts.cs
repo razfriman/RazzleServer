@@ -18,22 +18,24 @@ namespace RazzleServer.Game.Maple.Scripting.Cache
         {
             try
             {
-                var script = portal.Script;
-
-                if (!Data.ContainsKey(script))
+                if (!Data.ContainsKey(portal.Script))
                 {
-                    _log.LogWarning($"Script not implemented for Portal={portal.Label} on Map={portal.Map.MapleId}");
+                    _log.LogWarning($"Script not implemented for Portal={portal.Label} Script={portal.Script} on Map={portal.Map.MapleId}");
                     return;
                 }
 
-                var portalScript = Activator.CreateInstance(Data[script]) as APortalScript;
+                var portalScript = Activator.CreateInstance(Data[portal.Script]) as APortalScript;
                 portalScript.Character = character;
                 portalScript.Portal = portal;
                 Task.Factory.StartNew(portalScript.Execute);
             }
+            catch (NotImplementedException)
+            {
+                _log.LogWarning($"Script not implemented for Portal={portal.Label} Script={portal.Script} on Map={portal.Map.MapleId}");
+            }
             catch (Exception e)
             {
-                _log.LogError(e, $"Script error for Portal={portal.Label} on Map={portal.Map.MapleId}");
+                _log.LogError(e, $"Script error for Portal={portal.Label} Script={portal.Script} on Map={portal.Map.MapleId}");
             }
         }
     }

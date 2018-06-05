@@ -32,6 +32,10 @@ namespace RazzleServer.Game.Maple.Scripting.Cache
                 character.NpcScript = npcScript;
                 Task.Factory.StartNew(npcScript.Execute);
             }
+            catch (NotImplementedException)
+            {
+                _log.LogWarning($"Script not implemented  for Npc={npc.MapleId} Script={npc.CachedReference.Script} on Map={npc.Map.MapleId}");
+            }
             catch (Exception e)
             {
                 _log.LogError(e, $"Script error for Npc={npc.MapleId} Script={npc.CachedReference.Script} on Map={npc.Map.MapleId}");

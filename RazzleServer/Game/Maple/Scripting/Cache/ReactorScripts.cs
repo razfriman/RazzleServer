@@ -17,10 +17,10 @@ namespace RazzleServer.Game.Maple.Scripting.Cache
 
         public void Execute(Reactor reactor, Character character)
         {
+            var script = reactor.CachedReference.Script ?? reactor.MapleId.ToString();
+            
             try
             {
-                var script = reactor.CachedReference.Script ?? reactor.MapleId.ToString();
-
                 if (!Data.ContainsKey(script))
                 {
                     _log.LogWarning($"Script not implemented for Reactor={reactor.MapleId} Script={script} on Map={reactor.Map.MapleId}");
@@ -31,6 +31,10 @@ namespace RazzleServer.Game.Maple.Scripting.Cache
                 reactorScript.Character = character;
                 reactorScript.Reactor = reactor;
                 Task.Factory.StartNew(reactorScript.Execute);
+            }
+            catch (NotImplementedException)
+            {
+                _log.LogWarning($"Script not implemented for Reactor={reactor.MapleId} Script={script} on Map={reactor.Map.MapleId}");
             }
             catch (Exception e)
             {
