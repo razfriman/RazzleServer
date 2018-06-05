@@ -57,7 +57,7 @@ namespace RazzleServer.Game
             }
             catch (Exception e)
             {
-                Log.LogError(e, $"Packet Processing Error [{header.ToString()}] - {e.Message} - {e.StackTrace}");
+                Log.LogError(e, $"Packet Processing Error [{header.ToString()}] {packet.ToPacketString()} - {e.Message} - {e.StackTrace}");
             }
         }
 
@@ -80,6 +80,7 @@ namespace RazzleServer.Game
 
         public void ChangeChannel(byte channelId)
         {
+            Character.Save();
             Server.Manager.Migrate(Host, Account.Id, Character.Id);
 
             var outPacket = new PacketWriter(ServerOperationCode.ChangeChannel);
