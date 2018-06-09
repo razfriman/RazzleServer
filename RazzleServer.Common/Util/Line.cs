@@ -1,6 +1,6 @@
 ﻿namespace RazzleServer.Common.Util
 {
-    public sealed class Line
+    public struct Line
     {
         public Point Start { get; }
         public Point End { get; }

@@ -120,8 +120,7 @@ namespace RazzleServer.Game.Maple.Life
         {
             SpawnPoint = spawnPoint;
             Foothold = SpawnPoint.Foothold;
-            Position = SpawnPoint.Position;
-            Position.Y -= 1; // TODO: Is this needed?
+            Position = new Point(SpawnPoint.Position.X, SpawnPoint.Position.Y - 1);
         }
 
         public Mob(int mapleId, Point position)
@@ -129,7 +128,7 @@ namespace RazzleServer.Game.Maple.Life
         {
             Foothold = 0; // TODO.
             Position = position;
-            Position.Y -= 5; // TODO: Is this needed?
+            Position = new Point(SpawnPoint.Position.X, SpawnPoint.Position.Y - 5);
         }
 
         public void AssignController()

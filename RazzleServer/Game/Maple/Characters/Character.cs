@@ -788,14 +788,14 @@ namespace RazzleServer.Game.Maple.Characters
 
             if (portal == null)
             {
-                _log.LogWarning($"Character {Id} Attempting to change map to invalid portal: {portalLabel}");
+                LogCheatWarning(CheatType.InvalidMapChange);
                 return;
             }
 
             ChangeMap(mapId, portal.Id);
         }
 
-        public void ChangeMap(int mapId, byte? portalId = null, bool fromPosition = false, Point position = null)
+        public void ChangeMap(int mapId, byte? portalId = null, bool fromPosition = false, Point? position = null)
         {
             Map.Characters.Remove(this);
 
@@ -899,6 +899,7 @@ namespace RazzleServer.Game.Maple.Characters
 
             if (attack.Portals != Portals)
             {
+                LogCheatWarning(CheatType.InvalidPortals);
                 return;
             }
 
@@ -1118,6 +1119,20 @@ namespace RazzleServer.Game.Maple.Characters
         private void UpdateStatsForParty()
         {
             // TODO
+        }
+
+        public void LogCheatWarning(CheatType type)
+        {
+            using (var dbContext = new MapleDbContext())
+            {
+                dbContext.Cheats.Add(new CheatEntity
+                {
+                    CharacterId = Id,
+                    CheatType = (int)type
+                });
+
+                dbContext.SaveChanges();
+            }
         }
 
         internal static void Delete(int characterId)

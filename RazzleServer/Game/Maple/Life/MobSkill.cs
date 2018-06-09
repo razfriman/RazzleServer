@@ -210,7 +210,7 @@ namespace RazzleServer.Game.Maple.Life
 
         private IEnumerable<Character> GetAffectedCharacters(Mob caster)
         {
-            var rectangle = new Rectangle(CachedReference.Lt + caster.Position, CachedReference.Rb + caster.Position);
+            var rectangle = new Rectangle((CachedReference.Lt ?? new Point(0, 0)) + caster.Position, (CachedReference.Rb ?? new Point(0, 0)) + caster.Position);
 
             foreach (var character in caster.Map.Characters.Values)
             {
@@ -223,7 +223,7 @@ namespace RazzleServer.Game.Maple.Life
 
         private IEnumerable<Mob> GetAffectedMobs(Mob caster)
         {
-            var rectangle = new Rectangle(CachedReference.Lt + caster.Position, CachedReference.Rb + caster.Position);
+            var rectangle = new Rectangle((CachedReference.Lt ?? new Point(0,0)) + caster.Position, (CachedReference.Rb ?? new Point(0, 0)) + caster.Position);
 
             foreach (var mob in caster.Map.Mobs.Values)
             {

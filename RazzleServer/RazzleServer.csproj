@@ -22,6 +22,12 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RazzleServer.DB\RazzleServer.Data.csproj" />
@@ -29,15 +35,5 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="MapleServer.db" />
-    <None Remove="Game\Data\loot.json" />
-    <None Remove="Logs\RazzleServer-20180602.txt" />
-    <None Remove="Game\Data\shop.json" />
-    <None Remove="Game\Data\shopItems.json" />
-    <None Remove="Game\Data\rechargeTier.json" />
-    <None Remove="Logs\RazzleServer-20180603.txt" />
-    <None Remove="MapleServer.db" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Game\Scripts\" />
   </ItemGroup>
 </Project>

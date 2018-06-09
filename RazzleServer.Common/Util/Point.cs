@@ -2,12 +2,10 @@
 
 namespace RazzleServer.Common.Util
 {
-    public class Point
+    public struct Point
     {
         public short X { get; set; }
         public short Y { get; set; }
-
-        public Point() { }
 
         public Point(short x, short y)
         {
@@ -29,8 +27,26 @@ namespace RazzleServer.Common.Util
                 X <= rectangle.Rb.X &&
                 Y <= rectangle.Rb.Y;
 
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            var p = (Point)obj;
+            return X == p.X && Y == p.Y;
+        }
+
+        public override int GetHashCode() => HashCode.Combine(X, Y);
+
         public static Point operator +(Point p1, Point p2) => new Point(p1.X + p2.X, p1.Y + p2.Y);
 
         public static Point operator -(Point p1, Point p2) => new Point(p1.X - p2.X, p1.Y - p2.Y);
+
+        public static bool operator ==(Point p1, Point p2) => p1.Equals(p2);
+
+        public static bool operator !=(Point p1, Point p2) => !p1.Equals(p2);
+
     }
 }

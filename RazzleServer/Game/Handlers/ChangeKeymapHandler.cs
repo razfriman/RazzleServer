@@ -29,11 +29,6 @@ namespace RazzleServer.Game.Handlers
         {
             var count = packet.ReadInt();
 
-            if (count == 0)
-            {
-                return;
-            }
-
             for (var i = 0; i < count; i++)
             {
                 var key = (KeymapKey)packet.ReadInt();

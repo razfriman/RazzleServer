@@ -1,11 +1,9 @@
 ﻿namespace RazzleServer.Common.Util
 {
-    public class Rectangle
+    public struct Rectangle
     {
         public Point Lt { get; set; }
         public Point Rb { get; set; }
-
-        public Rectangle() { }
 
         public Rectangle(Point lt, Point rb)
         {

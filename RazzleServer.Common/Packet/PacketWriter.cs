@@ -145,20 +145,20 @@ namespace RazzleServer.Common.Packet
 
         public void WriteZeroBytes(int length) => WriteBytes(new byte[length]);
 
-        public void WritePoint(Point writeValue)
+        public void WritePoint(Point? writeValue)
         {
-            WriteShort(writeValue.X);
-            WriteShort(writeValue.Y);
+            WriteShort(writeValue?.X ?? 0);
+            WriteShort(writeValue?.Y ?? 0);
         }
 
         public void WriteHeader(ServerOperationCode header) => WriteUShort((ushort)header);
 
-        public void WriteBox(Rectangle box)
+        public void WriteBox(Rectangle? box)
         {
-            WriteInt(box.Lt.X);
-            WriteInt(box.Lt.Y);
-            WriteInt(box.Rb.X);
-            WriteInt(box.Rb.Y);
+            WriteInt(box?.Lt.X ?? 0);
+            WriteInt(box?.Lt.Y ?? 0);
+            WriteInt(box?.Rb.X ?? 0);
+            WriteInt(box?.Rb.Y ?? 0);
         }
 
         public void WriteDateTime(DateTime item) => WriteLong((long)(item.ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds);

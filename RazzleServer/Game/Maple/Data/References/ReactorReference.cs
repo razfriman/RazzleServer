@@ -8,7 +8,7 @@ namespace RazzleServer.Game.Maple.Data.References
     public class ReactorReference
     {
         public int MapleId { get; set; }
-        public Rectangle Bounds { get; set; }
+        public Rectangle? Bounds { get; set; }
         public Dictionary<sbyte, ReactorStateReference> States { get; set; } = new Dictionary<sbyte, ReactorStateReference>();
         public string Script { get; set; }
 
@@ -52,7 +52,7 @@ namespace RazzleServer.Game.Maple.Data.References
 
                         if (!areaSet)
                         {
-                            Bounds = new Rectangle(infoData["lt"]?.GetPoint(), infoData["rb"]?.GetPoint());
+                            Bounds = new Rectangle(infoData["lt"].GetPoint(), infoData["rb"].GetPoint());
                         }
                     }
 

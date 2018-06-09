@@ -123,6 +123,7 @@ namespace RazzleServer.Game.Maple.Characters
 
             if (!DataProvider.Quests.Data.ContainsKey(questId))
             {
+                Parent.LogCheatWarning(CheatType.InvalidQuest);
                 return;
             }
 

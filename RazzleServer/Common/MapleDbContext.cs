@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RazzleServer.Common.Server;
+using RazzleServer.Common.Util;
 using RazzleServer.Data;
 
 namespace RazzleServer.Common
@@ -24,6 +25,7 @@ namespace RazzleServer.Common
         public DbSet<ShopItemEntity> ShopItems { get; set; }
         public DbSet<ShopRechargeEntity> ShopRecharges { get; set; }
         public DbSet<LootEntity> Loots { get; set; }
+        public DbSet<CheatEntity> Cheats { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -31,11 +33,15 @@ namespace RazzleServer.Common
 
             if (config.DatabaseConnectionType == Constants.DatabaseConnectionType.Sqlite)
             {
-                optionsBuilder.UseSqlite($"Filename=./{ServerConfig.Instance.DatabaseConnection}");
+                optionsBuilder
+                    .UseLoggerFactory(LogManager.Factory)
+                    .UseSqlite($"Filename=./{ServerConfig.Instance.DatabaseConnection}");
             }
             else if (config.DatabaseConnectionType == Constants.DatabaseConnectionType.InMemory)
             {
-                optionsBuilder.UseInMemoryDatabase("RazzleServer");
+                optionsBuilder
+                    .UseLoggerFactory(LogManager.Factory)
+                    .UseInMemoryDatabase("RazzleServer");
             }
         }
     }

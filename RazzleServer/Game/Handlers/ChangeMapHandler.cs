@@ -1,4 +1,5 @@
-﻿using RazzleServer.Common.Packet;
+﻿using RazzleServer.Common.Constants;
+using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple.Scripting;
 
 namespace RazzleServer.Game.Handlers
@@ -12,6 +13,7 @@ namespace RazzleServer.Game.Handlers
 
             if (portals != client.Character.Portals)
             {
+                client.Character.LogCheatWarning(CheatType.InvalidPortals);
                 return;
             }
             // 23 00 [01] [00 95 BA 0A] [00 00 00 00 00 
@@ -36,6 +38,7 @@ namespace RazzleServer.Game.Handlers
         {
             if (client.Character.IsAlive)
             {
+                client.Character.LogCheatWarning(CheatType.InvalidRevive);
                 return;
             }
 
@@ -46,6 +49,7 @@ namespace RazzleServer.Game.Handlers
         {
             if (!client.Account.IsMaster)
             {
+                client.Character.LogCheatWarning(CheatType.ImperonatingGm);
                 return;
             }
 

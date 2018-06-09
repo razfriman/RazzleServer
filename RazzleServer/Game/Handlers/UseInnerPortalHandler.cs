@@ -21,7 +21,9 @@ namespace RazzleServer.Game.Handlers
 
             var destPortal = client.Character.Map.Portals[portal.DestinationLabel];
 
-            if (portals != client.Character.Portals || portal.Position != fromPoint || destPortal.Position != toPoint)
+            if (portals != client.Character.Portals || 
+                portal.Position != fromPoint || 
+                destPortal.Position != toPoint)
             {
                 // Invalid portal
             }

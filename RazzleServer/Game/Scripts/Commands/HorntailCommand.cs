@@ -20,7 +20,7 @@ namespace RazzleServer.Game.Scripts.Commands
             }
             else
             {
-                var mob = new Mob(8810026) // TODO: Get from strings 'Summon Horntail' so we don't have to deal with
+                var mob = new Mob(8810026)
                 {
                     Position = caller.Position
                 };

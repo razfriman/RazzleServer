@@ -19,7 +19,6 @@ namespace RazzleServer.Game.Handlers
             }
 
             client.Character.Items.Remove(itemId, 1);
-
             client.Character.ChangeMap(item.CMoveTo);
         }
     }

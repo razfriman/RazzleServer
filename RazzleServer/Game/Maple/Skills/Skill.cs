@@ -53,8 +53,8 @@ namespace RazzleServer.Game.Maple.Skills
         public short Mp { get; set; }
         public short Probability { get; set; }
         public short Morph { get; set; }
-        public Point Lt { get; private set; }
-        public Point Rb { get; private set; }
+        public Point? Lt { get; private set; }
+        public Point? Rb { get; private set; }
         public int Cooldown { get; set; }
 
         public bool HasBuff => BuffTime > 0;

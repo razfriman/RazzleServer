@@ -14,8 +14,8 @@ namespace RazzleServer.Game.Maple.Data.References
         public short Chance { get; private set; }
         public short TargetCount { get; private set; }
         public int Cooldown { get; private set; }
-        public Point Lt { get; private set; }
-        public Point Rb { get; private set; }
+        public Point? Lt { get; private set; }
+        public Point? Rb { get; private set; }
         public short PercentageLimitHp { get; private set; }
         public short SummonLimit { get; private set; }
         public short SummonEffect { get; private set; }
@@ -35,8 +35,8 @@ namespace RazzleServer.Game.Maple.Data.References
                 Chance = img["prop"]?.GetShort() ?? 0;
                 TargetCount = img["count"]?.GetShort() ?? 0;
                 Cooldown = img["interval"]?.GetShort() ?? 0;//
-                Lt = img["lt"]?.GetPoint() ?? null;
-                Rb = img["rb"]?.GetPoint() ?? null;
+                Lt = img["lt"]?.GetPoint();
+                Rb = img["rb"]?.GetPoint();
                 PercentageLimitHp = img["hp"]?.GetShort() ?? 0;
                 SummonLimit = img["limit"]?.GetShort() ?? 0;
                 SummonEffect = img["summonEffect"]?.GetShort() ?? 0;

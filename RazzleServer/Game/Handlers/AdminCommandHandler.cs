@@ -14,6 +14,7 @@ namespace RazzleServer.Game.Handlers
         {
             if (!client.Character.IsMaster)
             {
+                client.Character.LogCheatWarning(CheatType.ImperonatingGm);
                 return;
             }
 
