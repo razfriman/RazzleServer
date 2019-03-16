@@ -1,7 +1,9 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using Microsoft.Extensions.Logging;
+using NAudio.Wave;
 using RazzleServer.Common.Util;
 using RazzleServer.Common.Wz.Util;
 
@@ -15,27 +17,26 @@ namespace RazzleServer.Common.Wz.WzProperties
     /// </summary>
     public class WzSoundProperty : WzExtended
     {
-        public static ILogger Log = LogManager.Log;
+        public static readonly ILogger Log = LogManager.Log;
 
         #region Fields
-        internal byte[] mp3bytes;
-        internal int len_ms;
-        internal byte[] header;
-        //internal WzImage imgParent;
-        internal WzBinaryReader wzReader;
 
-        // TODO - Wait for .NET Core Audio library
-        //internal bool headerEncrypted;
+        private byte[] _mp3Bytes;
+        private WaveFormat _wavFormat;
+        private readonly WzBinaryReader _wzReader;
+        private bool _headerEncrypted;
+        private readonly long _offs;
+        private readonly int _soundDataLen;
 
-        internal long offs;
-        internal int soundDataLen;
-        public static readonly byte[] soundHeader = {
+        private static readonly byte[] SoundHeader =
+        {
             0x02,
             0x83, 0xEB, 0x36, 0xE4, 0x4F, 0x52, 0xCE, 0x11, 0x9F, 0x53, 0x00, 0x20, 0xAF, 0x0B, 0xA7, 0x70,
             0x8B, 0xEB, 0x36, 0xE4, 0x4F, 0x52, 0xCE, 0x11, 0x9F, 0x53, 0x00, 0x20, 0xAF, 0x0B, 0xA7, 0x70,
             0x00,
             0x01,
-            0x81, 0x9F, 0x58, 0x05, 0x56, 0xC3, 0xCE, 0x11, 0xBF, 0x01, 0x00, 0xAA, 0x00, 0x55, 0x59, 0x5A };
+            0x81, 0x9F, 0x58, 0x05, 0x56, 0xC3, 0xCE, 0x11, 0xBF, 0x01, 0x00, 0xAA, 0x00, 0x55, 0x59, 0x5A
+        };
 
         #endregion
 
@@ -43,7 +44,7 @@ namespace RazzleServer.Common.Wz.WzProperties
 
         public override WzImageProperty DeepClone()
         {
-            var clone = new WzSoundProperty(Name, len_ms, header, mp3bytes);
+            var clone = new WzSoundProperty(Name, Length, Header, _mp3Bytes);
             return clone;
         }
 
@@ -52,7 +53,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         public override void SetValue(object value)
         {
         }
-       
+
         /// <summary>
         /// The WzPropertyType of the property
         /// </summary>
@@ -62,10 +63,10 @@ namespace RazzleServer.Common.Wz.WzProperties
         {
             var data = GetBytes(false);
             writer.WriteStringValue("Sound_DX8", 0x73, 0x1B);
-            writer.Write((byte)0);
+            writer.Write((byte) 0);
             writer.WriteCompressedInt(data.Length);
-            writer.WriteCompressedInt(len_ms);
-            writer.Write(header);
+            writer.WriteCompressedInt(Length);
+            writer.Write(Header);
             writer.Write(data);
         }
 
@@ -75,28 +76,23 @@ namespace RazzleServer.Common.Wz.WzProperties
         public override void Dispose()
         {
             Name = null;
-            mp3bytes = null;
+            _mp3Bytes = null;
         }
+
         #endregion
 
         #region Custom Members
+
         /// <summary>
         /// The data of the mp3 header
         /// </summary>
-        public byte[] Header
-        {
-            get => header;
-            set => header = value;
-        }
+        public byte[] Header { get; set; }
+
         /// <summary>
         /// Length of the mp3 file in milliseconds
         /// </summary>
-        public int Length
-        {
-            get => len_ms;
-            set => len_ms = value;
-        }
-      
+        public int Length { get; set; }
+
         /// <summary>
         /// Creates a WzSoundProperty with the specified name
         /// </summary>
@@ -106,56 +102,51 @@ namespace RazzleServer.Common.Wz.WzProperties
         public WzSoundProperty(string name, WzBinaryReader reader, bool parseNow)
         {
             Name = name;
-            wzReader = reader;
+            _wzReader = reader;
             reader.BaseStream.Position++;
 
             //note - soundDataLen does NOT include the length of the header.
-            soundDataLen = reader.ReadCompressedInt();
-            len_ms = reader.ReadCompressedInt();
+            _soundDataLen = reader.ReadCompressedInt();
+            Length = reader.ReadCompressedInt();
 
             var headerOff = reader.BaseStream.Position;
-            reader.BaseStream.Position += soundHeader.Length; //skip GUIds
+            reader.BaseStream.Position += SoundHeader.Length; //skip GUIds
             int wavFormatLen = reader.ReadByte();
             reader.BaseStream.Position = headerOff;
 
-            header = reader.ReadBytes(soundHeader.Length + 1 + wavFormatLen);
+            Header = reader.ReadBytes(SoundHeader.Length + 1 + wavFormatLen);
             ParseHeader();
 
             //sound file offs
-            offs = reader.BaseStream.Position;
+            _offs = reader.BaseStream.Position;
             if (parseNow)
             {
-                mp3bytes = reader.ReadBytes(soundDataLen);
+                _mp3Bytes = reader.ReadBytes(_soundDataLen);
             }
             else
             {
-                reader.BaseStream.Position += soundDataLen;
+                reader.BaseStream.Position += _soundDataLen;
             }
         }
 
-        /*public WzSoundProperty(string name)
-        {
-            this.name = name;
-            this.len_ms = 0;
-            this.header = null;
-            this.mp3bytes = null;
-        }*/
+        public WzSoundProperty(string name) => Name = name;
 
         /// <summary>
         /// Creates a WzSoundProperty with the specified name and data
         /// </summary>
         /// <param name="name">The name of the property</param>
-        /// <param name="len_ms">The sound length</param>
+        /// <param name="lenMs">The sound length</param>
         /// <param name="header">The sound header</param>
         /// <param name="data">The sound data</param>
-        public WzSoundProperty(string name, int len_ms, byte[] header, byte[] data)
+        public WzSoundProperty(string name, int lenMs, byte[] header, byte[] data)
         {
             Name = name;
-            this.len_ms = len_ms;
-            this.header = header;
-            mp3bytes = data;
+            Length = lenMs;
+            Header = header;
+            _mp3Bytes = data;
             ParseHeader();
         }
+
         /// <summary>
         /// Creates a WzSoundProperty with the specified name from a file
         /// </summary>
@@ -163,15 +154,15 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// <param name="file">The path to the sound file</param>
         public WzSoundProperty(string name, string file)
         {
-            // TODO - Wait for .NET Core Audio library
-            //this.name = name;
-            //using (var reader = new Mp3FileReader(file))
-            //{
-            //    wavFormat = reader.Mp3WaveFormat;
-            //    len_ms = (int)(reader.Length * 1000d / reader.WaveFormat.AverageBytesPerSecond);
-            //    RebuildHeader();
-            //}
-            //mp3bytes = File.ReadAllBytes(file);
+            Name = name;
+            using (var reader = new Mp3FileReader(file))
+            {
+                _wavFormat = reader.Mp3WaveFormat;
+                Length = (int) (reader.Length * 1000d / reader.WaveFormat.AverageBytesPerSecond);
+                RebuildHeader();
+            }
+
+            _mp3Bytes = File.ReadAllBytes(file);
         }
 
         public static bool Memcmp(byte[] a, byte[] b, int n)
@@ -183,26 +174,28 @@ namespace RazzleServer.Common.Wz.WzProperties
                     return false;
                 }
             }
+
             return true;
         }
 
         public void RebuildHeader()
         {
-            using (var bw = new BinaryWriter(new MemoryStream()))
+            using (var ms = new MemoryStream())
+            using (var bw = new BinaryWriter(ms))
             {
-                // TODO - Wait for .NET Core Audio library
-                //bw.Write(soundHeader);
-                //byte[] wavHeader = StructToBytes(wavFormat);
-                //if (headerEncrypted)
-                //{
-                //    for (int i = 0; i < wavHeader.Length; i++)
-                //    {
-                //        wavHeader[i] ^= wzReader.WzKey[i];
-                //    }
-                //}
-                //bw.Write((byte)wavHeader.Length);
-                //bw.Write(wavHeader, 0, wavHeader.Length);
-                //header = ((MemoryStream)bw.BaseStream).ToArray();
+                bw.Write(SoundHeader);
+                var wavHeader = StructToBytes(_wavFormat);
+                if (_headerEncrypted)
+                {
+                    for (var i = 0; i < wavHeader.Length; i++)
+                    {
+                        wavHeader[i] ^= _wzReader.WzKey[i];
+                    }
+                }
+
+                bw.Write((byte) wavHeader.Length);
+                bw.Write(wavHeader, 0, wavHeader.Length);
+                Header = ms.ToArray();
             }
         }
 
@@ -239,7 +232,7 @@ namespace RazzleServer.Common.Wz.WzProperties
             var handle = GCHandle.Alloc(data, GCHandleType.Pinned);
             try
             {
-                var obj = (T)FormatterServices.GetUninitializedObject(typeof(T));
+                var obj = (T) FormatterServices.GetUninitializedObject(typeof(T));
                 Marshal.PtrToStructure(handle.AddrOfPinnedObject(), obj);
                 return obj;
             }
@@ -251,86 +244,81 @@ namespace RazzleServer.Common.Wz.WzProperties
 
         private void ParseHeader()
         {
-            // TODO - Wait for .NET Core Audio library
-            //byte[] wavHeader = new byte[header.Length - soundHeader.Length - 1];
-            //Buffer.BlockCopy(header, soundHeader.Length + 1, wavHeader, 0, wavHeader.Length);
+            var wavHeader = new byte[Header.Length - SoundHeader.Length - 1];
+            Buffer.BlockCopy(Header, SoundHeader.Length + 1, wavHeader, 0, wavHeader.Length);
 
-            //if (wavHeader.Length < Marshal.SizeOf<WaveFormat>())
-            //    return;
+            if (wavHeader.Length < Marshal.SizeOf<WaveFormat>())
+            {
+                return;
+            }
 
-            //WaveFormat wavFmt = BytesToStruct<WaveFormat>(wavHeader);
+            var wavFmt = BytesToStruct<WaveFormat>(wavHeader);
 
-            //if (Marshal.SizeOf<WaveFormat>() + wavFmt.ExtraSize != wavHeader.Length)
-            //{
-            //    //try decrypt
-            //    for (int i = 0; i < wavHeader.Length; i++)
-            //    {
-            //        wavHeader[i] ^= wzReader.WzKey[i];
-            //    }
-            //    wavFmt = BytesToStruct<WaveFormat>(wavHeader);
+            if (Marshal.SizeOf<WaveFormat>() + wavFmt.ExtraSize != wavHeader.Length)
+            {
+                //try decrypt
+                for (var i = 0; i < wavHeader.Length; i++)
+                {
+                    wavHeader[i] ^= _wzReader.WzKey[i];
+                }
 
-            //    if (Marshal.SizeOf<WaveFormat>() + wavFmt.ExtraSize != wavHeader.Length)
-            //    {
-            //        Log.LogCritical($"Failed to parse sound header");
-            //        return;
-            //    }
-            //    headerEncrypted = true;
-            //}
+                wavFmt = BytesToStruct<WaveFormat>(wavHeader);
 
-            //// parse to mp3 header
-            //if (wavFmt.Encoding == WaveFormatEncoding.MpegLayer3 && wavHeader.Length >= Marshal.SizeOf<Mp3WaveFormat>())
-            //{
-            //    wavFormat = BytesToStructConstructorless<Mp3WaveFormat>(wavHeader);
-            //}
-            //else if (wavFmt.Encoding == WaveFormatEncoding.Pcm)
-            //{
-            //    wavFormat = wavFmt;
-            //}
-            //else
-            //{
-            //    Log.LogError($"Unknown wave encoding: {wavFmt.Encoding}");
-            //}
+                if (Marshal.SizeOf<WaveFormat>() + wavFmt.ExtraSize != wavHeader.Length)
+                {
+                    Log.LogCritical("Failed to parse sound header");
+                    return;
+                }
+
+                _headerEncrypted = true;
+            }
+
+            // parse to mp3 header
+            if (wavFmt.Encoding == WaveFormatEncoding.MpegLayer3 && wavHeader.Length >= Marshal.SizeOf<Mp3WaveFormat>())
+            {
+                _wavFormat = BytesToStructConstructorless<Mp3WaveFormat>(wavHeader);
+            }
+            else if (wavFmt.Encoding == WaveFormatEncoding.Pcm)
+            {
+                _wavFormat = wavFmt;
+            }
+            else
+            {
+                Log.LogError($"Unknown wave encoding: {wavFmt.Encoding}");
+            }
         }
+
         #endregion
 
-        #region Parsing Methods
         public byte[] GetBytes(bool saveInMemory)
         {
-            if (mp3bytes != null)
+            if (_mp3Bytes != null)
             {
-                return mp3bytes;
+                return _mp3Bytes;
             }
-            if (wzReader == null)
+
+            if (_wzReader == null)
             {
                 return null;
             }
 
-            var currentPos = wzReader.BaseStream.Position;
-            wzReader.BaseStream.Position = offs;
-            mp3bytes = wzReader.ReadBytes(soundDataLen);
-            wzReader.BaseStream.Position = currentPos;
+            var currentPos = _wzReader.BaseStream.Position;
+            _wzReader.BaseStream.Position = _offs;
+            _mp3Bytes = _wzReader.ReadBytes(_soundDataLen);
+            _wzReader.BaseStream.Position = currentPos;
 
             if (saveInMemory)
             {
-                return mp3bytes;
+                return _mp3Bytes;
             }
 
-            var result = mp3bytes;
-            mp3bytes = null;
+            var result = _mp3Bytes;
+            _mp3Bytes = null;
             return result;
         }
 
-        public void SaveToFile(string file)
-        {
-            File.WriteAllBytes(file, GetBytes(false));
-        }
-        #endregion
+        public void SaveToFile(string file) => File.WriteAllBytes(file, GetBytes(false));
 
-        #region Cast Values
-        public override byte[] GetBytes()
-        {
-            return GetBytes(false);
-        }
-        #endregion
+        public override byte[] GetBytes() => GetBytes(false);
     }
 }

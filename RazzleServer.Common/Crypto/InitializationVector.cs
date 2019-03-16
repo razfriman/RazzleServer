@@ -20,12 +20,12 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
         /// Gets the HIWORD from the current container
         /// </summary>
-        internal ushort Hiword => (ushort)(_value >> 16);
+        internal ushort Hiword => (ushort) (_value >> 16);
 
         /// <summary>
         /// Gets the LOWORD from the current container
         /// </summary>
-        internal ushort Loword => (ushort)_value;
+        internal ushort Loword => (ushort) _value;
 
         /// <summary>
         /// IV Security check
@@ -51,10 +51,11 @@ namespace RazzleServer.Common.Crypto
                 {
                     for (var i = 0; i < 4; i++)
                     {
-                        *((byte*)pKey + 0) += (byte)(*(pShuffle + *((byte*)pKey + 1)) - *((byte*)pIv + i));
-                        *((byte*)pKey + 1) -= (byte)(*((byte*)pKey + 2) ^ *(pShuffle + *((byte*)pIv + i)));
-                        *((byte*)pKey + 2) ^= (byte)(*((byte*)pIv + i) + *(pShuffle + *((byte*)pKey + 3)));
-                        *((byte*)pKey + 3) = (byte)(*((byte*)pKey + 3) - *(byte*)pKey + *(pShuffle + *((byte*)pIv + i)));
+                        *((byte*) pKey + 0) += (byte) (*(pShuffle + *((byte*) pKey + 1)) - *((byte*) pIv + i));
+                        *((byte*) pKey + 1) -= (byte) (*((byte*) pKey + 2) ^ *(pShuffle + *((byte*) pIv + i)));
+                        *((byte*) pKey + 2) ^= (byte) (*((byte*) pIv + i) + *(pShuffle + *((byte*) pKey + 3)));
+                        *((byte*) pKey + 3) =
+                            (byte) (*((byte*) pKey + 3) - *(byte*) pKey + *(pShuffle + *((byte*) pIv + i)));
 
                         *pKey = (*pKey << 3) | (*pKey >> (32 - 3));
                     }

@@ -85,7 +85,7 @@ namespace RazzleServer.Common.Server
 
         private async Task SaveToFile(string path)
         {
-            await File.WriteAllTextAsync(path, JsonConvert.SerializeObject(Instance, Formatting.Indented));
+            await File.WriteAllTextAsync(path, JsonConvert.SerializeObject(this, Formatting.Indented));
             Log.LogInformation($"Saving default config file to '{path}'.");
         }
 

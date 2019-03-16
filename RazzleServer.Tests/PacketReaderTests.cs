@@ -157,7 +157,7 @@ namespace RazzleServer.Tests
         {
             using (var packet = new PacketReader(Functions.HexToBytes("01 02 03 04")))
             {
-                var result = packet.ReadBytes(-1);
+                packet.ReadBytes(-1);
             }
         }
 

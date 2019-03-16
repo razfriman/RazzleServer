@@ -138,7 +138,7 @@ namespace RazzleServer.Common.Wz.WzProperties
             prop.Parent = this;
             WzProperties.Add(prop);
         }
-        public void AddProperties(List<WzImageProperty> props)
+        public void AddProperties(IEnumerable<WzImageProperty> props)
         {
             foreach (var prop in props)
             {

@@ -10,10 +10,7 @@ namespace RazzleServer.Common.Util
         private TimeSpan Period { get; }
         private DateTime Next { get; set; }
 
-        public static Delay Execute(Action action, int timeout)
-        {
-            return new Delay(action, timeout);
-        }
+        public static Delay Execute(Action action, int timeout) => new Delay(action, timeout);
 
         public Delay(Action action, int timeout, int repeat = Timeout.Infinite)
         {
@@ -30,9 +27,6 @@ namespace RazzleServer.Common.Util
             _mAction();
         }
 
-        public void Dispose()
-        {
-            _mTimer.Dispose();
-        }
+        public void Dispose() => _mTimer?.Dispose();
     }
 }

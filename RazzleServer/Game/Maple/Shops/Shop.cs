@@ -32,7 +32,7 @@ namespace RazzleServer.Game.Maple.Shops
 
             if (RechargeTier > 0)
             {
-                foreach (KeyValuePair<int, double> rechargeable in UnitPrices)
+                foreach (var rechargeable in UnitPrices)
                 {
                     Items.Add(new ShopItem(this, rechargeable.Key));
                 }

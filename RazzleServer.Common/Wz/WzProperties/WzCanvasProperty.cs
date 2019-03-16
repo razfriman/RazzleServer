@@ -74,18 +74,6 @@ namespace RazzleServer.Common.Wz.WzProperties
             }
         }
 
-        public WzImageProperty GetProperty(string name)
-        {
-            foreach (var iwp in WzProperties)
-            {
-                if (iwp.Name.ToLower() == name.ToLower())
-                {
-                    return iwp;
-                }
-            }
-
-            return null;
-        }
         /// <summary>
 		/// Gets a wz property by a path name
 		/// </summary>
@@ -137,8 +125,8 @@ namespace RazzleServer.Common.Wz.WzProperties
             }
             writer.WriteCompressedInt(PngProperty.Width);
             writer.WriteCompressedInt(PngProperty.Height);
-            writer.WriteCompressedInt(PngProperty.format);
-            writer.Write((byte)PngProperty.format2);
+            writer.WriteCompressedInt(PngProperty.Format1);
+            writer.Write((byte)PngProperty.Format2);
             writer.Write(0);
             var bytes = PngProperty.GetCompressedBytes(false);
             writer.Write(bytes.Length + 1);
@@ -155,7 +143,7 @@ namespace RazzleServer.Common.Wz.WzProperties
             PngProperty.Dispose();
             PngProperty = null;
             WzProperties?.ForEach(x => x.Dispose());
-            WzProperties.Clear();
+            WzProperties?.Clear();
             WzProperties = null;
         }
         #endregion
@@ -186,7 +174,7 @@ namespace RazzleServer.Common.Wz.WzProperties
             prop.Parent = this;
             WzProperties.Add(prop);
         }
-        public void AddProperties(List<WzImageProperty> props)
+        public void AddProperties(IEnumerable<WzImageProperty> props)
         {
             foreach (var prop in props)
             {
@@ -218,7 +206,7 @@ namespace RazzleServer.Common.Wz.WzProperties
 
         #region Cast Values
 
-        public override Bitmap GetBitmap() => PngProperty.GetPNG(false);
+        public override Bitmap GetBitmap() => PngProperty.GetPng(false);
 
         #endregion
     }

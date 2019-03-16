@@ -17,7 +17,8 @@ namespace RazzleServer.Game.Maple.Characters
         public Dictionary<ItemType, byte> MaxSlots { get; }
         private List<Item> Items { get; }
 
-        public CharacterItems(Character parent, byte equipmentSlots, byte usableSlots, byte setupSlots, byte etceteraSlots, byte cashSlots)
+        public CharacterItems(Character parent, byte equipmentSlots, byte usableSlots, byte setupSlots,
+            byte etceteraSlots, byte cashSlots)
         {
             Parent = parent;
 
@@ -39,9 +40,9 @@ namespace RazzleServer.Game.Maple.Characters
             using (var dbContext = new MapleDbContext())
             {
                 var itemsEntities = dbContext.Items
-                                     .Where(x => x.CharacterId == Parent.Id)
-                                     .Where(x => x.AccountId == Parent.AccountId)
-                                     .ToArray();
+                    .Where(x => x.CharacterId == Parent.Id)
+                    .Where(x => x.AccountId == Parent.AccountId)
+                    .ToArray();
 
                 foreach (var itemEntity in itemsEntities)
                 {
@@ -81,7 +82,7 @@ namespace RazzleServer.Game.Maple.Characters
                         break;
                     }
 
-                    item.Quantity -= (short)(loopItem.MaxPerStack - loopItem.Quantity);
+                    item.Quantity -= (short) (loopItem.MaxPerStack - loopItem.Quantity);
                     item.Slot = GetNextFreeSlot(item.Type);
 
                     loopItem.Quantity = loopItem.MaxPerStack;
@@ -112,8 +113,8 @@ namespace RazzleServer.Game.Maple.Characters
                     {
                         oPacket.WriteBool(fromDrop);
                         oPacket.WriteByte(1);
-                        oPacket.WriteByte((byte)InventoryOperationType.AddItem);
-                        oPacket.WriteByte((byte)item.Type);
+                        oPacket.WriteByte((byte) InventoryOperationType.AddItem);
+                        oPacket.WriteByte((byte) item.Type);
                         oPacket.WriteShort(item.Slot);
                         oPacket.WriteBytes(item.ToByteArray(true));
 
@@ -173,8 +174,8 @@ namespace RazzleServer.Game.Maple.Characters
                 {
                     oPacket.WriteBool(fromDrop);
                     oPacket.WriteByte(1);
-                    oPacket.WriteByte((byte)InventoryOperationType.RemoveItem);
-                    oPacket.WriteByte((byte)item.Type);
+                    oPacket.WriteByte((byte) InventoryOperationType.RemoveItem);
+                    oPacket.WriteByte((byte) item.Type);
                     oPacket.WriteShort(item.Slot);
 
                     Parent.Client.Send(oPacket);
@@ -274,7 +275,6 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void NotifyFull()
         {
-
         }
 
         public bool IsFull(ItemType type)
@@ -363,7 +363,7 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 foreach (var item in this)
                 {
-                    if (item.Slot == (sbyte)slot)
+                    if (item.Slot == (sbyte) slot)
                     {
                         return item;
                     }
@@ -431,6 +431,7 @@ namespace RazzleServer.Game.Maple.Characters
                             {
                                 yield return loopItem;
                             }
+
                             break;
 
                         case EquippedQueryMode.Cash:
@@ -438,6 +439,7 @@ namespace RazzleServer.Game.Maple.Characters
                             {
                                 yield return loopItem;
                             }
+
                             break;
                     }
                 }
@@ -556,7 +558,6 @@ namespace RazzleServer.Game.Maple.Characters
 
         public IEnumerator<Item> GetEnumerator() => Items.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)Items).GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable) Items).GetEnumerator();
     }
 }
-

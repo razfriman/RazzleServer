@@ -13,7 +13,7 @@
 		/// <summary>
 		/// AES UserKey used by MapleStory
 		/// </summary>
-		public static byte[] UserKey = {
+		public static readonly byte[] UserKey = {
 			0x13, 0x00, 0x00, 0x00, 0x52, 0x00, 0x00, 0x00, 0x2A, 0x00, 0x00, 0x00, 0x5B, 0x00, 0x00, 0x00,
 			0x08, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x60, 0x00, 0x00, 0x00,
 			0x06, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x43, 0x00, 0x00, 0x00, 0x0F, 0x00, 0x00, 0x00,
@@ -70,19 +70,19 @@
 		/// <summary>
 		/// IV used to create the WzKey for GMS
 		/// </summary>
-		public static byte[] WzGmsiv = { 0x4D, 0x23, 0xC7, 0x2B };
+		public static readonly byte[] WzGmsiv = { 0x4D, 0x23, 0xC7, 0x2B };
 
 		/// <summary>
 		/// IV used to create the WzKey for MSEA
 		/// </summary>
-		public static byte[] WzMseaiv = { 0xB9, 0x7D, 0x63, 0xE9 };
+		public static readonly byte[] WzMseaiv = { 0xB9, 0x7D, 0x63, 0xE9 };
 
-		/// <summary>
-		/// Constant used in WZ offset encryption
-		/// </summary>
-		public static uint WzOffsetConstant = 0x581C3F6D;
+	    /// <summary>
+	    /// Constant used in WZ offset encryption
+	    /// </summary>
+	    public const uint WzOffsetConstant = 0x581C3F6D;
 
-		/// <summary>
+	    /// <summary>
 		/// Trims the AES UserKey for use an AES cryptor
 		/// </summary>
 		public static byte[] GetTrimmedUserKey()

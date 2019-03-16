@@ -5,7 +5,7 @@ namespace RazzleServer.Common.Wz
 	public interface IPropertyContainer
 	{
 		void AddProperty(WzImageProperty prop);
-		void AddProperties(List<WzImageProperty> props);
+		void AddProperties(IEnumerable<WzImageProperty> props);
 		void RemoveProperty(WzImageProperty prop);
 		void ClearProperties();
         List<WzImageProperty> WzProperties { get; }

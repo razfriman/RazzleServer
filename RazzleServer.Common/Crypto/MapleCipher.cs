@@ -13,7 +13,7 @@ namespace RazzleServer.Common.Crypto
 		private FastAes Transformer { get; }
 
         /// <summary>
-        /// General locker to prevent multithreading
+        /// General locker to prevent multi-threading errors
         /// </summary>
         private volatile object _locker = new object();
 
@@ -26,10 +26,10 @@ namespace RazzleServer.Common.Crypto
         /// IV to use in the Maple AES section
         /// </summary>
         /// <value>The real iv.</value>
-        private byte[] RealIv { get; set; } = new byte[sizeof(int) * 4];
+        private byte[] RealIv { get; } = new byte[sizeof(int) * 4];
 
         /// <summary>
-        /// Gameversion of the current <see cref="MapleCipher"/> instance
+        /// Game version of the current <see cref="MapleCipher"/> instance
         /// </summary>
         public ushort GameVersion { get; }
 
@@ -121,7 +121,7 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
         /// Handles an handshake for the current instance
         /// </summary>
-        public Span<byte> Handshake(Span<byte> data)
+        public static Span<byte> Handshake(Span<byte> data)
         {
             var length = BitConverter.ToUInt16(data.Slice(0, 2).ToArray(), 0);
             return data.Slice(2, length);
@@ -131,7 +131,7 @@ namespace RazzleServer.Common.Crypto
         /// Expands the key we store as long
         /// </summary>
         /// <returns>The expanded key</returns>
-        private byte[] ExpandKey(ulong aesKey)
+        private static byte[] ExpandKey(ulong aesKey)
         {
             var expand = BitConverter.GetBytes(aesKey);
             var key = new byte[expand.Length * 4];
@@ -144,20 +144,20 @@ namespace RazzleServer.Common.Crypto
         }
 
         /// <summary>
-        /// Performs Maplestory's AES algo
+        /// Performs Maplestory's AES algorithm
         /// </summary>
         private void Transform(Span<byte> buffer)
         {
             int remaining = buffer.Length,
                 length = 0x5B0,
-                start = 0,
-                index;
+                start = 0;
 
             RealIv.AsSpan().Fill(0);
             var ivBytes = MapleIv.Bytes;
 
             while (remaining > 0)
             {
+                int index;
                 for (index = 0; index < RealIv.Length; ++index)
                 {
                     RealIv[index] = ivBytes[index % 4];
@@ -216,7 +216,7 @@ namespace RazzleServer.Common.Crypto
         /// </summary>
         /// <param name="data">Data to check</param>
         /// <returns>Length of <paramref name="data"/></returns>
-        public int GetPacketLength(in ReadOnlySpan<byte> data) => (data[0] + (data[1] << 8)) ^ (data[2] + (data[3] << 8));
+        public static int GetPacketLength(in ReadOnlySpan<byte> data) => (data[0] + (data[1] << 8)) ^ (data[2] + (data[3] << 8));
 
         public bool CheckHeader(in ReadOnlySpan<byte> data, bool toClient) => toClient
                     ? CheckHeaderToClient(data)
@@ -239,15 +239,16 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
         /// Decrypts <paramref name="buffer"/> using the custom MapleStory shanda
         /// </summary>
-        private void DecryptShanda(Span<byte> buffer)
+        private static void DecryptShanda(Span<byte> buffer)
         {
-            int length = buffer.Length, i;
-            byte xorKey, save, len, temp;
+            var length = buffer.Length;
             for (var passes = 0; passes < 3; passes++)
             {
-                xorKey = 0;
-                save = 0;
-                len = (byte)(length & 0xFF);
+                byte xorKey = 0;
+                byte save;
+                var len = (byte)(length & 0xFF);
+                byte temp;
+                int i;
                 for (i = length - 1; i >= 0; --i)
                 {
                     temp = (byte)(RotateLeft(buffer[i], 3) ^ 0x13);
@@ -275,15 +276,15 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
         /// Encrypts <paramref name="buffer"/> using the custom MapleStory shanda
         /// </summary>
-        private void EncryptShanda(Span<byte> buffer)
+        private static void EncryptShanda(Span<byte> buffer)
         {
             var length = buffer.Length;
-            byte xorKey, len, temp;
-            int i;
             for (var passes = 0; passes < 3; passes++)
             {
-                xorKey = 0;
-                len = (byte)(length & 0xFF);
+                byte xorKey = 0;
+                var len = (byte)(length & 0xFF);
+                byte temp;
+                int i;
                 for (i = 0; i < length; i++)
                 {
                     temp = (byte)((RotateLeft(buffer[i], 3) + len) ^ xorKey);

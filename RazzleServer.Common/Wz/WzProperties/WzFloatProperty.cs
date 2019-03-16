@@ -1,4 +1,4 @@
-﻿using System.IO;
+﻿using System.Globalization;
 using RazzleServer.Common.Wz.Util;
 
 namespace RazzleServer.Common.Wz.WzProperties
@@ -9,72 +9,19 @@ namespace RazzleServer.Common.Wz.WzProperties
     /// </summary>
     public class WzFloatProperty : WzImageProperty
     {
-        #region Fields
-        internal float val;
-        //internal WzImage imgParent;
-        #endregion
-
-        #region Inherited Members
-        public override void SetValue(object value)
+        /// <summary>
+        /// Creates a blank WzFloatProperty
+        /// </summary>
+        public WzFloatProperty()
         {
-            val = (float)value;
         }
 
-        public override WzImageProperty DeepClone()
-        {
-            var clone = new WzFloatProperty(Name, val);
-            return clone;
-        }
-
-        public override object WzValue => Value;
-
-        /// <summary>
-        /// The WzPropertyType of the property
-        /// </summary>
-        public override WzPropertyType PropertyType => WzPropertyType.Float;
-
-
-        public override void WriteValue(WzBinaryWriter writer)
-        {
-            writer.Write((byte)4);
-            if (Value == 0f)
-            {
-                writer.Write((byte)0);
-            }
-            else
-            {
-                writer.Write((byte)0x80);
-                writer.Write(Value);
-            }
-        }
-     
-        /// <summary>
-        /// Dispose the object
-        /// </summary>
-        public override void Dispose()
-        {
-            Name = null;
-        }
-        #endregion
-
-        #region Custom Members
-        /// <summary>
-        /// The value of the property
-        /// </summary>
-        public float Value => val;
-
-        /// <summary>
-        /// Creates a blank WzByteFloatProperty
-        /// </summary>
-        public WzFloatProperty() { }
         /// <summary>
         /// Creates a WzByteFloatProperty with the specified name
         /// </summary>
         /// <param name="name">The name of the property</param>
-        public WzFloatProperty(string name)
-        {
-            Name = name;
-        }
+        public WzFloatProperty(string name) => Name = name;
+
         /// <summary>
         /// Creates a WzByteFloatProperty with the specified name and value
         /// </summary>
@@ -83,40 +30,48 @@ namespace RazzleServer.Common.Wz.WzProperties
         public WzFloatProperty(string name, float value)
         {
             Name = name;
-            val = value;
-        }
-        #endregion
-
-        #region Cast Values
-        public override float GetFloat()
-        {
-            return val;
+            Value = value;
         }
 
-        public override double GetDouble()
+        /// <summary>
+        /// The value of the property
+        /// </summary>
+        public float Value { get; private set; }
+        
+        public override object WzValue => Value;
+
+        public override void SetValue(object value) => Value = (float) value;
+
+        public override WzImageProperty DeepClone() => new WzFloatProperty(Name, Value);
+
+        public override WzPropertyType PropertyType => WzPropertyType.Float;
+
+        public override void WriteValue(WzBinaryWriter writer)
         {
-            return val;
+            writer.Write((byte) 4);
+            if (Value == 0f)
+            {
+                writer.Write((byte) 0);
+            }
+            else
+            {
+                writer.Write((byte) 0x80);
+                writer.Write(Value);
+            }
         }
 
-        public override int GetInt()
-        {
-            return (int)val;
-        }
+        public override float GetFloat() => Value;
 
-        public override short GetShort()
-        {
-            return (short)val;
-        }
+        public override double GetDouble() => Value;
 
-        public override long GetLong()
-        {
-            return (long)val;
-        }
+        public override int GetInt() => (int) Value;
 
-        public override string ToString()
-        {
-            return val.ToString();
-        }
-        #endregion
+        public override short GetShort() => (short) Value;
+
+        public override long GetLong() => (long) Value;
+
+        public override string ToString() => Value.ToString(CultureInfo.CurrentCulture);
+        
+        public override void Dispose() => Name = null;
     }
 }

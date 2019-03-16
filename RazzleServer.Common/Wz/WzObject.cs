@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Point = RazzleServer.Common.Util.Point;
@@ -47,14 +49,17 @@ namespace RazzleServer.Common.Wz
                 {
                     return wzFile[name];
                 }
+
                 if (this is WzDirectory wzDirectory)
                 {
                     return wzDirectory[name];
                 }
+
                 if (this is WzImage wzImage)
                 {
                     return wzImage[name];
                 }
+
                 if (this is WzImageProperty wzImageProperty)
                 {
                     return wzImageProperty[name];
@@ -81,12 +86,12 @@ namespace RazzleServer.Common.Wz
                     currObj = currObj.Parent;
                     result = currObj.Name + @"\" + result;
                 }
+
                 return result;
             }
         }
 
-        [JsonIgnore]
-        public virtual object WzValue => null;
+        [JsonIgnore] public virtual object WzValue => null;
 
         #region Cast Values
 
@@ -137,13 +142,23 @@ namespace RazzleServer.Common.Wz
 
         #endregion
 
-        public void Export(string path)
+        public virtual IEnumerable<WzObject> GetObjects() => Enumerable.Empty<WzObject>();
+
+
+        public void Export(string path, JsonSerializer serializer = null)
         {
-            using (var s = File.OpenWrite(path))
-            using (var sr = new StreamWriter(s))
+            using (var stream = File.OpenWrite(path))
+            {
+                Export(stream, serializer);
+            }
+        }
+
+        public void Export(Stream stream, JsonSerializer serializer = null)
+        {
+            using (var sr = new StreamWriter(stream))
             using (var writer = new JsonTextWriter(sr))
             {
-                var serializer = new JsonSerializer
+                serializer = serializer ?? new JsonSerializer
                 {
                     Formatting = Formatting.Indented
                 };

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Globalization;
+using System.IO;
 using RazzleServer.Common.Wz.Util;
 
 namespace RazzleServer.Common.Wz.WzProperties
@@ -97,7 +98,7 @@ namespace RazzleServer.Common.Wz.WzProperties
 
         public override string ToString()
         {
-            return Value.ToString();
+            return Value.ToString(CultureInfo.CurrentCulture);
         }
         #endregion
 	}

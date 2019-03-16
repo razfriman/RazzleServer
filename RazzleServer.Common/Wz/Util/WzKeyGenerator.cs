@@ -27,6 +27,6 @@ namespace RazzleServer.Common.Wz.Util
             return aes;
         }
 
-        public static WzMutableKey GenerateWzKey(byte[] WzIv) => new WzMutableKey(WzIv, CryptoConstants.GetTrimmedUserKey());
+        public static WzMutableKey GenerateWzKey(byte[] wzIv) => new WzMutableKey(wzIv, CryptoConstants.GetTrimmedUserKey());
     }
 }

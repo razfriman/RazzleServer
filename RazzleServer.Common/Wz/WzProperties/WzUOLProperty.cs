@@ -34,10 +34,7 @@ namespace RazzleServer.Common.Wz.WzProperties
             return clone;
         }
 
-        public override object WzValue
-        {
-            get { return LinkValue; }
-        }
+        public override object WzValue => LinkValue;
 
         public override List<WzImageProperty> WzProperties =>
             LinkValue is WzImageProperty ? ((WzImageProperty) LinkValue).WzProperties : null;
@@ -45,14 +42,12 @@ namespace RazzleServer.Common.Wz.WzProperties
         public override WzImageProperty this[string name] => LinkValue is WzImageProperty
             ?
             ((WzImageProperty) LinkValue)[name]
-            : LinkValue is WzImage
-                ? ((WzImage) LinkValue)[name]
-                : null;
+            : (LinkValue as WzImage)?[name];
 
         public override WzImageProperty GetFromPath(string path)
         {
-            return LinkValue is WzImageProperty ? ((WzImageProperty) LinkValue).GetFromPath(path) :
-                LinkValue is WzImage ? ((WzImage) LinkValue).GetFromPath(path) : null;
+            return LinkValue is WzImageProperty property ? property.GetFromPath(path) :
+                (LinkValue as WzImage)?.GetFromPath(path);
         }
 
         /// <summary>

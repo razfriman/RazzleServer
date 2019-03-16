@@ -44,8 +44,7 @@ namespace RazzleServer.Common
             DropRate = config.DropRate;
         }
 
-        [JsonIgnore]
-        public int Population => Values.Sum(x => x.Population);
+        [JsonIgnore] public int Population => Values.Sum(x => x.Population);
 
         [JsonIgnore]
         public WorldStatus Status
@@ -60,22 +59,17 @@ namespace RazzleServer.Common
                     return WorldStatus.Full;
                 }
 
-                if (population > totalMax / 2)
-                {
-                    return WorldStatus.HighlyPopulated;
-                }
-
-                return WorldStatus.Normal;
+                return population > totalMax / 2 ? WorldStatus.HighlyPopulated : WorldStatus.Normal;
             }
         }
 
         public override byte GetKey(GameServer item) => item.ChannelId;
 
         public void Send(PacketWriter pw, GameClient except = null) => Values
-        .SelectMany(x => x.Clients.Values)
-        .Where(x => x.Key != except?.Key)
-        .ToList()
-        .ForEach(x => x.Send(pw));
+            .SelectMany(x => x.Clients.Values)
+            .Where(x => x.Key != except?.Key)
+            .ToList()
+            .ForEach(x => x.Send(pw));
 
         public Character GetCharacterById(int id) => Values
             .SelectMany(x => x.Clients.Values)
@@ -87,14 +81,7 @@ namespace RazzleServer.Common
             .Select(x => x.Character)
             .FirstOrDefault(x => x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
 
-        public SelectChannelResult CheckChannel(byte channel)
-        {
-            if (Contains(channel))
-            {
-                return SelectChannelResult.Online;
-            }
-
-            return SelectChannelResult.Offline;
-        }
+        public SelectChannelResult CheckChannel(byte channel) =>
+            Contains(channel) ? SelectChannelResult.Online : SelectChannelResult.Offline;
     }
 }

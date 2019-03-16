@@ -159,7 +159,7 @@ namespace RazzleServer.Common.Wz.WzProperties
             properties.Add((WzExtended)prop);
         }
 
-        public void AddProperties(List<WzImageProperty> properties)
+        public void AddProperties(IEnumerable<WzImageProperty> properties)
         {
             foreach (var property in properties)
             {

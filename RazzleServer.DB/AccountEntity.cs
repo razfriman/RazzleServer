@@ -6,7 +6,7 @@ namespace RazzleServer.Data
     public class AccountEntity
     {
         [Key]
-        public int Id { get; private set; }
+        public int Id { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
         public string Salt { get; set; }

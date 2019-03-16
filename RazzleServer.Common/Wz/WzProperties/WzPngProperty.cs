@@ -15,39 +15,41 @@ namespace RazzleServer.Common.Wz.WzProperties
     /// </summary>
     public class WzPngProperty : WzImageProperty
     {
-        public static ILogger Log = LogManager.Log;
+        public static readonly ILogger Log = LogManager.Log;
 
         #region Fields
-        internal int width, height, format, format2;
-        internal byte[] compressedBytes;
-        internal Bitmap png;
-        internal bool listWzUsed;
-        internal WzBinaryReader wzReader;
-        internal long offs;
+
+        private byte[] _compressedBytes;
+        private Bitmap _png;
+        private bool _listWzUsed;
+        private readonly WzBinaryReader _wzReader;
+        private readonly long _offs;
+
         #endregion
 
         #region Inherited Members
+
         public override void SetValue(object value)
         {
-            if (value is Bitmap)
+            if (value is Bitmap bitmap)
             {
-                SetPNG((Bitmap)value);
+                SetPng(bitmap);
             }
             else
             {
-                compressedBytes = (byte[])value;
+                _compressedBytes = (byte[]) value;
             }
         }
 
         public override WzImageProperty DeepClone()
         {
             var clone = new WzPngProperty();
-            clone.SetPNG(GetPNG(false));
+            clone.SetPng(GetPng(false));
             return clone;
         }
 
-        public override object WzValue => GetPNG(false);
-       
+        public override object WzValue => GetPng(false);
+
         /// <summary>
         /// The WzPropertyType of the property
         /// </summary>
@@ -57,76 +59,92 @@ namespace RazzleServer.Common.Wz.WzProperties
         {
             throw new NotImplementedException("Cannot write a PngProperty");
         }
+
         /// <summary>
         /// Disposes the object
         /// </summary>
         public override void Dispose()
         {
-            compressedBytes = null;
-            png?.Dispose();
-            png = null;
+            _compressedBytes = null;
+            _png?.Dispose();
+            _png = null;
         }
+
         #endregion
 
         #region Custom Members
+
         /// <summary>
         /// The width of the bitmap
         /// </summary>
-        public int Width
-        {
-            get => width;
-            set => width = value;
-        }
+        public int Width { get; set; }
+
         /// <summary>
         /// The height of the bitmap
         /// </summary>
-        public int Height
-        {
-            get => height;
-            set => height = value;
-        }
+        public int Height { get; set; }
+
         /// <summary>
         /// The format of the bitmap
         /// </summary>
         public int Format
         {
-            get => format + format2;
-            set { format = value; format2 = 0; }
+            get => Format1 + Format1;
+            set
+            {
+                Format1 = value;
+                Format2 = 0;
+            }
         }
+
+        public int Format1 { get; set; }
+        public int Format2 { get; set; }
 
         public bool ListWzUsed
         {
-            get => listWzUsed;
-            set { if (value != listWzUsed) { listWzUsed = value; CompressPng(GetPNG(false)); } }
+            get => _listWzUsed;
+            set
+            {
+                if (value != _listWzUsed)
+                {
+                    _listWzUsed = value;
+                    CompressPng(GetPng(false));
+                }
+            }
         }
+
         /// <summary>
         /// The actual bitmap
         /// </summary>
-        public Bitmap PNG
+        public Bitmap Png
         {
             set
             {
-                png = value;
+                _png = value;
                 CompressPng(value);
             }
         }
 
-        [Obsolete("To enable more control over memory usage, this property was superseded by the GetCompressedBytes method and will be removed in the future")]
+        [Obsolete(
+            "To enable more control over memory usage, this property was superseded by the GetCompressedBytes method and will be removed in the future")]
         public byte[] CompressedBytes => GetCompressedBytes(false);
 
         /// <summary>
         /// Creates a blank WzPngProperty
         /// </summary>
-        public WzPngProperty() { }
+        public WzPngProperty()
+        {
+        }
+
         internal WzPngProperty(WzBinaryReader reader, bool parseNow)
         {
             // Read compressed bytes
-            width = reader.ReadCompressedInt();
-            height = reader.ReadCompressedInt();
-            format = reader.ReadCompressedInt();
-            format2 = reader.ReadByte();
+            Width = reader.ReadCompressedInt();
+            Height = reader.ReadCompressedInt();
+            Format1 = reader.ReadCompressedInt();
+            Format2 = reader.ReadByte();
             reader.BaseStream.Position += 4;
-            offs = reader.BaseStream.Position;
+            _offs = reader.BaseStream.Position;
             var len = reader.ReadInt32() - 1;
             reader.BaseStream.Position += 1;
 
@@ -134,7 +152,7 @@ namespace RazzleServer.Common.Wz.WzProperties
             {
                 if (parseNow)
                 {
-                    compressedBytes = wzReader.ReadBytes(len);
+                    _compressedBytes = _wzReader.ReadBytes(len);
                     ParsePng();
                 }
                 else
@@ -142,66 +160,71 @@ namespace RazzleServer.Common.Wz.WzProperties
                     reader.BaseStream.Position += len;
                 }
             }
-            wzReader = reader;
+
+            _wzReader = reader;
         }
+
         #endregion
 
         #region Parsing Methods
+
         public byte[] GetCompressedBytes(bool saveInMemory)
         {
-            if (compressedBytes == null)
+            if (_compressedBytes == null)
             {
-                var pos = wzReader.BaseStream.Position;
-                wzReader.BaseStream.Position = offs;
-                var len = wzReader.ReadInt32() - 1;
-                wzReader.BaseStream.Position += 1;
+                var pos = _wzReader.BaseStream.Position;
+                _wzReader.BaseStream.Position = _offs;
+                var len = _wzReader.ReadInt32() - 1;
+                _wzReader.BaseStream.Position += 1;
                 if (len > 0)
                 {
-                    compressedBytes = wzReader.ReadBytes(len);
+                    _compressedBytes = _wzReader.ReadBytes(len);
                 }
 
-                wzReader.BaseStream.Position = pos;
+                _wzReader.BaseStream.Position = pos;
                 if (!saveInMemory)
                 {
-                    //were removing the referance to compressedBytes, so a backup for the ret value is needed
-                    var returnBytes = compressedBytes;
-                    compressedBytes = null;
+                    //were removing the reference to compressedBytes, so a backup for the ret value is needed
+                    var returnBytes = _compressedBytes;
+                    _compressedBytes = null;
                     return returnBytes;
                 }
             }
-            return compressedBytes;
+
+            return _compressedBytes;
         }
 
-        public void SetPNG(Bitmap png)
+        public void SetPng(Bitmap png)
         {
-            this.png = png;
+            _png = png;
             CompressPng(png);
         }
 
-        public Bitmap GetPNG(bool saveInMemory)
+        public Bitmap GetPng(bool saveInMemory)
         {
-            if (png == null)
+            if (_png == null)
             {
-                var pos = wzReader.BaseStream.Position;
-                wzReader.BaseStream.Position = offs;
-                var len = wzReader.ReadInt32() - 1;
-                wzReader.BaseStream.Position += 1;
+                var pos = _wzReader.BaseStream.Position;
+                _wzReader.BaseStream.Position = _offs;
+                var len = _wzReader.ReadInt32() - 1;
+                _wzReader.BaseStream.Position += 1;
                 if (len > 0)
                 {
-                    compressedBytes = wzReader.ReadBytes(len);
+                    _compressedBytes = _wzReader.ReadBytes(len);
                 }
 
                 ParsePng();
-                wzReader.BaseStream.Position = pos;
+                _wzReader.BaseStream.Position = pos;
                 if (!saveInMemory)
                 {
-                    var pngImage = png;
-                    png = null;
-                    compressedBytes = null;
+                    var pngImage = _png;
+                    _png = null;
+                    _compressedBytes = null;
                     return pngImage;
                 }
             }
-            return png;
+
+            return _png;
         }
 
         internal byte[] Decompress(byte[] compressedBuffer, int decompressedSize)
@@ -221,7 +244,7 @@ namespace RazzleServer.Common.Wz.WzProperties
             }
         }
 
-        internal byte[] Compress(byte[] decompressedBuffer)
+        internal static byte[] Compress(byte[] decompressedBuffer)
         {
             using (var memStream = new MemoryStream())
             {
@@ -232,7 +255,7 @@ namespace RazzleServer.Common.Wz.WzProperties
                     memStream.Position = 0;
                     var buffer = new byte[memStream.Length + 2];
                     memStream.Read(buffer, 2, buffer.Length - 2);
-                    Buffer.BlockCopy(new byte[] { 0x78, 0x9C }, 0, buffer, 0, 2);
+                    Buffer.BlockCopy(new byte[] {0x78, 0x9C}, 0, buffer, 0, 2);
                     return buffer;
                 }
             }
@@ -241,17 +264,17 @@ namespace RazzleServer.Common.Wz.WzProperties
         internal void ParsePng()
         {
             DeflateStream zlib;
-            var uncompressedSize = 0;
-            int x = 0, y = 0, b = 0, g = 0;
+            int uncompressedSize;
+            int x = 0, y = 0;
             Bitmap bmp = null;
             BitmapData bmpData;
             var imgParent = ParentImage;
             byte[] decBuf;
 
-            var reader = new BinaryReader(new MemoryStream(compressedBytes));
+            var reader = new BinaryReader(new MemoryStream(_compressedBytes));
             var header = reader.ReadUInt16();
-            listWzUsed = header != 0x9C78 && header != 0xDA78 && header != 0x0178 && header != 0x5E78;
-            if (!listWzUsed)
+            _listWzUsed = header != 0x9C78 && header != 0xDA78 && header != 0x0178 && header != 0x5E78;
+            if (!_listWzUsed)
             {
                 zlib = new DeflateStream(reader.BaseStream, CompressionMode.Decompress);
             }
@@ -259,88 +282,80 @@ namespace RazzleServer.Common.Wz.WzProperties
             {
                 reader.BaseStream.Position -= 2;
                 var dataStream = new MemoryStream();
-                var blocksize = 0;
-                var endOfPng = compressedBytes.Length;
+                var endOfPng = _compressedBytes.Length;
 
                 while (reader.BaseStream.Position < endOfPng)
                 {
-                    blocksize = reader.ReadInt32();
+                    var blocksize = reader.ReadInt32();
                     for (var i = 0; i < blocksize; i++)
                     {
-                        dataStream.WriteByte((byte)(reader.ReadByte() ^ imgParent.reader.WzKey[i]));
+                        dataStream.WriteByte((byte) (reader.ReadByte() ^ imgParent.reader.WzKey[i]));
                     }
                 }
+
                 dataStream.Position = 2;
                 zlib = new DeflateStream(dataStream, CompressionMode.Decompress);
             }
 
-            switch (format + format2)
+            switch (Format)
             {
                 case 1:
-                    bmp = new Bitmap(width, height, PixelFormat.Format32bppArgb);
-                    bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
-                    uncompressedSize = width * height * 2;
+                    bmp = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
+                    bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, Width, Height), ImageLockMode.WriteOnly,
+                        PixelFormat.Format32bppArgb);
+                    uncompressedSize = Width * Height * 2;
                     decBuf = new byte[uncompressedSize];
                     zlib.Read(decBuf, 0, uncompressedSize);
                     var argb = new byte[uncompressedSize * 2];
                     for (var i = 0; i < uncompressedSize; i++)
                     {
-                        b = decBuf[i] & 0x0F; b |= b << 4; argb[i * 2] = (byte)b;
-                        g = decBuf[i] & 0xF0; g |= g >> 4; argb[i * 2 + 1] = (byte)g;
+                        var b = decBuf[i] & 0x0F;
+                        b |= b << 4;
+                        argb[i * 2] = (byte) b;
+                        var g = decBuf[i] & 0xF0;
+                        g |= g >> 4;
+                        argb[i * 2 + 1] = (byte) g;
                     }
+
                     Marshal.Copy(argb, 0, bmpData.Scan0, argb.Length);
                     bmp.UnlockBits(bmpData);
                     break;
                 case 2:
-                    bmp = new Bitmap(width, height, PixelFormat.Format32bppArgb);
-                    bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
-                    uncompressedSize = width * height * 4;
+                    bmp = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
+                    bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, Width, Height), ImageLockMode.WriteOnly,
+                        PixelFormat.Format32bppArgb);
+                    uncompressedSize = Width * Height * 4;
                     decBuf = new byte[uncompressedSize];
                     zlib.Read(decBuf, 0, uncompressedSize);
                     Marshal.Copy(decBuf, 0, bmpData.Scan0, decBuf.Length);
                     bmp.UnlockBits(bmpData);
                     break;
                 case 3: // thanks to Elem8100 
-                    uncompressedSize = (int)Math.Ceiling(width / 4.0) * 4 * (int)Math.Ceiling(height / 4.0) * 4 / 8;
+                    uncompressedSize = (int) Math.Ceiling(Width / 4.0) * 4 * (int) Math.Ceiling(Height / 4.0) * 4 / 8;
                     decBuf = new byte[uncompressedSize];
                     zlib.Read(decBuf, 0, uncompressedSize);
-                    bmp = new Bitmap(width, height, PixelFormat.Format32bppArgb);
-                    var argb2 = new int[width * height];
+                    bmp = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
+                    var argb2 = new int[Width * Height];
+                {
+                    var w = (int) Math.Ceiling(Width / 4.0);
+                    var h = (int) Math.Ceiling(Height / 4.0);
+                    for (var i = 0; i < h; i++)
                     {
-                        int index;
                         int index2;
-                        int p;
-                        var w = (int)Math.Ceiling(width / 4.0);
-                        var h = (int)Math.Ceiling(height / 4.0);
-                        for (var i = 0; i < h; i++)
+                        for (var j = 0; j < w; j++)
                         {
-                            for (var j = 0; j < w; j++)
-                            {
-                                index = (j + i * w) * 2;
-                                index2 = j * 4 + i * width * 4;
-                                p = (decBuf[index] & 0x0F) | ((decBuf[index] & 0x0F) << 4);
-                                p |= ((decBuf[index] & 0xF0) | ((decBuf[index] & 0xF0) >> 4)) << 8;
-                                p |= ((decBuf[index + 1] & 0x0F) | ((decBuf[index + 1] & 0x0F) << 4)) << 16;
-                                p |= ((decBuf[index + 1] & 0xF0) | ((decBuf[index] & 0xF0) >> 4)) << 24;
+                            var index = (j + i * w) * 2;
+                            index2 = j * 4 + i * Width * 4;
+                            var p = (decBuf[index] & 0x0F) | ((decBuf[index] & 0x0F) << 4);
+                            p |= ((decBuf[index] & 0xF0) | ((decBuf[index] & 0xF0) >> 4)) << 8;
+                            p |= ((decBuf[index + 1] & 0x0F) | ((decBuf[index + 1] & 0x0F) << 4)) << 16;
+                            p |= ((decBuf[index + 1] & 0xF0) | ((decBuf[index] & 0xF0) >> 4)) << 24;
 
-                                for (var k = 0; k < 4; k++)
-                                {
-                                    if (x * 4 + k < width)
-                                    {
-                                        argb2[index2 + k] = p;
-                                    }
-                                    else
-                                    {
-                                        break;
-                                    }
-                                }
-                            }
-                            index2 = y * width * 4;
-                            for (var m = 1; m < 4; m++)
+                            for (var k = 0; k < 4; k++)
                             {
-                                if (y * 4 + m < height)
+                                if (x * 4 + k < Width)
                                 {
-                                    Array.Copy(argb2, index2, argb2, index2 + m * width, width);
+                                    argb2[index2 + k] = p;
                                 }
                                 else
                                 {
@@ -348,16 +363,32 @@ namespace RazzleServer.Common.Wz.WzProperties
                                 }
                             }
                         }
+
+                        index2 = y * Width * 4;
+                        for (var m = 1; m < 4; m++)
+                        {
+                            if (y * 4 + m < Height)
+                            {
+                                Array.Copy(argb2, index2, argb2, index2 + m * Width, Width);
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
                     }
-                    bmpData = bmp.LockBits(new System.Drawing.Rectangle(System.Drawing.Point.Empty, bmp.Size), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+                }
+                    bmpData = bmp.LockBits(new System.Drawing.Rectangle(System.Drawing.Point.Empty, bmp.Size),
+                        ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
                     Marshal.Copy(argb2, 0, bmpData.Scan0, argb2.Length);
                     bmp.UnlockBits(bmpData);
                     break;
 
                 case 513:
-                    bmp = new Bitmap(width, height, PixelFormat.Format16bppRgb565);
-                    bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format16bppRgb565);
-                    uncompressedSize = width * height * 2;
+                    bmp = new Bitmap(Width, Height, PixelFormat.Format16bppRgb565);
+                    bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, Width, Height), ImageLockMode.WriteOnly,
+                        PixelFormat.Format16bppRgb565);
+                    uncompressedSize = Width * Height * 2;
                     decBuf = new byte[uncompressedSize];
                     zlib.Read(decBuf, 0, uncompressedSize);
                     Marshal.Copy(decBuf, 0, bmpData.Scan0, decBuf.Length);
@@ -365,105 +396,119 @@ namespace RazzleServer.Common.Wz.WzProperties
                     break;
 
                 case 517:
-                    bmp = new Bitmap(width, height);
-                    uncompressedSize = width * height / 128;
+                    bmp = new Bitmap(Width, Height);
+                    uncompressedSize = Width * Height / 128;
                     decBuf = new byte[uncompressedSize];
                     zlib.Read(decBuf, 0, uncompressedSize);
-                    byte iB = 0;
                     for (var i = 0; i < uncompressedSize; i++)
                     {
                         for (byte j = 0; j < 8; j++)
                         {
-                            iB = Convert.ToByte(((decBuf[i] & (0x01 << (7 - j))) >> (7 - j)) * 0xFF);
+                            var iB = Convert.ToByte(((decBuf[i] & (0x01 << (7 - j))) >> (7 - j)) * 0xFF);
                             for (var k = 0; k < 16; k++)
                             {
-                                if (x == width) { x = 0; y++; }
+                                if (x == Width)
+                                {
+                                    x = 0;
+                                    y++;
+                                }
+
                                 bmp.SetPixel(x, y, Color.FromArgb(0xFF, iB, iB, iB));
                                 x++;
                             }
                         }
                     }
+
                     break;
 
                 case 1026:
-                    bmp = new Bitmap(width, height, PixelFormat.Format32bppArgb);
-                    bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
-                    uncompressedSize = width * height;
+                    bmp = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
+                    bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, Width, Height), ImageLockMode.WriteOnly,
+                        PixelFormat.Format32bppArgb);
+                    uncompressedSize = Width * Height;
                     decBuf = new byte[uncompressedSize];
                     zlib.Read(decBuf, 0, uncompressedSize);
-                    decBuf = GetPixelDataDXT3(decBuf, Width, Height);
+                    decBuf = GetPixelDataDxt3(decBuf, Width, Height);
                     Marshal.Copy(decBuf, 0, bmpData.Scan0, decBuf.Length);
                     bmp.UnlockBits(bmpData);
                     break;
 
                 case 2050: // thanks to Elem8100
-                    bmp = new Bitmap(width, height, PixelFormat.Format32bppArgb);
-                    bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
-                    uncompressedSize = width * height;
+                    bmp = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
+                    bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, Width, Height), ImageLockMode.WriteOnly,
+                        PixelFormat.Format32bppArgb);
+                    uncompressedSize = Width * Height;
                     decBuf = new byte[uncompressedSize];
                     zlib.Read(decBuf, 0, uncompressedSize);
-                    decBuf = GetPixelDataDXT5(decBuf, Width, Height);
+                    decBuf = GetPixelDataDxt5(decBuf, Width, Height);
                     Marshal.Copy(decBuf, 0, bmpData.Scan0, decBuf.Length);
                     bmp.UnlockBits(bmpData);
                     break;
 
                 default:
-                    Log.LogError($"Unknown PNG format: {format} {format2}");
+                    Log.LogError($"Unknown PNG format: {Format1} {Format2}");
                     break;
             }
-            png = bmp;
+
+            _png = bmp;
         }
+
         internal void CompressPng(Bitmap bmp)
         {
             var buf = new byte[bmp.Width * bmp.Height * 8];
-            format = 2;
-            format2 = 0;
-            width = bmp.Width;
-            height = bmp.Height;
+            Format1 = 2;
+            Format2 = 0;
+            Width = bmp.Width;
+            Height = bmp.Height;
 
             var curPos = 0;
-            for (var i = 0; i < height; i++)
-                for (var j = 0; j < width; j++)
-                {
-                    var curPixel = bmp.GetPixel(j, i);
-                    buf[curPos] = curPixel.B;
-                    buf[curPos + 1] = curPixel.G;
-                    buf[curPos + 2] = curPixel.R;
-                    buf[curPos + 3] = curPixel.A;
-                    curPos += 4;
-                }
-            compressedBytes = Compress(buf);
-            if (listWzUsed)
+            for (var i = 0; i < Height; i++)
+            for (var j = 0; j < Width; j++)
+            {
+                var curPixel = bmp.GetPixel(j, i);
+                buf[curPos] = curPixel.B;
+                buf[curPos + 1] = curPixel.G;
+                buf[curPos + 2] = curPixel.R;
+                buf[curPos + 3] = curPixel.A;
+                curPos += 4;
+            }
+
+            _compressedBytes = Compress(buf);
+            if (_listWzUsed)
             {
                 var memStream = new MemoryStream();
                 var writer = new WzBinaryWriter(memStream, WzTool.GetIvByMapleVersion(WzMapleVersionType.Gms));
                 writer.Write(2);
                 for (var i = 0; i < 2; i++)
                 {
-                    writer.Write((byte)(compressedBytes[i] ^ writer.WzKey[i]));
-                }
-                writer.Write(compressedBytes.Length - 2);
-                for (var i = 2; i < compressedBytes.Length; i++)
-                {
-                    writer.Write((byte)(compressedBytes[i] ^ writer.WzKey[i - 2]));
+                    writer.Write((byte) (_compressedBytes[i] ^ writer.WzKey[i]));
                 }
 
-                compressedBytes = memStream.GetBuffer();
+                writer.Write(_compressedBytes.Length - 2);
+                for (var i = 2; i < _compressedBytes.Length; i++)
+                {
+                    writer.Write((byte) (_compressedBytes[i] ^ writer.WzKey[i - 2]));
+                }
+
+                _compressedBytes = memStream.GetBuffer();
                 writer.Close();
             }
         }
+
         #endregion
 
         #region Cast Values
 
         public override Bitmap GetBitmap()
         {
-            return GetPNG(false);
+            return GetPng(false);
         }
+
         #endregion
 
         #region DXT Format Parser
-        private static byte[] GetPixelDataDXT3(byte[] rawData, int width, int height)
+
+        private static byte[] GetPixelDataDxt3(byte[] rawData, int width, int height)
         {
             var pixel = new byte[width * height * 4];
 
@@ -499,7 +544,7 @@ namespace RazzleServer.Common.Wz.WzProperties
             return pixel;
         }
 
-        public static byte[] GetPixelDataDXT5(byte[] rawData, int width, int height)
+        public static byte[] GetPixelDataDxt5(byte[] rawData, int width, int height)
         {
             var pixel = new byte[width * height * 4];
 
@@ -512,8 +557,8 @@ namespace RazzleServer.Common.Wz.WzProperties
                 for (var x = 0; x < width; x += 4)
                 {
                     var off = x * 4 + y * width;
-                    ExpandAlphaTableDXT5(alphaTable, rawData[off + 0], rawData[off + 1]);
-                    ExpandAlphaIndexTableDXT5(alphaIdxTable, rawData, off + 2);
+                    ExpandAlphaTableDxt5(alphaTable, rawData[off + 0], rawData[off + 1]);
+                    ExpandAlphaIndexTableDxt5(alphaIdxTable, rawData, off + 2);
                     var u0 = BitConverter.ToUInt16(rawData, off + 8);
                     var u1 = BitConverter.ToUInt16(rawData, off + 10);
                     ExpandColorTable(colorTable, u0, u1);
@@ -537,7 +582,7 @@ namespace RazzleServer.Common.Wz.WzProperties
             return pixel;
         }
 
-        private static void ExpandAlphaTableDXT5(byte[] alpha, byte a0, byte a1)
+        private static void ExpandAlphaTableDxt5(byte[] alpha, byte a0, byte a1)
         {
             alpha[0] = a0;
             alpha[1] = a1;
@@ -545,27 +590,28 @@ namespace RazzleServer.Common.Wz.WzProperties
             {
                 for (var i = 2; i < 8; i++)
                 {
-                    alpha[i] = (byte)(((8 - i) * a0 + (i - 1) * a1 + 3) / 7);
+                    alpha[i] = (byte) (((8 - i) * a0 + (i - 1) * a1 + 3) / 7);
                 }
             }
             else
             {
                 for (var i = 2; i < 6; i++)
                 {
-                    alpha[i] = (byte)(((6 - i) * a0 + (i - 1) * a1 + 2) / 5);
+                    alpha[i] = (byte) (((6 - i) * a0 + (i - 1) * a1 + 2) / 5);
                 }
+
                 alpha[6] = 0;
                 alpha[7] = 255;
             }
         }
 
-        private static void ExpandAlphaIndexTableDXT5(int[] alphaIndex, byte[] rawData, int offset)
+        private static void ExpandAlphaIndexTableDxt5(int[] alphaIndex, byte[] rawData, int offset)
         {
             for (var i = 0; i < 16; i += 8, offset += 3)
             {
                 var flags = rawData[offset]
-                    | (rawData[offset + 1] << 8)
-                    | (rawData[offset + 2] << 16);
+                            | (rawData[offset + 1] << 8)
+                            | (rawData[offset + 2] << 16);
                 for (var j = 0; j < 8; j++)
                 {
                     var mask = 0x07 << (3 * j);
@@ -585,10 +631,12 @@ namespace RazzleServer.Common.Wz.WzProperties
 
         private static void ExpandColorTable(Color[] color, ushort u0, ushort u1)
         {
-            color[0] = RGB565ToColor(u0);
-            color[1] = RGB565ToColor(u1);
-            color[2] = Color.FromArgb(0xff, (color[0].R * 2 + color[1].R + 1) / 3, (color[0].G * 2 + color[1].G + 1) / 3, (color[0].B * 2 + color[1].B + 1) / 3);
-            color[3] = Color.FromArgb(0xff, (color[0].R + color[1].R * 2 + 1) / 3, (color[0].G + color[1].G * 2 + 1) / 3, (color[0].B + color[1].B * 2 + 1) / 3);
+            color[0] = Rgb565ToColor(u0);
+            color[1] = Rgb565ToColor(u1);
+            color[2] = Color.FromArgb(0xff, (color[0].R * 2 + color[1].R + 1) / 3,
+                (color[0].G * 2 + color[1].G + 1) / 3, (color[0].B * 2 + color[1].B + 1) / 3);
+            color[3] = Color.FromArgb(0xff, (color[0].R + color[1].R * 2 + 1) / 3,
+                (color[0].G + color[1].G * 2 + 1) / 3, (color[0].B + color[1].B * 2 + 1) / 3);
         }
 
         private static void ExpandColorIndexTable(int[] colorIndex, byte[] rawData, int offset)
@@ -606,29 +654,31 @@ namespace RazzleServer.Common.Wz.WzProperties
         {
             for (var i = 0; i < 16; i += 2, offset++)
             {
-                alpha[i + 0] = (byte)(rawData[offset] & 0x0f);
-                alpha[i + 1] = (byte)((rawData[offset] & 0xf0) >> 4);
+                alpha[i + 0] = (byte) (rawData[offset] & 0x0f);
+                alpha[i + 1] = (byte) ((rawData[offset] & 0xf0) >> 4);
             }
+
             for (var i = 0; i < 16; i++)
             {
-                alpha[i] = (byte)(alpha[i] | (alpha[i] << 4));
+                alpha[i] = (byte) (alpha[i] | (alpha[i] << 4));
             }
         }
 
-        private static Color RGB565ToColor(ushort val)
+        private static Color Rgb565ToColor(ushort val)
         {
-            const int rgb565_mask_r = 0xf800;
-            const int rgb565_mask_g = 0x07e0;
-            const int rgb565_mask_b = 0x001f;
-            var r = (val & rgb565_mask_r) >> 11;
-            var g = (val & rgb565_mask_g) >> 5;
-            var b = val & rgb565_mask_b;
+            const int rgb565MaskR = 0xf800;
+            const int rgb565MaskG = 0x07e0;
+            const int rgb565MaskB = 0x001f;
+            var r = (val & rgb565MaskR) >> 11;
+            var g = (val & rgb565MaskG) >> 5;
+            var b = val & rgb565MaskB;
             var c = Color.FromArgb(
                 (r << 3) | (r >> 2),
                 (g << 2) | (g >> 4),
                 (b << 3) | (b >> 2));
             return c;
         }
+
         #endregion
     }
 }

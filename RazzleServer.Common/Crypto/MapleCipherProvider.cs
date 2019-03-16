@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
 
@@ -11,7 +10,7 @@ namespace RazzleServer.Common.Crypto
     public class MapleCipherProvider
     {
         /// <summary>
-        /// Packet crypto, Incomming
+        /// Packet crypto, Incoming
         /// </summary>
         private MapleCipher RecvCipher { get; }
 
@@ -45,11 +44,10 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
         /// General locker for adding data
         /// </summary>
-        private object _addLocker = new object();
+        private readonly object _addLocker = new object();
 
-        private ILogger _log = LogManager.Log;
-
-        public MapleCipherProvider(ushort currentGameVersion, ulong aesKey, ushort initialBufferSize = 0x100, bool toClient = true)
+        public MapleCipherProvider(ushort currentGameVersion, ulong aesKey, ushort initialBufferSize = 0x100,
+            bool toClient = true)
         {
             RecvCipher = new MapleCipher(currentGameVersion, aesKey);
             SendCipher = new MapleCipher(currentGameVersion, aesKey);
@@ -73,7 +71,8 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
         /// Callback for when a handshake is finished
         /// </summary>
-        public delegate void CallHandshakeFinished(uint siv, uint riv);
+        public delegate void CallHandshakeFinished(uint siv, uint riv, short version, string subVersion,
+            byte serverType);
 
         /// <summary>
         /// Event called when a handshake has been handled by the crypto
@@ -187,7 +186,7 @@ namespace RazzleServer.Common.Crypto
         {
             if (!RecvCipher.Handshaken)
             {
-                var pr = new PacketReader(RecvCipher.Handshake(data));
+                var pr = new PacketReader(MapleCipher.Handshake(data));
                 var version = pr.ReadShort();
                 var subVersion = pr.ReadString();
                 var siv = pr.ReadUInt();
@@ -195,13 +194,12 @@ namespace RazzleServer.Common.Crypto
                 var serverType = pr.ReadByte();
                 SendCipher.SetIv(siv);
                 RecvCipher.SetIv(riv);
-                HandshakeFinished?.Invoke(siv, riv);
+                HandshakeFinished?.Invoke(siv, riv, version, subVersion, serverType);
             }
             else
             {
                 if (!RecvCipher.CheckHeader(data, !ToClient))
                 {
-
                     throw new InvalidOperationException("Packet header mismatch");
                 }
 
@@ -214,6 +212,7 @@ namespace RazzleServer.Common.Crypto
 
                 PacketFinished?.Invoke(decrypted.ToArray());
             }
+
             Wait();
         }
 
@@ -224,7 +223,7 @@ namespace RazzleServer.Common.Crypto
         {
             var packetLength = RecvCipher
                 .Handshaken
-                ? RecvCipher.GetPacketLength(DataBuffer.Slice(0, 4).Span)
+                ? MapleCipher.GetPacketLength(DataBuffer.Slice(0, 4).Span)
                 : BitConverter.ToUInt16(DataBuffer.Slice(0, 2).Span);
 
             WaitMore(packetLength);
