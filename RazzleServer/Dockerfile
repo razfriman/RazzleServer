@@ -1,7 +1,5 @@
-FROM microsoft/dotnet:3.0-runtime-alpine AS base
-WORKDIR /app
-
-FROM microsoft/dotnet:3.0-sdk-alpine AS build
+# Build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.0 as build
 WORKDIR /src
 COPY RazzleServer.sln ./
 COPY RazzleServer/RazzleServer.csproj RazzleServer/
@@ -11,17 +9,18 @@ COPY RazzleServer.Tests/RazzleServer.Tests.csproj RazzleServer.Tests/
 RUN dotnet restore
 COPY . .
 
-WORKDIR /src/RazzleServer
-RUN dotnet build -c Release -o /app
-
-WORKDIR /src/RazzleServer.Tests
-RUN dotnet test -c Release
-
-WORKDIR /src/RazzleServer
+# Publish
 FROM build AS publish
+WORKDIR /src/RazzleServer
 RUN dotnet publish -c Release -o /app
 
-FROM base AS final
+# Test
+#FROM build AS testrunner
+#WORKDIR /src/RazzleServer.Tests
+#ENTRYPOINT ["dotnet", "test", "--logger:trx"]
+
+# Run
+FROM mcr.microsoft.com/dotnet/core/runtime:3.0 as runtime
 WORKDIR /app
 COPY --from=publish /app .
 ENTRYPOINT ["dotnet", "RazzleServer.dll"]

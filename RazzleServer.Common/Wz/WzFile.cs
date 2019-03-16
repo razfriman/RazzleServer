@@ -28,10 +28,7 @@ namespace RazzleServer.Common.Wz
 
         #endregion
 
-        /// <summary>
-        /// The parsed IWzDir after having called ParseWzDirectory(), this can either be a WzDirectory or a WzListDirectory
-        /// </summary>
-        public WzDirectory WzDirectory { get; private set; }
+        public WzDirectory WzDirectory { get; private set; } = new WzDirectory();
 
         /// <summary>
         /// The WzObjectType of the file
@@ -45,7 +42,7 @@ namespace RazzleServer.Common.Wz
         /// <returns>WzDirectory[name]</returns>
         public new WzObject this[string name] => WzDirectory[name];
 
-        [JsonIgnore] public WzHeader Header { get; set; }
+        [JsonIgnore] public WzHeader Header { get; set; } = WzHeader.GetDefault();
 
         public short Version { get; set; }
 
@@ -64,10 +61,12 @@ namespace RazzleServer.Common.Wz
             WzDirectory?.Dispose();
         }
 
+        public WzFile()
+        {
+        }
+
         public WzFile(short gameVersion, WzMapleVersionType version)
         {
-            WzDirectory = new WzDirectory();
-            Header = WzHeader.GetDefault();
             Version = gameVersion;
             MapleVersionType = version;
             _wzIv = WzTool.GetIvByMapleVersion(version);
@@ -172,14 +171,14 @@ namespace RazzleServer.Common.Wz
                 FStart = reader.ReadUInt32(),
                 Copyright = reader.ReadNullTerminatedString()
             };
-            reader.ReadBytes((int) (Header.FStart - reader.BaseStream.Position));
+            reader.ReadBytes((int)(Header.FStart - reader.BaseStream.Position));
             reader.Header = Header;
             _version = reader.ReadInt16();
             if (Version == -1)
             {
                 for (var j = 0; j < short.MaxValue; j++)
                 {
-                    Version = (short) j;
+                    Version = (short)j;
                     _versionHash = GetVersionHash(_version, Version);
                     if (_versionHash != 0)
                     {
@@ -266,14 +265,14 @@ namespace RazzleServer.Common.Wz
             _versionHash = 0;
             foreach (var ch in Version.ToString())
             {
-                _versionHash = _versionHash * 32 + (byte) ch + 1;
+                _versionHash = _versionHash * 32 + (byte)ch + 1;
             }
 
             uint a = (_versionHash >> 24) & 0xFF,
                 b = (_versionHash >> 16) & 0xFF,
                 c = (_versionHash >> 8) & 0xFF,
                 d = _versionHash & 0xFF;
-            _version = (byte) ~(a ^ b ^ c ^ d);
+            _version = (byte)~(a ^ b ^ c ^ d);
         }
 
         /// <summary>
@@ -295,17 +294,17 @@ namespace RazzleServer.Common.Wz
             for (var i = 0; i < 4; i++)
             {
                 {
-                    wzWriter.Write((byte) Header.Ident[i]);
+                    wzWriter.Write((byte)Header.Ident[i]);
                 }
             }
 
-            wzWriter.Write((long) Header.FSize);
+            wzWriter.Write((long)Header.FSize);
             wzWriter.Write(Header.FStart);
             wzWriter.WriteNullTerminatedString(Header.Copyright);
             var extraHeaderLength = Header.FStart - wzWriter.BaseStream.Position;
             if (extraHeaderLength > 0)
             {
-                wzWriter.Write(new byte[(int) extraHeaderLength]);
+                wzWriter.Write(new byte[(int)extraHeaderLength]);
             }
 
             wzWriter.Write(_version);
@@ -459,7 +458,7 @@ namespace RazzleServer.Common.Wz
             switch (prop.PropertyType)
             {
                 case WzPropertyType.Canvas:
-                    foreach (var canvasProp in ((WzCanvasProperty) prop).WzProperties)
+                    foreach (var canvasProp in ((WzCanvasProperty)prop).WzProperties)
                     {
                         objList.Add(curPath + "/" + canvasProp.Name);
                         objList.AddRange(GetPathsFromProperty(canvasProp, curPath + "/" + canvasProp.Name));
@@ -468,7 +467,7 @@ namespace RazzleServer.Common.Wz
                     objList.Add(curPath + "/PNG");
                     break;
                 case WzPropertyType.Convex:
-                    foreach (var exProp in ((WzConvexProperty) prop).WzProperties)
+                    foreach (var exProp in ((WzConvexProperty)prop).WzProperties)
                     {
                         objList.Add(curPath + "/" + exProp.Name);
                         objList.AddRange(GetPathsFromProperty(exProp, curPath + "/" + exProp.Name));
@@ -476,7 +475,7 @@ namespace RazzleServer.Common.Wz
 
                     break;
                 case WzPropertyType.SubProperty:
-                    foreach (var subProp in ((WzSubProperty) prop).WzProperties)
+                    foreach (var subProp in ((WzSubProperty)prop).WzProperties)
                     {
                         objList.Add(curPath + "/" + subProp.Name);
                         objList.AddRange(GetPathsFromProperty(subProp, curPath + "/" + subProp.Name));
@@ -521,32 +520,32 @@ namespace RazzleServer.Common.Wz
                 switch (curObj.ObjectType)
                 {
                     case WzObjectType.Directory:
-                        curObj = ((WzDirectory) curObj)[seperatedPath[i]];
+                        curObj = ((WzDirectory)curObj)[seperatedPath[i]];
                         continue;
                     case WzObjectType.Image:
-                        curObj = ((WzImage) curObj)[seperatedPath[i]];
+                        curObj = ((WzImage)curObj)[seperatedPath[i]];
                         continue;
                     case WzObjectType.Property:
-                        switch (((WzImageProperty) curObj).PropertyType)
+                        switch (((WzImageProperty)curObj).PropertyType)
                         {
                             case WzPropertyType.Canvas:
-                                curObj = ((WzCanvasProperty) curObj)[seperatedPath[i]];
+                                curObj = ((WzCanvasProperty)curObj)[seperatedPath[i]];
                                 continue;
                             case WzPropertyType.Convex:
-                                curObj = ((WzConvexProperty) curObj)[seperatedPath[i]];
+                                curObj = ((WzConvexProperty)curObj)[seperatedPath[i]];
                                 continue;
                             case WzPropertyType.SubProperty:
-                                curObj = ((WzSubProperty) curObj)[seperatedPath[i]];
+                                curObj = ((WzSubProperty)curObj)[seperatedPath[i]];
                                 continue;
                             case WzPropertyType.Vector:
                                 if (seperatedPath[i] == "X")
                                 {
-                                    return ((WzVectorProperty) curObj).X;
+                                    return ((WzVectorProperty)curObj).X;
                                 }
 
                                 if (seperatedPath[i] == "Y")
                                 {
-                                    return ((WzVectorProperty) curObj).Y;
+                                    return ((WzVectorProperty)curObj).Y;
                                 }
 
                                 return null;

@@ -145,25 +145,40 @@ namespace RazzleServer.Common.Wz
         public virtual IEnumerable<WzObject> GetObjects() => Enumerable.Empty<WzObject>();
 
 
-        public void Export(string path, JsonSerializer serializer = null)
+        public void Serialize(string path, JsonSerializer serializer = null)
         {
             using (var stream = File.OpenWrite(path))
             {
-                Export(stream, serializer);
+                Serialize(stream, serializer);
             }
         }
 
-        public void Export(Stream stream, JsonSerializer serializer = null)
+        public void Serialize(Stream stream, JsonSerializer serializer = null)
         {
             using (var sr = new StreamWriter(stream))
             using (var writer = new JsonTextWriter(sr))
             {
                 serializer = serializer ?? new JsonSerializer
                 {
-                    Formatting = Formatting.Indented
+                    Formatting = Formatting.Indented,
+                    TypeNameHandling = TypeNameHandling.Auto
                 };
+
                 serializer.Serialize(writer, this);
             }
         }
+
+        public static WzFile DeserializeFile(string contents) => Deserialize<WzFile>(contents);
+
+        public static WzDirectory DeserializeDirectory(string contents) => Deserialize<WzDirectory>(contents);
+
+        public static WzImage DeserializeImage(string contents) => Deserialize<WzImage>(contents);
+
+        public static T Deserialize<T>(string contents) where T : WzObject =>
+            JsonConvert.DeserializeObject<T>(contents,
+                new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.Auto
+                });
     }
 }

@@ -8,6 +8,7 @@ using RazzleServer.Common.Wz.WzProperties;
 
 namespace RazzleServer.Common.Wz
 {
+    /// <inheritdoc />
     /// <summary>
     /// An interface for wz img properties
     /// </summary>
@@ -39,9 +40,9 @@ namespace RazzleServer.Common.Wz
                 var parent = Parent;
                 while (parent != null)
                 {
-                    if (parent is WzImage)
+                    if (parent is WzImage image)
                     {
-                        return (WzImage) parent;
+                        return image;
                     }
 
                     parent = parent.Parent;
@@ -59,10 +60,7 @@ namespace RazzleServer.Common.Wz
 
         public abstract void SetValue(object value);
 
-        public override void Remove()
-        {
-            ((IPropertyContainer) Parent).RemoveProperty(this);
-        }
+        public override void Remove() => ((IPropertyContainer) Parent)?.RemoveProperty(this);
 
         public override WzFile WzFileParent => ParentImage.WzFileParent;
 
