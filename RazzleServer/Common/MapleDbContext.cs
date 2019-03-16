@@ -34,13 +34,11 @@ namespace RazzleServer.Common
             if (config.DatabaseConnectionType == Constants.DatabaseConnectionType.Sqlite)
             {
                 optionsBuilder
-                    .UseLoggerFactory(LogManager.Factory)
                     .UseSqlite($"Filename=./{ServerConfig.Instance.DatabaseConnection}");
             }
             else if (config.DatabaseConnectionType == Constants.DatabaseConnectionType.InMemory)
             {
                 optionsBuilder
-                    .UseLoggerFactory(LogManager.Factory)
                     .UseInMemoryDatabase("RazzleServer");
             }
         }

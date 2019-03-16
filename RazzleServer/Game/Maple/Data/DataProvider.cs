@@ -7,7 +7,7 @@ using RazzleServer.Game.Maple.Data.Loaders;
 
 namespace RazzleServer.Game.Maple.Data
 {
-    public static class DataProvider
+    public class DataProvider
     {
         public static CachedAvailableStyles Styles { get; private set; } = new CachedAvailableStyles();
         public static CachedItems Items { get; private set; } = new CachedItems();
@@ -24,7 +24,7 @@ namespace RazzleServer.Game.Maple.Data
         public static CachedRechargeTiers RechargeTiers { get; private set; } = new CachedRechargeTiers();
         public static CachedQuizzes Quizzes { get; private set; } = new CachedQuizzes();
 
-        private static readonly ILogger Log = LogManager.Log;
+        private static readonly ILogger Log = LogManager.CreateLogger<DataProvider>();
 
         public static async Task Initialize()
         {

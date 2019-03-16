@@ -12,7 +12,7 @@ namespace RazzleServer.Common.Wz.WzProperties
     /// </summary>
     public class WzUOLProperty : WzExtended
     {
-        private static ILogger Log = LogManager.Log;
+        private static readonly ILogger Log = LogManager.Log;
 
         #region Fields
 
@@ -115,7 +115,7 @@ namespace RazzleServer.Common.Wz.WzProperties
                             }
                             else
                             {
-                                Log.LogCritical($"UOL got nexon'd at property: {FullPath}");
+                                Log.LogCritical($"UOL cannot be resolved for property: {FullPath}");
                                 return null;
                             }
                         }

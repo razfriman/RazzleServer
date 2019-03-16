@@ -10,11 +10,11 @@ namespace RazzleServer.Game.Maple.Data.Loaders
     {
         public override string CacheName => "MobSkills";
 
-        private readonly ILogger _log = LogManager.Log;
+        public override ILogger Log => LogManager.CreateLogger<MobSkillsLoader>();
 
         public override void LoadFromWz()
         {
-            _log.LogInformation("Loading MobSkills");
+            Log.LogInformation("Loading MobSkills");
 
             using (var file = GetWzFile("Skill.wz"))
             {

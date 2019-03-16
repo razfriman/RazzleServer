@@ -6,6 +6,8 @@ using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Maps;
 using RazzleServer.Common;
+using Microsoft.Extensions.Logging;
+using RazzleServer.Common.Util;
 
 namespace RazzleServer.Game
 {
@@ -28,6 +30,8 @@ namespace RazzleServer.Game
                 return Maps[id] = map;
             }
         }
+        public override ILogger Log => LogManager.CreateLogger<GameServer>();
+
 
         public GameServer(ServerManager manager, World world, ushort port, byte channelId) : base(manager)
         {
@@ -37,7 +41,7 @@ namespace RazzleServer.Game
             Start(new IPAddress(new byte[] { 0, 0, 0, 0 }), Port);
         }
 
-        public override void Dispose() => ShutDown();
+        public override void Dispose() => Shutdown();
 
         public void Send(PacketWriter pw, GameClient except = null) => 
         Clients

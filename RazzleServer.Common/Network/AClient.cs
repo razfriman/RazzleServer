@@ -16,7 +16,7 @@ namespace RazzleServer.Common.Network
         public bool Connected { get; set; }
         public DateTime LastPong { get; set; }
         public string Key { get; set; }
-        public ILogger Log { get; protected set; }
+        public abstract ILogger Log { get; }
 
         protected AClient(Socket session, bool toClient = true)
         {
@@ -24,7 +24,6 @@ namespace RazzleServer.Common.Network
             Host = Socket.Host;
             Port = Socket.Port;
             Connected = true;
-            Log = LogManager.LogByName(GetType().FullName);
         }
 
         public virtual void Disconnected() => Connected = false;

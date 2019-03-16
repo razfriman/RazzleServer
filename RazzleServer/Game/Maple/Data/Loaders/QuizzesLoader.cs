@@ -9,11 +9,11 @@ namespace RazzleServer.Game.Maple.Data.Loaders
     {
         public override string CacheName => "Quizzes";
 
-        private readonly ILogger _log = LogManager.Log;
+        public override ILogger Log => LogManager.CreateLogger<QuizzesLoader>();
 
         public override void LoadFromWz()
         {
-            _log.LogInformation("Loading Quizs");
+            Log.LogInformation("Loading Quizs");
 
             using (var file = GetWzFile("Etc.wz"))
             {

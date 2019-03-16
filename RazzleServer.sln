@@ -1,15 +1,20 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28606.126
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazzleServer", "RazzleServer\RazzleServer.csproj", "{23750A73-86BE-49CF-9159-39B34627990F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RazzleServer", "RazzleServer\RazzleServer.csproj", "{23750A73-86BE-49CF-9159-39B34627990F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazzleServer.Data", "RazzleServer.DB\RazzleServer.Data.csproj", "{728BCBCC-1E8D-4AE6-B40D-05B54FED815F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RazzleServer.Data", "RazzleServer.DB\RazzleServer.Data.csproj", "{728BCBCC-1E8D-4AE6-B40D-05B54FED815F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazzleServer.Tests", "RazzleServer.Tests\RazzleServer.Tests.csproj", "{99BD0C50-8420-4E09-9F7B-C465C4537115}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RazzleServer.Tests", "RazzleServer.Tests\RazzleServer.Tests.csproj", "{99BD0C50-8420-4E09-9F7B-C465C4537115}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazzleServer.Common", "RazzleServer.Common\RazzleServer.Common.csproj", "{DC2A8698-60A1-4D25-B6DE-D44DDDC74B45}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RazzleServer.Common", "RazzleServer.Common\RazzleServer.Common.csproj", "{DC2A8698-60A1-4D25-B6DE-D44DDDC74B45}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EDA15780-5621-44EB-9165-EC3177DFECC2}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,10 +30,6 @@ Global
 		{728BCBCC-1E8D-4AE6-B40D-05B54FED815F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{728BCBCC-1E8D-4AE6-B40D-05B54FED815F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{728BCBCC-1E8D-4AE6-B40D-05B54FED815F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4B8CD672-EC8E-43F2-BC2D-E0A1BA026157}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4B8CD672-EC8E-43F2-BC2D-E0A1BA026157}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4B8CD672-EC8E-43F2-BC2D-E0A1BA026157}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4B8CD672-EC8E-43F2-BC2D-E0A1BA026157}.Release|Any CPU.Build.0 = Release|Any CPU
 		{99BD0C50-8420-4E09-9F7B-C465C4537115}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{99BD0C50-8420-4E09-9F7B-C465C4537115}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99BD0C50-8420-4E09-9F7B-C465C4537115}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -40,5 +41,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {85FD71E4-5894-4818-AC0D-CEBD30804768}
 	EndGlobalSection
 EndGlobal

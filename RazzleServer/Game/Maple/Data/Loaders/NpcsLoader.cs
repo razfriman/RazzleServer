@@ -9,11 +9,11 @@ namespace RazzleServer.Game.Maple.Data.Loaders
     {
         public override string CacheName => "Npcs";
 
-        private readonly ILogger _log = LogManager.Log;
+        public override ILogger Log => LogManager.CreateLogger<NpcsLoader>();
 
         public override void LoadFromWz()
         {
-            _log.LogInformation("Loading Npcs");
+            Log.LogInformation("Loading Npcs");
 
             using (var file = GetWzFile("Npc.wz"))
             {

@@ -26,7 +26,7 @@ namespace RazzleServer.Game.Maple.Life
         [JsonIgnore]
         public NpcReference CachedReference => DataProvider.Npcs.Data[MapleId];
 
-        private readonly ILogger _log = LogManager.Log;
+        //private readonly ILogger _log = LogManager.Log;
 
         public Npc() { }
 

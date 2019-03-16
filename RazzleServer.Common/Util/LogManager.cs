@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace RazzleServer.Common.Util
@@ -11,5 +13,9 @@ namespace RazzleServer.Common.Util
         public static ILogger Log => Factory.CreateLogger(new StackFrame(1, false).GetMethod().DeclaringType.FullName);
 
         public static ILogger LogByName(string fullName) => Factory.CreateLogger(fullName);
+
+        public static IServiceProvider ServiceProvider { get; set; }
+
+        public static ILogger CreateLogger<T>() => ServiceProvider.GetService<ILogger<T>>();
     }
 }

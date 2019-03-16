@@ -16,7 +16,7 @@ namespace RazzleServer.Game.Maple.Data
 {
     public class ShopProvider
     {
-        private static readonly ILogger Log = LogManager.Log;
+        private static readonly ILogger Log = LogManager.CreateLogger<ShopProvider>();
         private const string ShopsDataFile = "InitialData/shops.json";
         private const string ShopItemsDataFile = "InitialData/shopItems.json";
         private const string RechargeTiersDataFile = "InitialData/rechargeTiers.json";

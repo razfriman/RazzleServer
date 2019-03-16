@@ -1,4 +1,4 @@
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Data.Cache;
 using RazzleServer.Game.Maple.Data.References;
@@ -9,11 +9,11 @@ namespace RazzleServer.Game.Maple.Data.Loaders
     {
         public override string CacheName => "Quests";
 
-        private readonly ILogger _log = LogManager.Log;
+        public override ILogger Log => LogManager.CreateLogger<QuestsLoader>();
 
         public override void LoadFromWz()
         {
-            _log.LogInformation("Loading Quests");
+            Log.LogInformation("Loading Quests");
 
             using (var file = GetWzFile("Quest.wz"))
             {
@@ -22,7 +22,7 @@ namespace RazzleServer.Game.Maple.Data.Loaders
 
                 foreach (var item in img.WzProperties)
                 {
-                    if(ushort.TryParse(item.Name, out var itemId))
+                    if (ushort.TryParse(item.Name, out var itemId))
                     {
                         Data.Data.Add(itemId, new QuestReference
                         {

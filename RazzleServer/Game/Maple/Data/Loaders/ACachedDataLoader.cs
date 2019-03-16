@@ -4,23 +4,17 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RazzleServer.Common.Server;
-using RazzleServer.Common.Util;
 using RazzleServer.Common.Wz;
 
 namespace RazzleServer.Game.Maple.Data.Loaders
 {
     public abstract class ACachedDataLoader<T> where T : new()
     {
-        private readonly ILogger _log;
-
         public abstract string CacheName { get; }
 
-        public T Data { get; private set; } = new T();
+        public abstract ILogger Log { get; }
 
-        protected ACachedDataLoader()
-        {
-            _log = LogManager.LogByName(GetType().FullName);
-        }
+        public T Data { get; private set; } = new T();
 
         public virtual async Task<T> Load()
         {
@@ -33,14 +27,14 @@ namespace RazzleServer.Game.Maple.Data.Loaders
                 }
                 catch (Exception e)
                 {
-                    _log.LogError(e, $"Error loading [{CacheName}] cache. Attempting to load from WZ");
+                    Log.LogError(e, $"Error loading [{CacheName}] cache. Attempting to load from WZ");
                     LoadFromWz();
                     await SaveToCache();
                 }
             }
             else
             {
-                _log.LogInformation($"[{CacheName}] cache not found. Attempting to load from WZ");
+                Log.LogInformation($"[{CacheName}] cache not found. Attempting to load from WZ");
                 LoadFromWz();
                 await SaveToCache();
             }
@@ -64,13 +58,13 @@ namespace RazzleServer.Game.Maple.Data.Loaders
                 serializer.Serialize(writer, Data);
             }
 
-            _log.LogInformation($"Saving [{CacheName}] to cached file");
+            Log.LogInformation($"Saving [{CacheName}] to cached file");
             return Task.CompletedTask;
         }
 
         public virtual Task LoadFromCache()
         {
-            
+
             var path = Path.Combine(ServerConfig.Instance.CacheFolder, $"{CacheName}.cache");
 
             using (var s = File.OpenRead(path))
@@ -79,7 +73,7 @@ namespace RazzleServer.Game.Maple.Data.Loaders
             {
                 var serializer = new JsonSerializer();
                 Data = serializer.Deserialize<T>(reader);
-                _log.LogInformation($"Loaded [{CacheName}] from cache");
+                Log.LogInformation($"Loaded [{CacheName}] from cache");
             }
 
             return Task.CompletedTask;

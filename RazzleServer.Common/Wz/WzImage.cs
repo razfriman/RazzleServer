@@ -12,8 +12,6 @@ namespace RazzleServer.Common.Wz
     /// </summary>
     public class WzImage : WzObject, IPropertyContainer
     {
-        //TODO: nest wzproperties in a wzsubproperty inside of WzImage
-
         #region Fields
 
         internal WzBinaryReader reader;

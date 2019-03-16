@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using RazzleServer.Common.Server;
 using RazzleServer.Common.Util;
 using RazzleServer.Game;
@@ -12,15 +13,19 @@ using RazzleServer.Login;
 
 namespace RazzleServer.Common
 {
-    public class ServerManager
+    public class ServerManager : IHostedService
     {
-        private static ServerManager _instance;
-
         public LoginServer Login { get; set; }
         public Worlds Worlds { get; } = new Worlds();
         public Migrations Migrations { get; } = new Migrations();
 
-        private readonly ILogger _log = LogManager.Log;
+        private readonly ILogger _logger;
+
+        public ServerManager(ILogger<ServerManager> logger, IServiceProvider serviceProvider)
+        {
+            _logger = logger;
+            LogManager.ServiceProvider = serviceProvider;
+        }
 
         public async Task Configure()
         {
@@ -32,26 +37,9 @@ namespace RazzleServer.Common
             await ShopProvider.Initialize();
         }
 
-        public void Start()
-        {
-            Login = new LoginServer(this);
-
-            ServerConfig.Instance.Worlds.ForEach(x =>
-            {
-                var world = new World(x);
-                Worlds.Add(world);
-
-                for (byte i = 0; i < x.Channels; i++)
-                {
-                    var game = new GameServer(this, world, ServerConfig.Instance.ChannelPort++, i);
-                    world.Add(game);
-                }
-            });
-        }
-
         private void InitializeDatabase()
         {
-            _log.LogInformation("Initializing Database");
+            _logger.LogInformation("Initializing Database");
 
             using (var context = new MapleDbContext())
             {
@@ -71,49 +59,29 @@ namespace RazzleServer.Common
             Migrations.Add(new Migration(host, accountId, characterId));
         }
 
-        internal void ProcessInput()
+        public async Task StartAsync(CancellationToken cancellationToken)
         {
-            while (true)
-            {
-                var line = Console.ReadLine();
+            await Configure();
+            Login = new LoginServer(this);
 
-                try
+            ServerConfig.Instance.Worlds.ForEach(x =>
+            {
+                var world = new World(x);
+                Worlds.Add(world);
+
+                for (byte i = 0; i < x.Channels; i++)
                 {
-                    ProcessCommandLineComand(line);
+                    var game = new GameServer(this, world, ServerConfig.Instance.ChannelPort++, i);
+                    world.Add(game);
                 }
-                catch (Exception e)
-                {
-                    _log.LogError(e, "Error processing server manager command");
-                }
-            }
+            });
         }
 
-        private void ProcessCommandLineComand(string line)
+        public Task StopAsync(CancellationToken cancellationToken)
         {
-            if (line == "config")
-            {
-                _log.LogInformation(JsonConvert.SerializeObject(ServerConfig.Instance, Formatting.Indented));
-            }
-            else if (line == "players")
-            {
-                _log.LogInformation($"Login: {Login.Clients.Count}");
-
-                foreach (var world in Worlds.Values)
-                {
-                    _log.LogInformation($"World ({world.Name}): {world.Values.Sum(x => x.Clients.Count)}");
-
-                    foreach (var channel in world.Values)
-                    {
-                        _log.LogInformation($"World ({world.Name}) - Channel {channel.ChannelId + 1}: {channel.Clients.Count}");
-                    }
-                }
-            }
-            else
-            {
-                Console.WriteLine($"Unknown command: {line}");
-            }
+            Login.Shutdown();
+            Worlds.Values.SelectMany(x => x.Values).ToList().ForEach(x => x.Shutdown());
+            return Task.CompletedTask;
         }
-
-        public static ServerManager Instance => _instance ?? (_instance = new ServerManager());
     }
 }

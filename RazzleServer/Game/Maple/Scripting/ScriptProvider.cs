@@ -7,7 +7,6 @@ using RazzleServer.Game.Maple.Scripting.Loaders;
 
 namespace RazzleServer.Game.Maple.Scripting
 {
-
     public static class ScriptProvider
     {
         public static CommandScripts Commands { get; private set; }

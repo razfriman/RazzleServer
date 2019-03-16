@@ -10,11 +10,11 @@ namespace RazzleServer.Game.Maple.Data.Loaders
     {
         public override string CacheName => "Reactors";
 
-        private readonly ILogger _log = LogManager.Log;
+        public override ILogger Log => LogManager.CreateLogger<ReactorsLoader>();
 
         public override void LoadFromWz()
         {
-            _log.LogInformation("Loading Reactors");
+            Log.LogInformation("Loading Reactors");
 
             using (var file = GetWzFile("Reactor.wz"))
             {

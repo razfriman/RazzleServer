@@ -67,6 +67,7 @@ namespace RazzleServer.Login.Maple
                 if (account == null)
                 {
                     _log.LogError($"Account does not exists with Id [{Id}]");
+                    return;
                 }
 
                 account.Username = Username;
@@ -92,7 +93,7 @@ namespace RazzleServer.Login.Maple
 
                 if (account != null)
                 {
-                    _log.LogError($"Error creating acconut - account already exists with username [{Username}]");
+                    _log.LogError($"Error creating account - account already exists with username [{Username}]");
                     return;
                 }
 

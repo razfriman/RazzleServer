@@ -14,9 +14,9 @@ using RazzleServer.Game.Maple.Life;
 
 namespace RazzleServer.Game.Maple.Data
 {
-    public static class LootProvider
+    public class LootProvider
     {
-        private static readonly ILogger Log = LogManager.Log;
+        private static readonly ILogger Log = LogManager.CreateLogger<LootProvider>();
         private const string InitialDataFile = "InitialData/loot.json";
 
         internal static async Task Initialize()

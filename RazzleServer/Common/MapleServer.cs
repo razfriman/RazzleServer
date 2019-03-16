@@ -26,12 +26,11 @@ namespace RazzleServer.Common
         private TcpListener _listener;
         private bool _disposed;
         private const int BacklogSize = 50;
-        public ILogger Log { get; protected set; }
+        public abstract ILogger Log { get; }
 
         protected MapleServer(ServerManager manager)
         {
             Manager = manager;
-            Log = LogManager.LogByName(GetType().FullName);
             RegisterPacketHandlers();
             RegisterIgnorePacketPrints();
         }
@@ -60,7 +59,7 @@ namespace RazzleServer.Common
         {
             if (disposing)
             {
-                ShutDown();
+                Shutdown();
             }
         }
 
@@ -102,7 +101,7 @@ namespace RazzleServer.Common
             }
         }
 
-        public virtual void ShutDown()
+        public virtual void Shutdown()
         {
             try
             {
@@ -110,7 +109,6 @@ namespace RazzleServer.Common
                 {
                     client.Terminate("Server is shutting down");
                 }
-
                 _disposed = true;
                 _listener.Stop();
                 _listener.Server.Shutdown(SocketShutdown.Both);
@@ -133,7 +131,7 @@ namespace RazzleServer.Common
             catch (Exception e)
             {
                 Log.LogCritical(e, $"Error starting server on port [{port}]");
-                ShutDown();
+                Shutdown();
             }
 
             Task.Factory.StartNew(ListenLoop);

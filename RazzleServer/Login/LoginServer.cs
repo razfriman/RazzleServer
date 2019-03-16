@@ -4,16 +4,23 @@ using System.Net;
 using RazzleServer.Common.Server;
 using RazzleServer.Common;
 using RazzleServer.Game.Maple.Characters;
+using System;
+using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Extensions.Logging;
+using RazzleServer.Common.Util;
 
 namespace RazzleServer.Login
 {
     public class LoginServer : MapleServer<LoginClient, LoginPacketHandler>
     {
+
         public LoginServer(ServerManager manager) : base(manager)
         {
             Port = ServerConfig.Instance.LoginPort;
             Start(new IPAddress(new byte[] { 0, 0, 0, 0 }), Port);
         }
+
+        public override ILogger Log => LogManager.CreateLogger<LoginServer>();
 
         internal bool CharacterExists(string name, byte world)
         {

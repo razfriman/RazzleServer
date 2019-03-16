@@ -5,6 +5,7 @@ using RazzleServer.Common.Server;
 using RazzleServer.Common.Network;
 using RazzleServer.Common.Packet;
 using RazzleServer.Login.Maple;
+using RazzleServer.Common.Util;
 
 namespace RazzleServer.Login
 {
@@ -17,6 +18,8 @@ namespace RazzleServer.Login
         public string LastPassword { get; internal set; }
         public string[] MacAddresses { get; internal set; }
         public LoginServer Server { get; internal set; }
+
+        public override ILogger Log => LogManager.CreateLogger<LoginClient>();
 
         public LoginClient(Socket socket, LoginServer server)
             : base(socket)

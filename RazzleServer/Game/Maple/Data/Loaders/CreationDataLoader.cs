@@ -9,11 +9,11 @@ namespace RazzleServer.Game.Maple.Data.Loaders
     {
         public override string CacheName => "CreationData";
 
-        private readonly ILogger _log = LogManager.Log;
+        public override ILogger Log => LogManager.CreateLogger<CreationDataLoader>();
 
         public override void LoadFromWz()
         {
-            _log.LogInformation("Loading Character Creation Data");
+            Log.LogInformation("Loading Character Creation Data");
 
             using (var file = GetWzFile("Etc.wz"))
             {
