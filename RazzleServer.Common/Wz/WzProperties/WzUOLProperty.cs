@@ -1,7 +1,5 @@
-﻿#define UOLRES
-
-using System.Collections.Generic;
-using System.DrawingCore;
+﻿using System.Collections.Generic;
+using System.Drawing;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Util;
 using RazzleServer.Common.Wz.Util;
@@ -17,14 +15,17 @@ namespace RazzleServer.Common.Wz.WzProperties
         private static ILogger Log = LogManager.Log;
 
         #region Fields
+
         internal string val;
         internal WzObject linkVal;
+
         #endregion
 
         #region Inherited Members
+
         public override void SetValue(object value)
         {
-            val = (string)value;
+            val = (string) value;
         }
 
         public override WzImageProperty DeepClone()
@@ -35,27 +36,24 @@ namespace RazzleServer.Common.Wz.WzProperties
 
         public override object WzValue
         {
-            get
-            {
-#if UOLRES
-                return LinkValue;
-#else
-                return this;
-#endif
-            }
+            get { return LinkValue; }
         }
 
-#if UOLRES
+        public override List<WzImageProperty> WzProperties =>
+            LinkValue is WzImageProperty ? ((WzImageProperty) LinkValue).WzProperties : null;
 
-        public override List<WzImageProperty> WzProperties => LinkValue is WzImageProperty ? ((WzImageProperty)LinkValue).WzProperties : null;
-
-        public override WzImageProperty this[string name] => LinkValue is WzImageProperty ? ((WzImageProperty)LinkValue)[name] : LinkValue is WzImage ? ((WzImage)LinkValue)[name] : null;
+        public override WzImageProperty this[string name] => LinkValue is WzImageProperty
+            ?
+            ((WzImageProperty) LinkValue)[name]
+            : LinkValue is WzImage
+                ? ((WzImage) LinkValue)[name]
+                : null;
 
         public override WzImageProperty GetFromPath(string path)
         {
-            return LinkValue is WzImageProperty ? ((WzImageProperty)LinkValue).GetFromPath(path) : LinkValue is WzImage ? ((WzImage)LinkValue).GetFromPath(path) : null;
+            return LinkValue is WzImageProperty ? ((WzImageProperty) LinkValue).GetFromPath(path) :
+                LinkValue is WzImage ? ((WzImage) LinkValue).GetFromPath(path) : null;
         }
-#endif
 
         /// <summary>
         /// The WzPropertyType of the property
@@ -65,7 +63,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         public override void WriteValue(WzBinaryWriter writer)
         {
             writer.WriteStringValue("UOL", 0x73, 0x1B);
-            writer.Write((byte)0);
+            writer.Write((byte) 0);
             writer.WriteStringValue(Value, 0, 1);
         }
 
@@ -78,17 +76,20 @@ namespace RazzleServer.Common.Wz.WzProperties
             Name = null;
             val = null;
         }
+
         #endregion
 
         #region Custom Members
+
         /// <summary>
         /// The value of the property
         /// </summary>
-        public string Value { get => val;
+        public string Value
+        {
+            get => val;
             set => val = value;
         }
 
-#if UOLRES
         public WzObject LinkValue
         {
             get
@@ -97,7 +98,6 @@ namespace RazzleServer.Common.Wz.WzProperties
                 {
                     var paths = val.Split('/');
                     linkVal = Parent;
-                    var asdf = Parent.FullPath;
                     foreach (var path in paths)
                     {
                         if (path == "..")
@@ -108,15 +108,15 @@ namespace RazzleServer.Common.Wz.WzProperties
                         {
                             if (linkVal is WzImageProperty)
                             {
-                                linkVal = ((WzImageProperty)linkVal)[path];
+                                linkVal = ((WzImageProperty) linkVal)[path];
                             }
                             else if (linkVal is WzImage)
                             {
-                                linkVal = ((WzImage)linkVal)[path];
+                                linkVal = ((WzImage) linkVal)[path];
                             }
                             else if (linkVal is WzDirectory)
                             {
-                                linkVal = ((WzDirectory)linkVal)[path];
+                                linkVal = ((WzDirectory) linkVal)[path];
                             }
                             else
                             {
@@ -126,15 +126,17 @@ namespace RazzleServer.Common.Wz.WzProperties
                         }
                     }
                 }
+
                 return linkVal;
             }
         }
-#endif
 
         /// <summary>
         /// Creates a blank WzUOLProperty
         /// </summary>
-        public WzUOLProperty() { }
+        public WzUOLProperty()
+        {
+        }
 
         /// <summary>
         /// Creates a WzUOLProperty with the specified name
@@ -155,10 +157,11 @@ namespace RazzleServer.Common.Wz.WzProperties
             Name = name;
             val = value;
         }
+
         #endregion
 
         #region Cast Values
-#if UOLRES
+
         public override int GetInt()
         {
             return LinkValue.GetInt();
@@ -203,16 +206,12 @@ namespace RazzleServer.Common.Wz.WzProperties
         {
             return LinkValue.GetBytes();
         }
-#else
-        public override string GetString()
-        {
-            return val;
-        }
-#endif
+
         public override string ToString()
         {
             return val;
         }
+
         #endregion
     }
 }

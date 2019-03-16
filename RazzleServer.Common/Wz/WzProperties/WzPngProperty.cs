@@ -1,6 +1,6 @@
 ﻿using System;
-using System.DrawingCore;
-using System.DrawingCore.Imaging;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.IO.Compression;
 using System.Runtime.InteropServices;
@@ -278,7 +278,7 @@ namespace RazzleServer.Common.Wz.WzProperties
             {
                 case 1:
                     bmp = new Bitmap(width, height, PixelFormat.Format32bppArgb);
-                    bmpData = bmp.LockBits(new System.DrawingCore.Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+                    bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
                     uncompressedSize = width * height * 2;
                     decBuf = new byte[uncompressedSize];
                     zlib.Read(decBuf, 0, uncompressedSize);
@@ -293,7 +293,7 @@ namespace RazzleServer.Common.Wz.WzProperties
                     break;
                 case 2:
                     bmp = new Bitmap(width, height, PixelFormat.Format32bppArgb);
-                    bmpData = bmp.LockBits(new System.DrawingCore.Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+                    bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
                     uncompressedSize = width * height * 4;
                     decBuf = new byte[uncompressedSize];
                     zlib.Read(decBuf, 0, uncompressedSize);
@@ -349,14 +349,14 @@ namespace RazzleServer.Common.Wz.WzProperties
                             }
                         }
                     }
-                    bmpData = bmp.LockBits(new System.DrawingCore.Rectangle(System.DrawingCore.Point.Empty, bmp.Size), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+                    bmpData = bmp.LockBits(new System.Drawing.Rectangle(System.Drawing.Point.Empty, bmp.Size), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
                     Marshal.Copy(argb2, 0, bmpData.Scan0, argb2.Length);
                     bmp.UnlockBits(bmpData);
                     break;
 
                 case 513:
                     bmp = new Bitmap(width, height, PixelFormat.Format16bppRgb565);
-                    bmpData = bmp.LockBits(new System.DrawingCore.Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format16bppRgb565);
+                    bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format16bppRgb565);
                     uncompressedSize = width * height * 2;
                     decBuf = new byte[uncompressedSize];
                     zlib.Read(decBuf, 0, uncompressedSize);
@@ -387,7 +387,7 @@ namespace RazzleServer.Common.Wz.WzProperties
 
                 case 1026:
                     bmp = new Bitmap(width, height, PixelFormat.Format32bppArgb);
-                    bmpData = bmp.LockBits(new System.DrawingCore.Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+                    bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
                     uncompressedSize = width * height;
                     decBuf = new byte[uncompressedSize];
                     zlib.Read(decBuf, 0, uncompressedSize);
@@ -398,7 +398,7 @@ namespace RazzleServer.Common.Wz.WzProperties
 
                 case 2050: // thanks to Elem8100
                     bmp = new Bitmap(width, height, PixelFormat.Format32bppArgb);
-                    bmpData = bmp.LockBits(new System.DrawingCore.Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+                    bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
                     uncompressedSize = width * height;
                     decBuf = new byte[uncompressedSize];
                     zlib.Read(decBuf, 0, uncompressedSize);

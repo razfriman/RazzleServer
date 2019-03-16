@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.DrawingCore;
-using System.IO;
+using System.Drawing;
 using RazzleServer.Common.Wz.Util;
 
 namespace RazzleServer.Common.Wz.WzProperties
