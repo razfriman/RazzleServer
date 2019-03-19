@@ -4,7 +4,9 @@ services:
   razzleserver:
     image: razzleserver
     volumes:
-    - ./RazzleServer/ServerConfig.json:/app/ServerConfig.json:ro
+    - ./Data/ServerConfig.json:/app/ServerConfig.json
+    - ./Data/DataCache:/app/Data/DataCache
+    - ./Data/WZ:/app/Data/WZ:ro
     build:
       context: .
       dockerfile: RazzleServer/Dockerfile

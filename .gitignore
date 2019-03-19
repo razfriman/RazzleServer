@@ -11,6 +11,9 @@ project.lock.json
 RazzleServer.Benchmarks/BenchmarkDotNet.Artifacts/
 RazzleServer/*.db
 RazzleServer/*.db-journal
+Data/WZ
+Data/DataCache
+
 # Autosave files
 *~
 
