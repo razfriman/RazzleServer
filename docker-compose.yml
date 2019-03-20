@@ -3,13 +3,14 @@ version: '3.7'
 services:
   razzleserver:
     image: razzleserver
-    # ports:
-    #   - '8484:8484'
-    #   - '7575:7575'
+    ports:
+      - '8484:8484'
+      - '7575-7577:7575-7577'
     volumes:
       - ./Data/ServerConfig.json:/app/ServerConfig.json
       - ./Data/DataCache:/app/Data/DataCache
       - ./Data/WZ:/app/Data/WZ:ro
+      - ./Logs:/app/Logs
     build:
       context: .
       dockerfile: RazzleServer/Dockerfile
