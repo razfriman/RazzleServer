@@ -14,7 +14,7 @@ namespace RazzleServer.Game.Maple.Scripting
 
         protected AScriptLoader()
         {
-            _log = LogManager.LogByName(GetType().FullName);
+            _log = LogManager.Log;
         }
 
         public virtual async Task<T> Load()
