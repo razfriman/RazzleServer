@@ -17,7 +17,7 @@ namespace RazzleServer.Common.Wz.WzProperties
     /// </summary>
     public class WzSoundProperty : WzExtended
     {
-        public static readonly ILogger Log = LogManager.Log;
+        public static readonly ILogger Log = LogManager.CreateLogger<WzSoundProperty>();
 
         #region Fields
 

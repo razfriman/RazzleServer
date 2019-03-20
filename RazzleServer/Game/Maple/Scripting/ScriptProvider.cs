@@ -7,14 +7,14 @@ using RazzleServer.Game.Maple.Scripting.Loaders;
 
 namespace RazzleServer.Game.Maple.Scripting
 {
-    public static class ScriptProvider
+    public class ScriptProvider
     {
         public static CommandScripts Commands { get; private set; }
         public static NpcScripts Npcs { get; private set; }
         public static ReactorScripts Reactors { get; private set; }
         public static PortalScripts Portals { get; private set; }
 
-        private static readonly ILogger Log = LogManager.Log;
+        private static readonly ILogger Log = LogManager.CreateLogger<ScriptProvider>();
 
         public static async Task Initialize()
         {

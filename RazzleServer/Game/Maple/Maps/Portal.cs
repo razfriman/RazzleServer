@@ -13,7 +13,7 @@ namespace RazzleServer.Game.Maple.Maps
 {
     public class Portal : MapObject
     {
-        private readonly ILogger _log = LogManager.Log;
+        private readonly ILogger _log = LogManager.CreateLogger<Portal>();
 
         public byte Id { get; set; }
         public string Label { get; set; }

@@ -16,8 +16,8 @@ namespace RazzleServer.Common
     public class ServerManager : IHostedService
     {
         public LoginServer Login { get; set; }
-        public Worlds Worlds { get; } = new Worlds();
-        public Migrations Migrations { get; } = new Migrations();
+        public Worlds Worlds { get; }
+        public Migrations Migrations { get; }
 
         private readonly ILogger _logger;
 
@@ -25,6 +25,9 @@ namespace RazzleServer.Common
         {
             _logger = logger;
             LogManager.ServiceProvider = serviceProvider;
+            Worlds = new Worlds();
+            Migrations = new Migrations();
+            ;
         }
 
         public async Task Configure()

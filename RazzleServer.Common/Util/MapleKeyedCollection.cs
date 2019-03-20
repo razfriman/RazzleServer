@@ -15,7 +15,7 @@ namespace RazzleServer.Common.Util
 
         protected MapleKeyedCollection()
         {
-            Logger = LogManager.Log;
+            Logger = LogManager.CreateLogger<MapleKeyedCollection<TKey, TValue>>();
         }
 
         public TValue this[TKey key] => Objects.ContainsKey(key) ? Objects[key] : null;

@@ -32,7 +32,7 @@ namespace RazzleServer.Common.Server
         public bool RequestPin { get; set; } = true;
         public List<WorldConfig> Worlds { get; set; }
 
-        private static readonly ILogger Log = LogManager.Log;
+        private static readonly ILogger Log = LogManager.CreateLogger<ServerConfig>();
 
         public static async Task LoadFromFile(string path)
         {

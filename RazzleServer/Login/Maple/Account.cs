@@ -26,7 +26,7 @@ namespace RazzleServer.Login.Maple
         public int MaxCharacters { get; set; }
         public DateTime PermanentBanDate => DateTime.Now.AddYears(2);
         private bool Assigned { get; set; }
-        private readonly ILogger _log = LogManager.Log;
+        private readonly ILogger _log = LogManager.CreateLogger<Account>();
 
         public Account(LoginClient client)
         {

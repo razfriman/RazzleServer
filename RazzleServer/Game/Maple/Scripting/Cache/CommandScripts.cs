@@ -8,7 +8,7 @@ namespace RazzleServer.Game.Maple.Scripting.Cache
 {
     public sealed class CommandScripts : MapleKeyedCollection<string, ACommandScript>
     {
-        private readonly ILogger _log = LogManager.Log;
+        private readonly ILogger _log = LogManager.CreateLogger<CommandScripts>();
 
         public override string GetKey(ACommandScript item) => item.Name;
 

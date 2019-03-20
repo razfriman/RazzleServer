@@ -6,7 +6,7 @@ namespace RazzleServer.Game.Maple.Scripting
 {
     public abstract class AScriptLoader<T> where T : new()
     {
-        protected readonly ILogger _log;
+        protected readonly ILogger Log;
 
         public abstract string CacheName { get; }
 
@@ -14,13 +14,13 @@ namespace RazzleServer.Game.Maple.Scripting
 
         protected AScriptLoader()
         {
-            _log = LogManager.Log;
+            Log = LogManager.CreateLogger<AScriptLoader<T>>();
         }
 
         public virtual async Task<T> Load()
         {
             await LoadScripts();
-            _log.LogInformation($"Loaded [{CacheName}]");
+            Log.LogInformation($"Loaded [{CacheName}]");
             return Data;
         }
 

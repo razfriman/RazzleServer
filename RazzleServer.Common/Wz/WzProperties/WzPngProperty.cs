@@ -15,7 +15,7 @@ namespace RazzleServer.Common.Wz.WzProperties
     /// </summary>
     public class WzPngProperty : WzImageProperty
     {
-        public static readonly ILogger Log = LogManager.Log;
+        public static readonly ILogger Log = LogManager.CreateLogger<WzPngProperty>();
 
         #region Fields
 

@@ -10,9 +10,9 @@ namespace RazzleServer.Common.Wz.WzProperties
     /// <summary>
     /// A property that's value is a string
     /// </summary>
-    public class WzUOLProperty : WzExtended
+    public class WzUolProperty : WzExtended
     {
-        private static readonly ILogger Log = LogManager.Log;
+        private static readonly ILogger Log = LogManager.CreateLogger<WzUolProperty>();
 
         #region Fields
 
@@ -30,7 +30,7 @@ namespace RazzleServer.Common.Wz.WzProperties
 
         public override WzImageProperty DeepClone()
         {
-            var clone = new WzUOLProperty(Name, val) {linkVal = null};
+            var clone = new WzUolProperty(Name, val) {linkVal = null};
             return clone;
         }
 
@@ -129,7 +129,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// <summary>
         /// Creates a blank WzUOLProperty
         /// </summary>
-        public WzUOLProperty()
+        public WzUolProperty()
         {
         }
 
@@ -137,7 +137,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// Creates a WzUOLProperty with the specified name
         /// </summary>
         /// <param name="name">The name of the property</param>
-        public WzUOLProperty(string name)
+        public WzUolProperty(string name)
         {
             Name = name;
         }
@@ -147,7 +147,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// </summary>
         /// <param name="name">The name of the property</param>
         /// <param name="value">The value of the property</param>
-        public WzUOLProperty(string name, string value)
+        public WzUolProperty(string name, string value)
         {
             Name = name;
             val = value;

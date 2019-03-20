@@ -18,7 +18,7 @@ namespace RazzleServer.Common.Wz
     /// </summary>
     public class WzFile : WzObject
     {
-        public static readonly ILogger Log = LogManager.Log;
+        public static readonly ILogger Log = LogManager.CreateLogger<WzFile>();
 
         #region Fields
 

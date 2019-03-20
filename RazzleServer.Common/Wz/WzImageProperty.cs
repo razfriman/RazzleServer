@@ -209,9 +209,9 @@ namespace RazzleServer.Common.Wz
                     switch (reader.ReadByte())
                     {
                         case 0:
-                            return new WzUOLProperty(name, reader.ReadString()) {Parent = parent};
+                            return new WzUolProperty(name, reader.ReadString()) {Parent = parent};
                         case 1:
-                            return new WzUOLProperty(name, reader.ReadStringAtOffset(offset + reader.ReadInt32()))
+                            return new WzUolProperty(name, reader.ReadStringAtOffset(offset + reader.ReadInt32()))
                                 {Parent = parent};
                     }
 

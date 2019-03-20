@@ -17,7 +17,7 @@ namespace RazzleServer.Common.Network
         private readonly bool _toClient;
         private bool _disposed;
         private IPEndPoint Endpoint { get; }
-        private readonly ILogger _log = LogManager.Log;
+        private readonly ILogger _log = LogManager.CreateLogger<ClientSocket>();
 
         public MapleCipherProvider Crypto { get; }
         public bool Connected => !_disposed;

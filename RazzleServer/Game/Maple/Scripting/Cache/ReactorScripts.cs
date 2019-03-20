@@ -11,7 +11,7 @@ namespace RazzleServer.Game.Maple.Scripting.Cache
 {
     public sealed class ReactorScripts
     {
-        private readonly ILogger _log = LogManager.Log;
+        private readonly ILogger _log = LogManager.CreateLogger<ReactorScripts>();
 
         public Dictionary<string, Type> Data { get; set; } = new Dictionary<string, Type>();
 

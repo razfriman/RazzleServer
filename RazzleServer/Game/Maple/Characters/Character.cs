@@ -86,7 +86,7 @@ namespace RazzleServer.Game.Maple.Characters
         private string _chalkboard;
         private int _itemEffect;
 
-        private readonly ILogger _log = LogManager.Log;
+        private readonly ILogger _log = LogManager.CreateLogger<Character>();
 
         public Gender Gender
         {
