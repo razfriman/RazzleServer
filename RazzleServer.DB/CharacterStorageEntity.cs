@@ -9,5 +9,7 @@ namespace RazzleServer.Data
         public int AccountId { get; set; }
         public int Meso { get; set; }
         public byte Slots { get; set; }
+        
+        public AccountEntity Account { get; set; }
     }
 }

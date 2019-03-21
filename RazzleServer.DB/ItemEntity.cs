@@ -47,5 +47,8 @@ namespace RazzleServer.Data
         public short CustomExp { get; set; }
         public byte Enhancements { get; set; }
         public byte CustomLevel { get; set; }
+        
+        public AccountEntity Account { get; set; }
+        public CharacterEntity Character { get; set; }
     }
 }

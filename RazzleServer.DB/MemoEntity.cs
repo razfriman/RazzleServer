@@ -11,5 +11,7 @@ namespace RazzleServer.Data
         public string Sender { get; set; }
         public string Message { get; set; }
         public DateTime Received { get; set; }
+        
+        public CharacterEntity Character { get; set; }
     }
 }

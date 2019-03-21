@@ -10,5 +10,7 @@ namespace RazzleServer.Data
         public int Action { get; set; }
         public byte Key { get; set; }
         public byte Type { get; set; }
+        
+        public CharacterEntity Character { get; set; }
     }
 }

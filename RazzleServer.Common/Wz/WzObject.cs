@@ -158,7 +158,7 @@ namespace RazzleServer.Common.Wz
             using (var sr = new StreamWriter(stream))
             using (var writer = new JsonTextWriter(sr))
             {
-                serializer = serializer ?? new JsonSerializer
+                serializer ??= new JsonSerializer
                 {
                     Formatting = Formatting.Indented,
                     TypeNameHandling = TypeNameHandling.Auto

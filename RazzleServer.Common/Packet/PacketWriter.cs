@@ -116,7 +116,7 @@ namespace RazzleServer.Common.Packet
         /// <param name="writeValue">The string to write</param>
         public void WriteString(string writeValue)
         {
-            writeValue = writeValue ?? string.Empty;
+            writeValue ??= string.Empty;
 
             WriteShort(writeValue.Length);
             WriteString(writeValue, writeValue.Length);

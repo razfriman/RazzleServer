@@ -13,6 +13,7 @@ namespace RazzleServer.Data
         public short Quantity { get; set; }
         public int Price { get; set; }
         public int Sort { get; set; }
+        
         public ShopEntity Shop { get; set; }
     }
 }

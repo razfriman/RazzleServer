@@ -10,5 +10,7 @@ namespace RazzleServer.Data
         public int CharacterId { get; set; }
 
         public int CheatType { get; set; }
+
+        public CharacterEntity Character { get; set; }
     }
 }

@@ -23,6 +23,7 @@ namespace RazzleServer.Game.Scripts.Commands
                 ShowSyntax(caller);
                 return;
             }
+
             var type = args[0].StartsWith('-') ? args[0].Substring(1) : args[0];
             var query = args.Fuse(1);
 
@@ -41,12 +42,10 @@ namespace RazzleServer.Game.Scripts.Commands
             else if (type == "map")
             {
                 lookup = DataProvider.Strings.Maps;
-
             }
             else if (type == "mob")
             {
                 lookup = DataProvider.Strings.Mobs;
-
             }
             else if (type == "npc")
             {
@@ -86,7 +85,6 @@ namespace RazzleServer.Game.Scripts.Commands
             else
             {
                 caller.Notify("No result found.");
-
             }
         }
     }

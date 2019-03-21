@@ -14,104 +14,74 @@ namespace RazzleServer.Common.Wz.WzProperties
     {
         private static readonly ILogger Log = LogManager.CreateLogger<WzUolProperty>();
 
-        #region Fields
+        private WzObject _linkVal;
 
-        internal string val;
-        internal WzObject linkVal;
+        public override void SetValue(object value) => Value = (string)value;
 
-        #endregion
-
-        #region Inherited Members
-
-        public override void SetValue(object value)
-        {
-            val = (string) value;
-        }
-
-        public override WzImageProperty DeepClone()
-        {
-            var clone = new WzUolProperty(Name, val) {linkVal = null};
-            return clone;
-        }
+        public override WzImageProperty DeepClone() => new WzUolProperty(Name, Value) {_linkVal = null};
 
         public override object WzValue => LinkValue;
 
         public override List<WzImageProperty> WzProperties =>
-            LinkValue is WzImageProperty ? ((WzImageProperty) LinkValue).WzProperties : null;
+            (LinkValue as WzImageProperty)?.WzProperties;
 
-        public override WzImageProperty this[string name] => LinkValue is WzImageProperty
-            ?
-            ((WzImageProperty) LinkValue)[name]
+        public override WzImageProperty this[string name] => LinkValue is WzImageProperty property
+            ? property[name]
             : (LinkValue as WzImage)?[name];
 
-        public override WzImageProperty GetFromPath(string path)
-        {
-            return LinkValue is WzImageProperty property ? property.GetFromPath(path) :
-                (LinkValue as WzImage)?.GetFromPath(path);
-        }
+        public override WzImageProperty GetFromPath(string path) =>
+            LinkValue is WzImageProperty property
+                ? property.GetFromPath(path)
+                : (LinkValue as WzImage)?.GetFromPath(path);
 
-        /// <summary>
-        /// The WzPropertyType of the property
-        /// </summary>
         public override WzPropertyType PropertyType => WzPropertyType.UOL;
 
         public override void WriteValue(WzBinaryWriter writer)
         {
             writer.WriteStringValue("UOL", 0x73, 0x1B);
-            writer.Write((byte) 0);
+            writer.Write((byte)0);
             writer.WriteStringValue(Value, 0, 1);
         }
 
 
-        /// <summary>
-        /// Disposes the object
-        /// </summary>
         public override void Dispose()
         {
             Name = null;
-            val = null;
+            Value = null;
         }
-
-        #endregion
-
-        #region Custom Members
 
         /// <summary>
         /// The value of the property
         /// </summary>
-        public string Value
-        {
-            get => val;
-            set => val = value;
-        }
+        public string Value { get; set; }
 
         public WzObject LinkValue
         {
             get
             {
-                if (linkVal == null)
+                if (_linkVal == null)
                 {
-                    var paths = val.Split('/');
-                    linkVal = Parent;
+                    var paths = Value.Split('/');
+                    _linkVal = Parent;
                     foreach (var path in paths)
                     {
                         if (path == "..")
                         {
-                            linkVal = linkVal.Parent;
+                            _linkVal = _linkVal.Parent;
                         }
                         else
                         {
-                            if (linkVal is WzImageProperty)
+                            if (_linkVal is WzImageProperty property)
                             {
-                                linkVal = ((WzImageProperty) linkVal)[path];
+                                _linkVal = property[path];
                             }
-                            else if (linkVal is WzImage)
+                            else if (_linkVal is WzImage image)
                             {
-                                linkVal = ((WzImage) linkVal)[path];
+                                _linkVal = image[path];
                             }
-                            else if (linkVal is WzDirectory)
+                            else if (_linkVal is WzDirectory directory)
                             {
-                                linkVal = ((WzDirectory) linkVal)[path];
+                                _linkVal = directory[path];
                             }
                             else
                             {
@@ -122,7 +92,7 @@ namespace RazzleServer.Common.Wz.WzProperties
                     }
                 }
 
-                return linkVal;
+                return _linkVal;
             }
         }
 
@@ -150,63 +120,27 @@ namespace RazzleServer.Common.Wz.WzProperties
         public WzUolProperty(string name, string value)
         {
             Name = name;
-            val = value;
+            Value = value;
         }
 
-        #endregion
+        public override int GetInt() => LinkValue.GetInt();
 
-        #region Cast Values
+        public override short GetShort() => LinkValue.GetShort();
 
-        public override int GetInt()
-        {
-            return LinkValue.GetInt();
-        }
+        public override long GetLong() => LinkValue.GetLong();
 
-        public override short GetShort()
-        {
-            return LinkValue.GetShort();
-        }
+        public override float GetFloat() => LinkValue.GetFloat();
 
-        public override long GetLong()
-        {
-            return LinkValue.GetLong();
-        }
+        public override double GetDouble() => LinkValue.GetDouble();
 
-        public override float GetFloat()
-        {
-            return LinkValue.GetFloat();
-        }
+        public override string GetString() => LinkValue.GetString();
 
-        public override double GetDouble()
-        {
-            return LinkValue.GetDouble();
-        }
+        public override Point GetPoint() => LinkValue.GetPoint();
 
-        public override string GetString()
-        {
-            return LinkValue.GetString();
-        }
+        public override Bitmap GetBitmap() => LinkValue.GetBitmap();
 
-        public override Point GetPoint()
-        {
-            return LinkValue.GetPoint();
-        }
+        public override byte[] GetBytes() => LinkValue.GetBytes();
 
-        public override Bitmap GetBitmap()
-        {
-            return LinkValue.GetBitmap();
-        }
-
-        public override byte[] GetBytes()
-        {
-            return LinkValue.GetBytes();
-        }
-
-        public override string ToString()
-        {
-            return val;
-        }
-
-        #endregion
+        public override string ToString() => Value;
     }
 }

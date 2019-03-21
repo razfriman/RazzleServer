@@ -54,7 +54,7 @@ namespace RazzleServer.Game.Scripts.Commands
                     }
                     else
                     {
-                        caller.Notify(string.Format("[Command] Invalid map name \"{0}\".", mapName));
+                        caller.Notify($"[Command] Invalid map name: {mapName}");
                     }
                 }
             }

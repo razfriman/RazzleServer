@@ -190,7 +190,7 @@ namespace RazzleServer.Common.Crypto
         private void WriteHeaderToServer(Span<byte> data, int length)
         {
             int a = MapleIv.Hiword;
-            a = a ^ GameVersion;
+            a ^= GameVersion;
             var b = a ^ length;
             data[0] = (byte)(a % 0x100);
             data[1] = (byte)(a / 0x100);

@@ -13,5 +13,7 @@ namespace RazzleServer.Data
         public int SkillId { get; set; }
         public byte Level { get; set; }
         public byte MasterLevel { get; set; }
+        
+        public CharacterEntity Character { get; set; }
     }
 }

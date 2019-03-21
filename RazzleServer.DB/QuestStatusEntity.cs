@@ -12,5 +12,7 @@ namespace RazzleServer.Data
         public byte Status { get; set; }
         [MaxLength(0xFF)]
         public string CustomData { get; set; }
+        
+        public CharacterEntity Character { get; set; }
     }
 }

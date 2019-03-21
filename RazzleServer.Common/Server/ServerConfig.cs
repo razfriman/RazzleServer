@@ -90,6 +90,6 @@ namespace RazzleServer.Common.Server
         }
 
         private static ServerConfig _instance;
-        public static ServerConfig Instance => _instance ?? (_instance = new ServerConfig());
+        public static ServerConfig Instance => _instance ??= new ServerConfig();
     }
 }

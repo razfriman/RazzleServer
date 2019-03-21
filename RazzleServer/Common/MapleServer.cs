@@ -13,12 +13,14 @@ using RazzleServer.Common.Util;
 namespace RazzleServer.Common
 {
     public abstract class MapleServer<TClient, TPacketHandler>
-    where TClient : AClient
-    where TPacketHandler : APacketHandler<TClient>
+        where TClient : AClient
+        where TPacketHandler : APacketHandler<TClient>
     {
         public Dictionary<string, TClient> Clients { get; set; } = new Dictionary<string, TClient>();
 
-        public Dictionary<ClientOperationCode, List<TPacketHandler>> PacketHandlers { get; } = new Dictionary<ClientOperationCode, List<TPacketHandler>>();
+        public Dictionary<ClientOperationCode, List<TPacketHandler>> PacketHandlers { get; } =
+            new Dictionary<ClientOperationCode, List<TPacketHandler>>();
+
         public HashSet<ClientOperationCode> IgnorePacketPrintSet { get; } = new HashSet<ClientOperationCode>();
 
         public ushort Port;
@@ -87,10 +89,15 @@ namespace RazzleServer.Common
 
             try
             {
-                await client.SendHandshake();
-                client.Key = $"{ip}-{Functions.Random()}";
-                AddClient(client);
-                return client;
+                if (client != null)
+                {
+                    await client.SendHandshake();
+                    client.Key = $"{ip}-{Functions.Random()}";
+                    AddClient(client);
+                    return client;
+                }
+
+                return null;
             }
             catch (Exception e)
             {
@@ -109,6 +116,7 @@ namespace RazzleServer.Common
                 {
                     client.Terminate("Server is shutting down");
                 }
+
                 _disposed = true;
                 _listener.Stop();
                 _listener.Server.Shutdown(SocketShutdown.Both);
@@ -171,15 +179,15 @@ namespace RazzleServer.Common
         public void RegisterPacketHandlers()
         {
             var types = Assembly.GetEntryAssembly()
-                                .GetTypes()
-                                .Where(x => x.IsSubclassOf(typeof(TPacketHandler)));
+                .GetTypes()
+                .Where(x => x.IsSubclassOf(typeof(TPacketHandler)));
 
             foreach (var type in types)
             {
                 var attributes = type.GetTypeInfo()
-                                     .GetCustomAttributes()
-                                     .OfType<PacketHandlerAttribute>()
-                                     .ToList();
+                    .GetCustomAttributes()
+                    .OfType<PacketHandlerAttribute>()
+                    .ToList();
 
                 foreach (var attribute in attributes)
                 {

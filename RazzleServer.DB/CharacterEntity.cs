@@ -44,5 +44,6 @@ namespace RazzleServer.Data
         public int JobRank { get; set; }
         public int JobRankMove { get; set; }
 
+        public AccountEntity Account { get; set; }
     }
 }

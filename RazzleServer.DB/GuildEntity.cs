@@ -6,7 +6,7 @@ namespace RazzleServer.Data
     {
         [Key]
         public int Id { get; set; }
-        public int Leader { get; set; }
+        public int LeaderId { get; set; }
         public int Logo { get; set; }
         public int LogoBg { get; set; }
         public int Capacity { get; set; }
@@ -28,5 +28,7 @@ namespace RazzleServer.Data
         public string Rank4Title { get; set; }
         [MaxLength(45)]
         public string Rank5Title { get; set; }
+        
+        public CharacterEntity Leader { get; set; }
     }
 }

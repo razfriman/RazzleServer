@@ -4,8 +4,8 @@ namespace RazzleServer.Common.Util
 {
     public struct Point
     {
-        public short X { get; set; }
-        public short Y { get; set; }
+        public short X { get; }
+        public short Y { get; }
 
         public Point(short x, short y)
         {
