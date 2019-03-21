@@ -1,11 +1,11 @@
-version: '3.7'
+version: "3.7"
 
 services:
   razzleserver:
-    image: razzleserver
+    image: rfriman/razzleserver:latest
     ports:
-      - '8484:8484'
-      - '7575-7577:7575-7577'
+      - "8484:8484"
+      - "7575-7577:7575-7577"
     volumes:
       - ./Data/ServerConfig.json:/app/ServerConfig.json
       - ./Data/DataCache:/app/Data/DataCache
