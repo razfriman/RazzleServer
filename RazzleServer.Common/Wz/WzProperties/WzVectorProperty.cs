@@ -12,8 +12,8 @@ namespace RazzleServer.Common.Wz.WzProperties
         {
             if (value is Point point)
             {
-                X.val = point.X;
-                X.val = point.Y;
+                X.Value = point.X;
+                X.Value = point.Y;
             }
         }
 
@@ -75,6 +75,6 @@ namespace RazzleServer.Common.Wz.WzProperties
 
         public override Point GetPoint() => new Point(X.Value, Y.Value);
 
-        public override string ToString() => $"X: {X.val}, Y: {Y.val}";
+        public override string ToString() => $"X: {X.Value}, Y: {Y.Value}";
     }
 }

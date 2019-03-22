@@ -30,9 +30,6 @@ namespace RazzleServer.Common.Wz
 
         public WzDirectory WzDirectory { get; private set; } = new WzDirectory();
 
-        /// <summary>
-        /// The WzObjectType of the file
-        /// </summary>
         public override WzObjectType ObjectType => WzObjectType.File;
 
         /// <summary>

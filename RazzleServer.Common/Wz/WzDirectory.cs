@@ -6,6 +6,7 @@ using RazzleServer.Common.Wz.Util;
 
 namespace RazzleServer.Common.Wz
 {
+    /// <inheritdoc />
     /// <summary>
     /// A directory in the wz file, which may contain sub directories or wz images
     /// </summary>
@@ -19,7 +20,6 @@ namespace RazzleServer.Common.Wz
         private WzFile _wzFile;
 
         #endregion
-        
 
         #region Inherited Members
 
@@ -224,15 +224,15 @@ namespace RazzleServer.Common.Wz
             {
                 if (img.Changed)
                 {
-                    fs.Position = img.tempFileStart;
+                    fs.Position = img.TempFileStart;
                     var buffer = new byte[img.BlockSize];
                     fs.Read(buffer, 0, img.BlockSize);
                     wzWriter.Write(buffer);
                 }
                 else
                 {
-                    img.reader.BaseStream.Position = img.tempFileStart;
-                    wzWriter.Write(img.reader.ReadBytes((int)(img.tempFileEnd - img.tempFileStart)));
+                    img.Reader.BaseStream.Position = img.TempFileStart;
+                    wzWriter.Write(img.Reader.ReadBytes((int)(img.TempFileEnd - img.TempFileStart)));
                 }
             }
             foreach (var dir in WzDirectories)
@@ -266,15 +266,15 @@ namespace RazzleServer.Common.Wz
                     {
                         img.Checksum += b;
                     }
-                    img.tempFileStart = fileWrite.Position;
+                    img.TempFileStart = fileWrite.Position;
                     fileWrite.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    img.tempFileEnd = fileWrite.Position;
+                    img.TempFileEnd = fileWrite.Position;
                     memStream.Dispose();
                 }
                 else
                 {
-                    img.tempFileStart = img.Offset;
-                    img.tempFileEnd = img.Offset + img.BlockSize;
+                    img.TempFileStart = img.Offset;
+                    img.TempFileEnd = img.Offset + img.BlockSize;
                 }
                 img.UnparseImage();
 

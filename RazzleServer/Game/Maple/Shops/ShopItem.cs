@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using RazzleServer.Common.Packet;
 using RazzleServer.Data;
 using RazzleServer.Game.Maple.Data;
-using RazzleServer.Game.Maple.Data.References;
 
 namespace RazzleServer.Game.Maple.Shops
 {

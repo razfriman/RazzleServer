@@ -9,6 +9,7 @@ using Point = RazzleServer.Common.Util.Point;
 
 namespace RazzleServer.Common.Wz
 {
+    /// <inheritdoc />
     /// <summary>
     /// An abstract class for wz objects
     /// </summary>
@@ -93,57 +94,25 @@ namespace RazzleServer.Common.Wz
 
         [JsonIgnore] public virtual object WzValue => null;
 
-        #region Cast Values
+        public virtual int GetInt() => throw new NotImplementedException();
 
-        public virtual int GetInt()
-        {
-            throw new NotImplementedException();
-        }
+        public virtual short GetShort() => throw new NotImplementedException();
 
-        public virtual short GetShort()
-        {
-            throw new NotImplementedException();
-        }
+        public virtual long GetLong() => throw new NotImplementedException();
 
-        public virtual long GetLong()
-        {
-            throw new NotImplementedException();
-        }
+        public virtual float GetFloat() => throw new NotImplementedException();
 
-        public virtual float GetFloat()
-        {
-            throw new NotImplementedException();
-        }
+        public virtual double GetDouble() => throw new NotImplementedException();
 
-        public virtual double GetDouble()
-        {
-            throw new NotImplementedException();
-        }
+        public virtual string GetString() => throw new NotImplementedException();
 
-        public virtual string GetString()
-        {
-            throw new NotImplementedException();
-        }
+        public virtual Point GetPoint() => throw new NotImplementedException();
 
-        public virtual Point GetPoint()
-        {
-            throw new NotImplementedException();
-        }
+        public virtual Bitmap GetBitmap() => throw new NotImplementedException();
 
-        public virtual Bitmap GetBitmap()
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual byte[] GetBytes()
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion
+        public virtual byte[] GetBytes() => throw new NotImplementedException();
 
         public virtual IEnumerable<WzObject> GetObjects() => Enumerable.Empty<WzObject>();
-
 
         public void Serialize(string path, JsonSerializer serializer = null)
         {

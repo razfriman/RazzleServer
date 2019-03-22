@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using RazzleServer.Common.Wz.Util;
@@ -14,8 +13,6 @@ namespace RazzleServer.Common.Wz
     /// </summary>
     public abstract class WzImageProperty : WzObject
     {
-        #region Virtual\Abstract Members
-
         public virtual List<WzImageProperty> WzProperties { get; set; } = new List<WzImageProperty>();
 
         public new virtual WzImageProperty this[string name]
@@ -63,10 +60,6 @@ namespace RazzleServer.Common.Wz
         public override void Remove() => ((IPropertyContainer) Parent)?.RemoveProperty(this);
 
         public override WzFile WzFileParent => ParentImage.WzFileParent;
-
-        #endregion
-
-        #region Extended Properties Parsing
 
         internal static void WritePropertyList(WzBinaryWriter writer, List<WzImageProperty> properties)
         {
@@ -184,7 +177,7 @@ namespace RazzleServer.Common.Wz
                         canvasProp.AddProperties(ParsePropertyList(offset, reader, canvasProp, imgParent));
                     }
 
-                    canvasProp.PngProperty = new WzPngProperty(reader, imgParent.parseEverything) {Parent = canvasProp};
+                    canvasProp.PngProperty = new WzPngProperty(reader, imgParent.ParseEverything) {Parent = canvasProp};
                     return canvasProp;
                 case "Shape2D#Vector2D":
                     var vecProp = new WzVectorProperty(name) {Parent = parent};
@@ -202,7 +195,7 @@ namespace RazzleServer.Common.Wz
 
                     return convexProp;
                 case "Sound_DX8":
-                    var soundProp = new WzSoundProperty(name, reader, imgParent.parseEverything) {Parent = parent};
+                    var soundProp = new WzSoundProperty(name, reader, imgParent.ParseEverything) {Parent = parent};
                     return soundProp;
                 case "UOL":
                     reader.BaseStream.Position++;
@@ -279,14 +272,12 @@ namespace RazzleServer.Common.Wz
                 case WzPropertyType.Double:
                 case WzPropertyType.String:
                 case WzPropertyType.Sound:
-                case WzPropertyType.UOL:
-                case WzPropertyType.PNG:
+                case WzPropertyType.Uol:
+                case WzPropertyType.Png:
                     break;
             }
 
             return objList;
         }
-
-        #endregion
     }
 }

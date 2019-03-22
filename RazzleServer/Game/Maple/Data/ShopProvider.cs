@@ -77,7 +77,7 @@ namespace RazzleServer.Game.Maple.Data
                         {
                             TierId = item.TierId,
                             ItemId = item.ItemId,
-                            Price = item.Price,
+                            Price = item.Price
                         });
                     }
 
@@ -123,7 +123,7 @@ namespace RazzleServer.Game.Maple.Data
                         {
                             ShopId = item.ShopId,
                             NpcId = item.NpcId,
-                            RechargeTier = item.RechargeTier,
+                            RechargeTier = item.RechargeTier
                         });
                     }
 

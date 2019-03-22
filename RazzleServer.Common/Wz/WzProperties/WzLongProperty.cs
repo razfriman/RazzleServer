@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using RazzleServer.Common.Wz.Util;
 
 namespace RazzleServer.Common.Wz.WzProperties

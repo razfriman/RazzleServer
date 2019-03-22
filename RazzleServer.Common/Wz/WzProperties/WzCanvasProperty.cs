@@ -10,11 +10,7 @@ namespace RazzleServer.Common.Wz.WzProperties
     /// </summary>
     public class WzCanvasProperty : WzExtended, IPropertyContainer
     {
-        #region Inherited Members
-        public override void SetValue(object value)
-        {
-            PngProperty = (WzPngProperty)value;
-        }
+        public override void SetValue(object value) => PngProperty = (WzPngProperty)value;
 
         public override WzImageProperty DeepClone()
         {
@@ -30,16 +26,8 @@ namespace RazzleServer.Common.Wz.WzProperties
 
         public override object WzValue => PngProperty;
 
-        /// <summary>
-        /// The WzPropertyType of the property
-        /// </summary>
         public override WzPropertyType PropertyType => WzPropertyType.Canvas;
 
-        /// <summary>
-        /// Gets a wz property by it's name
-        /// </summary>
-        /// <param name="name">The name of the property</param>
-        /// <returns>The wz property with the specified name</returns>
         public override WzImageProperty this[string name]
         {
             get
@@ -146,9 +134,7 @@ namespace RazzleServer.Common.Wz.WzProperties
             WzProperties?.Clear();
             WzProperties = null;
         }
-        #endregion
 
-        #region Custom Members
         /// <summary>
         /// The png image for this canvas property
         /// </summary>
@@ -202,12 +188,7 @@ namespace RazzleServer.Common.Wz.WzProperties
 
             WzProperties.Clear();
         }
-        #endregion
-
-        #region Cast Values
 
         public override Bitmap GetBitmap() => PngProperty.GetPng(false);
-
-        #endregion
     }
 }

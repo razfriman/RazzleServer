@@ -12,18 +12,12 @@ namespace RazzleServer.Common.Wz
     /// </summary>
     public class WzImage : WzObject, IPropertyContainer
     {
-        #region Fields
+        private List<WzImageProperty> _properties = new List<WzImageProperty>();
 
-        internal WzBinaryReader reader;
-        internal List<WzImageProperty> properties = new List<WzImageProperty>();
-        internal int blockStart;
-        internal long tempFileStart;
-        internal long tempFileEnd;
-        internal bool parseEverything;
-
-        #endregion
-
-        #region Constructors\Destructors
+        internal WzBinaryReader Reader { get; }
+        public bool ParseEverything { get; private set; }
+        internal long TempFileStart { get; set; }
+        internal long TempFileEnd { get; set; }
 
         /// <summary>
         /// Creates a blank WzImage
@@ -44,28 +38,24 @@ namespace RazzleServer.Common.Wz
         public WzImage(string name, Stream dataStream, WzMapleVersionType mapleVersion)
         {
             Name = name;
-            reader = new WzBinaryReader(dataStream, WzTool.GetIvByMapleVersion(mapleVersion));
+            Reader = new WzBinaryReader(dataStream, WzTool.GetIvByMapleVersion(mapleVersion));
         }
 
         internal WzImage(string name, WzBinaryReader reader)
         {
             Name = name;
-            this.reader = reader;
-            blockStart = (int) reader.BaseStream.Position;
+            Reader = reader;
+            BlockStart = (int)reader.BaseStream.Position;
         }
 
         public override void Dispose()
         {
             Name = null;
-            reader = null;
-            properties?.ForEach(x => x.Dispose());
-            properties?.Clear();
-            properties = null;
+            Reader?.Dispose();
+            _properties?.ForEach(x => x.Dispose());
+            _properties?.Clear();
+            _properties = null;
         }
-
-        #endregion
-
-        #region Inherited Members
 
         public override WzFile WzFileParent => Parent?.WzFileParent;
 
@@ -99,7 +89,7 @@ namespace RazzleServer.Common.Wz
         [JsonIgnore]
         public uint Offset { get; set; }
 
-        [JsonIgnore] public int BlockStart => blockStart;
+        [JsonIgnore] public int BlockStart { get; }
 
         /// <summary>
         /// The WzObjectType of the image
@@ -108,7 +98,7 @@ namespace RazzleServer.Common.Wz
         {
             get
             {
-                if (reader != null)
+                if (Reader != null)
                 {
                     if (!Parsed)
                     {
@@ -127,24 +117,24 @@ namespace RazzleServer.Common.Wz
         {
             get
             {
-                if (reader != null && !Parsed)
+                if (Reader != null && !Parsed)
                 {
                     ParseImage();
                 }
 
-                return properties;
+                return _properties;
             }
         }
 
         public WzImage DeepClone()
         {
-            if (reader != null && !Parsed)
+            if (Reader != null && !Parsed)
             {
                 ParseImage();
             }
 
             var clone = new WzImage(Name) {Changed = true};
-            foreach (var prop in properties)
+            foreach (var prop in _properties)
             {
                 clone.AddProperty(prop.DeepClone());
             }
@@ -161,7 +151,7 @@ namespace RazzleServer.Common.Wz
         {
             get
             {
-                if (reader != null)
+                if (Reader != null)
                 {
                     if (!Parsed)
                     {
@@ -169,7 +159,7 @@ namespace RazzleServer.Common.Wz
                     }
                 }
 
-                foreach (var iwp in properties)
+                foreach (var iwp in _properties)
                 {
                     if (iwp.Name.ToLower() == name.ToLower())
                     {
@@ -189,10 +179,6 @@ namespace RazzleServer.Common.Wz
             }
         }
 
-        #endregion
-
-        #region Custom Members
-
         /// <summary>
         /// Gets a WzImageProperty from a path
         /// </summary>
@@ -200,7 +186,7 @@ namespace RazzleServer.Common.Wz
         /// <returns>the selected WzImageProperty</returns>
         public WzImageProperty GetFromPath(string path)
         {
-            if (reader != null)
+            if (Reader != null)
             {
                 if (!Parsed)
                 {
@@ -218,7 +204,7 @@ namespace RazzleServer.Common.Wz
             foreach (var segment in segments)
             {
                 var foundChild = false;
-                foreach (var iwp in ret == null ? properties : ret.WzProperties)
+                foreach (var iwp in ret == null ? _properties : ret.WzProperties)
                 {
                     if (iwp.Name == segment)
                     {
@@ -244,12 +230,12 @@ namespace RazzleServer.Common.Wz
         public void AddProperty(WzImageProperty prop)
         {
             prop.Parent = this;
-            if (reader != null && !Parsed)
+            if (Reader != null && !Parsed)
             {
                 ParseImage();
             }
 
-            properties.Add(prop);
+            _properties.Add(prop);
         }
 
         public void AddProperties(IEnumerable<WzImageProperty> props)
@@ -266,36 +252,32 @@ namespace RazzleServer.Common.Wz
         /// <param name="prop">The property to remove</param>
         public void RemoveProperty(WzImageProperty prop)
         {
-            if (reader != null && !Parsed)
+            if (Reader != null && !Parsed)
             {
                 ParseImage();
             }
 
             prop.Parent = null;
-            properties.Remove(prop);
+            _properties.Remove(prop);
         }
 
         public void ClearProperties()
         {
-            foreach (var prop in properties)
+            foreach (var prop in _properties)
             {
                 prop.Parent = null;
             }
 
-            properties.Clear();
+            _properties.Clear();
         }
 
         public override void Remove()
         {
-            ((WzDirectory) Parent).RemoveImage(this);
+            ((WzDirectory)Parent).RemoveImage(this);
         }
 
-        #endregion
-
-        #region Parsing Methods
-
         /// <summary>
-        /// Parses the image from the wz filetod
+        /// Parses the image from the wz file
         /// </summary>
         public void ParseImage(bool parseEverything)
         {
@@ -310,15 +292,15 @@ namespace RazzleServer.Common.Wz
                 return;
             }
 
-            this.parseEverything = parseEverything;
-            reader.BaseStream.Position = Offset;
-            var b = reader.ReadByte();
-            if (b != 0x73 || reader.ReadString() != "Property" || reader.ReadUInt16() != 0)
+            ParseEverything = parseEverything;
+            Reader.BaseStream.Position = Offset;
+            var b = Reader.ReadByte();
+            if (b != 0x73 || Reader.ReadString() != "Property" || Reader.ReadUInt16() != 0)
             {
                 return;
             }
 
-            properties.AddRange(WzImageProperty.ParsePropertyList(Offset, reader, this, this));
+            _properties.AddRange(WzImageProperty.ParsePropertyList(Offset, Reader, this, this));
             Parsed = true;
         }
 
@@ -338,15 +320,15 @@ namespace RazzleServer.Common.Wz
                 return;
             }
 
-            parseEverything = false;
-            reader.BaseStream.Position = Offset;
-            var b = reader.ReadByte();
-            if (b != 0x73 || reader.ReadString() != "Property" || reader.ReadUInt16() != 0)
+            ParseEverything = false;
+            Reader.BaseStream.Position = Offset;
+            var b = Reader.ReadByte();
+            if (b != 0x73 || Reader.ReadString() != "Property" || Reader.ReadUInt16() != 0)
             {
                 return;
             }
 
-            properties.AddRange(WzImageProperty.ParsePropertyList(Offset, reader, this, this));
+            _properties.AddRange(WzImageProperty.ParsePropertyList(Offset, Reader, this, this));
             Parsed = true;
         }
 
@@ -356,10 +338,10 @@ namespace RazzleServer.Common.Wz
             get
             {
                 byte[] blockData = null;
-                if (reader != null && BlockSize > 0)
+                if (Reader != null && BlockSize > 0)
                 {
-                    blockData = reader.ReadBytes(BlockSize);
-                    reader.BaseStream.Position = blockStart;
+                    blockData = Reader.ReadBytes(BlockSize);
+                    Reader.BaseStream.Position = BlockStart;
                 }
 
                 return blockData;
@@ -369,14 +351,14 @@ namespace RazzleServer.Common.Wz
         public void UnparseImage()
         {
             Parsed = false;
-            properties = new List<WzImageProperty>();
+            _properties = new List<WzImageProperty>();
         }
 
         internal void SaveImage(WzBinaryWriter writer)
         {
             if (Changed)
             {
-                if (reader != null && !Parsed)
+                if (Reader != null && !Parsed)
                 {
                     ParseImage();
                 }
@@ -386,14 +368,14 @@ namespace RazzleServer.Common.Wz
                 imgProp.AddProperties(WzProperties);
                 imgProp.WriteValue(writer);
                 writer.StringCache.Clear();
-                BlockSize = (int) (writer.BaseStream.Position - startPos);
+                BlockSize = (int)(writer.BaseStream.Position - startPos);
             }
             else
             {
-                var pos = reader.BaseStream.Position;
-                reader.BaseStream.Position = Offset;
-                writer.Write(reader.ReadBytes(BlockSize));
-                reader.BaseStream.Position = pos;
+                var pos = Reader.BaseStream.Position;
+                Reader.BaseStream.Position = Offset;
+                writer.Write(Reader.ReadBytes(BlockSize));
+                Reader.BaseStream.Position = pos;
             }
         }
 
@@ -405,9 +387,8 @@ namespace RazzleServer.Common.Wz
                 objList.Add(prop);
                 objList.AddRange(prop.GetObjects());
             }
+
             return objList;
         }
-
-        #endregion
     }
 }

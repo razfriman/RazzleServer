@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using RazzleServer.Common.Wz.Util;
 
 namespace RazzleServer.Common.Wz.WzProperties
 {
     /// <summary>
-    /// A property that contains several WzExtendedPropertys
+    /// A property that contains several WzExtendedProperties
     /// </summary>
     public class WzConvexProperty : WzExtended, IPropertyContainer
     {
@@ -15,10 +14,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         #endregion
 
         #region Inherited Members
-        public override void SetValue(object value)
-        {
-            throw new NotImplementedException();
-        }
+        public override void SetValue(object value) => throw new NotImplementedException();
 
         public override WzImageProperty DeepClone()
         {
@@ -31,16 +27,8 @@ namespace RazzleServer.Common.Wz.WzProperties
             return clone;
         }
 
-        /// <summary>
-        /// The WzPropertyType of the property
-        /// </summary>
         public override WzPropertyType PropertyType => WzPropertyType.Convex;
 
-        /// <summary>
-        /// Gets a wz property by it's name
-        /// </summary>
-        /// <param name="name">The name of the property</param>
-        /// <returns>The wz property with the specified name</returns>
         public override WzImageProperty this[string name]
         {
             get
@@ -70,11 +58,6 @@ namespace RazzleServer.Common.Wz.WzProperties
             return null;
         }
 
-        /// <summary>
-        /// Gets a wz property by a path name
-        /// </summary>
-        /// <param name="path">path to property</param>
-        /// <returns>the wz property with the specified name</returns>
         public override WzImageProperty GetFromPath(string path)
         {
             var segments = path.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
@@ -125,7 +108,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         {
             Name = null;
             properties?.ForEach(x => x.Dispose());
-            properties.Clear();
+            properties?.Clear();
             properties = null;
         }
 

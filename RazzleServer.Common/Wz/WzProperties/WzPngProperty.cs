@@ -53,7 +53,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// <summary>
         /// The WzPropertyType of the property
         /// </summary>
-        public override WzPropertyType PropertyType => WzPropertyType.PNG;
+        public override WzPropertyType PropertyType => WzPropertyType.Png;
 
         public override void WriteValue(WzBinaryWriter writer)
         {
@@ -289,7 +289,7 @@ namespace RazzleServer.Common.Wz.WzProperties
                     var blocksize = reader.ReadInt32();
                     for (var i = 0; i < blocksize; i++)
                     {
-                        dataStream.WriteByte((byte) (reader.ReadByte() ^ imgParent.reader.WzKey[i]));
+                        dataStream.WriteByte((byte) (reader.ReadByte() ^ imgParent.Reader.WzKey[i]));
                     }
                 }
 

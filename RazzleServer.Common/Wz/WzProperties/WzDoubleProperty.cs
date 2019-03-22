@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using System.IO;
 using RazzleServer.Common.Wz.Util;
 
 namespace RazzleServer.Common.Wz.WzProperties
@@ -23,9 +22,6 @@ namespace RazzleServer.Common.Wz.WzProperties
 
 		public override object WzValue => Value;
 
-		/// <summary>
-		/// The WzPropertyType of the property
-		/// </summary>
 		public override WzPropertyType PropertyType => WzPropertyType.Double;
 
 		public override void WriteValue(WzBinaryWriter writer)
@@ -70,36 +66,16 @@ namespace RazzleServer.Common.Wz.WzProperties
 		}
 		#endregion
 
-        #region Cast Values
-        public override float GetFloat()
-        {
-            return (float)Value;
-        }
+        public override float GetFloat() => (float)Value;
 
-        public override double GetDouble()
-        {
-            return Value;
-        }
+        public override double GetDouble() => Value;
 
-        public override int GetInt()
-        {
-            return (int)Value;
-        }
+        public override int GetInt() => (int)Value;
 
-        public override short GetShort()
-        {
-            return (short)Value;
-        }
+        public override short GetShort() => (short)Value;
 
-        public override long GetLong()
-        {
-            return (long)Value;
-        }
+        public override long GetLong() => (long)Value;
 
-        public override string ToString()
-        {
-            return Value.ToString(CultureInfo.CurrentCulture);
-        }
-        #endregion
+        public override string ToString() => Value.ToString(CultureInfo.CurrentCulture);
 	}
 }

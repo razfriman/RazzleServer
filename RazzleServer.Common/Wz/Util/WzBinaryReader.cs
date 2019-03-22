@@ -12,22 +12,23 @@ namespace RazzleServer.Common.Wz.Util
 
         public WzHeader Header { get; set; }
 
-        public WzBinaryReader(Stream input, byte[] WzIv)
-            : base(input) => WzKey = WzKeyGenerator.GenerateWzKey(WzIv);
+        public WzBinaryReader(Stream input, byte[] wzIv)
+            : base(input) => WzKey = WzKeyGenerator.GenerateWzKey(wzIv);
 
-        public string ReadStringAtOffset(long Offset) => ReadStringAtOffset(Offset, false);
+        public string ReadStringAtOffset(long offset) => ReadStringAtOffset(offset, false);
 
-        public string ReadStringAtOffset(long Offset, bool readByte)
+        public string ReadStringAtOffset(long offset, bool readByte)
         {
-            var CurrentOffset = BaseStream.Position;
-            BaseStream.Position = Offset;
+            var currentOffset = BaseStream.Position;
+            BaseStream.Position = offset;
             if (readByte)
             {
                 ReadByte();
             }
-            var ReturnString = ReadString();
-            BaseStream.Position = CurrentOffset;
-            return ReturnString;
+
+            var returnString = ReadString();
+            BaseStream.Position = currentOffset;
+            return returnString;
         }
 
         public override string ReadString()
@@ -39,51 +40,43 @@ namespace RazzleServer.Common.Wz.Util
                 return string.Empty;
             }
 
-            int length;
+            return smallLength > 0 ? ReadUnicodeString(smallLength) : ReadAsciiString(smallLength);
+        }
+
+        private string ReadAsciiString(sbyte smallLength)
+        {
             var retString = new StringBuilder();
-            if (smallLength > 0) // Unicode
+            byte mask = 0xAA;
+            var length = smallLength == sbyte.MinValue ? ReadInt32() : -smallLength;
+
+            for (var i = 0; i < length; i++)
             {
-                ushort mask = 0xAAAA;
-                length = smallLength == sbyte.MaxValue ? ReadInt32() : smallLength;
-                if (length <= 0)
-                {
-                    return string.Empty;
-                }
-
-                for (var i = 0; i < length; i++)
-                {
-                    var encryptedChar = ReadUInt16();
-                    encryptedChar ^= mask;
-                    encryptedChar ^= (ushort)((WzKey[i * 2 + 1] << 8) + WzKey[i * 2]);
-                    retString.Append((char)encryptedChar);
-                    mask++;
-                }
+                var encryptedChar = ReadByte();
+                encryptedChar ^= mask;
+                encryptedChar ^= WzKey[i];
+                retString.Append((char)encryptedChar);
+                mask++;
             }
-            else
-            { // ASCII
-                byte mask = 0xAA;
-                if (smallLength == sbyte.MinValue)
-                {
-                    length = ReadInt32();
-                }
-                else
-                {
-                    length = -smallLength;
-                }
-                if (length <= 0)
-                {
-                    return string.Empty;
-                }
 
-                for (var i = 0; i < length; i++)
-                {
-                    var encryptedChar = ReadByte();
-                    encryptedChar ^= mask;
-                    encryptedChar ^= WzKey[i];
-                    retString.Append((char)encryptedChar);
-                    mask++;
-                }
+            return retString.ToString();
+        }
+
+        private string ReadUnicodeString(sbyte smallLength)
+        {
+            var retString = new StringBuilder();
+            ushort mask = 0xAAAA;
+            var length = smallLength == sbyte.MaxValue ? ReadInt32() : smallLength;
+
+
+            for (var i = 0; i < length; i++)
+            {
+                var encryptedChar = ReadUInt16();
+                encryptedChar ^= mask;
+                encryptedChar ^= (ushort)((WzKey[i * 2 + 1] << 8) + WzKey[i * 2]);
+                retString.Append((char)encryptedChar);
+                mask++;
             }
+
             return retString.ToString();
         }
 
@@ -102,6 +95,7 @@ namespace RazzleServer.Common.Wz.Util
                 retString.Append((char)b);
                 b = ReadByte();
             }
+
             return retString.ToString();
         }
 
@@ -119,12 +113,12 @@ namespace RazzleServer.Common.Wz.Util
 
         public uint ReadOffset()
         {
+            var encryptedOffset = ReadUInt32();
             var offset = (uint)BaseStream.Position;
             offset = (offset - Header.FStart) ^ uint.MaxValue;
             offset *= Hash;
             offset -= CryptoConstants.WzOffsetConstant;
             offset = WzTool.RotateLeft(offset, (byte)(offset & 0x1F));
-            var encryptedOffset = ReadUInt32();
             offset ^= encryptedOffset;
             offset += Header.FStart * 2;
             return offset;
@@ -132,24 +126,22 @@ namespace RazzleServer.Common.Wz.Util
 
         public string DecryptString(char[] stringToDecrypt)
         {
-            var outputString = "";
+            var builder = new StringBuilder(stringToDecrypt.Length);
             for (var i = 0; i < stringToDecrypt.Length; i++)
             {
-                outputString += (char)(stringToDecrypt[i] ^ (char)((WzKey[i * 2 + 1] << 8) + WzKey[i * 2]));
+                builder.Append((char)(stringToDecrypt[i] ^ (char)((WzKey[i * 2 + 1] << 8) + WzKey[i * 2])));
             }
-
-            return outputString;
+            return builder.ToString();
         }
 
         public string DecryptNonUnicodeString(char[] stringToDecrypt)
         {
-            var outputString = "";
+            var builder = new StringBuilder(stringToDecrypt.Length);
             for (var i = 0; i < stringToDecrypt.Length; i++)
             {
-                outputString += (char)(stringToDecrypt[i] ^ WzKey[i]);
+                builder.Append((char)(stringToDecrypt[i] ^ WzKey[i]));
             }
-
-            return outputString;
+            return builder.ToString();
         }
 
         public string ReadStringBlock(uint offset)

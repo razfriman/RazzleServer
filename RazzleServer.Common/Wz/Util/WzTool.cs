@@ -9,7 +9,7 @@ namespace RazzleServer.Common.Wz.Util
     {
         public const int WzHeader = 0x31474B50; //PKG1
 
-        public static Hashtable StringCache = new Hashtable();
+        public static readonly Hashtable StringCache = new Hashtable();
 
         public static uint RotateLeft(uint x, byte n) => (x << n) | (x >> (32 - n));
 
@@ -190,10 +190,10 @@ namespace RazzleServer.Common.Wz.Util
 
         public static bool IsListFile(string path)
         {
-            var reader = new BinaryReader(File.OpenRead(path));
-            var result = reader.ReadInt32() != WzHeader;
-            reader.Close();
-            return result;
+            using (var reader = new BinaryReader(File.OpenRead(path)))
+            {
+                return reader.ReadInt32() != WzHeader;
+            }
         }
     }
 }

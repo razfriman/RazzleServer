@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using RazzleServer.Common.Wz.Util;
 
 namespace RazzleServer.Common.Wz.WzProperties
@@ -10,11 +9,7 @@ namespace RazzleServer.Common.Wz.WzProperties
     /// </summary>
     public class WzSubProperty : WzExtended, IPropertyContainer
     {
-        #region Inherited Members
-        public override void SetValue(object value)
-        {
-            throw new NotImplementedException();
-        }
+        public override void SetValue(object value) => throw new NotImplementedException();
 
         public override WzImageProperty DeepClone()
         {
@@ -114,9 +109,7 @@ namespace RazzleServer.Common.Wz.WzProperties
             WzProperties.Clear();
             WzProperties = null;
         }
-        #endregion
 
-        #region Custom Members
         /// <summary>
         /// Creates a blank WzSubProperty
         /// </summary>
@@ -162,6 +155,5 @@ namespace RazzleServer.Common.Wz.WzProperties
 
             WzProperties.Clear();
         }
-        #endregion
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using RazzleServer.Common.Util;
 
 namespace RazzleServer.Game.Maple.Maps

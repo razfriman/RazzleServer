@@ -4,8 +4,6 @@ using System.Net;
 using RazzleServer.Common.Server;
 using RazzleServer.Common;
 using RazzleServer.Game.Maple.Characters;
-using System;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Util;
 

@@ -23,12 +23,12 @@ namespace RazzleServer.Common.Wz
         /// Parses a wz list file on the disk
         /// </summary>
         /// <param name="filePath">Path to the wz file</param>
-        /// <param name="WzIv"></param>
-        public static List<string> ParseListFile(string filePath, byte[] WzIv)
+        /// <param name="wzIv"></param>
+        public static List<string> ParseListFile(string filePath, byte[] wzIv)
         {
             var listEntries = new List<string>();
             var wzFileBytes = File.ReadAllBytes(filePath);
-            var wzParser = new WzBinaryReader(new MemoryStream(wzFileBytes), WzIv);
+            var wzParser = new WzBinaryReader(new MemoryStream(wzFileBytes), wzIv);
             while (wzParser.PeekChar() != -1)
             {
                 var len = wzParser.ReadInt32();
@@ -54,12 +54,12 @@ namespace RazzleServer.Common.Wz
             SaveToDisk(path, WzTool.GetIvByMapleVersion(version), listEntries);
         }
 
-        public static void SaveToDisk(string path, byte[] WzIv, List<string> listEntries)
+        public static void SaveToDisk(string path, byte[] wzIv, List<string> listEntries)
         {
             var lastIndex = listEntries.Count - 1;
             var lastEntry = listEntries[lastIndex];
             listEntries[lastIndex] = lastEntry.Substring(0, lastEntry.Length - 1) + "/";
-            var wzWriter = new WzBinaryWriter(File.Create(path), WzIv);
+            var wzWriter = new WzBinaryWriter(File.Create(path), wzIv);
             foreach (var entry in listEntries)
             {
                 wzWriter.Write(entry.Length);

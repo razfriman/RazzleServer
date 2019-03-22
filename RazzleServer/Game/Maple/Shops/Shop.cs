@@ -4,7 +4,6 @@ using RazzleServer.Common.Packet;
 using RazzleServer.Data;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
-using RazzleServer.Game.Maple.Life;
 
 namespace RazzleServer.Game.Maple.Shops
 {

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
-using RazzleServer.Game.Maple.Interaction;
 using RazzleServer.Game.Maple.Items;
-using RazzleServer.Game.Maple.Maps;
 
 namespace RazzleServer.Game.Maple.Characters
 {

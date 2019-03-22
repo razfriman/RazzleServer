@@ -17,10 +17,10 @@ namespace RazzleServer.Common.Wz.Util
 
         public bool LeaveOpen { get; internal set; }
 
-        public WzBinaryWriter(Stream output, byte[] WzIv, bool leaveOpen = false)
+        public WzBinaryWriter(Stream output, byte[] wzIv, bool leaveOpen = false)
             : base(output)
         {
-            WzKey = WzKeyGenerator.GenerateWzKey(WzIv);
+            WzKey = WzKeyGenerator.GenerateWzKey(wzIv);
             StringCache = new Hashtable();
             LeaveOpen = leaveOpen;
         }

@@ -18,8 +18,8 @@ namespace RazzleServer
             
             var host = new HostBuilder()
                 .UseConsoleLifetime()
-                .ConfigureHostConfiguration((config) => { config.AddEnvironmentVariables(); })
-                .ConfigureAppConfiguration((config) =>
+                .ConfigureHostConfiguration(config => { config.AddEnvironmentVariables(); })
+                .ConfigureAppConfiguration(config =>
                 {
                     config.AddEnvironmentVariables();
                     if (args != null)

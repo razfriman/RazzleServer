@@ -1,5 +1,4 @@
-﻿using System.IO;
-using RazzleServer.Common.Wz.Util;
+﻿using RazzleServer.Common.Wz.Util;
 
 namespace RazzleServer.Common.Wz.WzProperties
 {
@@ -8,27 +7,17 @@ namespace RazzleServer.Common.Wz.WzProperties
 	/// </summary>
 	public class WzStringProperty : WzImageProperty
 	{
-		#region Fields
-		internal string val;
-		#endregion
+        /// <summary>
+        /// The value of the property
+        /// </summary>
+        public string Value { get; set; }
+        
+        public override void SetValue(object value) => Value = (string)value;
 
-		#region Inherited Members
-        public override void SetValue(object value)
-        {
-            val = (string)value;
-        }
+        public override WzImageProperty DeepClone() => new WzStringProperty(Name, Value);
 
-        public override WzImageProperty DeepClone()
-        {
-            var clone = new WzStringProperty(Name, val);
-            return clone;
-        }
+        public override object WzValue => Value;
 
-		public override object WzValue => Value;
-
-		/// <summary>
-		/// The WzPropertyType of the property
-		/// </summary>
 		public override WzPropertyType PropertyType => WzPropertyType.String;
 
 		public override void WriteValue(WzBinaryWriter writer)
@@ -37,24 +26,13 @@ namespace RazzleServer.Common.Wz.WzProperties
 			writer.WriteStringValue(Value, 0, 1);
 		}
 		
-		/// <summary>
-		/// Disposes the object
-		/// </summary>
 		public override void Dispose()
 		{
             Name = null;
-			val = null;
+			Value = null;
 		}
-		#endregion
 
-		#region Custom Members
-		/// <summary>
-		/// The value of the property
-		/// </summary>
-		public string Value { get => val;
-			set => val = value;
-		}
-		/// <summary>
+        /// <summary>
 		/// Creates a blank WzStringProperty
 		/// </summary>
 		public WzStringProperty() { }
@@ -74,24 +52,21 @@ namespace RazzleServer.Common.Wz.WzProperties
 		public WzStringProperty(string name, string value)
 		{
             Name = name;
-			val = value;
+			Value = value;
 		}
-        #endregion
 
-        #region Cast Values
-        public override float GetFloat() => float.TryParse(val, out var result) ? result : 0;
+        public override float GetFloat() => float.TryParse(Value, out var result) ? result : 0;
 
-        public override double GetDouble() => double.TryParse(val, out var result) ? result : 0;
+        public override double GetDouble() => double.TryParse(Value, out var result) ? result : 0;
 
-        public override int GetInt() => int.TryParse(val, out var result) ? result : 0;
+        public override int GetInt() => int.TryParse(Value, out var result) ? result : 0;
 
-        public override short GetShort() => short.TryParse(val, out var result) ? result : (short)0;
+        public override short GetShort() => short.TryParse(Value, out var result) ? result : (short)0;
 
-        public override long GetLong() => long.TryParse(val, out var result) ? result : 0;
+        public override long GetLong() => long.TryParse(Value, out var result) ? result : 0;
 
-        public override string GetString() => val;
+        public override string GetString() => Value;
 
-        public override string ToString() => val;
-        #endregion
+        public override string ToString() => Value;
 	}
 }
