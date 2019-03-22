@@ -7,27 +7,17 @@ namespace RazzleServer.Common.Wz.WzProperties
     /// </summary>
     public class WzShortProperty : WzImageProperty
     {
-        #region Fields
-        internal short val;
-        #endregion
+        /// <summary>
+        /// The value of the property
+        /// </summary>
+        public short Value { get; set; }
+        
+        public override void SetValue(object value) => Value = (short)value;
 
-        #region Inherited Members
-        public override void SetValue(object value)
-        {
-            val = (short)value;
-        }
-
-        public override WzImageProperty DeepClone()
-        {
-            var clone = new WzShortProperty(Name, val);
-            return clone;
-        }
+        public override WzImageProperty DeepClone() => new WzShortProperty(Name, Value);
 
         public override object WzValue => Value;
 
-        /// <summary>
-        /// The WzPropertyType of the property
-        /// </summary>
         public override WzPropertyType PropertyType => WzPropertyType.Short;
 
         public override void WriteValue(WzBinaryWriter writer)
@@ -36,26 +26,13 @@ namespace RazzleServer.Common.Wz.WzProperties
             writer.Write(Value);
         }
 
-        /// <summary>
-        /// Disposes the object
-        /// </summary>
-        public override void Dispose()
-        {
-            Name = null;
-        }
-        #endregion
+        public override void Dispose() => Name = null;
 
-        #region Custom Members
-        /// <summary>
-        /// The value of the property
-        /// </summary>
-        public short Value { get => val;
-            set => val = value;
-        }
         /// <summary>
         /// Creates a blank WzUnsignedShortProperty
         /// </summary>
         public WzShortProperty() { }
+        
         /// <summary>
         /// Creates a WzUnsignedShortProperty with the specified name
         /// </summary>
@@ -64,6 +41,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         {
             Name = name;
         }
+        
         /// <summary>
         /// Creates a WzUnsignedShortProperty with the specified name and value
         /// </summary>
@@ -72,22 +50,19 @@ namespace RazzleServer.Common.Wz.WzProperties
         public WzShortProperty(string name, short value)
         {
             Name = name;
-            val = value;
+            Value = value;
         }
-        #endregion
 
-        #region Cast Values
-        public override float GetFloat() => val;
+        public override float GetFloat() => Value;
 
-        public override double GetDouble() => val;
+        public override double GetDouble() => Value;
 
-        public override int GetInt() => val;
+        public override int GetInt() => Value;
 
-        public override short GetShort() => val;
+        public override short GetShort() => Value;
 
-        public override long GetLong() => val;
+        public override long GetLong() => Value;
 
-        public override string ToString() => val.ToString();
-        #endregion
+        public override string ToString() => Value.ToString();
     }
 }

@@ -8,19 +8,16 @@ namespace RazzleServer.Common.Wz.WzProperties
 	/// </summary>
 	public class WzDoubleProperty : WzImageProperty
 	{
-		#region Inherited Members
-        public override void SetValue(object value)
-        {
-            Value = (double)value;
-        }
+        /// <summary>
+        /// The value of this property
+        /// </summary>
+        public double Value { get; set; }
+        
+        public override void SetValue(object value) => Value = (double)value;
 
-        public override WzImageProperty DeepClone()
-        {
-            var clone = new WzDoubleProperty(Name, Value);
-            return clone;
-        }
+        public override WzImageProperty DeepClone() => new WzDoubleProperty(Name, Value);
 
-		public override object WzValue => Value;
+        public override object WzValue => Value;
 
 		public override WzPropertyType PropertyType => WzPropertyType.Double;
 
@@ -30,23 +27,15 @@ namespace RazzleServer.Common.Wz.WzProperties
 			writer.Write(Value);
 		}
 		
-		public override void Dispose()
-		{
-            Name = null;
-		}
-		#endregion
+		public override void Dispose() => Name = null;
 
-		#region Custom Members
-		/// <summary>
-		/// The value of this property
-		/// </summary>
-        public double Value { get; set; }
 
-		/// <summary>
+        /// <summary>
 		/// Creates a blank WzDoubleProperty
 		/// </summary>
 		public WzDoubleProperty() { }
-		/// <summary>
+		
+        /// <summary>
 		/// Creates a WzDoubleProperty with the specified name
 		/// </summary>
 		/// <param name="name">The name of the property</param>
@@ -54,7 +43,8 @@ namespace RazzleServer.Common.Wz.WzProperties
 		{
             Name = name;
 		}
-		/// <summary>
+		
+        /// <summary>
 		/// Creates a WzDoubleProperty with the specified name and value
 		/// </summary>
 		/// <param name="name">The name of the property</param>
@@ -64,7 +54,6 @@ namespace RazzleServer.Common.Wz.WzProperties
             Name = name;
 			Value = value;
 		}
-		#endregion
 
         public override float GetFloat() => (float)Value;
 

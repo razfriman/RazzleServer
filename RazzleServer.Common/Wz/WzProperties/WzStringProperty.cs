@@ -2,9 +2,10 @@
 
 namespace RazzleServer.Common.Wz.WzProperties
 {
-	/// <summary>
-	/// A property with a string as a value
-	/// </summary>
+	/// <inheritdoc />
+    /// <summary>
+    /// A property with a string as a value
+    /// </summary>
 	public class WzStringProperty : WzImageProperty
 	{
         /// <summary>

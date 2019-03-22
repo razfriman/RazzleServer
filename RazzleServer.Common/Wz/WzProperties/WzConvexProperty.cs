@@ -9,9 +9,7 @@ namespace RazzleServer.Common.Wz.WzProperties
     /// </summary>
     public class WzConvexProperty : WzExtended, IPropertyContainer
     {
-        #region Fields
-        internal List<WzImageProperty> properties = new List<WzImageProperty>();
-        #endregion
+        private List<WzImageProperty> _properties = new List<WzImageProperty>();
 
         #region Inherited Members
         public override void SetValue(object value) => throw new NotImplementedException();
@@ -19,7 +17,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         public override WzImageProperty DeepClone()
         {
             var clone = new WzConvexProperty(Name);
-            foreach (var prop in properties)
+            foreach (var prop in _properties)
             {
                 clone.AddProperty(prop.DeepClone());
             }
@@ -33,7 +31,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         {
             get
             {
-                foreach (var iwp in properties)
+                foreach (var iwp in _properties)
                 {
                     if (iwp.Name.ToLower() == name.ToLower())
                     {
@@ -47,7 +45,7 @@ namespace RazzleServer.Common.Wz.WzProperties
 
         public WzImageProperty GetProperty(string name)
         {
-            foreach (var iwp in properties)
+            foreach (var iwp in _properties)
             {
                 if (iwp.Name.ToLower() == name.ToLower())
                 {
@@ -87,8 +85,8 @@ namespace RazzleServer.Common.Wz.WzProperties
         }
         public override void WriteValue(WzBinaryWriter writer)
         {
-            var extendedProps = new List<WzExtended>(properties.Count);
-            foreach (var prop in properties)
+            var extendedProps = new List<WzExtended>(_properties.Count);
+            foreach (var prop in _properties)
             {
                 if (prop is WzExtended)
                 {
@@ -100,16 +98,16 @@ namespace RazzleServer.Common.Wz.WzProperties
             writer.WriteCompressedInt(extendedProps.Count);
             for (var i = 0; i < extendedProps.Count; i++)
             {
-                properties[i].WriteValue(writer);
+                _properties[i].WriteValue(writer);
             }
         }
 
         public override void Dispose()
         {
             Name = null;
-            properties?.ForEach(x => x.Dispose());
-            properties?.Clear();
-            properties = null;
+            _properties?.ForEach(x => x.Dispose());
+            _properties?.Clear();
+            _properties = null;
         }
 
         #endregion
@@ -119,14 +117,13 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// Creates a blank WzConvexProperty
         /// </summary>
         public WzConvexProperty() { }
+        
         /// <summary>
         /// Creates a WzConvexProperty with the specified name
         /// </summary>
         /// <param name="name">The name of the property</param>
-        public WzConvexProperty(string name)
-        {
-            Name = name;
-        }
+        public WzConvexProperty(string name) => Name = name;
+
         /// <summary>
         /// Adds a WzExtendedProperty to the list of properties
         /// </summary>
@@ -139,7 +136,7 @@ namespace RazzleServer.Common.Wz.WzProperties
             }
 
             prop.Parent = this;
-            properties.Add((WzExtended)prop);
+            _properties.Add((WzExtended)prop);
         }
 
         public void AddProperties(IEnumerable<WzImageProperty> properties)
@@ -153,17 +150,17 @@ namespace RazzleServer.Common.Wz.WzProperties
         public void RemoveProperty(WzImageProperty prop)
         {
             prop.Parent = null;
-            properties.Remove(prop);
+            _properties.Remove(prop);
         }
 
         public void ClearProperties()
         {
-            foreach (var prop in properties)
+            foreach (var prop in _properties)
             {
                 prop.Parent = null;
             }
 
-            properties.Clear();
+            _properties.Clear();
         }
 
         #endregion

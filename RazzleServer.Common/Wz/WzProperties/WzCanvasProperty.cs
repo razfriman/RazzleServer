@@ -62,11 +62,6 @@ namespace RazzleServer.Common.Wz.WzProperties
             }
         }
 
-        /// <summary>
-		/// Gets a wz property by a path name
-		/// </summary>
-		/// <param name="path">path to property</param>
-		/// <returns>the wz property with the specified name</returns>
 		public override WzImageProperty GetFromPath(string path)
         {
             var segments = path.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
@@ -139,18 +134,18 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// The png image for this canvas property
         /// </summary>
         public WzPngProperty PngProperty { get; set; }
+       
         /// <summary>
         /// Creates a blank WzCanvasProperty
         /// </summary>
         public WzCanvasProperty() { }
+        
         /// <summary>
         /// Creates a WzCanvasProperty with the specified name
         /// </summary>
         /// <param name="name">The name of the property</param>
-        public WzCanvasProperty(string name)
-        {
-            Name = name;
-        }
+        public WzCanvasProperty(string name) => Name = name;
+
         /// <summary>
         /// Adds a property to the property list of this property
         /// </summary>

@@ -5,28 +5,12 @@ namespace RazzleServer.Common.Wz.WzProperties
 {
     internal class WzLongProperty : WzImageProperty
     {
-        #region Fields
-        internal long val;
-        #endregion
+        public override void SetValue(object value) => Value = Convert.ToInt64(value);
 
-        #region Inherited Members
-        public override void SetValue(object value)
-        {
-            val = Convert.ToInt64(value);
-        }
-
-        public override WzImageProperty DeepClone()
-        {
-            var clone = new WzLongProperty(Name, val);
-            return clone;
-        }
+        public override WzImageProperty DeepClone() => new WzLongProperty(Name, Value);
 
         public override object WzValue => Value;
 
-
-        /// <summary>
-        /// The WzPropertyType of the property
-        /// </summary>
         public override WzPropertyType PropertyType => WzPropertyType.Long;
 
         public override void WriteValue(WzBinaryWriter writer)
@@ -35,26 +19,18 @@ namespace RazzleServer.Common.Wz.WzProperties
             writer.WriteCompressedLong(Value);
         }
 
-        /// <summary>
-        /// Dispose the object
-        /// </summary>
-        public override void Dispose()
-        {
-            Name = null;
-        }
-        #endregion
+        public override void Dispose() => Name = null;
 
-        #region Custom Members
         /// <summary>
         /// The value of the property
         /// </summary>
-        public long Value { get => val;
-            set => val = value;
-        }
+        public long Value { get; set; }
+
         /// <summary>
         /// Creates a blank WzCompressedIntProperty
         /// </summary>
         public WzLongProperty() { }
+
         /// <summary>
         /// Creates a WzCompressedIntProperty with the specified name
         /// </summary>
@@ -63,6 +39,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         {
             Name = name;
         }
+
         /// <summary>
         /// Creates a WzCompressedIntProperty with the specified name and value
         /// </summary>
@@ -71,40 +48,37 @@ namespace RazzleServer.Common.Wz.WzProperties
         public WzLongProperty(string name, long value)
         {
             Name = name;
-            val = value;
+            Value = value;
         }
-        #endregion
 
-        #region Cast Values
         public override float GetFloat()
         {
-            return val;
+            return Value;
         }
 
         public override double GetDouble()
         {
-            return val;
+            return Value;
         }
 
         public override long GetLong()
         {
-            return val;
+            return Value;
         }
 
         public override int GetInt()
         {
-            return (int)val;
+            return (int)Value;
         }
 
         public override short GetShort()
         {
-            return (short)val;
+            return (short)Value;
         }
 
         public override string ToString()
         {
-            return val.ToString();
+            return Value.ToString();
         }
-        #endregion
     }
 }
