@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RazzleServer.Common.Constants;
@@ -32,32 +33,6 @@ namespace RazzleServer.Common.Server
         public bool RequestPin { get; set; } = true;
         public List<WorldConfig> Worlds { get; set; }
 
-        private static readonly ILogger Log = LogManager.CreateLogger<ServerConfig>();
-
-        public static async Task LoadFromFile(string path)
-        {
-            try
-            {
-                if (File.Exists(path))
-                {
-                    var contents = await File.ReadAllTextAsync(path);
-                    _instance = JsonConvert.DeserializeObject<ServerConfig>(contents);
-                }
-                else
-                {
-                    Log.LogWarning($"Config file does not exist at '{path}'.");
-                    _instance = GetDefaultConfig();
-                    await _instance.SaveToFile(path);
-                }
-            }
-            catch (Exception e)
-            {
-                Log.LogError(e, "Error deserializing ServerConfig");
-                _instance = GetDefaultConfig();
-                await _instance.SaveToFile(path);
-            }
-        }
-
         public static ServerConfig GetDefaultConfig()
         {
             return new ServerConfig
@@ -83,13 +58,13 @@ namespace RazzleServer.Common.Server
             };
         }
 
-        private async Task SaveToFile(string path)
-        {
-            await File.WriteAllTextAsync(path, JsonConvert.SerializeObject(this, Formatting.Indented));
-            Log.LogInformation($"Saving default config file to '{path}'.");
-        }
-
         private static ServerConfig _instance;
         public static ServerConfig Instance => _instance ??= new ServerConfig();
+
+        public static void Load(IConfiguration configuration)
+        {
+            _instance = GetDefaultConfig();
+            configuration.GetSection("RazzleServerConfig").Bind(_instance);
+        }
     }
 }
