@@ -3,8 +3,8 @@ using RazzleServer.Common.Packet;
 
 namespace RazzleServer.Game.Handlers
 {
-    [PacketHandler(ClientOperationCode.Command)]
-    public class CommandHandler : GamePacketHandler
+    [PacketHandler(ClientOperationCode.CommandWhisperFind)]
+    public class CommandWhisperFindHandler : GamePacketHandler
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
         {

@@ -3,8 +3,11 @@
     public enum ServerOperationCode : ushort
     {
         CheckPasswordResult = 0x01,
+        SelectWorldResult = 0x02,
         ClientConnectToServerLogin = 0x05,
-        LoginCharacterRemoveResult = 0x08,
+        LoginCheckNameResult = 0x06,
+        CreateCharacterResult = 0x07,
+        DeleteCharacterResult = 0x08,
         ClientConnectToServer = 0x09,
         Ping = 0x0A,
 
@@ -23,6 +26,7 @@
         BuddyOperation = 0x21,
         Message = 0x23,
         EnterMap = 0x26,
+        TransferFieldReqInogred = 0x2A,
         IncorrectChannelNumber = 0x2B,
         SlashCmdAnswer = 0x2E,
 
@@ -30,6 +34,7 @@
         RemotePlayerDespawn = 0x3D,
         RemotePlayerChat = 0x3F,
 
+        AnnounceBox = 0x40,
         SummonMove = 0x4B, // Wrong?
         SummonDespawn = 0x4B, // Wrong?
         SummonAttack = 0x4D,
@@ -61,8 +66,8 @@
         NpcControlRequest = 0x7D,
         NpcAnimate = 0x7F,
 
-        DropSpawn = 0x83,
-        DropModify = 0x84,
+        DropEnterField = 0x83,
+        DropLeaveField = 0x84,
 
         ReactorHit = 0x94,
         ReactorSpawn = 0x96,
@@ -76,6 +81,7 @@
         NpcShopShow = 0xA3,
         NpcShopResult = 0xA4,
         StorageShow = 0xA7,
-        StorageResult = 0xA8
+        StorageResult = 0xA8,
+        PlayerInteraction = 0xAE
     }
 }

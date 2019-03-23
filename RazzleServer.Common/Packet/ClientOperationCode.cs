@@ -2,20 +2,20 @@
 {
     public enum ClientOperationCode : byte
     {
-        LoginCheckPassword = 0x01,
+        Login = 0x01,
         LoginSelectChannel = 0x02,
-        LoginSelectWorld = 0x03,
-        LoginSelectCharacter = 0x04,
+        SelectWorld = 0x03,
+        SelectCharacter = 0x04,
         FieldEnter = 0x05,
-        LoginCheckName = 0x06,
-        LoginCreateCharacter = 0x07,
-        LoginRemoveCharacter = 0x08,
-        ClientPong = 0x09,
+        CheckName = 0x06,
+        CreateCharacter = 0x07,
+        DeleteCharacter = 0x08,
+        Pong = 0x09,
         ClientCrashReport = 0x0A,
         ClientHash = 0x0E,
 
         FieldEnterPortal = 0x11,
-        FieldChangeChannel = 0x12,
+        ChangeChannel = 0x12,
         FieldConnectCashShop = 0x13,
         FieldPlayerMovement = 0x14,
         FieldPlayerSitMapChair = 0x15,
@@ -58,6 +58,6 @@
         NpcAnimate = 0x5B,
         DropPickup = 0x5F,
         
-        Unknown = 0xFF
+        Unknown = 0xFF,
     }
 }

@@ -179,7 +179,7 @@ namespace RazzleServer.Tests
             using (var packet = new PacketReader(Functions.HexToBytes("01")))
             {
                 var result = packet.ReadHeader();
-                Assert.AreEqual((ushort)ClientOperationCode.LoginCheckPassword, result);
+                Assert.AreEqual((ushort)ClientOperationCode.Login, result);
                 Assert.AreEqual(0, packet.Available);
             }
         }

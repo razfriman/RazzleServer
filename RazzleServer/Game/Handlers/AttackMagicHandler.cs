@@ -3,12 +3,12 @@ using RazzleServer.Common.Packet;
 
 namespace RazzleServer.Game.Handlers
 {
-    [PacketHandler(ClientOperationCode.RangedAttack)]
-    public class RangeAttackHandler : GamePacketHandler
+    [PacketHandler(ClientOperationCode.AttackMagic)]
+    public class AttackMagicHandler : GamePacketHandler
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
-            client.Character.Attack(packet, AttackType.Range);
+            client.Character.Attack(packet, AttackType.Magic);
         }
     }
 }

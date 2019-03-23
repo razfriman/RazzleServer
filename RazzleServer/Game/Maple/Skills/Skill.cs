@@ -202,7 +202,7 @@ namespace RazzleServer.Game.Maple.Skills
 
         public void Update()
         {
-            using (var pw = new PacketWriter(ServerOperationCode.ChangeSkillRecordResult))
+            using (var pw = new PacketWriter(ServerOperationCode.SkillsAddPoint))
             {
                 pw.WriteByte(1);
                 pw.WriteShort(1);

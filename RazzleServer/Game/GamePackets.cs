@@ -8,7 +8,7 @@ namespace RazzleServer.Game
     {
         public static PacketWriter Notify(string message, NoticeType type = NoticeType.Popup)
         {
-            using (var pw = new PacketWriter(ServerOperationCode.BroadcastMsg))
+            using (var pw = new PacketWriter(ServerOperationCode.Message))
             {
                 pw.WriteByte((byte)type);
 
@@ -24,15 +24,18 @@ namespace RazzleServer.Game
 
         public static PacketWriter Cooldown(int skillId, int cooldownSeconds)
         {
-            using (var pw = new PacketWriter(ServerOperationCode.Cooldown))
-            {
-                pw.WriteInt(skillId);
-                pw.WriteShort((short)cooldownSeconds);
-                return pw;
-            }
+//            using (var pw = new PacketWriter(ServerOperationCode.Cooldown))
+//            {
+//                pw.WriteInt(skillId);
+//                pw.WriteShort((short)cooldownSeconds);
+//                return pw;
+//            }
+            return null;
         }
 
-        public static PacketWriter ShowStatusInfo(MessageType type, bool isMeso = false, int amount = 0, bool isWhite = false, bool inChat = false, int mapleId = 0, QuestStatus questStatus = QuestStatus.NotStarted, string questString = null)
+        public static PacketWriter ShowStatusInfo(MessageType type, bool isMeso = false, int amount = 0,
+            bool isWhite = false, bool inChat = false, int mapleId = 0,
+            QuestStatus questStatus = QuestStatus.NotStarted, string questString = null)
         {
             var pw = new PacketWriter(ServerOperationCode.Message);
 

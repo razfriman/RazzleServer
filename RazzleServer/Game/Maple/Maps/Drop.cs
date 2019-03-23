@@ -11,10 +11,8 @@ namespace RazzleServer.Game.Maple.Maps
     {
         public const int ExpiryTime = 60 * 1000;
 
-        [JsonIgnore]
-        public Character Owner { get; set; }
-        [JsonIgnore]
-        public Character Picker { get; set; }
+        [JsonIgnore] public Character Owner { get; set; }
+        [JsonIgnore] public Character Picker { get; set; }
         public Point Origin { get; set; }
         public Delay Expiry { get; set; }
 
@@ -60,7 +58,9 @@ namespace RazzleServer.Game.Maple.Maps
             var oPacket = new PacketWriter(ServerOperationCode.DropEnterField);
 
 
-			oPacket.WriteByte((byte)(dropped ? 1 : 2)); // TODO: Other types; 3 = disappearing, and 0 probably is something as well.
+            oPacket.WriteByte((byte)(dropped
+                ? 1
+                : 2)); // TODO: Other types; 3 = disappearing, and 0 probably is something as well.
             oPacket.WriteInt(ObjectId);
             oPacket.WriteBool(this is Meso);
 

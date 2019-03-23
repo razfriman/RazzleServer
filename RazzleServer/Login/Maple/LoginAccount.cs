@@ -18,7 +18,6 @@ namespace RazzleServer.Login.Maple
         public string Password { get; set; }
         public string Salt { get; set; }
         public Gender Gender { get; set; }
-        public string Pin { get; set; }
         public BanReasonType BanReason { get; set; }
         public bool IsMaster { get; set; }
         public DateTime Birthday { get; set; }
@@ -52,7 +51,6 @@ namespace RazzleServer.Login.Maple
                 MaxCharacters = account.MaxCharacters;
                 Birthday = account.Birthday;
                 Creation = account.Creation;
-                Pin = account.Pin;
                 BanReason = (BanReasonType)account.BanReason;
                 IsMaster = account.IsMaster;
             }
@@ -74,7 +72,6 @@ namespace RazzleServer.Login.Maple
                 account.Salt = Salt;
                 account.Password = Password;
                 account.Gender = (byte)Gender;
-                account.Pin = Pin;
                 account.Birthday = Birthday;
                 account.Creation = Creation;
                 account.BanReason = (byte)BanReason;
@@ -103,7 +100,6 @@ namespace RazzleServer.Login.Maple
                     Salt = Salt,
                     Password = Password,
                     Gender = (byte)Gender,
-                    Pin = Pin,
                     Birthday = Birthday,
                     Creation = Creation,
                     BanReason = (byte)BanReason,

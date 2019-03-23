@@ -2,15 +2,15 @@
 
 namespace RazzleServer.Login.Handlers
 {
-    [PacketHandler(ClientOperationCode.CharacterNameCheck)]
-    public class CheckCharacterNameHandler : LoginPacketHandler
+    [PacketHandler(ClientOperationCode.CheckName)]
+    public class CheckNameHandler : LoginPacketHandler
     {
         public override void HandlePacket(PacketReader packet, LoginClient client)
         {
             var name = packet.ReadString();
             var characterExists = client.Server.CharacterExists(name, client.World);
 
-            using (var pw = new PacketWriter(ServerOperationCode.CheckCharacterNameResult))
+            using (var pw = new PacketWriter(ServerOperationCode.LoginCheckNameResult))
             {
                 pw.WriteString(name);
                 pw.WriteBool(characterExists);

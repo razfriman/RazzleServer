@@ -1,9 +1,9 @@
-﻿using RazzleServer.Common.Packet;
+using RazzleServer.Common.Packet;
 
 namespace RazzleServer.Login.Handlers
 {
-    [PacketHandler(ClientOperationCode.VacFlagSet)]
-    public class SetViewAllCharactersHandler : LoginPacketHandler
+    [PacketHandler(ClientOperationCode.ClientHash)]
+    public class ClientHashHandler : LoginPacketHandler
     {
         public override void HandlePacket(PacketReader packet, LoginClient client)
         {

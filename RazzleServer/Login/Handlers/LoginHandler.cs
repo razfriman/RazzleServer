@@ -8,7 +8,7 @@ using RazzleServer.Login.Maple;
 
 namespace RazzleServer.Login.Handlers
 {
-    [PacketHandler(ClientOperationCode.AccountLogin)]
+    [PacketHandler(ClientOperationCode.Login)]
     public class LoginHandler : LoginPacketHandler
     {
         public override void HandlePacket(PacketReader packet, LoginClient client)
@@ -59,8 +59,7 @@ namespace RazzleServer.Login.Handlers
             client.Account.Username = username;
             client.Account.Salt = Functions.RandomString();
             client.Account.Password = Functions.GetSha512(password + client.Account.Salt);
-            client.Account.Gender = ServerConfig.Instance.RequestPin ? Gender.Unset : Gender.Male;
-            client.Account.Pin = string.Empty;
+            client.Account.Gender = Gender.Male;
             client.Account.Birthday = DateTime.UtcNow;
             client.Account.Creation = DateTime.UtcNow;
             client.Account.MaxCharacters = ServerConfig.Instance.DefaultCreationSlots;

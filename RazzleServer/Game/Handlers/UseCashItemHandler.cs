@@ -66,7 +66,7 @@ namespace RazzleServer.Game.Handlers
                         var message = string.Format($"{client.Character.Name} : {text}"); // TODO: Include medal name.
 
                         // NOTE: In GMS, this sends to everyone on the current channel, not the map (despite the item's description).
-                        using (var oPacket = new PacketWriter(ServerOperationCode.BroadcastMsg))
+                        using (var oPacket = new PacketWriter(ServerOperationCode.Message))
                         {
                             oPacket.WriteByte((byte)NoticeType.Megaphone);
                             oPacket.WriteString(message);
@@ -91,7 +91,7 @@ namespace RazzleServer.Game.Handlers
 
                         var message = string.Format($"{client.Character.Name} : {text}"); // TODO: Include medal name.
 
-                        using (var oPacket = new PacketWriter(ServerOperationCode.BroadcastMsg))
+                        using (var oPacket = new PacketWriter(ServerOperationCode.Message))
                         {
                             oPacket.WriteByte((byte)NoticeType.SuperMegaphone);
                             oPacket.WriteString(message);
@@ -162,7 +162,7 @@ namespace RazzleServer.Game.Handlers
 
                         var message = string.Format($"{client.Character.Name} : {text}"); // TODO: Include medal name.
 
-                        using (var oPacket = new PacketWriter(ServerOperationCode.BroadcastMsg))
+                        using (var oPacket = new PacketWriter(ServerOperationCode.Message))
                         {
                             oPacket.WriteByte((byte)NoticeType.ItemMegaphone);
                             oPacket.WriteString(message);
