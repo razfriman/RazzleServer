@@ -28,7 +28,7 @@ namespace RazzleServer.Game.Maple.Scripting.Cache
             Task.Factory.StartNew(portalScript.Execute)
                 .ContinueWith(x =>
                 {
-                    var ex = x.Exception.Flatten().InnerException;
+                    var ex = x.Exception?.Flatten().InnerException;
 
                     if (ex is NotImplementedException)
                     {

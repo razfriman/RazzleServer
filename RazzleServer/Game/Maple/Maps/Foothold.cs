@@ -6,7 +6,7 @@ namespace RazzleServer.Game.Maple.Maps
     public sealed class Foothold
     {
         public short Id { get; set; }
-        public Line Line { get;  set; }
+        public Line Line { get; set; }
         public short DragForce { get; set; }
         public bool ForbidDownwardJump { get; set; }
         public bool IsWall => Line.Start.X == Line.End.X;
@@ -18,7 +18,8 @@ namespace RazzleServer.Game.Maple.Maps
             if (short.TryParse(img.Name, out var id))
             {
                 Id = id;
-                Line = new Line(new Point(img["x1"].GetShort(), img["y1"].GetShort()), new Point(img["x2"].GetShort(), img["y2"].GetShort()));
+                Line = new Line(new Point(img["x1"].GetShort(), img["y1"].GetShort()),
+                    new Point(img["x2"].GetShort(), img["y2"].GetShort()));
                 // prev
                 // next
                 DragForce = img["force"]?.GetShort() ?? 0;

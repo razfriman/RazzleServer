@@ -77,7 +77,7 @@ namespace RazzleServer.Game.Maple.Data.References
         {
         }
 
-        public ItemReference(WzImage img, ItemType type)
+        public ItemReference(WzImage img)
         {
             var name = img.Name.Remove(8);
             var info = img["info"];

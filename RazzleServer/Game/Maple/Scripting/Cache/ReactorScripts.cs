@@ -30,7 +30,7 @@ namespace RazzleServer.Game.Maple.Scripting.Cache
             Task.Factory.StartNew(reactorScript.Execute)
             .ContinueWith(x =>
             {
-                var ex = x.Exception.Flatten().InnerException;
+                var ex = x.Exception?.Flatten().InnerException;
 
                 if (ex is NotImplementedException)
                 {

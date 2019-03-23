@@ -20,7 +20,8 @@ namespace RazzleServer.Game.Maple.Scripting.Cache
 
             if (!Data.ContainsKey(script))
             {
-                _log.LogWarning($"Script not implemented for Npc={npc.MapleId} Script={npc.CachedReference.Script} on Map={npc.Map.MapleId}");
+                _log.LogWarning(
+                    $"Script not implemented for Npc={npc.MapleId} Script={npc.CachedReference.Script} on Map={npc.Map.MapleId}");
                 return;
             }
 
@@ -29,22 +30,23 @@ namespace RazzleServer.Game.Maple.Scripting.Cache
             npcScript.Npc = npc;
             character.NpcScript = npcScript;
             Task.Factory.StartNew(npcScript.Execute)
-            .ContinueWith(x =>
-            {
-                var ex = x.Exception.Flatten().InnerException;
-
-                if (ex is NotImplementedException)
+                .ContinueWith(x =>
                 {
-                    _log.LogWarning($"Script not implemented for Npc={npc.MapleId} Script={npc.CachedReference.Script} on Map={npc.Map.MapleId}");
-                    character.Release();
-                }
-                else
-                {
-                    _log.LogError(ex, $"Script error for Npc={npc.MapleId} Script={npc.CachedReference.Script} on Map={npc.Map.MapleId}");
-                    character.Release();
-                }
+                    var ex = x.Exception?.Flatten().InnerException;
 
-            }, TaskContinuationOptions.OnlyOnFaulted);
+                    if (ex is NotImplementedException)
+                    {
+                        _log.LogWarning(
+                            $"Script not implemented for Npc={npc.MapleId} Script={npc.CachedReference.Script} on Map={npc.Map.MapleId}");
+                        character.Release();
+                    }
+                    else
+                    {
+                        _log.LogError(ex,
+                            $"Script error for Npc={npc.MapleId} Script={npc.CachedReference.Script} on Map={npc.Map.MapleId}");
+                        character.Release();
+                    }
+                }, TaskContinuationOptions.OnlyOnFaulted);
         }
     }
 }

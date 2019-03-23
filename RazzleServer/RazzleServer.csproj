@@ -29,5 +29,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Logs\**" />
+    <None Remove="MapleServer.db" />
   </ItemGroup>
 </Project>

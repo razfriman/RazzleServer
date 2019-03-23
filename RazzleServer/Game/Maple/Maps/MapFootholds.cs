@@ -14,7 +14,8 @@ namespace RazzleServer.Game.Maple.Maps
         {
             var allPoints = Footholds
                 .Select(x => x.Line.Start)
-                .Union(Footholds.Select(x => x.Line.End));
+                .Union(Footholds.Select(x => x.Line.End))
+                .ToList();
 
             var xMin = allPoints.Min(p => p.X);
             var xMax = allPoints.Max(p => p.X);

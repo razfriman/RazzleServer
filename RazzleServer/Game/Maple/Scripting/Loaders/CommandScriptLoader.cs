@@ -8,7 +8,7 @@ namespace RazzleServer.Game.Maple.Scripting.Loaders
 {
     public class CommandScriptLoader : AScriptLoader<CommandScripts>
     {
-        public override string CacheName => "Commands";
+        public override string CacheName => "Command Scripts";
 
         public override Task LoadScripts()
         {

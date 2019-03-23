@@ -18,9 +18,7 @@ namespace RazzleServer.Game.Maple.Scripting
 
         public static async Task Initialize()
         {
-            var sw = new Stopwatch();
-
-            sw.Start();
+            var sw = Stopwatch.StartNew();
 
             await Task.WhenAll(
                 Task.Run(async () => Commands = await new CommandScriptLoader().Load()),

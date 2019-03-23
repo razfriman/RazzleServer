@@ -96,7 +96,7 @@ namespace RazzleServer.Game.Maple.Data.Loaders
             dir.WzImages
             .ForEach(item =>
             {
-                var mapleItem = new ItemReference(item, ItemType.Equipment);
+                var mapleItem = new ItemReference(item);
 
                 if (!Data.Data.ContainsKey(mapleItem.MapleId))
                 {

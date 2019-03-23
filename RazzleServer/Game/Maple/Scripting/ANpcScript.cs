@@ -22,15 +22,9 @@ namespace RazzleServer.Game.Maple.Scripting
 
         public abstract void Execute();
 
-        public void SetResult(int value)
-        {
-            _result?.Set(value);
-        }
+        public void SetResult(int value) => _result?.Set(value);
 
-        public void SetResult(string value)
-        {
-            _stringResult?.Set(value);
-        }
+        public void SetResult(string value) => _stringResult?.Set(value);
 
         public void Send(NpcStateInfo state, bool addState = true)
         {

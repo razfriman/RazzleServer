@@ -8,14 +8,9 @@ namespace RazzleServer.Game.Maple.Items
     {
         public int Amount { get; }
 
-        public Meso(int amount)
-        {
-            Amount = amount;
-        }
+        public Meso(int amount) => Amount = amount;
 
-        public override PacketWriter GetShowGainPacket()
-        {
-            return GamePackets.ShowStatusInfo(MessageType.DropPickup, true, Amount);
-        }
+        public override PacketWriter GetShowGainPacket() =>
+            GamePackets.ShowStatusInfo(MessageType.DropPickup, true, Amount);
     }
 }

@@ -26,7 +26,7 @@ namespace RazzleServer.Game.Maple.Data.References
 
         public MobSkillDataReference(WzImageProperty img)
         {
-            if (int.TryParse(img.Name, out var level))
+            if (int.TryParse(img.Name, out _))
             {
                 Duration = img["time"]?.GetInt() ?? 0;
                 MpCost = img["mpCon"]?.GetShort() ?? 0;
@@ -34,7 +34,7 @@ namespace RazzleServer.Game.Maple.Data.References
                 ParameterB = img["y"]?.GetInt() ?? 0;
                 Chance = img["prop"]?.GetShort() ?? 0;
                 TargetCount = img["count"]?.GetShort() ?? 0;
-                Cooldown = img["interval"]?.GetShort() ?? 0;//
+                Cooldown = img["interval"]?.GetShort() ?? 0;
                 Lt = img["lt"]?.GetPoint();
                 Rb = img["rb"]?.GetPoint();
                 PercentageLimitHp = img["hp"]?.GetShort() ?? 0;

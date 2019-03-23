@@ -15,17 +15,8 @@ namespace RazzleServer.Game.Maple.Scripting.Cache
         public void Execute(Character caller, string text)
         {
             var splitted = text.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-
-            splitted[0] = splitted[0].ToLower();
-
-            var commandName = splitted[0].TrimStart(ServerConfig.Instance.CommandIndicator[0]);
-
-            var args = new string[splitted.Length - 1];
-
-            for (var i = 1; i < splitted.Length; i++)
-            {
-                args[i - 1] = splitted[i];
-            }
+            var commandName = splitted[0].ToLower().TrimStart(ServerConfig.Instance.CommandIndicator[0]);
+            var args = splitted.AsSpan().Slice(1).ToArray();
 
             if (Contains(commandName))
             {

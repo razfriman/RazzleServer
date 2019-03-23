@@ -10,12 +10,9 @@ namespace RazzleServer.Game.Maple.Scripting
 
         public abstract string CacheName { get; }
 
-        public T Data { get; private set; } = new T();
+        public T Data { get; } = new T();
 
-        protected AScriptLoader()
-        {
-            Log = LogManager.CreateLogger<AScriptLoader<T>>();
-        }
+        protected AScriptLoader() => Log = LogManager.CreateLogger<AScriptLoader<T>>();
 
         public virtual async Task<T> Load()
         {

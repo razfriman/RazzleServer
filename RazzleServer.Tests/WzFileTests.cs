@@ -10,7 +10,7 @@ namespace RazzleServer.Tests
     public class WzFileTests
     {
         [TestMethod]
-        public void TestWzFile()
+        public void TestEmptyWzFileSerializes()
         {
             var file = new WzFile(1, WzMapleVersionType.Classic);
 
@@ -24,7 +24,7 @@ namespace RazzleServer.Tests
         }
 
         [TestMethod]
-        public void TestWzFile1()
+        public void TestWzFileWithImageAndPropertySerializes()
         {
             var intProp = new WzIntProperty("int1", 100);
             var img = new WzImage("test.img");
