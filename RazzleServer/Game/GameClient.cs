@@ -12,14 +12,12 @@ namespace RazzleServer.Game
 {
     public sealed class GameClient : AClient
     {
-        public static int PingDelay = 5000;
+        public const int PingDelay = 5000;
 
         public Account Account { get; set; }
         public GameServer Server { get; set; }
         public Character Character { get; set; }
         public override ILogger Log => LogManager.CreateLogger<GameClient>();
-
-
 
         public GameClient(Socket session, GameServer server) : base(session)
         {

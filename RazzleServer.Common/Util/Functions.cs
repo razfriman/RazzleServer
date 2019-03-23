@@ -118,7 +118,7 @@ namespace RazzleServer.Common.Util
         /// <summary>
         /// Creates a random byte
         /// </summary>
-        public static byte RandomByte() => (byte)Math.Floor((double)(Rand.Next() / 0x1010101));
+        public static byte RandomByte() => RandomBytes(1)[0];
 
         /// <summary>
         /// Creates a random array of bytes
@@ -180,7 +180,7 @@ namespace RazzleServer.Common.Util
         /// Creates a SHA1 string
         /// </summary>
         /// <param name="value">Value to be hashed</param>
-        /// <returns>The SHA1 equivelant of value</returns>
+        /// <returns>The SHA1 equivalent of value</returns>
         public static string GetSha512(string value)
         {
             var data = Encoding.ASCII.GetBytes(value);
@@ -253,7 +253,14 @@ namespace RazzleServer.Common.Util
         public static void SaveToJson<T>(string path, T data) where T : class
         {
             using (var s = File.OpenWrite(path))
-            using (var sw = new StreamWriter(s))
+            {
+                SaveToJson(s, data);
+            }
+        }
+
+        public static void SaveToJson<T>(Stream stream, T data) where T : class
+        {
+            using (var sw = new StreamWriter(stream))
             using (var writer = new JsonTextWriter(sw))
             {
                 try

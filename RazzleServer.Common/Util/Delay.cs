@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace RazzleServer.Common.Util
 {
@@ -9,6 +10,12 @@ namespace RazzleServer.Common.Util
         private readonly Timer _mTimer;
         private TimeSpan Period { get; }
         private DateTime Next { get; set; }
+
+        public static async Task ExecuteViaTask(Action action, int timeout)
+        {
+            await Task.Delay(timeout);
+            action.Invoke();
+        }
 
         public static Delay Execute(Action action, int timeout) => new Delay(action, timeout);
 

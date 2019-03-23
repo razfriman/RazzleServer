@@ -11,7 +11,7 @@ namespace RazzleServer.Game.Handlers
             var channel = packet.ReadByte();
             client.ChangeChannel(channel);
 
-            Delay.Execute(() => client.Terminate("Changing Channels"), 5000);
+            Delay.Execute(() => client.Terminate($"Changing Channels: {client.Server.ChannelId} -> {channel}"), 5000);
         }
     }
 }

@@ -78,7 +78,7 @@ namespace RazzleServer.Common.Wz.Util
                 {
                     ushort mask = 0xAAAA;
 
-                    if (value.Length >= sbyte.MaxValue) // Bugfix - >= because if value.Length = MaxValue, MaxValue will be written and then treated as a long-length marker
+                    if (value.Length >= sbyte.MaxValue)
                     {
                         Write(sbyte.MaxValue);
                         Write(value.Length);

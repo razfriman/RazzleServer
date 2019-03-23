@@ -6,7 +6,7 @@ namespace RazzleServer.Common.Util
 {
     public class PendingKeyedQueue<TKey, TValue> : Dictionary<TKey, TValue>, IDisposable
     {
-        private ManualResetEvent _queueDone = new ManualResetEvent(false);
+        private readonly ManualResetEvent _queueDone = new ManualResetEvent(false);
 
         public void Enqueue(TKey key, TValue value)
         {

@@ -4,7 +4,7 @@ using RazzleServer.Game.Maple.Scripting;
 namespace RazzleServer.Game.Scripts.Npcs
 {
     [NpcScript("job_3th")]
-    public class Job3th : ANpcScript
+    public class Job3Th : ANpcScript
         {
             public override void Execute() => throw new NotImplementedException();
         }

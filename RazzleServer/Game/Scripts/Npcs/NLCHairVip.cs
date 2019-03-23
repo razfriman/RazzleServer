@@ -4,7 +4,7 @@ using RazzleServer.Game.Maple.Scripting;
 namespace RazzleServer.Game.Scripts.Npcs
 {
     [NpcScript("NLC_HairVip")]
-    public class NLCHairVip : ANpcScript
+    public class NlcHairVip : ANpcScript
         {
             public override void Execute() => throw new NotImplementedException();
         }
