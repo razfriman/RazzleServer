@@ -120,11 +120,11 @@ namespace RazzleServer.Common.Packet
         /// Reads the first two bytes from the stream, no matter what. If the position = 0, it advances two, otherwise, it does not change.       
         /// </summary>        
         /// <returns></returns>       
-        public ushort ReadHeader()
+        public byte ReadHeader()
         {
             var oldPos = Buffer.Position;
             Buffer.Position = 0;
-            var ret = ReadUShort();
+            var ret = ReadByte();
 
             if (oldPos != 0)
             {

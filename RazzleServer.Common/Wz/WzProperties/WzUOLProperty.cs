@@ -66,8 +66,6 @@ namespace RazzleServer.Common.Wz.WzProperties
                     return _linkVal;
                 }
 
-                return null;
-
                 var paths = Value.Split('/');
                 _linkVal = Parent;
                 foreach (var path in paths)

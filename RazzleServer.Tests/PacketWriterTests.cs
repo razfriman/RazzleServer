@@ -133,8 +133,8 @@ namespace RazzleServer.Tests
         {
             using (var pw = new PacketWriter())
             {
-                pw.WriteHeader(ServerOperationCode.CheckPasswordResult);
-                Assert.AreEqual("00 00", pw.ToPacketString());
+                pw.WriteHeader(ServerOperationCode.Fame);
+                Assert.AreEqual("19 00", pw.ToPacketString());
             }
         }
 
@@ -211,9 +211,9 @@ namespace RazzleServer.Tests
         [TestMethod]
         public void Constructor_FromServerOperationCode_Succeeds()
         {
-            using (var pw = new PacketWriter(ServerOperationCode.CheckPasswordResult))
+            using (var pw = new PacketWriter(ServerOperationCode.Fame))
             {
-                Assert.AreEqual("00 00", pw.ToPacketString());
+                Assert.AreEqual("19 00", pw.ToPacketString());
             }
         }
 

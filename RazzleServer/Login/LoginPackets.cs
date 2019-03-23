@@ -10,7 +10,8 @@ namespace RazzleServer.Login
         {
             using (var pw = new PacketWriter(ServerOperationCode.CheckPasswordResult))
             {
-                pw.WriteShort((short)result);
+                pw.WriteByte((byte)result);
+                pw.WriteByte(0);
                 pw.WriteInt(0);
 
                 if (result == LoginResult.Banned)
@@ -23,25 +24,15 @@ namespace RazzleServer.Login
                     pw.WriteInt(acc.Id);
                     pw.WriteByte((int)acc.Gender);
                     pw.WriteBool(acc.IsMaster);
-                    //pw.WriteByte((byte) (acc.IsMaster ? AdminLevel.LevelFour : AdminLevel.None));
-                    pw.WriteByte(0x40);
+                    pw.WriteByte(1);
                     pw.WriteString(acc.Username);
-                    pw.WriteByte(0);
-                    pw.WriteByte(0); // quiet ban reason
-                    pw.WriteLong(0); // quiet ban time
-                    pw.WriteDateTime(acc.Creation);
-                    pw.WriteInt(0);
                 }
 
-                return pw;
-            }
-        }
+                pw.WriteLong(0);
+                pw.WriteLong(0);
+                pw.WriteLong(0);
 
-        internal static PacketWriter PinResult(PinResult result)
-        {
-            using (var pw = new PacketWriter(ServerOperationCode.PinCodeOperation))
-            {
-                pw.WriteByte((byte)result);
+
                 return pw;
             }
         }

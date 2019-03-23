@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace RazzleServer.Common.Crypto
 {
@@ -20,12 +21,12 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
         /// Gets the HIWORD from the current container
         /// </summary>
-        internal ushort Hiword => (ushort) (_value >> 16);
+        internal ushort Hiword => (ushort)(_value >> 16);
 
         /// <summary>
         /// Gets the LOWORD from the current container
         /// </summary>
-        internal ushort Loword => (ushort) _value;
+        internal ushort Loword => (ushort)_value;
 
         /// <summary>
         /// IV Security check
@@ -41,28 +42,24 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
         /// Shuffles the current IV to the next vector using the shuffle table
         /// </summary>
-        internal unsafe void Shuffle()
+        internal void Shuffle()
         {
-            var key = CryptoConstants.DefaultKey;
-            var pKey = &key;
-            fixed (uint* pIv = &_value)
+            for (var i = 0; i < 4; i++)
             {
-                fixed (byte* pShuffle = CryptoConstants.Shuffle)
-                {
-                    for (var i = 0; i < 4; i++)
-                    {
-                        *((byte*) pKey + 0) += (byte) (*(pShuffle + *((byte*) pKey + 1)) - *((byte*) pIv + i));
-                        *((byte*) pKey + 1) -= (byte) (*((byte*) pKey + 2) ^ *(pShuffle + *((byte*) pIv + i)));
-                        *((byte*) pKey + 2) ^= (byte) (*((byte*) pIv + i) + *(pShuffle + *((byte*) pKey + 3)));
-                        *((byte*) pKey + 3) =
-                            (byte) (*((byte*) pKey + 3) - *(byte*) pKey + *(pShuffle + *((byte*) pIv + i)));
+                var newIv = CryptoConstants.DefaultKey.ToArray();
+                var input = (byte)(_value & 0xFF);
+                var tableInput = CryptoConstants.Shuffle[input];
+                newIv[0] += (byte)(CryptoConstants.Shuffle[newIv[1]] - input);
+                newIv[1] -= (byte)(newIv[2] ^ tableInput);
+                newIv[2] ^= (byte)(CryptoConstants.Shuffle[newIv[3]] + input);
+                newIv[3] -= (byte)(newIv[0] - tableInput);
 
-                        *pKey = (*pKey << 3) | (*pKey >> (32 - 3));
-                    }
-                }
+                var val = BitConverter.ToUInt32(newIv, 0);
+                var val2 = val >> 0x1D;
+                val <<= 0x03;
+                val2 |= val;
+                _value = val2;
             }
-
-            _value = key;
         }
     }
 }

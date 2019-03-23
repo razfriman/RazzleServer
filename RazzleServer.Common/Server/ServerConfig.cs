@@ -31,7 +31,6 @@ namespace RazzleServer.Common.Server
         public bool EnableMultiLeveling { get; set; } = true;
         public string CommandIndicator { get; set; } = "!";
         public int DefaultCreationSlots { get; set; } = 3;
-        public bool RequestPin { get; set; } = true;
         public List<WorldConfig> Worlds { get; set; }
 
         public static ServerConfig GetDefaultConfig()

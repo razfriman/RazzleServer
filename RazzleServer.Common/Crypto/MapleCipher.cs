@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Intrinsics.Arm.Arm64;
 using System.Security.Cryptography;
 using RazzleServer.Common.Server;
 
@@ -10,17 +9,7 @@ namespace RazzleServer.Common.Crypto
     /// </summary>
     public class MapleCipher
     {
-        /// <summary>
-        /// AES transformer
-        /// </summary>
-        private FastAes Transformer { get; }
-
         private ICryptoTransform AesTransformer { get; }
-
-        /// <summary>
-        /// General locker to prevent multi-threading errors
-        /// </summary>
-        private volatile object _locker = new object();
 
         /// <summary>
         /// Vector to use in the MapleCrypto
@@ -56,7 +45,6 @@ namespace RazzleServer.Common.Crypto
             {
                 Key = ExpandKey(aesKey), Mode = CipherMode.ECB, Padding = PaddingMode.PKCS7
             }.CreateEncryptor();
-            Transformer = new FastAes(ExpandKey(aesKey));
         }
 
         /// <summary>

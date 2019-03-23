@@ -83,11 +83,13 @@ namespace RazzleServer.Game
             Character.Save();
             Server.Manager.Migrate(Host, Account.Id, Character.Id);
 
-            var outPacket = new PacketWriter(ServerOperationCode.ChangeChannel);
-            outPacket.WriteBool(true);
-            outPacket.WriteBytes(Socket.HostBytes);
-            outPacket.WriteUShort(Server.World[channelId].Port);
-            Send(outPacket);
+            using (var outPacket = new PacketWriter(ServerOperationCode.ClientConnectToServer))
+            {
+                outPacket.WriteBool(true);
+                outPacket.WriteBytes(Socket.HostBytes);
+                outPacket.WriteUShort(Server.World[channelId].Port);
+                Send(outPacket);
+            }
         }
 
         public void StartPingCheck()
