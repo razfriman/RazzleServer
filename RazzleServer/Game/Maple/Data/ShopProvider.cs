@@ -75,9 +75,7 @@ namespace RazzleServer.Game.Maple.Data
                     {
                         context.ShopRecharges.Add(new ShopRechargeEntity
                         {
-                            TierId = item.TierId,
-                            ItemId = item.ItemId,
-                            Price = item.Price
+                            TierId = item.TierId, ItemId = item.ItemId, Price = item.Price
                         });
                     }
 
@@ -110,7 +108,7 @@ namespace RazzleServer.Game.Maple.Data
 
                     var serializer = new JsonSerializer();
                     var data = serializer.Deserialize<List<ShopEntity>>(reader);
-
+                    
                     foreach (var item in data)
                     {
                         if (!DataProvider.Npcs?.Data?.ContainsKey(item.NpcId) ?? true)
@@ -121,9 +119,7 @@ namespace RazzleServer.Game.Maple.Data
 
                         context.Shops.Add(new ShopEntity
                         {
-                            ShopId = item.ShopId,
-                            NpcId = item.NpcId,
-                            RechargeTier = item.RechargeTier
+                            ShopId = item.ShopId, NpcId = item.NpcId, RechargeTier = item.RechargeTier
                         });
                     }
 
@@ -156,17 +152,20 @@ namespace RazzleServer.Game.Maple.Data
                     var serializer = new JsonSerializer();
                     var data = serializer.Deserialize<List<ShopItemEntity>>(reader);
                     var shops = context.Shops.Select(x => x.ShopId).ToHashSet();
+                    
                     foreach (var item in data)
                     {
                         if (!shops.Contains(item.ShopId))
                         {
-                            Log.LogWarning($"Skipping shop item - Cannot find Shop with ID={item.ShopId} in DataProvider");
+                            Log.LogWarning(
+                                $"Skipping shop item - Cannot find Shop with ID={item.ShopId} in DataProvider");
                             continue;
                         }
 
                         if (!DataProvider.Items.Data.ContainsKey(item.ItemId))
                         {
-                            Log.LogWarning($"Skipping shop item - Cannot find Item with ID={item.ItemId} in DataProvider");
+                            Log.LogWarning(
+                                $"Skipping shop item - Cannot find Item with ID={item.ItemId} in DataProvider");
                             continue;
                         }
 
@@ -223,6 +222,5 @@ namespace RazzleServer.Game.Maple.Data
                     DataProvider.Shops.Data[x.NpcId] = new Shop(x);
                 });
         }
-
     }
 }

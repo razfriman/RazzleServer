@@ -13,12 +13,13 @@ namespace RazzleServer.Game.Maple.Data.Loaders
 
         public override void LoadFromWz()
         {
-            Log.LogInformation("Loading Quizs");
+            Log.LogInformation("Loading Quizzes");
 
-            using (var file = GetWzFile("Etc.wz"))
+            using (var file = GetWzFile("Data.wz"))
             {
                 file.ParseWzFile();
-                var img = file.WzDirectory.GetImageByName("OXQuiz.img");
+                var dir = file.WzDirectory.GetDirectoryByName("Etc");
+                var img = dir.GetImageByName("OXQuiz.img");
                 img.WzProperties.ForEach(quizImg =>
                 {
                     if (!int.TryParse(quizImg.Name, out var quizId))

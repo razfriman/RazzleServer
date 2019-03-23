@@ -15,9 +15,8 @@ namespace RazzleServer.Common.Wz
         private List<WzImageProperty> _properties = new List<WzImageProperty>();
 
         internal WzBinaryReader Reader { get; }
-        
-        [JsonIgnore]
-        public bool ParseEverything { get; private set; }
+
+        [JsonIgnore] public bool ParseEverything { get; private set; }
         internal long TempFileStart { get; set; }
         internal long TempFileEnd { get; set; }
 
@@ -100,12 +99,9 @@ namespace RazzleServer.Common.Wz
         {
             get
             {
-                if (Reader != null)
+                if (Reader != null && !Parsed)
                 {
-                    if (!Parsed)
-                    {
-                        ParseImage();
-                    }
+                    ParseImage();
                 }
 
                 return WzObjectType.Image;

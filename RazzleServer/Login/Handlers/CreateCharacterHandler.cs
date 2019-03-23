@@ -59,7 +59,6 @@ namespace RazzleServer.Login.Handlers
             character.Items.Add(new Item(shoesId, equipped: true));
             character.Items.Add(new Item(weaponId, equipped: true));
             character.Items.Add(new Item(4161001), forceGetSlot: true); // A Beginner's Guide
-            character.Keymap.CreateDefaultKeymap();
             character.Create();
 
             using (var pw = new PacketWriter(ServerOperationCode.CreateCharacterResult))

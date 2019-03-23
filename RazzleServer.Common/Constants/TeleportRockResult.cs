@@ -1,16 +1,16 @@
 ﻿namespace RazzleServer.Common.Constants
 {
-    public enum TrockResult : byte
+    public enum TeleportRockResult : byte
     {
-        Success,
-        Unknown = 2,
-        Unknown2 = 3,
+        Success = 1,
+        Delete = 2,
+        Add = 3,
         CannotGo2 = 5,
         DifficultToLocate = 6,
         DifficultToLocate2 = 7,
         CannotGo = 8,
         AlreadyThere = 9,
         CannotSaveMap = 10,
-        NoobsCannotLeaveMapleIsland = 11
+        CannotLeaveMapleIsland = 11
     }
 }

@@ -16,10 +16,12 @@ namespace RazzleServer.Game.Maple.Data.Loaders
         {
             Log.LogInformation("Loading Reactors");
 
-            using (var file = GetWzFile("Reactor.wz"))
+            using (var file = GetWzFile("Data.wz"))
             {
                 file.ParseWzFile();
-                file.WzDirectory.WzImages.ForEach(img =>
+                var dir = file.WzDirectory.GetDirectoryByName("Reactor");
+
+                dir.WzImages.ForEach(img =>
                 {
                     var name = img.Name.Remove(7);
                     if (!int.TryParse(name, out var id))

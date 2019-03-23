@@ -175,7 +175,7 @@ namespace RazzleServer.Game.Maple.Life
 
                 if (disease != CharacterDisease.None)
                 {
-                    using (var oPacket = new PacketWriter(ServerOperationCode.TemporaryStatSet))
+                    using (var oPacket = new PacketWriter(ServerOperationCode.SkillsGiveBuff))
                     {
                         oPacket.WriteLong(0);
                         oPacket.WriteLong((long)disease);
@@ -191,8 +191,11 @@ namespace RazzleServer.Game.Maple.Life
 
                         affectedCharacter.Client.Send(oPacket);
                     }
-
-                    //map packet.
+                    
+                    //TODO - the remote packet
+                    using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerSkillBuff))
+                    {
+                    }
                 }
             }
 

@@ -16,12 +16,12 @@ namespace RazzleServer.Game.Maple.Data.Loaders
         {
             Log.LogInformation("Loading MobSkills");
 
-            using (var file = GetWzFile("Skill.wz"))
+            using (var file = GetWzFile("Data.wz"))
             {
                 file.ParseWzFile();
+                var dir = file.WzDirectory.GetDirectoryByName("Skill");
 
-
-                foreach (var skillImg in file.WzDirectory.GetImageByName("MobSkill.img").WzProperties)
+                foreach (var skillImg in dir.GetImageByName("MobSkill.img").WzProperties)
                 {
                     if (!int.TryParse(skillImg.Name, out var id))
                     {

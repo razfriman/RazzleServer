@@ -31,18 +31,18 @@ namespace RazzleServer.Game.Maple.Data
             var sw = Stopwatch.StartNew();
 
             await Task.WhenAll(
-                Task.Run(async () => Styles = await new AvailableStylesDataLoader().Load())
-//                Task.Run(async () => Items = await new ItemsLoader().Load()),
-//                Task.Run(async () => CreationData = await new CreationDataLoader().Load()),
-//                Task.Run(async () => Skills = await new SkillsLoader().Load()),
-//                Task.Run(async () => Mobs = await new MobsLoader().Load()),
-//                Task.Run(async () => Npcs = await new NpcsLoader().Load()),
-//                Task.Run(async () => MobSkills = await new MobSkillsLoader().Load()),
-//                Task.Run(async () => Reactors = await new ReactorsLoader().Load()),
-//                Task.Run(async () => Quests = await new QuestsLoader().Load()),
-//                Task.Run(async () => Maps = await new MapsLoader().Load()),
-//                Task.Run(async () => Strings = await new StringLoader().Load()),
-//                Task.Run(async () => Quizzes = await new QuizzesLoader().Load())
+                Task.Run(async () => Styles = await new AvailableStylesDataLoader().Load()),
+                Task.Run(async () => Items = await new ItemsLoader().Load()),
+                Task.Run(async () => CreationData = await new CreationDataLoader().Load()),
+                Task.Run(async () => Skills = await new SkillsLoader().Load()),
+                Task.Run(async () => Mobs = await new MobsLoader().Load()),
+                Task.Run(async () => Npcs = await new NpcsLoader().Load()),
+                Task.Run(async () => MobSkills = await new MobSkillsLoader().Load()),
+                Task.Run(async () => Reactors = await new ReactorsLoader().Load()),
+                Task.Run(async () => Quests = await new QuestsLoader().Load()),
+                Task.Run(async () => Maps = await new MapsLoader().Load()),
+                Task.Run(async () => Strings = await new StringLoader().Load()),
+                Task.Run(async () => Quizzes = await new QuizzesLoader().Load())
             );
 
             sw.Stop();

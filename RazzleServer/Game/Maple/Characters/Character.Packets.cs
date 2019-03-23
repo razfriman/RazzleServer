@@ -27,32 +27,6 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public void SendHint(string text, int width = 0, int height = 0)
-        {
-            using (var pw = new PacketWriter(ServerOperationCode.Hint))
-            {
-                if (width < 1)
-                {
-                    width = text.Length * 10;
-                    if (width < 40)
-                    {
-                        width = 40;
-                    }
-                }
-
-                if (height < 5)
-                {
-                    height = 5;
-                }
-
-                pw.WriteString(text);
-                pw.WriteShort(width);
-                pw.WriteShort(height);
-                pw.WriteByte(1);
-                Client.Send(pw);
-            }
-        }
-
         public byte[] StatisticsToByteArray()
         {
             using (var oPacket = new PacketWriter())
@@ -163,12 +137,11 @@ namespace RazzleServer.Game.Maple.Characters
             pw.WriteBytes(StatisticsToByteArray());
             pw.WriteByte(BuddyListSlots);
             pw.WriteInt(Meso);
-            pw.WriteBytes(Items.ToByteArray());// OK
+            pw.WriteBytes(Items.ToByteArray()); // OK
             pw.WriteBytes(Skills.ToByteArray());
             pw.WriteBytes(Quests.ToByteArray());
-            pw.WriteLong(0);// Rings
-            pw.WriteBytes(Trocks.RegularToByteArray());
-            pw.WriteBytes(Trocks.VipToByteArray());
+            pw.WriteLong(0); // Rings
+            pw.WriteBytes(TeleportRocks.ToByteArray());
             pw.WriteInt(0); // OK
             return pw.ToArray();
         }
@@ -177,67 +150,55 @@ namespace RazzleServer.Game.Maple.Characters
 
         public PacketWriter GetSpawnPacket()
         {
-            var oPacket = new PacketWriter(ServerOperationCode.UserEnterField);
+            var pw = new PacketWriter(ServerOperationCode.RemotePlayerEnterField);
 
-            oPacket.WriteInt(Id);
-            oPacket.WriteByte(Level);
-            oPacket.WriteString(Name);
-            oPacket.WriteString(Guild?.Name);
-            oPacket.WriteShort(Guild?.LogoBg ?? 0);
-            oPacket.WriteByte(Guild?.LogoBgColor ?? 0);
-            oPacket.WriteShort(Guild?.Logo ?? 0);
-            oPacket.WriteByte(Guild?.LogoColor ?? 0);
-            oPacket.WriteBytes(Buffs.ToByteArray());
-            oPacket.WriteShort((short)Job);
-            oPacket.WriteBytes(AppearanceToByteArray());
-            oPacket.WriteInt(Items.Available(5110000));
-            oPacket.WriteInt(ItemEffect);
-            oPacket.WriteInt(Item.GetType(Chair) == ItemType.Setup ? Chair : 0);
-            oPacket.WritePoint(Position);
-            oPacket.WriteByte(Stance);
-            oPacket.WriteShort(Foothold);
-            oPacket.WriteByte(0);
-            oPacket.WriteByte(0);
-            oPacket.WriteInt(1);
-            oPacket.WriteLong(0);
+            pw.WriteInt(Id);
+            pw.WriteString(Name);
+            pw.WriteString(Guild?.Name);
+            pw.WriteShort(Guild?.LogoBg ?? 0);
+            pw.WriteByte(Guild?.LogoBgColor ?? 0);
+            pw.WriteShort(Guild?.Logo ?? 0);
+            pw.WriteByte(Guild?.LogoColor ?? 0);
+            pw.WriteBytes(Buffs.ToByteArray());
+            pw.WriteShort((short)Job);
+            pw.WriteBytes(AppearanceToByteArray());
+            pw.WriteInt(Items.Available(5110000));
+            pw.WriteInt(ItemEffect);
+            pw.WriteInt(Item.GetType(Chair) == ItemType.Setup ? Chair : 0);
+
+
+            pw.WritePoint(Position);
+            pw.WriteByte(Stance);
+            pw.WriteShort(Foothold);
+            pw.WriteByte(0); // Pets
 
             if (PlayerShop != null && PlayerShop.Owner == this)
             {
-
-                oPacket.WriteByte((byte)InteractionType.PlayerShop);
-                oPacket.WriteInt(PlayerShop.ObjectId);
-                oPacket.WriteString(PlayerShop.Description);
-                oPacket.WriteBool(PlayerShop.IsPrivate);
-                oPacket.WriteByte(0);
-                oPacket.WriteByte(1);
-                oPacket.WriteByte((byte)(PlayerShop.IsFull ? 1 : 2)); // NOTE: Visitor availability.
-                oPacket.WriteByte(0);
+                pw.WriteByte((byte)InteractionType.PlayerShop);
+                pw.WriteInt(PlayerShop.ObjectId);
+                pw.WriteString(PlayerShop.Description);
+                pw.WriteBool(PlayerShop.IsPrivate);
+                pw.WriteByte(0);
+                pw.WriteByte(1);
+                pw.WriteByte((byte)(PlayerShop.IsFull ? 1 : 2)); // NOTE: Visitor availability.
+                pw.WriteByte(0);
             }
             else
             {
-                oPacket.WriteByte(0);
+                pw.WriteByte(0);
             }
 
-            var hasChalkboard = !string.IsNullOrEmpty(Chalkboard);
+            pw.WriteByte(0); // NOTE: Couple ring.
+            pw.WriteByte(0); // NOTE: Friendship ring.
+            pw.WriteByte(0); // NOTE: Marriage ring.
+            pw.WriteByte(0);
 
-            oPacket.WriteBool(hasChalkboard);
-
-            if (hasChalkboard)
-            {
-                oPacket.WriteString(Chalkboard);
-            }
-
-            oPacket.WriteByte(0); // NOTE: Couple ring.
-            oPacket.WriteByte(0); // NOTE: Friendship ring.
-            oPacket.WriteByte(0); // NOTE: Marriage ring.
-            oPacket.WriteByte(0);
-
-            return oPacket;
+            return pw;
         }
 
         public PacketWriter GetDestroyPacket()
         {
-            using (var pw = new PacketWriter(ServerOperationCode.UserLeaveField))
+            using (var pw = new PacketWriter(ServerOperationCode.RemotePlayerLeaveField))
             {
                 pw.WriteInt(Id);
                 return pw;

@@ -16,13 +16,13 @@ namespace RazzleServer.Game.Maple.Data.Loaders
         {
             Log.LogInformation("Loading Maps");
 
-            using (var file = GetWzFile("Map.wz"))
+            using (var file = GetWzFile("Data.wz"))
             {
                 file.ParseWzFile();
-                file.WzDirectory
+                file.WzDirectory.GetDirectoryByName("Map")
                     .GetDirectoryByName("Map")
                     .WzDirectories
-                    .SelectMany(dir => dir.WzImages)
+                    .SelectMany(subDir => subDir.WzImages)
                     .ToList()
                     .ForEach(img =>
                     {

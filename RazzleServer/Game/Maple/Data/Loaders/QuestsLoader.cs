@@ -15,10 +15,11 @@ namespace RazzleServer.Game.Maple.Data.Loaders
         {
             Log.LogInformation("Loading Quests");
 
-            using (var file = GetWzFile("Quest.wz"))
+            using (var file = GetWzFile("Data.wz"))
             {
                 file.ParseWzFile();
-                var img = file.WzDirectory.GetImageByName("QuestInfo.img");
+                var dir = file.WzDirectory.GetDirectoryByName("Etc");
+                var img = dir.GetImageByName("QuestInfo.img");
 
                 foreach (var item in img.WzProperties)
                 {
@@ -27,7 +28,7 @@ namespace RazzleServer.Game.Maple.Data.Loaders
                         Data.Data.Add(itemId, new QuestReference
                         {
                             MapleId = itemId,
-                            Name = item["name"].GetString()
+                            Name = item["subject"]?.GetString()
                         });
                     }
                 }

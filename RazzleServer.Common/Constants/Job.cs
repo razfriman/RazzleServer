@@ -6,43 +6,32 @@
 
         Warrior = 100,
         Fighter = 110,
-        Crusader,
-        Hero,
+        Crusader = 111,
         Page = 120,
-        WhiteKnight,
-        Paladin,
+        WhiteKnight = 121,
         Spearman = 130,
-        DragonKnight,
-        DarkKnight,
+        DragonKnight = 131,
 
         Magician = 200,
         FirePoisonWizard = 210,
-        FirePoisonMage,
-        FirePoisonArchMage,
+        FirePoisonMage = 211,
         IceLightningWizard = 220,
-        IceLightningMage,
-        IceLightningArchMage,
+        IceLightningMage = 221,
         Cleric = 230,
-        Priest,
-        Bishop,
-
+        Priest = 231,
+        
         Bowman = 300,
         Hunter = 310,
-        Ranger,
-        BowMaster,
+        Ranger = 311,
         CrossbowMan = 320,
-        Sniper,
-        CrossbowMaster,
+        Sniper = 321,
 
         Thief = 400,
         Assassin = 410,
-        Hermit,
-        NightLord,
+        Hermit = 411,
         Bandit = 420,
-        ChiefBandit,
-        Shadower,
+        ChiefBandit = 421,
 
-        Gm = 500,
-        SuperGm = 510
+        Gm = 500
     }
 }

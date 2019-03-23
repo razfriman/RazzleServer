@@ -53,6 +53,7 @@ namespace RazzleServer.Game.Maple.Data.Loaders
             {
                 var serializer = new JsonSerializer
                 {
+                    DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
                     Formatting = ServerConfig.Instance.PrettifyCache ? Formatting.Indented : Formatting.None
                 };
                 serializer.Serialize(writer, Data);

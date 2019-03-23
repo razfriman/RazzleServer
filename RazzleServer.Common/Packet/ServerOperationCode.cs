@@ -11,9 +11,9 @@
         ClientConnectToServer = 0x09,
         Ping = 0x0A,
 
-        InventoryChangeSlot = 0x12,
+        InventoryOperation = 0x12,
         InventoryChangeInventorySlots = 0x13,
-        StatsChange = 0x14,
+        StatsChanged = 0x14,
         SkillsGiveBuff = 0x15,
         SkillsGiveDebuff = 0x16,
         SkillsAddPoint = 0x17,
@@ -25,18 +25,19 @@
         PartyOperation = 0x20,
         BuddyOperation = 0x21,
         Message = 0x23,
-        EnterMap = 0x26,
+        SetField = 0x26,
         TransferFieldReqInogred = 0x2A,
         IncorrectChannelNumber = 0x2B,
         SlashCmdAnswer = 0x2E,
 
-        RemotePlayerSpawn = 0x3C,
-        RemotePlayerDespawn = 0x3D,
+        MapEffect = 0x30,
+        RemotePlayerEnterField = 0x3C,
+        RemotePlayerLeaveField = 0x3D,
         RemotePlayerChat = 0x3F,
 
         AnnounceBox = 0x40,
         SummonMove = 0x4B, // Wrong?
-        SummonDespawn = 0x4B, // Wrong?
+        SummonLeaveField = 0x4B, // Wrong?
         SummonAttack = 0x4D,
         SummonDamage = 0x4E,
 
@@ -47,31 +48,35 @@
         RemotePlayerGetDamage = 0x58,
         RemotePlayerEmote = 0x59,
         RemotePlayerChangeEquips = 0x5A,
-        RemotePlayerAnimation = 0x5B,
+        RemotePlayerEffect = 0x5B,
         RemotePlayerSkillBuff = 0x5C,
         RemotePlayerSkillDebuff = 0x5D,
 
+        ItemEffect = 0x60,
         RemotePlayerSitOnChair = 0x61,
-        RemotePlayerThirdPartyAnimation = 0x62,
+        Effect = 0x62, // RemotePlayerThirdPartyAnimation
         CashShopUnavailable = 0x64,
         MesoSackResult = 0x65,
-        MobSpawn = 0x6A,
-        MobRespawn = 0x6B,
+        MobEnterField = 0x6A,
+        MobLeaveField = 0x6B,
         MobControlRequest = 0x6C,
-        MobMovement = 0x6E,
+        MobMove = 0x6E,
         MobControlResponse = 0x6F,
 
         MobChangeHealth = 0x75,
-        NpcSpawn = 0x7B,
+        NpcEnterField = 0x7B,
+        NpcLeaveField = 0x7C, // Guess
         NpcControlRequest = 0x7D,
-        NpcAnimate = 0x7F,
+        NpcMove = 0x7F,
 
         DropEnterField = 0x83,
         DropLeaveField = 0x84,
+        MistEnterField = 0x8C,
+        MistLeaveField = 0x8D,
 
-        ReactorHit = 0x94,
-        ReactorSpawn = 0x96,
-        ReactorDestroy = 0x97,
+        ReactorChangeState = 0x94,
+        ReactorEnterField = 0x96,
+        ReactorLeaveField = 0x97,
         SnowBallState = 0x9A,
         SnowBallHit = 0x9B,
         CoconutHit = 0x9C,

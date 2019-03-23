@@ -43,7 +43,7 @@ namespace RazzleServer.Game.Maple.Life
 
         private PacketWriter GetInternalPacket()
         {
-            using (var pw = new PacketWriter(ServerOperationCode.MistSpawn))
+            using (var pw = new PacketWriter(ServerOperationCode.MistEnterField))
             {
                 pw.WriteInt(ObjectId);
                 pw.WriteInt((int)MistType);
@@ -62,7 +62,7 @@ namespace RazzleServer.Game.Maple.Life
 
         public PacketWriter GetDestroyPacket()
         {
-            using (var pw = new PacketWriter(ServerOperationCode.MistRemove))
+            using (var pw = new PacketWriter(ServerOperationCode.MistLeaveField))
             {
                 pw.WriteInt(ObjectId);
                 return pw;

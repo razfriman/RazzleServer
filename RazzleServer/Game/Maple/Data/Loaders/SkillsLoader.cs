@@ -18,14 +18,20 @@ namespace RazzleServer.Game.Maple.Data.Loaders
         {
             Log.LogInformation("Loading Skills");
 
-            using (var file = GetWzFile("Skill.wz"))
+            using (var file = GetWzFile("Data.wz"))
             {
                 file.ParseWzFile();
+                var dir = file.WzDirectory.GetDirectoryByName("Skill");
 
                 foreach (var job in Enum.GetValues(typeof(Job)))
                 {
                     var imgName = $"{((short)job).ToString().PadLeft(3, '0')}.img";
-                    var img = file.WzDirectory.GetImageByName(imgName);
+                    var img = dir.GetImageByName(imgName);
+
+                    if (img == null)
+                    {
+                        continue;
+                    }
 
                     foreach (var skillImg in img["skill"].WzProperties)
                     {

@@ -128,7 +128,8 @@ namespace RazzleServer.Common.Wz
                         var subPath = Path.Combine(path, wzDir.Name);
                         Directory.CreateDirectory(subPath);
                         wzDir.WzDirectories.ForEach(subDir => subDir.Serialize(subPath, false, serializer));
-                        wzDir.WzImages.ForEach(img => img.Serialize(Path.Combine(subPath, img.Name + ".json"), true, serializer));
+                        wzDir.WzImages.ForEach(img =>
+                            img.Serialize(Path.Combine(subPath, img.Name + ".json"), true, serializer));
                         break;
                     }
                 }

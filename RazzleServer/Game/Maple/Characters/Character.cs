@@ -45,9 +45,7 @@ namespace RazzleServer.Game.Maple.Characters
         public CharacterSkills Skills { get; }
         public CharacterQuests Quests { get; }
         public CharacterBuffs Buffs { get; }
-        public CharacterKeymap Keymap { get; }
-        public CharacterTrocks Trocks { get; }
-        public CharacterMemos Memos { get; }
+        public CharacterTeleportRocks TeleportRocks { get; }
         public CharacterStorage Storage { get; }
         public ControlledMobs ControlledMobs { get; }
         public ControlledNpcs ControlledNpcs { get; }
@@ -55,7 +53,6 @@ namespace RazzleServer.Game.Maple.Characters
         public PlayerShop PlayerShop { get; set; }
         public CharacterGuild Guild { get; set; }
         public CharacterParty Party { get; set; }
-        public CharacterSkillMacros SkillMacros { get; set; }
         public ANpcScript NpcScript { get; set; }
         public Shop CurrentNpcShop { get; set; }
         public CharacterDamage Damage { get; set; }
@@ -64,7 +61,6 @@ namespace RazzleServer.Game.Maple.Characters
         public DateTime LastHealthHealOverTime { get; set; } = new DateTime();
         public DateTime LastManaHealOverTime { get; set; } = new DateTime();
 
-        private Gender _gender;
         private byte _skin;
         private int _face;
         private int _hair;
@@ -83,27 +79,11 @@ namespace RazzleServer.Game.Maple.Characters
         private int _experience;
         private short _fame;
         private int _meso;
-        private string _chalkboard;
         private int _itemEffect;
 
         private readonly ILogger _log = LogManager.CreateLogger<Character>();
 
-        public Gender Gender
-        {
-            get => _gender;
-            set
-            {
-                _gender = value;
-
-                if (IsInitialized)
-                {
-                    var oPacket = new PacketWriter(ServerOperationCode.SetGender);
-                    oPacket.WriteByte((byte)Gender);
-                    oPacket.WriteByte(1);
-                    Client.Send(oPacket);
-                }
-            }
-        }
+        public Gender Gender { get; set; }
 
         public byte Skin
         {
@@ -525,23 +505,6 @@ namespace RazzleServer.Game.Maple.Characters
 
         public QuestReference LastQuest { get; set; }
 
-        public string Chalkboard
-        {
-            get => _chalkboard;
-            set
-            {
-                _chalkboard = value;
-
-                using (var oPacket = new PacketWriter(ServerOperationCode.Chalkboard))
-                {
-                    oPacket.WriteInt(Id);
-                    oPacket.WriteBool(!string.IsNullOrEmpty(Chalkboard));
-                    oPacket.WriteString(Chalkboard);
-                    Map.Send(oPacket);
-                }
-            }
-        }
-
         public int ItemEffect
         {
             get => _itemEffect;
@@ -613,11 +576,8 @@ namespace RazzleServer.Game.Maple.Characters
             Items = new CharacterItems(this, 24, 24, 24, 24, 48);
             Skills = new CharacterSkills(this);
             Quests = new CharacterQuests(this);
-            SkillMacros = new CharacterSkillMacros(this);
             Buffs = new CharacterBuffs(this);
-            Keymap = new CharacterKeymap(this);
-            Trocks = new CharacterTrocks(this);
-            Memos = new CharacterMemos(this);
+            TeleportRocks = new CharacterTeleportRocks(this);
             Storage = new CharacterStorage(this);
             Position = new Point(0, 0);
             ControlledMobs = new ControlledMobs(this);
@@ -647,26 +607,14 @@ namespace RazzleServer.Game.Maple.Characters
 
             Map.Characters.Add(this);
 
-            ShowApple();
             UpdateStatsForParty();
-            Keymap.Send();
-            Memos.Send();
-            SkillMacros.Send();
 
             Task.Factory.StartNew(Client.StartPingCheck);
         }
 
-        private void ShowApple()
-        {
-            if (Map.MapleId == 1 || Map.MapleId == 2 || Map.MapleId == 809000101 || Map.MapleId == 809000201)
-            {
-                Client.Send(new PacketWriter(ServerOperationCode.ShowApple));
-            }
-        }
-
         public void Update(params StatisticType[] statistics)
         {
-            var oPacket = new PacketWriter(ServerOperationCode.StatChanged);
+            var oPacket = new PacketWriter(ServerOperationCode.StatsChanged);
             oPacket.WriteBool(true); // itemReaction
 
             var flag = statistics.Aggregate(0, (current, statistic) => current | (int)statistic);
@@ -758,7 +706,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void UpdateApperance()
         {
-            using (var oPacket = new PacketWriter(ServerOperationCode.AvatarModified))
+            using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerChangeEquips))
             {
                 oPacket.WriteInt(Id);
                 oPacket.WriteBool(true);
@@ -913,7 +861,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
 
             // TODO: Modify packet based on attack type.
-            using (var oPacket = new PacketWriter(ServerOperationCode.CloseRangeAttack))
+            using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerMeleeAttack))
             {
                 oPacket.WriteInt(Id);
                 oPacket.WriteByte((byte)(attack.Targets * 0x10 + attack.Hits));
@@ -967,7 +915,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Talk(string text, bool show = true)
         {
-            using (var oPacket = new PacketWriter(ServerOperationCode.UserChat))
+            using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerChat))
             {
                 oPacket.WriteInt(Id);
                 oPacket.WriteBool(IsMaster);
@@ -979,7 +927,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void PerformFacialExpression(int expressionId)
         {
-            using (var oPacket = new PacketWriter(ServerOperationCode.Emotion))
+            using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerEmote))
             {
                 oPacket.WriteInt(Id);
                 oPacket.WriteInt(expressionId);
@@ -998,7 +946,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void ShowRemoteUserEffect(UserEffect effect, bool skipSelf = false)
         {
-            using (var oPacket = new PacketWriter(ServerOperationCode.RemoteEffect))
+            using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerEffect))
             {
                 oPacket.WriteInt(Id);
                 oPacket.WriteByte((int)effect);
@@ -1173,7 +1121,7 @@ namespace RazzleServer.Game.Maple.Characters
                 character.Experience = Experience;
                 character.Face = Face;
                 character.Fame = Fame;
-                character.Gender = (byte)_gender;
+                character.Gender = (byte)Gender;
                 character.Hair = Hair;
                 character.Health = Health;
                 character.Intelligence = _intelligence;
@@ -1206,9 +1154,7 @@ namespace RazzleServer.Game.Maple.Characters
             Skills.Save();
             Quests.Save();
             Buffs.Save();
-            Keymap.Save();
-            Trocks.Save();
-            SkillMacros.Save();
+            TeleportRocks.Save();
 
             _log.LogInformation($"Saved character '{Name}' to database.");
         }
@@ -1235,7 +1181,7 @@ namespace RazzleServer.Game.Maple.Characters
                     Experience = Experience,
                     Face = Face,
                     Fame = Fame,
-                    Gender = (byte)_gender,
+                    Gender = (byte)Gender,
                     Hair = Hair,
                     Health = Health,
                     Intelligence = _intelligence,
@@ -1270,8 +1216,7 @@ namespace RazzleServer.Game.Maple.Characters
                 Skills.Save();
                 Quests.Save();
                 Buffs.Save();
-                Keymap.Save();
-                Trocks.Save();
+                TeleportRocks.Save();
             }
         }
 
@@ -1295,7 +1240,7 @@ namespace RazzleServer.Game.Maple.Characters
                 _experience = character.Experience;
                 _face = character.Face;
                 _fame = character.Fame;
-                _gender = (Gender)character.Gender;
+                Gender = (Gender)character.Gender;
                 _hair = character.Hair;
                 _health = character.Health;
                 _intelligence = character.Intelligence;
@@ -1327,10 +1272,7 @@ namespace RazzleServer.Game.Maple.Characters
             Skills.Load();
             Quests.Load();
             Buffs.Load();
-            Keymap.Load();
-            Trocks.Load();
-            Memos.Load();
-            SkillMacros.Load();
+            TeleportRocks.Load();
         }
     }
 }

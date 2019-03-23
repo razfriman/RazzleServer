@@ -15,11 +15,12 @@ namespace RazzleServer.Game.Maple.Data.Loaders
         {
             Log.LogInformation("Loading Character Creation Data");
 
-            using (var file = GetWzFile("Etc.wz"))
+            using (var file = GetWzFile("Data.wz"))
             {
                 file.ParseWzFile();
-                var makeCharInfo = file.WzDirectory.GetImageByName("MakeCharInfo.img")["Info"];
-                var forbiddenNames = file.WzDirectory.GetImageByName("ForbiddenName.img");
+                var dir = file.WzDirectory.GetDirectoryByName("Etc");
+                var makeCharInfo = dir.GetImageByName("MakeCharInfo.img")["Info"];
+                var forbiddenNames = dir.GetImageByName("ForbiddenName.img");
 
                 LoadCreationData(makeCharInfo, true);
                 LoadCreationData(makeCharInfo, false);
