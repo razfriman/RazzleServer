@@ -6,7 +6,7 @@ namespace RazzleServer.Login
 {
     public static class LoginPackets
     {
-        public static PacketWriter SendLoginResult(LoginResult result, Account acc)
+        public static PacketWriter SendLoginResult(LoginResult result, LoginAccount acc)
         {
             using (var pw = new PacketWriter(ServerOperationCode.CheckPasswordResult))
             {
@@ -16,7 +16,7 @@ namespace RazzleServer.Login
                 if (result == LoginResult.Banned)
                 {
                     pw.WriteByte((byte)acc.BanReason);
-                    pw.WriteDateTime(acc.PermanentBanDate);
+                    pw.WriteDateTime(LoginAccount.PermanentBanDate);
                 }
                 else if (result == LoginResult.Valid)
                 {

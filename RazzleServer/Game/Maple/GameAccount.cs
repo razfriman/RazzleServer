@@ -5,7 +5,7 @@ using RazzleServer.Common.Exceptions;
 
 namespace RazzleServer.Game.Maple
 {
-    public sealed class Account
+    public sealed class GameAccount
     {
         public GameClient Client { get; }
         public int Id { get; set; }
@@ -18,7 +18,7 @@ namespace RazzleServer.Game.Maple
 
         private bool Assigned { get; set; }
 
-        public Account(int accountId, GameClient client)
+        public GameAccount(int accountId, GameClient client)
         {
             Id = accountId;
             Client = client;

@@ -14,7 +14,7 @@ namespace RazzleServer.Game
     {
         public const int PingDelay = 5000;
 
-        public Account Account { get; set; }
+        public GameAccount Account { get; set; }
         public GameServer Server { get; set; }
         public Character Character { get; set; }
         public override ILogger Log => LogManager.CreateLogger<GameClient>();

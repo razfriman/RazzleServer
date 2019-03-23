@@ -10,7 +10,7 @@ using RazzleServer.Data;
 
 namespace RazzleServer.Login.Maple
 {
-    public sealed class Account : IMapleSavable
+    public sealed class LoginAccount : IMapleSavable
     {
         public LoginClient Client { get; }
         public int Id { get; private set; }
@@ -24,11 +24,11 @@ namespace RazzleServer.Login.Maple
         public DateTime Birthday { get; set; }
         public DateTime Creation { get; set; }
         public int MaxCharacters { get; set; }
-        public DateTime PermanentBanDate => DateTime.Now.AddYears(2);
+        public static DateTime PermanentBanDate => DateTime.Now.AddYears(2);
         private bool Assigned { get; set; }
-        private readonly ILogger _log = LogManager.CreateLogger<Account>();
+        private readonly ILogger _log = LogManager.CreateLogger<LoginAccount>();
 
-        public Account(LoginClient client)
+        public LoginAccount(LoginClient client)
         {
             Client = client;
         }

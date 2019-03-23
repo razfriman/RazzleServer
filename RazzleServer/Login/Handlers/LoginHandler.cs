@@ -21,7 +21,7 @@ namespace RazzleServer.Login.Handlers
 
         public LoginResult Login(LoginClient client, string username, string password)
         {
-            client.Account = new Account(client);
+            client.Account = new LoginAccount(client);
 
             try
             {

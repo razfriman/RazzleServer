@@ -18,7 +18,7 @@ namespace RazzleServer.Game.Handlers
                 return;
             }
 
-            client.Account = new Account(accountId, client);
+            client.Account = new GameAccount(accountId, client);
             client.Account.Load();
 
             client.Character = new Character(characterId, client);

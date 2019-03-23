@@ -13,7 +13,7 @@ namespace RazzleServer.Login
     {
         public byte World { get; internal set; }
         public byte Channel { get; internal set; }
-        public Account Account { get; internal set; }
+        public LoginAccount Account { get; internal set; }
         public string LastUsername { get; internal set; }
         public string LastPassword { get; internal set; }
         public string[] MacAddresses { get; internal set; }
