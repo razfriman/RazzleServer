@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RazzleServer.Common;
 using RazzleServer.Common.Server;
+using RazzleServer.Common.Wz;
 using Serilog;
 using Serilog.Filters;
 using Serilog.Formatting.Compact;

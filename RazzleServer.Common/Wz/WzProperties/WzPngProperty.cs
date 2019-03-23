@@ -5,6 +5,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Runtime.InteropServices;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using RazzleServer.Common.Util;
 using RazzleServer.Common.Wz.Util;
 
@@ -37,7 +38,7 @@ namespace RazzleServer.Common.Wz.WzProperties
             }
             else
             {
-                _compressedBytes = (byte[]) value;
+                _compressedBytes = (byte[])value;
             }
         }
 
@@ -87,6 +88,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// <summary>
         /// The format of the bitmap
         /// </summary>
+        [JsonIgnore]
         public int Format
         {
             get => Format1 + Format1;
@@ -97,9 +99,11 @@ namespace RazzleServer.Common.Wz.WzProperties
             }
         }
 
-        public int Format1 { get; set; }
-        public int Format2 { get; set; }
+        [JsonIgnore] public int Format1 { get; set; }
 
+        [JsonIgnore] public int Format2 { get; set; }
+
+        [JsonIgnore]
         public bool ListWzUsed
         {
             get => _listWzUsed;
@@ -116,6 +120,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// <summary>
         /// The actual bitmap
         /// </summary>
+        [JsonIgnore]
         public Bitmap Png
         {
             set
@@ -124,10 +129,6 @@ namespace RazzleServer.Common.Wz.WzProperties
                 CompressPng(value);
             }
         }
-
-        [Obsolete(
-            "To enable more control over memory usage, this property was superseded by the GetCompressedBytes method and will be removed in the future")]
-        public byte[] CompressedBytes => GetCompressedBytes(false);
 
         /// <summary>
         /// Creates a blank WzPngProperty
@@ -289,7 +290,7 @@ namespace RazzleServer.Common.Wz.WzProperties
                     var blocksize = reader.ReadInt32();
                     for (var i = 0; i < blocksize; i++)
                     {
-                        dataStream.WriteByte((byte) (reader.ReadByte() ^ imgParent.Reader.WzKey[i]));
+                        dataStream.WriteByte((byte)(reader.ReadByte() ^ imgParent.Reader.WzKey[i]));
                     }
                 }
 
@@ -311,10 +312,10 @@ namespace RazzleServer.Common.Wz.WzProperties
                     {
                         var b = decBuf[i] & 0x0F;
                         b |= b << 4;
-                        argb[i * 2] = (byte) b;
+                        argb[i * 2] = (byte)b;
                         var g = decBuf[i] & 0xF0;
                         g |= g >> 4;
-                        argb[i * 2 + 1] = (byte) g;
+                        argb[i * 2 + 1] = (byte)g;
                     }
 
                     Marshal.Copy(argb, 0, bmpData.Scan0, argb.Length);
@@ -331,14 +332,14 @@ namespace RazzleServer.Common.Wz.WzProperties
                     bmp.UnlockBits(bmpData);
                     break;
                 case 3: // thanks to Elem8100 
-                    uncompressedSize = (int) Math.Ceiling(Width / 4.0) * 4 * (int) Math.Ceiling(Height / 4.0) * 4 / 8;
+                    uncompressedSize = (int)Math.Ceiling(Width / 4.0) * 4 * (int)Math.Ceiling(Height / 4.0) * 4 / 8;
                     decBuf = new byte[uncompressedSize];
                     zlib.Read(decBuf, 0, uncompressedSize);
                     bmp = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
                     var argb2 = new int[Width * Height];
                 {
-                    var w = (int) Math.Ceiling(Width / 4.0);
-                    var h = (int) Math.Ceiling(Height / 4.0);
+                    var w = (int)Math.Ceiling(Width / 4.0);
+                    var h = (int)Math.Ceiling(Height / 4.0);
                     for (var i = 0; i < h; i++)
                     {
                         int index2;
@@ -481,13 +482,13 @@ namespace RazzleServer.Common.Wz.WzProperties
                 writer.Write(2);
                 for (var i = 0; i < 2; i++)
                 {
-                    writer.Write((byte) (_compressedBytes[i] ^ writer.WzKey[i]));
+                    writer.Write((byte)(_compressedBytes[i] ^ writer.WzKey[i]));
                 }
 
                 writer.Write(_compressedBytes.Length - 2);
                 for (var i = 2; i < _compressedBytes.Length; i++)
                 {
-                    writer.Write((byte) (_compressedBytes[i] ^ writer.WzKey[i - 2]));
+                    writer.Write((byte)(_compressedBytes[i] ^ writer.WzKey[i - 2]));
                 }
 
                 _compressedBytes = memStream.GetBuffer();
@@ -590,14 +591,14 @@ namespace RazzleServer.Common.Wz.WzProperties
             {
                 for (var i = 2; i < 8; i++)
                 {
-                    alpha[i] = (byte) (((8 - i) * a0 + (i - 1) * a1 + 3) / 7);
+                    alpha[i] = (byte)(((8 - i) * a0 + (i - 1) * a1 + 3) / 7);
                 }
             }
             else
             {
                 for (var i = 2; i < 6; i++)
                 {
-                    alpha[i] = (byte) (((6 - i) * a0 + (i - 1) * a1 + 2) / 5);
+                    alpha[i] = (byte)(((6 - i) * a0 + (i - 1) * a1 + 2) / 5);
                 }
 
                 alpha[6] = 0;
@@ -654,13 +655,13 @@ namespace RazzleServer.Common.Wz.WzProperties
         {
             for (var i = 0; i < 16; i += 2, offset++)
             {
-                alpha[i + 0] = (byte) (rawData[offset] & 0x0f);
-                alpha[i + 1] = (byte) ((rawData[offset] & 0xf0) >> 4);
+                alpha[i + 0] = (byte)(rawData[offset] & 0x0f);
+                alpha[i + 1] = (byte)((rawData[offset] & 0xf0) >> 4);
             }
 
             for (var i = 0; i < 16; i++)
             {
-                alpha[i] = (byte) (alpha[i] | (alpha[i] << 4));
+                alpha[i] = (byte)(alpha[i] | (alpha[i] << 4));
             }
         }
 

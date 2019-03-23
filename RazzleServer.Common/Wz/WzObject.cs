@@ -114,11 +114,31 @@ namespace RazzleServer.Common.Wz
 
         public virtual IEnumerable<WzObject> GetObjects() => Enumerable.Empty<WzObject>();
 
-        public void Serialize(string path, JsonSerializer serializer = null)
+        public void Serialize(string path, bool oneFile = true, JsonSerializer serializer = null)
         {
-            using (var stream = File.OpenWrite(path))
+            if (!oneFile && (this is WzFile || this is WzDirectory))
             {
-                Serialize(stream, serializer);
+                switch (this)
+                {
+                    case WzFile wzFile:
+                        wzFile.WzDirectory.Serialize(path, false, serializer);
+                        break;
+                    case WzDirectory wzDir:
+                    {
+                        var subPath = Path.Combine(path, wzDir.Name);
+                        Directory.CreateDirectory(subPath);
+                        wzDir.WzDirectories.ForEach(subDir => subDir.Serialize(subPath, false, serializer));
+                        wzDir.WzImages.ForEach(img => img.Serialize(Path.Combine(subPath, img.Name + ".json"), true, serializer));
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                using (var stream = File.OpenWrite(path))
+                {
+                    Serialize(stream, serializer);
+                }
             }
         }
 
@@ -129,8 +149,7 @@ namespace RazzleServer.Common.Wz
             {
                 serializer ??= new JsonSerializer
                 {
-                    Formatting = Formatting.Indented,
-                    TypeNameHandling = TypeNameHandling.Auto
+                    Formatting = Formatting.Indented, TypeNameHandling = TypeNameHandling.Auto
                 };
 
                 serializer.Serialize(writer, this);
@@ -145,9 +164,6 @@ namespace RazzleServer.Common.Wz
 
         public static T Deserialize<T>(string contents) where T : WzObject =>
             JsonConvert.DeserializeObject<T>(contents,
-                new JsonSerializerSettings
-                {
-                    TypeNameHandling = TypeNameHandling.Auto
-                });
+                new JsonSerializerSettings {TypeNameHandling = TypeNameHandling.Auto});
     }
 }

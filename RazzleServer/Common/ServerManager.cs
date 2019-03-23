@@ -27,7 +27,6 @@ namespace RazzleServer.Common
             LogManager.ServiceProvider = serviceProvider;
             Worlds = new Worlds();
             Migrations = new Migrations();
-            ;
         }
 
         public async Task Configure()

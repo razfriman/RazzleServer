@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using Microsoft.Extensions.Logging;
 using NAudio.Wave;
+using Newtonsoft.Json;
 using RazzleServer.Common.Util;
 using RazzleServer.Common.Wz.Util;
 
@@ -86,6 +87,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// <summary>
         /// The data of the mp3 header
         /// </summary>
+        [JsonIgnore]
         public byte[] Header { get; set; }
 
         /// <summary>

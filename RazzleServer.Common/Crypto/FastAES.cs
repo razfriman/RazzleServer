@@ -1,10 +1,12 @@
-﻿using System.Security;
+﻿using System;
+using System.Security;
 
 namespace RazzleServer.Common.Crypto
 {
     /// <summary>
     /// FastAES based on the AesFastEngine from bouncy castle
     /// </summary>
+    [Obsolete("Using RjindaelManaged to avoid unsafe code")]
     public class FastAes
     {
         private readonly uint[][] _workingKey;

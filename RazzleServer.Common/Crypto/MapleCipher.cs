@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Runtime.Intrinsics.Arm.Arm64;
+using System.Security.Cryptography;
+using RazzleServer.Common.Server;
 
 namespace RazzleServer.Common.Crypto
 {
@@ -8,9 +11,11 @@ namespace RazzleServer.Common.Crypto
     public class MapleCipher
     {
         /// <summary>
-		/// AES transformer
-		/// </summary>
-		private FastAes Transformer { get; }
+        /// AES transformer
+        /// </summary>
+        private FastAes Transformer { get; }
+
+        private ICryptoTransform AesTransformer { get; }
 
         /// <summary>
         /// General locker to prevent multi-threading errors
@@ -47,6 +52,10 @@ namespace RazzleServer.Common.Crypto
         {
             Handshaken = false;
             GameVersion = currentGameVersion;
+            AesTransformer = new RijndaelManaged
+            {
+                Key = ExpandKey(aesKey), Mode = CipherMode.ECB, Padding = PaddingMode.PKCS7
+            }.CreateEncryptor();
             Transformer = new FastAes(ExpandKey(aesKey));
         }
 
@@ -76,10 +85,13 @@ namespace RazzleServer.Common.Crypto
 
             EncryptShanda(content);
 
-            lock (_locker)
+            if (ServerConfig.Instance.UseAesEncryption)
             {
-                Transform(content);
+                AesTransform(content);
             }
+
+            MapleIv.Shuffle();
+
 
             return newData;
         }
@@ -99,11 +111,12 @@ namespace RazzleServer.Common.Crypto
             var length = GetPacketLength(header);
             var content = data.Slice(4, length);
 
-            lock (_locker)
+            if (ServerConfig.Instance.UseAesEncryption)
             {
-                Transform(content);
+                AesTransform(content);
             }
 
+            MapleIv.Shuffle();
             DecryptShanda(content);
 
             return content;
@@ -146,7 +159,7 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
         /// Performs Maplestory's AES algorithm
         /// </summary>
-        private void Transform(Span<byte> buffer)
+        private void AesTransform(Span<byte> buffer)
         {
             int remaining = buffer.Length,
                 length = 0x5B0,
@@ -172,16 +185,18 @@ namespace RazzleServer.Common.Crypto
                 {
                     if ((index - start) % RealIv.Length == 0)
                     {
-                        Transformer.TransformBlock(RealIv);
+                        var tempIv = new byte[RealIv.Length];
+                        AesTransformer.TransformBlock(RealIv, 0, RealIv.Length, tempIv, 0);
+                        tempIv.CopyTo(RealIv.AsSpan());
                     }
 
                     buffer[index] ^= RealIv[(index - start) % RealIv.Length];
                 }
+
                 start += length;
                 remaining -= length;
                 length = 0x5B4;
             }
-            MapleIv.Shuffle();
         }
 
         /// <summary>
@@ -216,11 +231,12 @@ namespace RazzleServer.Common.Crypto
         /// </summary>
         /// <param name="data">Data to check</param>
         /// <returns>Length of <paramref name="data"/></returns>
-        public static int GetPacketLength(in ReadOnlySpan<byte> data) => (data[0] + (data[1] << 8)) ^ (data[2] + (data[3] << 8));
+        public static int GetPacketLength(in ReadOnlySpan<byte> data) =>
+            (data[0] + (data[1] << 8)) ^ (data[2] + (data[3] << 8));
 
         public bool CheckHeader(in ReadOnlySpan<byte> data, bool toClient) => toClient
-                    ? CheckHeaderToClient(data)
-                    : CheckHeaderToServer(data);
+            ? CheckHeaderToClient(data)
+            : CheckHeaderToServer(data);
 
         public bool CheckHeaderToServer(in ReadOnlySpan<byte> data)
         {
@@ -293,6 +309,7 @@ namespace RazzleServer.Common.Crypto
                     buffer[i] = temp;
                     len--;
                 }
+
                 xorKey = 0;
                 len = (byte)(length & 0xFF);
                 for (i = length - 1; i >= 0; i--)

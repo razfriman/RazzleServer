@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using RazzleServer.Common.Util;
 using RazzleServer.Common.Wz.Util;
 using Point = RazzleServer.Common.Util.Point;
@@ -55,39 +56,44 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// </summary>
         public string Value { get; set; }
 
+        [JsonIgnore]
         public WzObject LinkValue
         {
             get
             {
-                if (_linkVal == null)
+                if (_linkVal != null)
                 {
-                    var paths = Value.Split('/');
-                    _linkVal = Parent;
-                    foreach (var path in paths)
+                    return _linkVal;
+                }
+
+                return null;
+
+                var paths = Value.Split('/');
+                _linkVal = Parent;
+                foreach (var path in paths)
+                {
+                    if (path == "..")
                     {
-                        if (path == "..")
+                        _linkVal = _linkVal.Parent;
+                    }
+                    else
+                    {
+                        if (_linkVal is WzImageProperty property)
                         {
-                            _linkVal = _linkVal.Parent;
+                            _linkVal = property[path];
+                        }
+                        else if (_linkVal is WzImage image)
+                        {
+                            _linkVal = image[path];
+                        }
+                        else if (_linkVal is WzDirectory directory)
+                        {
+                            _linkVal = directory[path];
                         }
                         else
                         {
-                            if (_linkVal is WzImageProperty property)
-                            {
-                                _linkVal = property[path];
-                            }
-                            else if (_linkVal is WzImage image)
-                            {
-                                _linkVal = image[path];
-                            }
-                            else if (_linkVal is WzDirectory directory)
-                            {
-                                _linkVal = directory[path];
-                            }
-                            else
-                            {
-                                Log.LogCritical($"UOL cannot be resolved for property: {FullPath}");
-                                return null;
-                            }
+                            Log.LogCritical($"UOL cannot be resolved for property: {FullPath}");
+                            return null;
                         }
                     }
                 }
