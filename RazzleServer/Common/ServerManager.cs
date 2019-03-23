@@ -32,7 +32,6 @@ namespace RazzleServer.Common
 
         public async Task Configure()
         {
-            await ServerConfig.LoadFromFile("ServerConfig.json");
             InitializeDatabase();
             await DataProvider.Initialize();
             await ScriptProvider.Initialize();
