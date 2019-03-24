@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Drawing;
 using Newtonsoft.Json;
 using RazzleServer.Common.Util;
@@ -11,15 +11,15 @@ namespace RazzleServer.Common.Wz.WzProperties
     /// <summary>
     /// A property that's value is a string
     /// </summary>
-    public class WzUolProperty : WzExtended
+    public class WzUolResolvingProperty : WzExtended
     {
-        private static readonly ILogger Log = LogManager.CreateLoggerSerilog<WzUolProperty>();
+        private static readonly ILogger Log = LogManager.CreateLoggerSerilog<WzUolResolvingProperty>();
 
         private WzObject _linkVal;
 
         public override void SetValue(object value) => Value = (string)value;
 
-        public override WzImageProperty DeepClone() => new WzUolProperty(Name, Value) {_linkVal = null};
+        public override WzImageProperty DeepClone() => new WzUolResolvingProperty(Name, Value) {_linkVal = null};
 
         public override object WzValue => LinkValue;
 
@@ -66,9 +66,6 @@ namespace RazzleServer.Common.Wz.WzProperties
                     return _linkVal;
                 }
 
-                
-                return null;
-
                 var paths = Value.Split('/');
                 _linkVal = Parent;
                 foreach (var path in paths)
@@ -106,7 +103,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// <summary>
         /// Creates a blank WzUOLProperty
         /// </summary>
-        public WzUolProperty()
+        public WzUolResolvingProperty()
         {
         }
 
@@ -114,7 +111,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// Creates a WzUOLProperty with the specified name
         /// </summary>
         /// <param name="name">The name of the property</param>
-        public WzUolProperty(string name)
+        public WzUolResolvingProperty(string name)
         {
             Name = name;
         }
@@ -124,7 +121,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// </summary>
         /// <param name="name">The name of the property</param>
         /// <param name="value">The value of the property</param>
-        public WzUolProperty(string name, string value)
+        public WzUolResolvingProperty(string name, string value)
         {
             Name = name;
             Value = value;

@@ -142,8 +142,7 @@ namespace RazzleServer.Common.Wz
             {
                 serializer ??= new JsonSerializer
                 {
-                    NullValueHandling = NullValueHandling.Ignore,
-                    Formatting = Formatting.None
+                    NullValueHandling = NullValueHandling.Ignore, Formatting = Formatting.None
                 };
 
                 serializer.Serialize(writer, this);
