@@ -2,14 +2,11 @@
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-using Microsoft.Extensions.Logging;
 using NAudio.Wave;
 using Newtonsoft.Json;
 using RazzleServer.Common.Util;
 using RazzleServer.Common.Wz.Util;
-
-//using System;
-//using NAudio.Wave;
+using Serilog;
 
 namespace RazzleServer.Common.Wz.WzProperties
 {
@@ -18,7 +15,7 @@ namespace RazzleServer.Common.Wz.WzProperties
     /// </summary>
     public class WzSoundProperty : WzExtended
     {
-        public static readonly ILogger Log = LogManager.CreateLogger<WzSoundProperty>();
+        public static readonly ILogger Log = LogManager.CreateLoggerSerilog<WzSoundProperty>();
 
         #region Fields
 
@@ -268,7 +265,7 @@ namespace RazzleServer.Common.Wz.WzProperties
 
                 if (Marshal.SizeOf<WaveFormat>() + wavFmt.ExtraSize != wavHeader.Length)
                 {
-                    Log.LogCritical("Failed to parse sound header");
+                    Log.Error("Failed to parse sound header");
                     return;
                 }
 
@@ -286,7 +283,7 @@ namespace RazzleServer.Common.Wz.WzProperties
             }
             else
             {
-                Log.LogError($"Unknown wave encoding: {wavFmt.Encoding}");
+                Log.Error($"Unknown wave encoding: {wavFmt.Encoding}");
             }
         }
 

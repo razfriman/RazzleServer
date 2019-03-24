@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RazzleServer.Common.Util;
 using RazzleServer.Common.Wz.Util;
+using Serilog;
 using Point = RazzleServer.Common.Util.Point;
 
 namespace RazzleServer.Common.Wz.WzProperties
@@ -13,7 +13,7 @@ namespace RazzleServer.Common.Wz.WzProperties
     /// </summary>
     public class WzUolProperty : WzExtended
     {
-        private static readonly ILogger Log = LogManager.CreateLogger<WzUolProperty>();
+        private static readonly ILogger Log = LogManager.CreateLoggerSerilog<WzUolProperty>();
 
         private WzObject _linkVal;
 
@@ -90,7 +90,7 @@ namespace RazzleServer.Common.Wz.WzProperties
                         }
                         else
                         {
-                            Log.LogCritical($"UOL cannot be resolved for property: {FullPath}");
+                            Log.Error($"UOL cannot be resolved for property: {FullPath}");
                             return null;
                         }
                     }

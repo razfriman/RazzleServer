@@ -4,10 +4,10 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.IO.Compression;
 using System.Runtime.InteropServices;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RazzleServer.Common.Util;
 using RazzleServer.Common.Wz.Util;
+using Serilog;
 
 namespace RazzleServer.Common.Wz.WzProperties
 {
@@ -16,7 +16,7 @@ namespace RazzleServer.Common.Wz.WzProperties
     /// </summary>
     public class WzPngProperty : WzImageProperty
     {
-        public static readonly ILogger Log = LogManager.CreateLogger<WzPngProperty>();
+        public static readonly ILogger Log = LogManager.CreateLoggerSerilog<WzPngProperty>();
 
         #region Fields
 
@@ -447,7 +447,7 @@ namespace RazzleServer.Common.Wz.WzProperties
                     break;
 
                 default:
-                    Log.LogError($"Unknown PNG format: {Format1} {Format2}");
+                    Log.Error($"Unknown PNG format: {Format1} {Format2}");
                     break;
             }
 

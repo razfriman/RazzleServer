@@ -1,21 +1,21 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Serilog;
 
 namespace RazzleServer.Common.Util
 {
     public abstract class MapleKeyedCollection<TKey, TValue> where TValue : class
     {
         [JsonIgnore]
-        protected readonly ILogger Logger;
+        protected readonly ILogger Log;
 
         [JsonProperty]
         protected Dictionary<TKey, TValue> Objects { get; set; } = new Dictionary<TKey, TValue>();
 
         protected MapleKeyedCollection()
         {
-            Logger = LogManager.CreateLogger<MapleKeyedCollection<TKey, TValue>>();
+            Log = LogManager.CreateLoggerSerilog<MapleKeyedCollection<TKey, TValue>>();
         }
 
         public TValue this[TKey key] => Objects.ContainsKey(key) ? Objects[key] : null;

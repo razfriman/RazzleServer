@@ -32,7 +32,7 @@ namespace RazzleServer.Game.Maple.Maps
             }
             catch (Exception e)
             {
-                Logger.LogError(e, "Error adding item to MapCharacters");
+                Log.Error(e, "Error adding item to MapCharacters");
             }
 
             lock (Map.Drops)

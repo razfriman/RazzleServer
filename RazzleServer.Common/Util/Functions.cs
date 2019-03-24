@@ -3,14 +3,14 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Serilog;
 
 namespace RazzleServer.Common.Util
 {
     public class Functions
     {
-        private static readonly ILogger Log = LogManager.CreateLogger<Functions>();
+        private static readonly ILogger Log = LogManager.CreateLoggerSerilog<Functions>();
 
         /// <summary>
         /// Global random against time-based seed mistakes
@@ -270,7 +270,7 @@ namespace RazzleServer.Common.Util
                 }
                 catch (Exception e)
                 {
-                    Log.LogError(e, "Error while saving to JSON");
+                    Log.Error(e, "Error while saving to JSON");
                 }
             }
         }

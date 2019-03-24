@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using RazzleServer.Common.Util;
 using RazzleServer.Common.Wz.Util;
 using RazzleServer.Common.Wz.WzProperties;
+using Serilog;
 
 namespace RazzleServer.Common.Wz
 {
@@ -18,7 +18,7 @@ namespace RazzleServer.Common.Wz
     /// </summary>
     public class WzFile : WzObject
     {
-        public static readonly ILogger Log = LogManager.CreateLogger<WzFile>();
+        public static readonly ILogger Log = LogManager.CreateLoggerSerilog<WzFile>();
 
         #region Fields
 
@@ -43,6 +43,7 @@ namespace RazzleServer.Common.Wz
 
         public short Version { get; set; }
 
+        [JsonIgnore]
         public string FilePath { get; private set; }
 
         [JsonConverter(typeof(StringEnumConverter))]
@@ -148,14 +149,14 @@ namespace RazzleServer.Common.Wz
         {
             if (FilePath == null)
             {
-                Log.LogCritical("Path is null");
+                Log.Error("Path is null");
                 return;
             }
 
             if (!File.Exists(FilePath))
             {
                 var message = $"WZ File does not exist at path: '{FilePath}'";
-                Log.LogCritical(message);
+                Log.Error(message);
                 throw new FileNotFoundException(message);
             }
 

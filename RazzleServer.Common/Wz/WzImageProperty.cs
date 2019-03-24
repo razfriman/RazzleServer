@@ -11,9 +11,10 @@ namespace RazzleServer.Common.Wz
     /// <summary>
     /// An interface for wz img properties
     /// </summary>
+    [JsonConverter(typeof(WzImagePropertyConverter))]
     public abstract class WzImageProperty : WzObject
     {
-        public virtual List<WzImageProperty> WzProperties { get; set; } = new List<WzImageProperty>();
+        public virtual List<WzImageProperty> WzProperties { get; set; }
 
         public new virtual WzImageProperty this[string name]
         {

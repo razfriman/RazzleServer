@@ -2,10 +2,10 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Crypto;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
+using Serilog;
 
 namespace RazzleServer.Common.Network
 {
@@ -17,7 +17,7 @@ namespace RazzleServer.Common.Network
         private readonly bool _toClient;
         private bool _disposed;
         private IPEndPoint Endpoint { get; }
-        private readonly ILogger _log = LogManager.CreateLogger<ClientSocket>();
+        private readonly ILogger _log = LogManager.CreateLoggerSerilog<ClientSocket>();
 
         public MapleCipherProvider Crypto { get; }
         public bool Connected => !_disposed;
@@ -52,7 +52,7 @@ namespace RazzleServer.Common.Network
                 }
                 catch (Exception e)
                 {
-                    _log.LogError(e, "Error receiving data");
+                    _log.Error(e, "Error receiving data");
                 }
             }
         }
@@ -102,7 +102,7 @@ namespace RazzleServer.Common.Network
 
         public void Disconnect()
         {
-            _log.LogInformation("Client Disconnected");
+            _log.Information("Client Disconnected");
             Dispose();
         }
 

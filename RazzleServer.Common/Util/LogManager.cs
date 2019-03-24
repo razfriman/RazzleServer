@@ -9,5 +9,6 @@ namespace RazzleServer.Common.Util
         public static IServiceProvider ServiceProvider { get; set; }
 
         public static ILogger CreateLogger<T>() => ServiceProvider.GetService<ILogger<T>>();
+        public static Serilog.ILogger CreateLoggerSerilog<T>() => Serilog.Log.ForContext<T>();
     }
 }

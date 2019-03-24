@@ -29,7 +29,7 @@ namespace RazzleServer.Common.Wz
         /// <summary>
         /// The WzObjectType of the object
         /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
+        [JsonIgnore]
         public abstract WzObjectType ObjectType { get; }
 
         /// <summary>
@@ -46,27 +46,19 @@ namespace RazzleServer.Common.Wz
         {
             get
             {
-                if (this is WzFile wzFile)
+                switch (this)
                 {
-                    return wzFile[name];
+                    case WzFile wzFile:
+                        return wzFile[name];
+                    case WzDirectory wzDirectory:
+                        return wzDirectory[name];
+                    case WzImage wzImage:
+                        return wzImage[name];
+                    case WzImageProperty wzImageProperty:
+                        return wzImageProperty[name];
+                    default:
+                        return null;
                 }
-
-                if (this is WzDirectory wzDirectory)
-                {
-                    return wzDirectory[name];
-                }
-
-                if (this is WzImage wzImage)
-                {
-                    return wzImage[name];
-                }
-
-                if (this is WzImageProperty wzImageProperty)
-                {
-                    return wzImageProperty[name];
-                }
-
-                return null;
             }
         }
 
@@ -150,7 +142,9 @@ namespace RazzleServer.Common.Wz
             {
                 serializer ??= new JsonSerializer
                 {
-                    Formatting = Formatting.Indented, TypeNameHandling = TypeNameHandling.Auto
+                    NullValueHandling = NullValueHandling.Ignore,
+                    DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
+                    Formatting = Formatting.None
                 };
 
                 serializer.Serialize(writer, this);

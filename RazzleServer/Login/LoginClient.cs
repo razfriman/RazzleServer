@@ -34,7 +34,7 @@ namespace RazzleServer.Login
             {
                 if (packet.Available >= 2)
                 {
-                    header = (ClientOperationCode)packet.ReadUShort();
+                    header = (ClientOperationCode)packet.ReadByte();
 
                     if (Server.PacketHandlers.ContainsKey(header))
                     {
