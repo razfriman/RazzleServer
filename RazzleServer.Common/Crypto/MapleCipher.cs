@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Security.Cryptography;
-using RazzleServer.Common.Server;
 
 namespace RazzleServer.Common.Crypto
 {
@@ -31,16 +30,23 @@ namespace RazzleServer.Common.Crypto
         /// Bool stating if the current instance received its handshake
         /// </summary>
         public bool Handshaken { get; set; }
+        
+        /// <summary>
+        /// Apply AES encrpytion. This must be false in v40b.
+        /// </summary>
+        public bool UseAesEncryption { get; set; }
 
         /// <summary>
         /// Creates a new instance of <see cref="MapleCipher"/>
         /// </summary>
         /// <param name="currentGameVersion">The current MapleStory version</param>
         /// <param name="aesKey">AESKey for the current MapleStory version</param>
-        public MapleCipher(ushort currentGameVersion, ulong aesKey)
+        /// <param name="useAesEncryption">Apply AES encryption</param>
+        public MapleCipher(ushort currentGameVersion, ulong aesKey, bool useAesEncryption = true)
         {
             Handshaken = false;
             GameVersion = currentGameVersion;
+            UseAesEncryption = useAesEncryption;
             AesTransformer = new RijndaelManaged
             {
                 Key = ExpandKey(aesKey), Mode = CipherMode.ECB, Padding = PaddingMode.PKCS7
@@ -73,7 +79,7 @@ namespace RazzleServer.Common.Crypto
 
             EncryptShanda(content);
 
-            if (ServerConfig.Instance.UseAesEncryption)
+            if (UseAesEncryption)
             {
                 AesTransform(content);
             }
@@ -99,7 +105,7 @@ namespace RazzleServer.Common.Crypto
             var length = GetPacketLength(header);
             var content = data.Slice(4, length);
 
-            if (ServerConfig.Instance.UseAesEncryption)
+            if (UseAesEncryption)
             {
                 AesTransform(content);
             }
@@ -192,7 +198,7 @@ namespace RazzleServer.Common.Crypto
         /// </summary>
         private void WriteHeaderToServer(Span<byte> data, int length)
         {
-            int a = MapleIv.Hiword;
+            int a = MapleIv.HiWord;
             a ^= GameVersion;
             var b = a ^ length;
             data[0] = (byte)(a % 0x100);
@@ -206,7 +212,7 @@ namespace RazzleServer.Common.Crypto
         /// </summary>
         private void WriteHeaderToClient(Span<byte> data, int length)
         {
-            var a = MapleIv.Hiword ^ -(GameVersion + 1);
+            var a = MapleIv.HiWord ^ -(GameVersion + 1);
             var b = a ^ length;
             data[0] = (byte)(a % 0x100);
             data[1] = (byte)((a - data[0]) / 0x100);
@@ -229,14 +235,14 @@ namespace RazzleServer.Common.Crypto
         public bool CheckHeaderToServer(in ReadOnlySpan<byte> data)
         {
             var encodedVersion = (ushort)(data[0] + (data[1] << 8));
-            var version = (ushort)(encodedVersion ^ MapleIv.Hiword);
+            var version = (ushort)(encodedVersion ^ MapleIv.HiWord);
             return version == GameVersion;
         }
 
         public bool CheckHeaderToClient(in ReadOnlySpan<byte> data)
         {
             var encodedVersion = (ushort)(data[0] + (data[1] << 8));
-            var version = (ushort)-((encodedVersion ^ MapleIv.Hiword) + 1);
+            var version = (ushort)-((encodedVersion ^ MapleIv.HiWord) + 1);
             return version == GameVersion;
         }
 

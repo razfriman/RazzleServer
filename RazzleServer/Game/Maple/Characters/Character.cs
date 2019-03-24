@@ -576,7 +576,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             Id = id;
             Client = client;
-            Items = new CharacterItems(this, 24, 24, 24, 24, 48);
+            Items = new CharacterItems(this, 100, 100, 100, 100, 100);
             Skills = new CharacterSkills(this);
             Quests = new CharacterQuests(this);
             Buffs = new CharacterBuffs(this);
@@ -590,26 +590,26 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Initialize()
         {
-            using (var oPacket = new PacketWriter(ServerOperationCode.SetField))
+            using (var pw = new PacketWriter(ServerOperationCode.SetField))
             {
-                oPacket.WriteInt(Client.Server.ChannelId);
-                oPacket.WriteByte(++Portals);
-                oPacket.WriteBool(true);
-                oPacket.WriteShort(0);
-                oPacket.WriteInt(Damage.Random.OriginalSeed1);
-                oPacket.WriteInt(Damage.Random.OriginalSeed2);
-                oPacket.WriteInt(Damage.Random.OriginalSeed3);
-                oPacket.WriteLong(-1);
-                oPacket.WriteBytes(DataToByteArray());
-                oPacket.WriteDateTime(DateTime.UtcNow);
-
-                Client.Send(oPacket);
+                pw.WriteInt(Client.Server.ChannelId);
+                pw.WriteByte(++Portals);
+                pw.WriteBool(true);
+                pw.WriteInt(Damage.Random.OriginalSeed1);
+                pw.WriteInt(Damage.Random.OriginalSeed2);
+                pw.WriteInt(Damage.Random.OriginalSeed3);
+                pw.WriteInt(Damage.Random.OriginalSeed3);
+                pw.WriteShort(-1); // flags
+                pw.WriteBytes(DataToByteArray());
+                Client.Send(pw);
             }
 
             IsInitialized = true;
 
             Map.Characters.Add(this);
-
+            // Send server message
+            // Update buddy list
+            // update quest mob kills
             UpdateStatsForParty();
 
             Task.Factory.StartNew(Client.StartPingCheck);

@@ -32,27 +32,30 @@ namespace RazzleServer.Game
             var header = ClientOperationCode.Unknown;
             try
             {
-                if (packet.Available >= 2)
+                if (packet.Available < 1)
                 {
-                    header = (ClientOperationCode)packet.ReadUShort();
+                    Logger.Error("Invalid packet - no data available");
+                    return;
+                }
 
-                    if (Server.PacketHandlers.ContainsKey(header))
-                    {
-                        if (ServerConfig.Instance.PrintPackets && !Server.IgnorePacketPrintSet.Contains(header))
-                        {
-                            Logger.Information($"Received [{header.ToString()}] {packet.ToPacketString()}");
-                        }
+                header = (ClientOperationCode)packet.ReadByte();
 
-                        foreach (var handler in Server.PacketHandlers[header])
-                        {
-                            handler.HandlePacket(packet, this);
-                        }
-                    }
-                    else
+                if (Server.PacketHandlers.ContainsKey(header))
+                {
+                    if (ServerConfig.Instance.PrintPackets && !Server.IgnorePacketPrintSet.Contains(header))
                     {
-                        Logger.Warning($"Unhandled Packet [{header.ToString()}] {packet.ToPacketString()}");
-                        Character?.Release();
+                        Logger.Information($"Received [{header.ToString()}] {packet.ToPacketString()}");
                     }
+
+                    foreach (var handler in Server.PacketHandlers[header])
+                    {
+                        handler.HandlePacket(packet, this);
+                    }
+                }
+                else
+                {
+                    Logger.Warning($"Unhandled Packet [{header.ToString()}] {packet.ToPacketString()}");
+                    Character?.Release();
                 }
             }
             catch (Exception e)

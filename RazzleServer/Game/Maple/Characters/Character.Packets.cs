@@ -37,9 +37,7 @@ namespace RazzleServer.Game.Maple.Characters
                 oPacket.WriteByte(Skin);
                 oPacket.WriteInt(Face);
                 oPacket.WriteInt(Hair);
-                oPacket.WriteLong(0);
-                oPacket.WriteLong(0);
-                oPacket.WriteLong(0);
+                oPacket.WriteLong(0); // Pet SN
                 oPacket.WriteByte(Level);
                 oPacket.WriteShort((short)Job);
                 oPacket.WriteShort(Strength);
@@ -54,9 +52,10 @@ namespace RazzleServer.Game.Maple.Characters
                 oPacket.WriteShort(SkillPoints);
                 oPacket.WriteInt(Experience);
                 oPacket.WriteShort(Fame);
-                oPacket.WriteInt(0);
                 oPacket.WriteInt(Map.MapleId);
                 oPacket.WriteByte(SpawnPoint);
+                oPacket.WriteLong(0);
+                oPacket.WriteInt(0);
                 oPacket.WriteInt(0);
 
                 return oPacket.ToArray();
@@ -67,14 +66,6 @@ namespace RazzleServer.Game.Maple.Characters
         {
             using (var oPacket = new PacketWriter())
             {
-                var megaphone = true;
-
-                oPacket.WriteByte((int)Gender);
-                oPacket.WriteByte(Skin);
-                oPacket.WriteInt(Face);
-                oPacket.WriteBool(megaphone);
-                oPacket.WriteInt(Hair);
-
                 var visibleLayer = new Dictionary<byte, int>();
                 var hiddenLayer = new Dictionary<byte, int>();
 
@@ -108,8 +99,7 @@ namespace RazzleServer.Game.Maple.Characters
                     oPacket.WriteByte(entry.Key);
                     oPacket.WriteInt(entry.Value);
                 }
-
-                oPacket.WriteByte(byte.MaxValue);
+                oPacket.WriteByte(0);
 
                 foreach (var entry in hiddenLayer)
                 {
@@ -117,15 +107,7 @@ namespace RazzleServer.Game.Maple.Characters
                     oPacket.WriteInt(entry.Value);
                 }
 
-                oPacket.WriteByte(byte.MaxValue);
-
-                var cashWeapon = Items[EquipmentSlot.CashWeapon];
-
-                oPacket.WriteInt(cashWeapon?.MapleId ?? 0);
-
-                oPacket.WriteInt(0); // pet id
-                oPacket.WriteInt(0); // pet id
-                oPacket.WriteInt(0); // pet id
+                oPacket.WriteByte(0);
 
                 return oPacket.ToArray();
             }
@@ -137,12 +119,12 @@ namespace RazzleServer.Game.Maple.Characters
             pw.WriteBytes(StatisticsToByteArray());
             pw.WriteByte(BuddyListSlots);
             pw.WriteInt(Meso);
-            pw.WriteBytes(Items.ToByteArray()); // OK
+            pw.WriteBytes(Items.ToByteArray()); 
             pw.WriteBytes(Skills.ToByteArray());
             pw.WriteBytes(Quests.ToByteArray());
-            pw.WriteLong(0); // Rings
+            pw.WriteShort(0); // Mini games (5 ints)
+            pw.WriteShort(0); // Rings (int, partner(13), ringid, 0int, partnerringid, 0int
             pw.WriteBytes(TeleportRocks.ToByteArray());
-            pw.WriteInt(0); // OK
             return pw.ToArray();
         }
 

@@ -289,12 +289,6 @@ namespace RazzleServer.Game.Maple.Skills
             {
                 oPacket.WriteInt(MapleId);
                 oPacket.WriteInt(CurrentLevel);
-
-                if (IsFromFourthJob)
-                {
-                    oPacket.WriteInt(MaxLevel);
-                }
-
                 return oPacket.ToArray();
             }
         }

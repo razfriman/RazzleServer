@@ -24,20 +24,19 @@ namespace RazzleServer.Login.Handlers
             var bottomId = packet.ReadInt();
             var shoesId = packet.ReadInt();
             var weaponId = packet.ReadInt();
-            var gender = (Gender)packet.ReadByte();
             var strength = packet.ReadByte();
             var dexterity = packet.ReadByte();
             var intelligence = packet.ReadByte();
             var luck = packet.ReadByte();
             var error = ValidateCharacterCreation(client.Server, client.World, name, face, hair, hairColor, skin, topId,
-                bottomId, shoesId, weaponId, gender);
+                bottomId, shoesId, weaponId, client.Account.Gender);
 
             var character = new Character
             {
                 AccountId = client.Account.Id,
                 WorldId = client.World,
                 Name = name,
-                Gender = gender,
+                Gender = client.Account.Gender,
                 Skin = skin,
                 Face = face,
                 Hair = hair + hairColor,
@@ -58,13 +57,15 @@ namespace RazzleServer.Login.Handlers
             character.Items.Add(new Item(bottomId, equipped: true));
             character.Items.Add(new Item(shoesId, equipped: true));
             character.Items.Add(new Item(weaponId, equipped: true));
-            character.Items.Add(new Item(4161001), forceGetSlot: true); // A Beginner's Guide
             character.Create();
 
             using (var pw = new PacketWriter(ServerOperationCode.CreateCharacterResult))
             {
                 pw.WriteBool(error);
-                pw.WriteBytes(character.ToByteArray());
+                if (!error)
+                {
+                    pw.WriteBytes(character.ToByteArray());
+                }
                 client.Send(pw);
             }
         }

@@ -20,7 +20,8 @@ namespace RazzleServer.Common.Network
 
         protected AClient(Socket session, bool toClient = true)
         {
-            Socket = new ClientSocket(session, this, ServerConfig.Instance.Version, ServerConfig.Instance.AesKey, toClient);
+            Socket = new ClientSocket(session, this, ServerConfig.Instance.Version, ServerConfig.Instance.AesKey,
+                toClient, ServerConfig.Instance.UseAesEncryption);
             Host = Socket.Host;
             Port = Socket.Port;
             Connected = true;

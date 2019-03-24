@@ -8,10 +8,9 @@ namespace RazzleServer.Login.Handlers
         public override void HandlePacket(PacketReader packet, LoginClient client)
         {
             var characterId = packet.ReadInt();
-            client.MacAddresses = packet.ReadString().Split(',', ' ');
-
+            
             client.Server.Manager.Migrate(client.Host, client.Account.Id, characterId);
-
+            
             var host = client.Socket.HostBytes;
             var port = client.Server.Manager.Worlds[client.World][client.Channel].Port;
 

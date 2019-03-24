@@ -16,10 +16,20 @@ namespace RazzleServer.Login.Handlers
             var accountName = packet.ReadString();
             var accountPassword = packet.ReadString();
             var result = Login(client, accountName, accountPassword);
-            client.Send(LoginPackets.SendLoginResult(result, client.Account));
+            client.Send(LoginPackets.LoginResult(result, client.Account));
+
+
+            if (result != LoginResult.Valid)
+            {
+                return;
+            }
+            
+            client.Send(LoginPackets.ListWorlds(client.Server.Manager.Worlds));
+            client.Send(LoginPackets.EndListWorlds());
         }
 
-        public LoginResult Login(LoginClient client, string username, string password)
+
+        public static LoginResult Login(LoginClient client, string username, string password)
         {
             client.Account = new LoginAccount(client);
 
@@ -54,7 +64,7 @@ namespace RazzleServer.Login.Handlers
             return LoginResult.Valid;
         }
 
-        private void AutoRegisterAccount(LoginClient client, string username, string password)
+        private static void AutoRegisterAccount(LoginClient client, string username, string password)
         {
             client.Account.Username = username;
             client.Account.Salt = Functions.RandomString();

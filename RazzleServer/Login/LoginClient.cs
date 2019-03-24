@@ -15,7 +15,6 @@ namespace RazzleServer.Login
         public LoginAccount Account { get; internal set; }
         public string LastUsername { get; internal set; }
         public string LastPassword { get; internal set; }
-        public string[] MacAddresses { get; internal set; }
         public LoginServer Server { get; internal set; }
 
         public override ILogger Logger => Log.ForContext<LoginClient>();

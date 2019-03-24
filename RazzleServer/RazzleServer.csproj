@@ -29,11 +29,8 @@
     <Compile Remove="Game\Handlers\CashShopMigrationHandler.cs" />
     <Compile Remove="Game\Handlers\ChalkboardCloseHandler.cs" />
     <Compile Remove="Game\Handlers\ChangeKeymapHandler.cs" />
-    <Compile Remove="Game\Handlers\ChangeMapHandler.cs" />
-    <Compile Remove="Game\Handlers\CharacterLoadHandler.cs" />
     <Compile Remove="Game\Handlers\CommandWhisperFindHandler.cs" />
     <Compile Remove="Game\Handlers\DistributeSPHandler.cs" />
-    <Compile Remove="Game\Handlers\EnterPortalHandler.cs" />
     <Compile Remove="Game\Handlers\FaceExpressionHandler.cs" />
     <Compile Remove="Game\Handlers\HealOverTimeHandler.cs" />
     <Compile Remove="Game\Handlers\HitReactorHandler.cs" />

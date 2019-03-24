@@ -497,12 +497,6 @@ namespace RazzleServer.Game.Maple.Characters
         {
             using (var oPacket = new PacketWriter())
             {
-                oPacket.WriteByte(MaxSlots[ItemType.Equipment]);
-                oPacket.WriteByte(MaxSlots[ItemType.Usable]);
-                oPacket.WriteByte(MaxSlots[ItemType.Setup]);
-                oPacket.WriteByte(MaxSlots[ItemType.Etcetera]);
-                oPacket.WriteByte(MaxSlots[ItemType.Cash]);
-
                 foreach (var item in GetEquipped(EquippedQueryMode.Normal))
                 {
                     oPacket.WriteBytes(item.ToByteArray());

@@ -3,9 +3,11 @@
     public enum ServerOperationCode : ushort
     {
         CheckPasswordResult = 0x01,
-        SelectWorldResult = 0x02,
+        WorldStatus = 0x02,
+        WorldInformation = 0x03,
+        CharacterList = 0x04,
         ClientConnectToServerLogin = 0x05,
-        LoginCheckNameResult = 0x06,
+        CheckNameResult = 0x06,
         CreateCharacterResult = 0x07,
         DeleteCharacterResult = 0x08,
         ClientConnectToServer = 0x09,
@@ -26,6 +28,7 @@
         BuddyOperation = 0x21,
         Message = 0x23,
         SetField = 0x26,
+        SetFieldCashShop = 0x27,
         TransferFieldReqIgnored = 0x2A,
         IncorrectChannelNumber = 0x2B,
         SlashCmdAnswer = 0x2E,

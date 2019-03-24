@@ -4,19 +4,18 @@ using RazzleServer.Game.Maple.Scripting;
 
 namespace RazzleServer.Game.Handlers
 {
-    [PacketHandler(ClientOperationCode.ChangeMap)]
-    public class ChangeMapHandler : GamePacketHandler
+    [PacketHandler(ClientOperationCode.ChangeField)]
+    public class ChangeFieldHandler : GamePacketHandler
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
             var portals = packet.ReadByte();
-
             if (portals != client.Character.Portals)
             {
                 client.Character.LogCheatWarning(CheatType.InvalidPortals);
                 return;
             }
-            // 23 00 [01] [00 95 BA 0A] [00 00 00 00 00 
+
             var mapId = packet.ReadInt();
             var portalLabel = packet.ReadString();
 

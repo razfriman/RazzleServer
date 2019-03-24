@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace RazzleServer.Common.Crypto
 {
@@ -8,46 +9,54 @@ namespace RazzleServer.Common.Crypto
     /// </summary>
     public class InitializationVector
     {
+        private readonly byte[] _data;
+
         /// <summary>
-        /// IV Container
+        /// Gets the uint value from the current container
         /// </summary>
-        private uint _value;
+        public uint UInt => MemoryMarshal.Cast<byte, uint>(_data)[0];
+        /// <summary>
+        /// Gets the LOWORD from the current container
+        /// </summary>
+        public ushort LoWord => MemoryMarshal.Cast<byte, ushort>(_data)[0];
+        
+        /// <summary>
+        /// Gets the HIWORD from the current container
+        /// </summary>
+        public ushort HiWord => MemoryMarshal.Cast<byte, ushort>(_data)[1];
 
         /// <summary>
         /// Gets the bytes of the current container
         /// </summary>
-        internal byte[] Bytes => BitConverter.GetBytes(_value);
-
-        /// <summary>
-        /// Gets the HIWORD from the current container
-        /// </summary>
-        internal ushort Hiword => (ushort)(_value >> 16);
-
-        /// <summary>
-        /// Gets the LOWORD from the current container
-        /// </summary>
-        internal ushort Loword => (ushort)_value;
-
+        public byte[] Bytes => _data.ToArray();
+        
         /// <summary>
         /// IV Security check
         /// </summary>
-        internal bool MustSend => Loword % 0x1F == 0;
+        public bool MustSend => LoWord % 0x1F == 0;
 
         /// <summary>
         /// Creates a IV instance using <paramref name="vector"/>
         /// </summary>
         /// <param name="vector">Initialization vector</param>
-        internal InitializationVector(uint vector) => _value = vector;
+        public InitializationVector(uint vector) => _data = BitConverter.GetBytes(vector);
+
+        /// <summary>
+        /// Creates a IV instance using <paramref name="vector"/>
+        /// </summary>
+        /// <param name="vector">Initialization vector</param>
+        public InitializationVector(byte[] vector) => _data = vector;
 
         /// <summary>
         /// Shuffles the current IV to the next vector using the shuffle table
         /// </summary>
-        internal void Shuffle()
+        public void Shuffle()
         {
+            var newIv = CryptoConstants.DefaultKey.ToArray();
+            
             for (var i = 0; i < 4; i++)
             {
-                var newIv = CryptoConstants.DefaultKey.ToArray();
-                var input = (byte)(_value & 0xFF);
+                var input = _data[i];
                 var tableInput = CryptoConstants.Shuffle[input];
                 newIv[0] += (byte)(CryptoConstants.Shuffle[newIv[1]] - input);
                 newIv[1] -= (byte)(newIv[2] ^ tableInput);
@@ -58,8 +67,12 @@ namespace RazzleServer.Common.Crypto
                 var val2 = val >> 0x1D;
                 val <<= 0x03;
                 val2 |= val;
-                _value = val2;
+                newIv[0] = (byte)(val2 & 0xFF);
+                newIv[1] = (byte)((val2 >> 8) & 0xFF);
+                newIv[2] = (byte)((val2 >> 16) & 0xFF);
+                newIv[3] = (byte)((val2 >> 24) & 0xFF);
             }
+            Buffer.BlockCopy(newIv, 0, _data, 0, 4);
         }
     }
 }

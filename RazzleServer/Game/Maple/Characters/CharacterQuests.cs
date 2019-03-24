@@ -395,14 +395,6 @@ namespace RazzleServer.Game.Maple.Characters
                     oPacket.WriteString(kills);
                 }
 
-                oPacket.WriteShort((short)Completed.Count);
-
-                foreach (var quest in Completed)
-                {
-                    oPacket.WriteUShort(quest.Key);
-                    oPacket.WriteDateTime(quest.Value);
-                }
-
                 return oPacket.ToArray();
             }
         }

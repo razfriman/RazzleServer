@@ -91,20 +91,6 @@ namespace RazzleServer.Game.Maple.Characters
                 foreach (var loopSkill in Values)
                 {
                     oPacket.WriteBytes(loopSkill.ToByteArray());
-
-                    if (loopSkill.IsCoolingDown)
-                    {
-                        cooldownSkills.Add(loopSkill);
-                    }
-                }
-
-                oPacket.WriteShort((short)cooldownSkills.Count);
-
-                foreach (var loopCooldown in cooldownSkills)
-                {
-
-                    oPacket.WriteInt(loopCooldown.MapleId);
-                    oPacket.WriteShort((short)loopCooldown.RemainingCooldownSeconds);
                 }
 
                 return oPacket.ToArray();

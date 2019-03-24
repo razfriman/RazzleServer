@@ -24,7 +24,8 @@ namespace RazzleServer.Common.Network
         public byte[] HostBytes { get; }
         public ushort Port { get; }
 
-        public ClientSocket(Socket socket, AClient client, ushort currentGameVersion, ulong aesKey, bool toClient)
+        public ClientSocket(Socket socket, AClient client, ushort currentGameVersion, ulong aesKey, bool toClient,
+            bool useAesEncryption)
         {
             _socket = socket;
             _socketBuffer = new byte[1024];
@@ -35,7 +36,7 @@ namespace RazzleServer.Common.Network
             _client = client;
             _toClient = toClient;
 
-            Crypto = new MapleCipherProvider(currentGameVersion, aesKey);
+            Crypto = new MapleCipherProvider(currentGameVersion, aesKey, useAesEncryption);
             Crypto.PacketFinished += data => _client.Receive(new PacketReader(data));
             Task.Factory.StartNew(WaitForData);
         }
@@ -52,22 +53,26 @@ namespace RazzleServer.Common.Network
                 catch (Exception e)
                 {
                     _log.Error(e, "Error receiving data");
+                    Disconnect();
                 }
             }
         }
 
         private void PacketReceived(int size)
         {
-            if (!_disposed)
+            if (_disposed)
             {
-                if (size == 0)
-                {
-                    Disconnect();
-                    return;
-                }
-
-                Crypto.AddData(_socketBuffer, 0, size);
+                _log.Warning($"Received packet but client was already disposed Size={size}");
+                return;
             }
+
+            if (size == 0)
+            {
+                Disconnect();
+                return;
+            }
+
+            Crypto.AddData(_socketBuffer, 0, size);
         }
 
         public async Task SendRawPacket(ReadOnlyMemory<byte> final)

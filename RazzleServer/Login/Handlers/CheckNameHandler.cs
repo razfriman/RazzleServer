@@ -10,7 +10,7 @@ namespace RazzleServer.Login.Handlers
             var name = packet.ReadString();
             var characterExists = client.Server.CharacterExists(name, client.World);
 
-            using (var pw = new PacketWriter(ServerOperationCode.LoginCheckNameResult))
+            using (var pw = new PacketWriter(ServerOperationCode.CheckNameResult))
             {
                 pw.WriteString(name);
                 pw.WriteBool(characterExists);

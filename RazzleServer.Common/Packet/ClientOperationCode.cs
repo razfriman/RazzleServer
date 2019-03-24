@@ -3,10 +3,10 @@
     public enum ClientOperationCode : byte
     {
         Login = 0x01,
-        LoginSelectChannel = 0x02,
-        SelectWorld = 0x03,
+        SelectChannel = 0x02,
+        WorldStatus = 0x03,
         SelectCharacter = 0x04,
-        FieldEnter = 0x05,
+        CharacterLoad = 0x05,
         CheckName = 0x06,
         CreateCharacter = 0x07,
         DeleteCharacter = 0x08,
@@ -14,7 +14,7 @@
         ClientCrashReport = 0x0A,
         ClientHash = 0x0E,
 
-        FieldEnterPortal = 0x11,
+        ChangeField = 0x11,
         ChangeChannel = 0x12,
         FieldConnectCashShop = 0x13,
         FieldPlayerMovement = 0x14,
