@@ -4,7 +4,6 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using RazzleServer.Common.Crypto;
 using RazzleServer.Common.Packet;
-using RazzleServer.Common.Util;
 using Serilog;
 
 namespace RazzleServer.Common.Network
@@ -17,7 +16,7 @@ namespace RazzleServer.Common.Network
         private readonly bool _toClient;
         private bool _disposed;
         private IPEndPoint Endpoint { get; }
-        private readonly ILogger _log = LogManager.CreateLoggerSerilog<ClientSocket>();
+        private readonly ILogger _log = Log.ForContext<ClientSocket>();
 
         public MapleCipherProvider Crypto { get; }
         public bool Connected => !_disposed;

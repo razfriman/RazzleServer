@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
@@ -8,12 +7,13 @@ using RazzleServer.Common.Wz;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Data.References;
+using Serilog;
 
 namespace RazzleServer.Game.Maple.Maps
 {
     public class Portal : MapObject
     {
-        private readonly ILogger _log = LogManager.CreateLogger<Portal>();
+        private readonly ILogger _log = Log.ForContext<Portal>();
 
         public byte Id { get; set; }
         public string Label { get; set; }
@@ -45,9 +45,9 @@ namespace RazzleServer.Game.Maple.Maps
             IsOnlyOnce = (img["onlyOnce"]?.GetInt() ?? 0) > 0;
         }
 
-        public virtual void Enter(Character character)
+        public void Enter(Character character)
         {
-            _log.LogWarning($"'{character.Name}' attempted to enter an unimplemented portal '{Script}'");
+            _log.Warning($"'{character.Name}' attempted to enter an unimplemented portal '{Script}'");
 
             using (var oPacket = new PacketWriter(ServerOperationCode.TransferFieldReqIgnored))
             {

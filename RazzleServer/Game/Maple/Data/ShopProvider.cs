@@ -5,18 +5,17 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RazzleServer.Common;
-using RazzleServer.Common.Util;
 using RazzleServer.Data;
 using RazzleServer.Game.Maple.Shops;
+using Serilog;
 
 namespace RazzleServer.Game.Maple.Data
 {
     public class ShopProvider
     {
-        private static readonly ILogger Log = LogManager.CreateLogger<ShopProvider>();
+        private static readonly ILogger Logger = Log.ForContext<ShopProvider>();
         private const string ShopsDataFile = "InitialData/shops.json";
         private const string ShopItemsDataFile = "InitialData/shopItems.json";
         private const string RechargeTiersDataFile = "InitialData/rechargeTiers.json";
@@ -27,19 +26,19 @@ namespace RazzleServer.Game.Maple.Data
             {
                 if (!context.Shops.Any())
                 {
-                    Log.LogInformation("Cannot find any shops in the database, attempting to load from JSON");
+                    Logger.Information("Cannot find any shops in the database, attempting to load from JSON");
                     await LoadShopsFromJson();
                 }
 
                 if (!context.ShopItems.Any())
                 {
-                    Log.LogInformation("Cannot find any shop items in the database, attempting to load from JSON");
+                    Logger.Information("Cannot find any shop items in the database, attempting to load from JSON");
                     await LoadShopItemsFromJson();
                 }
 
                 if (!context.ShopRecharges.Any())
                 {
-                    Log.LogInformation("Cannot find any shop recharges in the database, attempting to load from JSON");
+                    Logger.Information("Cannot find any shop recharges in the database, attempting to load from JSON");
                     await LoadShopRechargesFromJson();
                 }
 
@@ -47,7 +46,7 @@ namespace RazzleServer.Game.Maple.Data
 
                 await LoadFromDatabase(context);
 
-                Log.LogInformation("Data loaded in {0}ms.", sw.ElapsedMilliseconds);
+                Logger.Information("Data loaded in {0}ms.", sw.ElapsedMilliseconds);
             }
         }
 
@@ -55,7 +54,7 @@ namespace RazzleServer.Game.Maple.Data
         {
             if (!File.Exists(RechargeTiersDataFile))
             {
-                Log.LogWarning($"Cannot find {RechargeTiersDataFile}");
+                Logger.Warning($"Cannot find {RechargeTiersDataFile}");
                 return;
             }
 
@@ -80,11 +79,11 @@ namespace RazzleServer.Game.Maple.Data
                     }
 
                     await context.SaveChangesAsync();
-                    Log.LogInformation("Populated database in {0}ms.", sw.ElapsedMilliseconds);
+                    Logger.Information("Populated database in {0}ms.", sw.ElapsedMilliseconds);
                 }
                 catch (Exception e)
                 {
-                    Log.LogError(e, "Error while loading changes from JSON");
+                    Logger.Error(e, "Error while loading changes from JSON");
                 }
             }
         }
@@ -93,7 +92,7 @@ namespace RazzleServer.Game.Maple.Data
         {
             if (!File.Exists(ShopsDataFile))
             {
-                Log.LogWarning($"Cannot find {ShopsDataFile}");
+                Logger.Warning($"Cannot find {ShopsDataFile}");
                 return;
             }
 
@@ -113,7 +112,7 @@ namespace RazzleServer.Game.Maple.Data
                     {
                         if (!DataProvider.Npcs?.Data?.ContainsKey(item.NpcId) ?? true)
                         {
-                            Log.LogWarning($"Skipping shop - Cannot find Npc with ID={item.NpcId} in DataProvider");
+                            Logger.Warning($"Skipping shop - Cannot find Npc with ID={item.NpcId} in DataProvider");
                             continue;
                         }
 
@@ -124,11 +123,11 @@ namespace RazzleServer.Game.Maple.Data
                     }
 
                     await context.SaveChangesAsync();
-                    Log.LogInformation("Populated database in {0}ms.", sw.ElapsedMilliseconds);
+                    Logger.Information("Populated database in {0}ms.", sw.ElapsedMilliseconds);
                 }
                 catch (Exception e)
                 {
-                    Log.LogError(e, "Error while loading changes from JSON");
+                    Logger.Error(e, "Error while loading changes from JSON");
                 }
             }
         }
@@ -137,7 +136,7 @@ namespace RazzleServer.Game.Maple.Data
         {
             if (!File.Exists(ShopItemsDataFile))
             {
-                Log.LogWarning($"Cannot find {ShopItemsDataFile}");
+                Logger.Warning($"Cannot find {ShopItemsDataFile}");
                 return;
             }
 
@@ -157,14 +156,14 @@ namespace RazzleServer.Game.Maple.Data
                     {
                         if (!shops.Contains(item.ShopId))
                         {
-                            Log.LogWarning(
+                            Logger.Warning(
                                 $"Skipping shop item - Cannot find Shop with ID={item.ShopId} in DataProvider");
                             continue;
                         }
 
                         if (!DataProvider.Items.Data.ContainsKey(item.ItemId))
                         {
-                            Log.LogWarning(
+                            Logger.Warning(
                                 $"Skipping shop item - Cannot find Item with ID={item.ItemId} in DataProvider");
                             continue;
                         }
@@ -180,18 +179,18 @@ namespace RazzleServer.Game.Maple.Data
                     }
 
                     await context.SaveChangesAsync();
-                    Log.LogInformation("Populated database in {0}ms.", sw.ElapsedMilliseconds);
+                    Logger.Information("Populated database in {0}ms.", sw.ElapsedMilliseconds);
                 }
                 catch (Exception e)
                 {
-                    Log.LogError(e, "Error while loading changes from JSON");
+                    Logger.Error(e, "Error while loading changes from JSON");
                 }
             }
         }
 
         private static async Task LoadFromDatabase(MapleDbContext context)
         {
-            Log.LogInformation("Loading Shops from database");
+            Logger.Information("Loading Shops from database");
 
             var rechargeTiers = await context
                 .ShopRecharges
@@ -215,7 +214,7 @@ namespace RazzleServer.Game.Maple.Data
                 {
                     if (!DataProvider.Npcs?.Data?.ContainsKey(x.NpcId) ?? true)
                     {
-                        Log.LogWarning($"Skipping shop - Cannot find Npc with ID={x.NpcId} in DataProvider");
+                        Logger.Warning($"Skipping shop - Cannot find Npc with ID={x.NpcId} in DataProvider");
                         return;
                     }
 

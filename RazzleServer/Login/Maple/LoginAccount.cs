@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.Extensions.Logging;
 using RazzleServer.Common;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Data;
 using RazzleServer.Common.Exceptions;
-using RazzleServer.Common.Util;
 using RazzleServer.Data;
+using Serilog;
 
 namespace RazzleServer.Login.Maple
 {
@@ -25,7 +24,7 @@ namespace RazzleServer.Login.Maple
         public int MaxCharacters { get; set; }
         public static DateTime PermanentBanDate => DateTime.Now.AddYears(2);
         private bool Assigned { get; set; }
-        private readonly ILogger _log = LogManager.CreateLogger<LoginAccount>();
+        private readonly ILogger _log = Log.ForContext<LoginAccount>();
 
         public LoginAccount(LoginClient client)
         {
@@ -64,7 +63,7 @@ namespace RazzleServer.Login.Maple
 
                 if (account == null)
                 {
-                    _log.LogError($"Account does not exists with Id [{Id}]");
+                    _log.Error($"Account does not exists with Id [{Id}]");
                     return;
                 }
 
@@ -90,7 +89,7 @@ namespace RazzleServer.Login.Maple
 
                 if (account != null)
                 {
-                    _log.LogError($"Error creating account - account already exists with username [{Username}]");
+                    _log.Error($"Error creating account - account already exists with username [{Username}]");
                     return;
                 }
 

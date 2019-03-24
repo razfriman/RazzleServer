@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Net.Sockets;
-using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Server;
 using RazzleServer.Common.Network;
 using RazzleServer.Common.Packet;
 using RazzleServer.Login.Maple;
-using RazzleServer.Common.Util;
+using Serilog;
 
 namespace RazzleServer.Login
 {
@@ -19,7 +18,7 @@ namespace RazzleServer.Login
         public string[] MacAddresses { get; internal set; }
         public LoginServer Server { get; internal set; }
 
-        public override ILogger Log => LogManager.CreateLogger<LoginClient>();
+        public override ILogger Logger => Log.ForContext<LoginClient>();
 
         public LoginClient(Socket socket, LoginServer server)
             : base(socket)
@@ -40,7 +39,7 @@ namespace RazzleServer.Login
                     {
                         if (ServerConfig.Instance.PrintPackets && !Server.IgnorePacketPrintSet.Contains(header))
                         {
-                            Log.LogInformation($"Received [{header.ToString()}] {packet.ToPacketString()}");
+                            Logger.Information($"Received [{header.ToString()}] {packet.ToPacketString()}");
                         }
 
                         foreach (var handler in Server.PacketHandlers[header])
@@ -50,14 +49,14 @@ namespace RazzleServer.Login
                     }
                     else
                     {
-                        Log.LogWarning($"Unhandled Packet [{header.ToString()}] {packet.ToPacketString()}");
+                        Logger.Warning($"Unhandled Packet [{header.ToString()}] {packet.ToPacketString()}");
                     }
 
                 }
             }
             catch (Exception e)
             {
-                Log.LogError(e, $"Packet Processing Error [{header.ToString()}] - {e.Message} - {e.StackTrace}");
+                Logger.Error(e, $"Packet Processing Error [{header.ToString()}] - {e.Message} - {e.StackTrace}");
             }
         }
 
@@ -70,7 +69,7 @@ namespace RazzleServer.Login
             }
             catch (Exception e)
             {
-                Log.LogError(e, $"Error while disconnecting. Account [{Account?.Username}]");
+                Logger.Error(e, $"Error while disconnecting. Account [{Account?.Username}]");
             }
         }
 

@@ -6,8 +6,7 @@ using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Maps;
 using RazzleServer.Common;
-using Microsoft.Extensions.Logging;
-using RazzleServer.Common.Util;
+using Serilog;
 
 namespace RazzleServer.Game
 {
@@ -30,7 +29,7 @@ namespace RazzleServer.Game
                 return Maps[id] = map;
             }
         }
-        public override ILogger Log => LogManager.CreateLogger<GameServer>();
+        public override ILogger Logger => Log.ForContext<GameServer>();
 
 
         public GameServer(ServerManager manager, World world, ushort port, byte channelId) : base(manager)

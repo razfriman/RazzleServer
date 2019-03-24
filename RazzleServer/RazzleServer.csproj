@@ -23,8 +23,6 @@
     <ProjectReference Include="..\RazzleServer.Common\RazzleServer.Common.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="Logs\**" />
-    <Compile Remove="DataCache\**" />
     <Compile Remove="Game\Handlers\AdminCommandHandler.cs" />
     <Compile Remove="Game\Handlers\CancelBuffHandler.cs" />
     <Compile Remove="Game\Handlers\CancelItemEffectHandler.cs" />
@@ -73,11 +71,6 @@
     <Compile Remove="Game\Handlers\PlayerUpdateHandler.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Remove="Logs\**" />
-    <EmbeddedResource Remove="DataCache\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="DataCache\**" />
     <None Remove="Logs\**" />
     <None Remove="MapleServer.db" />
     <None Update="appsettings.json">

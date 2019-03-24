@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using RazzleServer.Common.Util;
 using RazzleServer.Common.Wz.Util;
 using RazzleServer.Common.Wz.WzProperties;
 using Serilog;
@@ -18,7 +17,7 @@ namespace RazzleServer.Common.Wz
     /// </summary>
     public class WzFile : WzObject
     {
-        public static readonly ILogger Log = LogManager.CreateLoggerSerilog<WzFile>();
+        private readonly ILogger _log = Log.ForContext<WzFile>();
 
         #region Fields
 
@@ -149,14 +148,14 @@ namespace RazzleServer.Common.Wz
         {
             if (FilePath == null)
             {
-                Log.Error("Path is null");
+                _log.Error("Path is null");
                 return;
             }
 
             if (!File.Exists(FilePath))
             {
                 var message = $"WZ File does not exist at path: '{FilePath}'";
-                Log.Error(message);
+                _log.Error(message);
                 throw new FileNotFoundException(message);
             }
 

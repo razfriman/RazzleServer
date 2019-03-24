@@ -5,18 +5,17 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RazzleServer.Common;
-using RazzleServer.Common.Util;
 using RazzleServer.Data;
 using RazzleServer.Game.Maple.Life;
+using Serilog;
 
 namespace RazzleServer.Game.Maple.Data
 {
     public class LootProvider
     {
-        private static readonly ILogger Log = LogManager.CreateLogger<LootProvider>();
+        private static readonly ILogger Logger = Log.ForContext<LootProvider>();
         private const string InitialDataFile = "InitialData/loot.json";
 
         internal static async Task Initialize()
@@ -25,7 +24,7 @@ namespace RazzleServer.Game.Maple.Data
             {
                 if (!context.Loots.Any())
                 {
-                    Log.LogInformation("Cannot find any loot in the database, attempting to load from JSON");
+                    Logger.Information("Cannot find any loot in the database, attempting to load from JSON");
                     await LoadFromJson();
                 }
 
@@ -33,13 +32,13 @@ namespace RazzleServer.Game.Maple.Data
 
                 await LoadFromDatabase(context);
 
-                Log.LogInformation("Data loaded in {0}ms.", sw.ElapsedMilliseconds);
+                Logger.Information("Data loaded in {0}ms.", sw.ElapsedMilliseconds);
             }
         }
 
         private static async Task LoadFromDatabase(MapleDbContext context)
         {
-            Log.LogInformation("Loading Loot from database");
+            Logger.Information("Loading Loot from database");
 
             var entities = await context
             .Loots
@@ -51,7 +50,7 @@ namespace RazzleServer.Game.Maple.Data
             {
                 if (!DataProvider.Mobs?.Data?.ContainsKey(x.Key) ?? true)
                 {
-                    Log.LogWarning($"Removing loot - Cannot find Mob with ID={x.Key} in DataProvider");
+                    Logger.Warning($"Removing loot - Cannot find Mob with ID={x.Key} in DataProvider");
                     context.Loots.RemoveRange(x);
                     return;
                 }
@@ -66,7 +65,7 @@ namespace RazzleServer.Game.Maple.Data
 
                     if (!item.IsMeso && !DataProvider.Items.Data.ContainsKey(item.ItemId))
                     {
-                        Log.LogWarning($"Removing loot - Cannot find Item with ID={item.ItemId} in DataProvider");
+                        Logger.Warning($"Removing loot - Cannot find Item with ID={item.ItemId} in DataProvider");
                         context.Loots.Remove(item);
                         return;
                     }
@@ -91,7 +90,7 @@ namespace RazzleServer.Game.Maple.Data
         {
             if (!File.Exists(InitialDataFile))
             {
-                Log.LogWarning($"Cannot find {InitialDataFile}");
+                Logger.Warning($"Cannot find {InitialDataFile}");
                 return;
             }
 
@@ -111,13 +110,13 @@ namespace RazzleServer.Game.Maple.Data
                     {
                         if (!DataProvider.Mobs.Data.ContainsKey(item.MobId))
                         {
-                            Log.LogWarning($"Skipping loot - Cannot find Mob with ID={item.MobId} in DataProvider");
+                            Logger.Warning($"Skipping loot - Cannot find Mob with ID={item.MobId} in DataProvider");
                             continue;
                         }
 
                         if (!item.IsMeso && !DataProvider.Items.Data.ContainsKey(item.ItemId))
                         {
-                            Log.LogWarning($"Skipping loot - Cannot find Item with ID={item.ItemId} in DataProvider");
+                            Logger.Warning($"Skipping loot - Cannot find Item with ID={item.ItemId} in DataProvider");
                             continue;
                         }
 
@@ -134,11 +133,11 @@ namespace RazzleServer.Game.Maple.Data
                     }
 
                     await context.SaveChangesAsync();
-                    Log.LogInformation("Populated database in {0}ms.", sw.ElapsedMilliseconds);
+                    Logger.Information("Populated database in {0}ms.", sw.ElapsedMilliseconds);
                 }
                 catch (Exception e)
                 {
-                    Log.LogError(e, "Error while loading changes from JSON");
+                    Logger.Error(e, "Error while loading changes from JSON");
                 }
             }
         }

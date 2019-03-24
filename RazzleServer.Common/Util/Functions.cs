@@ -10,7 +10,7 @@ namespace RazzleServer.Common.Util
 {
     public class Functions
     {
-        private static readonly ILogger Log = LogManager.CreateLoggerSerilog<Functions>();
+        private static readonly ILogger Logger = Log.ForContext<Functions>();
 
         /// <summary>
         /// Global random against time-based seed mistakes
@@ -270,7 +270,7 @@ namespace RazzleServer.Common.Util
                 }
                 catch (Exception e)
                 {
-                    Log.Error(e, "Error while saving to JSON");
+                    Logger.Error(e, "Error while saving to JSON");
                 }
             }
         }

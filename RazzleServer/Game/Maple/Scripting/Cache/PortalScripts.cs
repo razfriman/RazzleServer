@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Maps;
+using Serilog;
 
 namespace RazzleServer.Game.Maple.Scripting.Cache
 {
     public sealed class PortalScripts
     {
-        private readonly ILogger _log = LogManager.CreateLogger<PortalScripts>();
+        private readonly ILogger _log = Log.ForContext<PortalScripts>();
 
         public Dictionary<string, Type> Data { get; set; } = new Dictionary<string, Type>();
 
@@ -18,7 +17,7 @@ namespace RazzleServer.Game.Maple.Scripting.Cache
         {
             if (!Data.ContainsKey(portal.Script))
             {
-                _log.LogWarning($"Script not implemented for Portal={portal.Label} Script={portal.Script} on Map={portal.Map.MapleId}");
+                _log.Warning($"Script not implemented for Portal={portal.Label} Script={portal.Script} on Map={portal.Map.MapleId}");
                 return;
             }
 
@@ -32,11 +31,11 @@ namespace RazzleServer.Game.Maple.Scripting.Cache
 
                     if (ex is NotImplementedException)
                     {
-                        _log.LogWarning($"Script not implemented for Portal={portal.Label} Script={portal.Script} on Map={portal.Map.MapleId}");
+                        _log.Warning($"Script not implemented for Portal={portal.Label} Script={portal.Script} on Map={portal.Map.MapleId}");
                     }
                     else
                     {
-                        _log.LogError(ex, $"Script error for Portal={portal.Label} Script={portal.Script} on Map={portal.Map.MapleId}");
+                        _log.Error(ex, $"Script error for Portal={portal.Label} Script={portal.Script} on Map={portal.Map.MapleId}");
                     }
 
                 }, TaskContinuationOptions.OnlyOnFaulted);

@@ -1,23 +1,22 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using RazzleServer.Common.Util;
+using Serilog;
 
 namespace RazzleServer.Game.Maple.Scripting
 {
     public abstract class AScriptLoader<T> where T : new()
     {
-        protected readonly ILogger Log;
+        protected readonly ILogger Logger;
 
         public abstract string CacheName { get; }
 
         public T Data { get; } = new T();
 
-        protected AScriptLoader() => Log = LogManager.CreateLogger<AScriptLoader<T>>();
+        protected AScriptLoader() => Logger = Log.ForContext<AScriptLoader<T>>();
 
         public virtual async Task<T> Load()
         {
             await LoadScripts();
-            Log.LogInformation($"Loaded [{CacheName}]");
+            Log.Information($"Loaded [{CacheName}]");
             return Data;
         }
 

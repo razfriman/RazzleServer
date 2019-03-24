@@ -10,11 +10,13 @@ namespace RazzleServer.Common.Wz.WzProperties
     {
         public override void SetValue(object value)
         {
-            if (value is Point point)
+            if (!(value is Point point))
             {
-                X.Value = point.X;
-                X.Value = point.Y;
+                return;
             }
+
+            X.Value = point.X;
+            Y.Value = point.Y;
         }
 
         public override WzImageProperty DeepClone() => new WzVectorProperty(Name, X, Y);

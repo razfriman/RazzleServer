@@ -1,15 +1,13 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Server;
-using RazzleServer.Common.Util;
 using RazzleServer.Game;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Scripting;
 using RazzleServer.Login;
+using Serilog;
 
 namespace RazzleServer.Common
 {
@@ -19,12 +17,10 @@ namespace RazzleServer.Common
         public Worlds Worlds { get; }
         public Migrations Migrations { get; }
 
-        private readonly ILogger _logger;
+        private readonly ILogger _log = Log.ForContext<ServerManager>();
 
-        public ServerManager(ILogger<ServerManager> logger, IServiceProvider serviceProvider)
+        public ServerManager()
         {
-            _logger = logger;
-            LogManager.ServiceProvider = serviceProvider;
             Worlds = new Worlds();
             Migrations = new Migrations();
         }
@@ -40,7 +36,7 @@ namespace RazzleServer.Common
 
         private void InitializeDatabase()
         {
-            _logger.LogInformation("Initializing Database");
+            _log.Information("Initializing Database");
 
             using (var context = new MapleDbContext())
             {

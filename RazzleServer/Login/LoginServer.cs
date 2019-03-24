@@ -4,8 +4,7 @@ using System.Net;
 using RazzleServer.Common.Server;
 using RazzleServer.Common;
 using RazzleServer.Game.Maple.Characters;
-using Microsoft.Extensions.Logging;
-using RazzleServer.Common.Util;
+using Serilog;
 
 namespace RazzleServer.Login
 {
@@ -18,7 +17,7 @@ namespace RazzleServer.Login
             Start(new IPAddress(new byte[] { 0, 0, 0, 0 }), Port);
         }
 
-        public override ILogger Log => LogManager.CreateLogger<LoginServer>();
+        public override ILogger Logger => Log.ForContext<LoginServer>();
 
         internal bool CharacterExists(string name, byte world)
         {

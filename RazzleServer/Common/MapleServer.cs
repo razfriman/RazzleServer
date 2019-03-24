@@ -5,10 +5,10 @@ using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Network;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
+using Serilog;
 
 namespace RazzleServer.Common
 {
@@ -28,7 +28,7 @@ namespace RazzleServer.Common
         private TcpListener _listener;
         private bool _disposed;
         private const int BacklogSize = 50;
-        public abstract ILogger Log { get; }
+        public abstract ILogger Logger { get; }
 
         protected MapleServer(ServerManager manager)
         {
@@ -53,7 +53,7 @@ namespace RazzleServer.Common
             }
             else
             {
-                Log.LogError($"Client already exists with Key={client.Key}");
+                Logger.Error($"Client already exists with Key={client.Key}");
             }
         }
 
@@ -79,11 +79,11 @@ namespace RazzleServer.Common
             if (!AllowConnection(ip))
             {
                 socket.Shutdown(SocketShutdown.Both);
-                Log.LogWarning("Rejected Client");
+                Logger.Warning("Rejected Client");
                 return null;
             }
 
-            Log.LogInformation("Client Connected");
+            Logger.Information("Client Connected");
 
             var client = Activator.CreateInstance(typeof(TClient), socket, this) as TClient;
 
@@ -101,7 +101,7 @@ namespace RazzleServer.Common
             }
             catch (Exception e)
             {
-                Log.LogError(e, "Error sending handshake. Disconnecting.");
+                Logger.Error(e, "Error sending handshake. Disconnecting.");
                 client?.Terminate(e.ToString());
                 RemoveClient(client);
                 return null;
@@ -123,7 +123,7 @@ namespace RazzleServer.Common
             }
             catch (Exception e)
             {
-                Log.LogError("Error during server shutdown", e);
+                Logger.Error("Error during server shutdown", e);
             }
         }
 
@@ -131,14 +131,14 @@ namespace RazzleServer.Common
         {
             try
             {
-                Log.LogInformation($"Starting {GetType().Name} on port [{port}]");
+                Logger.Information($"Starting {GetType().Name} on port [{port}]");
                 Port = port;
                 _listener = new TcpListener(ip, port);
                 _listener.Start(BacklogSize);
             }
             catch (Exception e)
             {
-                Log.LogCritical(e, $"Error starting server on port [{port}]");
+                Logger.Fatal(e, $"Error starting server on port [{port}]");
                 Shutdown();
             }
 

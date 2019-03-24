@@ -1,9 +1,8 @@
 ﻿using System.Diagnostics;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Scripting.Cache;
 using RazzleServer.Game.Maple.Scripting.Loaders;
+using Serilog;
 
 namespace RazzleServer.Game.Maple.Scripting
 {
@@ -14,7 +13,7 @@ namespace RazzleServer.Game.Maple.Scripting
         public static ReactorScripts Reactors { get; private set; }
         public static PortalScripts Portals { get; private set; }
 
-        private static readonly ILogger Log = LogManager.CreateLogger<ScriptProvider>();
+        private static readonly ILogger Logger = Log.ForContext<ScriptProvider>();
 
         public static async Task Initialize()
         {
@@ -29,7 +28,7 @@ namespace RazzleServer.Game.Maple.Scripting
 
             sw.Stop();
 
-            Log.LogInformation("Scripts loaded in {0}ms.", sw.ElapsedMilliseconds);
+            Logger.Information("Scripts loaded in {0}ms.", sw.ElapsedMilliseconds);
         }
     }
 }

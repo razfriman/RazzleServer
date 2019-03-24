@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using Microsoft.Extensions.Logging;
+using Serilog;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Util;
 using RazzleServer.Common.Wz;
@@ -12,13 +12,13 @@ namespace RazzleServer.Game.Maple.Data.Loaders
     {
         public override string CacheName => "Items";
 
-        public override ILogger Log => LogManager.CreateLogger<ItemsLoader>();
+        public override ILogger Logger => Log.ForContext<ItemsLoader>();
 
         public override void LoadFromWz()
         {
-            Log.LogInformation("Loading Items from WZ");
+            Logger.Information("Loading Items from WZ");
 
-            Log.LogInformation("Loading Regular Items");
+            Logger.Information("Loading Regular Items");
 
             using (var file = GetWzFile("Data.wz"))
             {
@@ -31,42 +31,42 @@ namespace RazzleServer.Game.Maple.Data.Loaders
                 LoadItems(itemDir.GetDirectoryByName("Etc"), ItemType.Etcetera);
                 LoadItems(itemDir.GetDirectoryByName("Install"), ItemType.Setup);
 
-                Log.LogInformation("Loading Equip Items");
+                Logger.Information("Loading Equip Items");
 
-                Log.LogInformation("Loading Equip Items: Accessory");
+                Logger.Information("Loading Equip Items: Accessory");
                 LoadEquipment(characterDir.GetDirectoryByName("Accessory"));
 
-                Log.LogInformation("Loading Equip Items: Cap");
+                Logger.Information("Loading Equip Items: Cap");
                 LoadEquipment(characterDir.GetDirectoryByName("Cap"));
 
-                Log.LogInformation("Loading Equip Items: Cape");
+                Logger.Information("Loading Equip Items: Cape");
                 LoadEquipment(characterDir.GetDirectoryByName("Cape"));
 
-                Log.LogInformation("Loading Equip Items: Coat");
+                Logger.Information("Loading Equip Items: Coat");
                 LoadEquipment(characterDir.GetDirectoryByName("Coat"));
 
-                Log.LogInformation("Loading Equip Items: Glove");
+                Logger.Information("Loading Equip Items: Glove");
                 LoadEquipment(characterDir.GetDirectoryByName("Glove"));
 
-                Log.LogInformation("Loading Equip Items: Longcoat");
+                Logger.Information("Loading Equip Items: Longcoat");
                 LoadEquipment(characterDir.GetDirectoryByName("Longcoat"));
 
-                Log.LogInformation("Loading Equip Items: Pants");
+                Logger.Information("Loading Equip Items: Pants");
                 LoadEquipment(characterDir.GetDirectoryByName("Pants"));
 
-                Log.LogInformation("Loading Equip Items: PetEquip");
+                Logger.Information("Loading Equip Items: PetEquip");
                 LoadEquipment(characterDir.GetDirectoryByName("PetEquip"));
 
-                Log.LogInformation("Loading Equip Items: Ring");
+                Logger.Information("Loading Equip Items: Ring");
                 LoadEquipment(characterDir.GetDirectoryByName("Ring"));
 
-                Log.LogInformation("Loading Equip Items: Shield");
+                Logger.Information("Loading Equip Items: Shield");
                 LoadEquipment(characterDir.GetDirectoryByName("Shield"));
 
-                Log.LogInformation("Loading Equip Items: Shoes");
+                Logger.Information("Loading Equip Items: Shoes");
                 LoadEquipment(characterDir.GetDirectoryByName("Shoes"));
 
-                Log.LogInformation("Loading Equip Items: Weapon");
+                Logger.Information("Loading Equip Items: Weapon");
                 LoadEquipment(characterDir.GetDirectoryByName("Weapon"));
             }
         }

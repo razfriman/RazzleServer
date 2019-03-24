@@ -5,18 +5,18 @@ using System.IO;
 using System.IO.Compression;
 using System.Runtime.InteropServices;
 using Newtonsoft.Json;
-using RazzleServer.Common.Util;
 using RazzleServer.Common.Wz.Util;
 using Serilog;
 
 namespace RazzleServer.Common.Wz.WzProperties
 {
+    /// <inheritdoc />
     /// <summary>
     /// A property that contains the information for a bitmap
     /// </summary>
     public class WzPngProperty : WzImageProperty
     {
-        public static readonly ILogger Log = LogManager.CreateLoggerSerilog<WzPngProperty>();
+        private readonly ILogger _log = Log.ForContext<WzPngProperty>();
 
         #region Fields
 
@@ -302,7 +302,7 @@ namespace RazzleServer.Common.Wz.WzProperties
             {
                 case 1:
                     bmp = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
-                    bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, Width, Height), ImageLockMode.WriteOnly,
+                    bmpData = bmp.LockBits(new Rectangle(0, 0, Width, Height), ImageLockMode.WriteOnly,
                         PixelFormat.Format32bppArgb);
                     uncompressedSize = Width * Height * 2;
                     decBuf = new byte[uncompressedSize];
@@ -323,7 +323,7 @@ namespace RazzleServer.Common.Wz.WzProperties
                     break;
                 case 2:
                     bmp = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
-                    bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, Width, Height), ImageLockMode.WriteOnly,
+                    bmpData = bmp.LockBits(new Rectangle(0, 0, Width, Height), ImageLockMode.WriteOnly,
                         PixelFormat.Format32bppArgb);
                     uncompressedSize = Width * Height * 4;
                     decBuf = new byte[uncompressedSize];
@@ -379,7 +379,7 @@ namespace RazzleServer.Common.Wz.WzProperties
                         }
                     }
                 }
-                    bmpData = bmp.LockBits(new System.Drawing.Rectangle(System.Drawing.Point.Empty, bmp.Size),
+                    bmpData = bmp.LockBits(new Rectangle(Point.Empty, bmp.Size),
                         ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
                     Marshal.Copy(argb2, 0, bmpData.Scan0, argb2.Length);
                     bmp.UnlockBits(bmpData);
@@ -387,7 +387,7 @@ namespace RazzleServer.Common.Wz.WzProperties
 
                 case 513:
                     bmp = new Bitmap(Width, Height, PixelFormat.Format16bppRgb565);
-                    bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, Width, Height), ImageLockMode.WriteOnly,
+                    bmpData = bmp.LockBits(new Rectangle(0, 0, Width, Height), ImageLockMode.WriteOnly,
                         PixelFormat.Format16bppRgb565);
                     uncompressedSize = Width * Height * 2;
                     decBuf = new byte[uncompressedSize];
@@ -424,7 +424,7 @@ namespace RazzleServer.Common.Wz.WzProperties
 
                 case 1026:
                     bmp = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
-                    bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, Width, Height), ImageLockMode.WriteOnly,
+                    bmpData = bmp.LockBits(new Rectangle(0, 0, Width, Height), ImageLockMode.WriteOnly,
                         PixelFormat.Format32bppArgb);
                     uncompressedSize = Width * Height;
                     decBuf = new byte[uncompressedSize];
@@ -436,7 +436,7 @@ namespace RazzleServer.Common.Wz.WzProperties
 
                 case 2050: // thanks to Elem8100
                     bmp = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
-                    bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, Width, Height), ImageLockMode.WriteOnly,
+                    bmpData = bmp.LockBits(new Rectangle(0, 0, Width, Height), ImageLockMode.WriteOnly,
                         PixelFormat.Format32bppArgb);
                     uncompressedSize = Width * Height;
                     decBuf = new byte[uncompressedSize];
@@ -447,7 +447,7 @@ namespace RazzleServer.Common.Wz.WzProperties
                     break;
 
                 default:
-                    Log.Error($"Unknown PNG format: {Format1} {Format2}");
+                    _log.Error($"Unknown PNG format: {Format1} {Format2}");
                     break;
             }
 
@@ -500,10 +500,7 @@ namespace RazzleServer.Common.Wz.WzProperties
 
         #region Cast Values
 
-        public override Bitmap GetBitmap()
-        {
-            return GetPng(false);
-        }
+        public override Bitmap GetBitmap() => GetPng(false);
 
         #endregion
 

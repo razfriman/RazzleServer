@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Serilog;
 using RazzleServer.Common.Util;
 using RazzleServer.Common.Wz;
 using RazzleServer.Game.Maple.Data.Cache;
@@ -10,11 +10,11 @@ namespace RazzleServer.Game.Maple.Data.Loaders
     {
         public override string CacheName => "Reactors";
 
-        public override ILogger Log => LogManager.CreateLogger<ReactorsLoader>();
+        public override ILogger Logger => Log.ForContext<ReactorsLoader>();
 
         public override void LoadFromWz()
         {
-            Log.LogInformation("Loading Reactors");
+            Logger.Information("Loading Reactors");
 
             using (var file = GetWzFile("Data.wz"))
             {

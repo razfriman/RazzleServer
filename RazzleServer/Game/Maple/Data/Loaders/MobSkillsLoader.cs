@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Microsoft.Extensions.Logging;
+using Serilog;
 using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Data.Cache;
 using RazzleServer.Game.Maple.Data.References;
@@ -10,11 +10,11 @@ namespace RazzleServer.Game.Maple.Data.Loaders
     {
         public override string CacheName => "MobSkills";
 
-        public override ILogger Log => LogManager.CreateLogger<MobSkillsLoader>();
+        public override ILogger Logger => Log.ForContext<MobSkillsLoader>();
 
         public override void LoadFromWz()
         {
-            Log.LogInformation("Loading MobSkills");
+            Logger.Information("Loading MobSkills");
 
             using (var file = GetWzFile("Data.wz"))
             {

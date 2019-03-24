@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Serilog;
 using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Data.Cache;
 using RazzleServer.Game.Maple.Data.References;
@@ -9,11 +9,11 @@ namespace RazzleServer.Game.Maple.Data.Loaders
     {
         public override string CacheName => "Npcs";
 
-        public override ILogger Log => LogManager.CreateLogger<NpcsLoader>();
+        public override ILogger Logger => Log.ForContext<NpcsLoader>();
 
         public override void LoadFromWz()
         {
-            Log.LogInformation("Loading Npcs");
+            Logger.Information("Loading Npcs");
 
             using (var file = GetWzFile("Data.wz"))
             {

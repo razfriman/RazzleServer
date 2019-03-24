@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Serilog;
 using RazzleServer.Common.Util;
 using RazzleServer.Common.Wz;
 using RazzleServer.Game.Maple.Data.Cache;
@@ -9,11 +9,11 @@ namespace RazzleServer.Game.Maple.Data.Loaders
     {
         public override string CacheName => "CreationData";
 
-        public override ILogger Log => LogManager.CreateLogger<CreationDataLoader>();
+        public override ILogger Logger => Log.ForContext<CreationDataLoader>();
 
         public override void LoadFromWz()
         {
-            Log.LogInformation("Loading Character Creation Data");
+            Logger.Information("Loading Character Creation Data");
 
             using (var file = GetWzFile("Data.wz"))
             {
