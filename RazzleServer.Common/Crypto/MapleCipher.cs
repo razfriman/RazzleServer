@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography;
 
 namespace RazzleServer.Common.Crypto
 {
@@ -7,15 +8,7 @@ namespace RazzleServer.Common.Crypto
     /// </summary>
     public class MapleCipher
     {
-        /// <summary>
-		/// AES transformer
-		/// </summary>
-		private FastAes Transformer { get; }
-
-        /// <summary>
-        /// General locker to prevent multi-threading errors
-        /// </summary>
-        private volatile object _locker = new object();
+        private ICryptoTransform AesTransformer { get; }
 
         /// <summary>
         /// Vector to use in the MapleCrypto
@@ -37,17 +30,27 @@ namespace RazzleServer.Common.Crypto
         /// Bool stating if the current instance received its handshake
         /// </summary>
         public bool Handshaken { get; set; }
+        
+        /// <summary>
+        /// Apply AES encrpytion. This must be false in v40b.
+        /// </summary>
+        public bool UseAesEncryption { get; set; }
 
         /// <summary>
         /// Creates a new instance of <see cref="MapleCipher"/>
         /// </summary>
         /// <param name="currentGameVersion">The current MapleStory version</param>
         /// <param name="aesKey">AESKey for the current MapleStory version</param>
-        public MapleCipher(ushort currentGameVersion, ulong aesKey)
+        /// <param name="useAesEncryption">Apply AES encryption</param>
+        public MapleCipher(ushort currentGameVersion, ulong aesKey, bool useAesEncryption = true)
         {
             Handshaken = false;
             GameVersion = currentGameVersion;
-            Transformer = new FastAes(ExpandKey(aesKey));
+            UseAesEncryption = useAesEncryption;
+            AesTransformer = new RijndaelManaged
+            {
+                Key = ExpandKey(aesKey), Mode = CipherMode.ECB, Padding = PaddingMode.PKCS7
+            }.CreateEncryptor();
         }
 
         /// <summary>
@@ -76,10 +79,13 @@ namespace RazzleServer.Common.Crypto
 
             EncryptShanda(content);
 
-            lock (_locker)
+            if (UseAesEncryption)
             {
-                Transform(content);
+                AesTransform(content);
             }
+
+            MapleIv.Shuffle();
+
 
             return newData;
         }
@@ -99,11 +105,12 @@ namespace RazzleServer.Common.Crypto
             var length = GetPacketLength(header);
             var content = data.Slice(4, length);
 
-            lock (_locker)
+            if (UseAesEncryption)
             {
-                Transform(content);
+                AesTransform(content);
             }
 
+            MapleIv.Shuffle();
             DecryptShanda(content);
 
             return content;
@@ -146,7 +153,7 @@ namespace RazzleServer.Common.Crypto
         /// <summary>
         /// Performs Maplestory's AES algorithm
         /// </summary>
-        private void Transform(Span<byte> buffer)
+        private void AesTransform(Span<byte> buffer)
         {
             int remaining = buffer.Length,
                 length = 0x5B0,
@@ -172,16 +179,18 @@ namespace RazzleServer.Common.Crypto
                 {
                     if ((index - start) % RealIv.Length == 0)
                     {
-                        Transformer.TransformBlock(RealIv);
+                        var tempIv = new byte[RealIv.Length];
+                        AesTransformer.TransformBlock(RealIv, 0, RealIv.Length, tempIv, 0);
+                        tempIv.CopyTo(RealIv.AsSpan());
                     }
 
                     buffer[index] ^= RealIv[(index - start) % RealIv.Length];
                 }
+
                 start += length;
                 remaining -= length;
                 length = 0x5B4;
             }
-            MapleIv.Shuffle();
         }
 
         /// <summary>
@@ -189,7 +198,7 @@ namespace RazzleServer.Common.Crypto
         /// </summary>
         private void WriteHeaderToServer(Span<byte> data, int length)
         {
-            int a = MapleIv.Hiword;
+            int a = MapleIv.HiWord;
             a ^= GameVersion;
             var b = a ^ length;
             data[0] = (byte)(a % 0x100);
@@ -203,7 +212,7 @@ namespace RazzleServer.Common.Crypto
         /// </summary>
         private void WriteHeaderToClient(Span<byte> data, int length)
         {
-            var a = MapleIv.Hiword ^ -(GameVersion + 1);
+            var a = MapleIv.HiWord ^ -(GameVersion + 1);
             var b = a ^ length;
             data[0] = (byte)(a % 0x100);
             data[1] = (byte)((a - data[0]) / 0x100);
@@ -216,23 +225,24 @@ namespace RazzleServer.Common.Crypto
         /// </summary>
         /// <param name="data">Data to check</param>
         /// <returns>Length of <paramref name="data"/></returns>
-        public static int GetPacketLength(in ReadOnlySpan<byte> data) => (data[0] + (data[1] << 8)) ^ (data[2] + (data[3] << 8));
+        public static int GetPacketLength(in ReadOnlySpan<byte> data) =>
+            (data[0] + (data[1] << 8)) ^ (data[2] + (data[3] << 8));
 
         public bool CheckHeader(in ReadOnlySpan<byte> data, bool toClient) => toClient
-                    ? CheckHeaderToClient(data)
-                    : CheckHeaderToServer(data);
+            ? CheckHeaderToClient(data)
+            : CheckHeaderToServer(data);
 
         public bool CheckHeaderToServer(in ReadOnlySpan<byte> data)
         {
             var encodedVersion = (ushort)(data[0] + (data[1] << 8));
-            var version = (ushort)(encodedVersion ^ MapleIv.Hiword);
+            var version = (ushort)(encodedVersion ^ MapleIv.HiWord);
             return version == GameVersion;
         }
 
         public bool CheckHeaderToClient(in ReadOnlySpan<byte> data)
         {
             var encodedVersion = (ushort)(data[0] + (data[1] << 8));
-            var version = (ushort)-((encodedVersion ^ MapleIv.Hiword) + 1);
+            var version = (ushort)-((encodedVersion ^ MapleIv.HiWord) + 1);
             return version == GameVersion;
         }
 
@@ -293,6 +303,7 @@ namespace RazzleServer.Common.Crypto
                     buffer[i] = temp;
                     len--;
                 }
+
                 xorKey = 0;
                 len = (byte)(length & 0xFF);
                 for (i = length - 1; i >= 0; i--)

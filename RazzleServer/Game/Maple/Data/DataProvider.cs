@@ -1,9 +1,8 @@
 ﻿using System.Diagnostics;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Data.Cache;
 using RazzleServer.Game.Maple.Data.Loaders;
+using Serilog;
 
 namespace RazzleServer.Game.Maple.Data
 {
@@ -24,7 +23,7 @@ namespace RazzleServer.Game.Maple.Data
         public static CachedRechargeTiers RechargeTiers { get; private set; } = new CachedRechargeTiers();
         public static CachedQuizzes Quizzes { get; private set; } = new CachedQuizzes();
 
-        private static readonly ILogger Log = LogManager.CreateLogger<DataProvider>();
+        private static readonly ILogger Logger = Log.ForContext<DataProvider>();
 
         public static async Task Initialize()
         {
@@ -47,7 +46,7 @@ namespace RazzleServer.Game.Maple.Data
 
             sw.Stop();
 
-            Log.LogInformation("Data loaded in {0}ms.", sw.ElapsedMilliseconds);
+            Logger.Information("Data loaded in {0}ms.", sw.ElapsedMilliseconds);
         }
     }
 }

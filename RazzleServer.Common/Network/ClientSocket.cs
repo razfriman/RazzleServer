@@ -2,10 +2,9 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Crypto;
 using RazzleServer.Common.Packet;
-using RazzleServer.Common.Util;
+using Serilog;
 
 namespace RazzleServer.Common.Network
 {
@@ -17,7 +16,7 @@ namespace RazzleServer.Common.Network
         private readonly bool _toClient;
         private bool _disposed;
         private IPEndPoint Endpoint { get; }
-        private readonly ILogger _log = LogManager.CreateLogger<ClientSocket>();
+        private readonly ILogger _log = Log.ForContext<ClientSocket>();
 
         public MapleCipherProvider Crypto { get; }
         public bool Connected => !_disposed;
@@ -25,7 +24,8 @@ namespace RazzleServer.Common.Network
         public byte[] HostBytes { get; }
         public ushort Port { get; }
 
-        public ClientSocket(Socket socket, AClient client, ushort currentGameVersion, ulong aesKey, bool toClient)
+        public ClientSocket(Socket socket, AClient client, ushort currentGameVersion, ulong aesKey, bool toClient,
+            bool useAesEncryption)
         {
             _socket = socket;
             _socketBuffer = new byte[1024];
@@ -36,7 +36,7 @@ namespace RazzleServer.Common.Network
             _client = client;
             _toClient = toClient;
 
-            Crypto = new MapleCipherProvider(currentGameVersion, aesKey);
+            Crypto = new MapleCipherProvider(currentGameVersion, aesKey, useAesEncryption);
             Crypto.PacketFinished += data => _client.Receive(new PacketReader(data));
             Task.Factory.StartNew(WaitForData);
         }
@@ -52,23 +52,27 @@ namespace RazzleServer.Common.Network
                 }
                 catch (Exception e)
                 {
-                    _log.LogError(e, "Error receiving data");
+                    _log.Error(e, "Error receiving data");
+                    Disconnect();
                 }
             }
         }
 
         private void PacketReceived(int size)
         {
-            if (!_disposed)
+            if (_disposed)
             {
-                if (size == 0)
-                {
-                    Disconnect();
-                    return;
-                }
-
-                Crypto.AddData(_socketBuffer, 0, size);
+                _log.Warning($"Received packet but client was already disposed Size={size}");
+                return;
             }
+
+            if (size == 0)
+            {
+                Disconnect();
+                return;
+            }
+
+            Crypto.AddData(_socketBuffer, 0, size);
         }
 
         public async Task SendRawPacket(ReadOnlyMemory<byte> final)
@@ -102,7 +106,7 @@ namespace RazzleServer.Common.Network
 
         public void Disconnect()
         {
-            _log.LogInformation("Client Disconnected");
+            _log.Information("Client Disconnected");
             Dispose();
         }
 

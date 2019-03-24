@@ -57,27 +57,6 @@ namespace RazzleServer.Game.Maple.Characters
 
             skill.Recalculate();
             skill.Cast();
-
-            switch (skill.MapleId)
-            {
-                case (int)SkillNames.SuperGm.Resurrection:
-                    {
-                        var targets = iPacket.ReadByte();
-
-                        while (targets-- > 0)
-                        {
-                            var targetId = iPacket.ReadInt();
-
-                            var target = Parent.Map.Characters[targetId];
-
-                            if (!target.IsAlive)
-                            {
-                                target.Health = target.MaxHealth;
-                            }
-                        }
-                    }
-                    break;
-            }
         }
 
         public byte[] ToByteArray()
@@ -86,25 +65,9 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 oPacket.WriteShort((short)Count);
 
-                var cooldownSkills = new List<Skill>();
-
                 foreach (var loopSkill in Values)
                 {
                     oPacket.WriteBytes(loopSkill.ToByteArray());
-
-                    if (loopSkill.IsCoolingDown)
-                    {
-                        cooldownSkills.Add(loopSkill);
-                    }
-                }
-
-                oPacket.WriteShort((short)cooldownSkills.Count);
-
-                foreach (var loopCooldown in cooldownSkills)
-                {
-
-                    oPacket.WriteInt(loopCooldown.MapleId);
-                    oPacket.WriteShort((short)loopCooldown.RemainingCooldownSeconds);
                 }
 
                 return oPacket.ToArray();

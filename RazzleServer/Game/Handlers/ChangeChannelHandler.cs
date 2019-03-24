@@ -3,7 +3,7 @@ using RazzleServer.Common.Util;
 
 namespace RazzleServer.Game.Handlers
 {
-    [PacketHandler(ClientOperationCode.ChannelChange)]
+    [PacketHandler(ClientOperationCode.ChangeChannel)]
     public class ChangeChannelHandler : GamePacketHandler
     {
         public override void HandlePacket(PacketReader packet, GameClient client)

@@ -10,18 +10,20 @@ namespace RazzleServer.Common.Wz.WzProperties
     {
         public override void SetValue(object value)
         {
-            if (value is Point point)
+            if (!(value is Point point))
             {
-                X.Value = point.X;
-                X.Value = point.Y;
+                return;
             }
+
+            X.Value = point.X;
+            Y.Value = point.Y;
         }
 
         public override WzImageProperty DeepClone() => new WzVectorProperty(Name, X, Y);
 
         public override object WzValue => new Point(X.Value, Y.Value);
 
-        public override WzPropertyType PropertyType => WzPropertyType.Vector;
+        public override WzPropertyType Type => WzPropertyType.Vector;
 
         public override void WriteValue(WzBinaryWriter writer)
         {

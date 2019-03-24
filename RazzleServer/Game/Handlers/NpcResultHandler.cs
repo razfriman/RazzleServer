@@ -2,7 +2,7 @@
 
 namespace RazzleServer.Game.Handlers
 {
-    [PacketHandler(ClientOperationCode.NpcResult)]
+    [PacketHandler(ClientOperationCode.NpcChat)]
     public class NpcResultHandler : GamePacketHandler
     {
         public override void HandlePacket(PacketReader packet, GameClient client)

@@ -1,14 +1,14 @@
 ﻿using System;
-using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Server;
 using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Characters;
+using Serilog;
 
 namespace RazzleServer.Game.Maple.Scripting.Cache
 {
     public sealed class CommandScripts : MapleKeyedCollection<string, ACommandScript>
     {
-        private readonly ILogger _log = LogManager.CreateLogger<CommandScripts>();
+        private readonly ILogger _log = Log.ForContext<CommandScripts>();
 
         public override string GetKey(ACommandScript item) => item.Name;
 
@@ -31,7 +31,7 @@ namespace RazzleServer.Game.Maple.Scripting.Cache
                     catch (Exception e)
                     {
                         caller.Notify("[Command] Unknown error: " + e.Message);
-                        _log.LogError($"{command.GetType().Name} error by {caller.Name}", e);
+                        _log.Error(e, $"{command.GetType().Name} error by {caller.Name}");
                     }
                 }
                 else

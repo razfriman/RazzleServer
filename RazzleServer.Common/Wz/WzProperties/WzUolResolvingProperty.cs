@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Drawing;
-using Microsoft.Extensions.Logging;
-using RazzleServer.Common.Util;
+using Newtonsoft.Json;
 using RazzleServer.Common.Wz.Util;
+using Serilog;
 using Point = RazzleServer.Common.Util.Point;
 
 namespace RazzleServer.Common.Wz.WzProperties
@@ -10,15 +10,15 @@ namespace RazzleServer.Common.Wz.WzProperties
     /// <summary>
     /// A property that's value is a string
     /// </summary>
-    public class WzUolProperty : WzExtended
+    public class WzUolResolvingProperty : WzExtended
     {
-        private static readonly ILogger Log = LogManager.CreateLogger<WzUolProperty>();
+        private readonly ILogger _log = Log.ForContext<WzUolResolvingProperty>();
 
         private WzObject _linkVal;
 
         public override void SetValue(object value) => Value = (string)value;
 
-        public override WzImageProperty DeepClone() => new WzUolProperty(Name, Value) {_linkVal = null};
+        public override WzImageProperty DeepClone() => new WzUolResolvingProperty(Name, Value) {_linkVal = null};
 
         public override object WzValue => LinkValue;
 
@@ -34,7 +34,7 @@ namespace RazzleServer.Common.Wz.WzProperties
                 ? property.GetFromPath(path)
                 : (LinkValue as WzImage)?.GetFromPath(path);
 
-        public override WzPropertyType PropertyType => WzPropertyType.Uol;
+        public override WzPropertyType Type => WzPropertyType.Uol;
 
         public override void WriteValue(WzBinaryWriter writer)
         {
@@ -55,39 +55,42 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// </summary>
         public string Value { get; set; }
 
+        [JsonIgnore]
         public WzObject LinkValue
         {
             get
             {
-                if (_linkVal == null)
+                if (_linkVal != null)
                 {
-                    var paths = Value.Split('/');
-                    _linkVal = Parent;
-                    foreach (var path in paths)
+                    return _linkVal;
+                }
+
+                var paths = Value.Split('/');
+                _linkVal = Parent;
+                foreach (var path in paths)
+                {
+                    if (path == "..")
                     {
-                        if (path == "..")
+                        _linkVal = _linkVal.Parent;
+                    }
+                    else
+                    {
+                        if (_linkVal is WzImageProperty property)
                         {
-                            _linkVal = _linkVal.Parent;
+                            _linkVal = property[path];
+                        }
+                        else if (_linkVal is WzImage image)
+                        {
+                            _linkVal = image[path];
+                        }
+                        else if (_linkVal is WzDirectory directory)
+                        {
+                            _linkVal = directory[path];
                         }
                         else
                         {
-                            if (_linkVal is WzImageProperty property)
-                            {
-                                _linkVal = property[path];
-                            }
-                            else if (_linkVal is WzImage image)
-                            {
-                                _linkVal = image[path];
-                            }
-                            else if (_linkVal is WzDirectory directory)
-                            {
-                                _linkVal = directory[path];
-                            }
-                            else
-                            {
-                                Log.LogCritical($"UOL cannot be resolved for property: {FullPath}");
-                                return null;
-                            }
+                            _log.Error($"UOL cannot be resolved for property: {FullPath}");
+                            return null;
                         }
                     }
                 }
@@ -99,7 +102,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// <summary>
         /// Creates a blank WzUOLProperty
         /// </summary>
-        public WzUolProperty()
+        public WzUolResolvingProperty()
         {
         }
 
@@ -107,7 +110,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// Creates a WzUOLProperty with the specified name
         /// </summary>
         /// <param name="name">The name of the property</param>
-        public WzUolProperty(string name)
+        public WzUolResolvingProperty(string name)
         {
             Name = name;
         }
@@ -117,7 +120,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// </summary>
         /// <param name="name">The name of the property</param>
         /// <param name="value">The value of the property</param>
-        public WzUolProperty(string name, string value)
+        public WzUolResolvingProperty(string name, string value)
         {
             Name = name;
             Value = value;

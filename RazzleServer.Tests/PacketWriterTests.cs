@@ -1,5 +1,6 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 
 namespace RazzleServer.Tests
@@ -133,8 +134,8 @@ namespace RazzleServer.Tests
         {
             using (var pw = new PacketWriter())
             {
-                pw.WriteHeader(ServerOperationCode.CheckPasswordResult);
-                Assert.AreEqual("00 00", pw.ToPacketString());
+                pw.WriteHeader(ServerOperationCode.Fame);
+                Assert.AreEqual("19", pw.ToPacketString());
             }
         }
 
@@ -173,11 +174,11 @@ namespace RazzleServer.Tests
         {
             using (var pw = new PacketWriter())
             {
-                pw.WriteDateTime(new DateTime(2079, 1, 1, 12, 0, 0));
+                pw.WriteDateTime(DateConstants.Permanent);
                 Assert.AreEqual("80 5E B2 E1 20 03 00 00", pw.ToPacketString());
             }
         }
-
+        
         [TestMethod]
         public void WriteHexString_Valid_Succeeds()
         {
@@ -211,18 +212,18 @@ namespace RazzleServer.Tests
         [TestMethod]
         public void Constructor_FromServerOperationCode_Succeeds()
         {
-            using (var pw = new PacketWriter(ServerOperationCode.CheckPasswordResult))
+            using (var pw = new PacketWriter(ServerOperationCode.Fame))
             {
-                Assert.AreEqual("00 00", pw.ToPacketString());
+                Assert.AreEqual("19", pw.ToPacketString());
             }
         }
 
         [TestMethod]
-        public void Constructor_FromUShort_Succeeds()
+        public void Constructor_FromByte_Succeeds()
         {
             using (var pw = new PacketWriter(1))
             {
-                Assert.AreEqual("01 00", pw.ToPacketString());
+                Assert.AreEqual("01", pw.ToPacketString());
             }
         }
 

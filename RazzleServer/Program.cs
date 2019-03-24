@@ -5,9 +5,6 @@ using Microsoft.Extensions.Hosting;
 using RazzleServer.Common;
 using RazzleServer.Common.Server;
 using Serilog;
-using Serilog.Filters;
-using Serilog.Formatting.Compact;
-using Serilog.Sinks.SystemConsole.Themes;
 
 namespace RazzleServer
 {
@@ -20,7 +17,7 @@ namespace RazzleServer
                 .ConfigureHostConfiguration(config => { config.AddEnvironmentVariables(); })
                 .ConfigureAppConfiguration(config =>
                 {
-                    config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+                    config.AddJsonFile("appsettings.json", true, true);
                     config.AddEnvironmentVariables();
                     if (args != null)
                     {

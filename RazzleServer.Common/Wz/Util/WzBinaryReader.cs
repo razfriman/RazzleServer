@@ -113,8 +113,8 @@ namespace RazzleServer.Common.Wz.Util
 
         public uint ReadOffset()
         {
-            var encryptedOffset = ReadUInt32();
             var offset = (uint)BaseStream.Position;
+            var encryptedOffset = ReadUInt32();
             offset = (offset - Header.FStart) ^ uint.MaxValue;
             offset *= Hash;
             offset -= CryptoConstants.WzOffsetConstant;

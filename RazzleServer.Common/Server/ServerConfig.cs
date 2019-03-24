@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using RazzleServer.Common.Constants;
-using RazzleServer.Common.Util;
 
 namespace RazzleServer.Common.Server
 {
@@ -20,17 +14,17 @@ namespace RazzleServer.Common.Server
         public string CacheFolder { get; set; } = "DataCache";
         public bool PrettifyCache { get; set; } = false;
         public string WzFilePath { get; set; } = string.Empty;
-        public ushort Version { get; set; } = 62;
+        public ushort Version { get; set; } = 40;
         public byte SubVersion { get; set; } = 1;
-        public byte ServerType { get; set; } = 8;
+        public byte ServerType { get; set; } = 5;
         public int PingTimeout { get; set; } = 30;
         public bool PrintPackets { get; set; } = true;
         public ulong AesKey { get; set; } = 0x52330F1BB4060813;
+        public bool UseAesEncryption { get; set; } = false;
         public bool EnableAutoRegister { get; set; } = true;
         public bool EnableMultiLeveling { get; set; } = true;
         public string CommandIndicator { get; set; } = "!";
         public int DefaultCreationSlots { get; set; } = 3;
-        public bool RequestPin { get; set; } = true;
         public List<WorldConfig> Worlds { get; set; }
 
         public static ServerConfig GetDefaultConfig()

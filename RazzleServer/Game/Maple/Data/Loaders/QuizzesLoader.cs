@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using RazzleServer.Common.Util;
+﻿using Serilog;
 using RazzleServer.Game.Maple.Data.Cache;
 using RazzleServer.Game.Maple.Data.References;
 
@@ -9,16 +8,17 @@ namespace RazzleServer.Game.Maple.Data.Loaders
     {
         public override string CacheName => "Quizzes";
 
-        public override ILogger Log => LogManager.CreateLogger<QuizzesLoader>();
+        public override ILogger Logger => Log.ForContext<QuizzesLoader>();
 
         public override void LoadFromWz()
         {
-            Log.LogInformation("Loading Quizs");
+            Logger.Information("Loading Quizzes");
 
-            using (var file = GetWzFile("Etc.wz"))
+            using (var file = GetWzFile("Data.wz"))
             {
                 file.ParseWzFile();
-                var img = file.WzDirectory.GetImageByName("OXQuiz.img");
+                var dir = file.WzDirectory.GetDirectoryByName("Etc");
+                var img = dir.GetImageByName("OXQuiz.img");
                 img.WzProperties.ForEach(quizImg =>
                 {
                     if (!int.TryParse(quizImg.Name, out var quizId))

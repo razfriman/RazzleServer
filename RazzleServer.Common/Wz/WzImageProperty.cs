@@ -11,9 +11,10 @@ namespace RazzleServer.Common.Wz
     /// <summary>
     /// An interface for wz img properties
     /// </summary>
+    [JsonConverter(typeof(WzImagePropertyConverter))]
     public abstract class WzImageProperty : WzObject
     {
-        public virtual List<WzImageProperty> WzProperties { get; set; } = new List<WzImageProperty>();
+        public virtual List<WzImageProperty> WzProperties { get; set; }
 
         public new virtual WzImageProperty this[string name]
         {
@@ -24,7 +25,7 @@ namespace RazzleServer.Common.Wz
         public virtual WzImageProperty GetFromPath(string path) => null;
 
         [JsonConverter(typeof(StringEnumConverter))]
-        public abstract WzPropertyType PropertyType { get; }
+        public abstract WzPropertyType Type { get; }
 
         /// <summary>
         /// The image that this property is contained in
@@ -230,7 +231,7 @@ namespace RazzleServer.Common.Wz
         public override IEnumerable<WzObject> GetObjects()
         {
             var objList = new List<WzObject>();
-            switch (PropertyType)
+            switch (Type)
             {
                 case WzPropertyType.Canvas:
                     foreach (var canvasProp in ((WzCanvasProperty) this).WzProperties)

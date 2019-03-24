@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
+using RazzleServer.Common.Util;
 
 namespace RazzleServer.Game.Maple.Characters
 {
@@ -18,47 +19,37 @@ namespace RazzleServer.Game.Maple.Characters
         public int Ticks { get; }
 
         public uint TotalDamage { get; }
+        
+        public bool IsMesoExplosion { get; }
+        
+        public short StarPosition { get; }
+
+        public List<Point> Positions { get; } = new List<Point>();
         public Dictionary<int, List<uint>> Damages { get; }
 
         public Attack(PacketReader packet, AttackType type)
         {
             Type = type;
-            Portals = packet.ReadByte();
             var tByte = packet.ReadByte();
             Targets = tByte / 0x10;
             Hits = tByte % 0x10;
             SkillId = packet.ReadInt();
 
-            switch (SkillId)
+            if (SkillId == (int)SkillNames.ChiefBandit.MesoExplosion)
             {
-                case (int)SkillNames.FirePoisonArchMage.BigBang:
-                case (int)SkillNames.IceLightningArchMage.BigBang:
-                case (int)SkillNames.Bishop.BigBang:
-                case (int)SkillNames.SuperGm.Hide:
-                    var charge = packet.ReadInt();
-                    break;
+                IsMesoExplosion = true;
             }
 
-            if (SkillId == (int)SkillNames.Paladin.HeavensHammer)
-            {
-                //isHH = true;
-            }
-
-            if (SkillId == (int)SkillNames.ChiefBandit.MesoExplosion) 
-            {
-                // parseMesoExplosion(lea, ret);
-            }
-
+            Portals = packet.ReadByte(); // Might be wrong 
             Display = packet.ReadByte();
             Animation = packet.ReadByte();
-            WeaponClass = packet.ReadByte();
-            WeaponSpeed = packet.ReadByte();
-            Ticks = packet.ReadInt();
+            //WeaponClass = packet.ReadByte();
+            //WeaponSpeed = packet.ReadByte();
+            //Ticks = packet.ReadInt();
 
             if (Type == AttackType.Range)
             {
-                var starSlot = packet.ReadShort();
-                var cashStarSlot = packet.ReadShort();
+                StarPosition = packet.ReadShort();
                 packet.ReadByte(); // NOTE: Unknown.
             }
 
@@ -68,9 +59,17 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 var objectId = packet.ReadInt();
                 packet.ReadInt(); // NOTE: Unknown.
-                packet.ReadPoint(); // NOTE: Mob position.
+                Positions.Add(packet.ReadPoint());
                 packet.ReadPoint(); // NOTE: Damage position.
-                packet.ReadShort(); // NOTE: Distance.
+
+                if (Type == AttackType.Summon)
+                {
+                    packet.ReadByte();
+                }
+                else if (!IsMesoExplosion)
+                {
+                    packet.ReadShort(); // NOTE: Distance.
+                }
 
                 for (var j = 0; j < Hits; j++)
                 {
@@ -85,11 +84,6 @@ namespace RazzleServer.Game.Maple.Characters
 
                     TotalDamage += damage;
                 }
-
-                if (Type != AttackType.Summon)
-                {
-                    packet.ReadInt(); // NOTE: Unknown, probably CRC.
-                }
             }
 
             if (Type == AttackType.Range)
@@ -99,5 +93,6 @@ namespace RazzleServer.Game.Maple.Characters
 
             var playerPosition = packet.ReadPoint();
         }
+
     }
 }

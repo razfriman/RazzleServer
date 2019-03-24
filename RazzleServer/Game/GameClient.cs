@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Net.Sockets;
-using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Server;
 using RazzleServer.Common.Network;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple;
 using RazzleServer.Game.Maple.Characters;
+using Serilog;
 
 namespace RazzleServer.Game
 {
@@ -17,7 +17,7 @@ namespace RazzleServer.Game
         public GameAccount Account { get; set; }
         public GameServer Server { get; set; }
         public Character Character { get; set; }
-        public override ILogger Log => LogManager.CreateLogger<GameClient>();
+        public override ILogger Logger => Log.ForContext<GameClient>();
 
         public GameClient(Socket session, GameServer server) : base(session)
         {
@@ -32,32 +32,35 @@ namespace RazzleServer.Game
             var header = ClientOperationCode.Unknown;
             try
             {
-                if (packet.Available >= 2)
+                if (packet.Available < 1)
                 {
-                    header = (ClientOperationCode)packet.ReadUShort();
+                    Logger.Error("Invalid packet - no data available");
+                    return;
+                }
 
-                    if (Server.PacketHandlers.ContainsKey(header))
-                    {
-                        if (ServerConfig.Instance.PrintPackets && !Server.IgnorePacketPrintSet.Contains(header))
-                        {
-                            Log.LogInformation($"Received [{header.ToString()}] {packet.ToPacketString()}");
-                        }
+                header = (ClientOperationCode)packet.ReadByte();
 
-                        foreach (var handler in Server.PacketHandlers[header])
-                        {
-                            handler.HandlePacket(packet, this);
-                        }
-                    }
-                    else
+                if (Server.PacketHandlers.ContainsKey(header))
+                {
+                    if (ServerConfig.Instance.PrintPackets && !Server.IgnorePacketPrintSet.Contains(header))
                     {
-                        Log.LogWarning($"Unhandled Packet [{header.ToString()}] {packet.ToPacketString()}");
-                        Character?.Release();
+                        Logger.Information($"Received [{header.ToString()}] {packet.ToPacketString()}");
                     }
+
+                    foreach (var handler in Server.PacketHandlers[header])
+                    {
+                        handler.HandlePacket(packet, this);
+                    }
+                }
+                else
+                {
+                    Logger.Warning($"Unhandled Packet [{header.ToString()}] {packet.ToPacketString()}");
+                    Character?.Release();
                 }
             }
             catch (Exception e)
             {
-                Log.LogError(e, $"Packet Processing Error [{header.ToString()}] {packet.ToPacketString()} - {e.Message} - {e.StackTrace}");
+                Logger.Error(e, $"Packet Processing Error [{header.ToString()}] {packet.ToPacketString()} - {e.Message} - {e.StackTrace}");
             }
         }
 
@@ -74,7 +77,7 @@ namespace RazzleServer.Game
             }
             catch (Exception e)
             {
-                Log.LogError(e, $"Error while disconnecting. Account [{Account?.Username}] Character [{save?.Name}]");
+                Logger.Error(e, $"Error while disconnecting. Account [{Account?.Username}] Character [{save?.Name}]");
             }
         }
 
@@ -83,11 +86,13 @@ namespace RazzleServer.Game
             Character.Save();
             Server.Manager.Migrate(Host, Account.Id, Character.Id);
 
-            var outPacket = new PacketWriter(ServerOperationCode.ChangeChannel);
-            outPacket.WriteBool(true);
-            outPacket.WriteBytes(Socket.HostBytes);
-            outPacket.WriteUShort(Server.World[channelId].Port);
-            Send(outPacket);
+            using (var outPacket = new PacketWriter(ServerOperationCode.ClientConnectToServer))
+            {
+                outPacket.WriteBool(true);
+                outPacket.WriteBytes(Socket.HostBytes);
+                outPacket.WriteUShort(Server.World[channelId].Port);
+                Send(outPacket);
+            }
         }
 
         public void StartPingCheck()

@@ -211,7 +211,7 @@ namespace RazzleServer.Game.Maple.Life
 
         private PacketWriter GetInternalPacket(bool requestControl)
         {
-            var oPacket = new PacketWriter(requestControl ? ServerOperationCode.NpcChangeController : ServerOperationCode.NpcEnterField);
+            var oPacket = new PacketWriter(requestControl ? ServerOperationCode.NpcControlRequest : ServerOperationCode.NpcEnterField);
 
             if (requestControl)
             {
@@ -225,14 +225,13 @@ namespace RazzleServer.Game.Maple.Life
             oPacket.WriteShort(Foothold);
             oPacket.WriteShort(MinimumClickX);
             oPacket.WriteShort(MaximumClickX);
-            oPacket.WriteBool(!Hide);
 
             return oPacket;
         }
 
         public PacketWriter GetControlCancelPacket()
         {
-            var oPacket = new PacketWriter(ServerOperationCode.NpcChangeController);
+            var oPacket = new PacketWriter(ServerOperationCode.NpcControlRequest);
 
             oPacket.WriteBool(false);
             oPacket.WriteInt(ObjectId);
@@ -242,7 +241,7 @@ namespace RazzleServer.Game.Maple.Life
 
         public PacketWriter GetDialogPacket(NpcStateInfo stateInfo)
         {
-            var pw = new PacketWriter(ServerOperationCode.ScriptMessage);
+            var pw = new PacketWriter(ServerOperationCode.NpcScriptChat);
 
             pw.WriteByte(4); // NOTE: Unknown.
             pw.WriteInt(MapleId);

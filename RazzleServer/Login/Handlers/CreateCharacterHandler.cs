@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using RazzleServer.Common.Server;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
@@ -9,7 +10,7 @@ using RazzleServer.Game.Maple.Maps;
 
 namespace RazzleServer.Login.Handlers
 {
-    [PacketHandler(ClientOperationCode.CharacterCreate)]
+    [PacketHandler(ClientOperationCode.CreateCharacter)]
     public class CreateCharacterHandler : LoginPacketHandler
     {
         public override void HandlePacket(PacketReader packet, LoginClient client)
@@ -23,19 +24,19 @@ namespace RazzleServer.Login.Handlers
             var bottomId = packet.ReadInt();
             var shoesId = packet.ReadInt();
             var weaponId = packet.ReadInt();
-            var gender = (Gender)packet.ReadByte();
             var strength = packet.ReadByte();
             var dexterity = packet.ReadByte();
             var intelligence = packet.ReadByte();
             var luck = packet.ReadByte();
-            var error = ValidateCharacterCreation(client.Server, client.World, name, face, hair, hairColor, skin, topId, bottomId, shoesId, weaponId, gender);
+            var error = ValidateCharacterCreation(client.Server, client.World, name, face, hair, hairColor, skin, topId,
+                bottomId, shoesId, weaponId, client.Account.Gender);
 
             var character = new Character
             {
                 AccountId = client.Account.Id,
                 WorldId = client.World,
                 Name = name,
-                Gender = gender,
+                Gender = client.Account.Gender,
                 Skin = skin,
                 Face = face,
                 Hair = hair + hairColor,
@@ -56,46 +57,51 @@ namespace RazzleServer.Login.Handlers
             character.Items.Add(new Item(bottomId, equipped: true));
             character.Items.Add(new Item(shoesId, equipped: true));
             character.Items.Add(new Item(weaponId, equipped: true));
-            character.Items.Add(new Item(4161001), forceGetSlot: true); // A Beginner's Guide
-            character.Keymap.CreateDefaultKeymap();
             character.Create();
 
-            using (var pw = new PacketWriter(ServerOperationCode.CreateNewCharacterResult))
+            using (var pw = new PacketWriter(ServerOperationCode.CreateCharacterResult))
             {
                 pw.WriteBool(error);
-                pw.WriteBytes(character.ToByteArray());
+                if (!error)
+                {
+                    pw.WriteBytes(character.ToByteArray());
+                }
                 client.Send(pw);
             }
         }
 
-        private bool ValidateCharacterCreation(LoginServer server, byte world, string name, int face, int hair, int hairColor, byte skin, int topId, int bottomId, int shoesId, int weaponId, Gender gender)
+        private bool ValidateCharacterCreation(LoginServer server, byte world, string name, int face, int hair,
+            int hairColor, byte skin, int topId, int bottomId, int shoesId, int weaponId, Gender gender)
         {
             var error = name.Length < 4
-                            || name.Length > 12
-                            || server.CharacterExists(name, world)
-                            || DataProvider.CreationData.ForbiddenNames.Any(name.Contains);
+                        || name.Length > 12
+                        || server.CharacterExists(name, world)
+                        || DataProvider.CreationData.ForbiddenNames.Any(name.Contains);
 
-            if (gender == Gender.Male)
+            switch (gender)
             {
-                error |= DataProvider.CreationData.MaleSkins.All(x => x != skin)
-                         || DataProvider.CreationData.MaleFaces.All(x => x != face)
-                         || DataProvider.CreationData.MaleHairs.All(x => x != hair)
-                         || DataProvider.CreationData.MaleHairColors.All(x => x != hairColor)
-                         || DataProvider.CreationData.MaleTops.All(x => x != topId)
-                         || DataProvider.CreationData.MaleBottoms.All(x => x != bottomId)
-                         || DataProvider.CreationData.MaleShoes.All(x => x != shoesId)
-                         || DataProvider.CreationData.MaleWeapons.All(x => x != weaponId);
-            }
-            else if (gender == Gender.Female)
-            {
-                error |= DataProvider.CreationData.FemaleSkins.All(x => x != skin)
-                         || DataProvider.CreationData.FemaleFaces.All(x => x != face)
-                         || DataProvider.CreationData.FemaleHairs.All(x => x != hair)
-                         || DataProvider.CreationData.FemaleHairColors.All(x => x != hairColor)
-                         || DataProvider.CreationData.FemaleTops.All(x => x != topId)
-                         || DataProvider.CreationData.FemaleBottoms.All(x => x != bottomId)
-                         || DataProvider.CreationData.FemaleShoes.All(x => x != shoesId)
-                         || DataProvider.CreationData.FemaleWeapons.All(x => x != weaponId);
+                case Gender.Male:
+                    error |= DataProvider.CreationData.MaleSkins.All(x => x != skin)
+                             || DataProvider.CreationData.MaleFaces.All(x => x != face)
+                             || DataProvider.CreationData.MaleHairs.All(x => x != hair)
+                             || DataProvider.CreationData.MaleHairColors.All(x => x != hairColor)
+                             || DataProvider.CreationData.MaleTops.All(x => x != topId)
+                             || DataProvider.CreationData.MaleBottoms.All(x => x != bottomId)
+                             || DataProvider.CreationData.MaleShoes.All(x => x != shoesId)
+                             || DataProvider.CreationData.MaleWeapons.All(x => x != weaponId);
+                    break;
+                case Gender.Female:
+                    error |= DataProvider.CreationData.FemaleSkins.All(x => x != skin)
+                             || DataProvider.CreationData.FemaleFaces.All(x => x != face)
+                             || DataProvider.CreationData.FemaleHairs.All(x => x != hair)
+                             || DataProvider.CreationData.FemaleHairColors.All(x => x != hairColor)
+                             || DataProvider.CreationData.FemaleTops.All(x => x != topId)
+                             || DataProvider.CreationData.FemaleBottoms.All(x => x != bottomId)
+                             || DataProvider.CreationData.FemaleShoes.All(x => x != shoesId)
+                             || DataProvider.CreationData.FemaleWeapons.All(x => x != weaponId);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(gender), gender, null);
             }
 
             return error;

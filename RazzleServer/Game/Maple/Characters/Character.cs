@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Server;
 using RazzleServer.Common;
 using RazzleServer.Common.Constants;
@@ -19,6 +18,7 @@ using RazzleServer.Game.Maple.Scripting;
 using RazzleServer.Game.Maple.Shops;
 using RazzleServer.Game.Maple.Skills;
 using RazzleServer.Game.Maple.Util;
+using Serilog;
 
 namespace RazzleServer.Game.Maple.Characters
 {
@@ -44,10 +44,9 @@ namespace RazzleServer.Game.Maple.Characters
         public CharacterItems Items { get; }
         public CharacterSkills Skills { get; }
         public CharacterQuests Quests { get; }
+        public CharacterRings Rings { get; }
         public CharacterBuffs Buffs { get; }
-        public CharacterKeymap Keymap { get; }
-        public CharacterTrocks Trocks { get; }
-        public CharacterMemos Memos { get; }
+        public CharacterTeleportRocks TeleportRocks { get; }
         public CharacterStorage Storage { get; }
         public ControlledMobs ControlledMobs { get; }
         public ControlledNpcs ControlledNpcs { get; }
@@ -55,7 +54,6 @@ namespace RazzleServer.Game.Maple.Characters
         public PlayerShop PlayerShop { get; set; }
         public CharacterGuild Guild { get; set; }
         public CharacterParty Party { get; set; }
-        public CharacterSkillMacros SkillMacros { get; set; }
         public ANpcScript NpcScript { get; set; }
         public Shop CurrentNpcShop { get; set; }
         public CharacterDamage Damage { get; set; }
@@ -64,7 +62,6 @@ namespace RazzleServer.Game.Maple.Characters
         public DateTime LastHealthHealOverTime { get; set; } = new DateTime();
         public DateTime LastManaHealOverTime { get; set; } = new DateTime();
 
-        private Gender _gender;
         private byte _skin;
         private int _face;
         private int _hair;
@@ -83,27 +80,12 @@ namespace RazzleServer.Game.Maple.Characters
         private int _experience;
         private short _fame;
         private int _meso;
-        private string _chalkboard;
         private int _itemEffect;
 
-        private readonly ILogger _log = LogManager.CreateLogger<Character>();
+        private readonly ILogger _log = Log.ForContext<Character>();
 
-        public Gender Gender
-        {
-            get => _gender;
-            set
-            {
-                _gender = value;
 
-                if (IsInitialized)
-                {
-                    var oPacket = new PacketWriter(ServerOperationCode.SetGender);
-                    oPacket.WriteByte((byte)Gender);
-                    oPacket.WriteByte(1);
-                    Client.Send(oPacket);
-                }
-            }
-        }
+        public Gender Gender { get; set; }
 
         public byte Skin
         {
@@ -205,6 +187,7 @@ namespace RazzleServer.Game.Maple.Characters
                         Health = MaxHealth;
                         Mana = MaxMana;
                     }
+
                     UpdateStatsForParty();
                 }
             }
@@ -218,7 +201,8 @@ namespace RazzleServer.Game.Maple.Characters
 
             if (Job == Job.Beginner)
             {
-                var totalUsed = Skills.GetCurrentLevel(1000) + Skills.GetCurrentLevel(1001) + Skills.GetCurrentLevel(1002);
+                var totalUsed = Skills.GetCurrentLevel(1000) + Skills.GetCurrentLevel(1001) +
+                                Skills.GetCurrentLevel(1002);
                 if (totalUsed < 6)
                 {
                     _skillPoints += 1;
@@ -271,7 +255,8 @@ namespace RazzleServer.Game.Maple.Characters
             _maxHealth = (short)maxHp;
             _maxMana = (short)maxMp;
 
-            Update(StatisticType.Level, StatisticType.MaxHealth, StatisticType.MaxMana, StatisticType.AbilityPoints, StatisticType.SkillPoints);
+            Update(StatisticType.Level, StatisticType.MaxHealth, StatisticType.MaxMana, StatisticType.AbilityPoints,
+                StatisticType.SkillPoints);
             ShowRemoteUserEffect(UserEffect.LevelUp);
         }
 
@@ -525,23 +510,6 @@ namespace RazzleServer.Game.Maple.Characters
 
         public QuestReference LastQuest { get; set; }
 
-        public string Chalkboard
-        {
-            get => _chalkboard;
-            set
-            {
-                _chalkboard = value;
-
-                using (var oPacket = new PacketWriter(ServerOperationCode.Chalkboard))
-                {
-                    oPacket.WriteInt(Id);
-                    oPacket.WriteBool(!string.IsNullOrEmpty(Chalkboard));
-                    oPacket.WriteString(Chalkboard);
-                    Map.Send(oPacket);
-                }
-            }
-        }
-
         public int ItemEffect
         {
             get => _itemEffect;
@@ -605,19 +573,16 @@ namespace RazzleServer.Game.Maple.Characters
         }
 
 
-
         public Character(int id = 0, GameClient client = null)
         {
             Id = id;
             Client = client;
-            Items = new CharacterItems(this, 24, 24, 24, 24, 48);
+            Items = new CharacterItems(this, 100, 100, 100, 100, 100);
             Skills = new CharacterSkills(this);
             Quests = new CharacterQuests(this);
-            SkillMacros = new CharacterSkillMacros(this);
+            Rings = new CharacterRings(this);
             Buffs = new CharacterBuffs(this);
-            Keymap = new CharacterKeymap(this);
-            Trocks = new CharacterTrocks(this);
-            Memos = new CharacterMemos(this);
+            TeleportRocks = new CharacterTeleportRocks(this);
             Storage = new CharacterStorage(this);
             Position = new Point(0, 0);
             ControlledMobs = new ControlledMobs(this);
@@ -627,46 +592,40 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Initialize()
         {
-            using (var oPacket = new PacketWriter(ServerOperationCode.SetField))
+            using (var pw = new PacketWriter(ServerOperationCode.SetField))
             {
-                oPacket.WriteInt(Client.Server.ChannelId);
-                oPacket.WriteByte(++Portals);
-                oPacket.WriteBool(true);
-                oPacket.WriteShort(0);
-                oPacket.WriteInt(Damage.Random.OriginalSeed1);
-                oPacket.WriteInt(Damage.Random.OriginalSeed2);
-                oPacket.WriteInt(Damage.Random.OriginalSeed3);
-                oPacket.WriteLong(-1);
-                oPacket.WriteBytes(DataToByteArray());
-                oPacket.WriteDateTime(DateTime.UtcNow);
-
-                Client.Send(oPacket);
+                pw.WriteInt(Client.Server.ChannelId);
+                pw.WriteByte(++Portals);
+                pw.WriteBool(true);
+                pw.WriteInt(Damage.Random.OriginalSeed1);
+                pw.WriteInt(Damage.Random.OriginalSeed2);
+                pw.WriteInt(Damage.Random.OriginalSeed3);
+                pw.WriteInt(Damage.Random.OriginalSeed3);
+                pw.WriteShort(-1); // flags
+                pw.WriteBytes(DataToByteArray());
+                pw.WriteLong(0);
+                pw.WriteLong(0);
+                pw.WriteLong(0);
+                pw.WriteLong(0);
+                pw.WriteLong(0);
+                pw.WriteLong(0);
+                Client.Send(pw);
             }
 
             IsInitialized = true;
 
             Map.Characters.Add(this);
-
-            ShowApple();
+            // Send server message
+            // Update buddy list
+            // update quest mob kills
             UpdateStatsForParty();
-            Keymap.Send();
-            Memos.Send();
-            SkillMacros.Send();
 
             Task.Factory.StartNew(Client.StartPingCheck);
         }
 
-        private void ShowApple()
-        {
-            if (Map.MapleId == 1 || Map.MapleId == 2 || Map.MapleId == 809000101 || Map.MapleId == 809000201)
-            {
-                Client.Send(new PacketWriter(ServerOperationCode.ShowApple));
-            }
-        }
-
         public void Update(params StatisticType[] statistics)
         {
-            var oPacket = new PacketWriter(ServerOperationCode.StatChanged);
+            var oPacket = new PacketWriter(ServerOperationCode.StatsChanged);
             oPacket.WriteBool(true); // itemReaction
 
             var flag = statistics.Aggregate(0, (current, statistic) => current | (int)statistic);
@@ -758,7 +717,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void UpdateApperance()
         {
-            using (var oPacket = new PacketWriter(ServerOperationCode.AvatarModified))
+            using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerChangeEquips))
             {
                 oPacket.WriteInt(Id);
                 oPacket.WriteBool(true);
@@ -795,7 +754,7 @@ namespace RazzleServer.Game.Maple.Characters
             ChangeMap(mapId, portal.Id);
         }
 
-        public void ChangeMap(int mapId, byte? portalId = null, bool fromPosition = false, Point? position = null)
+        public void ChangeMap(int mapId, byte? portalId = null)
         {
             Map.Characters.Remove(this);
 
@@ -804,19 +763,9 @@ namespace RazzleServer.Game.Maple.Characters
                 oPacket.WriteInt(Client.Server.ChannelId);
                 oPacket.WriteByte(++Portals);
                 oPacket.WriteBool(false);
-                oPacket.WriteShort(0);
                 oPacket.WriteInt(mapId);
                 oPacket.WriteByte(portalId ?? SpawnPoint);
                 oPacket.WriteShort(Health);
-                oPacket.WriteBool(fromPosition);
-
-                if (fromPosition)
-                {
-                    oPacket.WritePoint(position);
-                }
-
-                oPacket.WriteDateTime(DateTime.Now);
-
                 Client.Send(oPacket);
             }
 
@@ -826,7 +775,6 @@ namespace RazzleServer.Game.Maple.Characters
         public void AddAbility(StatisticType statistic, short mod, bool isReset)
         {
             var maxStat = short.MaxValue;
-            var isSubtract = mod < 0;
 
             lock (this)
             {
@@ -893,9 +841,9 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public void Attack(PacketReader iPacket, AttackType type)
+        public void Attack(PacketReader packet, AttackType type)
         {
-            var attack = new Attack(iPacket, type);
+            var attack = new Attack(packet, type);
 
             if (attack.Portals != Portals)
             {
@@ -913,11 +861,10 @@ namespace RazzleServer.Game.Maple.Characters
             }
 
             // TODO: Modify packet based on attack type.
-            using (var oPacket = new PacketWriter(ServerOperationCode.CloseRangeAttack))
+            using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerMeleeAttack))
             {
                 oPacket.WriteInt(Id);
                 oPacket.WriteByte((byte)(attack.Targets * 0x10 + attack.Hits));
-                oPacket.WriteByte(0); // NOTE: Unknown.
                 oPacket.WriteByte((byte)(attack.SkillId != 0 ? skill.CurrentLevel : 0)); // NOTE: Skill level.
 
                 if (attack.SkillId != 0)
@@ -925,18 +872,20 @@ namespace RazzleServer.Game.Maple.Characters
                     oPacket.WriteInt(attack.SkillId);
                 }
 
-                oPacket.WriteByte(0); // NOTE: Unknown.
                 oPacket.WriteByte(attack.Display);
                 oPacket.WriteByte(attack.Animation);
                 oPacket.WriteByte(attack.WeaponSpeed);
                 oPacket.WriteByte(0); // NOTE: Skill mastery.
-                oPacket.WriteInt(0); // NOTE: Unknown.
+                oPacket.WriteInt(0); // NOTE: StarId = Item ID at attack.StarPosition
 
                 foreach (var target in attack.Damages)
                 {
                     oPacket.WriteInt(target.Key);
                     oPacket.WriteByte(6);
-
+                    if (attack.IsMesoExplosion)
+                    {
+                        oPacket.WriteByte(target.Value.Count);
+                    }
                     foreach (var hit in target.Value)
                     {
                         oPacket.WriteUInt(hit);
@@ -952,6 +901,7 @@ namespace RazzleServer.Game.Maple.Characters
                 {
                     continue;
                 }
+
                 var mob = Map.Mobs[target.Key];
                 mob.IsProvoked = true;
                 mob.SwitchController(this);
@@ -967,7 +917,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Talk(string text, bool show = true)
         {
-            using (var oPacket = new PacketWriter(ServerOperationCode.UserChat))
+            using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerChat))
             {
                 oPacket.WriteInt(Id);
                 oPacket.WriteBool(IsMaster);
@@ -979,7 +929,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void PerformFacialExpression(int expressionId)
         {
-            using (var oPacket = new PacketWriter(ServerOperationCode.Emotion))
+            using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerEmote))
             {
                 oPacket.WriteInt(Id);
                 oPacket.WriteInt(expressionId);
@@ -998,7 +948,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void ShowRemoteUserEffect(UserEffect effect, bool skipSelf = false)
         {
-            using (var oPacket = new PacketWriter(ServerOperationCode.RemoteEffect))
+            using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerEffect))
             {
                 oPacket.WriteInt(Id);
                 oPacket.WriteByte((int)effect);
@@ -1049,7 +999,6 @@ namespace RazzleServer.Game.Maple.Characters
                         maxHp += Functions.Random(20, 24);
                         var skill = Skills[(int)SkillNames.Swordsman.ImprovedMaxHpIncrease];
                         maxHp += skill?.ParameterB ?? 0;
-
                     }
                     else if (IsBaseJob(Job.Magician))
                     {
@@ -1094,7 +1043,6 @@ namespace RazzleServer.Game.Maple.Characters
                     else if (IsBaseJob(Job.Bowman))
                     {
                         maxMp += Functions.Random(10, 12);
-
                     }
                     else if (IsBaseJob(Job.Thief))
                     {
@@ -1125,11 +1073,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             using (var dbContext = new MapleDbContext())
             {
-                dbContext.Cheats.Add(new CheatEntity
-                {
-                    CharacterId = Id,
-                    CheatType = (int)type
-                });
+                dbContext.Cheats.Add(new CheatEntity {CharacterId = Id, CheatType = (int)type});
 
                 dbContext.SaveChanges();
             }
@@ -1144,6 +1088,7 @@ namespace RazzleServer.Game.Maple.Characters
                 {
                     dbContext.Characters.Remove(entity);
                 }
+
                 dbContext.SaveChanges();
             }
         }
@@ -1158,12 +1103,12 @@ namespace RazzleServer.Game.Maple.Characters
             using (var dbContext = new MapleDbContext())
             {
                 var character = dbContext.Characters
-                                       .Where(x => x.Name == Name)
-                                       .FirstOrDefault(x => x.WorldId == WorldId);
+                    .Where(x => x.Name == Name)
+                    .FirstOrDefault(x => x.WorldId == WorldId);
 
                 if (character == null)
                 {
-                    _log.LogError($"Cannot find account [{Name}] in World [{WorldId}]");
+                    _log.Error($"Cannot find account [{Name}] in World [{WorldId}]");
                     return;
                 }
 
@@ -1173,7 +1118,7 @@ namespace RazzleServer.Game.Maple.Characters
                 character.Experience = Experience;
                 character.Face = Face;
                 character.Fame = Fame;
-                character.Gender = (byte)_gender;
+                character.Gender = (byte)Gender;
                 character.Hair = Hair;
                 character.Health = Health;
                 character.Intelligence = _intelligence;
@@ -1205,12 +1150,11 @@ namespace RazzleServer.Game.Maple.Characters
             Items.Save();
             Skills.Save();
             Quests.Save();
+            Rings.Save();
             Buffs.Save();
-            Keymap.Save();
-            Trocks.Save();
-            SkillMacros.Save();
+            TeleportRocks.Save();
 
-            _log.LogInformation($"Saved character '{Name}' to database.");
+            _log.Information($"Saved character '{Name}' to database.");
         }
 
         public void Create()
@@ -1218,12 +1162,12 @@ namespace RazzleServer.Game.Maple.Characters
             using (var dbContext = new MapleDbContext())
             {
                 var character = dbContext.Characters
-                                       .Where(x => x.Name == Name)
-                                       .FirstOrDefault(x => x.WorldId == WorldId);
+                    .Where(x => x.Name == Name)
+                    .FirstOrDefault(x => x.WorldId == WorldId);
 
                 if (character != null)
                 {
-                    _log.LogError($"Error creating acconut - [{Name}] already exists in World [{WorldId}]");
+                    _log.Error($"Error creating account - [{Name}] already exists in World [{WorldId}]");
                     return;
                 }
 
@@ -1235,7 +1179,7 @@ namespace RazzleServer.Game.Maple.Characters
                     Experience = Experience,
                     Face = Face,
                     Fame = Fame,
-                    Gender = (byte)_gender,
+                    Gender = (byte)Gender,
                     Hair = Hair,
                     Health = Health,
                     Intelligence = _intelligence,
@@ -1269,9 +1213,9 @@ namespace RazzleServer.Game.Maple.Characters
                 Items.Save();
                 Skills.Save();
                 Quests.Save();
+                Rings.Save();
                 Buffs.Save();
-                Keymap.Save();
-                Trocks.Save();
+                TeleportRocks.Save();
             }
         }
 
@@ -1283,7 +1227,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                 if (character == null)
                 {
-                    _log.LogError($"Cannot find character [{Id}]");
+                    _log.Error($"Cannot find character [{Id}]");
                     return;
                 }
 
@@ -1295,7 +1239,7 @@ namespace RazzleServer.Game.Maple.Characters
                 _experience = character.Experience;
                 _face = character.Face;
                 _fame = character.Fame;
-                _gender = (Gender)character.Gender;
+                Gender = (Gender)character.Gender;
                 _hair = character.Hair;
                 _health = character.Health;
                 _intelligence = character.Intelligence;
@@ -1327,10 +1271,7 @@ namespace RazzleServer.Game.Maple.Characters
             Skills.Load();
             Quests.Load();
             Buffs.Load();
-            Keymap.Load();
-            Trocks.Load();
-            Memos.Load();
-            SkillMacros.Load();
+            TeleportRocks.Load();
         }
     }
 }

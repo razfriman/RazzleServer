@@ -16,7 +16,6 @@ namespace RazzleServer.Game.Maple.Skills
 
         private byte _currentLevel;
         private byte _maxLevel;
-        private DateTime _cooldownEnd = DateTime.MinValue;
 
         public int Id { get; set; }
         public int MapleId { get; set; }
@@ -54,8 +53,6 @@ namespace RazzleServer.Game.Maple.Skills
         public short Morph { get; set; }
         public Point? Lt { get; private set; }
         public Point? Rb { get; private set; }
-        public int Cooldown { get; set; }
-
         public bool HasBuff => BuffTime > 0;
 
         public byte CurrentLevel
@@ -94,37 +91,6 @@ namespace RazzleServer.Game.Maple.Skills
         public SkillReference CachedReference => DataProvider.Skills.Data[MapleId][CurrentLevel];
 
         public Character Character => Parent.Parent;
-
-        public bool IsFromFourthJob => MapleId > 1000000 && (MapleId / 10000).ToString()[2] == '2'; // TODO: Redo that.
-
-        public bool IsFromBeginner => MapleId % 10000000 > 999 && MapleId % 10000000 < 1003;
-
-        public bool IsCoolingDown => DateTime.Now < CooldownEnd;
-
-        public int RemainingCooldownSeconds => Math.Min(0, (int)(CooldownEnd - DateTime.Now).TotalSeconds);
-
-        public DateTime CooldownEnd
-        {
-            get => _cooldownEnd;
-            set
-            {
-                _cooldownEnd = value;
-
-                if (IsCoolingDown)
-                {
-                    Character.Client.Send(GamePackets.Cooldown(MapleId, RemainingCooldownSeconds));
-                    ScheduleCooldownExpiration();
-                }
-            }
-        }
-
-        private void ScheduleCooldownExpiration()
-        {
-            Delay.Execute(() =>
-            {
-                Character.Client.Send(GamePackets.Cooldown(MapleId, 0));
-            }, RemainingCooldownSeconds * 1000);
-        }
 
         private bool Assigned { get; set; }
 
@@ -173,7 +139,6 @@ namespace RazzleServer.Game.Maple.Skills
                 item.Level = CurrentLevel;
                 item.MasterLevel = MaxLevel;
                 item.Expiration = Expiration;
-                item.CooldownEnd = CooldownEnd;
 
                 dbContext.SaveChanges();
 
@@ -202,7 +167,7 @@ namespace RazzleServer.Game.Maple.Skills
 
         public void Update()
         {
-            using (var pw = new PacketWriter(ServerOperationCode.ChangeSkillRecordResult))
+            using (var pw = new PacketWriter(ServerOperationCode.SkillsAddPoint))
             {
                 pw.WriteByte(1);
                 pw.WriteShort(1);
@@ -249,16 +214,10 @@ namespace RazzleServer.Game.Maple.Skills
             Morph = CachedReference.Morph;
             Lt = CachedReference.Lt;
             Rb = CachedReference.Rb;
-            Cooldown = CachedReference.Cooldown;
         }
 
         public void Cast()
         {
-            if (IsCoolingDown)
-            {
-                return;
-            }
-
             Character.Health -= CostHp;
             Character.Mana -= CostMp;
 
@@ -276,11 +235,6 @@ namespace RazzleServer.Game.Maple.Skills
             {
 
             }
-
-            if (Cooldown > 0)
-            {
-                CooldownEnd = DateTime.Now.AddSeconds(Cooldown);
-            }
         }
 
         public byte[] ToByteArray()
@@ -289,12 +243,6 @@ namespace RazzleServer.Game.Maple.Skills
             {
                 oPacket.WriteInt(MapleId);
                 oPacket.WriteInt(CurrentLevel);
-
-                if (IsFromFourthJob)
-                {
-                    oPacket.WriteInt(MaxLevel);
-                }
-
                 return oPacket.ToArray();
             }
         }

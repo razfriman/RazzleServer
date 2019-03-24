@@ -26,7 +26,7 @@ namespace RazzleServer.Common.Wz.WzProperties
 
         public override object WzValue => PngProperty;
 
-        public override WzPropertyType PropertyType => WzPropertyType.Canvas;
+        public override WzPropertyType Type => WzPropertyType.Canvas;
 
         public override WzImageProperty this[string name]
         {

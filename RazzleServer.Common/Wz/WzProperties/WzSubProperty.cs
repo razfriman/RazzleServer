@@ -25,7 +25,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// <summary>
         /// The WzPropertyType of the property
         /// </summary>
-        public override WzPropertyType PropertyType => WzPropertyType.SubProperty;
+        public override WzPropertyType Type => WzPropertyType.SubProperty;
 
         /// <summary>
         /// Gets a wz property by it's name

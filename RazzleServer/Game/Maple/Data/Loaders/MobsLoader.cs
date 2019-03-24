@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using RazzleServer.Common.Util;
+﻿using Serilog;
 using RazzleServer.Game.Maple.Data.Cache;
 using RazzleServer.Game.Maple.Data.References;
 
@@ -9,27 +8,21 @@ namespace RazzleServer.Game.Maple.Data.Loaders
     {
         public override string CacheName => "Mobs";
 
-        public override ILogger Log => LogManager.CreateLogger<MobsLoader>();
+        public override ILogger Logger => Log.ForContext<MobsLoader>();
 
         public override void LoadFromWz()
         {
-            Log.LogInformation("Loading Mobs");
+            Logger.Information("Loading Mobs");
 
-            using (var file = GetWzFile("Mob.wz"))
+            using (var file = GetWzFile("Data.wz"))
             {
                 file.ParseWzFile();
-                file.WzDirectory.WzImages.ForEach(x =>
+                var dir = file.WzDirectory.GetDirectoryByName("Mob");
+                dir.WzImages.ForEach(x =>
                 {
                     var mob = new MobReference(x);
                     Data.Data.Add(mob.MapleId, mob);
                 });
-            }
-
-            using (var file = GetWzFile("Skill.wz"))
-            {
-                file.ParseWzFile();
-                file.WzDirectory.GetImageByName("MobSkill.img");
-                // TODO - Load Mob Skills
             }
         }
     }

@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using RazzleServer.Common.Util;
+﻿using Serilog;
 using RazzleServer.Common.Wz;
 using RazzleServer.Game.Maple.Data.Cache;
 
@@ -9,18 +8,19 @@ namespace RazzleServer.Game.Maple.Data.Loaders
     {
         public override string CacheName => "AvailableStyles";
 
-        public override ILogger Log => LogManager.CreateLogger<AvailableStylesDataLoader>();
+        public override ILogger Logger => Log.ForContext<AvailableStylesDataLoader>();
 
         public override void LoadFromWz()
         {
-            Log.LogInformation("Loading Character Creation Data");
+            Logger.Information("Loading Character Creation Data");
 
-            using (var file = GetWzFile("Character.wz"))
+            using (var file = GetWzFile("Data.wz"))
             {
                 file.ParseWzFile();
+                var dir = file.WzDirectory.GetDirectoryByName("Character");
                 LoadSkins();
-                LoadHairs(file.WzDirectory.GetDirectoryByName("Hair"));
-                LoadFaces(file.WzDirectory.GetDirectoryByName("Face"));
+                LoadHairs(dir.GetDirectoryByName("Hair"));
+                LoadFaces(dir.GetDirectoryByName("Face"));
             }
         }
 

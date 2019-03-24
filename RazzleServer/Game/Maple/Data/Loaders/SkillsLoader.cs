@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Extensions.Logging;
+using Serilog;
 using RazzleServer.Common.Constants;
-using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Data.Cache;
 using RazzleServer.Game.Maple.Data.References;
 
@@ -12,20 +11,26 @@ namespace RazzleServer.Game.Maple.Data.Loaders
     {
         public override string CacheName => "Skills";
 
-        public override ILogger Log => LogManager.CreateLogger<SkillsLoader>();
+        public override ILogger Logger => Log.ForContext<SkillsLoader>();
 
         public override void LoadFromWz()
         {
-            Log.LogInformation("Loading Skills");
+            Logger.Information("Loading Skills");
 
-            using (var file = GetWzFile("Skill.wz"))
+            using (var file = GetWzFile("Data.wz"))
             {
                 file.ParseWzFile();
+                var dir = file.WzDirectory.GetDirectoryByName("Skill");
 
                 foreach (var job in Enum.GetValues(typeof(Job)))
                 {
                     var imgName = $"{((short)job).ToString().PadLeft(3, '0')}.img";
-                    var img = file.WzDirectory.GetImageByName(imgName);
+                    var img = dir.GetImageByName(imgName);
+
+                    if (img == null)
+                    {
+                        continue;
+                    }
 
                     foreach (var skillImg in img["skill"].WzProperties)
                     {

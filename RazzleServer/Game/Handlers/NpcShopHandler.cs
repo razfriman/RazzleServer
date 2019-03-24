@@ -90,7 +90,7 @@ namespace RazzleServer.Game.Handlers
                 client.Character.Items.Add(purchase);
             }
 
-            using (var oPacket = new PacketWriter(ServerOperationCode.ConfirmShopTransaction))
+            using (var oPacket = new PacketWriter(ServerOperationCode.NpcShopResult))
             {
                 oPacket.WriteByte(0);
                 client.Character.Client.Send(oPacket);
@@ -134,7 +134,7 @@ namespace RazzleServer.Game.Handlers
                 client.Character.Meso += item.SalePrice * quantity;
             }
 
-            using (var oPacket = new PacketWriter(ServerOperationCode.ConfirmShopTransaction))
+            using (var oPacket = new PacketWriter(ServerOperationCode.NpcShopResult))
             {
                 oPacket.WriteByte(8);
                 client.Character.Client.Send(oPacket);
@@ -158,7 +158,7 @@ namespace RazzleServer.Game.Handlers
                 item.Update();
             }
 
-            using (var oPacket = new PacketWriter(ServerOperationCode.ConfirmShopTransaction))
+            using (var oPacket = new PacketWriter(ServerOperationCode.NpcShopResult))
             {
                 oPacket.WriteByte(8);
                 client.Character.Client.Send(oPacket);

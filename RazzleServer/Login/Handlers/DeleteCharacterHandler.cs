@@ -4,19 +4,18 @@ using RazzleServer.Game.Maple.Characters;
 
 namespace RazzleServer.Login.Handlers
 {
-    [PacketHandler(ClientOperationCode.CharacterDelete)]
+    [PacketHandler(ClientOperationCode.DeleteCharacter)]
     public class DeleteCharacterHandler : LoginPacketHandler
     {
         public override void HandlePacket(PacketReader packet, LoginClient client)
         {
             var characterId = packet.ReadInt();
-            var result = CharacterDeletionResult.Valid;
             Character.Delete(characterId);
 
             using (var pw = new PacketWriter(ServerOperationCode.DeleteCharacterResult))
             {
                 pw.WriteInt(characterId);
-                pw.WriteByte((byte)result);
+                pw.WriteByte((byte)CharacterDeletionResult.Valid);
                 client.Send(pw);
             }
         }

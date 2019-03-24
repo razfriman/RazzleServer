@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using RazzleServer.Common.Packet;
 using RazzleServer.Common.Server;
 using RazzleServer.Common.Util;
+using Serilog;
 
 namespace RazzleServer.Common.Network
 {
@@ -16,11 +16,12 @@ namespace RazzleServer.Common.Network
         public bool Connected { get; set; }
         public DateTime LastPong { get; set; }
         public string Key { get; set; }
-        public abstract ILogger Log { get; }
+        public abstract ILogger Logger { get; }
 
         protected AClient(Socket session, bool toClient = true)
         {
-            Socket = new ClientSocket(session, this, ServerConfig.Instance.Version, ServerConfig.Instance.AesKey, toClient);
+            Socket = new ClientSocket(session, this, ServerConfig.Instance.Version, ServerConfig.Instance.AesKey,
+                toClient, ServerConfig.Instance.UseAesEncryption);
             Host = Socket.Host;
             Port = Socket.Port;
             Connected = true;
@@ -36,7 +37,7 @@ namespace RazzleServer.Common.Network
         {
             if (ServerConfig.Instance.PrintPackets)
             {
-                Log.LogInformation($"Sending: {packet.ByteArrayToString()}");
+                Logger.Information($"Sending: {packet.ByteArrayToString()}");
             }
 
             Socket?.Send(packet).GetAwaiter().GetResult();
@@ -44,7 +45,7 @@ namespace RazzleServer.Common.Network
 
         public void Terminate(string message = null)
         {
-            Log.LogInformation($"Disconnecting Client - {Key}. Reason: {message}");
+            Logger.Information($"Disconnecting Client - {Key}. Reason: {message}");
             Socket.Disconnect();
         }
 

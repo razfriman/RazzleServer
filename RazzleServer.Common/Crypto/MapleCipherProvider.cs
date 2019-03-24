@@ -46,11 +46,11 @@ namespace RazzleServer.Common.Crypto
         /// </summary>
         private readonly object _addLocker = new object();
 
-        public MapleCipherProvider(ushort currentGameVersion, ulong aesKey, ushort initialBufferSize = 0x100,
+        public MapleCipherProvider(ushort currentGameVersion, ulong aesKey, bool useAesEncryption = true, ushort initialBufferSize = 0x100,
             bool toClient = true)
         {
-            RecvCipher = new MapleCipher(currentGameVersion, aesKey);
-            SendCipher = new MapleCipher(currentGameVersion, aesKey);
+            RecvCipher = new MapleCipher(currentGameVersion, aesKey, useAesEncryption);
+            SendCipher = new MapleCipher(currentGameVersion, aesKey, useAesEncryption);
             DataBuffer = new byte[initialBufferSize];
             AvailableData = 0;
             WaitForData = 0;

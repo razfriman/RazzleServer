@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.Extensions.Logging;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Common.Util;
+using Serilog;
 
 namespace RazzleServer.Game.Maple.Maps
 {
     public sealed class MapCharacters : MapObjects<Character>
     {
+        private readonly ILogger _log = Log.ForContext<MapCharacters>();
+        
         public MapCharacters(Map map) : base(map) { }
 
         public Character this[string name] => Values.FirstOrDefault(x => x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
@@ -32,7 +34,7 @@ namespace RazzleServer.Game.Maple.Maps
             }
             catch (Exception e)
             {
-                Logger.LogError(e, "Error adding item to MapCharacters");
+                _log.Error(e, "Error adding item to MapCharacters");
             }
 
             lock (Map.Drops)

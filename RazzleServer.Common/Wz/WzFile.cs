@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using RazzleServer.Common.Util;
 using RazzleServer.Common.Wz.Util;
 using RazzleServer.Common.Wz.WzProperties;
+using Serilog;
 
 namespace RazzleServer.Common.Wz
 {
@@ -18,7 +17,7 @@ namespace RazzleServer.Common.Wz
     /// </summary>
     public class WzFile : WzObject
     {
-        public static readonly ILogger Log = LogManager.CreateLogger<WzFile>();
+        private readonly ILogger _log = Log.ForContext<WzFile>();
 
         #region Fields
 
@@ -43,6 +42,7 @@ namespace RazzleServer.Common.Wz
 
         public short Version { get; set; }
 
+        [JsonIgnore]
         public string FilePath { get; private set; }
 
         [JsonConverter(typeof(StringEnumConverter))]
@@ -148,14 +148,14 @@ namespace RazzleServer.Common.Wz
         {
             if (FilePath == null)
             {
-                Log.LogCritical("Path is null");
+                _log.Error("Path is null");
                 return;
             }
 
             if (!File.Exists(FilePath))
             {
                 var message = $"WZ File does not exist at path: '{FilePath}'";
-                Log.LogCritical(message);
+                _log.Error(message);
                 throw new FileNotFoundException(message);
             }
 
@@ -224,6 +224,9 @@ namespace RazzleServer.Common.Wz
 
                 throw new Exception(
                     "Error with game version hash : The specified game version is incorrect and WzLib was unable to determine the version itself");
+            }
+            else
+            {
             }
 
             _versionHash = GetVersionHash(_version, Version);
@@ -452,7 +455,7 @@ namespace RazzleServer.Common.Wz
         internal IEnumerable<string> GetPathsFromProperty(WzImageProperty prop, string curPath)
         {
             var objList = new List<string>();
-            switch (prop.PropertyType)
+            switch (prop.Type)
             {
                 case WzPropertyType.Canvas:
                     foreach (var canvasProp in ((WzCanvasProperty)prop).WzProperties)
@@ -523,7 +526,7 @@ namespace RazzleServer.Common.Wz
                         curObj = ((WzImage)curObj)[seperatedPath[i]];
                         continue;
                     case WzObjectType.Property:
-                        switch (((WzImageProperty)curObj).PropertyType)
+                        switch (((WzImageProperty)curObj).Type)
                         {
                             case WzPropertyType.Canvas:
                                 curObj = ((WzCanvasProperty)curObj)[seperatedPath[i]];

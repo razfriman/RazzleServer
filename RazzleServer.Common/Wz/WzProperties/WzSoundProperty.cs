@@ -2,13 +2,10 @@
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-using Microsoft.Extensions.Logging;
 using NAudio.Wave;
-using RazzleServer.Common.Util;
+using Newtonsoft.Json;
 using RazzleServer.Common.Wz.Util;
-
-//using System;
-//using NAudio.Wave;
+using Serilog;
 
 namespace RazzleServer.Common.Wz.WzProperties
 {
@@ -17,7 +14,7 @@ namespace RazzleServer.Common.Wz.WzProperties
     /// </summary>
     public class WzSoundProperty : WzExtended
     {
-        public static readonly ILogger Log = LogManager.CreateLogger<WzSoundProperty>();
+        private readonly ILogger _log = Log.ForContext<WzSoundProperty>();
 
         #region Fields
 
@@ -57,7 +54,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// <summary>
         /// The WzPropertyType of the property
         /// </summary>
-        public override WzPropertyType PropertyType => WzPropertyType.Sound;
+        public override WzPropertyType Type => WzPropertyType.Sound;
 
         public override void WriteValue(WzBinaryWriter writer)
         {
@@ -86,6 +83,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// <summary>
         /// The data of the mp3 header
         /// </summary>
+        [JsonIgnore]
         public byte[] Header { get; set; }
 
         /// <summary>
@@ -266,7 +264,7 @@ namespace RazzleServer.Common.Wz.WzProperties
 
                 if (Marshal.SizeOf<WaveFormat>() + wavFmt.ExtraSize != wavHeader.Length)
                 {
-                    Log.LogCritical("Failed to parse sound header");
+                    _log.Error("Failed to parse sound header");
                     return;
                 }
 
@@ -284,7 +282,7 @@ namespace RazzleServer.Common.Wz.WzProperties
             }
             else
             {
-                Log.LogError($"Unknown wave encoding: {wavFmt.Encoding}");
+                _log.Error($"Unknown wave encoding: {wavFmt.Encoding}");
             }
         }
 

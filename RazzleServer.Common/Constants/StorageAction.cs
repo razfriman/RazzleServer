@@ -2,10 +2,9 @@
 {
     public enum StorageAction : byte
     {
-        Withdraw = 4,
-        Deposit,
-        Unknown,
-        ModifyMeso,
-        Leave
+        Remove = 3,
+        Add = 4,
+        Meso = 5,
+        Leave = 6
     }
 }

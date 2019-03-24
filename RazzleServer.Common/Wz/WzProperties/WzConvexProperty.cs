@@ -25,7 +25,7 @@ namespace RazzleServer.Common.Wz.WzProperties
             return clone;
         }
 
-        public override WzPropertyType PropertyType => WzPropertyType.Convex;
+        public override WzPropertyType Type => WzPropertyType.Convex;
 
         public override WzImageProperty this[string name]
         {

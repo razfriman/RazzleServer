@@ -13,7 +13,5 @@ namespace RazzleServer.Game.Maple.Scripting
         public abstract void Execute();
 
         protected void PlayPortalSoundEffect() => Character.ShowLocalUserEffect(UserEffect.PlayPortalSe);
-
-        protected void ShowInstruction(string text, int width = 0, int height = 0) => Character.SendHint(text, width, height);
     }
 }

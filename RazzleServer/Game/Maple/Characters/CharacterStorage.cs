@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using RazzleServer.Common;
+using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
 using RazzleServer.Data;
 using RazzleServer.Game.Maple.Items;
@@ -72,20 +73,28 @@ namespace RazzleServer.Game.Maple.Characters
 
             Load();
 
-            using (var pw = new PacketWriter(ServerOperationCode.Storage))
+            using (var pw = new PacketWriter(ServerOperationCode.StorageShow))
             {
-                pw.WriteByte(22);
                 pw.WriteInt(npc.MapleId);
                 pw.WriteByte(Slots);
-                pw.WriteShort(126);
-                pw.WriteShort(0);
-                pw.WriteInt(0);
+                pw.WriteShort(0x7E);
                 pw.WriteInt(Meso);
-                pw.WriteShort(0);
+
                 pw.WriteByte((byte)Items.Count);
                 Items.ForEach(item => item.ToByteArray(true, true));
-                pw.WriteShort(0);
-                pw.WriteByte(0);
+                pw.WriteLong(0);
+                pw.WriteLong(0);
+                pw.WriteLong(0);
+                pw.WriteLong(0);
+                Parent.Client.Send(pw);
+            }
+        }
+
+        public void StorageError(StorageResult result)
+        {
+            using (var pw = new PacketWriter(ServerOperationCode.StorageResult))
+            {
+                pw.WriteByte((byte) result);
                 Parent.Client.Send(pw);
             }
         }

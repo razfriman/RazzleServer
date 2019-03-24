@@ -1,7 +1,6 @@
 ﻿using System.Linq;
-using Microsoft.Extensions.Logging;
+using Serilog;
 using RazzleServer.Common.Constants;
-using RazzleServer.Common.Util;
 using RazzleServer.Common.Wz;
 using RazzleServer.Game.Maple.Data.Cache;
 using RazzleServer.Game.Maple.Data.References;
@@ -12,97 +11,92 @@ namespace RazzleServer.Game.Maple.Data.Loaders
     {
         public override string CacheName => "Items";
 
-        public override ILogger Log => LogManager.CreateLogger<ItemsLoader>();
+        public override ILogger Logger => Log.ForContext<ItemsLoader>();
 
         public override void LoadFromWz()
         {
-            Log.LogInformation("Loading Items from WZ");
+            Logger.Information("Loading Items from WZ");
 
-            Log.LogInformation("Loading Regular Items");
+            Logger.Information("Loading Regular Items");
 
-            using (var file = GetWzFile("Item.wz"))
+            using (var file = GetWzFile("Data.wz"))
             {
                 file.ParseWzFile();
+                var itemDir = file.WzDirectory.GetDirectoryByName("Item");
+                var characterDir = file.WzDirectory.GetDirectoryByName("Character");
 
-                LoadItems(file.WzDirectory.GetDirectoryByName("Cash"), ItemType.Cash);
-                LoadItems(file.WzDirectory.GetDirectoryByName("Consume"), ItemType.Usable);
-                LoadItems(file.WzDirectory.GetDirectoryByName("Etc"), ItemType.Etcetera);
-                LoadItems(file.WzDirectory.GetDirectoryByName("Install"), ItemType.Setup);
-            }
+                //LoadItems(file.WzDirectory.GetDirectoryByName("Cash"), ItemType.Cash);
+                LoadItems(itemDir.GetDirectoryByName("Consume"), ItemType.Usable);
+                LoadItems(itemDir.GetDirectoryByName("Etc"), ItemType.Etcetera);
+                LoadItems(itemDir.GetDirectoryByName("Install"), ItemType.Setup);
 
-            Log.LogInformation("Loading Equip Items");
-            using (var file = GetWzFile("Character.wz"))
-            {
-                file.ParseWzFile();
+                Logger.Information("Loading Equip Items");
 
-                Log.LogInformation("Loading Equip Items: Accessory");
-                LoadEquipment(file.WzDirectory.GetDirectoryByName("Accessory"));
+                Logger.Information("Loading Equip Items: Accessory");
+                LoadEquipment(characterDir.GetDirectoryByName("Accessory"));
 
-                Log.LogInformation("Loading Equip Items: Cap");
-                LoadEquipment(file.WzDirectory.GetDirectoryByName("Cap"));
+                Logger.Information("Loading Equip Items: Cap");
+                LoadEquipment(characterDir.GetDirectoryByName("Cap"));
 
-                Log.LogInformation("Loading Equip Items: Cape");
-                LoadEquipment(file.WzDirectory.GetDirectoryByName("Cape"));
+                Logger.Information("Loading Equip Items: Cape");
+                LoadEquipment(characterDir.GetDirectoryByName("Cape"));
 
-                Log.LogInformation("Loading Equip Items: Coat");
-                LoadEquipment(file.WzDirectory.GetDirectoryByName("Coat"));
+                Logger.Information("Loading Equip Items: Coat");
+                LoadEquipment(characterDir.GetDirectoryByName("Coat"));
 
-                Log.LogInformation("Loading Equip Items: Glove");
-                LoadEquipment(file.WzDirectory.GetDirectoryByName("Glove"));
+                Logger.Information("Loading Equip Items: Glove");
+                LoadEquipment(characterDir.GetDirectoryByName("Glove"));
 
-                Log.LogInformation("Loading Equip Items: Longcoat");
-                LoadEquipment(file.WzDirectory.GetDirectoryByName("Longcoat"));
+                Logger.Information("Loading Equip Items: Longcoat");
+                LoadEquipment(characterDir.GetDirectoryByName("Longcoat"));
 
-                Log.LogInformation("Loading Equip Items: Pants");
-                LoadEquipment(file.WzDirectory.GetDirectoryByName("Pants"));
+                Logger.Information("Loading Equip Items: Pants");
+                LoadEquipment(characterDir.GetDirectoryByName("Pants"));
 
-                Log.LogInformation("Loading Equip Items: PetEquip");
-                LoadEquipment(file.WzDirectory.GetDirectoryByName("PetEquip"));
+                Logger.Information("Loading Equip Items: PetEquip");
+                LoadEquipment(characterDir.GetDirectoryByName("PetEquip"));
 
-                Log.LogInformation("Loading Equip Items: Ring");
-                LoadEquipment(file.WzDirectory.GetDirectoryByName("Ring"));
+                Logger.Information("Loading Equip Items: Ring");
+                LoadEquipment(characterDir.GetDirectoryByName("Ring"));
 
-                Log.LogInformation("Loading Equip Items: Shield");
-                LoadEquipment(file.WzDirectory.GetDirectoryByName("Shield"));
+                Logger.Information("Loading Equip Items: Shield");
+                LoadEquipment(characterDir.GetDirectoryByName("Shield"));
 
-                Log.LogInformation("Loading Equip Items: Shoes");
-                LoadEquipment(file.WzDirectory.GetDirectoryByName("Shoes"));
+                Logger.Information("Loading Equip Items: Shoes");
+                LoadEquipment(characterDir.GetDirectoryByName("Shoes"));
 
-                Log.LogInformation("Loading Equip Items: TamingMob");
-                LoadEquipment(file.WzDirectory.GetDirectoryByName("TamingMob"));
-
-                Log.LogInformation("Loading Equip Items: Weapon");
-                LoadEquipment(file.WzDirectory.GetDirectoryByName("Weapon"));
+                Logger.Information("Loading Equip Items: Weapon");
+                LoadEquipment(characterDir.GetDirectoryByName("Weapon"));
             }
         }
 
         private void LoadItems(WzDirectory dir, ItemType type)
         {
             dir.WzImages
-               .SelectMany(x => x.WzProperties)
-               .ToList()
-               .ForEach(item =>
-               {
-                   var mapleItem = new ItemReference(item, type);
-                   if (!Data.Data.ContainsKey(mapleItem.MapleId))
-                   {
-                       Data.Data.Add(mapleItem.MapleId, mapleItem);
-                   }
-               });
+                .SelectMany(x => x.WzProperties)
+                .ToList()
+                .ForEach(item =>
+                {
+                    var mapleItem = new ItemReference(item, type);
+                    if (!Data.Data.ContainsKey(mapleItem.MapleId))
+                    {
+                        Data.Data.Add(mapleItem.MapleId, mapleItem);
+                    }
+                });
         }
 
         private void LoadEquipment(WzDirectory dir)
         {
             dir.WzImages
-            .ForEach(item =>
-            {
-                var mapleItem = new ItemReference(item);
-
-                if (!Data.Data.ContainsKey(mapleItem.MapleId))
+                .ForEach(item =>
                 {
-                    Data.Data.Add(mapleItem.MapleId, mapleItem);
-                }
-            });
+                    var mapleItem = new ItemReference(item);
+
+                    if (!Data.Data.ContainsKey(mapleItem.MapleId))
+                    {
+                        Data.Data.Add(mapleItem.MapleId, mapleItem);
+                    }
+                });
         }
     }
 }

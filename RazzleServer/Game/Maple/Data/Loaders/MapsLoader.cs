@@ -1,6 +1,5 @@
 ﻿using System.Linq;
-using Microsoft.Extensions.Logging;
-using RazzleServer.Common.Util;
+using Serilog;
 using RazzleServer.Game.Maple.Data.Cache;
 using RazzleServer.Game.Maple.Data.References;
 
@@ -10,19 +9,19 @@ namespace RazzleServer.Game.Maple.Data.Loaders
     {
         public override string CacheName => "Maps";
 
-        public override ILogger Log => LogManager.CreateLogger<MapsLoader>();
+        public override ILogger Logger => Log.ForContext<MapsLoader>();
 
         public override void LoadFromWz()
         {
-            Log.LogInformation("Loading Maps");
+            Logger.Information("Loading Maps");
 
-            using (var file = GetWzFile("Map.wz"))
+            using (var file = GetWzFile("Data.wz"))
             {
                 file.ParseWzFile();
-                file.WzDirectory
+                file.WzDirectory.GetDirectoryByName("Map")
                     .GetDirectoryByName("Map")
                     .WzDirectories
-                    .SelectMany(dir => dir.WzImages)
+                    .SelectMany(subDir => subDir.WzImages)
                     .ToList()
                     .ForEach(img =>
                     {

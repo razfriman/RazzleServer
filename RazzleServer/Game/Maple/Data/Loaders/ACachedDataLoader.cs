@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+using Serilog;
 using Newtonsoft.Json;
 using RazzleServer.Common.Server;
 using RazzleServer.Common.Wz;
@@ -12,11 +12,11 @@ namespace RazzleServer.Game.Maple.Data.Loaders
     {
         public abstract string CacheName { get; }
 
-        public abstract ILogger Log { get; }
+        public abstract ILogger Logger { get; }
 
         public T Data { get; private set; } = new T();
 
-        public virtual async Task<T> Load()
+        public async Task<T> Load()
         {
             var path = Path.Combine(ServerConfig.Instance.CacheFolder, $"{CacheName}.cache");
             if (File.Exists(path))
@@ -27,14 +27,14 @@ namespace RazzleServer.Game.Maple.Data.Loaders
                 }
                 catch (Exception e)
                 {
-                    Log.LogError(e, $"Error loading [{CacheName}] cache. Attempting to load from WZ");
+                    Logger.Error(e, $"Error loading [{CacheName}] cache. Attempting to load from WZ");
                     LoadFromWz();
                     await SaveToCache();
                 }
             }
             else
             {
-                Log.LogInformation($"[{CacheName}] cache not found. Attempting to load from WZ");
+                Logger.Information($"[{CacheName}] cache not found. Attempting to load from WZ");
                 LoadFromWz();
                 await SaveToCache();
             }
@@ -42,7 +42,7 @@ namespace RazzleServer.Game.Maple.Data.Loaders
             return Data;
         }
 
-        public virtual Task SaveToCache()
+        public Task SaveToCache()
         {
             Directory.CreateDirectory(ServerConfig.Instance.CacheFolder);
             var path = Path.Combine(ServerConfig.Instance.CacheFolder, $"{CacheName}.cache");
@@ -53,16 +53,17 @@ namespace RazzleServer.Game.Maple.Data.Loaders
             {
                 var serializer = new JsonSerializer
                 {
+                    DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
                     Formatting = ServerConfig.Instance.PrettifyCache ? Formatting.Indented : Formatting.None
                 };
                 serializer.Serialize(writer, Data);
             }
 
-            Log.LogInformation($"Saving [{CacheName}] to cached file");
+            Logger.Information($"Saving [{CacheName}] to cached file");
             return Task.CompletedTask;
         }
 
-        public virtual Task LoadFromCache()
+        public Task LoadFromCache()
         {
 
             var path = Path.Combine(ServerConfig.Instance.CacheFolder, $"{CacheName}.cache");
@@ -73,7 +74,7 @@ namespace RazzleServer.Game.Maple.Data.Loaders
             {
                 var serializer = new JsonSerializer();
                 Data = serializer.Deserialize<T>(reader);
-                Log.LogInformation($"Loaded [{CacheName}] from cache");
+                Logger.Information($"Loaded [{CacheName}] from cache");
             }
 
             return Task.CompletedTask;
@@ -81,6 +82,6 @@ namespace RazzleServer.Game.Maple.Data.Loaders
 
         public abstract void LoadFromWz();
 
-        public WzFile GetWzFile(string name) => new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, name), WzMapleVersionType.Gms);
+        public WzFile GetWzFile(string name) => new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, name), (short) ServerConfig.Instance.Version, WzMapleVersionType.Classic);
     }
 }

@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Life;
+using Serilog;
 
 namespace RazzleServer.Game.Maple.Scripting.Cache
 {
     public sealed class NpcScripts
     {
-        private readonly ILogger _log = LogManager.CreateLogger<NpcScripts>();
+        private readonly ILogger _log = Log.ForContext<NpcScripts>();
 
         public Dictionary<string, Type> Data { get; set; } = new Dictionary<string, Type>();
 
@@ -20,7 +19,7 @@ namespace RazzleServer.Game.Maple.Scripting.Cache
 
             if (!Data.ContainsKey(script))
             {
-                _log.LogWarning(
+                _log.Warning(
                     $"Script not implemented for Npc={npc.MapleId} Script={npc.CachedReference.Script} on Map={npc.Map.MapleId}");
                 return;
             }
@@ -36,13 +35,13 @@ namespace RazzleServer.Game.Maple.Scripting.Cache
 
                     if (ex is NotImplementedException)
                     {
-                        _log.LogWarning(
+                        _log.Warning(
                             $"Script not implemented for Npc={npc.MapleId} Script={npc.CachedReference.Script} on Map={npc.Map.MapleId}");
                         character.Release();
                     }
                     else
                     {
-                        _log.LogError(ex,
+                        _log.Error(ex,
                             $"Script error for Npc={npc.MapleId} Script={npc.CachedReference.Script} on Map={npc.Map.MapleId}");
                         character.Release();
                     }

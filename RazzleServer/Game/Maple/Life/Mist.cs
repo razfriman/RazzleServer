@@ -29,9 +29,6 @@ namespace RazzleServer.Game.Maple.Life
             {
                 case (int)SkillNames.FirePoisonMage.PoisonMist:
                     return MistType.Poison;
-
-                case (int)SkillNames.Shadower.Smokescreen:
-                    return MistType.Smokes;
             }
 
             return MistType.Mob;
@@ -43,14 +40,14 @@ namespace RazzleServer.Game.Maple.Life
 
         private PacketWriter GetInternalPacket()
         {
-            using (var pw = new PacketWriter(ServerOperationCode.MistSpawn))
+            using (var pw = new PacketWriter(ServerOperationCode.MistEnterField))
             {
                 pw.WriteInt(ObjectId);
                 pw.WriteInt((int)MistType);
                 pw.WriteInt(Owner.Id);
                 pw.WriteInt(Skill.MapleId);
                 pw.WriteByte(Skill.CurrentLevel);
-                pw.WriteShort((short)Skill.Cooldown);
+                pw.WriteShort(0); // Cooldown
                 pw.WriteInt(Bounds.Rb.X);
                 pw.WriteInt(Bounds.Rb.Y);
                 pw.WriteInt(Bounds.Rb.X + Bounds.Lt.Y);
@@ -62,7 +59,7 @@ namespace RazzleServer.Game.Maple.Life
 
         public PacketWriter GetDestroyPacket()
         {
-            using (var pw = new PacketWriter(ServerOperationCode.MistRemove))
+            using (var pw = new PacketWriter(ServerOperationCode.MistLeaveField))
             {
                 pw.WriteInt(ObjectId);
                 return pw;

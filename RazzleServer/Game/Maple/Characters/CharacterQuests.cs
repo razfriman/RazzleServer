@@ -217,15 +217,15 @@ namespace RazzleServer.Game.Maple.Characters
 
             Update(quest.MapleId, QuestStatus.InProgress);
 
-            using (var oPacket = new PacketWriter(ServerOperationCode.QuestResult))
-            {
-                oPacket.WriteByte((byte)QuestResult.Complete);
-                oPacket.WriteUShort(quest.MapleId);
-                oPacket.WriteInt(npcId);
-                oPacket.WriteInt(0);
-
-                Parent.Client.Send(oPacket);
-            }
+//            using (var oPacket = new PacketWriter(ServerOperationCode.QuestResult))
+//            {
+//                oPacket.WriteByte((byte)QuestResult.Complete);
+//                oPacket.WriteUShort(quest.MapleId);
+//                oPacket.WriteInt(npcId);
+//                oPacket.WriteInt(0);
+//
+//                Parent.Client.Send(oPacket);
+//            }
         }
 
         public void Complete(QuestReference quest, int selection)
@@ -368,12 +368,11 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void NotifyComplete(ushort questId)
         {
-            using (var oPacket = new PacketWriter(ServerOperationCode.QuestClear))
-            {
-                oPacket.WriteUShort(questId);
-
-                Parent.Client.Send(oPacket);
-            }
+//            using (var oPacket = new PacketWriter(ServerOperationCode.QuestClear))
+//            {
+//                oPacket.WriteUShort(questId);
+//                Parent.Client.Send(oPacket);
+//            }
         }
 
         public byte[] ToByteArray()
@@ -394,14 +393,6 @@ namespace RazzleServer.Game.Maple.Characters
                     }
 
                     oPacket.WriteString(kills);
-                }
-
-                oPacket.WriteShort((short)Completed.Count);
-
-                foreach (var quest in Completed)
-                {
-                    oPacket.WriteUShort(quest.Key);
-                    oPacket.WriteDateTime(quest.Value);
                 }
 
                 return oPacket.ToArray();

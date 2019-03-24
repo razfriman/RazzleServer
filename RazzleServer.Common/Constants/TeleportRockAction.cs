@@ -1,6 +1,6 @@
 ﻿namespace RazzleServer.Common.Constants
 {
-    public enum TrockAction : byte
+    public enum TeleportRockAction : byte
     {
         Remove = 0,
         Add = 1

@@ -22,56 +22,14 @@ namespace RazzleServer.Game.Maple.Util
 
             var count = packet.ReadByte();
 
-            //26
-            //00 01 
-            //63 FE 57 06
-            //0A
-
-            //00 
-            //73 FE 5A 06 
-            //80 00 20 00 
-            //56 00 
-            //02 
-            //78 00
-
-            //00
-            //74 FE 5B 06
-            //84 00 F8 FF 
-            //56 00 
-            //02 
-            //0C 00 
-
-
-            //00
-            //86 FE 59 06 
-            //7C 00 F9 FF 
-            //57 00
-            //02 
-            //8A 00
-
-            //00
-            //89 FE 59 06
-            //64 00 FA FF 
-            //57 00 
-            //08
-            //1E 00 
-
-            //00 
-            //8E FE 59 06 
-            //34 00 FD FF 
-            //57 00 
-            //0A 
-            //3C 00 
-
-            //0E 
-            //34 00 FD FF
-            //00 00
-            //0A
-            //00 00 
-
-
-            //0F
-            //8E FE 58 06 34 00 FD FF 57 00 57 00 0A 00 00 0F 8E FE 58 06 34 00 FD FF 00 00 57 00 06 00 00 0F 8E FE 4E 06 00 00 F0 FF 00 00 57 00 06 5A 00 0F 8D FE 51 06 00 00 68 00 00 00 57 00 06 3C 00 11 44 44 44 44 04 11 11 11 01 63 FE 4E 06 8E FE 5B 06
+            //[00 00] [F6 FF]
+            //[03]
+            
+            //[00] [00 00 4F 00] [00 00 58 02] [00 00] [06] [2C 01]
+            //[00] [00 00 5F 00] [00 00 00 00] [00 00] [06] [17 00]
+            //[00] [00 00 5F 00] [00 00 00 00] [13 00] [04] [BB 00]
+            //[11]
+            //00 00 00 00 00 00 00 00 00
             while (count-- > 0)
             {
                 var type = (MovementType)packet.ReadByte();
@@ -160,11 +118,6 @@ namespace RazzleServer.Game.Maple.Util
                     packet.ReadByte(); // NOTE: Unknown.
                 }
             }
-
-            // Rectangle for bounds checking.
-            var lt = packet.ReadPoint();
-            var rb = packet.ReadPoint();
-
             Position = position;
             Stance = stance;
             Foothold = foothold;

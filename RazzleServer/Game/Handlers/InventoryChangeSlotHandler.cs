@@ -4,12 +4,11 @@ using RazzleServer.Common.Packet;
 
 namespace RazzleServer.Game.Handlers
 {
-    [PacketHandler(ClientOperationCode.InventoryAction)]
-    public class InventoryActionHandler : GamePacketHandler
+    [PacketHandler(ClientOperationCode.InventoryChangeSlot)]
+    public class InventoryChangeSlotHandler : GamePacketHandler
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
-            packet.ReadInt();
             var type = (ItemType)packet.ReadByte();
             var source = packet.ReadShort();
             var destination = packet.ReadShort();

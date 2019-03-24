@@ -14,17 +14,13 @@ namespace RazzleServer.Game.Maple.Shops
         public int PurchasePrice { get; }
         public int Sort { get; private set; }
 
-        [JsonIgnore]
-        public short MaxPerStack => DataProvider.Items.Data[MapleId].MaxPerStack;
+        [JsonIgnore] public short MaxPerStack => DataProvider.Items.Data[MapleId].MaxPerStack;
 
-        [JsonIgnore]
-        public int SalePrice => DataProvider.Items.Data[MapleId].SalePrice;
+        [JsonIgnore] public int SalePrice => DataProvider.Items.Data[MapleId].SalePrice;
 
-        [JsonIgnore]
-        public double UnitPrice => Parent.UnitPrices[MapleId];
+        [JsonIgnore] public double UnitPrice => Parent.UnitPrices[MapleId];
 
-        [JsonIgnore]
-        public bool IsRecharageable => DataProvider.Items.Data[MapleId].IsRechargeable;
+        [JsonIgnore] public bool IsRecharageable => DataProvider.Items.Data[MapleId].IsRechargeable;
 
         public ShopItem(Shop parent, ShopItemEntity entity)
         {
@@ -54,14 +50,14 @@ namespace RazzleServer.Game.Maple.Shops
                     oPacket.WriteShort(0);
                     oPacket.WriteInt(0);
                     oPacket.WriteShort((short)(BitConverter.DoubleToInt64Bits(UnitPrice) >> 48));
-                    oPacket.WriteShort(MaxPerStack);
                 }
                 else
                 {
-
                     oPacket.WriteShort(Quantity);
-                    oPacket.WriteShort(MaxPerStack);
                 }
+
+                oPacket.WriteShort(MaxPerStack);
+
 
                 return oPacket.ToArray();
             }

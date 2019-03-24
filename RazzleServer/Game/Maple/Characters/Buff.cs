@@ -123,7 +123,7 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 default:
                     {
-                        using (var oPacket = new PacketWriter(ServerOperationCode.TemporaryStatSet))
+                        using (var oPacket = new PacketWriter(ServerOperationCode.SkillsGiveBuff))
                         {
                             oPacket.WriteLong(PrimaryBuffMask);
                             oPacket.WriteLong(SecondaryBuffMask);
@@ -150,7 +150,7 @@ namespace RazzleServer.Game.Maple.Characters
                             Character.Client.Send(oPacket);
                         }
 
-                        using (var oPacket = new PacketWriter(ServerOperationCode.SetTemporaryStat))
+                        using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerSkillBuff))
                         {
                             oPacket.WriteInt(Character.Id);
                             oPacket.WriteLong(PrimaryBuffMask);
@@ -178,7 +178,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Cancel()
         {
-            using (var oPacket = new PacketWriter(ServerOperationCode.TemporaryStatReset))
+            using (var oPacket = new PacketWriter(ServerOperationCode.SkillsGiveBuff))
             {
                 oPacket.WriteLong(PrimaryBuffMask);
                 oPacket.WriteLong(SecondaryBuffMask);
@@ -186,8 +186,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                 Character.Client.Send(oPacket);
             }
-
-            using (var oPacket = new PacketWriter(ServerOperationCode.ResetTemporaryStat))
+            using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerSkillBuff))
             {
                 oPacket.WriteInt(Character.Id);
                 oPacket.WriteLong(PrimaryBuffMask);
@@ -242,17 +241,6 @@ namespace RazzleServer.Game.Maple.Characters
             if (skill.Morph > 0)
             {
                 SecondaryStatups.Add(SecondaryBuffStat.Morph, (short)(skill.Morph + 100 * (int)Character.Gender));
-            }
-
-            switch (MapleId)
-            {
-                case (int)SkillNames.SuperGm.HolySymbol:
-                    SecondaryStatups.Add(SecondaryBuffStat.HolySymbol, skill.ParameterA);
-                    break;
-
-                case (int)SkillNames.SuperGm.Hide:
-                    SecondaryStatups.Add(SecondaryBuffStat.DarkSight, skill.ParameterA);
-                    break;
             }
         }
     }

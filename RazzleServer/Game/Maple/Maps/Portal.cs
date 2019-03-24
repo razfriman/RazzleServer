@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
@@ -8,12 +7,13 @@ using RazzleServer.Common.Wz;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Data.References;
+using Serilog;
 
 namespace RazzleServer.Game.Maple.Maps
 {
     public class Portal : MapObject
     {
-        private readonly ILogger _log = LogManager.CreateLogger<Portal>();
+        private readonly ILogger _log = Log.ForContext<Portal>();
 
         public byte Id { get; set; }
         public string Label { get; set; }
@@ -25,11 +25,11 @@ namespace RazzleServer.Game.Maple.Maps
 
         public bool IsSpawnPoint => Label == "sp";
 
-        [JsonIgnore]
-        public MapReference DestinationMap => DataProvider.Maps.Data[DestinationMapId];
+        [JsonIgnore] public MapReference DestinationMap => DataProvider.Maps.Data[DestinationMapId];
 
         [JsonIgnore]
-        public Portal Link => DataProvider.Maps.Data[DestinationMapId].Portals.FirstOrDefault(x => x.Label == DestinationLabel);
+        public Portal Link => DataProvider.Maps.Data[DestinationMapId].Portals
+            .FirstOrDefault(x => x.Label == DestinationLabel);
 
         public Portal() { }
 
@@ -45,40 +45,17 @@ namespace RazzleServer.Game.Maple.Maps
             IsOnlyOnce = (img["onlyOnce"]?.GetInt() ?? 0) > 0;
         }
 
-        public virtual void Enter(Character character)
+        public void Enter(Character character)
         {
-            _log.LogWarning($"'{character.Name}' attempted to enter an unimplemented portal '{Script}'");
+            _log.Warning($"'{character.Name}' attempted to enter an unimplemented portal '{Script}'");
 
-            using (var oPacket = new PacketWriter(ServerOperationCode.TransferFieldReqInogred))
+            using (var oPacket = new PacketWriter(ServerOperationCode.TransferFieldReqIgnored))
             {
                 oPacket.WriteByte((byte)MapTransferResult.NoReason);
                 character.Client.Send(oPacket);
             }
         }
 
-        public void PlaySoundEffect(Character character)
-        {
-            character.ShowLocalUserEffect(UserEffect.PlayPortalSe);
-        }
-
-        public void ShowBalloonMessage(Character character, string text, short width, short height)
-        {
-            var oPacket = new PacketWriter(ServerOperationCode.BalloonMsg);
-            oPacket.WriteString(text);
-            oPacket.WriteShort(width);
-            oPacket.WriteShort(height);
-            oPacket.WriteByte(1);
-            character.Client.Send(oPacket);
-        }
-
-
-        public void ShowTutorialMessage(Character character, string dataPath)
-        {
-            var oPacket = new PacketWriter(ServerOperationCode.Effect);
-            oPacket.WriteByte((byte)UserEffect.AvatarOriented);
-            oPacket.WriteString(dataPath);
-            oPacket.WriteInt(1);
-            character.Client.Send(oPacket);
-        }
+        public void PlaySoundEffect(Character character) => character.ShowLocalUserEffect(UserEffect.PlayPortalSe);
     }
 }
