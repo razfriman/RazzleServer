@@ -13,7 +13,7 @@ namespace RazzleServer.Game.Maple.Scripting
 
         protected AScriptLoader() => Logger = Log.ForContext<AScriptLoader<T>>();
 
-        public virtual async Task<T> Load()
+        public async Task<T> Load()
         {
             await LoadScripts();
             Log.Information($"Loaded [{CacheName}]");

@@ -4,7 +4,6 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using Point = RazzleServer.Common.Util.Point;
 
 namespace RazzleServer.Common.Wz

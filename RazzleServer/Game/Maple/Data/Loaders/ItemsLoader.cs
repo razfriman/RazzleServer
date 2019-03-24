@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using Serilog;
 using RazzleServer.Common.Constants;
-using RazzleServer.Common.Util;
 using RazzleServer.Common.Wz;
 using RazzleServer.Game.Maple.Data.Cache;
 using RazzleServer.Game.Maple.Data.References;

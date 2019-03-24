@@ -37,7 +37,7 @@ namespace RazzleServer.Common
             RegisterIgnorePacketPrints();
         }
 
-        public virtual void RemoveClient(TClient client)
+        public void RemoveClient(TClient client)
         {
             if (Clients.ContainsKey(client.Key))
             {
@@ -45,7 +45,7 @@ namespace RazzleServer.Common
             }
         }
 
-        public virtual void AddClient(TClient client)
+        public void AddClient(TClient client)
         {
             if (!Clients.ContainsKey(client.Key))
             {
@@ -57,7 +57,7 @@ namespace RazzleServer.Common
             }
         }
 
-        protected virtual void Dispose(bool disposing)
+        protected void Dispose(bool disposing)
         {
             if (disposing)
             {
@@ -71,7 +71,7 @@ namespace RazzleServer.Common
             GC.SuppressFinalize(this);
         }
 
-        public virtual bool AllowConnection(string address) => true;
+        public bool AllowConnection(string address) => true;
 
         public async Task<TClient> GenerateClient(Socket socket)
         {
@@ -89,15 +89,16 @@ namespace RazzleServer.Common
 
             try
             {
-                if (client != null)
+                if (client == null)
                 {
-                    await client.SendHandshake();
-                    client.Key = $"{ip}-{Functions.Random()}";
-                    AddClient(client);
-                    return client;
+                    return null;
                 }
 
-                return null;
+                await client.SendHandshake();
+                client.Key = $"{ip}-{Functions.Random()}";
+                AddClient(client);
+                return client;
+
             }
             catch (Exception e)
             {

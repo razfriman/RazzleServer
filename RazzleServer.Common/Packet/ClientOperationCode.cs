@@ -58,6 +58,6 @@
         NpcAnimate = 0x5B,
         DropPickup = 0x5F,
         
-        Unknown = 0xFF,
+        Unknown = 0xFF
     }
 }

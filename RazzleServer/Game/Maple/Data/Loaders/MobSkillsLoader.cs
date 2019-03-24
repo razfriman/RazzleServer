@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Serilog;
-using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Data.Cache;
 using RazzleServer.Game.Maple.Data.References;
 
