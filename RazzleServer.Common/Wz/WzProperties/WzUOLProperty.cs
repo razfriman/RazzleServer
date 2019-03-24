@@ -35,7 +35,7 @@ namespace RazzleServer.Common.Wz.WzProperties
                 ? property.GetFromPath(path)
                 : (LinkValue as WzImage)?.GetFromPath(path);
 
-        public override WzPropertyType PropertyType => WzPropertyType.Uol;
+        public override WzPropertyType Type => WzPropertyType.Uol;
 
         public override void WriteValue(WzBinaryWriter writer)
         {
@@ -65,6 +65,9 @@ namespace RazzleServer.Common.Wz.WzProperties
                 {
                     return _linkVal;
                 }
+
+                
+                return null;
 
                 var paths = Value.Split('/');
                 _linkVal = Parent;

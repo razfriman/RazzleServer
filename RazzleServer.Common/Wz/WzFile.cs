@@ -456,7 +456,7 @@ namespace RazzleServer.Common.Wz
         internal IEnumerable<string> GetPathsFromProperty(WzImageProperty prop, string curPath)
         {
             var objList = new List<string>();
-            switch (prop.PropertyType)
+            switch (prop.Type)
             {
                 case WzPropertyType.Canvas:
                     foreach (var canvasProp in ((WzCanvasProperty)prop).WzProperties)
@@ -527,7 +527,7 @@ namespace RazzleServer.Common.Wz
                         curObj = ((WzImage)curObj)[seperatedPath[i]];
                         continue;
                     case WzObjectType.Property:
-                        switch (((WzImageProperty)curObj).PropertyType)
+                        switch (((WzImageProperty)curObj).Type)
                         {
                             case WzPropertyType.Canvas:
                                 curObj = ((WzCanvasProperty)curObj)[seperatedPath[i]];

@@ -18,7 +18,6 @@ namespace RazzleServer.Game.Maple.Data.Loaders
             using (var file = GetWzFile("Data.wz"))
             {
                 file.ParseWzFile();
-                file.Serialize(@"C:\Users\Raz\Desktop\TestJson", true);
                 var dir = file.WzDirectory.GetDirectoryByName("Character");
                 LoadSkins();
                 LoadHairs(dir.GetDirectoryByName("Hair"));

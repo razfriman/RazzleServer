@@ -18,7 +18,7 @@ namespace RazzleServer.Common.Wz.WzProperties
 
         public override object WzValue => Value;
 
-        public override WzPropertyType PropertyType => WzPropertyType.Short;
+        public override WzPropertyType Type => WzPropertyType.Short;
 
         public override void WriteValue(WzBinaryWriter writer)
         {

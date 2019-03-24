@@ -143,7 +143,6 @@ namespace RazzleServer.Common.Wz
                 serializer ??= new JsonSerializer
                 {
                     NullValueHandling = NullValueHandling.Ignore,
-                    DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
                     Formatting = Formatting.None
                 };
 

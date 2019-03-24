@@ -21,7 +21,7 @@ namespace RazzleServer.Common.Wz.WzProperties
 
         public override object WzValue => new Point(X.Value, Y.Value);
 
-        public override WzPropertyType PropertyType => WzPropertyType.Vector;
+        public override WzPropertyType Type => WzPropertyType.Vector;
 
         public override void WriteValue(WzBinaryWriter writer)
         {

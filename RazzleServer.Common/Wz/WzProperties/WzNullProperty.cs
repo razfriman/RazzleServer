@@ -13,7 +13,7 @@ namespace RazzleServer.Common.Wz.WzProperties
 
         public override WzImageProperty DeepClone() => new WzNullProperty(Name);
 
-        public override WzPropertyType PropertyType => WzPropertyType.Null;
+        public override WzPropertyType Type => WzPropertyType.Null;
 
         public override WzObjectType ObjectType => WzObjectType.Property;
 

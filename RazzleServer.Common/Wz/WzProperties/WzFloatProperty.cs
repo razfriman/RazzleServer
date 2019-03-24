@@ -44,7 +44,7 @@ namespace RazzleServer.Common.Wz.WzProperties
 
         public override WzImageProperty DeepClone() => new WzFloatProperty(Name, Value);
 
-        public override WzPropertyType PropertyType => WzPropertyType.Float;
+        public override WzPropertyType Type => WzPropertyType.Float;
 
         public override void WriteValue(WzBinaryWriter writer)
         {

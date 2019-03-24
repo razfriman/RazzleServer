@@ -14,7 +14,7 @@ namespace RazzleServer.Common.Wz.Util
             JsonSerializer serializer)
         {
             var token = JToken.Load(reader);
-            var typeToken = token["PropertyType"];
+            var typeToken = token["Type"];
             if (typeToken == null)
             {
                 throw new InvalidOperationException("invalid object");

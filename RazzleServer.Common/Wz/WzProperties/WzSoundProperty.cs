@@ -55,7 +55,7 @@ namespace RazzleServer.Common.Wz.WzProperties
         /// <summary>
         /// The WzPropertyType of the property
         /// </summary>
-        public override WzPropertyType PropertyType => WzPropertyType.Sound;
+        public override WzPropertyType Type => WzPropertyType.Sound;
 
         public override void WriteValue(WzBinaryWriter writer)
         {
