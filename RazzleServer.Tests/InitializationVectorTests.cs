@@ -35,7 +35,6 @@ namespace RazzleServer.Tests
             var iv = new InitializationVector(0);
             CollectionAssert.AreEqual(new byte[4], iv.Bytes);
             iv.Shuffle();
-            Console.WriteLine(iv.Bytes.ByteArrayToString());
             CollectionAssert.AreEqual(new byte[]{ 0x11, 0xBB, 0x64, 0xC7}, iv.Bytes);
         }
     }

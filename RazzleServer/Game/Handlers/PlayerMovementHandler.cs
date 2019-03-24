@@ -16,7 +16,7 @@ namespace RazzleServer.Game.Handlers
             client.Character.Foothold = movements.Foothold;
             client.Character.Stance = movements.Stance;
 
-            using (var oPacket = new PacketWriter(ServerOperationCode.Move))
+            using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerMove))
             {
 
                 oPacket.WriteInt(client.Character.Id);

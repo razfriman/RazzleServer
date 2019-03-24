@@ -8,12 +8,8 @@ namespace RazzleServer.Game.Handlers
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
-            packet.ReadInt(); // NOTE: Ticks.
-
             var type = (StatisticType)packet.ReadInt();
-
             client.Character.DistributeAp(type);
-
         }
     }
 }

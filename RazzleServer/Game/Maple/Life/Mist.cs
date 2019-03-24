@@ -29,9 +29,6 @@ namespace RazzleServer.Game.Maple.Life
             {
                 case (int)SkillNames.FirePoisonMage.PoisonMist:
                     return MistType.Poison;
-
-                case (int)SkillNames.Shadower.Smokescreen:
-                    return MistType.Smokes;
             }
 
             return MistType.Mob;
@@ -50,7 +47,7 @@ namespace RazzleServer.Game.Maple.Life
                 pw.WriteInt(Owner.Id);
                 pw.WriteInt(Skill.MapleId);
                 pw.WriteByte(Skill.CurrentLevel);
-                pw.WriteShort((short)Skill.Cooldown);
+                pw.WriteShort(0); // Cooldown
                 pw.WriteInt(Bounds.Rb.X);
                 pw.WriteInt(Bounds.Rb.Y);
                 pw.WriteInt(Bounds.Rb.X + Bounds.Lt.Y);

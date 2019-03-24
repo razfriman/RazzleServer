@@ -7,16 +7,6 @@
             RegularAttack = 0
         }
 
-        public enum Beginner
-        {
-            BlessingOfTheFairy = 12,
-            EchoOfHero = 1005,
-            FollowTheLead = 8,
-            MonsterRider = 1004,
-            NimbleFeet = 1002,
-            Recovery = 1001
-        }
-
         public enum Swordsman
         {
             ImprovedMaxHpIncrease = 1000001,
@@ -44,18 +34,6 @@
             SwordPanic = 1111003
         }
 
-        public enum Hero
-        {
-            Achilles = 1120004,
-            AdvancedComboAttack = 1120003,
-            Enrage = 1121010,
-            Guardian = 1120005,
-            HerosWill = 1121011,
-            MapleWarrior = 1121000,
-            MonsterMagnet = 1121001,
-            PowerStance = 1121002
-        }
-
         public enum Page
         {
             BwBooster = 1201005,
@@ -78,20 +56,6 @@
             SwordLitCharge = 1211007
         }
 
-        public enum Paladin
-        {
-            Achilles = 1220005,
-            AdvancedCharge = 1220010,
-            BwHolyCharge = 1221004,
-            Guardian = 1220006,
-            HeavensHammer = 1221011,
-            HerosWill = 1221012,
-            MapleWarrior = 1221000,
-            MonsterMagnet = 1221001,
-            PowerStance = 1221002,
-            SwordHolyCharge = 1221003
-        }
-
         public enum Spearman
         {
             HyperBody = 1301007,
@@ -109,19 +73,6 @@
             ElementalResistance = 1310000,
             PowerCrash = 1311007,
             Sacrifice = 1311005
-        }
-
-        public enum DarkKnight
-        {
-            Achilles = 1320005,
-            AuraOfBeholder = 1320008,
-            Beholder = 1321007,
-            Berserk = 1320006,
-            HerosWill = 1321010,
-            HexOfBeholder = 1320009,
-            MapleWarrior = 1321000,
-            MonsterMagnet = 1321001,
-            PowerStance = 1321002
         }
 
         public enum Magician
@@ -149,18 +100,6 @@
             SpellBooster = 2111005
         }
 
-        public enum FirePoisonArchMage
-        {
-            BigBang = 2121001,
-            Elquines = 2121005,
-            FireDemon = 2121003,
-            HerosWill = 2121008,
-            Infinity = 2121004,
-            ManaReflection = 2121002,
-            MapleWarrior = 2121000,
-            Paralyze = 2121006
-        }
-
         public enum IceLightningWizard
         {
             ColdBeam = 2201004,
@@ -179,18 +118,6 @@
             SpellBooster = 2211005
         }
 
-        public enum IceLightningArchMage
-        {
-            BigBang = 2221001,
-            Blizzard = 2221007,
-            HerosWill = 2221008,
-            IceDemon = 2221003,
-            Ifrit = 2221005,
-            Infinity = 2221004,
-            ManaReflection = 2221002,
-            MapleWarrior = 2221000
-        }
-
         public enum Cleric
         {
             Bless = 2301004,
@@ -207,18 +134,6 @@
             HolySymbol = 2311003,
             MysticDoor = 2311002,
             SummonDragon = 2311006
-        }
-
-        public enum Bishop
-        {
-            Bahamut = 2321003,
-            BigBang = 2321001,
-            HerosWill = 2321009,
-            HolyShield = 2321005,
-            Infinity = 2321004,
-            ManaReflection = 2321002,
-            MapleWarrior = 2321000,
-            Resurrection = 2321006
         }
 
         public enum Archer
@@ -242,17 +157,6 @@
             SilverHawk = 3111005
         }
 
-        public enum Bowmaster
-        {
-            Concentrate = 3121008,
-            Hamstring = 3121007,
-            HerosWill = 3121009,
-            Hurricane = 3121004,
-            MapleWarrior = 3121000,
-            Phoenix = 3121006,
-            SharpEyes = 3121002
-        }
-
         public enum Crossbowman
         {
             CrossbowBooster = 3201002,
@@ -266,17 +170,6 @@
             GoldenEagle = 3211005,
             MortalBlow = 3210001,
             Puppet = 3211002
-        }
-
-        public enum Marksman
-        {
-            Blind = 3221006,
-            Frostprey = 3221005,
-            HerosWill = 3221008,
-            MapleWarrior = 3221000,
-            PiercingArrow = 3221001,
-            SharpEyes = 3221002,
-            Snipe = 3221007
         }
 
         public enum Rogue
@@ -307,19 +200,6 @@
             ShadowWeb = 4111003
         }
 
-        public enum NightLord
-        {
-            HerosWill = 4121009,
-            MapleWarrior = 4121000,
-            NinjaAmbush = 4121004,
-            NinjaStorm = 4121008,
-            ShadowShifter = 4120002,
-            ShadowStars = 4121006,
-            Taunt = 4121003,
-            TripleThrow = 4121007,
-            VenomousStar = 4120005
-        }
-
         public enum Bandit
         {
             DaggerBooster = 4201002,
@@ -339,36 +219,11 @@
             Pickpocket = 4211003
         }
 
-        public enum Shadower
-        {
-            Assassinate = 4221001,
-            BoomerangStep = 4221007,
-            HerosWill = 4221008,
-            MapleWarrior = 4221000,
-            NinjaAmbush = 4221004,
-            ShadowShifter = 4220002,
-            Smokescreen = 4221006,
-            Taunt = 4221003,
-            VenomousStab = 4220005
-        }
-
         public enum Gm
         {
             Haste = 5001000,
             SuperDragonRoar = 5001001,
             Teleport = 5001007
-        }
-
-        public enum SuperGm
-        {
-            HealPlusDispel = 5101000,
-            Haste = 5101001,
-            HolySymbol = 5101002,
-            Bless = 5101003,
-            Hide = 5101004,
-            Resurrection = 5101005,
-            SuperDragonRoar = 5101006,
-            Teleport = 5101007
         }
     }
 }

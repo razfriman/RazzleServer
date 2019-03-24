@@ -37,8 +37,6 @@ namespace RazzleServer.Game.Maple.Data.References
         public short Morph { get; set; }
         public Point? Lt { get; private set; }
         public Point? Rb { get; private set; }
-        public int Cooldown { get; set; }
-
         public SkillReference()
         {
         }
@@ -68,7 +66,6 @@ namespace RazzleServer.Game.Maple.Data.References
             Jump = img["jump"]?.GetShort() ?? 0;
             Accuracy = img["acc"]?.GetShort() ?? 0;
             Avoidability = img["eva"]?.GetShort() ?? 0;
-            Cooldown = img["cooltime"]?.GetInt() ?? 0;
             Probability = img["prop"]?.GetShort() ?? 0;
             FixedDamage = img["fixDamage"]?.GetInt() ?? 0;
             CriticalDamage = (byte)(img["criticalDamage"]?.GetInt() ?? 0);

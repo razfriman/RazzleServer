@@ -34,18 +34,10 @@
     <Compile Remove="Game\Handlers\FaceExpressionHandler.cs" />
     <Compile Remove="Game\Handlers\HealOverTimeHandler.cs" />
     <Compile Remove="Game\Handlers\HitReactorHandler.cs" />
-    <Compile Remove="Game\Handlers\InventoryActionHandler.cs" />
-    <Compile Remove="Game\Handlers\InventoryGatherHandler.cs" />
-    <Compile Remove="Game\Handlers\InventorySortHandler.cs" />
     <Compile Remove="Game\Handlers\MemoOperationHandler.cs" />
-    <Compile Remove="Game\Handlers\MesoDropHandler.cs" />
     <Compile Remove="Game\Handlers\MobMovementHandler.cs" />
     <Compile Remove="Game\Handlers\MovePetHandler.cs" />
     <Compile Remove="Game\Handlers\MultiChatHandler.cs" />
-    <Compile Remove="Game\Handlers\NpcConverseHandler.cs" />
-    <Compile Remove="Game\Handlers\NpcMovementHandler.cs" />
-    <Compile Remove="Game\Handlers\NpcResultHandler.cs" />
-    <Compile Remove="Game\Handlers\NpcShopHandler.cs" />
     <Compile Remove="Game\Handlers\QuestActionHandler.cs" />
     <Compile Remove="Game\Handlers\ReportHandler.cs" />
     <Compile Remove="Game\Handlers\SitChairHandler.cs" />
@@ -64,7 +56,6 @@
     <Compile Remove="Game\Handlers\UseSummonBagHandler.cs" />
     <Compile Remove="Game\Handlers\PlayerInformationHandler.cs" />
     <Compile Remove="Game\Handlers\PlayerInteractionHandler.cs" />
-    <Compile Remove="Game\Handlers\PlayerMovementHandler.cs" />
     <Compile Remove="Game\Handlers\PlayerUpdateHandler.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -44,6 +44,7 @@ namespace RazzleServer.Game.Maple.Characters
         public CharacterItems Items { get; }
         public CharacterSkills Skills { get; }
         public CharacterQuests Quests { get; }
+        public CharacterRings Rings { get; }
         public CharacterBuffs Buffs { get; }
         public CharacterTeleportRocks TeleportRocks { get; }
         public CharacterStorage Storage { get; }
@@ -579,6 +580,7 @@ namespace RazzleServer.Game.Maple.Characters
             Items = new CharacterItems(this, 100, 100, 100, 100, 100);
             Skills = new CharacterSkills(this);
             Quests = new CharacterQuests(this);
+            Rings = new CharacterRings(this);
             Buffs = new CharacterBuffs(this);
             TeleportRocks = new CharacterTeleportRocks(this);
             Storage = new CharacterStorage(this);
@@ -601,6 +603,12 @@ namespace RazzleServer.Game.Maple.Characters
                 pw.WriteInt(Damage.Random.OriginalSeed3);
                 pw.WriteShort(-1); // flags
                 pw.WriteBytes(DataToByteArray());
+                pw.WriteLong(0);
+                pw.WriteLong(0);
+                pw.WriteLong(0);
+                pw.WriteLong(0);
+                pw.WriteLong(0);
+                pw.WriteLong(0);
                 Client.Send(pw);
             }
 
@@ -746,7 +754,7 @@ namespace RazzleServer.Game.Maple.Characters
             ChangeMap(mapId, portal.Id);
         }
 
-        public void ChangeMap(int mapId, byte? portalId = null, bool fromPosition = false, Point? position = null)
+        public void ChangeMap(int mapId, byte? portalId = null)
         {
             Map.Characters.Remove(this);
 
@@ -755,19 +763,9 @@ namespace RazzleServer.Game.Maple.Characters
                 oPacket.WriteInt(Client.Server.ChannelId);
                 oPacket.WriteByte(++Portals);
                 oPacket.WriteBool(false);
-                oPacket.WriteShort(0);
                 oPacket.WriteInt(mapId);
                 oPacket.WriteByte(portalId ?? SpawnPoint);
                 oPacket.WriteShort(Health);
-                oPacket.WriteBool(fromPosition);
-
-                if (fromPosition)
-                {
-                    oPacket.WritePoint(position);
-                }
-
-                oPacket.WriteDateTime(DateTime.Now);
-
                 Client.Send(oPacket);
             }
 
@@ -843,9 +841,9 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public void Attack(PacketReader iPacket, AttackType type)
+        public void Attack(PacketReader packet, AttackType type)
         {
-            var attack = new Attack(iPacket, type);
+            var attack = new Attack(packet, type);
 
             if (attack.Portals != Portals)
             {
@@ -867,7 +865,6 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 oPacket.WriteInt(Id);
                 oPacket.WriteByte((byte)(attack.Targets * 0x10 + attack.Hits));
-                oPacket.WriteByte(0); // NOTE: Unknown.
                 oPacket.WriteByte((byte)(attack.SkillId != 0 ? skill.CurrentLevel : 0)); // NOTE: Skill level.
 
                 if (attack.SkillId != 0)
@@ -875,18 +872,20 @@ namespace RazzleServer.Game.Maple.Characters
                     oPacket.WriteInt(attack.SkillId);
                 }
 
-                oPacket.WriteByte(0); // NOTE: Unknown.
                 oPacket.WriteByte(attack.Display);
                 oPacket.WriteByte(attack.Animation);
                 oPacket.WriteByte(attack.WeaponSpeed);
                 oPacket.WriteByte(0); // NOTE: Skill mastery.
-                oPacket.WriteInt(0); // NOTE: Unknown.
+                oPacket.WriteInt(0); // NOTE: StarId = Item ID at attack.StarPosition
 
                 foreach (var target in attack.Damages)
                 {
                     oPacket.WriteInt(target.Key);
                     oPacket.WriteByte(6);
-
+                    if (attack.IsMesoExplosion)
+                    {
+                        oPacket.WriteByte(target.Value.Count);
+                    }
                     foreach (var hit in target.Value)
                     {
                         oPacket.WriteUInt(hit);
@@ -1151,6 +1150,7 @@ namespace RazzleServer.Game.Maple.Characters
             Items.Save();
             Skills.Save();
             Quests.Save();
+            Rings.Save();
             Buffs.Save();
             TeleportRocks.Save();
 
@@ -1213,6 +1213,7 @@ namespace RazzleServer.Game.Maple.Characters
                 Items.Save();
                 Skills.Save();
                 Quests.Save();
+                Rings.Save();
                 Buffs.Save();
                 TeleportRocks.Save();
             }

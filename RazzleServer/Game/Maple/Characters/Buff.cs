@@ -242,17 +242,6 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 SecondaryStatups.Add(SecondaryBuffStat.Morph, (short)(skill.Morph + 100 * (int)Character.Gender));
             }
-
-            switch (MapleId)
-            {
-                case (int)SkillNames.SuperGm.HolySymbol:
-                    SecondaryStatups.Add(SecondaryBuffStat.HolySymbol, skill.ParameterA);
-                    break;
-
-                case (int)SkillNames.SuperGm.Hide:
-                    SecondaryStatups.Add(SecondaryBuffStat.DarkSight, skill.ParameterA);
-                    break;
-            }
         }
     }
 }

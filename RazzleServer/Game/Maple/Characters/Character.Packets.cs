@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
+using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Items;
 
 namespace RazzleServer.Game.Maple.Characters
@@ -123,7 +124,7 @@ namespace RazzleServer.Game.Maple.Characters
             pw.WriteBytes(Skills.ToByteArray());
             pw.WriteBytes(Quests.ToByteArray());
             pw.WriteShort(0); // Mini games (5 ints)
-            pw.WriteShort(0); // Rings (int, partner(13), ringid, 0int, partnerringid, 0int
+            pw.WriteBytes(Rings.ToByteArray());
             pw.WriteBytes(TeleportRocks.ToByteArray());
             return pw.ToArray();
         }

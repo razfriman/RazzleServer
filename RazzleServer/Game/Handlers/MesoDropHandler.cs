@@ -8,7 +8,6 @@ namespace RazzleServer.Game.Handlers
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
-            packet.ReadInt(); // NOTE: ticks
             var amount = packet.ReadInt();
 
             if (amount > client.Character.Meso || amount < 10 || amount > 50000)

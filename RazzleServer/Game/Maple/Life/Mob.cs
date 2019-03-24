@@ -127,7 +127,6 @@ namespace RazzleServer.Game.Maple.Life
         {
             Foothold = 0; // TODO.
             Position = position;
-            Position = new Point(SpawnPoint.Position.X, SpawnPoint.Position.Y - 5);
         }
 
         public void AssignController()

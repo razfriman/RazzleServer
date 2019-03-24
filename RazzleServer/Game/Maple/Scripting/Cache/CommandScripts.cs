@@ -31,7 +31,7 @@ namespace RazzleServer.Game.Maple.Scripting.Cache
                     catch (Exception e)
                     {
                         caller.Notify("[Command] Unknown error: " + e.Message);
-                        _log.Error($"{command.GetType().Name} error by {caller.Name}", e);
+                        _log.Error(e, $"{command.GetType().Name} error by {caller.Name}");
                     }
                 }
                 else

@@ -82,7 +82,7 @@ namespace RazzleServer.Game.Maple.Characters
                         break;
                     }
 
-                    item.Quantity -= (short) (loopItem.MaxPerStack - loopItem.Quantity);
+                    item.Quantity -= (short)(loopItem.MaxPerStack - loopItem.Quantity);
                     item.Slot = GetNextFreeSlot(item.Type);
 
                     loopItem.Quantity = loopItem.MaxPerStack;
@@ -113,8 +113,8 @@ namespace RazzleServer.Game.Maple.Characters
                     {
                         oPacket.WriteBool(fromDrop);
                         oPacket.WriteByte(1);
-                        oPacket.WriteByte((byte) InventoryOperationType.AddItem);
-                        oPacket.WriteByte((byte) item.Type);
+                        oPacket.WriteByte((byte)InventoryOperationType.AddItem);
+                        oPacket.WriteByte((byte)item.Type);
                         oPacket.WriteShort(item.Slot);
                         oPacket.WriteBytes(item.ToByteArray(true));
 
@@ -174,8 +174,8 @@ namespace RazzleServer.Game.Maple.Characters
                 {
                     oPacket.WriteBool(fromDrop);
                     oPacket.WriteByte(1);
-                    oPacket.WriteByte((byte) InventoryOperationType.RemoveItem);
-                    oPacket.WriteByte((byte) item.Type);
+                    oPacket.WriteByte((byte)InventoryOperationType.RemoveItem);
+                    oPacket.WriteByte((byte)item.Type);
                     oPacket.WriteShort(item.Slot);
 
                     Parent.Client.Send(oPacket);
@@ -363,7 +363,7 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 foreach (var item in this)
                 {
-                    if (item.Slot == (sbyte) slot)
+                    if (item.Slot == (sbyte)slot)
                     {
                         return item;
                     }
@@ -511,6 +511,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                 oPacket.WriteByte(0);
 
+                oPacket.WriteByte(MaxSlots[ItemType.Equipment]);
                 foreach (var item in this[ItemType.Equipment])
                 {
                     oPacket.WriteBytes(item.ToByteArray());
@@ -518,6 +519,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                 oPacket.WriteByte(0);
 
+                oPacket.WriteByte(MaxSlots[ItemType.Usable]);
                 foreach (var item in this[ItemType.Usable])
                 {
                     oPacket.WriteBytes(item.ToByteArray());
@@ -525,6 +527,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                 oPacket.WriteByte(0);
 
+                oPacket.WriteByte(MaxSlots[ItemType.Setup]);
                 foreach (var item in this[ItemType.Setup])
                 {
                     oPacket.WriteBytes(item.ToByteArray());
@@ -532,6 +535,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                 oPacket.WriteByte(0);
 
+                oPacket.WriteByte(MaxSlots[ItemType.Etcetera]);
                 foreach (var item in this[ItemType.Etcetera])
                 {
                     oPacket.WriteBytes(item.ToByteArray());
@@ -539,6 +543,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                 oPacket.WriteByte(0);
 
+                oPacket.WriteByte(MaxSlots[ItemType.Cash]);
                 foreach (var item in this[ItemType.Cash])
                 {
                     oPacket.WriteBytes(item.ToByteArray());
@@ -552,6 +557,6 @@ namespace RazzleServer.Game.Maple.Characters
 
         public IEnumerator<Item> GetEnumerator() => Items.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable) Items).GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)Items).GetEnumerator();
     }
 }
