@@ -26,7 +26,7 @@
         BuddyOperation = 0x21,
         Message = 0x23,
         SetField = 0x26,
-        TransferFieldReqInogred = 0x2A,
+        TransferFieldReqIgnored = 0x2A,
         IncorrectChannelNumber = 0x2B,
         SlashCmdAnswer = 0x2E,
 
