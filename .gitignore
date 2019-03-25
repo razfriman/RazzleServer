@@ -12,7 +12,6 @@ RazzleServer.Benchmarks/BenchmarkDotNet.Artifacts/
 RazzleServer/*.db
 RazzleServer/*.db-journal
 Data/WZ
-Data/DataCache
 
 # Autosave files
 *~
@@ -30,7 +29,6 @@ Makefile.in
 *.DS_Store
 *.sln.cache
 *.suo
-*.cache
 *.pidb
 *.userprefs
 *.usertasks
