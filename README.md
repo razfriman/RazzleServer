@@ -36,63 +36,40 @@ This contains both the server configuration and the logging configuration.
 | DefaultMapId           | The map that new characters will start on once they are created                                        | 180000000      |
 | DatabaseConnection     | Database connection string, this will change based on the database connection type                     | MapleServer.db |
 | DatabaseConnectionType | Which database provider to use. Current supported values or `InMemory` and `Sqlite`                    | `Sqlite`       |
-
-...
-
-TODO: List out all of the configuration options...
-
-```
-        public string CacheFolder { get; set; } = "DataCache";
-        public bool PrettifyCache { get; set; } = false;
-        public string WzFilePath { get; set; } = string.Empty;
-        public ushort Version { get; set; } = 62;
-        public byte SubVersion { get; set; } = 1;
-        public byte ServerType { get; set; } = 8;
-        public int PingTimeout { get; set; } = 30;
-        public bool PrintPackets { get; set; } = true;
-        public ulong AesKey { get; set; } = 0x52330F1BB4060813;
-        public bool EnableAutoRegister { get; set; } = true;
-        public bool EnableMultiLeveling { get; set; } = true;
-        public string CommandIndicator { get; set; } = "!";
-        public int DefaultCreationSlots { get; set; } = 3;
-        public bool RequestPin { get; set; } = true;
-        public List<WorldConfig> Worlds { get; set; }
-
-        public static ServerConfig GetDefaultConfig()
-        {
-            return new ServerConfig
-            {
-                Worlds = new List<WorldConfig>
-                {
-                    new WorldConfig
-                    {
-                        Id = 0,
-                        Name = WorldName.Scania.ToString(),
-                        Channels = 3,
-                        Flag = WorldStatusFlag.None,
-                        EventMessage = "",
-                        TickerMessage = "",
-                        EnableCharacterCreation = true,
-                        ExperienceRate = 1,
-                        QuestExperienceRate = 1,
-                        PartyQuestExperienceRate = 1,
-                        MesoRate = 1,
-                        DropRate = 1
-                    }
-                }
-            };
-        }
-```
+| WzFilePath | Path to a directory containing MapleStory .wz files. Only required if no data cache is supplied |  |
+| CacheFolder | Path to the RazzleServer data cache files. These are included by default. | DataCache |
+| PrettifyCache | Output the cache files in an indented/readable format (uses more space) | false |
+| Version | x | 40 |
+| SubVersion | x | 1 |
+| ServerType | x | 5 |
+| PingTimeout | x | 30 |
+| PrintPackets | x | true |
+| AesKey | x | 0x52330F1BB4060813 |
+| EnableAesEncrpytion | Enable MapleStory AES encrpytion, false for v40b | false |
+| EnableAutoRegister | Allow account creation by logging in with an unregistered account | true |
+| EnableMultiLeveling | Allow gaining multiple levels at once | true |
+| CommandIndicator | Prefix character for server commands performed in game chat | '!' |
+| Worlds | World configuration | `{` | 
+| | | `"Id": 0,`|
+| | | `"Name": "Tespia",`|
+| | | `"Channels": 3,`|
+| | | `"Flag": "None",`|
+| | | `"EventMessage": "",`|
+| | | `"TickerMessage": "",`|
+| | | `"EnableCharacterCreation": true,`|
+| | | `"ExperienceRate": 10,`|
+| | | `"QuestExperienceRate": 10,`|
+| | | `"PartyQuestExperienceRate": 10,`|
+| | | `"MesoRate": 10,`|
+| | | `"DropRate": 10`|
+| | | `}`|
 
 ### Logging
 
 Logging is currently configured via [Serilog](https://serilog.net/) with a default configuration already setup in `appsettings.json`.
 However, these are highly customizable using the vast features that Serilog provides
 
-By default, Logs are created in the `Logs` folder:
-
-- `RazzleServer` specific logs are sent to their own log file.
-- `Microsoft` specific logs are sent to their own log file. This is helpful useful to see what database queries are being executed.
+By default, Logs are created in the `Logs` folder
 
 ### Database
 
