@@ -13,36 +13,36 @@ namespace RazzleServer.Game.Maple.Characters
     {
         public Character Parent { get; }
 
-        public Dictionary<ushort, Dictionary<int, short>> Started { get; }
-        public Dictionary<ushort, DateTime> Completed { get; }
+        public Dictionary<int, Dictionary<int, short>> Started { get; }
+        public Dictionary<int, DateTime> Completed { get; }
 
         public CharacterQuests(Character parent)
         {
             Parent = parent;
 
-            Started = new Dictionary<ushort, Dictionary<int, short>>();
-            Completed = new Dictionary<ushort, DateTime>();
+            Started = new Dictionary<int, Dictionary<int, short>>();
+            Completed = new Dictionary<int, DateTime>();
         }
 
         public void Load()
         {
             //foreach (Datum datum in new Datums("quests_started").Populate("CharacterId = {0}", this.Parent.Id))
             //{
-            //    if (!this.Started.ContainsKey((ushort)datum["QuestId"]))
+            //    if (!this.Started.ContainsKey((int)datum["QuestId"]))
             //    {
-            //        this.Started.Add((ushort)datum["QuestId"], new Dictionary<int, short>());
+            //        this.Started.Add((int)datum["QuestId"], new Dictionary<int, short>());
             //    }
 
             //    if (datum["MobId"] != null && datum["Killed"] != null)
             //    {
-            //        this.Started[(ushort)datum["QuestId"]].Add((int)datum["MobId"], ((short)datum["Killed"]));
+            //        this.Started[(int)datum["QuestId"]].Add((int)datum["MobId"], ((short)datum["Killed"]));
             //    }
             //}
         }
 
         public void Save()
         {
-            //foreach (KeyValuePair<ushort, Dictionary<int, short>> loopStarted in this.Started)
+            //foreach (KeyValuePair<int, Dictionary<int, short>> loopStarted in this.Started)
             //{
             //    if (loopStarted.Value == null || loopStarted.Value.Count == 0)
             //    {
@@ -79,7 +79,7 @@ namespace RazzleServer.Game.Maple.Characters
             //    }
             //}
 
-            //foreach (KeyValuePair<ushort, DateTime> loopCompleted in this.Completed)
+            //foreach (KeyValuePair<int, DateTime> loopCompleted in this.Completed)
             //{
             //    Datum datum = new Datum("quests_completed");
 
@@ -98,7 +98,7 @@ namespace RazzleServer.Game.Maple.Characters
             //}
         }
 
-        public void Delete(ushort questId)
+        public void Delete(int questId)
         {
             if (Started.ContainsKey(questId))
             {
@@ -119,7 +119,7 @@ namespace RazzleServer.Game.Maple.Characters
         public void Handle(PacketReader iPacket)
         {
             var action = (QuestAction)iPacket.ReadByte();
-            var questId = iPacket.ReadUShort();
+            var questId = iPacket.ReadInt();
 
             if (!DataProvider.Quests.Data.ContainsKey(questId))
             {
@@ -220,7 +220,7 @@ namespace RazzleServer.Game.Maple.Characters
 //            using (var oPacket = new PacketWriter(ServerOperationCode.QuestResult))
 //            {
 //                oPacket.WriteByte((byte)QuestResult.Complete);
-//                oPacket.WriteUShort(quest.MapleId);
+//                oPacket.Writeint(quest.MapleId);
 //                oPacket.WriteInt(npcId);
 //                oPacket.WriteInt(0);
 //
@@ -314,18 +314,18 @@ namespace RazzleServer.Game.Maple.Characters
             Parent.ShowRemoteUserEffect(UserEffect.QuestComplete, true);
         }
 
-        public void Forfeit(ushort questId)
+        public void Forfeit(int questId)
         {
             Delete(questId);
             Update(questId, QuestStatus.NotStarted);
         }
 
-        private void Update(ushort questId, QuestStatus status, string progress = "")
+        private void Update(int questId, QuestStatus status, string progress = "")
         {
             Parent.Client.Send(GamePackets.ShowStatusInfo(MessageType.QuestRecord, mapleId: questId, questStatus: status, questString: progress));
         }
 
-        public bool CanComplete(ushort questId, bool onlyOnFinalKill = false)
+        public bool CanComplete(int questId, bool onlyOnFinalKill = false)
         {
             var quest = DataProvider.Quests.Data[questId];
 
@@ -366,11 +366,11 @@ namespace RazzleServer.Game.Maple.Characters
             return true;
         }
 
-        public void NotifyComplete(ushort questId)
+        public void NotifyComplete(int questId)
         {
 //            using (var oPacket = new PacketWriter(ServerOperationCode.QuestClear))
 //            {
-//                oPacket.WriteUShort(questId);
+//                oPacket.Writeint(questId);
 //                Parent.Client.Send(oPacket);
 //            }
         }
@@ -383,7 +383,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                 foreach (var quest in Started)
                 {
-                    oPacket.WriteUShort(quest.Key);
+                    oPacket.WriteInt(quest.Key);
 
                     var kills = string.Empty;
 

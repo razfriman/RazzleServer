@@ -29,6 +29,7 @@ namespace RazzleServer
                     ServerConfig.Load(configuration);
                     Log.Logger = new LoggerConfiguration()
                         .ReadFrom.Configuration(configuration)
+                        .Enrich.FromLogContext()
                         .CreateLogger();
                 })
                 .ConfigureLogging((hostContext, configLogging) => configLogging.AddSerilog(dispose: true))

@@ -7,9 +7,9 @@ namespace RazzleServer.Game.Maple.Data.References
 {
     public class QuestReference
     {
-        public ushort MapleId { get; set; }
+        public int MapleId { get; set; }
         public string Name { get; set; }
-        public ushort NextQuestId { get; set; }
+        public int NextQuestId { get; set; }
         public sbyte Area { get; set; }
         public byte MinimumLevel { get; set; }
         public byte MaximumLevel { get; set; }
