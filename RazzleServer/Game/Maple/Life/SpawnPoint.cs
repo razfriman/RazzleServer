@@ -18,10 +18,6 @@ namespace RazzleServer.Game.Maple.Life
             {
                 Map.Mobs.Add(new Mob(this));
             }
-            else if (Type == LifeObjectType.Reactor)
-            {
-                Map.Reactors.Add(new Reactor(this));
-            }
         }
     }
 }

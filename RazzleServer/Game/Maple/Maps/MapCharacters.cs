@@ -62,14 +62,6 @@ namespace RazzleServer.Game.Maple.Maps
                 }
             }
 
-            lock (Map.Reactors)
-            {
-                foreach (var reactor in Map.Reactors.Values)
-                {
-                    item.Client.Send(reactor.GetSpawnPacket());
-                }
-            }
-
             lock (Map.Mobs)
             {
                 foreach (var mob in Map.Mobs.Values)

@@ -77,9 +77,6 @@
         MistEnterField = 0x8C,
         MistLeaveField = 0x8D,
 
-        ReactorChangeState = 0x94,
-        ReactorEnterField = 0x96,
-        ReactorLeaveField = 0x97,
         SnowBallState = 0x9A,
         SnowBallHit = 0x9B,
         CoconutHit = 0x9C,

@@ -33,7 +33,6 @@
     <Compile Remove="Game\Handlers\DistributeSPHandler.cs" />
     <Compile Remove="Game\Handlers\FaceExpressionHandler.cs" />
     <Compile Remove="Game\Handlers\HealOverTimeHandler.cs" />
-    <Compile Remove="Game\Handlers\HitReactorHandler.cs" />
     <Compile Remove="Game\Handlers\MemoOperationHandler.cs" />
     <Compile Remove="Game\Handlers\MobMovementHandler.cs" />
     <Compile Remove="Game\Handlers\MovePetHandler.cs" />
@@ -46,7 +45,6 @@
     <Compile Remove="Game\Handlers\StorageHandler.cs" />
     <Compile Remove="Game\Handlers\StrangeDataHandler.cs" />
     <Compile Remove="Game\Handlers\TakeDamageHandler.cs" />
-    <Compile Remove="Game\Handlers\TouchReactorHandler.cs" />
     <Compile Remove="Game\Handlers\UseCashItemHandler.cs" />
     <Compile Remove="Game\Handlers\UseInnerPortalHandler.cs" />
     <Compile Remove="Game\Handlers\UseItemEffectHandler.cs" />

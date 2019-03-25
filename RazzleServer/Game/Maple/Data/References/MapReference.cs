@@ -25,8 +25,6 @@ namespace RazzleServer.Game.Maple.Data.References
         public bool IsEverlasting { get; set; }
         public bool DisablesTownScroll { get; set; }
         public bool IsSwim { get; set; }
-        public bool ShufflesReactors { get; set; }
-        public string UniqueShuffledReactor { get; set; }
         public bool IsShop { get; set; }
         public bool NoPartyLeaderPass { get; set; }
         public List<Foothold> Footholds { get; set; } = new List<Foothold>();
@@ -53,10 +51,6 @@ namespace RazzleServer.Game.Maple.Data.References
             ReturnMapId = info["returnMap"]?.GetInt() ?? 0;
             ForcedReturnMapId = info["forcedReturn"]?.GetInt() ?? 0;
 
-            img["reactor"]?.WzProperties?
-                .Where(x => x["id"] != null)
-                .ToList()
-                .ForEach(x => SpawnPoints.Add(new SpawnPoint(x, LifeObjectType.Reactor)));
             img["portal"]?.WzProperties?.ForEach(x => Portals.Add(new Portal(x)));
             img["seat"]?.WzProperties?.ForEach(x => Seats.Add(new Seat(x)));
             img["foothold"]?.WzProperties.SelectMany(x => x.WzProperties).SelectMany(x => x.WzProperties).ToList().ForEach(x => Footholds.Add(new Foothold(x)));

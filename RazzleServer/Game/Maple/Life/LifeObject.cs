@@ -33,10 +33,6 @@ namespace RazzleServer.Game.Maple.Life
             {
                 RespawnTime = img["mobTime"]?.GetInt() ?? 0;
             }
-            else if (type == LifeObjectType.Reactor)
-            {
-                RespawnTime = img["reactorTime"]?.GetInt() ?? 0;
-            }
         }
     }
 }

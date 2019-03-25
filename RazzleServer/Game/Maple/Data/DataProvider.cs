@@ -13,7 +13,6 @@ namespace RazzleServer.Game.Maple.Data
         public static CachedSkills Skills { get; private set; } = new CachedSkills();
         public static CachedMobs Mobs { get; private set; } = new CachedMobs();
         public static CachedMobSkills MobSkills { get; private set; } = new CachedMobSkills();
-        public static CachedReactors Reactors { get; private set; } = new CachedReactors();
         public static CachedQuests Quests { get; private set; } = new CachedQuests();
         public static CachedNpcs Npcs { get; private set; } = new CachedNpcs();
         public static CachedCreationData CreationData { get; private set; } = new CachedCreationData();
@@ -37,7 +36,6 @@ namespace RazzleServer.Game.Maple.Data
                 Task.Run(async () => Mobs = await new MobsLoader().Load()),
                 Task.Run(async () => Npcs = await new NpcsLoader().Load()),
                 Task.Run(async () => MobSkills = await new MobSkillsLoader().Load()),
-                Task.Run(async () => Reactors = await new ReactorsLoader().Load()),
                 Task.Run(async () => Quests = await new QuestsLoader().Load()),
                 Task.Run(async () => Maps = await new MapsLoader().Load()),
                 Task.Run(async () => Strings = await new StringLoader().Load()),

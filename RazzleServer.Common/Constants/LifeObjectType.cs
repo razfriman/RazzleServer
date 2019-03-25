@@ -3,7 +3,6 @@
     public enum LifeObjectType
     {
         Npc,
-        Mob,
-        Reactor
+        Mob
     }
 }

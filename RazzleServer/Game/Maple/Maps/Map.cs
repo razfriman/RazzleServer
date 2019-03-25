@@ -16,7 +16,6 @@ namespace RazzleServer.Game.Maple.Maps
         public MapDrops Drops { get; }
         public MapMobs Mobs { get; }
         public MapNpcs Npcs { get; }
-        public MapReactors Reactors { get; }
         public MapFootholds Footholds { get; }
         public MapSeats Seats { get; }
         public MapPortals Portals { get; }
@@ -35,7 +34,6 @@ namespace RazzleServer.Game.Maple.Maps
             Drops = new MapDrops(this);
             Mobs = new MapMobs(this);
             Npcs = new MapNpcs(this);
-            Reactors = new MapReactors(this);
             Footholds = new MapFootholds();
             Seats = new MapSeats(this);
             Portals = new MapPortals(this);
