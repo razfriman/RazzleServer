@@ -23,7 +23,7 @@ namespace RazzleServer.Login.Handlers
             {
                 return;
             }
-            
+
             client.Send(LoginPackets.ListWorlds(client.Server.Manager.Worlds));
             client.Send(LoginPackets.EndListWorlds());
         }
@@ -44,12 +44,13 @@ namespace RazzleServer.Login.Handlers
                 }
 
                 return client.Account.BanReason != BanReasonType.None
-                             ? LoginResult.Banned
-                             : LoginResult.Valid;
+                    ? LoginResult.Banned
+                    : LoginResult.Valid;
             }
             catch (NoAccountException)
             {
-                if (ServerConfig.Instance.EnableAutoRegister && username == client.LastUsername && password == client.LastPassword)
+                if (ServerConfig.Instance.EnableAutoRegister && username == client.LastUsername &&
+                    password == client.LastPassword)
                 {
                     AutoRegisterAccount(client, username, password);
                 }

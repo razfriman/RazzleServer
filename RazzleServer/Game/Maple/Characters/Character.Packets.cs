@@ -100,6 +100,7 @@ namespace RazzleServer.Game.Maple.Characters
                     oPacket.WriteByte(entry.Key);
                     oPacket.WriteInt(entry.Value);
                 }
+
                 oPacket.WriteByte(0);
 
                 foreach (var entry in hiddenLayer)
@@ -120,7 +121,7 @@ namespace RazzleServer.Game.Maple.Characters
             pw.WriteBytes(StatisticsToByteArray());
             pw.WriteByte(BuddyListSlots);
             pw.WriteInt(Meso);
-            pw.WriteBytes(Items.ToByteArray()); 
+            pw.WriteBytes(Items.ToByteArray());
             pw.WriteBytes(Skills.ToByteArray());
             pw.WriteBytes(Quests.ToByteArray());
             pw.WriteShort(0); // Mini games (5 ints)

@@ -26,10 +26,7 @@ namespace RazzleServer.Game.Maple.Data.Loaders
                         return;
                     }
 
-                    var quiz = new QuizReference
-                    {
-                        Id = quizId
-                    };
+                    var quiz = new QuizReference {Id = quizId};
 
                     quizImg.WzProperties.ForEach(questionImg =>
                     {
@@ -44,16 +41,11 @@ namespace RazzleServer.Game.Maple.Data.Loaders
                         var response = questionImg["d"]?.GetString();
                         quiz.Questions.Add(new QuizQuestionReference
                         {
-                            Id = questionId,
-                            Question = question,
-                            Answer = answer,
-                            Response = response
+                            Id = questionId, Question = question, Answer = answer, Response = response
                         });
-
                     });
 
                     Data.Data.Add(quiz.Id, quiz);
-
                 });
             }
         }

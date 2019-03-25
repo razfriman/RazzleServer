@@ -5,7 +5,7 @@ namespace RazzleServer.Game.Scripts.Portals
 {
     [PortalScript("Masteria_U2_1")]
     public class MasteriaU21 : APortalScript
-        {
-            public override void Execute() => throw new NotImplementedException();
-        }
+    {
+        public override void Execute() => throw new NotImplementedException();
     }
+}

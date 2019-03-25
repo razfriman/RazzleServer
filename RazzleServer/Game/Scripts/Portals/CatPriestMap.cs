@@ -5,7 +5,7 @@ namespace RazzleServer.Game.Scripts.Portals
 {
     [PortalScript("catPriest_map")]
     public class CatPriestMap : APortalScript
-        {
-            public override void Execute() => throw new NotImplementedException();
-        }
+    {
+        public override void Execute() => throw new NotImplementedException();
     }
+}

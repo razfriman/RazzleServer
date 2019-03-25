@@ -5,7 +5,7 @@ namespace RazzleServer.Game.Scripts.Portals
 {
     [PortalScript("advice08")]
     public class Advice08 : APortalScript
-        {
-            public override void Execute() => throw new NotImplementedException();
-        }
+    {
+        public override void Execute() => throw new NotImplementedException();
     }
+}

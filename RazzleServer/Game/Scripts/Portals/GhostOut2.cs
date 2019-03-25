@@ -5,7 +5,7 @@ namespace RazzleServer.Game.Scripts.Portals
 {
     [PortalScript("ghostOut2")]
     public class GhostOut2 : APortalScript
-        {
-            public override void Execute() => throw new NotImplementedException();
-        }
+    {
+        public override void Execute() => throw new NotImplementedException();
     }
+}

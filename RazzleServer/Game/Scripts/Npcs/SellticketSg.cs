@@ -5,7 +5,7 @@ namespace RazzleServer.Game.Scripts.Npcs
 {
     [NpcScript("sellticket_sg")]
     public class SellticketSg : ANpcScript
-        {
-            public override void Execute() => throw new NotImplementedException();
-        }
+    {
+        public override void Execute() => throw new NotImplementedException();
     }
+}

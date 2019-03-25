@@ -5,7 +5,7 @@ namespace RazzleServer.Game.Scripts.Portals
 {
     [PortalScript("s4berserk_move")]
     public class S4BerserkMove : APortalScript
-        {
-            public override void Execute() => throw new NotImplementedException();
-        }
+    {
+        public override void Execute() => throw new NotImplementedException();
     }
+}

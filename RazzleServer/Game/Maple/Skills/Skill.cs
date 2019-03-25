@@ -223,17 +223,14 @@ namespace RazzleServer.Game.Maple.Skills
 
             if (CostItem > 0)
             {
-
             }
 
             if (CostBullet > 0)
             {
-
             }
 
             if (CostMeso > 0)
             {
-
             }
         }
 

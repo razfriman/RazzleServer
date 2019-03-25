@@ -5,7 +5,7 @@ namespace RazzleServer.Game.Scripts.Npcs
 {
     [NpcScript("boss_cat")]
     public class BossCat : ANpcScript
-        {
-            public override void Execute() => throw new NotImplementedException();
-        }
+    {
+        public override void Execute() => throw new NotImplementedException();
     }
+}

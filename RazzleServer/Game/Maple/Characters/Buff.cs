@@ -122,56 +122,56 @@ namespace RazzleServer.Game.Maple.Characters
             switch (MapleId)
             {
                 default:
+                {
+                    using (var oPacket = new PacketWriter(ServerOperationCode.SkillsGiveBuff))
                     {
-                        using (var oPacket = new PacketWriter(ServerOperationCode.SkillsGiveBuff))
+                        oPacket.WriteLong(PrimaryBuffMask);
+                        oPacket.WriteLong(SecondaryBuffMask);
+
+                        foreach (var primaryStatup in PrimaryStatups)
                         {
-                            oPacket.WriteLong(PrimaryBuffMask);
-                            oPacket.WriteLong(SecondaryBuffMask);
-
-                            foreach (var primaryStatup in PrimaryStatups)
-                            {
-                                oPacket.WriteShort(primaryStatup.Value);
-                                oPacket.WriteInt(MapleId);
-                                oPacket.WriteInt((int)(End - DateTime.Now).TotalMilliseconds);
-                            }
-
-                            foreach (var secondaryStatup in SecondaryStatups)
-                            {
-                                oPacket.WriteShort(secondaryStatup.Value);
-                                oPacket.WriteInt(MapleId);
-                                oPacket.WriteInt((int)(End - DateTime.Now).TotalMilliseconds);
-                            }
-
-                            oPacket.WriteShort(0);
-                            oPacket.WriteShort(0);
-                            oPacket.WriteByte(0);
-                            oPacket.WriteInt(0);
-
-                            Character.Client.Send(oPacket);
+                            oPacket.WriteShort(primaryStatup.Value);
+                            oPacket.WriteInt(MapleId);
+                            oPacket.WriteInt((int)(End - DateTime.Now).TotalMilliseconds);
                         }
 
-                        using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerSkillBuff))
+                        foreach (var secondaryStatup in SecondaryStatups)
                         {
-                            oPacket.WriteInt(Character.Id);
-                            oPacket.WriteLong(PrimaryBuffMask);
-                            oPacket.WriteLong(SecondaryBuffMask);
-
-                            foreach (var primaryStatup in PrimaryStatups)
-                            {
-                                oPacket.WriteShort(primaryStatup.Value);
-                            }
-
-                            foreach (var secondaryStatup in SecondaryStatups)
-                            {
-                                oPacket.WriteShort(secondaryStatup.Value);
-                            }
-
-                            oPacket.WriteInt(0);
-                            oPacket.WriteShort(0);
-
-                            Character.Map.Send(oPacket);
+                            oPacket.WriteShort(secondaryStatup.Value);
+                            oPacket.WriteInt(MapleId);
+                            oPacket.WriteInt((int)(End - DateTime.Now).TotalMilliseconds);
                         }
+
+                        oPacket.WriteShort(0);
+                        oPacket.WriteShort(0);
+                        oPacket.WriteByte(0);
+                        oPacket.WriteInt(0);
+
+                        Character.Client.Send(oPacket);
                     }
+
+                    using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerSkillBuff))
+                    {
+                        oPacket.WriteInt(Character.Id);
+                        oPacket.WriteLong(PrimaryBuffMask);
+                        oPacket.WriteLong(SecondaryBuffMask);
+
+                        foreach (var primaryStatup in PrimaryStatups)
+                        {
+                            oPacket.WriteShort(primaryStatup.Value);
+                        }
+
+                        foreach (var secondaryStatup in SecondaryStatups)
+                        {
+                            oPacket.WriteShort(secondaryStatup.Value);
+                        }
+
+                        oPacket.WriteInt(0);
+                        oPacket.WriteShort(0);
+
+                        Character.Map.Send(oPacket);
+                    }
+                }
                     break;
             }
         }
@@ -186,6 +186,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                 Character.Client.Send(oPacket);
             }
+
             using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerSkillBuff))
             {
                 oPacket.WriteInt(Character.Id);

@@ -5,7 +5,7 @@ namespace RazzleServer.Game.Scripts.Npcs
 {
     [NpcScript("taxi2")]
     public class Taxi2 : ANpcScript
-        {
-            public override void Execute() => throw new NotImplementedException();
-        }
+    {
+        public override void Execute() => throw new NotImplementedException();
     }
+}

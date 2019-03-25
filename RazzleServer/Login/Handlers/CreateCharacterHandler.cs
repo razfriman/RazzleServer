@@ -66,6 +66,7 @@ namespace RazzleServer.Login.Handlers
                 {
                     pw.WriteBytes(character.ToByteArray());
                 }
+
                 client.Send(pw);
             }
         }

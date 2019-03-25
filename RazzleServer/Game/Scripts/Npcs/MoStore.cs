@@ -5,7 +5,7 @@ namespace RazzleServer.Game.Scripts.Npcs
 {
     [NpcScript("MoStore")]
     public class MoStore : ANpcScript
-        {
-            public override void Execute() => throw new NotImplementedException();
-        }
+    {
+        public override void Execute() => throw new NotImplementedException();
     }
+}

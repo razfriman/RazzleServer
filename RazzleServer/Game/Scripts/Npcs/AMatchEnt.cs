@@ -5,7 +5,7 @@ namespace RazzleServer.Game.Scripts.Npcs
 {
     [NpcScript("aMatchEnt")]
     public class AMatchEnt : ANpcScript
-        {
-            public override void Execute() => throw new NotImplementedException();
-        }
+    {
+        public override void Execute() => throw new NotImplementedException();
     }
+}

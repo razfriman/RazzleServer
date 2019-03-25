@@ -17,11 +17,7 @@ namespace RazzleServer.Game.Handlers
 
             client.Character.Meso -= amount;
 
-            var mesoDrop = new Meso(amount)
-            {
-                Dropper = client.Character,
-                Owner = null
-            };
+            var mesoDrop = new Meso(amount) {Dropper = client.Character, Owner = null};
 
             client.Character.Map.Drops.Add(mesoDrop);
         }

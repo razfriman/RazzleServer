@@ -36,6 +36,7 @@ namespace RazzleServer.Game.Maple.Data.References
         public MapReference()
         {
         }
+
         public MapReference(WzImage img)
         {
             var name = img.Name.Remove(9);
@@ -43,6 +44,7 @@ namespace RazzleServer.Game.Maple.Data.References
             {
                 return;
             }
+
             MapleId = id;
 
             var info = img["info"];
@@ -53,7 +55,8 @@ namespace RazzleServer.Game.Maple.Data.References
 
             img["portal"]?.WzProperties?.ForEach(x => Portals.Add(new Portal(x)));
             img["seat"]?.WzProperties?.ForEach(x => Seats.Add(new Seat(x)));
-            img["foothold"]?.WzProperties.SelectMany(x => x.WzProperties).SelectMany(x => x.WzProperties).ToList().ForEach(x => Footholds.Add(new Foothold(x)));
+            img["foothold"]?.WzProperties.SelectMany(x => x.WzProperties).SelectMany(x => x.WzProperties).ToList()
+                .ForEach(x => Footholds.Add(new Foothold(x)));
             img["seat"]?.WzProperties?.ForEach(x => Seats.Add(new Seat(x)));
             img["life"]?.WzProperties?.ForEach(life =>
             {

@@ -11,6 +11,7 @@ namespace RazzleServer.Game.Maple.Scripting
 
         public abstract void Execute(Character caller, string[] args);
 
-        public void ShowSyntax(Character caller) => caller.Notify($"[Syntax] {ServerConfig.Instance.CommandIndicator}{Name} {Parameters}");
+        public void ShowSyntax(Character caller) =>
+            caller.Notify($"[Syntax] {ServerConfig.Instance.CommandIndicator}{Name} {Parameters}");
     }
 }

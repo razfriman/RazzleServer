@@ -15,14 +15,11 @@ namespace RazzleServer.Game.Maple.Life
 {
     public class Npc : LifeObject, ISpawnable, IControllable
     {
-        [JsonIgnore]
-        public Character Controller { get; set; }
+        [JsonIgnore] public Character Controller { get; set; }
 
-        [JsonIgnore]
-        public Shop Shop => DataProvider.Shops.Data.GetValueOrDefault(MapleId);
+        [JsonIgnore] public Shop Shop => DataProvider.Shops.Data.GetValueOrDefault(MapleId);
 
-        [JsonIgnore]
-        public NpcReference CachedReference => DataProvider.Npcs.Data[MapleId];
+        [JsonIgnore] public NpcReference CachedReference => DataProvider.Npcs.Data[MapleId];
 
         //private readonly ILogger _log = LogManager.Log;
 
@@ -39,8 +36,8 @@ namespace RazzleServer.Game.Maple.Life
             var action2 = iPacket.ReadByte();
 
             var movements = iPacket.Available > 0
-                                   ? new Movements(iPacket)
-                                   : null;
+                ? new Movements(iPacket)
+                : null;
 
             using (var oPacket = new PacketWriter(ServerOperationCode.NpcMove))
             {
@@ -119,6 +116,7 @@ namespace RazzleServer.Game.Maple.Life
                     {
                         script = null;
                     }
+
                     break;
                 case NpcMessageType.YesNo:
                 case NpcMessageType.AcceptDecline:
@@ -138,6 +136,7 @@ namespace RazzleServer.Game.Maple.Life
                         script = null;
                         return;
                     }
+
                     break;
                 case NpcMessageType.RequestText:
                     if (action != 0)
@@ -150,6 +149,7 @@ namespace RazzleServer.Game.Maple.Life
                         script = null;
                         return;
                     }
+
                     break;
                 case NpcMessageType.RequestNumber:
                     if (action == 1)
@@ -162,6 +162,7 @@ namespace RazzleServer.Game.Maple.Life
                         script = null;
                         return;
                     }
+
                     break;
                 case NpcMessageType.Choice:
                 case NpcMessageType.Quiz:
@@ -176,6 +177,7 @@ namespace RazzleServer.Game.Maple.Life
                         script = null;
                         return;
                     }
+
                     break;
             }
         }
@@ -211,7 +213,9 @@ namespace RazzleServer.Game.Maple.Life
 
         private PacketWriter GetInternalPacket(bool requestControl)
         {
-            var oPacket = new PacketWriter(requestControl ? ServerOperationCode.NpcControlRequest : ServerOperationCode.NpcEnterField);
+            var oPacket = new PacketWriter(requestControl
+                ? ServerOperationCode.NpcControlRequest
+                : ServerOperationCode.NpcEnterField);
 
             if (requestControl)
             {
@@ -280,6 +284,7 @@ namespace RazzleServer.Game.Maple.Life
                 case NpcMessageType.YesNo:
                     break;
             }
+
             return pw;
         }
 

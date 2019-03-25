@@ -8,7 +8,7 @@ namespace RazzleServer.Login.Handlers
     public class WorldStatusHandler : LoginPacketHandler
     {
         private readonly ILogger _log = Log.ForContext<WorldStatusHandler>();
-        
+
         public override void HandlePacket(PacketReader packet, LoginClient client)
         {
             var worldId = packet.ReadByte();

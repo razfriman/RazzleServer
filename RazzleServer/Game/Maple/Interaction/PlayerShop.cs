@@ -30,7 +30,6 @@ namespace RazzleServer.Game.Maple.Interaction
 
             using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
             {
-
                 oPacket.WriteByte((byte)InteractionCode.Room);
                 oPacket.WriteByte(4);
                 oPacket.WriteByte(4);
@@ -52,99 +51,62 @@ namespace RazzleServer.Game.Maple.Interaction
             switch (code)
             {
                 case InteractionCode.OpenStore:
-                    {
-                        Owner.Map.PlayerShops.Add(this);
+                {
+                    Owner.Map.PlayerShops.Add(this);
 
-                        Opened = true;
-                    }
+                    Opened = true;
+                }
                     break;
 
                 case InteractionCode.AddItem:
+                {
+                    var type = (ItemType)iPacket.ReadByte();
+                    var slot = iPacket.ReadShort();
+                    var bundles = iPacket.ReadShort();
+                    var perBundle = iPacket.ReadShort();
+                    var price = iPacket.ReadInt();
+                    var quantity = (short)(bundles * perBundle);
+
+                    var item = character.Items[type, slot];
+
+                    if (item == null)
                     {
-                        var type = (ItemType)iPacket.ReadByte();
-                        var slot = iPacket.ReadShort();
-                        var bundles = iPacket.ReadShort();
-                        var perBundle = iPacket.ReadShort();
-                        var price = iPacket.ReadInt();
-                        var quantity = (short)(bundles * perBundle);
-
-                        var item = character.Items[type, slot];
-
-                        if (item == null)
-                        {
-                            return;
-                        }
-
-                        if (perBundle < 0 || perBundle * bundles > 2000 || bundles < 0 || price < 0)
-                        {
-                            return;
-                        }
-
-                        if (quantity > item.Quantity)
-                        {
-                            return;
-                        }
-
-                        if (quantity < item.Quantity)
-                        {
-                            item.Quantity -= quantity;
-                            item.Update();
-                        }
-                        else
-                        {
-                            character.Items.Remove(item, true);
-                        }
-
-                        var shopItem = new PlayerShopItem(item.MapleId, bundles, quantity, price);
-
-                        Items.Add(shopItem);
-
-                        UpdateItems();
+                        return;
                     }
+
+                    if (perBundle < 0 || perBundle * bundles > 2000 || bundles < 0 || price < 0)
+                    {
+                        return;
+                    }
+
+                    if (quantity > item.Quantity)
+                    {
+                        return;
+                    }
+
+                    if (quantity < item.Quantity)
+                    {
+                        item.Quantity -= quantity;
+                        item.Update();
+                    }
+                    else
+                    {
+                        character.Items.Remove(item, true);
+                    }
+
+                    var shopItem = new PlayerShopItem(item.MapleId, bundles, quantity, price);
+
+                    Items.Add(shopItem);
+
+                    UpdateItems();
+                }
                     break;
 
                 case InteractionCode.RemoveItem:
+                {
+                    if (character == Owner)
                     {
-                        if (character == Owner)
-                        {
-                            var slot = iPacket.ReadShort();
-
-                            var shopItem = Items[slot];
-
-                            if (shopItem == null)
-                            {
-                                return;
-                            }
-
-                            if (shopItem.Quantity > 0)
-                            {
-                                Owner.Items.Add(new Item(shopItem.MapleId, shopItem.Quantity));
-                            }
-
-                            Items.Remove(shopItem);
-
-                            UpdateItems();
-                        }
-                    }
-                    break;
-
-                case InteractionCode.Exit:
-                    {
-                        if (character == Owner)
-                        {
-                            Close();
-                        }
-                        else
-                        {
-                            RemoveVisitor(character);
-                        }
-                    }
-                    break;
-
-                case InteractionCode.Buy:
-                    {
-                        short slot = iPacket.ReadByte();
-                        var quantity = iPacket.ReadShort();
+                        var slot = iPacket.ReadShort();
 
                         var shopItem = Items[slot];
 
@@ -153,79 +115,115 @@ namespace RazzleServer.Game.Maple.Interaction
                             return;
                         }
 
-                        if (character == Owner)
+                        if (shopItem.Quantity > 0)
                         {
-                            return;
+                            Owner.Items.Add(new Item(shopItem.MapleId, shopItem.Quantity));
                         }
 
-                        if (quantity > shopItem.Quantity)
+                        Items.Remove(shopItem);
+
+                        UpdateItems();
+                    }
+                }
+                    break;
+
+                case InteractionCode.Exit:
+                {
+                    if (character == Owner)
+                    {
+                        Close();
+                    }
+                    else
+                    {
+                        RemoveVisitor(character);
+                    }
+                }
+                    break;
+
+                case InteractionCode.Buy:
+                {
+                    short slot = iPacket.ReadByte();
+                    var quantity = iPacket.ReadShort();
+
+                    var shopItem = Items[slot];
+
+                    if (shopItem == null)
+                    {
+                        return;
+                    }
+
+                    if (character == Owner)
+                    {
+                        return;
+                    }
+
+                    if (quantity > shopItem.Quantity)
+                    {
+                        return;
+                    }
+
+                    if (character.Meso < shopItem.MerchantPrice * quantity)
+                    {
+                        return;
+                    }
+
+                    shopItem.Quantity -= quantity;
+
+                    character.Meso -= shopItem.MerchantPrice * quantity;
+                    Owner.Meso += shopItem.MerchantPrice * quantity;
+
+                    character.Items.Add(new Item(shopItem.MapleId, quantity));
+
+                    UpdateItems(); // TODO: This doesn't mark the item as sold.
+
+                    var noItemLeft = true;
+
+                    foreach (var loopShopItem in Items)
+                    {
+                        if (loopShopItem.Quantity > 0)
                         {
-                            return;
-                        }
+                            noItemLeft = false;
 
-                        if (character.Meso < shopItem.MerchantPrice * quantity)
-                        {
-                            return;
-                        }
-
-                        shopItem.Quantity -= quantity;
-
-                        character.Meso -= shopItem.MerchantPrice * quantity;
-                        Owner.Meso += shopItem.MerchantPrice * quantity;
-
-                        character.Items.Add(new Item(shopItem.MapleId, quantity));
-
-                        UpdateItems(); // TODO: This doesn't mark the item as sold.
-
-                        var noItemLeft = true;
-
-                        foreach (var loopShopItem in Items)
-                        {
-                            if (loopShopItem.Quantity > 0)
-                            {
-                                noItemLeft = false;
-
-                                break;
-                            }
-                        }
-
-                        if (noItemLeft)
-                        {
-                            // TODO: Close the owner's shop.
-                            // TODO: Notify  the owner the shop has been closed due to items being sold out.
-
-                            Close();
+                            break;
                         }
                     }
+
+                    if (noItemLeft)
+                    {
+                        // TODO: Close the owner's shop.
+                        // TODO: Notify  the owner the shop has been closed due to items being sold out.
+
+                        Close();
+                    }
+                }
                     break;
 
                 case InteractionCode.Chat:
+                {
+                    var text = iPacket.ReadString();
+
+                    using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                     {
-                        var text = iPacket.ReadString();
+                        oPacket.WriteByte((byte)InteractionCode.Chat);
+                        oPacket.WriteByte(8);
 
-                        using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
+                        byte sender = 0;
+
+                        for (var i = 0; i < Visitors.Length; i++)
                         {
-
-                            oPacket.WriteByte((byte)InteractionCode.Chat);
-                            oPacket.WriteByte(8);
-
-                            byte sender = 0;
-
-                            for (var i = 0; i < Visitors.Length; i++)
+                            if (Visitors[i] == character)
                             {
-                                if (Visitors[i] == character)
-                                {
-                                    sender = (byte)(i + 1);
-                                }
+                                sender = (byte)(i + 1);
                             }
-
-
-                            oPacket.WriteByte(sender);
-                            oPacket.WriteString($"{character.Name} : {text}");
-
-                            Broadcast(oPacket);
                         }
+
+
+                        oPacket.WriteByte(sender);
+                        oPacket.WriteString($"{character.Name} : {text}");
+
+                        Broadcast(oPacket);
                     }
+                }
                     break;
             }
         }
@@ -250,7 +248,6 @@ namespace RazzleServer.Game.Maple.Interaction
                     {
                         using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                         {
-
                             oPacket.WriteByte((byte)InteractionCode.Exit);
                             oPacket.WriteByte(1);
                             oPacket.WriteByte(10);
@@ -270,13 +267,11 @@ namespace RazzleServer.Game.Maple.Interaction
         {
             using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
             {
-
                 oPacket.WriteByte((byte)InteractionCode.UpdateItems);
                 oPacket.WriteByte((byte)Items.Count);
 
                 foreach (var loopShopItem in Items)
                 {
-
                     oPacket.WriteShort(loopShopItem.Bundles);
                     oPacket.WriteShort(loopShopItem.Quantity);
                     oPacket.WriteInt(loopShopItem.MerchantPrice);
@@ -308,7 +303,6 @@ namespace RazzleServer.Game.Maple.Interaction
                 {
                     using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                     {
-
                         oPacket.WriteByte((byte)InteractionCode.Visit);
                         oPacket.WriteByte((byte)(i + 1));
                         oPacket.WriteBytes(visitor.AppearanceToByteArray());
@@ -322,7 +316,6 @@ namespace RazzleServer.Game.Maple.Interaction
 
                     using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                     {
-
                         oPacket.WriteByte((byte)InteractionCode.Room);
                         oPacket.WriteByte(4);
                         oPacket.WriteByte(4);
@@ -335,7 +328,6 @@ namespace RazzleServer.Game.Maple.Interaction
                         {
                             if (Visitors[slot] != null)
                             {
-
                                 oPacket.WriteByte((byte)(slot + 1));
                                 oPacket.WriteBytes(Visitors[slot].AppearanceToByteArray());
                                 oPacket.WriteString(Visitors[slot].Name);
@@ -350,7 +342,6 @@ namespace RazzleServer.Game.Maple.Interaction
 
                         foreach (var loopShopItem in Items)
                         {
-
                             oPacket.WriteShort(loopShopItem.Bundles);
                             oPacket.WriteShort(loopShopItem.Quantity);
                             oPacket.WriteInt(loopShopItem.MerchantPrice);

@@ -1,66 +1,66 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <LangVersion>latest</LangVersion>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.2.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.3" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.0.0-preview.19074.2" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-    <PackageReference Include="Serilog.Extensions.Logging" Version="2.0.2" />
-    <PackageReference Include="Serilog.Settings.Configuration" Version="3.0.1" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
-    <PackageReference Include="Serilog.Sinks.File" Version="4.0.0" />
-    <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\RazzleServer.DB\RazzleServer.Data.csproj" />
-    <ProjectReference Include="..\RazzleServer.Common\RazzleServer.Common.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Game\Handlers\AdminCommandHandler.cs" />
-    <Compile Remove="Game\Handlers\CancelBuffHandler.cs" />
-    <Compile Remove="Game\Handlers\CancelItemEffectHandler.cs" />
-    <Compile Remove="Game\Handlers\CashShopMigrationHandler.cs" />
-    <Compile Remove="Game\Handlers\ChalkboardCloseHandler.cs" />
-    <Compile Remove="Game\Handlers\ChangeKeymapHandler.cs" />
-    <Compile Remove="Game\Handlers\CommandWhisperFindHandler.cs" />
-    <Compile Remove="Game\Handlers\DistributeSPHandler.cs" />
-    <Compile Remove="Game\Handlers\FaceExpressionHandler.cs" />
-    <Compile Remove="Game\Handlers\HealOverTimeHandler.cs" />
-    <Compile Remove="Game\Handlers\MemoOperationHandler.cs" />
-    <Compile Remove="Game\Handlers\MobMovementHandler.cs" />
-    <Compile Remove="Game\Handlers\MovePetHandler.cs" />
-    <Compile Remove="Game\Handlers\MultiChatHandler.cs" />
-    <Compile Remove="Game\Handlers\QuestActionHandler.cs" />
-    <Compile Remove="Game\Handlers\ReportHandler.cs" />
-    <Compile Remove="Game\Handlers\SitChairHandler.cs" />
-    <Compile Remove="Game\Handlers\SitHandler.cs" />
-    <Compile Remove="Game\Handlers\SkillMacroHandler.cs" />
-    <Compile Remove="Game\Handlers\StorageHandler.cs" />
-    <Compile Remove="Game\Handlers\StrangeDataHandler.cs" />
-    <Compile Remove="Game\Handlers\TakeDamageHandler.cs" />
-    <Compile Remove="Game\Handlers\UseCashItemHandler.cs" />
-    <Compile Remove="Game\Handlers\UseInnerPortalHandler.cs" />
-    <Compile Remove="Game\Handlers\UseItemEffectHandler.cs" />
-    <Compile Remove="Game\Handlers\UseItemHandler.cs" />
-    <Compile Remove="Game\Handlers\UseReturnScrollHandler.cs" />
-    <Compile Remove="Game\Handlers\UseSkillHandler.cs" />
-    <Compile Remove="Game\Handlers\UseSummonBagHandler.cs" />
-    <Compile Remove="Game\Handlers\PlayerInformationHandler.cs" />
-    <Compile Remove="Game\Handlers\PlayerInteractionHandler.cs" />
-    <Compile Remove="Game\Handlers\PlayerUpdateHandler.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="Logs\**" />
-    <None Remove="MapleServer.db" />
-    <None Update="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>netcoreapp3.0</TargetFramework>
+    </PropertyGroup>
+    <PropertyGroup>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <LangVersion>latest</LangVersion>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.2.3" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.3" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.0.0-preview.19074.2" />
+        <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+        <PackageReference Include="Serilog.Extensions.Logging" Version="2.0.2" />
+        <PackageReference Include="Serilog.Settings.Configuration" Version="3.0.1" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+        <PackageReference Include="Serilog.Sinks.File" Version="4.0.0" />
+        <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\RazzleServer.DB\RazzleServer.Data.csproj" />
+        <ProjectReference Include="..\RazzleServer.Common\RazzleServer.Common.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Remove="Game\Handlers\AdminCommandHandler.cs" />
+        <Compile Remove="Game\Handlers\CancelBuffHandler.cs" />
+        <Compile Remove="Game\Handlers\CancelItemEffectHandler.cs" />
+        <Compile Remove="Game\Handlers\CashShopMigrationHandler.cs" />
+        <Compile Remove="Game\Handlers\ChalkboardCloseHandler.cs" />
+        <Compile Remove="Game\Handlers\ChangeKeymapHandler.cs" />
+        <Compile Remove="Game\Handlers\CommandWhisperFindHandler.cs" />
+        <Compile Remove="Game\Handlers\DistributeSPHandler.cs" />
+        <Compile Remove="Game\Handlers\FaceExpressionHandler.cs" />
+        <Compile Remove="Game\Handlers\HealOverTimeHandler.cs" />
+        <Compile Remove="Game\Handlers\MemoOperationHandler.cs" />
+        <Compile Remove="Game\Handlers\MobMovementHandler.cs" />
+        <Compile Remove="Game\Handlers\MovePetHandler.cs" />
+        <Compile Remove="Game\Handlers\MultiChatHandler.cs" />
+        <Compile Remove="Game\Handlers\QuestActionHandler.cs" />
+        <Compile Remove="Game\Handlers\ReportHandler.cs" />
+        <Compile Remove="Game\Handlers\SitChairHandler.cs" />
+        <Compile Remove="Game\Handlers\SitHandler.cs" />
+        <Compile Remove="Game\Handlers\SkillMacroHandler.cs" />
+        <Compile Remove="Game\Handlers\StorageHandler.cs" />
+        <Compile Remove="Game\Handlers\StrangeDataHandler.cs" />
+        <Compile Remove="Game\Handlers\TakeDamageHandler.cs" />
+        <Compile Remove="Game\Handlers\UseCashItemHandler.cs" />
+        <Compile Remove="Game\Handlers\UseInnerPortalHandler.cs" />
+        <Compile Remove="Game\Handlers\UseItemEffectHandler.cs" />
+        <Compile Remove="Game\Handlers\UseItemHandler.cs" />
+        <Compile Remove="Game\Handlers\UseReturnScrollHandler.cs" />
+        <Compile Remove="Game\Handlers\UseSkillHandler.cs" />
+        <Compile Remove="Game\Handlers\UseSummonBagHandler.cs" />
+        <Compile Remove="Game\Handlers\PlayerInformationHandler.cs" />
+        <Compile Remove="Game\Handlers\PlayerInteractionHandler.cs" />
+        <Compile Remove="Game\Handlers\PlayerUpdateHandler.cs" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Remove="Logs\**" />
+        <None Remove="MapleServer.db" />
+        <None Update="appsettings.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
 </Project>

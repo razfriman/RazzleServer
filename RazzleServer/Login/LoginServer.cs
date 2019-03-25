@@ -10,11 +10,10 @@ namespace RazzleServer.Login
 {
     public class LoginServer : MapleServer<LoginClient, LoginPacketHandler>
     {
-
         public LoginServer(ServerManager manager) : base(manager)
         {
             Port = ServerConfig.Instance.LoginPort;
-            Start(new IPAddress(new byte[] { 0, 0, 0, 0 }), Port);
+            Start(new IPAddress(new byte[] {0, 0, 0, 0}), Port);
         }
 
         public override ILogger Logger => Log.ForContext<LoginServer>();
@@ -24,8 +23,8 @@ namespace RazzleServer.Login
             using (var dbContext = new MapleDbContext())
             {
                 return dbContext.Characters
-                                .Where(x => x.WorldId == world)
-                                .Any(x => x.Name == name);
+                    .Where(x => x.WorldId == world)
+                    .Any(x => x.Name == name);
             }
         }
 
@@ -43,14 +42,11 @@ namespace RazzleServer.Login
                 characters
                     .ToList()
                     .ForEach(x =>
-                      {
-                          var c = new Character
-                          {
-                              Id = x.Id
-                          };
-                          c.Load();
-                          result.Add(c);
-                      });
+                    {
+                        var c = new Character {Id = x.Id};
+                        c.Load();
+                        result.Add(c);
+                    });
 
                 return result;
             }

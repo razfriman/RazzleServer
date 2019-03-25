@@ -24,7 +24,7 @@ namespace RazzleServer.Game.Maple.Util
 
             //[00 00] [F6 FF]
             //[03]
-            
+
             //[00] [00 00 4F 00] [00 00 58 02] [00 00] [06] [2C 01]
             //[00] [00 00 5F 00] [00 00 00 00] [00 00] [06] [17 00]
             //[00] [00 00 5F 00] [00 00 00 00] [13 00] [04] [BB 00]
@@ -34,36 +34,30 @@ namespace RazzleServer.Game.Maple.Util
             {
                 var type = (MovementType)packet.ReadByte();
 
-                var movement = new Movement
-                {
-                    Type = type,
-                    Foothold = foothold,
-                    Position = position,
-                    Stance = stance
-                };
+                var movement = new Movement {Type = type, Foothold = foothold, Position = position, Stance = stance};
                 switch (type)
                 {
                     case MovementType.Normal:
                     case MovementType.Normal2:
                     case MovementType.NormalFloat:
-                        {
-                            movement.Position = packet.ReadPoint();
-                            movement.Velocity = packet.ReadPoint();
-                            movement.Foothold = packet.ReadShort();
-                            movement.Stance = packet.ReadByte();
-                            movement.Duration = packet.ReadShort();
-                        }
+                    {
+                        movement.Position = packet.ReadPoint();
+                        movement.Velocity = packet.ReadPoint();
+                        movement.Foothold = packet.ReadShort();
+                        movement.Stance = packet.ReadByte();
+                        movement.Duration = packet.ReadShort();
+                    }
                         break;
                     case MovementType.Jump:
                     case MovementType.JumpKnockback:
                     case MovementType.FlashJump:
                     case MovementType.ExcessiveKnockback:
                     case MovementType.RelativeFloat:
-                        {
-                            movement.Velocity = packet.ReadPoint();
-                            movement.Stance = packet.ReadByte();
-                            movement.Duration = packet.ReadShort();
-                        }
+                    {
+                        movement.Velocity = packet.ReadPoint();
+                        movement.Stance = packet.ReadByte();
+                        movement.Duration = packet.ReadShort();
+                    }
                         break;
                     case MovementType.Immediate:
                     case MovementType.Teleport:
@@ -72,33 +66,33 @@ namespace RazzleServer.Game.Maple.Util
                     case MovementType.Rush:
                     case MovementType.Chair:
                     case MovementType.UnknownTeleport:
-                        {
-                            movement.Position = packet.ReadPoint();
-                            movement.Foothold = packet.ReadShort();
-                            movement.Stance = packet.ReadByte();
-                            movement.Duration = packet.ReadShort();
-                        }
+                    {
+                        movement.Position = packet.ReadPoint();
+                        movement.Foothold = packet.ReadShort();
+                        movement.Stance = packet.ReadByte();
+                        movement.Duration = packet.ReadShort();
+                    }
                         break;
                     case MovementType.Falling:
-                        {
-                            movement.Statistic = packet.ReadByte();
-                        }
+                    {
+                        movement.Statistic = packet.ReadByte();
+                    }
                         break;
                     case MovementType.JumpDown:
-                        {
-                            movement.Position = packet.ReadPoint();
-                            movement.Velocity = packet.ReadPoint();
-                            movement.FallStart = packet.ReadShort();
-                            movement.Foothold = packet.ReadShort();
-                            movement.Stance = packet.ReadByte();
-                            movement.Duration = packet.ReadShort();
-                        }
+                    {
+                        movement.Position = packet.ReadPoint();
+                        movement.Velocity = packet.ReadPoint();
+                        movement.FallStart = packet.ReadShort();
+                        movement.Foothold = packet.ReadShort();
+                        movement.Stance = packet.ReadByte();
+                        movement.Duration = packet.ReadShort();
+                    }
                         break;
                     default:
-                        {
-                            movement.Stance = packet.ReadByte();
-                            movement.Duration = packet.ReadShort();
-                        }
+                    {
+                        movement.Stance = packet.ReadByte();
+                        movement.Duration = packet.ReadShort();
+                    }
                         break;
                 }
 
@@ -118,6 +112,7 @@ namespace RazzleServer.Game.Maple.Util
                     packet.ReadByte(); // NOTE: Unknown.
                 }
             }
+
             Position = position;
             Stance = stance;
             Foothold = foothold;
@@ -139,13 +134,13 @@ namespace RazzleServer.Game.Maple.Util
                         case MovementType.Normal:
                         case MovementType.Normal2:
                         case MovementType.NormalFloat:
-                            {
-                                pw.WritePoint(movement.Position);
-                                pw.WritePoint(movement.Velocity);
-                                pw.WriteShort(movement.Foothold);
-                                pw.WriteByte(movement.Stance);
-                                pw.WriteShort(movement.Duration);
-                            }
+                        {
+                            pw.WritePoint(movement.Position);
+                            pw.WritePoint(movement.Velocity);
+                            pw.WriteShort(movement.Foothold);
+                            pw.WriteByte(movement.Stance);
+                            pw.WriteShort(movement.Duration);
+                        }
                             break;
 
                         case MovementType.Jump:
@@ -154,12 +149,12 @@ namespace RazzleServer.Game.Maple.Util
                         case MovementType.ExcessiveKnockback:
                         case MovementType.RecoilShot:
                         case MovementType.RelativeFloat:
-                            {
-                                pw.WriteShort(movement.Velocity.X);
-                                pw.WriteShort(movement.Velocity.Y);
-                                pw.WriteByte(movement.Stance);
-                                pw.WriteShort(movement.Duration);
-                            }
+                        {
+                            pw.WriteShort(movement.Velocity.X);
+                            pw.WriteShort(movement.Velocity.Y);
+                            pw.WriteByte(movement.Stance);
+                            pw.WriteShort(movement.Duration);
+                        }
                             break;
 
                         case MovementType.Immediate:
@@ -169,36 +164,36 @@ namespace RazzleServer.Game.Maple.Util
                         case MovementType.Rush:
                         case MovementType.Chair:
                         case MovementType.UnknownTeleport:
-                            {
-                                pw.WritePoint(movement.Position);
-                                pw.WriteShort(movement.Foothold);
-                                pw.WriteByte(movement.Stance);
-                                pw.WriteShort(movement.Duration);
-                            }
+                        {
+                            pw.WritePoint(movement.Position);
+                            pw.WriteShort(movement.Foothold);
+                            pw.WriteByte(movement.Stance);
+                            pw.WriteShort(movement.Duration);
+                        }
                             break;
 
                         case MovementType.Falling:
-                            {
-                                pw.WriteByte(movement.Statistic);
-                            }
+                        {
+                            pw.WriteByte(movement.Statistic);
+                        }
                             break;
 
                         case MovementType.JumpDown:
-                            {
-                                pw.WritePoint(movement.Position);
-                                pw.WritePoint(movement.Velocity);
-                                pw.WriteShort(movement.FallStart);
-                                pw.WriteShort(movement.Foothold);
-                                pw.WriteByte(movement.Stance);
-                                pw.WriteShort(movement.Duration);
-                            }
+                        {
+                            pw.WritePoint(movement.Position);
+                            pw.WritePoint(movement.Velocity);
+                            pw.WriteShort(movement.FallStart);
+                            pw.WriteShort(movement.Foothold);
+                            pw.WriteByte(movement.Stance);
+                            pw.WriteShort(movement.Duration);
+                        }
                             break;
 
                         default:
-                            {
-                                pw.WriteByte(movement.Stance);
-                                pw.WriteShort(movement.Duration);
-                            }
+                        {
+                            pw.WriteByte(movement.Stance);
+                            pw.WriteShort(movement.Duration);
+                        }
                             break;
                     }
                 }

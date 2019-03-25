@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
 <imgdir name="SpecificItems.img">
     <imgdir name="PriceRecordingItem">
         <imgdir name="0">
-            <int name="Divider" value="1"/>
-            <int name="ItemType" value="2000005"/>
-</imgdir>
+            <int name="Divider" value="1" />
+            <int name="ItemType" value="2000005" />
+        </imgdir>
         <imgdir name="1">
-            <int name="Divider" value="1"/>
-            <int name="ItemType" value="2000004"/>
-</imgdir>
+            <int name="Divider" value="1" />
+            <int name="ItemType" value="2000004" />
+        </imgdir>
         <imgdir name="2">
-            <int name="Divider" value="1"/>
-            <int name="ItemType" value="2020013"/>
-</imgdir>
+            <int name="Divider" value="1" />
+            <int name="ItemType" value="2020013" />
+        </imgdir>
         <imgdir name="3">
-            <int name="Divider" value="1"/>
-            <int name="ItemType" value="2020015"/>
-</imgdir>
+            <int name="Divider" value="1" />
+            <int name="ItemType" value="2020015" />
+        </imgdir>
         <imgdir name="4">
-            <int name="Divider" value="10000"/>
-            <int name="ItemType" value="204"/>
-</imgdir>
+            <int name="Divider" value="10000" />
+            <int name="ItemType" value="204" />
+        </imgdir>
         <imgdir name="5">
-            <string name="Divider" value="1"/>
-            <string name="ItemType" value="2340000"/>
-</imgdir>
+            <string name="Divider" value="1" />
+            <string name="ItemType" value="2340000" />
+        </imgdir>
     </imgdir>
 </imgdir>

@@ -86,164 +86,164 @@ namespace RazzleServer.Game.Maple.Interaction
                     break;
 
                 case InteractionCode.SetMeso:
+                {
+                    var meso = packet.ReadInt();
+
+                    if (meso < 0 || meso > character.Meso)
                     {
-                        var meso = packet.ReadInt();
-
-                        if (meso < 0 || meso > character.Meso)
-                        {
-                            return;
-                        }
-
-                        // TODO: The meso written in this packet is the added meso amount.
-                        // The amount that should be written is the total amount.
-
-                        using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
-                        {
-                            oPacket.WriteByte((byte)InteractionCode.SetMeso);
-                            oPacket.WriteByte(0);
-                            oPacket.WriteInt(meso);
-
-                            if (character == Owner)
-                            {
-                                if (OwnerLocked)
-                                {
-                                    return;
-                                }
-
-                                OwnerMeso += meso;
-                                Owner.Meso -= meso;
-
-                                Owner.Client.Send(oPacket);
-                            }
-                            else
-                            {
-                                if (VisitorLocked)
-                                {
-                                    return;
-                                }
-
-                                VisitorMeso += meso;
-                                Visitor.Meso -= meso;
-
-                                Visitor.Client.Send(oPacket);
-                            }
-                        }
-
-                        using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
-                        {
-                            oPacket.WriteByte((byte)InteractionCode.SetMeso);
-                            oPacket.WriteByte(1);
-                            oPacket.WriteInt(meso);
-
-                            if (Owner == character)
-                            {
-                                Visitor.Client.Send(oPacket);
-                            }
-                            else
-                            {
-                                oPacket.WriteInt(OwnerMeso);
-
-                                Owner.Client.Send(oPacket);
-                            }
-                        }
+                        return;
                     }
-                    break;
 
-                case InteractionCode.Exit:
+                    // TODO: The meso written in this packet is the added meso amount.
+                    // The amount that should be written is the total amount.
+
+                    using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                     {
-                        if (Started)
+                        oPacket.WriteByte((byte)InteractionCode.SetMeso);
+                        oPacket.WriteByte(0);
+                        oPacket.WriteInt(meso);
+
+                        if (character == Owner)
                         {
-                            Cancel();
-
-                            using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
+                            if (OwnerLocked)
                             {
-                                oPacket.WriteByte((byte)InteractionCode.Exit);
-                                oPacket.WriteByte(0);
-                                oPacket.WriteByte(2);
-
-                                Owner.Client.Send(oPacket);
-                                Visitor.Client.Send(oPacket);
+                                return;
                             }
 
-                            Owner.Trade = null;
-                            Visitor.Trade = null;
-                            Owner = null;
-                            Visitor = null;
+                            OwnerMeso += meso;
+                            Owner.Meso -= meso;
+
+                            Owner.Client.Send(oPacket);
                         }
                         else
                         {
-                            using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
+                            if (VisitorLocked)
                             {
-                                oPacket.WriteByte((byte)InteractionCode.Exit);
-                                oPacket.WriteByte(0);
-                                oPacket.WriteByte(2);
-
-                                Owner.Client.Send(oPacket);
+                                return;
                             }
 
-                            Owner.Trade = null;
-                            Owner = null;
+                            VisitorMeso += meso;
+                            Visitor.Meso -= meso;
+
+                            Visitor.Client.Send(oPacket);
                         }
                     }
-                    break;
 
-                case InteractionCode.Confirm:
+                    using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                     {
-                        using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
+                        oPacket.WriteByte((byte)InteractionCode.SetMeso);
+                        oPacket.WriteByte(1);
+                        oPacket.WriteInt(meso);
+
+                        if (Owner == character)
                         {
-                            oPacket.WriteByte((byte)InteractionCode.Confirm);
-
-                            if (character == Owner)
-                            {
-                                OwnerLocked = true;
-
-                                Visitor.Client.Send(oPacket);
-                            }
-                            else
-                            {
-                                VisitorLocked = true;
-
-                                Owner.Client.Send(oPacket);
-                            }
+                            Visitor.Client.Send(oPacket);
                         }
-
-                        if (OwnerLocked && VisitorLocked)
+                        else
                         {
-                            Complete();
+                            oPacket.WriteInt(OwnerMeso);
 
-                            using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
-                            {
-                                oPacket.WriteByte((byte)InteractionCode.Exit);
-                                oPacket.WriteByte(0);
-                                oPacket.WriteByte(6);
-
-                                Owner.Client.Send(oPacket);
-                                Visitor.Client.Send(oPacket);
-                            }
-
-                            Owner.Trade = null;
-                            Visitor.Trade = null;
-                            Owner = null;
-                            Visitor = null;
+                            Owner.Client.Send(oPacket);
                         }
                     }
+                }
                     break;
 
-                case InteractionCode.Chat:
+                case InteractionCode.Exit:
+                {
+                    if (Started)
                     {
-                        var text = packet.ReadString();
+                        Cancel();
 
                         using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                         {
-                            oPacket.WriteByte((byte)InteractionCode.Chat);
-                            oPacket.WriteByte(8);
-                            oPacket.WriteBool(Owner != character);
-                            oPacket.WriteString($"{character.Name} : {text}");
+                            oPacket.WriteByte((byte)InteractionCode.Exit);
+                            oPacket.WriteByte(0);
+                            oPacket.WriteByte(2);
 
                             Owner.Client.Send(oPacket);
                             Visitor.Client.Send(oPacket);
                         }
+
+                        Owner.Trade = null;
+                        Visitor.Trade = null;
+                        Owner = null;
+                        Visitor = null;
                     }
+                    else
+                    {
+                        using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
+                        {
+                            oPacket.WriteByte((byte)InteractionCode.Exit);
+                            oPacket.WriteByte(0);
+                            oPacket.WriteByte(2);
+
+                            Owner.Client.Send(oPacket);
+                        }
+
+                        Owner.Trade = null;
+                        Owner = null;
+                    }
+                }
+                    break;
+
+                case InteractionCode.Confirm:
+                {
+                    using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
+                    {
+                        oPacket.WriteByte((byte)InteractionCode.Confirm);
+
+                        if (character == Owner)
+                        {
+                            OwnerLocked = true;
+
+                            Visitor.Client.Send(oPacket);
+                        }
+                        else
+                        {
+                            VisitorLocked = true;
+
+                            Owner.Client.Send(oPacket);
+                        }
+                    }
+
+                    if (OwnerLocked && VisitorLocked)
+                    {
+                        Complete();
+
+                        using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
+                        {
+                            oPacket.WriteByte((byte)InteractionCode.Exit);
+                            oPacket.WriteByte(0);
+                            oPacket.WriteByte(6);
+
+                            Owner.Client.Send(oPacket);
+                            Visitor.Client.Send(oPacket);
+                        }
+
+                        Owner.Trade = null;
+                        Visitor.Trade = null;
+                        Owner = null;
+                        Visitor = null;
+                    }
+                }
+                    break;
+
+                case InteractionCode.Chat:
+                {
+                    var text = packet.ReadString();
+
+                    using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
+                    {
+                        oPacket.WriteByte((byte)InteractionCode.Chat);
+                        oPacket.WriteByte(8);
+                        oPacket.WriteBool(Owner != character);
+                        oPacket.WriteString($"{character.Name} : {text}");
+
+                        Owner.Client.Send(oPacket);
+                        Visitor.Client.Send(oPacket);
+                    }
+                }
                     break;
             }
         }
@@ -340,7 +340,7 @@ namespace RazzleServer.Game.Maple.Interaction
                     oPacket.WriteByte((byte)InteractionCode.Invite);
                     oPacket.WriteByte(3);
                     oPacket.WriteString(Owner.Name);
-                    oPacket.WriteBytes(new byte[] { 0xB7, 0x50, 0x00, 0x00 });
+                    oPacket.WriteBytes(new byte[] {0xB7, 0x50, 0x00, 0x00});
 
                     Visitor.Client.Send(oPacket);
                 }

@@ -38,21 +38,16 @@ namespace RazzleServer.Game.Maple.Characters
                 Meso = entity.Meso;
 
                 var itemEntities = dbContext.Items
-                                            .Where(x => x.AccountId == Parent.AccountId)
-                                            .Where(x => x.IsStored)
-                                            .ToList();
+                    .Where(x => x.AccountId == Parent.AccountId)
+                    .Where(x => x.IsStored)
+                    .ToList();
 
                 itemEntities.ForEach(x => Items.Add(new Item(x)));
             }
         }
 
-        private CharacterStorageEntity GenerateDefault() => 
-        new CharacterStorageEntity
-        {
-            AccountId = Parent.AccountId,
-            Slots = 4,
-            Meso = 0
-        };
+        private CharacterStorageEntity GenerateDefault() =>
+            new CharacterStorageEntity {AccountId = Parent.AccountId, Slots = 4, Meso = 0};
 
         public void Save()
         {
@@ -94,7 +89,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             using (var pw = new PacketWriter(ServerOperationCode.StorageResult))
             {
-                pw.WriteByte((byte) result);
+                pw.WriteByte((byte)result);
                 Parent.Client.Send(pw);
             }
         }

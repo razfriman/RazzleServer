@@ -16,6 +16,7 @@ namespace RazzleServer.Game
         public int Population { get; set; }
         public World World { get; set; }
         public Dictionary<int, Map> Maps { get; set; } = new Dictionary<int, Map>();
+
         public Map this[int id]
         {
             get
@@ -29,6 +30,7 @@ namespace RazzleServer.Game
                 return Maps[id] = map;
             }
         }
+
         public override ILogger Logger => Log.ForContext<GameServer>();
 
 
@@ -37,17 +39,17 @@ namespace RazzleServer.Game
             World = world;
             Port = port;
             ChannelId = channelId;
-            Start(new IPAddress(new byte[] { 0, 0, 0, 0 }), Port);
+            Start(new IPAddress(new byte[] {0, 0, 0, 0}), Port);
         }
 
         public override void Dispose() => Shutdown();
 
-        public void Send(PacketWriter pw, GameClient except = null) => 
-        Clients
-            .Values
-            .Where(x => x.Key != except?.Key)
-            .ToList()
-            .ForEach(x => x.Send(pw));
+        public void Send(PacketWriter pw, GameClient except = null) =>
+            Clients
+                .Values
+                .Where(x => x.Key != except?.Key)
+                .ToList()
+                .ForEach(x => x.Send(pw));
 
         public Character GetCharacterById(int id) => Clients
             .Values
@@ -64,8 +66,8 @@ namespace RazzleServer.Game
             using (var dbContext = new MapleDbContext())
             {
                 return dbContext.Characters
-                                .Where(x => x.WorldId == World.Id)
-                                .Any(x => x.Name == name);
+                    .Where(x => x.WorldId == World.Id)
+                    .Any(x => x.Name == name);
             }
         }
     }

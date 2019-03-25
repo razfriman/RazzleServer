@@ -20,7 +20,9 @@ namespace RazzleServer.Login
         public override ILogger Logger => Log.ForContext<LoginClient>();
 
         public LoginClient(Socket socket, LoginServer server)
-            : base(socket, ServerConfig.Instance.Version, ServerConfig.Instance.SubVersion, ServerConfig.Instance.ServerType, ServerConfig.Instance.AesKey, ServerConfig.Instance.UseAesEncryption, ServerConfig.Instance.PrintPackets, true)
+            : base(socket, ServerConfig.Instance.Version, ServerConfig.Instance.SubVersion,
+                ServerConfig.Instance.ServerType, ServerConfig.Instance.AesKey, ServerConfig.Instance.UseAesEncryption,
+                ServerConfig.Instance.PrintPackets, true)
         {
             Server = server;
         }
@@ -50,7 +52,6 @@ namespace RazzleServer.Login
                     {
                         Logger.Warning($"Unhandled Packet [{header.ToString()}] {packet.ToPacketString()}");
                     }
-
                 }
             }
             catch (Exception e)
@@ -71,6 +72,5 @@ namespace RazzleServer.Login
                 Logger.Error(e, $"Error while disconnecting. Account [{Account?.Username}]");
             }
         }
-
     }
 }

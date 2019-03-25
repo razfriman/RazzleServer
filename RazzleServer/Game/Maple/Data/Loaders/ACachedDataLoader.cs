@@ -65,7 +65,6 @@ namespace RazzleServer.Game.Maple.Data.Loaders
 
         public Task LoadFromCache()
         {
-
             var path = Path.Combine(ServerConfig.Instance.CacheFolder, $"{CacheName}.cache");
 
             using (var s = File.OpenRead(path))
@@ -82,6 +81,7 @@ namespace RazzleServer.Game.Maple.Data.Loaders
 
         public abstract void LoadFromWz();
 
-        public WzFile GetWzFile(string name) => new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, name), (short) ServerConfig.Instance.Version, WzMapleVersionType.Classic);
+        public WzFile GetWzFile(string name) => new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, name),
+            (short)ServerConfig.Instance.Version, WzMapleVersionType.Classic);
     }
 }

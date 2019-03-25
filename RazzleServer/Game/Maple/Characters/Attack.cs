@@ -19,9 +19,9 @@ namespace RazzleServer.Game.Maple.Characters
         public int Ticks { get; }
 
         public uint TotalDamage { get; }
-        
+
         public bool IsMesoExplosion { get; }
-        
+
         public short StarPosition { get; }
 
         public List<Point> Positions { get; } = new List<Point>();
@@ -93,6 +93,5 @@ namespace RazzleServer.Game.Maple.Characters
 
             var playerPosition = packet.ReadPoint();
         }
-
     }
 }

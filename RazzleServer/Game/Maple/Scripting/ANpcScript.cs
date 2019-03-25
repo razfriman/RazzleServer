@@ -40,13 +40,7 @@ namespace RazzleServer.Game.Maple.Scripting
         {
             _result = new WaitableResult<int>();
 
-            Send(new NpcStateInfo
-            {
-                Type = NpcMessageType.Standard,
-                Text = text,
-                IsPrevious = false,
-                IsNext = false
-            });
+            Send(new NpcStateInfo {Type = NpcMessageType.Standard, Text = text, IsPrevious = false, IsNext = false});
 
             _result.Wait();
             return _result.Value;
@@ -56,14 +50,7 @@ namespace RazzleServer.Game.Maple.Scripting
         {
             _result = new WaitableResult<int>();
 
-            Send(new NpcStateInfo
-            {
-
-                Type = NpcMessageType.Standard,
-                Text = text,
-                IsPrevious = false,
-                IsNext = true
-            });
+            Send(new NpcStateInfo {Type = NpcMessageType.Standard, Text = text, IsPrevious = false, IsNext = true});
 
             _result.Wait();
             return _result.Value;
@@ -73,13 +60,7 @@ namespace RazzleServer.Game.Maple.Scripting
         {
             _result = new WaitableResult<int>();
 
-            Send(new NpcStateInfo
-            {
-                Type = NpcMessageType.Standard,
-                Text = text,
-                IsPrevious = true,
-                IsNext = false
-            });
+            Send(new NpcStateInfo {Type = NpcMessageType.Standard, Text = text, IsPrevious = true, IsNext = false});
 
             _result.Wait();
             return _result.Value;
@@ -89,26 +70,17 @@ namespace RazzleServer.Game.Maple.Scripting
         {
             _result = new WaitableResult<int>();
 
-            Send(new NpcStateInfo
-            {
-                Type = NpcMessageType.Standard,
-                Text = text,
-                IsPrevious = true,
-                IsNext = true
-            });
+            Send(new NpcStateInfo {Type = NpcMessageType.Standard, Text = text, IsPrevious = true, IsNext = true});
 
             _result.Wait();
             return _result.Value;
         }
+
         protected int AskYesNo(string text)
         {
             _result = new WaitableResult<int>();
 
-            Send(new NpcStateInfo
-            {
-                Type = NpcMessageType.YesNo,
-                Text = text
-            });
+            Send(new NpcStateInfo {Type = NpcMessageType.YesNo, Text = text});
 
             _result.Wait();
             return _result.Value;
@@ -118,11 +90,7 @@ namespace RazzleServer.Game.Maple.Scripting
         {
             _result = new WaitableResult<int>();
 
-            Send(new NpcStateInfo
-            {
-                Type = NpcMessageType.AcceptDecline,
-                Text = text
-            });
+            Send(new NpcStateInfo {Type = NpcMessageType.AcceptDecline, Text = text});
 
             _result.Wait();
             return _result.Value;
@@ -132,17 +100,14 @@ namespace RazzleServer.Game.Maple.Scripting
         {
             _result = new WaitableResult<int>();
 
-            Send(new NpcStateInfo
-            {
-                Type = NpcMessageType.AcceptDeclineNoExit,
-                Text = text
-            });
+            Send(new NpcStateInfo {Type = NpcMessageType.AcceptDeclineNoExit, Text = text});
 
             _result.Wait();
             return _result.Value;
         }
 
-        protected int SendRequestNumber(string text, int numberDefault = 0, int numberMinimum = 0, int numberMaximum = 0)
+        protected int SendRequestNumber(string text, int numberDefault = 0, int numberMinimum = 0,
+            int numberMaximum = 0)
         {
             _result = new WaitableResult<int>();
 
@@ -163,12 +128,7 @@ namespace RazzleServer.Game.Maple.Scripting
         {
             _result = new WaitableResult<int>();
 
-            Send(new NpcStateInfo
-            {
-                Type = NpcMessageType.RequestStyle,
-                Text = text,
-                Styles = styles.ToList()
-            });
+            Send(new NpcStateInfo {Type = NpcMessageType.RequestStyle, Text = text, Styles = styles.ToList()});
 
             _result.Wait();
             return _result.Value;
@@ -178,11 +138,7 @@ namespace RazzleServer.Game.Maple.Scripting
         {
             _stringResult = new WaitableResult<string>();
 
-            Send(new NpcStateInfo
-            {
-                Type = NpcMessageType.RequestText,
-                Text = text
-            });
+            Send(new NpcStateInfo {Type = NpcMessageType.RequestText, Text = text});
 
             _stringResult.Wait();
             return _stringResult.Value;

@@ -332,7 +332,6 @@ namespace RazzleServer.Game.Maple.Items
             }
             else if (IsConsumable)
             {
-
                 CFlags = CachedReference.CFlags;
                 CCureAilments = CachedReference.CCureAilments;
                 CEffect = CachedReference.CEffect;
@@ -522,9 +521,9 @@ namespace RazzleServer.Game.Maple.Items
             }
 
             if ((Character.Strength < RequiredStrength ||
-                Character.Dexterity < RequiredDexterity ||
-                Character.Intelligence < RequiredIntelligence ||
-                Character.Luck < RequiredLuck) &&
+                 Character.Dexterity < RequiredDexterity ||
+                 Character.Intelligence < RequiredIntelligence ||
+                 Character.Luck < RequiredLuck) &&
                 !Character.IsMaster)
             {
                 return;
@@ -549,7 +548,6 @@ namespace RazzleServer.Game.Maple.Items
 
             using (var oPacket = new PacketWriter(ServerOperationCode.InventoryOperation))
             {
-
                 oPacket.WriteBool(true);
                 oPacket.WriteByte(1);
                 oPacket.WriteByte((byte)InventoryOperationType.ModifySlot);
@@ -564,39 +562,39 @@ namespace RazzleServer.Game.Maple.Items
             switch (destinationSlot)
             {
                 case EquipmentSlot.Bottom:
+                {
+                    if (top != null && top.IsOverall)
                     {
-                        if (top != null && top.IsOverall)
-                        {
-                            top.Unequip();
-                        }
+                        top.Unequip();
                     }
+                }
                     break;
 
                 case EquipmentSlot.Top:
+                {
+                    if (IsOverall)
                     {
-                        if (IsOverall)
-                        {
-                            bottom?.Unequip();
-                        }
+                        bottom?.Unequip();
                     }
+                }
                     break;
 
                 case EquipmentSlot.Shield:
+                {
+                    if (weapon != null && weapon.IsTwoHanded)
                     {
-                        if (weapon != null && weapon.IsTwoHanded)
-                        {
-                            weapon.Unequip();
-                        }
+                        weapon.Unequip();
                     }
+                }
                     break;
 
                 case EquipmentSlot.Weapon:
+                {
+                    if (IsTwoHanded)
                     {
-                        if (IsTwoHanded)
-                        {
-                            shield?.Unequip();
-                        }
+                        shield?.Unequip();
                     }
+                }
                     break;
             }
 
@@ -621,7 +619,6 @@ namespace RazzleServer.Game.Maple.Items
 
             using (var oPacket = new PacketWriter(ServerOperationCode.InventoryOperation))
             {
-
                 oPacket.WriteBool(true);
                 oPacket.WriteByte(1);
                 oPacket.WriteByte((byte)InventoryOperationType.ModifySlot);
@@ -694,11 +691,7 @@ namespace RazzleServer.Game.Maple.Items
                     Character.Client.Send(oPacket);
                 }
 
-                var dropped = new Item(MapleId, quantity)
-                {
-                    Dropper = Character,
-                    Owner = null
-                };
+                var dropped = new Item(MapleId, quantity) {Dropper = Character, Owner = null};
 
                 Character.Map.Drops.Add(dropped);
             }
@@ -767,7 +760,6 @@ namespace RazzleServer.Game.Maple.Items
 
                 using (var oPacket = new PacketWriter(ServerOperationCode.InventoryOperation))
                 {
-
                     oPacket.WriteBool(true);
                     oPacket.WriteByte(1);
                     oPacket.WriteByte((byte)InventoryOperationType.ModifySlot);

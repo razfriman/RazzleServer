@@ -7,8 +7,7 @@ namespace RazzleServer.Game.Maple.Maps
 {
     public abstract class MapObjects<T> : MapleKeyedCollection<int, T> where T : MapObject
     {
-        [JsonIgnore]
-        public Map Map { get; }
+        [JsonIgnore] public Map Map { get; }
 
         protected MapObjects() { }
 

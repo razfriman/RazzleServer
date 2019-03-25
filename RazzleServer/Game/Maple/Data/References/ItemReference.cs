@@ -120,8 +120,8 @@ namespace RazzleServer.Game.Maple.Data.References
             Health = info["incJump"]?.GetShort() ?? 0;
             Mana = info["incJump"]?.GetShort() ?? 0;
             MaxPerStack = 1;
-
         }
+
         public ItemReference(WzImageProperty img, ItemType type)
         {
             var name = img.Name;
@@ -145,7 +145,7 @@ namespace RazzleServer.Game.Maple.Data.References
             if (type == ItemType.Usable)
             {
                 var spec = img["spec"];
-            
+
                 if (spec != null)
                 {
                     CHealth = spec["hp"]?.GetShort() ?? 0;
@@ -272,6 +272,5 @@ namespace RazzleServer.Game.Maple.Data.References
                 }
             }
         }
-
     }
 }

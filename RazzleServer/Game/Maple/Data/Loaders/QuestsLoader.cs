@@ -24,11 +24,8 @@ namespace RazzleServer.Game.Maple.Data.Loaders
                 {
                     if (int.TryParse(item.Name, out var questId))
                     {
-                        Data.Data.Add(questId, new QuestReference
-                        {
-                            MapleId = questId,
-                            Name = item["info"]?["subject"]?.GetString()
-                        });
+                        Data.Data.Add(questId,
+                            new QuestReference {MapleId = questId, Name = item["info"]?["subject"]?.GetString()});
                     }
                 }
             }

@@ -37,6 +37,7 @@ namespace RazzleServer.Game.Maple.Data.References
         public short Morph { get; set; }
         public Point? Lt { get; private set; }
         public Point? Rb { get; private set; }
+
         public SkillReference()
         {
         }

@@ -886,6 +886,7 @@ namespace RazzleServer.Game.Maple.Characters
                     {
                         oPacket.WriteByte(target.Value.Count);
                     }
+
                     foreach (var hit in target.Value)
                     {
                         oPacket.WriteUInt(hit);

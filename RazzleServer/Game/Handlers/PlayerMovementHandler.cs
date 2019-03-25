@@ -18,7 +18,6 @@ namespace RazzleServer.Game.Handlers
 
             using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerMove))
             {
-
                 oPacket.WriteInt(client.Character.Id);
                 oPacket.WriteBytes(movements.ToByteArray());
                 client.Character.Map.Send(oPacket, client.Character);

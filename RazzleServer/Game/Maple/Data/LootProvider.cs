@@ -41,47 +41,47 @@ namespace RazzleServer.Game.Maple.Data
             Logger.Information("Loading Loot from database");
 
             var entities = await context
-            .Loots
-            .GroupBy(x => x.MobId)
-            .ToListAsync();
+                .Loots
+                .GroupBy(x => x.MobId)
+                .ToListAsync();
 
             entities
-            .ForEach(x =>
-            {
-                if (!DataProvider.Mobs?.Data?.ContainsKey(x.Key) ?? true)
+                .ForEach(x =>
                 {
-                    Logger.Warning($"Removing loot - Cannot find Mob with ID={x.Key} in DataProvider");
-                    context.Loots.RemoveRange(x);
-                    return;
-                }
-
-                var loots = DataProvider.Mobs.Data[x.Key].Loots;
-                loots.Clear();
-
-                x
-                .ToList()
-                .ForEach(item =>
-                {
-
-                    if (!item.IsMeso && !DataProvider.Items.Data.ContainsKey(item.ItemId))
+                    if (!DataProvider.Mobs?.Data?.ContainsKey(x.Key) ?? true)
                     {
-                        Logger.Warning($"Removing loot - Cannot find Item with ID={item.ItemId} in DataProvider");
-                        context.Loots.Remove(item);
+                        Logger.Warning($"Removing loot - Cannot find Mob with ID={x.Key} in DataProvider");
+                        context.Loots.RemoveRange(x);
                         return;
                     }
 
-                    loots.Add(new Loot
-                    {
-                        Chance = item.Chance,
-                        IsMeso = item.IsMeso,
-                        ItemId = item.ItemId,
-                        MaximumQuantity = item.MaximumQuantity,
-                        MinimumQuantity = item.MinimumQuantity,
-                        MobId = item.MobId,
-                        QuestId = item.QuestId
-                    });
+                    var loots = DataProvider.Mobs.Data[x.Key].Loots;
+                    loots.Clear();
+
+                    x
+                        .ToList()
+                        .ForEach(item =>
+                        {
+                            if (!item.IsMeso && !DataProvider.Items.Data.ContainsKey(item.ItemId))
+                            {
+                                Logger.Warning(
+                                    $"Removing loot - Cannot find Item with ID={item.ItemId} in DataProvider");
+                                context.Loots.Remove(item);
+                                return;
+                            }
+
+                            loots.Add(new Loot
+                            {
+                                Chance = item.Chance,
+                                IsMeso = item.IsMeso,
+                                ItemId = item.ItemId,
+                                MaximumQuantity = item.MaximumQuantity,
+                                MinimumQuantity = item.MinimumQuantity,
+                                MobId = item.MobId,
+                                QuestId = item.QuestId
+                            });
+                        });
                 });
-            });
 
             await context.SaveChangesAsync();
         }

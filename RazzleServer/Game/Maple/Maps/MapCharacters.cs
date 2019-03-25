@@ -9,10 +9,11 @@ namespace RazzleServer.Game.Maple.Maps
     public sealed class MapCharacters : MapObjects<Character>
     {
         private readonly ILogger _log = Log.ForContext<MapCharacters>();
-        
+
         public MapCharacters(Map map) : base(map) { }
 
-        public Character this[string name] => Values.FirstOrDefault(x => x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+        public Character this[string name] =>
+            Values.FirstOrDefault(x => x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
 
         public override void Add(Character item)
         {

@@ -135,7 +135,7 @@ namespace RazzleServer.Game.Maple.Characters
                     mask |= (long)SecondaryBuffStat.SoulArrow;
                 }
 
-                
+
                 oPacket.WriteLong(mask);
                 if (value != 0)
                 {

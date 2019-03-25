@@ -107,7 +107,7 @@ namespace RazzleServer.Game.Maple.Data
 
                     var serializer = new JsonSerializer();
                     var data = serializer.Deserialize<List<ShopEntity>>(reader);
-                    
+
                     foreach (var item in data)
                     {
                         if (!DataProvider.Npcs?.Data?.ContainsKey(item.NpcId) ?? true)
@@ -151,7 +151,7 @@ namespace RazzleServer.Game.Maple.Data
                     var serializer = new JsonSerializer();
                     var data = serializer.Deserialize<List<ShopItemEntity>>(reader);
                     var shops = context.Shops.Select(x => x.ShopId).ToHashSet();
-                    
+
                     foreach (var item in data)
                     {
                         if (!shops.Contains(item.ShopId))

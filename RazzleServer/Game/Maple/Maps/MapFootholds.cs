@@ -75,9 +75,9 @@ namespace RazzleServer.Game.Maple.Maps
             }
 
             return p1.X - Bounds.Lt.X > 0 && p2.X - Bounds.Lt.X < 0 ||
-                     p1.X - Bounds.Lt.X < 0 && p2.X - Bounds.Lt.X > 0 ||
-                     p1.X - Bounds.Rb.X > 0 && p2.X - Bounds.Rb.X < 0 ||
-                     p1.X - Bounds.Rb.X < 0 && p2.X - Bounds.Rb.X > 0;
+                   p1.X - Bounds.Lt.X < 0 && p2.X - Bounds.Lt.X > 0 ||
+                   p1.X - Bounds.Rb.X > 0 && p2.X - Bounds.Rb.X < 0 ||
+                   p1.X - Bounds.Rb.X < 0 && p2.X - Bounds.Rb.X > 0;
         }
     }
 }

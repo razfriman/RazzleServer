@@ -139,12 +139,12 @@ namespace RazzleServer.Game.Maple.Life
                     {
                         var summon = new Mob(mobId)
                         {
-                            Position = caster.Position,
-                            SpawnEffect = CachedReference.SummonEffect
+                            Position = caster.Position, SpawnEffect = CachedReference.SummonEffect
                         };
 
                         caster.Map.Mobs.Add(summon);
                     }
+
                     break;
             }
 
@@ -191,7 +191,7 @@ namespace RazzleServer.Game.Maple.Life
 
                         affectedCharacter.Client.Send(oPacket);
                     }
-                    
+
                     //TODO - the remote packet
                     using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerSkillBuff))
                     {
@@ -213,7 +213,8 @@ namespace RazzleServer.Game.Maple.Life
 
         private IEnumerable<Character> GetAffectedCharacters(Mob caster)
         {
-            var rectangle = new Rectangle((CachedReference.Lt ?? new Point(0, 0)) + caster.Position, (CachedReference.Rb ?? new Point(0, 0)) + caster.Position);
+            var rectangle = new Rectangle((CachedReference.Lt ?? new Point(0, 0)) + caster.Position,
+                (CachedReference.Rb ?? new Point(0, 0)) + caster.Position);
 
             foreach (var character in caster.Map.Characters.Values)
             {
@@ -226,7 +227,8 @@ namespace RazzleServer.Game.Maple.Life
 
         private IEnumerable<Mob> GetAffectedMobs(Mob caster)
         {
-            var rectangle = new Rectangle((CachedReference.Lt ?? new Point(0,0)) + caster.Position, (CachedReference.Rb ?? new Point(0, 0)) + caster.Position);
+            var rectangle = new Rectangle((CachedReference.Lt ?? new Point(0, 0)) + caster.Position,
+                (CachedReference.Rb ?? new Point(0, 0)) + caster.Position);
 
             foreach (var mob in caster.Map.Mobs.Values)
             {

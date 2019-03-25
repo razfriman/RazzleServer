@@ -74,7 +74,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public override void Add( Skill item)
+        public override void Add(Skill item)
         {
             item.Parent = this;
             base.Add(item);
@@ -93,4 +93,3 @@ namespace RazzleServer.Game.Maple.Characters
             : 0;
     }
 }
-

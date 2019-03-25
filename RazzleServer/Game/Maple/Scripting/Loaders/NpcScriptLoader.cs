@@ -26,7 +26,7 @@ namespace RazzleServer.Game.Maple.Scripting.Loaders
                     .ToList()
                     .ForEach(x => Data.Data[x.Script] = type);
             });
-                
+
             return Task.CompletedTask;
         }
     }

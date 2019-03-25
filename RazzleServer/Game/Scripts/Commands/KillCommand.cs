@@ -22,38 +22,38 @@ namespace RazzleServer.Game.Scripts.Commands
                 switch (args[0])
                 {
                     case "-map":
+                    {
+                        foreach (var character in caller.Map.Characters.Values)
                         {
-                            foreach (var character in caller.Map.Characters.Values)
+                            if (character != caller && !character.IsMaster)
                             {
-                                if (character != caller && !character.IsMaster)
-                                {
-                                    character.Health = 0;
-                                }
+                                character.Health = 0;
                             }
                         }
+                    }
                         break;
 
                     case "-character":
+                    {
+                        if (args.Length == 1)
                         {
-                            if (args.Length == 1)
-                            {
-                                ShowSyntax(caller);
+                            ShowSyntax(caller);
 
-                                return;
-                            }
-
-                            var targetName = args[1];
-                            var target = caller.Map.Characters[targetName];
-
-                            if (target == null)
-                            {
-                                caller.Notify("[Command] " + targetName + " cannot be found.");
-                            }
-                            else
-                            {
-                                target.Health = 0;
-                            }
+                            return;
                         }
+
+                        var targetName = args[1];
+                        var target = caller.Map.Characters[targetName];
+
+                        if (target == null)
+                        {
+                            caller.Notify("[Command] " + targetName + " cannot be found.");
+                        }
+                        else
+                        {
+                            target.Health = 0;
+                        }
+                    }
                         break;
 
                     default:

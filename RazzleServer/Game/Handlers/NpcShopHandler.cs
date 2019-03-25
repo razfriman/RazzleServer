@@ -23,27 +23,27 @@ namespace RazzleServer.Game.Handlers
             switch (action)
             {
                 case ShopAction.Buy:
-                    {
-                        Buy(packet, client, shop);
-                    }
+                {
+                    Buy(packet, client, shop);
+                }
                     break;
 
                 case ShopAction.Sell:
-                    {
-                        Sell(packet, client, shop);
-                    }
+                {
+                    Sell(packet, client, shop);
+                }
                     break;
 
                 case ShopAction.Recharge:
-                    {
-                        Recharge(packet, client, shop);
-                    }
+                {
+                    Recharge(packet, client, shop);
+                }
                     break;
 
                 case ShopAction.Leave:
-                    {
-                        client.Character.CurrentNpcShop = null;
-                    }
+                {
+                    client.Character.CurrentNpcShop = null;
+                }
                     break;
             }
         }
@@ -166,5 +166,3 @@ namespace RazzleServer.Game.Handlers
         }
     }
 }
-
-

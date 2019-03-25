@@ -17,7 +17,8 @@ namespace RazzleServer.Game.Maple.Scripting.Cache
         {
             if (!Data.ContainsKey(portal.Script))
             {
-                _log.Warning($"Script not implemented for Portal={portal.Label} Script={portal.Script} on Map={portal.Map.MapleId}");
+                _log.Warning(
+                    $"Script not implemented for Portal={portal.Label} Script={portal.Script} on Map={portal.Map.MapleId}");
                 return;
             }
 
@@ -31,13 +32,14 @@ namespace RazzleServer.Game.Maple.Scripting.Cache
 
                     if (ex is NotImplementedException)
                     {
-                        _log.Warning($"Script not implemented for Portal={portal.Label} Script={portal.Script} on Map={portal.Map.MapleId}");
+                        _log.Warning(
+                            $"Script not implemented for Portal={portal.Label} Script={portal.Script} on Map={portal.Map.MapleId}");
                     }
                     else
                     {
-                        _log.Error(ex, $"Script error for Portal={portal.Label} Script={portal.Script} on Map={portal.Map.MapleId}");
+                        _log.Error(ex,
+                            $"Script error for Portal={portal.Label} Script={portal.Script} on Map={portal.Map.MapleId}");
                     }
-
                 }, TaskContinuationOptions.OnlyOnFaulted);
         }
     }

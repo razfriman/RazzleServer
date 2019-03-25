@@ -14,7 +14,7 @@ namespace RazzleServer.Game.Maple.Maps
         public MapMobs(Map map) : base(map) { }
 
         public override void Add(Mob item)
-        { 
+        {
             base.Add(item);
             Map.Send(item.GetCreatePacket());
             item.AssignController();
@@ -39,10 +39,7 @@ namespace RazzleServer.Game.Maple.Maps
         {
             foreach (var summonId in item.DeathSummons)
             {
-                Map.Mobs.Add(new Mob(summonId)
-                {
-                    Position = item.Position
-                });
+                Map.Mobs.Add(new Mob(summonId) {Position = item.Position});
             }
         }
 
@@ -54,7 +51,8 @@ namespace RazzleServer.Game.Maple.Maps
                 {
                     if (loopStarted.Value.ContainsKey(item.MapleId))
                     {
-                        if (loopStarted.Value[item.MapleId] < DataProvider.Quests.Data[loopStarted.Key].PostRequiredKills[item.MapleId])
+                        if (loopStarted.Value[item.MapleId] <
+                            DataProvider.Quests.Data[loopStarted.Key].PostRequiredKills[item.MapleId])
                         {
                             loopStarted.Value[item.MapleId]++;
 
@@ -65,7 +63,8 @@ namespace RazzleServer.Game.Maple.Maps
                                 kills += kill.ToString().PadLeft(3, '0');
                             }
 
-                            owner.Client.Send(GamePackets.ShowStatusInfo(MessageType.QuestRecord, mapleId: loopStarted.Key, questStatus: QuestStatus.InProgress, questString: kills));
+                            owner.Client.Send(GamePackets.ShowStatusInfo(MessageType.QuestRecord,
+                                mapleId: loopStarted.Key, questStatus: QuestStatus.InProgress, questString: kills));
 
                             if (owner.Quests.CanComplete(loopStarted.Key, true))
                             {
@@ -104,18 +103,16 @@ namespace RazzleServer.Game.Maple.Maps
                 {
                     if (loopLoot.IsMeso)
                     {
-                        drops.Add(new Meso((short)(Functions.Random(loopLoot.MinimumQuantity, loopLoot.MaximumQuantity) * Map.Server.World.MesoRate))
-                        {
-                            Dropper = item,
-                            Owner = owner
-                        });
+                        drops.Add(new Meso(
+                            (short)(Functions.Random(loopLoot.MinimumQuantity, loopLoot.MaximumQuantity) *
+                                    Map.Server.World.MesoRate)) {Dropper = item, Owner = owner});
                     }
                     else
                     {
-                        drops.Add(new Item(loopLoot.ItemId, (short)Functions.Random(loopLoot.MinimumQuantity, loopLoot.MaximumQuantity))
+                        drops.Add(new Item(loopLoot.ItemId,
+                            (short)Functions.Random(loopLoot.MinimumQuantity, loopLoot.MaximumQuantity))
                         {
-                            Dropper = item,
-                            Owner = owner
+                            Dropper = item, Owner = owner
                         });
                     }
                 }
@@ -139,7 +136,9 @@ namespace RazzleServer.Game.Maple.Maps
                         mostDamage = attacker.Value;
                     }
 
-                    attacker.Key.Experience += (int)Math.Min(item.Experience, attacker.Value * item.Experience / item.MaxHealth) * attacker.Key.Client.Server.World.ExperienceRate;
+                    attacker.Key.Experience +=
+                        (int)Math.Min(item.Experience, attacker.Value * item.Experience / item.MaxHealth) *
+                        attacker.Key.Client.Server.World.ExperienceRate;
                 }
             }
 

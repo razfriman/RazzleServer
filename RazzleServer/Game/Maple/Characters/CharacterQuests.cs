@@ -113,7 +113,6 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Delete()
         {
-
         }
 
         public void Handle(PacketReader iPacket)
@@ -134,56 +133,56 @@ namespace RazzleServer.Game.Maple.Characters
             switch (action)
             {
                 case QuestAction.RestoreLostItem: // TODO: Validate.
-                    {
-                        var quantity = iPacket.ReadInt();
-                        var itemId = iPacket.ReadInt();
+                {
+                    var quantity = iPacket.ReadInt();
+                    var itemId = iPacket.ReadInt();
 
-                        quantity -= Parent.Items.Available(itemId);
+                    quantity -= Parent.Items.Available(itemId);
 
-                        var item = new Item(itemId, (short)quantity);
+                    var item = new Item(itemId, (short)quantity);
 
-                        Parent.Items.Add(item);
-                    }
+                    Parent.Items.Add(item);
+                }
                     break;
 
                 case QuestAction.Start:
-                    {
-                        npcId = iPacket.ReadInt();
+                {
+                    npcId = iPacket.ReadInt();
 
-                        Start(quest, npcId);
-                    }
+                    Start(quest, npcId);
+                }
                     break;
 
                 case QuestAction.Complete:
-                    {
-                        npcId = iPacket.ReadInt();
-                        iPacket.ReadInt(); // NOTE: Unknown
-                        var selection = iPacket.Available >= 4 ? iPacket.ReadInt() : 0;
+                {
+                    npcId = iPacket.ReadInt();
+                    iPacket.ReadInt(); // NOTE: Unknown
+                    var selection = iPacket.Available >= 4 ? iPacket.ReadInt() : 0;
 
-                        Complete(quest, selection);
-                    }
+                    Complete(quest, selection);
+                }
                     break;
 
                 case QuestAction.Forfeit:
-                    {
-                        Forfeit(quest.MapleId);
-                    }
+                {
+                    Forfeit(quest.MapleId);
+                }
                     break;
 
                 case QuestAction.ScriptStart:
                 case QuestAction.ScriptEnd:
+                {
+                    npcId = iPacket.ReadInt();
+
+                    var npc = Parent.Map.Npcs.Values.FirstOrDefault(loopNpc => loopNpc.MapleId == npcId);
+
+                    if (npc == null)
                     {
-                        npcId = iPacket.ReadInt();
-
-                        var npc = Parent.Map.Npcs.Values.FirstOrDefault(loopNpc => loopNpc.MapleId == npcId);
-
-                        if (npc == null)
-                        {
-                            return;
-                        }
-
-                        Parent.Converse(npc, quest);
+                        return;
                     }
+
+                    Parent.Converse(npc, quest);
+                }
                     break;
             }
         }
@@ -207,7 +206,8 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 if (item.Value > 0)
                 {
-                    Parent.Items.Add(new Item(item.Key, item.Value)); // TODO: Quest items rewards are displayed in chat.
+                    Parent.Items.Add(new Item(item.Key,
+                        item.Value)); // TODO: Quest items rewards are displayed in chat.
                 }
                 else if (item.Value < 0)
                 {
@@ -242,7 +242,8 @@ namespace RazzleServer.Game.Maple.Characters
             Parent.Fame += (short)quest.FameReward[1];
             Parent.Meso += mesoReward;
 
-            Parent.Client.Send(GamePackets.ShowStatusInfo(MessageType.IncreaseExp, amount: quest.ExperienceReward[1], isWhite: true, inChat: true));
+            Parent.Client.Send(GamePackets.ShowStatusInfo(MessageType.IncreaseExp, amount: quest.ExperienceReward[1],
+                isWhite: true, inChat: true));
             Parent.Client.Send(GamePackets.ShowStatusInfo(MessageType.IncreaseFame, amount: quest.FameReward[1]));
             Parent.Client.Send(GamePackets.ShowStatusInfo(MessageType.IncreaseMeso, amount: mesoReward));
 
@@ -322,7 +323,8 @@ namespace RazzleServer.Game.Maple.Characters
 
         private void Update(int questId, QuestStatus status, string progress = "")
         {
-            Parent.Client.Send(GamePackets.ShowStatusInfo(MessageType.QuestRecord, mapleId: questId, questStatus: status, questString: progress));
+            Parent.Client.Send(GamePackets.ShowStatusInfo(MessageType.QuestRecord, mapleId: questId,
+                questStatus: status, questString: progress));
         }
 
         public bool CanComplete(int questId, bool onlyOnFinalKill = false)
@@ -400,4 +402,3 @@ namespace RazzleServer.Game.Maple.Characters
         }
     }
 }
-

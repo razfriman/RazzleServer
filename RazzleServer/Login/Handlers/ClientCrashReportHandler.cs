@@ -7,7 +7,7 @@ namespace RazzleServer.Login.Handlers
     public class ClientCrashReportHandler : LoginPacketHandler
     {
         public static readonly ILogger Log = Log.ForContext<ClientCrashReportHandler>();
-        
+
         public override void HandlePacket(PacketReader packet, LoginClient client)
         {
             var message = packet.ReadString();

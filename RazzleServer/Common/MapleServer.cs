@@ -98,7 +98,6 @@ namespace RazzleServer.Common
                 client.Key = $"{ip}-{Functions.Random()}";
                 AddClient(client);
                 return client;
-
             }
             catch (Exception e)
             {

@@ -20,10 +20,7 @@ namespace RazzleServer.Game.Scripts.Commands
             }
             else
             {
-                var mob = new Mob(8810026)
-                {
-                    Position = caller.Position
-                };
+                var mob = new Mob(8810026) {Position = caller.Position};
 
                 caller.Map.Mobs.Add(mob);
                 caller.Map.Mobs.Remove(mob);

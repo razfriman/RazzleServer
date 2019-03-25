@@ -65,6 +65,5 @@ namespace RazzleServer.Game.Maple.Life
                 return pw;
             }
         }
-
     }
 }

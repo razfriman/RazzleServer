@@ -10,7 +10,6 @@ namespace RazzleServer.Game.Handlers
             var objectId = packet.ReadInt();
             var npc = client.Character.ControlledNpcs[objectId];
             npc?.Move(packet);
-
         }
     }
 }

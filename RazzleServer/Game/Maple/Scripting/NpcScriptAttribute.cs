@@ -11,5 +11,4 @@ namespace RazzleServer.Game.Maple.Scripting
 
         public string Script { get; }
     }
-  
 }

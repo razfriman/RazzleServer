@@ -10,7 +10,6 @@ namespace RazzleServer.Game.Maple.Data.References
 
         public MobSkillReference()
         {
-
         }
 
         public MobSkillReference(WzImageProperty img)
