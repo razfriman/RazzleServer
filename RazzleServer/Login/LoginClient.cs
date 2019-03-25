@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Sockets;
+using RazzleServer.Common;
 using RazzleServer.Common.Server;
 using RazzleServer.Common.Network;
 using RazzleServer.Common.Packet;

@@ -1,6 +1,6 @@
 ﻿using RazzleServer.Common.Constants;
 
-namespace RazzleServer.Common.Server
+namespace RazzleServer.Common
 {
     public sealed class WorldConfig
     {

@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using RazzleServer.Common.Constants;
 
-namespace RazzleServer.Common.Server
+namespace RazzleServer.Common
 {
     public class ServerConfig
     {
