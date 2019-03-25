@@ -2,7 +2,6 @@
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using RazzleServer.Common.Packet;
-using RazzleServer.Common.Server;
 using RazzleServer.Common.Util;
 using Serilog;
 
@@ -10,6 +9,10 @@ namespace RazzleServer.Common.Network
 {
     public abstract class AClient : IDisposable
     {
+        public ushort Version { get; }
+        public byte SubVersion { get; }
+        public byte ServerType { get; }
+        public bool PrintPackets { get; }
         public string Host { get; set; }
         public ushort Port { get; set; }
         public ClientSocket Socket { get; set; }
@@ -18,10 +21,13 @@ namespace RazzleServer.Common.Network
         public string Key { get; set; }
         public abstract ILogger Logger { get; }
 
-        protected AClient(Socket session, bool toClient = true)
+        protected AClient(Socket session, ushort version, byte subVersion, byte serverType, ulong aesKey, bool useAesEncryption, bool printPackets, bool toClient)
         {
-            Socket = new ClientSocket(session, this, ServerConfig.Instance.Version, ServerConfig.Instance.AesKey,
-                toClient, ServerConfig.Instance.UseAesEncryption);
+            Version = version;
+            SubVersion = subVersion;
+            ServerType = serverType;
+            PrintPackets = printPackets;
+            Socket = new ClientSocket(session, this, version, aesKey, useAesEncryption, toClient);
             Host = Socket.Host;
             Port = Socket.Port;
             Connected = true;
@@ -35,7 +41,7 @@ namespace RazzleServer.Common.Network
 
         public void Send(byte[] packet)
         {
-            if (ServerConfig.Instance.PrintPackets)
+            if (PrintPackets)
             {
                 Logger.Information($"Sending: {packet.ByteArrayToString()}");
             }
@@ -63,11 +69,11 @@ namespace RazzleServer.Common.Network
 
             var writer = new PacketWriter();
             writer.WriteUShort(0x0E);
-            writer.WriteUShort(ServerConfig.Instance.Version);
-            writer.WriteString(ServerConfig.Instance.SubVersion.ToString());
+            writer.WriteUShort(Version);
+            writer.WriteString(SubVersion.ToString());
             writer.WriteUInt(rIv);
             writer.WriteUInt(sIv);
-            writer.WriteByte(ServerConfig.Instance.ServerType);
+            writer.WriteByte(ServerType);
             await Socket.SendRawPacket(writer.ToArray());
         }
 

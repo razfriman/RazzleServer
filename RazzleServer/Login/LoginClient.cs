@@ -20,7 +20,7 @@ namespace RazzleServer.Login
         public override ILogger Logger => Log.ForContext<LoginClient>();
 
         public LoginClient(Socket socket, LoginServer server)
-            : base(socket)
+            : base(socket, ServerConfig.Instance.Version, ServerConfig.Instance.SubVersion, ServerConfig.Instance.ServerType, ServerConfig.Instance.AesKey, ServerConfig.Instance.UseAesEncryption, ServerConfig.Instance.PrintPackets, true)
         {
             Server = server;
         }

@@ -24,8 +24,7 @@ namespace RazzleServer.Common.Network
         public byte[] HostBytes { get; }
         public ushort Port { get; }
 
-        public ClientSocket(Socket socket, AClient client, ushort currentGameVersion, ulong aesKey, bool toClient,
-            bool useAesEncryption)
+        public ClientSocket(Socket socket, AClient client, ushort version, ulong aesKey, bool useAesEncryption, bool toClient)
         {
             _socket = socket;
             _socketBuffer = new byte[1024];
@@ -36,7 +35,7 @@ namespace RazzleServer.Common.Network
             _client = client;
             _toClient = toClient;
 
-            Crypto = new MapleCipherProvider(currentGameVersion, aesKey, useAesEncryption);
+            Crypto = new MapleCipherProvider(version, aesKey, useAesEncryption);
             Crypto.PacketFinished += data => _client.Receive(new PacketReader(data));
             Task.Factory.StartNew(WaitForData);
         }

@@ -19,7 +19,9 @@ namespace RazzleServer.Game
         public Character Character { get; set; }
         public override ILogger Logger => Log.ForContext<GameClient>();
 
-        public GameClient(Socket session, GameServer server) : base(session)
+        public GameClient(Socket session, GameServer server) : base(session, ServerConfig.Instance.Version,
+            ServerConfig.Instance.SubVersion, ServerConfig.Instance.ServerType, ServerConfig.Instance.AesKey,
+            ServerConfig.Instance.UseAesEncryption, ServerConfig.Instance.PrintPackets, true)
         {
             Server = server;
             Host = Socket.Host;
@@ -60,7 +62,8 @@ namespace RazzleServer.Game
             }
             catch (Exception e)
             {
-                Logger.Error(e, $"Packet Processing Error [{header.ToString()}] {packet.ToPacketString()} - {e.Message} - {e.StackTrace}");
+                Logger.Error(e,
+                    $"Packet Processing Error [{header.ToString()}] {packet.ToPacketString()} - {e.Message} - {e.StackTrace}");
             }
         }
 
