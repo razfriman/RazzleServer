@@ -2,10 +2,10 @@
 using System.Linq;
 using RazzleServer.Common;
 using RazzleServer.Common.Constants;
-using RazzleServer.Common.Packet;
 using RazzleServer.Data;
 using RazzleServer.Game.Maple.Items;
 using RazzleServer.Game.Maple.Life;
+using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Maple.Characters
 {

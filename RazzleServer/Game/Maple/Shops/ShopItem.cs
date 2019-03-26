@@ -1,8 +1,8 @@
 ﻿using System;
 using Newtonsoft.Json;
-using RazzleServer.Common.Packet;
 using RazzleServer.Data;
 using RazzleServer.Game.Maple.Data;
+using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Maple.Shops
 {

@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using Serilog;
 using RazzleServer.Common.Constants;
-using RazzleServer.Common.Wz;
 using RazzleServer.Game.Maple.Data.Cache;
 using RazzleServer.Game.Maple.Data.References;
+using RazzleServer.Wz;
 
 namespace RazzleServer.Game.Maple.Data.Loaders
 {

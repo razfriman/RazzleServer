@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using RazzleServer.Common;
 using RazzleServer.Common.Constants;
-using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
 using RazzleServer.Data;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Data.References;
 using RazzleServer.Game.Maple.Skills;
+using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Maple.Characters
 {

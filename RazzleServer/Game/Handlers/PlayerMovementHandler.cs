@@ -1,5 +1,5 @@
-﻿using RazzleServer.Common.Packet;
-using RazzleServer.Game.Maple.Util;
+﻿using RazzleServer.Game.Maple.Util;
+using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Handlers
 {

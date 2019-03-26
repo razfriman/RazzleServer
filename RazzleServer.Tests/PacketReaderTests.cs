@@ -1,7 +1,7 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
+using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Tests
 {

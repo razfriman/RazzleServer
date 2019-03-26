@@ -3,11 +3,11 @@ using System.Linq;
 using RazzleServer.Common;
 using RazzleServer.Common.Server;
 using RazzleServer.Common.Constants;
-using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Items;
 using RazzleServer.Game.Maple.Maps;
+using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Login.Handlers
 {

@@ -16,11 +16,13 @@
         <PackageReference Include="Serilog.Settings.Configuration" Version="3.0.1" />
         <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
         <PackageReference Include="Serilog.Sinks.File" Version="4.0.0" />
-        <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
     </ItemGroup>
     <ItemGroup>
+        <ProjectReference Include="..\RazzleServer.Crypto\RazzleServer.Crypto.csproj" />
         <ProjectReference Include="..\RazzleServer.DB\RazzleServer.Data.csproj" />
         <ProjectReference Include="..\RazzleServer.Common\RazzleServer.Common.csproj" />
+        <ProjectReference Include="..\RazzleServer.Net\RazzleServer.Net.csproj" />
+        <ProjectReference Include="..\RazzleServer.Wz\RazzleServer.Wz.csproj" />
     </ItemGroup>
     <ItemGroup>
         <Compile Remove="Game\Handlers\AdminCommandHandler.cs" />

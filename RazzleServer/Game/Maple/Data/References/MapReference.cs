@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using RazzleServer.Common.Constants;
-using RazzleServer.Common.Wz;
 using RazzleServer.Game.Maple.Life;
 using RazzleServer.Game.Maple.Maps;
+using RazzleServer.Wz;
 
 namespace RazzleServer.Game.Maple.Data.References
 {

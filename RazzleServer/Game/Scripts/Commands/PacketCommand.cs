@@ -1,7 +1,7 @@
-﻿using RazzleServer.Common.Packet;
-using RazzleServer.Common.Util;
+﻿using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Scripting;
+using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Scripts.Commands
 {

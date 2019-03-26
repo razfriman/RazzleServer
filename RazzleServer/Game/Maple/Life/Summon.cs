@@ -1,6 +1,6 @@
-﻿using RazzleServer.Common.Packet;
-using RazzleServer.Game.Maple.Maps;
+﻿using RazzleServer.Game.Maple.Maps;
 using RazzleServer.Game.Maple.Util;
+using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Maple.Life
 {

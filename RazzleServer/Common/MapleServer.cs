@@ -5,9 +5,9 @@ using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Threading.Tasks;
-using RazzleServer.Common.Network;
-using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
+using RazzleServer.Net;
+using RazzleServer.Net.Packet;
 using Serilog;
 
 namespace RazzleServer.Common

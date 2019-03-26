@@ -1,12 +1,12 @@
 ﻿using System.Linq;
 using Newtonsoft.Json;
 using RazzleServer.Common.Constants;
-using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
-using RazzleServer.Common.Wz;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Data.References;
+using RazzleServer.Net.Packet;
+using RazzleServer.Wz;
 using Serilog;
 
 namespace RazzleServer.Game.Maple.Maps

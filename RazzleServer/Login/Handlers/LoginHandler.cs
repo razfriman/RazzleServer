@@ -3,9 +3,9 @@ using RazzleServer.Common;
 using RazzleServer.Common.Server;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Exceptions;
-using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
 using RazzleServer.Login.Maple;
+using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Login.Handlers
 {

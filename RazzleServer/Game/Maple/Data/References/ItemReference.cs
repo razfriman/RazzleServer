@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using RazzleServer.Common.Constants;
-using RazzleServer.Common.Wz;
+using RazzleServer.Wz;
 
 namespace RazzleServer.Game.Maple.Data.References
 {

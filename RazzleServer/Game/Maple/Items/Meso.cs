@@ -1,6 +1,6 @@
 ﻿using RazzleServer.Common.Constants;
-using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple.Maps;
+using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Maple.Items
 {

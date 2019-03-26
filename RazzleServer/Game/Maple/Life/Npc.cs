@@ -2,14 +2,14 @@
 using System.Linq;
 using Newtonsoft.Json;
 using RazzleServer.Common.Constants;
-using RazzleServer.Common.Packet;
-using RazzleServer.Common.Wz;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Data.References;
 using RazzleServer.Game.Maple.Scripting;
 using RazzleServer.Game.Maple.Shops;
 using RazzleServer.Game.Maple.Util;
+using RazzleServer.Net.Packet;
+using RazzleServer.Wz;
 
 namespace RazzleServer.Game.Maple.Life
 {

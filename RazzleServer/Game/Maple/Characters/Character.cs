@@ -6,7 +6,6 @@ using RazzleServer.Common;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Data;
 using RazzleServer.Common.Exceptions;
-using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
 using RazzleServer.Data;
 using RazzleServer.Game.Maple.Data;
@@ -18,6 +17,7 @@ using RazzleServer.Game.Maple.Scripting;
 using RazzleServer.Game.Maple.Shops;
 using RazzleServer.Game.Maple.Skills;
 using RazzleServer.Game.Maple.Util;
+using RazzleServer.Net.Packet;
 using Serilog;
 
 namespace RazzleServer.Game.Maple.Characters

@@ -1,9 +1,9 @@
 using System;
 using RazzleServer.Common;
 using RazzleServer.Common.Constants;
-using RazzleServer.Common.Packet;
 using RazzleServer.Game.Scripts.Npcs;
 using RazzleServer.Login.Maple;
+using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Login
 {

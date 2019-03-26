@@ -1,9 +1,9 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RazzleServer.Common.Crypto;
-using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
 using System;
 using System.Threading;
+using RazzleServer.Crypto;
+using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Tests
 {

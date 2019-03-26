@@ -1,5 +1,5 @@
 ﻿using RazzleServer.Common.Constants;
-using RazzleServer.Common.Packet;
+using RazzleServer.Net.Packet;
 using Serilog;
 
 namespace RazzleServer.Login.Handlers

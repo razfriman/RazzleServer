@@ -1,7 +1,7 @@
 ﻿using System;
 using RazzleServer.Common;
-using RazzleServer.Common.Packet;
 using RazzleServer.Data;
+using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Maple.Characters
 {

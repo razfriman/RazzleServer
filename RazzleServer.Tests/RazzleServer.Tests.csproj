@@ -11,5 +11,8 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RazzleServer.Common\RazzleServer.Common.csproj" />
+    <ProjectReference Include="..\RazzleServer.Crypto\RazzleServer.Crypto.csproj" />
+    <ProjectReference Include="..\RazzleServer.Net\RazzleServer.Net.csproj" />
+    <ProjectReference Include="..\RazzleServer.Wz\RazzleServer.Wz.csproj" />
   </ItemGroup>
 </Project>

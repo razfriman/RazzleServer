@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using RazzleServer.Common.Constants;
-using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Items;
 using RazzleServer.Game.Maple.Maps;
 using RazzleServer.Game.Maple.Util;
+using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Maple.Interaction
 {

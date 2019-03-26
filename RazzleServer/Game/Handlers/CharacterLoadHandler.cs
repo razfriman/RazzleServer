@@ -1,6 +1,6 @@
-﻿using RazzleServer.Common.Packet;
-using RazzleServer.Game.Maple;
+﻿using RazzleServer.Game.Maple;
 using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Handlers
 {

@@ -1,7 +1,7 @@
 ﻿using RazzleServer.Common.Constants;
-using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple.Items;
 using RazzleServer.Game.Maple.Shops;
+using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Handlers
 {

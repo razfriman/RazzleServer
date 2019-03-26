@@ -5,6 +5,9 @@ COPY RazzleServer.sln ./
 COPY RazzleServer/RazzleServer.csproj RazzleServer/
 COPY RazzleServer.DB/RazzleServer.Data.csproj RazzleServer.DB/
 COPY RazzleServer.Common/RazzleServer.Common.csproj RazzleServer.Common/
+COPY RazzleServer.Crypto/RazzleServer.Crypto.csproj RazzleServer.Crypto/
+COPY RazzleServer.Net/RazzleServer.Net.csproj RazzleServer.Net/
+COPY RazzleServer.Wz/RazzleServer.Wz.csproj RazzleServer.Wz/
 COPY RazzleServer.Tests/RazzleServer.Tests.csproj RazzleServer.Tests/
 RUN dotnet restore
 COPY . .

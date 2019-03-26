@@ -1,7 +1,7 @@
 ﻿using RazzleServer.Common.Constants;
 using RazzleServer.Common.Util;
-using RazzleServer.Common.Wz;
 using RazzleServer.Game.Maple.Maps;
+using RazzleServer.Wz;
 
 namespace RazzleServer.Game.Maple.Life
 {

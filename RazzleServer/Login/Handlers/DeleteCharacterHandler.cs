@@ -1,6 +1,6 @@
 ﻿using RazzleServer.Common.Constants;
-using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Login.Handlers
 {

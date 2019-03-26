@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="NAudio" Version="1.9.0-preview2" />
+        <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+        <PackageReference Include="Serilog" Version="2.8.0" />
+        <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\RazzleServer.Common\RazzleServer.Common.csproj" />
+      <ProjectReference Include="..\RazzleServer.Crypto\RazzleServer.Crypto.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -2,11 +2,11 @@
 using System.Linq;
 using Newtonsoft.Json;
 using RazzleServer.Common.Constants;
-using RazzleServer.Common.Packet;
 using RazzleServer.Common.Server;
 using RazzleServer.Common.Util;
 using RazzleServer.Game;
 using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Common
 {

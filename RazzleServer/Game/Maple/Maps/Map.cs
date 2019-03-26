@@ -1,8 +1,8 @@
 ﻿using System.Linq;
-using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Data.References;
+using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Maple.Maps
 {

@@ -2,9 +2,9 @@
 using System.Net.Sockets;
 using RazzleServer.Common;
 using RazzleServer.Common.Server;
-using RazzleServer.Common.Network;
-using RazzleServer.Common.Packet;
 using RazzleServer.Login.Maple;
+using RazzleServer.Net;
+using RazzleServer.Net.Packet;
 using Serilog;
 
 namespace RazzleServer.Login
