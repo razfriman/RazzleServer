@@ -1,6 +1,6 @@
 ﻿using System;
-using RazzleServer.Common.Packet;
-using RazzleServer.Common.Util;
+using System.IO;
+using System.Text;
 
 namespace RazzleServer.Common.Crypto
 {
@@ -87,7 +87,7 @@ namespace RazzleServer.Common.Crypto
             lock (_addLocker)
             {
                 EnsureCapacity(length + AvailableData);
-                Functions.MemoryCopy(data, offset, DataBuffer, AvailableData, length);
+                data.Slice(offset, length).CopyTo(DataBuffer);
                 AvailableData += length;
             }
 
@@ -137,7 +137,7 @@ namespace RazzleServer.Common.Crypto
             }
 
             var newBuffer = new byte[length].AsMemory();
-            Functions.MemoryCopy(DataBuffer, 0, newBuffer, 0, DataBuffer.Length);
+            DataBuffer.CopyTo(newBuffer);
             DataBuffer = newBuffer;
         }
 
@@ -172,8 +172,8 @@ namespace RazzleServer.Common.Crypto
             }
 
             var data = new byte[length + add].AsMemory();
-            Functions.MemoryCopy(DataBuffer, 0, data, 0, data.Length);
-            Functions.MemoryCopy(DataBuffer, length + add, DataBuffer, 0, DataBuffer.Length - (length + add));
+            DataBuffer.Slice(0, data.Length).CopyTo(data);
+            DataBuffer.Slice(length + add, DataBuffer.Length - (length + add)).CopyTo(DataBuffer);
             AvailableData -= length + add;
 
             Decrypt(data.Span);
@@ -186,11 +186,12 @@ namespace RazzleServer.Common.Crypto
         {
             if (!RecvCipher.Handshaken)
             {
-                var pr = new PacketReader(MapleCipher.Handshake(data));
-                var version = pr.ReadShort();
-                var subVersion = pr.ReadString();
-                var siv = pr.ReadUInt();
-                var riv = pr.ReadUInt();
+                var pr = new BinaryReader(new MemoryStream(MapleCipher.Handshake(data).ToArray(), false), Encoding.ASCII);
+                var version = pr.ReadInt16();
+                var subVersionLength = pr.ReadInt16();
+                var subVersion = new string(pr.ReadChars(subVersionLength));
+                var siv = pr.ReadUInt32();
+                var riv = pr.ReadUInt32();
                 var serverType = pr.ReadByte();
                 SendCipher.SetIv(siv);
                 RecvCipher.SetIv(riv);
