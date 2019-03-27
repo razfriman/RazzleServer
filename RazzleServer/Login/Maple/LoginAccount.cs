@@ -2,14 +2,13 @@
 using System.Linq;
 using RazzleServer.Common;
 using RazzleServer.Common.Constants;
-using RazzleServer.Common.Data;
 using RazzleServer.Common.Exceptions;
 using RazzleServer.Data;
 using Serilog;
 
 namespace RazzleServer.Login.Maple
 {
-    public sealed class LoginAccount : IMapleSavable
+    public sealed class LoginAccount
     {
         public LoginClient Client { get; }
         public int Id { get; private set; }

@@ -538,17 +538,15 @@ namespace RazzleServer.Wz
                                 curObj = ((WzSubProperty)curObj)[seperatedPath[i]];
                                 continue;
                             case WzPropertyType.Vector:
-                                if (seperatedPath[i] == "X")
+                                switch (seperatedPath[i])
                                 {
-                                    return ((WzVectorProperty)curObj).X;
+                                    case "X":
+                                        return ((WzVectorProperty)curObj).X;
+                                    case "Y":
+                                        return ((WzVectorProperty)curObj).Y;
+                                    default:
+                                        return null;
                                 }
-
-                                if (seperatedPath[i] == "Y")
-                                {
-                                    return ((WzVectorProperty)curObj).Y;
-                                }
-
-                                return null;
 
                             default:
                                 return null;

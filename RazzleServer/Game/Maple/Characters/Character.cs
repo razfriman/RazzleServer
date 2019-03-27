@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using RazzleServer.Common.Server;
 using RazzleServer.Common;
 using RazzleServer.Common.Constants;
-using RazzleServer.Common.Data;
 using RazzleServer.Common.Exceptions;
 using RazzleServer.Common.Util;
 using RazzleServer.Data;
@@ -22,7 +20,7 @@ using Serilog;
 
 namespace RazzleServer.Game.Maple.Characters
 {
-    public partial class Character : MapObject, IMoveable, ISpawnable, IMapleSavable
+    public partial class Character : MapObject, IMoveable, ISpawnable
     {
         public GameClient Client { get; }
         public int Id { get; set; }
@@ -1074,8 +1072,8 @@ namespace RazzleServer.Game.Maple.Characters
         {
             using (var dbContext = new MapleDbContext())
             {
+                _log.Information($"Cheat Warning: Character={Id} CheatType={type}");
                 dbContext.Cheats.Add(new CheatEntity {CharacterId = Id, CheatType = (int)type});
-
                 dbContext.SaveChanges();
             }
         }

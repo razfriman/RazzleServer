@@ -21,27 +21,27 @@ namespace RazzleServer.Game.Scripts.Commands
             }
             else
             {
-                var amount = 0;
-                var isAmountSpecified = args.Length > 1 && int.TryParse(args[args.Length - 1], out amount);
+                if (args.Length < 2 || !int.TryParse(args[1], out var amount))
+                {
+                    amount = 1;
+                }
 
                 if (amount < 1)
                 {
                     amount = 1;
                 }
 
-                if (int.TryParse(args[0], out var mobId))
+                int.TryParse(args[0], out var mobId);
+                if (DataProvider.Mobs.Data.ContainsKey(mobId))
                 {
-                    if (DataProvider.Mobs.Data.ContainsKey(mobId))
+                    for (var i = 0; i < amount; i++)
                     {
-                        for (var i = 0; i < amount; i++)
-                        {
-                            caller.Map.Mobs.Add(new Mob(mobId, caller.Position));
-                        }
+                        caller.Map.Mobs.Add(new Mob(mobId, caller.Position));
                     }
-                    else
-                    {
-                        caller.Notify("[Command] Invalid mob.");
-                    }
+                }
+                else
+                {
+                    caller.Notify("[Command] Invalid mob.");
                 }
             }
         }

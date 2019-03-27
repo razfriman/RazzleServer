@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using RazzleServer.Common.Data;
 
 namespace RazzleServer.Game.Maple.Characters
 {
-    public sealed class CharacterGuild : IMapleSavable
+    public sealed class CharacterGuild
     {
         public int Id { get; set; }
         public int Leader { get; set; }
@@ -22,17 +21,5 @@ namespace RazzleServer.Game.Maple.Characters
         public string Rank4Title { get; set; }
         public string Rank5Title { get; set; }
         public List<Character> Characters { get; private set; }
-
-        public void Create()
-        {
-        }
-
-        public void Save()
-        {
-        }
-
-        public void Load()
-        {
-        }
     }
 }

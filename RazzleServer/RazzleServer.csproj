@@ -32,8 +32,6 @@
         <Compile Remove="Game\Handlers\ChalkboardCloseHandler.cs" />
         <Compile Remove="Game\Handlers\ChangeKeymapHandler.cs" />
         <Compile Remove="Game\Handlers\CommandWhisperFindHandler.cs" />
-        <Compile Remove="Game\Handlers\DistributeSPHandler.cs" />
-        <Compile Remove="Game\Handlers\FaceExpressionHandler.cs" />
         <Compile Remove="Game\Handlers\HealOverTimeHandler.cs" />
         <Compile Remove="Game\Handlers\MemoOperationHandler.cs" />
         <Compile Remove="Game\Handlers\MobMovementHandler.cs" />
@@ -41,9 +39,6 @@
         <Compile Remove="Game\Handlers\MultiChatHandler.cs" />
         <Compile Remove="Game\Handlers\QuestActionHandler.cs" />
         <Compile Remove="Game\Handlers\ReportHandler.cs" />
-        <Compile Remove="Game\Handlers\SitChairHandler.cs" />
-        <Compile Remove="Game\Handlers\SitHandler.cs" />
-        <Compile Remove="Game\Handlers\SkillMacroHandler.cs" />
         <Compile Remove="Game\Handlers\StorageHandler.cs" />
         <Compile Remove="Game\Handlers\StrangeDataHandler.cs" />
         <Compile Remove="Game\Handlers\TakeDamageHandler.cs" />
@@ -54,7 +49,6 @@
         <Compile Remove="Game\Handlers\UseReturnScrollHandler.cs" />
         <Compile Remove="Game\Handlers\UseSkillHandler.cs" />
         <Compile Remove="Game\Handlers\UseSummonBagHandler.cs" />
-        <Compile Remove="Game\Handlers\PlayerInformationHandler.cs" />
         <Compile Remove="Game\Handlers\PlayerInteractionHandler.cs" />
         <Compile Remove="Game\Handlers\PlayerUpdateHandler.cs" />
     </ItemGroup>

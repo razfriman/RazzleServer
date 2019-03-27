@@ -1,8 +1,8 @@
-﻿using RazzleServer.Common.Packet;
+﻿using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Handlers
 {
-    [PacketHandler(ClientOperationCode.Sit)]
+    [PacketHandler(ClientOperationCode.FieldPlayerSitMapChair)]
     public class SitHandler : GamePacketHandler
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
@@ -14,12 +14,8 @@ namespace RazzleServer.Game.Handlers
             {
                 client.Character.Chair = seatId;
             }
-            else
-            {
-                RemoveChair(client);
-            }
 
-            using (var oPacket = new PacketWriter(ServerOperationCode.Sit))
+            using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerSitOnChair))
             {
                 oPacket.WriteBool(hasSeat);
 
@@ -27,21 +23,10 @@ namespace RazzleServer.Game.Handlers
                 {
                     oPacket.WriteShort(seatId);
                 }
-
-                client.Send(oPacket);
-            }
-        }
-
-        private static void RemoveChair(GameClient client)
-        {
-            client.Character.Chair = 0;
-
-            using (var oPacket = new PacketWriter(ServerOperationCode.ShowChair))
-            {
-                oPacket.WriteInt(client.Character.Id);
-                oPacket.WriteInt(0);
+                
                 client.Character.Map.Send(oPacket, client.Character);
             }
+            client.Character.Release();
         }
     }
 }

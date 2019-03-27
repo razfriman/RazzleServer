@@ -101,21 +101,22 @@ namespace RazzleServer.Wz
             }
             set
             {
-                if (value != null)
+                if (value == null)
                 {
-                    value.Name = name;
-                    if (value is WzDirectory directory)
-                    {
+                    return;
+                }
+
+                value.Name = name;
+                switch (value)
+                {
+                    case WzDirectory directory:
                         AddDirectory(directory);
-                    }
-                    else if (value is WzImage image)
-                    {
+                        break;
+                    case WzImage image:
                         AddImage(image);
-                    }
-                    else
-                    {
+                        break;
+                    default:
                         throw new ArgumentException("Value must be a Directory or Image");
-                    }
                 }
             }
         }

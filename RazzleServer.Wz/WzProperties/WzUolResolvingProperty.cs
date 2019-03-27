@@ -75,22 +75,20 @@ namespace RazzleServer.Wz.WzProperties
                     }
                     else
                     {
-                        if (_linkVal is WzImageProperty property)
+                        switch (_linkVal)
                         {
-                            _linkVal = property[path];
-                        }
-                        else if (_linkVal is WzImage image)
-                        {
-                            _linkVal = image[path];
-                        }
-                        else if (_linkVal is WzDirectory directory)
-                        {
-                            _linkVal = directory[path];
-                        }
-                        else
-                        {
-                            _log.Error($"UOL cannot be resolved for property: {FullPath}");
-                            return null;
+                            case WzImageProperty property:
+                                _linkVal = property[path];
+                                break;
+                            case WzImage image:
+                                _linkVal = image[path];
+                                break;
+                            case WzDirectory directory:
+                                _linkVal = directory[path];
+                                break;
+                            default:
+                                _log.Error($"UOL cannot be resolved for property: {FullPath}");
+                                return null;
                         }
                     }
                 }

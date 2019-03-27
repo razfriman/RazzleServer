@@ -271,18 +271,18 @@ namespace RazzleServer.Wz.WzProperties
                 _headerEncrypted = true;
             }
 
-            // parse to mp3 header
-            if (wavFmt.Encoding == WaveFormatEncoding.MpegLayer3 && wavHeader.Length >= Marshal.SizeOf<Mp3WaveFormat>())
+            switch (wavFmt.Encoding)
             {
-                _wavFormat = BytesToStructConstructorless<Mp3WaveFormat>(wavHeader);
-            }
-            else if (wavFmt.Encoding == WaveFormatEncoding.Pcm)
-            {
-                _wavFormat = wavFmt;
-            }
-            else
-            {
-                _log.Error($"Unknown wave encoding: {wavFmt.Encoding}");
+                // parse to mp3 header
+                case WaveFormatEncoding.MpegLayer3 when wavHeader.Length >= Marshal.SizeOf<Mp3WaveFormat>():
+                    _wavFormat = BytesToStructConstructorless<Mp3WaveFormat>(wavHeader);
+                    break;
+                case WaveFormatEncoding.Pcm:
+                    _wavFormat = wavFmt;
+                    break;
+                default:
+                    _log.Error($"Unknown wave encoding: {wavFmt.Encoding}");
+                    break;
             }
         }
 

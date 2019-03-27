@@ -3,7 +3,7 @@ using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Handlers
 {
-    [PacketHandler(ClientOperationCode.StatsChange)]
+    [PacketHandler(ClientOperationCode.DistributeAp)]
     public class DistributeApHandler : GamePacketHandler
     {
         public override void HandlePacket(PacketReader packet, GameClient client)

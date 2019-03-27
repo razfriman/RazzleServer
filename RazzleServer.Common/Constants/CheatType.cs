@@ -6,6 +6,7 @@
         InvalidPortals,
         InvalidRevive,
         InvalidMapChange,
-        InvalidQuest
+        InvalidQuest,
+        InvalidSkillChange
     }
 }

@@ -1,4 +1,4 @@
-﻿using RazzleServer.Common.Packet;
+﻿using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Handlers
 {
@@ -7,9 +7,7 @@ namespace RazzleServer.Game.Handlers
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
-            packet.ReadInt();
             var characterId = packet.ReadInt();
-
             var target = client.Character.Map.Characters[characterId];
 
             if (target == null || target.IsMaster && !client.Character.IsMaster)
@@ -17,17 +15,16 @@ namespace RazzleServer.Game.Handlers
                 return;
             }
 
-            using (var oPacket = new PacketWriter(ServerOperationCode.CharacterInformation))
+            using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInformation))
             {
                 oPacket.WriteInt(target.Id);
                 oPacket.WriteByte(target.Level);
                 oPacket.WriteShort((int)target.Job);
                 oPacket.WriteShort(target.Fame);
-                oPacket.WriteBool(false); // NOTE: Marriage.
                 oPacket.WriteString(target.Guild?.Name ?? "-");
-                oPacket.WriteByte(0); // NOTE: Pets.
-                oPacket.WriteByte(0); // NOTE: Mount.
-                oPacket.WriteByte(0); // NOTE: Wishlist.
+                // NOTE: Pets. // petid(int), petname(string) level(byte) closeness(short) fullness(byte) petequipitemid(int)
+                oPacket.WriteBool(false);
+                oPacket.WriteByte(0); // NOTE: Wishlist. // int for each item
                 client.Send(oPacket);
             }
         }
