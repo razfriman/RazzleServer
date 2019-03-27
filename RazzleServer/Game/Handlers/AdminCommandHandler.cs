@@ -1,13 +1,15 @@
 ﻿using RazzleServer.Common.Constants;
-using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Items;
 using RazzleServer.Game.Maple.Life;
 using RazzleServer.Game.Maple.Skills;
+using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Handlers
 {
     [PacketHandler(ClientOperationCode.AdminCommand)]
+    [PacketHandler(ClientOperationCode.AdminCommandLog)]
+    [PacketHandler(ClientOperationCode.AdminCommandMessage)]
     public class AdminCommandHandler : GamePacketHandler
     {
         public override void HandlePacket(PacketReader packet, GameClient client)

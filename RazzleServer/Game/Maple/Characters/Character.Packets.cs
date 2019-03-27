@@ -138,11 +138,6 @@ namespace RazzleServer.Game.Maple.Characters
 
             pw.WriteInt(Id);
             pw.WriteString(Name);
-            pw.WriteString(Guild?.Name);
-            pw.WriteShort(Guild?.LogoBg ?? 0);
-            pw.WriteByte(Guild?.LogoBgColor ?? 0);
-            pw.WriteShort(Guild?.Logo ?? 0);
-            pw.WriteByte(Guild?.LogoColor ?? 0);
             pw.WriteBytes(Buffs.ToByteArray());
             pw.WriteShort((short)Job);
             pw.WriteBytes(AppearanceToByteArray());
@@ -154,7 +149,18 @@ namespace RazzleServer.Game.Maple.Characters
             pw.WritePoint(Position);
             pw.WriteByte(Stance);
             pw.WriteShort(Foothold);
-            pw.WriteByte(0); // Pets
+
+            var pet = Pets.GetEquippedPet();
+            pw.WriteBool(pet != null);
+            if (pet != null)
+            {
+                pw.WriteInt(pet.Item.Id);
+                pw.WriteString(pet.Name);
+                pw.WriteLong(pet.Item.CashId);
+                pw.WritePoint(pet.Position);
+                pw.WriteByte(pet.Stance);
+                pw.WriteShort(pet.Foothold);
+            }
 
             if (PlayerShop != null && PlayerShop.Owner == this)
             {

@@ -5,8 +5,7 @@
     public enum MultiChatType : byte
     {
         Buddy = 0,
-        Party = 1,
-        Guild = 2
+        Party = 1
     }
     #endregion
 }

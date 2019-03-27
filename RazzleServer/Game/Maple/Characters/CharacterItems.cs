@@ -52,7 +52,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                     if (item.PetId != null)
                     {
-                        //this.Parent.Pets.Add(new Pet(item));
+                        Parent.Pets.Add(new Pet(item));
                     }
                 }
             }

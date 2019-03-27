@@ -1,4 +1,4 @@
-﻿using RazzleServer.Common.Packet;
+﻿using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Handlers
 {
@@ -101,7 +101,7 @@ namespace RazzleServer.Game.Handlers
                 // TODO: Apply damage to buffs.
             }
 
-            using (var oPacket = new PacketWriter(ServerOperationCode.Hit))
+            using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerGetDamage))
             {
                 oPacket.WriteInt(client.Character.Id);
                 oPacket.WriteByte(type);

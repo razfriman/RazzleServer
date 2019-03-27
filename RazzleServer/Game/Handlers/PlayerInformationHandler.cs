@@ -15,17 +15,16 @@ namespace RazzleServer.Game.Handlers
                 return;
             }
 
-            using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInformation))
+            using (var pw = new PacketWriter(ServerOperationCode.PlayerInformation))
             {
-                oPacket.WriteInt(target.Id);
-                oPacket.WriteByte(target.Level);
-                oPacket.WriteShort((int)target.Job);
-                oPacket.WriteShort(target.Fame);
-                oPacket.WriteString(target.Guild?.Name ?? "-");
+                pw.WriteInt(target.Id);
+                pw.WriteByte(target.Level);
+                pw.WriteShort((int)target.Job);
+                pw.WriteShort(target.Fame);
                 // NOTE: Pets. // petid(int), petname(string) level(byte) closeness(short) fullness(byte) petequipitemid(int)
-                oPacket.WriteBool(false);
-                oPacket.WriteByte(0); // NOTE: Wishlist. // int for each item
-                client.Send(oPacket);
+                pw.WriteBool(false);
+                pw.WriteByte(0); // NOTE: Wishlist. // int for each item
+                client.Send(pw);
             }
         }
     }

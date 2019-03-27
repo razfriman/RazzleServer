@@ -7,6 +7,8 @@
         InvalidRevive,
         InvalidMapChange,
         InvalidQuest,
-        InvalidSkillChange
+        InvalidSkillChange,
+        InvalidHeal,
+        InvalidMobMovement
     }
 }

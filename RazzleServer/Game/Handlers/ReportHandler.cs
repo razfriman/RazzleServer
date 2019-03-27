@@ -1,9 +1,9 @@
 ﻿using RazzleServer.Common.Constants;
-using RazzleServer.Common.Packet;
+using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Handlers
 {
-    [PacketHandler(ClientOperationCode.Report)]
+    [PacketHandler(ClientOperationCode.ReportPlayer)]
     public class ReportHandler : GamePacketHandler
     {
         public override void HandlePacket(PacketReader packet, GameClient client)

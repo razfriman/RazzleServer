@@ -17,7 +17,6 @@ namespace RazzleServer.Data
         public short Intelligence { get; set; }
         public short SkillPoints { get; set; }
         public short AbilityPoints { get; set; }
-        public int GuildId { get; set; }
         public int Experience { get; set; }
         public int Meso { get; set; }
         public int MapId { get; set; }
@@ -29,10 +28,8 @@ namespace RazzleServer.Data
         public short Fame { get; set; }
         public int Hair { get; set; }
         public int Face { get; set; }
-        public int GuildContribution { get; set; }
         public byte Gender { get; set; }
         public byte Skin { get; set; }
-        public int? GuildRank { get; set; }
         public byte EquipmentSlots { get; set; }
         public byte UsableSlots { get; set; }
         public byte SetupSlots { get; set; }

@@ -59,6 +59,8 @@ namespace RazzleServer.Game.Maple.Items
         public short RequiredLuck { get; }
         public short RequiredFame { get; }
         public Job RequiredJob { get; }
+        public long CashId { get; set; }
+
 
         // Consume data properties are prefixed with 'C'.
         public int CItemId { get; private set; }

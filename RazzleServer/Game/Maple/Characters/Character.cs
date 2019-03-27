@@ -33,7 +33,6 @@ namespace RazzleServer.Game.Maple.Characters
         public short Foothold { get; set; }
         public byte Portals { get; set; }
         public int Chair { get; set; }
-        public int? GuildRank { get; set; }
         public int BuddyListSlots { get; private set; } = 20;
         public int Rank { get; set; }
         public int RankMove { get; set; }
@@ -50,7 +49,7 @@ namespace RazzleServer.Game.Maple.Characters
         public ControlledNpcs ControlledNpcs { get; }
         public Trade Trade { get; set; }
         public PlayerShop PlayerShop { get; set; }
-        public CharacterGuild Guild { get; set; }
+        public CharacterPets Pets { get; set; }
         public CharacterParty Party { get; set; }
         public ANpcScript NpcScript { get; set; }
         public Shop CurrentNpcShop { get; set; }
@@ -1136,7 +1135,6 @@ namespace RazzleServer.Game.Maple.Characters
                 character.Strength = Strength;
                 character.Name = Name;
                 character.BuddyListSlots = BuddyListSlots;
-                character.GuildRank = GuildRank;
                 character.EquipmentSlots = Items.MaxSlots[ItemType.Equipment];
                 character.UsableSlots = Items.MaxSlots[ItemType.Usable];
                 character.SetupSlots = Items.MaxSlots[ItemType.Setup];
@@ -1196,7 +1194,6 @@ namespace RazzleServer.Game.Maple.Characters
                     WorldId = WorldId,
                     Strength = Strength,
                     Name = Name,
-                    GuildRank = GuildRank,
                     BuddyListSlots = BuddyListSlots,
                     EquipmentSlots = Items.MaxSlots[ItemType.Equipment],
                     UsableSlots = Items.MaxSlots[ItemType.Usable],
@@ -1256,14 +1253,12 @@ namespace RazzleServer.Game.Maple.Characters
                 SpawnPoint = character.SpawnPoint;
                 WorldId = character.WorldId;
                 _strength = character.Strength;
-                GuildRank = character.GuildRank;
                 BuddyListSlots = character.BuddyListSlots;
                 Items.MaxSlots[ItemType.Equipment] = character.EquipmentSlots;
                 Items.MaxSlots[ItemType.Usable] = character.UsableSlots;
                 Items.MaxSlots[ItemType.Setup] = character.SetupSlots;
                 Items.MaxSlots[ItemType.Etcetera] = character.EtceteraSlots;
                 Items.MaxSlots[ItemType.Cash] = character.CashSlots;
-                Guild = null;
             }
 
             Items.Load();

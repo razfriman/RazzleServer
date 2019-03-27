@@ -1,5 +1,6 @@
 ﻿using System;
-using RazzleServer.Common.Packet;
+using RazzleServer.Common.Constants;
+using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Handlers
 {
@@ -8,7 +9,6 @@ namespace RazzleServer.Game.Handlers
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
-
             packet.ReadInt(); // NOTE: Ticks.
             var healthAmount = packet.ReadShort();
             var manaAmount = packet.ReadShort();
@@ -17,6 +17,7 @@ namespace RazzleServer.Game.Handlers
             {
                 if ((DateTime.Now - client.Character.LastHealthHealOverTime).TotalSeconds < 2)
                 {
+                    client.Character.LogCheatWarning(CheatType.InvalidHeal);
                     return;
                 }
 
@@ -28,6 +29,7 @@ namespace RazzleServer.Game.Handlers
             {
                 if ((DateTime.Now - client.Character.LastManaHealOverTime).TotalSeconds < 2)
                 {
+                    client.Character.LogCheatWarning(CheatType.InvalidHeal);
                     return;
                 }
 

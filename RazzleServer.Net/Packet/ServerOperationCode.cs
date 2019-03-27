@@ -22,6 +22,7 @@
         Fame = 0x19,
         Notice = 0x1A,
         TeleportRock = 0x1C,
+        SueCharacterResult = 0x1D,
         PlayerInformation = 0x1F,
 
         PartyOperation = 0x20,
@@ -34,6 +35,7 @@
         SlashCmdAnswer = 0x2E,
 
         MapEffect = 0x30,
+        AdminResult = 0x33,
         RemotePlayerEnterField = 0x3C,
         RemotePlayerLeaveField = 0x3D,
         RemotePlayerChat = 0x3F,
