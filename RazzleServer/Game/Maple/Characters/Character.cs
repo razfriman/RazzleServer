@@ -575,6 +575,7 @@ namespace RazzleServer.Game.Maple.Characters
             Id = id;
             Client = client;
             Items = new CharacterItems(this, 100, 100, 100, 100, 100);
+            Pets = new CharacterPets(this);
             Skills = new CharacterSkills(this);
             Quests = new CharacterQuests(this);
             Rings = new CharacterRings(this);
@@ -841,12 +842,6 @@ namespace RazzleServer.Game.Maple.Characters
         public void Attack(PacketReader packet, AttackType type)
         {
             var attack = new Attack(packet, type);
-
-            if (attack.Portals != Portals)
-            {
-                LogCheatWarning(CheatType.InvalidPortals);
-                return;
-            }
 
             Skill skill = null;
 

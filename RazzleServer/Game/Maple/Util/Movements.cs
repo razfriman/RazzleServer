@@ -22,14 +22,6 @@ namespace RazzleServer.Game.Maple.Util
 
             var count = packet.ReadByte();
 
-            //[00 00] [F6 FF]
-            //[03]
-
-            //[00] [00 00 4F 00] [00 00 58 02] [00 00] [06] [2C 01]
-            //[00] [00 00 5F 00] [00 00 00 00] [00 00] [06] [17 00]
-            //[00] [00 00 5F 00] [00 00 00 00] [13 00] [04] [BB 00]
-            //[11]
-            //00 00 00 00 00 00 00 00 00
             while (count-- > 0)
             {
                 var type = (MovementType)packet.ReadByte();

@@ -169,15 +169,14 @@ namespace RazzleServer.Game.Maple.Life
             }
         }
 
-        public void Move(PacketReader iPacket)
+        public void Move(PacketReader packet)
         {
-            var moveAction = iPacket.ReadShort();
-            var skillByte = iPacket.ReadByte();
-            var skillId = iPacket.ReadInt();
-            iPacket.ReadShort();
-            iPacket.ReadInt();
+            var moveAction = packet.ReadShort();
+            var skillByte = packet.ReadByte();
+            var skillId = packet.ReadByte();
+            var projectileTarget = packet.ReadPoint();
 
-            var movements = new Movements(iPacket);
+            var movements = new Movements(packet);
 
             Position = movements.Position;
             Foothold = movements.Foothold;
@@ -339,10 +338,9 @@ namespace RazzleServer.Game.Maple.Life
 
         public PacketWriter GetControlCancelPacket()
         {
-            var oPacket = new PacketWriter(ServerOperationCode.MobControlRequest);
-            oPacket.WriteBool(false);
-            oPacket.WriteInt(ObjectId);
-            return oPacket;
+            var pw = new PacketWriter(ServerOperationCode.MobControlRequest);
+            pw.WriteBool(false);
+            return pw;
         }
 
         public PacketWriter GetDestroyPacket()

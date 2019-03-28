@@ -10,7 +10,6 @@ namespace RazzleServer.Game.Handlers
 
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
-            packet.ReadInt(); // NOTE: Ticks.
             var type = (sbyte)packet.ReadByte();
             packet.ReadByte(); // NOTE: Elemental type.
             var damage = packet.ReadInt();

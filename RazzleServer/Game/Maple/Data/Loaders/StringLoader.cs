@@ -2,6 +2,7 @@
 using Serilog;
 using RazzleServer.Game.Maple.Data.Cache;
 using RazzleServer.Wz;
+using RazzleServer.Wz.WzProperties;
 
 namespace RazzleServer.Game.Maple.Data.Loaders
 {
@@ -100,10 +101,17 @@ namespace RazzleServer.Game.Maple.Data.Loaders
 
         private void ProcessItems(WzImage wzImage)
         {
-            wzImage
+            wzImage["Eqp"].WzProperties.ForEach(ProcessItemSection);
+            ProcessItemSection(wzImage["Con"]);
+            ProcessItemSection(wzImage["Ins"]);
+            ProcessItemSection(wzImage["Etc"]);
+            ProcessItemSection(wzImage["Pet"]);
+        }
+
+        private void ProcessItemSection(WzImageProperty itemProperty)
+        {
+            itemProperty
                 .WzProperties
-                .SelectMany(x => x.WzProperties)
-                .ToList()
                 .ForEach(x =>
                 {
                     if (int.TryParse(x.Name, out var id))

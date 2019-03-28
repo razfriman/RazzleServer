@@ -28,6 +28,18 @@ namespace RazzleServer.Tests
 
             }
         }
+        
+        [TestMethod]
+        public void ReadSByte_Valid_Succeeds()
+        {
+            using (var packet = new PacketReader(Functions.HexToBytes("FF")))
+            {
+                var result = packet.ReadSByte();
+                Assert.AreEqual(-1, result);
+                Assert.AreEqual(0, packet.Available);
+
+            }
+        }
 
         [TestMethod]
         public void ReadShort_Valid_Succeeds()

@@ -43,9 +43,6 @@ namespace RazzleServer.Game.Maple.Characters
             Portals = packet.ReadByte(); // Might be wrong 
             Display = packet.ReadByte();
             Animation = packet.ReadByte();
-            //WeaponClass = packet.ReadByte();
-            //WeaponSpeed = packet.ReadByte();
-            //Ticks = packet.ReadInt();
 
             if (Type == AttackType.Range)
             {

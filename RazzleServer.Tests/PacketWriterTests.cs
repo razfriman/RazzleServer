@@ -26,6 +26,16 @@ namespace RazzleServer.Tests
                 Assert.AreEqual("01", pw.ToPacketString());
             }
         }
+        
+        [TestMethod]
+        public void WriteSByte_Valid_Succeeds()
+        {
+            using (var pw = new PacketWriter())
+            {
+                pw.WriteByte(-1);
+                Assert.AreEqual("FF", pw.ToPacketString());
+            }
+        }
 
         [TestMethod]
         public void WriteShort_Valid_Succeeds()
