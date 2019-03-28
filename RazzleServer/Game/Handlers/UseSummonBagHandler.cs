@@ -1,8 +1,8 @@
 ﻿using RazzleServer.Common.Constants;
-using RazzleServer.Common.Packet;
 using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Life;
+using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Handlers
 {
@@ -11,7 +11,6 @@ namespace RazzleServer.Game.Handlers
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
-            packet.ReadInt(); // NOTE: Ticks.
             var slot = packet.ReadShort();
             var itemId = packet.ReadInt();
 

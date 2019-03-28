@@ -8,7 +8,7 @@ namespace RazzleServer.Game
     {
         public static PacketWriter Notify(string message, NoticeType type = NoticeType.Popup)
         {
-            using (var pw = new PacketWriter(ServerOperationCode.Message))
+            using (var pw = new PacketWriter(ServerOperationCode.Notice))
             {
                 pw.WriteByte((byte)type);
 

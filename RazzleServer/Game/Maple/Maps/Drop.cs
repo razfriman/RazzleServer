@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using RazzleServer.Common.Constants;
 using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Items;
@@ -15,6 +16,8 @@ namespace RazzleServer.Game.Maple.Maps
         [JsonIgnore] public Character Picker { get; set; }
         public Point Origin { get; set; }
         public Delay Expiry { get; set; }
+
+        public DropType DropType { get; set; } = DropType.Normal;
 
         private MapObject _mDropper;
 
@@ -35,65 +38,65 @@ namespace RazzleServer.Game.Maple.Maps
 
         public PacketWriter GetCreatePacket()
         {
-            return GetInternalPacket(true, null);
+            return GetInternalPacket(DropAnimationType.DropAnimation, null);
         }
 
         public PacketWriter GetCreatePacket(Character temporaryOwner)
         {
-            return GetInternalPacket(true, temporaryOwner);
+            return GetInternalPacket(DropAnimationType.DropAnimation, temporaryOwner);
         }
 
         public PacketWriter GetSpawnPacket()
         {
-            return GetInternalPacket(false, null);
+            return GetInternalPacket(DropAnimationType.ShowExisting, null);
         }
 
         public PacketWriter GetSpawnPacket(Character temporaryOwner)
         {
-            return GetInternalPacket(false, temporaryOwner);
+            return GetInternalPacket(DropAnimationType.ShowExisting, temporaryOwner);
         }
 
-        private PacketWriter GetInternalPacket(bool dropped, Character temporaryOwner)
+        private PacketWriter GetInternalPacket(DropAnimationType dropAnimationType, Character temporaryOwner)
         {
-            var oPacket = new PacketWriter(ServerOperationCode.DropEnterField);
+            var pw = new PacketWriter(ServerOperationCode.DropEnterField);
 
 
-            oPacket.WriteByte((byte)(dropped
-                ? 1
-                : 2)); // TODO: Other types; 3 = disappearing, and 0 probably is something as well.
-            oPacket.WriteInt(ObjectId);
-            oPacket.WriteBool(this is Meso);
+            pw.WriteByte((byte)(dropAnimationType));
+            pw.WriteInt(ObjectId);
+            pw.WriteBool(this is Meso);
 
-            if (this is Meso)
+            switch (this)
             {
-                oPacket.WriteInt(((Meso)this).Amount);
-            }
-            else if (this is Item)
-            {
-                oPacket.WriteInt(((Item)this).MapleId);
-            }
-
-            oPacket.WriteInt(Owner?.Id ?? temporaryOwner.Id);
-            oPacket.WriteByte(0); // TODO: Type implementation (0 - normal, 1 - party, 2 - FFA, 3 - explosive)
-            oPacket.WriteShort(Position.X);
-            oPacket.WriteShort(Position.Y);
-            oPacket.WriteInt(Dropper.ObjectId);
-
-            if (dropped)
-            {
-                oPacket.WriteShort(Origin.X);
-                oPacket.WriteShort(Origin.Y);
-                oPacket.WriteShort(0); // NOTE: Foothold, probably.
+                case Meso meso:
+                    pw.WriteInt(meso.Amount);
+                    break;
+                case Item item:
+                    pw.WriteInt(item.MapleId);
+                    break;
             }
 
-            if (this is Item)
+            pw.WriteInt(Owner?.Id ?? temporaryOwner.Id);
+            pw.WriteByte((byte)DropType);
+            pw.WritePoint(Position);
+            pw.WriteInt(Dropper.ObjectId);
+
+            if (dropAnimationType != DropAnimationType.ShowExisting)
             {
-                oPacket.WriteLong(0); // NOTE: Item expiration.
+                pw.WritePoint(Origin);
+                pw.WriteShort(0); // NOTE: Foothold or delay probably.
             }
 
-            oPacket.WriteByte(0); // NOTE: Pet equip pick-up.
+            
+            switch (this)
+            {
+                case Item item:
+                    pw.WriteDateTime(item.Expiration);
+                    break;
+            }
 
-            return oPacket;
+            pw.WriteByte(0); // NOTE: Pet equip pick-up.
+
+            return pw;
         }
 
         public PacketWriter GetDestroyPacket()

@@ -53,6 +53,12 @@ namespace RazzleServer.Net.Packet
         /// </summary>
         /// <returns> an unsigned byte from the stream</returns>
         public byte ReadByte() => _binReader.ReadByte();
+        
+        /// <summary>
+        /// Reads a signed byte from the stream
+        /// </summary>
+        /// <returns> a signed byte from the stream</returns>
+        public sbyte ReadSByte() => _binReader.ReadSByte();
 
         /// <summary>
         /// Reads a byte array from the stream

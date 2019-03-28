@@ -45,6 +45,16 @@ namespace RazzleServer.Game.Maple.Scripting
             _result.Wait();
             return _result.Value;
         }
+        
+        protected int SendChoice(string text)
+        {
+            _result = new WaitableResult<int>();
+
+            Send(new NpcStateInfo {Type = NpcMessageType.Choice, Text = text, IsPrevious = false, IsNext = false});
+
+            _result.Wait();
+            return _result.Value;
+        }
 
         protected int SendNext(string text)
         {

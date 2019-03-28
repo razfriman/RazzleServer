@@ -12,7 +12,7 @@ namespace RazzleServer.Game.Scripts.Commands
     {
         public override string Name => "search";
 
-        public override string Parameters => "[ -item | -map | -mob | -npc | -quest | -pet ] label";
+        public override string Parameters => "[ -item | -map | -mob | -npc | -quest ] label";
 
         public override bool IsRestricted => true;
 
@@ -35,33 +35,26 @@ namespace RazzleServer.Game.Scripts.Commands
 
             Dictionary<int, string> lookup = null;
 
-            if (type == "item")
+            switch (type)
             {
-                lookup = DataProvider.Strings.Items;
-            }
-            else if (type == "map")
-            {
-                lookup = DataProvider.Strings.Maps;
-            }
-            else if (type == "mob")
-            {
-                lookup = DataProvider.Strings.Mobs;
-            }
-            else if (type == "npc")
-            {
-                lookup = DataProvider.Strings.Npcs;
-            }
-            else if (type == "pet")
-            {
-                lookup = DataProvider.Strings.Pets;
-            }
-            else if (type == "skill")
-            {
-                lookup = DataProvider.Strings.Skills;
-            }
-            else if (type == "quest")
-            {
-                lookup = DataProvider.Quests.Data.Values.ToDictionary(x => (int)x.MapleId, x => x.Name);
+                case "item":
+                    lookup = DataProvider.Strings.Items;
+                    break;
+                case "map":
+                    lookup = DataProvider.Strings.Maps;
+                    break;
+                case "mob":
+                    lookup = DataProvider.Strings.Mobs;
+                    break;
+                case "npc":
+                    lookup = DataProvider.Strings.Npcs;
+                    break;
+                case "skill":
+                    lookup = DataProvider.Strings.Skills;
+                    break;
+                case "quest":
+                    lookup = DataProvider.Quests.Data.Values.ToDictionary(x => x.MapleId, x => x.Name);
+                    break;
             }
 
             if (lookup == null)

@@ -8,7 +8,6 @@ namespace RazzleServer.Game.Maple.Data.Cache
         public readonly Dictionary<int, string> Maps = new Dictionary<int, string>();
         public readonly Dictionary<int, string> Mobs = new Dictionary<int, string>();
         public readonly Dictionary<int, string> Npcs = new Dictionary<int, string>();
-        public readonly Dictionary<int, string> Pets = new Dictionary<int, string>();
         public readonly Dictionary<int, string> Skills = new Dictionary<int, string>();
     }
 }

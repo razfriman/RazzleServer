@@ -2,6 +2,7 @@
 using Serilog;
 using RazzleServer.Game.Maple.Data.Cache;
 using RazzleServer.Wz;
+using RazzleServer.Wz.WzProperties;
 
 namespace RazzleServer.Game.Maple.Data.Loaders
 {
@@ -23,7 +24,6 @@ namespace RazzleServer.Game.Maple.Data.Loaders
                 ProcessMaps(dir.GetImageByName("Map.img"));
                 ProcessMobs(dir.GetImageByName("Mob.img"));
                 ProcessNpcs(dir.GetImageByName("Npc.img"));
-                ProcessPets(dir.GetImageByName("Pet.img"));
                 ProcessSkills(dir.GetImageByName("Skill.img"));
             }
         }
@@ -40,23 +40,6 @@ namespace RazzleServer.Game.Maple.Data.Loaders
                         if (name != null)
                         {
                             Data.Skills[id] = name;
-                        }
-                    }
-                });
-        }
-
-        private void ProcessPets(WzImage wzImage)
-        {
-            wzImage
-                .WzProperties
-                .ForEach(x =>
-                {
-                    if (int.TryParse(x.Name, out var id))
-                    {
-                        var name = x["name"]?.GetString();
-                        if (name != null)
-                        {
-                            Data.Pets[id] = name;
                         }
                     }
                 });
@@ -118,7 +101,16 @@ namespace RazzleServer.Game.Maple.Data.Loaders
 
         private void ProcessItems(WzImage wzImage)
         {
-            wzImage
+            wzImage["Eqp"].WzProperties.ForEach(ProcessItemSection);
+            ProcessItemSection(wzImage["Con"]);
+            ProcessItemSection(wzImage["Ins"]);
+            ProcessItemSection(wzImage["Etc"]);
+            ProcessItemSection(wzImage["Pet"]);
+        }
+
+        private void ProcessItemSection(WzImageProperty itemProperty)
+        {
+            itemProperty
                 .WzProperties
                 .ForEach(x =>
                 {
