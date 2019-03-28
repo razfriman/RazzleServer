@@ -1,6 +1,6 @@
 ﻿using RazzleServer.Common.Constants;
-using RazzleServer.Common.Packet;
 using RazzleServer.Game.Maple.Items;
+using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Handlers
 {
@@ -27,7 +27,7 @@ namespace RazzleServer.Game.Handlers
                 case 5040001: // NOTE: Coke Teleport Rock.
                 case 5041000: // NOTE: VIP Teleport Rock.
                     {
-                        used = client.Character.Trocks.Use(itemId, packet);
+                        used = client.Character.TeleportRocks.Use(itemId, packet);
                     }
                     break;
 
@@ -265,15 +265,6 @@ namespace RazzleServer.Game.Handlers
                         client.Character.Meso += item.Meso;
                         client.Send(GamePackets.ShowStatusInfo(MessageType.IncreaseMeso, true, item.Meso));
                         used = true;
-                    }
-                    break;
-
-                case 5370000: // NOTE: Chalkboard.
-                case 5370001: // NOTE: Chalkboard 2.
-                    {
-                        var text = packet.ReadString();
-
-                        client.Character.Chalkboard = text;
                     }
                     break;
 

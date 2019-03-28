@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Packet;
+using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Handlers
 {
@@ -32,12 +33,6 @@ namespace RazzleServer.Game.Handlers
                     break;
 
                 case MultiChatType.Party:
-                    {
-
-                    }
-                    break;
-
-                case MultiChatType.Guild:
                     {
 
                     }
