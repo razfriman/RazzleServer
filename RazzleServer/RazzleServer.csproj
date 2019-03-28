@@ -25,26 +25,6 @@
         <ProjectReference Include="..\RazzleServer.Wz\RazzleServer.Wz.csproj" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Remove="Game\Handlers\CancelBuffHandler.cs" />
-        <Compile Remove="Game\Handlers\CancelItemEffectHandler.cs" />
-        <Compile Remove="Game\Handlers\CashShopMigrationHandler.cs" />
-        <Compile Remove="Game\Handlers\ChalkboardCloseHandler.cs" />
-        <Compile Remove="Game\Handlers\CommandWhisperFindHandler.cs" />
-        <Compile Remove="Game\Handlers\MemoOperationHandler.cs" />
-        <Compile Remove="Game\Handlers\MultiChatHandler.cs" />
-        <Compile Remove="Game\Handlers\QuestActionHandler.cs" />
-        <Compile Remove="Game\Handlers\StorageHandler.cs" />
-        <Compile Remove="Game\Handlers\StrangeDataHandler.cs" />
-        <Compile Remove="Game\Handlers\UseCashItemHandler.cs" />
-        <Compile Remove="Game\Handlers\UseItemHandler.cs" />
-        <Compile Remove="Game\Handlers\UseReturnScrollHandler.cs" />
-        <Compile Remove="Game\Handlers\UseSkillHandler.cs" />
-        <Compile Remove="Game\Handlers\UseSummonBagHandler.cs" />
-        <Compile Remove="Game\Handlers\PlayerInteractionHandler.cs" />
-        <Compile Remove="Game\Handlers\PlayerUpdateHandler.cs" />
-        <Compile Remove="Game\Handlers\UseItemEffectHandler.cs" />
-    </ItemGroup>
-    <ItemGroup>
         <None Remove="Logs\**" />
         <None Remove="MapleServer.db" />
         <None Update="appsettings.json">
