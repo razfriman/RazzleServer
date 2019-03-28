@@ -32,7 +32,7 @@ namespace RazzleServer.Game.Handlers
         {
             var text = packet.ReadString();
 
-            using (var oPacket = new PacketWriter(ServerOperationCode.Whisper))
+            using (var oPacket = new PacketWriter(ServerOperationCode.GroupMessage))
             {
                 oPacket.WriteByte(10);
                 oPacket.WriteString(targetName);

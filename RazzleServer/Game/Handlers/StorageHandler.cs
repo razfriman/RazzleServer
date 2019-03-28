@@ -14,7 +14,7 @@ namespace RazzleServer.Game.Handlers
 
             switch (action)
             {
-                case StorageAction.Withdraw:
+                case StorageAction.Remove:
                     {
                         var type = (ItemType)packet.ReadByte();
                         var slot = packet.ReadByte();
@@ -43,7 +43,7 @@ namespace RazzleServer.Game.Handlers
                             }
                         }
 
-                        using (var oPacket = new PacketWriter(ServerOperationCode.Storage))
+                        using (var oPacket = new PacketWriter(ServerOperationCode.StorageResult))
                         {
 
                             oPacket.WriteByte(13);
@@ -63,7 +63,7 @@ namespace RazzleServer.Game.Handlers
                     }
                     break;
 
-                case StorageAction.Deposit:
+                case StorageAction.Add:
                     {
                         var slot = packet.ReadShort();
                         var itemId = packet.ReadInt();
@@ -73,7 +73,7 @@ namespace RazzleServer.Game.Handlers
 
                         if (client.Character.Storage.IsFull)
                         {
-                            using (var oPacket = new PacketWriter(ServerOperationCode.Storage))
+                            using (var oPacket = new PacketWriter(ServerOperationCode.StorageResult))
                             {
                                 oPacket.WriteByte(17);
 
@@ -109,7 +109,7 @@ namespace RazzleServer.Game.Handlers
                             }
                         }
 
-                        using (var oPacket = new PacketWriter(ServerOperationCode.Storage))
+                        using (var oPacket = new PacketWriter(ServerOperationCode.StorageResult))
                         {
 
                             oPacket.WriteByte(13);
@@ -129,7 +129,7 @@ namespace RazzleServer.Game.Handlers
                     }
                     break;
 
-                case StorageAction.ModifyMeso:
+                case StorageAction.Meso:
                     {
                         var meso = packet.ReadInt();
 
@@ -141,7 +141,7 @@ namespace RazzleServer.Game.Handlers
                         client.Character.Meso -= meso;
                         client.Character.Meso += meso;
 
-                        using (var oPacket = new PacketWriter(ServerOperationCode.Storage))
+                        using (var oPacket = new PacketWriter(ServerOperationCode.StorageResult))
                         {
 
                             oPacket.WriteByte(19);
