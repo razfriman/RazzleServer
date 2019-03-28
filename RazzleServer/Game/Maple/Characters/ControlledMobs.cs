@@ -35,10 +35,10 @@ namespace RazzleServer.Game.Maple.Characters
         {
             lock (this)
             {
-                if (Parent.Client.Connected)
-                {
-                    Parent.Client.Send(item.GetControlCancelPacket());
-                }
+//                if (Parent.Client.Connected)
+//                {
+//                    Parent.Client.Send(item.GetControlCancelPacket());
+//                }
 
                 item.Controller = null;
                 base.Remove(item);

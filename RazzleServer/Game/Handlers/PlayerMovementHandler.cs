@@ -1,4 +1,5 @@
-﻿using RazzleServer.Game.Maple.Util;
+﻿using System;
+using RazzleServer.Game.Maple.Util;
 using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Handlers
@@ -15,6 +16,8 @@ namespace RazzleServer.Game.Handlers
             client.Character.Position = movements.Position;
             client.Character.Foothold = movements.Foothold;
             client.Character.Stance = movements.Stance;
+
+            Console.WriteLine(client.Character.Position);
 
             using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerMove))
             {

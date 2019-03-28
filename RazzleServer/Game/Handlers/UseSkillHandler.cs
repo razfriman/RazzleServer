@@ -13,7 +13,6 @@ namespace RazzleServer.Game.Handlers
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
-            packet.ReadInt();
             var skillId = packet.ReadInt();
             var skillLevel = packet.ReadByte();
             var skill = client.Character.Skills[skillId];
