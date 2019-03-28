@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 
 namespace RazzleServer.Common.Util
 {
@@ -13,6 +14,7 @@ namespace RazzleServer.Common.Util
             Y = y;
         }
 
+        [JsonConstructor]
         public Point(int x, int y)
         {
             X = (short)x;

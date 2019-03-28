@@ -27,7 +27,7 @@ namespace RazzleServer.Net
         public ClientSocket(Socket socket, AClient client, ushort version, ulong aesKey, bool useAesEncryption, bool toClient)
         {
             _socket = socket;
-            _socketBuffer = new byte[4096];
+            _socketBuffer = new byte[8192];
             Endpoint = socket.RemoteEndPoint as IPEndPoint;
             Host = Endpoint?.Address.ToString();
             HostBytes = Endpoint?.Address.GetAddressBytes();

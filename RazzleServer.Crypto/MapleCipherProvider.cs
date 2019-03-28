@@ -201,7 +201,7 @@ namespace RazzleServer.Crypto
             {
                 if (!RecvCipher.CheckHeader(data, !ToClient))
                 {
-                    throw new InvalidOperationException("Packet header mismatch");
+                    throw new InvalidOperationException($"Packet header mismatch Size:{data.Length}");
                 }
 
                 var decrypted = RecvCipher.Decrypt(data);

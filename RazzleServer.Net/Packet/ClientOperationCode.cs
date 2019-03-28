@@ -10,13 +10,16 @@
         CheckName = 0x06,
         CreateCharacter = 0x07,
         DeleteCharacter = 0x08,
+        [IgnorePacketPrint]
         Pong = 0x09,
         ClientCrashReport = 0x0A,
+        [IgnorePacketPrint]
         ClientHash = 0x0E,
 
         ChangeField = 0x11,
         ChangeChannel = 0x12,
         FieldConnectCashShop = 0x13,
+        [IgnorePacketPrint]
         PlayerMovement = 0x14,
         FieldPlayerSitMapChair = 0x15,
         AttackMelee = 0x16,
@@ -68,6 +71,7 @@
         SummonAttack = 0x4F,
         SummonDamage = 0x50,
 
+        [IgnorePacketPrint]
         MobMovement = 0x56,
         MobDistanceFromPlayer = 0x57,
         MobPickupDrop = 0x58,
