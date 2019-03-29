@@ -70,12 +70,14 @@ namespace RazzleServer.Wz.WzProperties
                 var foundChild = false;
                 foreach (var iwp in ret.WzProperties)
                 {
-                    if (iwp.Name == segment)
+                    if (iwp.Name != segment)
                     {
-                        ret = iwp;
-                        foundChild = true;
-                        break;
+                        continue;
                     }
+
+                    ret = iwp;
+                    foundChild = true;
+                    break;
                 }
                 if (!foundChild)
                 {

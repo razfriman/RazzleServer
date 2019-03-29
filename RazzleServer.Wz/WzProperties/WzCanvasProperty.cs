@@ -49,26 +49,30 @@ namespace RazzleServer.Wz.WzProperties
             }
             set
             {
-                if (value != null)
+                if (value == null)
                 {
-                    if (name == "PNG")
-                    {
-                        PngProperty = (WzPngProperty)value;
-                        return;
-                    }
-                    value.Name = name;
-                    AddProperty(value);
+                    return;
                 }
+
+                if (name == "PNG")
+                {
+                    PngProperty = (WzPngProperty)value;
+                    return;
+                }
+
+                value.Name = name;
+                AddProperty(value);
             }
         }
 
-		public override WzImageProperty GetFromPath(string path)
+        public override WzImageProperty GetFromPath(string path)
         {
-            var segments = path.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+            var segments = path.Split(new[] {'/'}, StringSplitOptions.RemoveEmptyEntries);
             if (segments[0] == "..")
             {
                 return ((WzImageProperty)Parent)[path.Substring(Name.IndexOf('/') + 1)];
             }
+
             WzImageProperty ret = this;
             foreach (var segment in segments)
             {
@@ -77,22 +81,28 @@ namespace RazzleServer.Wz.WzProperties
                 {
                     return PngProperty;
                 }
+
                 foreach (var iwp in ret.WzProperties)
                 {
-                    if (iwp.Name == segment)
+                    if (iwp.Name != segment)
                     {
-                        ret = iwp;
-                        foundChild = true;
-                        break;
+                        continue;
                     }
+
+                    ret = iwp;
+                    foundChild = true;
+                    break;
                 }
+
                 if (!foundChild)
                 {
                     return null;
                 }
             }
+
             return ret;
         }
+
         public override void WriteValue(WzBinaryWriter writer)
         {
             writer.WriteStringValue("Canvas", 0x73, 0x1B);
@@ -106,6 +116,7 @@ namespace RazzleServer.Wz.WzProperties
             {
                 writer.Write((byte)0);
             }
+
             writer.WriteCompressedInt(PngProperty.Width);
             writer.WriteCompressedInt(PngProperty.Height);
             writer.WriteCompressedInt(PngProperty.Format1);
@@ -134,12 +145,12 @@ namespace RazzleServer.Wz.WzProperties
         /// The png image for this canvas property
         /// </summary>
         public WzPngProperty PngProperty { get; set; }
-       
+
         /// <summary>
         /// Creates a blank WzCanvasProperty
         /// </summary>
         public WzCanvasProperty() { }
-        
+
         /// <summary>
         /// Creates a WzCanvasProperty with the specified name
         /// </summary>
@@ -155,6 +166,7 @@ namespace RazzleServer.Wz.WzProperties
             prop.Parent = this;
             WzProperties.Add(prop);
         }
+
         public void AddProperties(IEnumerable<WzImageProperty> props)
         {
             foreach (var prop in props)
@@ -162,6 +174,7 @@ namespace RazzleServer.Wz.WzProperties
                 AddProperty(prop);
             }
         }
+
         /// <summary>
         /// Remove a property
         /// </summary>

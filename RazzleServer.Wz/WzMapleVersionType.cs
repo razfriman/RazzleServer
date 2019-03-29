@@ -6,7 +6,6 @@
         Ems,
 		Bms,
 		Classic,
-		Generate,
-        GetFromZlz
+		Generate
 	}
 }

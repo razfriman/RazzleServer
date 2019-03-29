@@ -42,8 +42,7 @@ namespace RazzleServer.Wz
 
         public short Version { get; set; }
 
-        [JsonIgnore]
-        public string FilePath { get; private set; }
+        [JsonIgnore] public string FilePath { get; private set; }
 
         [JsonConverter(typeof(StringEnumConverter))]
         public WzMapleVersionType MapleVersionType { get; set; }
@@ -70,29 +69,13 @@ namespace RazzleServer.Wz
             WzDirectory.WzIv = _wzIv;
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Open a wz file from a file on the disk
         /// </summary>
         /// <param name="filePath">Path to the wz file</param>
         /// <param name="version"></param>
-        public WzFile(string filePath, WzMapleVersionType version)
-        {
-            Name = Path.GetFileName(filePath);
-            FilePath = filePath;
-            Version = -1;
-            MapleVersionType = version;
-            if (version == WzMapleVersionType.GetFromZlz)
-            {
-                using (var zlzStream = File.OpenRead(Path.Combine(Path.GetDirectoryName(filePath), "ZLZ.dll")))
-                {
-                    _wzIv = WzKeyGenerator.GetIvFromZlz(zlzStream);
-                }
-            }
-            else
-            {
-                _wzIv = WzTool.GetIvByMapleVersion(version);
-            }
-        }
+        public WzFile(string filePath, WzMapleVersionType version) : this(filePath, -1, version) { }
 
         /// <summary>
         /// Open a wz file from a file on the disk
@@ -106,17 +89,7 @@ namespace RazzleServer.Wz
             FilePath = filePath;
             Version = gameVersion;
             MapleVersionType = version;
-            if (version == WzMapleVersionType.GetFromZlz)
-            {
-                using (var zlzStream = File.OpenRead(Path.Combine(Path.GetDirectoryName(filePath), "ZLZ.dll")))
-                {
-                    _wzIv = WzKeyGenerator.GetIvFromZlz(zlzStream);
-                }
-            }
-            else
-            {
-                _wzIv = WzTool.GetIvByMapleVersion(version);
-            }
+            _wzIv = WzTool.GetIvByMapleVersion(version);
         }
 
         /// <summary>
@@ -177,53 +150,54 @@ namespace RazzleServer.Wz
                 {
                     Version = (short)j;
                     _versionHash = GetVersionHash(_version, Version);
-                    if (_versionHash != 0)
+                    if (_versionHash == 0)
                     {
-                        reader.Hash = _versionHash;
-                        var position = reader.BaseStream.Position;
-                        WzDirectory testDirectory;
-                        try
-                        {
-                            testDirectory = new WzDirectory(reader, Name, _versionHash, _wzIv, this);
-                            testDirectory.ParseDirectory();
-                        }
-                        catch
-                        {
-                            reader.BaseStream.Position = position;
-                            continue;
-                        }
+                        continue;
+                    }
 
-                        var testImage = testDirectory.GetChildImages()[0];
+                    reader.Hash = _versionHash;
+                    var position = reader.BaseStream.Position;
+                    WzDirectory testDirectory;
+                    try
+                    {
+                        testDirectory = new WzDirectory(reader, Name, _versionHash, _wzIv, this);
+                        testDirectory.ParseDirectory();
+                    }
+                    catch
+                    {
+                        reader.BaseStream.Position = position;
+                        continue;
+                    }
 
-                        try
-                        {
-                            reader.BaseStream.Position = testImage.Offset;
-                            var checkByte = reader.ReadByte();
-                            reader.BaseStream.Position = position;
-                            testDirectory.Dispose();
-                            switch (checkByte)
-                            {
-                                case 0x73:
-                                case 0x1b:
-                                {
-                                    var directory = new WzDirectory(reader, Name, _versionHash, _wzIv, this);
-                                    directory.ParseDirectory();
-                                    WzDirectory = directory;
-                                    return;
-                                }
-                            }
+                    var testImage = testDirectory.GetChildImages()[0];
 
-                            reader.BaseStream.Position = position;
-                        }
-                        catch
+                    try
+                    {
+                        reader.BaseStream.Position = testImage.Offset;
+                        var checkByte = reader.ReadByte();
+                        reader.BaseStream.Position = position;
+                        testDirectory.Dispose();
+                        switch (checkByte)
                         {
-                            reader.BaseStream.Position = position;
+                            case 0x73:
+                            case 0x1b:
+                                var directory = new WzDirectory(reader, Name, _versionHash, _wzIv, this);
+                                directory.ParseDirectory();
+                                WzDirectory = directory;
+                                return;
+                            default:
+                                reader.BaseStream.Position = position;
+                                return;
                         }
+                    }
+                    catch
+                    {
+                        reader.BaseStream.Position = position;
                     }
                 }
 
-                throw new Exception(
-                    "Error with game version hash : The specified game version is incorrect and WzLib was unable to determine the version itself");
+                throw new InvalidDataException(
+                    "Error with game version hash : The specified game version is incorrect");
             }
 
             _versionHash = GetVersionHash(_version, Version);
@@ -290,9 +264,7 @@ namespace RazzleServer.Wz
             Header.FSize = totalLen - Header.FStart;
             for (var i = 0; i < 4; i++)
             {
-                {
-                    wzWriter.Write((byte)Header.Ident[i]);
-                }
+                wzWriter.Write((byte)Header.Ident[i]);
             }
 
             wzWriter.Write((long)Header.FSize);
@@ -330,17 +302,12 @@ namespace RazzleServer.Wz
         {
             if (path.ToLower() == Name.ToLower())
             {
-                {
-                    return new List<WzObject> {WzDirectory};
-                }
+                return new List<WzObject> {WzDirectory};
             }
 
             if (path == "*")
             {
-                var fullList = new List<WzObject>
-                {
-                    WzDirectory
-                };
+                var fullList = new List<WzObject> {WzDirectory};
                 fullList.AddRange(WzDirectory.GetObjects());
                 return fullList;
             }
@@ -359,7 +326,7 @@ namespace RazzleServer.Wz
             var objList = new List<WzObject>();
             foreach (var img in WzDirectory.WzImages)
             {
-                foreach (var spath in GetPathsFromImage(img, Name + "/" + img.Name))
+                foreach (var spath in img.GetPaths(Name + "/" + img.Name))
                 {
                     if (StrMatch(path, spath))
                     {
@@ -370,7 +337,7 @@ namespace RazzleServer.Wz
 
             foreach (var dir in WzDirectory.WzDirectories)
             {
-                foreach (var spath in GetPathsFromDirectory(dir, Name + "/" + dir.Name))
+                foreach (var spath in dir.GetPaths(Name + "/" + dir.Name))
                 {
                     if (StrMatch(path, spath))
                     {
@@ -394,7 +361,7 @@ namespace RazzleServer.Wz
             var objList = new List<WzObject>();
             foreach (var img in WzDirectory.WzImages)
             {
-                foreach (var spath in GetPathsFromImage(img, Name + "/" + img.Name))
+                foreach (var spath in img.GetPaths(Name + "/" + img.Name))
                 {
                     if (Regex.Match(spath, path).Success)
                     {
@@ -405,7 +372,7 @@ namespace RazzleServer.Wz
 
             foreach (var dir in WzDirectory.WzDirectories)
             {
-                foreach (var spath in GetPathsFromDirectory(dir, Name + "/" + dir.Name))
+                foreach (var spath in dir.GetPaths(Name + "/" + dir.Name))
                 {
                     if (Regex.Match(spath, path).Success)
                     {
@@ -419,91 +386,18 @@ namespace RazzleServer.Wz
             return objList;
         }
 
-        internal List<string> GetPathsFromDirectory(WzDirectory dir, string curPath)
-        {
-            var objList = new List<string>();
-            foreach (var img in dir.WzImages)
-            {
-                objList.Add(curPath + "/" + img.Name);
-                objList.AddRange(GetPathsFromImage(img, curPath + "/" + img.Name));
-            }
-
-            foreach (var subdir in dir.WzDirectories)
-            {
-                objList.Add(curPath + "/" + subdir.Name);
-                objList.AddRange(GetPathsFromDirectory(subdir, curPath + "/" + subdir.Name));
-            }
-
-            return objList;
-        }
-
-        internal List<string> GetPathsFromImage(WzImage img, string curPath)
-        {
-            var objList = new List<string>();
-            foreach (var prop in img.WzProperties)
-            {
-                objList.Add(curPath + "/" + prop.Name);
-                objList.AddRange(GetPathsFromProperty(prop, curPath + "/" + prop.Name));
-            }
-
-            return objList;
-        }
-
-        internal IEnumerable<string> GetPathsFromProperty(WzImageProperty prop, string curPath)
-        {
-            var objList = new List<string>();
-            switch (prop.Type)
-            {
-                case WzPropertyType.Canvas:
-                    foreach (var canvasProp in ((WzCanvasProperty)prop).WzProperties)
-                    {
-                        objList.Add(curPath + "/" + canvasProp.Name);
-                        objList.AddRange(GetPathsFromProperty(canvasProp, curPath + "/" + canvasProp.Name));
-                    }
-
-                    objList.Add(curPath + "/PNG");
-                    break;
-                case WzPropertyType.Convex:
-                    foreach (var exProp in ((WzConvexProperty)prop).WzProperties)
-                    {
-                        objList.Add(curPath + "/" + exProp.Name);
-                        objList.AddRange(GetPathsFromProperty(exProp, curPath + "/" + exProp.Name));
-                    }
-
-                    break;
-                case WzPropertyType.SubProperty:
-                    foreach (var subProp in ((WzSubProperty)prop).WzProperties)
-                    {
-                        objList.Add(curPath + "/" + subProp.Name);
-                        objList.AddRange(GetPathsFromProperty(subProp, curPath + "/" + subProp.Name));
-                    }
-
-                    break;
-                case WzPropertyType.Vector:
-                    objList.Add(curPath + "/X");
-                    objList.Add(curPath + "/Y");
-                    break;
-            }
-
-            return objList;
-        }
-
         public WzObject GetObjectFromPath(string path)
         {
             var seperatedPath = path.Split("/".ToCharArray());
             if (seperatedPath[0].ToLower() != WzDirectory.Name.ToLower() && seperatedPath[0].ToLower() !=
                 WzDirectory.Name.Substring(0, WzDirectory.Name.Length - 3).ToLower())
             {
-                {
-                    return null;
-                }
+                return null;
             }
 
             if (seperatedPath.Length == 1)
             {
-                {
-                    return WzDirectory;
-                }
+                return WzDirectory;
             }
 
             WzObject curObj = WzDirectory;
@@ -545,9 +439,26 @@ namespace RazzleServer.Wz
                                         return null;
                                 }
 
-                            default:
+                            case WzPropertyType.Null:
+                            case WzPropertyType.Short:
+                            case WzPropertyType.Int:
+                            case WzPropertyType.Long:
+                            case WzPropertyType.Float:
+                            case WzPropertyType.Double:
+                            case WzPropertyType.String:
+                            case WzPropertyType.Sound:
+                            case WzPropertyType.Uol:
+                            case WzPropertyType.Png:
                                 return null;
+                            default:
+                                throw new ArgumentOutOfRangeException();
                         }
+
+                    case WzObjectType.File:
+                    case WzObjectType.List:
+                        throw new InvalidOperationException();
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
             }
 
@@ -558,16 +469,12 @@ namespace RazzleServer.Wz
         {
             if (strWildCard.Length == 0)
             {
-                {
-                    return strCompare.Length == 0;
-                }
+                return strCompare.Length == 0;
             }
 
             if (strCompare.Length == 0)
             {
-                {
-                    return false;
-                }
+                return false;
             }
 
             if (strWildCard[0] == '*' && strWildCard.Length > 1)
@@ -576,21 +483,12 @@ namespace RazzleServer.Wz
                     .Any();
             }
 
-            if (strWildCard[0] == '*')
+            if (strWildCard[0] != '*')
             {
-                {
-                    return true;
-                }
+                return strWildCard[0] == strCompare[0] && StrMatch(strWildCard.Substring(1), strCompare.Substring(1));
             }
 
-            if (strWildCard[0] == strCompare[0])
-            {
-                {
-                    return StrMatch(strWildCard.Substring(1), strCompare.Substring(1));
-                }
-            }
-
-            return false;
+            return true;
         }
 
         public override void Remove() => Dispose();

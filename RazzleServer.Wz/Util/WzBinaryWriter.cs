@@ -20,7 +20,7 @@ namespace RazzleServer.Wz.Util
         public WzBinaryWriter(Stream output, byte[] wzIv, bool leaveOpen = false)
             : base(output)
         {
-            WzKey = WzKeyGenerator.GenerateWzKey(wzIv);
+            WzKey = WzTool.GenerateWzKey(wzIv);
             StringCache = new Hashtable();
             LeaveOpen = leaveOpen;
         }
@@ -101,7 +101,8 @@ namespace RazzleServer.Wz.Util
                 {
                     byte mask = 0xAA;
 
-                    if (value.Length > sbyte.MaxValue) // Note - no need for >= here because of 2's complement (MinValue == -(MaxValue + 1))
+                    if (value.Length > sbyte.MaxValue
+                    ) // Note - no need for >= here because of 2's complement (MinValue == -(MaxValue + 1))
                     {
                         Write(sbyte.MinValue);
                         Write(value.Length);
@@ -138,7 +139,7 @@ namespace RazzleServer.Wz.Util
             }
         }
 
-        public char[] EncryptString(string stringToDecrypt)
+        public string EncryptString(string stringToDecrypt)
         {
             var outputChars = new char[stringToDecrypt.Length];
             for (var i = 0; i < stringToDecrypt.Length; i++)
@@ -146,7 +147,7 @@ namespace RazzleServer.Wz.Util
                 outputChars[i] = (char)(stringToDecrypt[i] ^ (char)((WzKey[i * 2 + 1] << 8) + WzKey[i * 2]));
             }
 
-            return outputChars;
+            return new string(outputChars);
         }
 
         public char[] EncryptNonUnicodeString(string stringToDecrypt)

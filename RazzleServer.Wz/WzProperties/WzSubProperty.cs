@@ -49,11 +49,13 @@ namespace RazzleServer.Wz.WzProperties
             }
             set
             {
-                if (value != null)
+                if (value == null)
                 {
-                    value.Name = name;
-                    AddProperty(value);
+                    return;
                 }
+
+                value.Name = name;
+                AddProperty(value);
             }
         }
 
@@ -75,12 +77,14 @@ namespace RazzleServer.Wz.WzProperties
                 var foundChild = false;
                 foreach (var iwp in ret.WzProperties)
                 {
-                    if (iwp.Name == segment)
+                    if (iwp.Name != segment)
                     {
-                        ret = iwp;
-                        foundChild = true;
-                        break;
+                        continue;
                     }
+
+                    ret = iwp;
+                    foundChild = true;
+                    break;
                 }
                 if (!foundChild)
                 {

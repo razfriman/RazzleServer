@@ -109,11 +109,13 @@ namespace RazzleServer.Wz.WzProperties
             get => _listWzUsed;
             set
             {
-                if (value != _listWzUsed)
+                if (value == _listWzUsed)
                 {
-                    _listWzUsed = value;
-                    CompressPng(GetPng(false));
+                    return;
                 }
+
+                _listWzUsed = value;
+                CompressPng(GetPng(false));
             }
         }
 
@@ -171,28 +173,30 @@ namespace RazzleServer.Wz.WzProperties
 
         public byte[] GetCompressedBytes(bool saveInMemory)
         {
-            if (_compressedBytes == null)
+            if (_compressedBytes != null)
             {
-                var pos = _wzReader.BaseStream.Position;
-                _wzReader.BaseStream.Position = _offs;
-                var len = _wzReader.ReadInt32() - 1;
-                _wzReader.BaseStream.Position += 1;
-                if (len > 0)
-                {
-                    _compressedBytes = _wzReader.ReadBytes(len);
-                }
-
-                _wzReader.BaseStream.Position = pos;
-                if (!saveInMemory)
-                {
-                    //were removing the reference to compressedBytes, so a backup for the ret value is needed
-                    var returnBytes = _compressedBytes;
-                    _compressedBytes = null;
-                    return returnBytes;
-                }
+                return _compressedBytes;
             }
 
-            return _compressedBytes;
+            var pos = _wzReader.BaseStream.Position;
+            _wzReader.BaseStream.Position = _offs;
+            var len = _wzReader.ReadInt32() - 1;
+            _wzReader.BaseStream.Position += 1;
+            if (len > 0)
+            {
+                _compressedBytes = _wzReader.ReadBytes(len);
+            }
+
+            _wzReader.BaseStream.Position = pos;
+            if (saveInMemory)
+            {
+                return _compressedBytes;
+            }
+
+            //were removing the reference to compressedBytes, so a backup for the ret value is needed
+            var returnBytes = _compressedBytes;
+            _compressedBytes = null;
+            return returnBytes;
         }
 
         public void SetPng(Bitmap png)
@@ -203,29 +207,31 @@ namespace RazzleServer.Wz.WzProperties
 
         public Bitmap GetPng(bool saveInMemory)
         {
-            if (_png == null)
+            if (_png != null)
             {
-                var pos = _wzReader.BaseStream.Position;
-                _wzReader.BaseStream.Position = _offs;
-                var len = _wzReader.ReadInt32() - 1;
-                _wzReader.BaseStream.Position += 1;
-                if (len > 0)
-                {
-                    _compressedBytes = _wzReader.ReadBytes(len);
-                }
-
-                ParsePng();
-                _wzReader.BaseStream.Position = pos;
-                if (!saveInMemory)
-                {
-                    var pngImage = _png;
-                    _png = null;
-                    _compressedBytes = null;
-                    return pngImage;
-                }
+                return _png;
             }
 
-            return _png;
+            var pos = _wzReader.BaseStream.Position;
+            _wzReader.BaseStream.Position = _offs;
+            var len = _wzReader.ReadInt32() - 1;
+            _wzReader.BaseStream.Position += 1;
+            if (len > 0)
+            {
+                _compressedBytes = _wzReader.ReadBytes(len);
+            }
+
+            ParsePng();
+            _wzReader.BaseStream.Position = pos;
+            if (saveInMemory)
+            {
+                return _png;
+            }
+
+            var pngImage = _png;
+            _png = null;
+            _compressedBytes = null;
+            return pngImage;
         }
 
         internal byte[] Decompress(byte[] compressedBuffer, int decompressedSize)
@@ -475,25 +481,27 @@ namespace RazzleServer.Wz.WzProperties
             }
 
             _compressedBytes = Compress(buf);
-            if (_listWzUsed)
+            if (!_listWzUsed)
             {
-                var memStream = new MemoryStream();
-                var writer = new WzBinaryWriter(memStream, WzTool.GetIvByMapleVersion(WzMapleVersionType.Gms));
-                writer.Write(2);
-                for (var i = 0; i < 2; i++)
-                {
-                    writer.Write((byte)(_compressedBytes[i] ^ writer.WzKey[i]));
-                }
-
-                writer.Write(_compressedBytes.Length - 2);
-                for (var i = 2; i < _compressedBytes.Length; i++)
-                {
-                    writer.Write((byte)(_compressedBytes[i] ^ writer.WzKey[i - 2]));
-                }
-
-                _compressedBytes = memStream.GetBuffer();
-                writer.Close();
+                return;
             }
+
+            var memStream = new MemoryStream();
+            var writer = new WzBinaryWriter(memStream, WzTool.GetIvByMapleVersion(WzMapleVersionType.Gms));
+            writer.Write(2);
+            for (var i = 0; i < 2; i++)
+            {
+                writer.Write((byte)(_compressedBytes[i] ^ writer.WzKey[i]));
+            }
+
+            writer.Write(_compressedBytes.Length - 2);
+            for (var i = 2; i < _compressedBytes.Length; i++)
+            {
+                writer.Write((byte)(_compressedBytes[i] ^ writer.WzKey[i - 2]));
+            }
+
+            _compressedBytes = memStream.GetBuffer();
+            writer.Close();
         }
 
         #endregion

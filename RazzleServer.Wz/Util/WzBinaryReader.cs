@@ -13,7 +13,7 @@ namespace RazzleServer.Wz.Util
         public WzHeader Header { get; set; }
 
         public WzBinaryReader(Stream input, byte[] wzIv)
-            : base(input) => WzKey = WzKeyGenerator.GenerateWzKey(wzIv);
+            : base(input) => WzKey = WzTool.GenerateWzKey(wzIv);
 
         public string ReadStringAtOffset(long offset) => ReadStringAtOffset(offset, false);
 
@@ -131,6 +131,7 @@ namespace RazzleServer.Wz.Util
             {
                 builder.Append((char)(stringToDecrypt[i] ^ (char)((WzKey[i * 2 + 1] << 8) + WzKey[i * 2])));
             }
+
             return builder.ToString();
         }
 
@@ -141,6 +142,7 @@ namespace RazzleServer.Wz.Util
             {
                 builder.Append((char)(stringToDecrypt[i] ^ WzKey[i]));
             }
+
             return builder.ToString();
         }
 

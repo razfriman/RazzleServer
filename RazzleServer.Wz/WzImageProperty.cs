@@ -58,13 +58,13 @@ namespace RazzleServer.Wz
 
         public abstract void SetValue(object value);
 
-        public override void Remove() => ((IPropertyContainer) Parent)?.RemoveProperty(this);
+        public override void Remove() => ((IPropertyContainer)Parent)?.RemoveProperty(this);
 
         public override WzFile WzFileParent => ParentImage.WzFileParent;
 
         internal static void WritePropertyList(WzBinaryWriter writer, List<WzImageProperty> properties)
         {
-            writer.Write((ushort) 0);
+            writer.Write((ushort)0);
             writer.WriteCompressedInt(properties.Count);
             foreach (var property in properties)
             {
@@ -124,7 +124,7 @@ namespace RazzleServer.Wz
                         properties.Add(new WzStringProperty(name, reader.ReadStringBlock(offset)) {Parent = parent});
                         break;
                     case 9:
-                        var eob = (int) (reader.ReadUInt32() + reader.BaseStream.Position);
+                        var eob = (int)(reader.ReadUInt32() + reader.BaseStream.Position);
                         WzImageProperty exProp = ParseExtendedProp(reader, offset, name, parent, parentImg);
                         properties.Add(exProp);
                         reader.BaseStream.Position = eob;
@@ -206,22 +206,24 @@ namespace RazzleServer.Wz
                             return new WzUolProperty(name, reader.ReadString()) {Parent = parent};
                         case 1:
                             return new WzUolProperty(name, reader.ReadStringAtOffset(offset + reader.ReadInt32()))
-                                {Parent = parent};
+                            {
+                                Parent = parent
+                            };
+                        default:
+                            throw new InvalidOperationException("Unsupported UOL type");
                     }
-
-                    throw new Exception("Unsupported UOL type");
                 default:
-                    throw new Exception("Unknown iname: " + iname);
+                    throw new InvalidOperationException("Unknown iname: " + iname);
             }
         }
 
         internal static void WriteExtendedValue(WzBinaryWriter writer, WzExtended property)
         {
-            writer.Write((byte) 9);
+            writer.Write((byte)9);
             var beforePos = writer.BaseStream.Position;
             writer.Write(0); // Placeholder
             property.WriteValue(writer);
-            var len = (int) (writer.BaseStream.Position - beforePos);
+            var len = (int)(writer.BaseStream.Position - beforePos);
             var newPos = writer.BaseStream.Position;
             writer.BaseStream.Position = beforePos;
             writer.Write(len - 4);
@@ -234,36 +236,30 @@ namespace RazzleServer.Wz
             switch (Type)
             {
                 case WzPropertyType.Canvas:
-                    foreach (var canvasProp in ((WzCanvasProperty) this).WzProperties)
+                    foreach (var canvasProp in ((WzCanvasProperty)this).WzProperties)
                     {
-                        {
-                            objList.AddRange(canvasProp.GetObjects());
-                        }
+                        objList.AddRange(canvasProp.GetObjects());
                     }
 
-                    objList.Add(((WzCanvasProperty) this).PngProperty);
+                    objList.Add(((WzCanvasProperty)this).PngProperty);
                     break;
                 case WzPropertyType.Convex:
-                    foreach (var exProp in ((WzConvexProperty) this).WzProperties)
+                    foreach (var exProp in ((WzConvexProperty)this).WzProperties)
                     {
-                        {
-                            objList.AddRange(exProp.GetObjects());
-                        }
+                        objList.AddRange(exProp.GetObjects());
                     }
 
                     break;
                 case WzPropertyType.SubProperty:
-                    foreach (var subProp in ((WzSubProperty) this).WzProperties)
+                    foreach (var subProp in ((WzSubProperty)this).WzProperties)
                     {
-                        {
-                            objList.AddRange(subProp.GetObjects());
-                        }
+                        objList.AddRange(subProp.GetObjects());
                     }
 
                     break;
                 case WzPropertyType.Vector:
-                    objList.Add(((WzVectorProperty) this).X);
-                    objList.Add(((WzVectorProperty) this).Y);
+                    objList.Add(((WzVectorProperty)this).X);
+                    objList.Add(((WzVectorProperty)this).Y);
                     break;
                 case WzPropertyType.Null:
                 case WzPropertyType.Short:
@@ -276,6 +272,60 @@ namespace RazzleServer.Wz
                 case WzPropertyType.Uol:
                 case WzPropertyType.Png:
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            return objList;
+        }
+
+        public IEnumerable<string> GetPaths(string curPath)
+        {
+            var objList = new List<string>();
+            switch (Type)
+            {
+                case WzPropertyType.Canvas:
+                    foreach (var canvasProp in ((WzCanvasProperty)this).WzProperties)
+                    {
+                        objList.Add(curPath + "/" + canvasProp.Name);
+                        objList.AddRange(canvasProp.GetPaths(curPath + "/" + canvasProp.Name));
+                    }
+
+                    objList.Add(curPath + "/PNG");
+                    break;
+                case WzPropertyType.Convex:
+                    foreach (var exProp in ((WzConvexProperty)this).WzProperties)
+                    {
+                        objList.Add(curPath + "/" + exProp.Name);
+                        objList.AddRange(exProp.GetPaths(curPath + "/" + exProp.Name));
+                    }
+
+                    break;
+                case WzPropertyType.SubProperty:
+                    foreach (var subProp in ((WzSubProperty)this).WzProperties)
+                    {
+                        objList.Add(curPath + "/" + subProp.Name);
+                        objList.AddRange(subProp.GetPaths(curPath + "/" + subProp.Name));
+                    }
+
+                    break;
+                case WzPropertyType.Vector:
+                    objList.Add(curPath + "/X");
+                    objList.Add(curPath + "/Y");
+                    break;
+                case WzPropertyType.Null:
+                case WzPropertyType.Short:
+                case WzPropertyType.Int:
+                case WzPropertyType.Long:
+                case WzPropertyType.Float:
+                case WzPropertyType.Double:
+                case WzPropertyType.String:
+                case WzPropertyType.Sound:
+                case WzPropertyType.Uol:
+                case WzPropertyType.Png:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
             return objList;

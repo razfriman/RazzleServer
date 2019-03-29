@@ -7,6 +7,9 @@ using RazzleServer.Wz.WzProperties;
 
 namespace RazzleServer.Wz
 {
+    /// <inheritdoc>
+    ///     <cref>WzObject</cref>
+    /// </inheritdoc>
     /// <summary>
     /// A .img contained in a wz directory
     /// </summary>
@@ -203,12 +206,14 @@ namespace RazzleServer.Wz
                 var foundChild = false;
                 foreach (var iwp in ret == null ? _properties : ret.WzProperties)
                 {
-                    if (iwp.Name == segment)
+                    if (iwp.Name != segment)
                     {
-                        ret = iwp;
-                        foundChild = true;
-                        break;
+                        continue;
                     }
+
+                    ret = iwp;
+                    foundChild = true;
+                    break;
                 }
 
                 if (!foundChild)
@@ -334,13 +339,13 @@ namespace RazzleServer.Wz
         {
             get
             {
-                byte[] blockData = null;
-                if (Reader != null && BlockSize > 0)
+                if (Reader == null || BlockSize <= 0)
                 {
-                    blockData = Reader.ReadBytes(BlockSize);
-                    Reader.BaseStream.Position = BlockStart;
+                    return null;
                 }
-
+                
+                var blockData = Reader.ReadBytes(BlockSize);
+                Reader.BaseStream.Position = BlockStart;
                 return blockData;
             }
         }
@@ -383,6 +388,18 @@ namespace RazzleServer.Wz
             {
                 objList.Add(prop);
                 objList.AddRange(prop.GetObjects());
+            }
+
+            return objList;
+        }
+        
+        public List<string> GetPaths(string curPath)
+        {
+            var objList = new List<string>();
+            foreach (var prop in WzProperties)
+            {
+                objList.Add(curPath + "/" + prop.Name);
+                objList.AddRange(prop.GetPaths(curPath + "/" + prop.Name));
             }
 
             return objList;
