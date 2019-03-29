@@ -31,8 +31,8 @@ namespace RazzleServer
                         .Enrich.FromLogContext()
                         .CreateLogger();
                 })
-                .ConfigureLogging((hostContext, configLogging) => configLogging.AddSerilog(dispose: true))
                 .ConfigureServices((hostContext, services) => { services.AddHostedService<ServerManager>(); })
+                .UseSerilog()
                 .Build();
 
             await host.RunAsync();
