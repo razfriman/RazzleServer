@@ -3,6 +3,7 @@ using RazzleServer.Wz.Util;
 
 namespace RazzleServer.Wz.WzProperties
 {
+    /// <inheritdoc />
     /// <summary>
     /// A property that is stored in the wz file with a signed byte and possibly followed by an int. If the 
     /// signed byte is equal to -128, the value is is the int that follows, else the value is the byte.

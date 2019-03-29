@@ -3,9 +3,10 @@ using RazzleServer.Wz.Util;
 
 namespace RazzleServer.Wz.WzProperties
 {
-	/// <summary>
-	/// A property that has the value of a double
-	/// </summary>
+	/// <inheritdoc />
+    /// <summary>
+    /// A property that has the value of a double
+    /// </summary>
 	public class WzDoubleProperty : WzImageProperty
 	{
         /// <summary>

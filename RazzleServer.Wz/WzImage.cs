@@ -92,9 +92,6 @@ namespace RazzleServer.Wz
 
         [JsonIgnore] public int BlockStart { get; }
 
-        /// <summary>
-        /// The WzObjectType of the image
-        /// </summary>
         public override WzObjectType ObjectType
         {
             get

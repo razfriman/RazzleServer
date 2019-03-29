@@ -10,7 +10,6 @@ namespace RazzleServer.Game.Maple.Scripting
     {
         public static CommandScripts Commands { get; private set; }
         public static NpcScripts Npcs { get; private set; }
-        public static PortalScripts Portals { get; private set; }
 
         private static readonly ILogger Logger = Log.ForContext<ScriptProvider>();
 
@@ -20,7 +19,6 @@ namespace RazzleServer.Game.Maple.Scripting
 
             await Task.WhenAll(
                 Task.Run(async () => Commands = await new CommandScriptLoader().Load()),
-                Task.Run(async () => Portals = await new PortalScriptLoader().Load()),
                 Task.Run(async () => Npcs = await new NpcScriptLoader().Load())
             );
 

@@ -131,12 +131,6 @@ namespace RazzleServer.Game.Maple.Life
                         script.SetResult(1);
                         script.State++;
                     }
-                    else
-                    {
-                        script = null;
-                        return;
-                    }
-
                     break;
                 case NpcMessageType.RequestText:
                     if (action != 0)
@@ -144,12 +138,6 @@ namespace RazzleServer.Game.Maple.Life
                         script.SetResult(packet.ReadString());
                         script.State++;
                     }
-                    else
-                    {
-                        script = null;
-                        return;
-                    }
-
                     break;
                 case NpcMessageType.RequestNumber:
                     if (action == 1)
@@ -157,12 +145,6 @@ namespace RazzleServer.Game.Maple.Life
                         script.SetResult(packet.ReadInt());
                         script.State++;
                     }
-                    else
-                    {
-                        script = null;
-                        return;
-                    }
-
                     break;
                 case NpcMessageType.Choice:
                 case NpcMessageType.Quiz:
@@ -172,37 +154,36 @@ namespace RazzleServer.Game.Maple.Life
                         script.SetResult(packet.ReadInt());
                         script.State++;
                     }
-                    else
-                    {
-                        script = null;
-                        return;
-                    }
-
                     break;
             }
         }
 
         public void AssignController()
         {
-            if (Controller == null)
+            if (Controller != null)
             {
-                var leastControlled = int.MaxValue;
-                Character newController = null;
-
-                lock (Map.Characters)
-                {
-                    foreach (var character in Map.Characters.Values.Where(x => x.Client.Connected))
-                    {
-                        if (character.ControlledNpcs.Count < leastControlled)
-                        {
-                            leastControlled = character.ControlledNpcs.Count;
-                            newController = character;
-                        }
-                    }
-                }
-
-                newController?.ControlledNpcs.Add(this);
+                // Already has a controller
+                return;
             }
+
+            var leastControlled = int.MaxValue;
+            Character newController = null;
+
+            lock (Map.Characters)
+            {
+                foreach (var character in Map.Characters.Values.Where(x => x.Client.Connected))
+                {
+                    if (character.ControlledNpcs.Count >= leastControlled)
+                    {
+                        continue;
+                    }
+
+                    leastControlled = character.ControlledNpcs.Count;
+                    newController = character;
+                }
+            }
+
+            newController?.ControlledNpcs.Add(this);
         }
 
         public PacketWriter GetCreatePacket() => GetSpawnPacket();

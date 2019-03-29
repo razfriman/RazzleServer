@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using RazzleServer.Wz.Util;
 
 namespace RazzleServer.Wz.WzProperties
@@ -85,21 +86,10 @@ namespace RazzleServer.Wz.WzProperties
         }
         public override void WriteValue(WzBinaryWriter writer)
         {
-            var extendedProps = new List<WzExtended>(_properties.Count);
-            foreach (var prop in _properties)
-            {
-                if (prop is WzExtended)
-                {
-                    extendedProps.Add((WzExtended)prop);
-                }
-            }
-
+            var extendedProps = _properties.Where(x => x is WzExtended).ToList();
             writer.WriteStringValue("Shape2D#Convex2D", 0x73, 0x1B);
             writer.WriteCompressedInt(extendedProps.Count);
-            for (var i = 0; i < extendedProps.Count; i++)
-            {
-                _properties[i].WriteValue(writer);
-            }
+            extendedProps.ForEach(x => x.WriteValue(writer));
         }
 
         public override void Dispose()
