@@ -1,6 +1,4 @@
-using System;
-using System.Linq;
-using System.Text;
+using RazzleServer.Common.Constants;
 using RazzleServer.Game.Maple.Scripting;
 
 namespace RazzleServer.Game.Scripts.Npcs
@@ -11,15 +9,8 @@ namespace RazzleServer.Game.Scripts.Npcs
         public override void Execute()
         {
             SendOk("Welcome to RazzleServer");
-
             var mapIds = new[] {100000000, 101000000};
-            var builder = new StringBuilder();
-            for (var i = 0; i < mapIds.Length; i++)
-            {
-                builder.Append("\r\n#L" + i + "##m" + mapIds[i] + "##l");
-            }
-
-            var result = SendChoice("Where do you want to go?#b" + builder.ToString());
+            var result = SendChoice("Where do you want to go?" + Blue(CreateSelectionList(NpcListType.Map, mapIds)));
             Character.ChangeMap(mapIds[result]);
         }
     }

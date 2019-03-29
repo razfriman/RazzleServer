@@ -61,7 +61,7 @@ namespace RazzleServer.Game.Maple.Maps
             var pw = new PacketWriter(ServerOperationCode.DropEnterField);
 
 
-            pw.WriteByte((byte)(dropAnimationType));
+            pw.WriteByte((byte)dropAnimationType);
             pw.WriteInt(ObjectId);
             pw.WriteBool(this is Meso);
 

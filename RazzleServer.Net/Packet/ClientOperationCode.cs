@@ -55,7 +55,7 @@
         AdminCommandMessage = 0x3A,
         MultiChat = 0x3B,
         CommandWhisperFind = 0x3C,
-        CUIMessenger = 0x3D,
+        CuiMessenger = 0x3D,
         PlayerInteraction = 0x3E, // Miniroom
         PartyCreate = 0x3F,
         PartyMessage = 040,

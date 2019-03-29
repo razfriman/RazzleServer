@@ -309,36 +309,33 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Pickup(Drop drop)
         {
-            if (drop.Picker == null)
+            if (drop.Picker != null)
             {
-                try
-                {
-                    drop.Picker = Parent;
-
-                    if (drop is Meso meso)
-                    {
-                        Parent.Meso += meso.Amount; // TODO: Check for max meso.
-                    }
-                    else if (drop is Item item)
-                    {
-                        if (item.OnlyOne)
-                        {
-                            // TODO: Appropriate message.
-                            return;
-                        }
-
-                        item.Slot = GetNextFreeSlot(item.Type); // TODO: Check for inv. full. 
-                        Add(item, true);
-                    }
-
-                    Parent.Map.Drops.Remove(drop);
-                    drop.Picker.Client.Send(drop.GetShowGainPacket());
-                }
-                catch (InventoryFullException)
-                {
-                    NotifyFull();
-                }
+                // Someone already picked up this drop
+                return;
             }
+
+            drop.Picker = Parent;
+
+            switch (drop)
+            {
+                case Meso meso when Parent.Meso != int.MaxValue:
+                    Parent.Meso += meso.Amount;
+                    break;
+                case Item item when item.OnlyOne:
+                    // TODO: Appropriate message.
+                    return;
+                case Item item when IsFull(item.Type):
+                    NotifyFull();
+                    break;
+                case Item item when !IsFull(item.Type):
+                    item.Slot = GetNextFreeSlot(item.Type);
+                    Add(item, true);
+                    break;
+            }
+
+            Parent.Map.Drops.Remove(drop);
+            drop.Picker.Client.Send(drop.GetShowGainPacket());
         }
 
         public Item this[ItemType type, short slot]

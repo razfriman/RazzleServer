@@ -1,7 +1,6 @@
 using System;
 using RazzleServer.Common;
 using RazzleServer.Common.Constants;
-using RazzleServer.Game.Scripts.Npcs;
 using RazzleServer.Login.Maple;
 using RazzleServer.Net.Packet;
 

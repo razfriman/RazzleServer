@@ -225,9 +225,6 @@ namespace RazzleServer.Wz
                 throw new Exception(
                     "Error with game version hash : The specified game version is incorrect and WzLib was unable to determine the version itself");
             }
-            else
-            {
-            }
 
             _versionHash = GetVersionHash(_version, Version);
             reader.Hash = _versionHash;

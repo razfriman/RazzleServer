@@ -1,5 +1,4 @@
-﻿using System;
-using RazzleServer.Game.Maple.Util;
+﻿using RazzleServer.Game.Maple.Util;
 using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Handlers

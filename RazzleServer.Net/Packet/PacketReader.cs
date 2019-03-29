@@ -23,6 +23,7 @@ namespace RazzleServer.Net.Packet
 
         public long Available => Buffer.Length - Buffer.Position;
 
+        /// <inheritdoc />
         /// <summary>
         /// Creates a new instance of PacketReader
         /// </summary>

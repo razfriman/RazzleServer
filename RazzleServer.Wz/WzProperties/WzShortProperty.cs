@@ -2,6 +2,7 @@
 
 namespace RazzleServer.Wz.WzProperties
 {
+    /// <inheritdoc />
     /// <summary>
     /// A wz property which has a value which is a ushort
     /// </summary>

@@ -11,22 +11,19 @@ namespace RazzleServer.Common.Server
             var migration = Values
                 .Where(x => x.Host == host)
                 .FirstOrDefault(x => x.CharacterId == characterId);
-            
+
             return RemoveMigration(migration);
         }
 
         private int RemoveMigration(Migration migration)
         {
-            if (migration != null)
+            if (migration == null)
             {
-                Remove(migration);
-
-                return (DateTime.Now - migration.Expiry).TotalSeconds > 30 
-                    ? 0 
-                    : migration.AccountId;
+                return 0;
             }
 
-            return 0;
+            Remove(migration);
+            return (DateTime.Now - migration.Expiry).TotalSeconds > 30 ? 0 : migration.AccountId;
         }
 
         public override string GetKey(Migration item) => item.Host;

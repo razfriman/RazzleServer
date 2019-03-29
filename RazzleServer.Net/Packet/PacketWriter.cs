@@ -31,11 +31,13 @@ namespace RazzleServer.Net.Packet
             _binWriter = new BinaryWriter(Buffer, Encoding.ASCII);
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Creates a new instance of PacketWriter
         /// </summary>
         public PacketWriter(byte header) : this() => WriteByte(header);
 
+        /// <inheritdoc />
         /// <summary>
         /// Creates a new instance of PacketWriter
         /// </summary>

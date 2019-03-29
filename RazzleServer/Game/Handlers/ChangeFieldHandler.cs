@@ -1,5 +1,4 @@
 ﻿using RazzleServer.Common.Constants;
-using RazzleServer.Game.Maple.Scripting;
 using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Handlers
@@ -10,6 +9,7 @@ namespace RazzleServer.Game.Handlers
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
             var portals = packet.ReadByte();
+            
             if (portals != client.Character.Portals)
             {
                 client.Character.LogCheatWarning(CheatType.InvalidPortals);
@@ -57,19 +57,14 @@ namespace RazzleServer.Game.Handlers
 
         private static void UsePortal(GameClient client, string portalLabel)
         {
-            if (client.Character.Map.Portals.ContainsPortal(portalLabel))
+            if (!client.Character.Map.Portals.ContainsPortal(portalLabel))
             {
-                var portal = client.Character.Map.Portals[portalLabel];
-
-                if (portal.DestinationMapId == 999999999)
-                {
-                    ScriptProvider.Portals.Execute(portal, client.Character);
-                }
-                else
-                {
-                    client.Character.ChangeMap(portal.DestinationMapId, portal.Link.Id);
-                }
+                client.Character.LogCheatWarning(CheatType.InvalidMapChange);
+                return;
             }
+
+            var portal = client.Character.Map.Portals[portalLabel];
+            client.Character.ChangeMap(portal.DestinationMapId, portal.Link.Id);
         }
     }
 }

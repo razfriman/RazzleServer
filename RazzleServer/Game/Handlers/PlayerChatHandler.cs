@@ -1,5 +1,4 @@
 ﻿using RazzleServer.Common;
-using RazzleServer.Common.Server;
 using RazzleServer.Game.Maple.Scripting;
 using RazzleServer.Net.Packet;
 

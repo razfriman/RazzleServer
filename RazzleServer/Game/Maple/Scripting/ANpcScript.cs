@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Characters;
@@ -45,7 +47,7 @@ namespace RazzleServer.Game.Maple.Scripting
             _result.Wait();
             return _result.Value;
         }
-        
+
         protected int SendChoice(string text)
         {
             _result = new WaitableResult<int>();
@@ -153,5 +155,54 @@ namespace RazzleServer.Game.Maple.Scripting
             _stringResult.Wait();
             return _stringResult.Value;
         }
+
+        public static string CreateSelectionList(NpcListType type, params int[] ids)
+        {
+            var builder = new StringBuilder();
+            for (var i = 0; i < ids.Length; i++)
+            {
+                builder.Append($"\r\n{i}##{MapNpcListType(type)}{ids[i]}##l");
+            }
+
+            return builder.ToString();
+        }
+
+        public static string Blue(string s) => $"#b{s}";
+        public static string Purple(string s) => $"#d{s}";
+        public static string Bold(string s) => $"#e{s}";
+        public static string Green(string s) => $"#g{s}";
+        public static string Black(string s) => $"#k{s}";
+        public static string Red(string s) => $"#r{s}";
+        public static string Backwards(string s) => $"\b{s}";
+        public static string NormalText(string s) => $"#n{s}";
+        public static string WzImageByPath(string s) => $"#f{s}#";
+        public static string CountItem(int n) => $"#c{n}#";
+        public static string PlayerName() => "#h #";
+        public static string ProgressBar(int n) => $"#B{n}#";
+
+        public static string MapNpcListType(NpcListType type)
+        {
+            switch (type)
+            {
+                case NpcListType.Npc:
+                    return "p";
+                case NpcListType.Mob:
+                    return "o";
+                case NpcListType.Map:
+                    return "m";
+                case NpcListType.Skill:
+                    return "q";
+                case NpcListType.Item:
+                    return "t"; // z
+                case NpcListType.SkillIcon:
+                    return "s";
+                case NpcListType.ItemIcon:
+                    return "v"; // i
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
+            }
+        }
+
+     
     }
 }
