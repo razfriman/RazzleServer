@@ -151,11 +151,13 @@ namespace RazzleServer.Crypto
                 IsWaiting = true;
             }
 
-            if (AvailableData > 4)
+            if (AvailableData <= 4)
             {
-                IsWaiting = false;
-                GetHeader();
+                return;
             }
+
+            IsWaiting = false;
+            GetHeader();
         }
 
         /// <summary>

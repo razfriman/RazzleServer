@@ -169,11 +169,13 @@ namespace RazzleServer.Wz
             }
             set
             {
-                if (value != null)
+                if (value == null)
                 {
-                    value.Name = name;
-                    AddProperty(value);
+                    return;
                 }
+
+                value.Name = name;
+                AddProperty(value);
             }
         }
 

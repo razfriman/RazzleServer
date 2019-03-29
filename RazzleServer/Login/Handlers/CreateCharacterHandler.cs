@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using RazzleServer.Common;
-using RazzleServer.Common.Server;
 using RazzleServer.Common.Constants;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;

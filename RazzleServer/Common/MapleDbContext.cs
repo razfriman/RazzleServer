@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using RazzleServer.Common.Server;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using RazzleServer.Data;
 
 namespace RazzleServer.Common
@@ -25,15 +25,16 @@ namespace RazzleServer.Common
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (ServerConfig.Instance.DatabaseConnectionType == Constants.DatabaseConnectionType.Sqlite)
+            switch (ServerConfig.Instance.DatabaseConnectionType)
             {
-                optionsBuilder
-                    .UseSqlite($"Filename=./{ServerConfig.Instance.DatabaseConnection}");
-            }
-            else if (ServerConfig.Instance.DatabaseConnectionType == Constants.DatabaseConnectionType.InMemory)
-            {
-                optionsBuilder
-                    .UseInMemoryDatabase("RazzleServer");
+                case Constants.DatabaseConnectionType.Sqlite:
+                    optionsBuilder.UseSqlite($"Filename=./{ServerConfig.Instance.DatabaseConnection}");
+                    break;
+                case Constants.DatabaseConnectionType.InMemory:
+                    optionsBuilder.UseInMemoryDatabase("RazzleServer");
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }

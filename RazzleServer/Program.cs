@@ -3,7 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RazzleServer.Common;
-using RazzleServer.Common.Server;
 using Serilog;
 
 namespace RazzleServer

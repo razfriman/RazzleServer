@@ -27,15 +27,17 @@ namespace RazzleServer.Common.Util
 
         private void DestoryExpiredItems(TKey key)
         {
-            if (_innerDictionary.ContainsKey(key))
+            if (!_innerDictionary.ContainsKey(key))
             {
-                var value = _innerDictionary[key];
+                return;
+            }
 
-                if (value.Expiry < DateTime.UtcNow)
-                {
-                    //Expired, nuke it in the background and continue
-                    _innerDictionary.Remove(key);
-                }
+            var value = _innerDictionary[key];
+
+            if (value.Expiry < DateTime.UtcNow)
+            {
+                //Expired, nuke it in the background and continue
+                _innerDictionary.Remove(key);
             }
         }
 

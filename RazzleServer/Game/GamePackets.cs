@@ -30,66 +30,72 @@ namespace RazzleServer.Game
 
             pw.WriteByte((byte)type);
 
-            if (type == MessageType.DropPickup)
+            switch (type)
             {
-                pw.WriteBool(isMeso);
-
-                if (isMeso)
+                case MessageType.DropPickup:
                 {
+                    pw.WriteBool(isMeso);
+
+                    if (isMeso)
+                    {
+                        pw.WriteInt(amount);
+                        pw.WriteShort(0); // iNet Cafe Meso Gain
+                    }
+                    else
+                    {
+                        pw.WriteInt(mapleId);
+                        pw.WriteInt(amount);
+                        pw.WriteInt(0);
+                        pw.WriteInt(0);
+                    }
+
+                    break;
+                }
+
+                case MessageType.IncreaseMeso:
                     pw.WriteInt(amount);
                     pw.WriteShort(0); // iNet Cafe Meso Gain
-                }
-                else
-                {
-                    pw.WriteInt(mapleId);
+                    break;
+                case MessageType.IncreaseExp:
+                    pw.WriteBool(isWhite);
                     pw.WriteInt(amount);
+                    pw.WriteBool(inChat);
                     pw.WriteInt(0);
                     pw.WriteInt(0);
-                }
-            }
-            else if (type == MessageType.IncreaseMeso)
-            {
-                pw.WriteInt(amount);
-                pw.WriteShort(0); // iNet Cafe Meso Gain
-            }
-            else if (type == MessageType.IncreaseExp)
-            {
-                pw.WriteBool(isWhite);
-                pw.WriteInt(amount);
-                pw.WriteBool(inChat);
-                pw.WriteInt(0);
-                pw.WriteInt(0);
-                pw.WriteInt(0);
-            }
-            else if (type == MessageType.IncreaseFame)
-            {
-                pw.WriteInt(amount);
-            }
-            else if (type == MessageType.QuestRecord)
-            {
-                pw.WriteShort(mapleId);
-                pw.WriteByte((byte)questStatus);
+                    pw.WriteInt(0);
+                    break;
+                case MessageType.IncreaseFame:
+                    pw.WriteInt(amount);
+                    break;
+                case MessageType.QuestRecord:
+                    pw.WriteShort(mapleId);
+                    pw.WriteByte((byte)questStatus);
 
-                if (questStatus == QuestStatus.NotStarted)
-                {
-                    pw.WriteByte(0);
-                    pw.WriteByte(0);
-                    pw.WriteLong(0);
-                }
-                else if (questStatus == QuestStatus.InProgress)
-                {
-                    pw.WriteString(questString);
-
-                    if (questString != null)
+                    switch (questStatus)
                     {
-                        pw.WriteLong(0);
+                        case QuestStatus.NotStarted:
+                            pw.WriteByte(0);
+                            pw.WriteByte(0);
+                            pw.WriteLong(0);
+                            break;
+                        case QuestStatus.InProgress:
+                        {
+                            pw.WriteString(questString);
+
+                            if (questString != null)
+                            {
+                                pw.WriteLong(0);
+                            }
+
+                            break;
+                        }
+                        case QuestStatus.Complete:
+                            pw.WriteByte(0);
+                            pw.WriteDateTime(DateTime.Now);
+                            break;
                     }
-                }
-                else if (questStatus == QuestStatus.Complete)
-                {
-                    pw.WriteByte(0);
-                    pw.WriteDateTime(DateTime.Now);
-                }
+
+                    break;
             }
 
 

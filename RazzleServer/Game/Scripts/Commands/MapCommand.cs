@@ -18,44 +18,43 @@ namespace RazzleServer.Game.Scripts.Commands
             if (args.Length == 0)
             {
                 ShowSyntax(caller);
+                return;
+            }
+
+            if (args.Length == 1 && args[0] == "-current")
+            {
+                caller.Notify("[Command] Current map: " + caller.Map.MapleId);
+                caller.Notify("   -X: " + caller.Position.X);
+                caller.Notify("   -Y: " + caller.Position.Y);
             }
             else
             {
-                if (args.Length == 1 && args[0] == "-current")
+                var mapName = "";
+                int mapId = int.TryParse(args[0], out mapId) ? mapId : -1;
+                byte portalId = 0;
+
+                if (args.Length >= 2)
                 {
-                    caller.Notify("[Command] Current map: " + caller.Map.MapleId);
-                    caller.Notify("   -X: " + caller.Position.X);
-                    caller.Notify("   -Y: " + caller.Position.Y);
+                    byte.TryParse(args[1], out portalId);
+                }
+
+                if (mapId == -1)
+                {
+                    mapName = string.Join(" ", args);
+                    Enum.TryParse(mapName, true, out CommandMaps val);
+                    if (val > 0)
+                    {
+                        mapId = (int)val;
+                    }
+                }
+
+                if (DataProvider.Maps.Data.ContainsKey(mapId))
+                {
+                    caller.ChangeMap(mapId, portalId);
                 }
                 else
                 {
-                    var mapName = "";
-                    int mapId = int.TryParse(args[0], out mapId) ? mapId : -1;
-                    byte portalId = 0;
-
-                    if (args.Length >= 2)
-                    {
-                        byte.TryParse(args[1], out portalId);
-                    }
-
-                    if (mapId == -1)
-                    {
-                        mapName = string.Join(" ", args);
-                        Enum.TryParse(mapName, true, out CommandMaps val);
-                        if (val > 0)
-                        {
-                            mapId = (int)val;
-                        }
-                    }
-
-                    if (DataProvider.Maps.Data.ContainsKey(mapId))
-                    {
-                        caller.ChangeMap(mapId, portalId);
-                    }
-                    else
-                    {
-                        caller.Notify($"[Command] Invalid map name: {mapName}");
-                    }
+                    caller.Notify($"[Command] Invalid map name: {mapName}");
                 }
             }
         }

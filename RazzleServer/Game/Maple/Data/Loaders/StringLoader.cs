@@ -2,7 +2,6 @@
 using Serilog;
 using RazzleServer.Game.Maple.Data.Cache;
 using RazzleServer.Wz;
-using RazzleServer.Wz.WzProperties;
 
 namespace RazzleServer.Game.Maple.Data.Loaders
 {

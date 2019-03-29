@@ -1,5 +1,4 @@
 ﻿using RazzleServer.Common.Constants;
-using RazzleServer.Game.Maple.Items;
 using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Handlers

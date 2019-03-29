@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Serilog;
 using Newtonsoft.Json;
 using RazzleServer.Common;
-using RazzleServer.Common.Server;
 using RazzleServer.Wz;
 
 namespace RazzleServer.Game.Maple.Data.Loaders
