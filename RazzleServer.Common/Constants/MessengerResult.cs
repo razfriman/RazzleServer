@@ -1,7 +1,5 @@
 ﻿namespace RazzleServer.Common.Constants
 {
-    #region Social
-
     public enum MessengerResult : byte
     {
         Open = 0,
@@ -12,5 +10,4 @@
         Decline = 5,
         Chat = 6
     }
-    #endregion
 }

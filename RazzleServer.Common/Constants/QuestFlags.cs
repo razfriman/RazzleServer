@@ -2,8 +2,6 @@
 
 namespace RazzleServer.Common.Constants
 {
-    #region Quests
-
     [Flags]
     public enum QuestFlags : short
     {
@@ -11,5 +9,4 @@ namespace RazzleServer.Common.Constants
         AutoStart = 0x01,
         SelectedMob = 0x02
     }
-    #endregion
 }

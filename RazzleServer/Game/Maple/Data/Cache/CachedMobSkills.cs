@@ -5,7 +5,7 @@ namespace RazzleServer.Game.Maple.Data.Cache
 {
     public sealed class CachedMobSkills
     {
-        public Dictionary<int, Dictionary<byte, MobSkillDataReference>> Data =
+        public readonly Dictionary<int, Dictionary<byte, MobSkillDataReference>> Data =
             new Dictionary<int, Dictionary<byte, MobSkillDataReference>>();
     }
 }

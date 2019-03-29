@@ -1,8 +1,5 @@
 ﻿namespace RazzleServer.Common.Constants
 {
-
-    #region Social
-
     public enum BbsAction : byte
     {
         AddOrEdit,
@@ -12,5 +9,4 @@
         Reply,
         DeleteReply
     }
-    #endregion
 }

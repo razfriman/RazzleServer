@@ -12,16 +12,10 @@ namespace RazzleServer.Wz
     /// </summary>
     public class WzDirectory : WzObject
     {
-        #region Fields
-
         private WzBinaryReader _reader;
         private uint _hash;
         private int _offsetSize;
         private WzFile _wzFile;
-
-        #endregion
-
-        #region Inherited Members
 
         public override WzObjectType ObjectType => WzObjectType.Directory;
 
@@ -38,10 +32,6 @@ namespace RazzleServer.Wz
             WzImages = null;
             WzDirectories = null;
         }
-
-        #endregion
-
-        #region Custom Members
 
         /// <summary>
         /// The size of the directory in the wz file
@@ -558,8 +548,6 @@ namespace RazzleServer.Wz
 
             return result;
         }
-
-        #endregion
 
         public override void Remove() => ((WzDirectory)Parent)?.RemoveDirectory(this);
 

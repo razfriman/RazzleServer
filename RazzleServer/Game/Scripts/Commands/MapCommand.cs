@@ -21,7 +21,7 @@ namespace RazzleServer.Game.Scripts.Commands
                 return;
             }
 
-            if (args.Length == 1 && args[0] == "-current")
+            if (args[0] == "-current")
             {
                 caller.Notify("[Command] Current map: " + caller.Map.MapleId);
                 caller.Notify("   -X: " + caller.Position.X);

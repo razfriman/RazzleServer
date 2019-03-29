@@ -1,7 +1,5 @@
 ﻿namespace RazzleServer.Common.Constants
 {
-    #region Quests
-
     public enum QuestResult : byte
     {
         AddTimeLimit = 0x06,
@@ -15,5 +13,4 @@
         Expire = 0x0F,
         ResetTimeLimit = 0x10
     }
-    #endregion
 }

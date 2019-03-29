@@ -16,8 +16,6 @@ namespace RazzleServer.Wz.WzProperties
     {
         private readonly ILogger _log = Log.ForContext<WzSoundProperty>();
 
-        #region Fields
-
         private byte[] _mp3Bytes;
         private WaveFormat _wavFormat;
         private readonly WzBinaryReader _wzReader;
@@ -34,10 +32,6 @@ namespace RazzleServer.Wz.WzProperties
             0x01,
             0x81, 0x9F, 0x58, 0x05, 0x56, 0xC3, 0xCE, 0x11, 0xBF, 0x01, 0x00, 0xAA, 0x00, 0x55, 0x59, 0x5A
         };
-
-        #endregion
-
-        #region Inherited Members
 
         public override WzImageProperty DeepClone()
         {
@@ -75,10 +69,6 @@ namespace RazzleServer.Wz.WzProperties
             Name = null;
             _mp3Bytes = null;
         }
-
-        #endregion
-
-        #region Custom Members
 
         /// <summary>
         /// The data of the mp3 header
@@ -285,8 +275,6 @@ namespace RazzleServer.Wz.WzProperties
                     break;
             }
         }
-
-        #endregion
 
         public byte[] GetBytes(bool saveInMemory)
         {

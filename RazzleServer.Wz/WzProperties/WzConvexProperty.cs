@@ -12,7 +12,6 @@ namespace RazzleServer.Wz.WzProperties
     {
         private List<WzImageProperty> _properties = new List<WzImageProperty>();
 
-        #region Inherited Members
         public override void SetValue(object value) => throw new NotImplementedException();
 
         public override WzImageProperty DeepClone()
@@ -102,9 +101,6 @@ namespace RazzleServer.Wz.WzProperties
             _properties = null;
         }
 
-        #endregion
-
-        #region Custom Members
         /// <summary>
         /// Creates a blank WzConvexProperty
         /// </summary>
@@ -154,7 +150,5 @@ namespace RazzleServer.Wz.WzProperties
 
             _properties.Clear();
         }
-
-        #endregion
     }
 }

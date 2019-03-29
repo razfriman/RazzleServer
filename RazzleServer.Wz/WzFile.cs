@@ -19,13 +19,9 @@ namespace RazzleServer.Wz
     {
         private readonly ILogger _log = Log.ForContext<WzFile>();
 
-        #region Fields
-
         private uint _versionHash;
         private int _version;
         private byte[] _wzIv;
-
-        #endregion
 
         public WzDirectory WzDirectory { get; private set; } = new WzDirectory();
 
@@ -144,58 +140,8 @@ namespace RazzleServer.Wz
             reader.ReadBytes((int)(Header.FStart - reader.BaseStream.Position));
             reader.Header = Header;
             _version = reader.ReadInt16();
-            if (Version == -1)
+            if (Version == -1 && !CalculateVersion(reader))
             {
-                for (var j = 0; j < short.MaxValue; j++)
-                {
-                    Version = (short)j;
-                    _versionHash = GetVersionHash(_version, Version);
-                    if (_versionHash == 0)
-                    {
-                        continue;
-                    }
-
-                    reader.Hash = _versionHash;
-                    var position = reader.BaseStream.Position;
-                    WzDirectory testDirectory;
-                    try
-                    {
-                        testDirectory = new WzDirectory(reader, Name, _versionHash, _wzIv, this);
-                        testDirectory.ParseDirectory();
-                    }
-                    catch
-                    {
-                        reader.BaseStream.Position = position;
-                        continue;
-                    }
-
-                    var testImage = testDirectory.GetChildImages()[0];
-
-                    try
-                    {
-                        reader.BaseStream.Position = testImage.Offset;
-                        var checkByte = reader.ReadByte();
-                        reader.BaseStream.Position = position;
-                        testDirectory.Dispose();
-                        switch (checkByte)
-                        {
-                            case 0x73:
-                            case 0x1b:
-                                var directory = new WzDirectory(reader, Name, _versionHash, _wzIv, this);
-                                directory.ParseDirectory();
-                                WzDirectory = directory;
-                                return;
-                            default:
-                                reader.BaseStream.Position = position;
-                                return;
-                        }
-                    }
-                    catch
-                    {
-                        reader.BaseStream.Position = position;
-                    }
-                }
-
                 throw new InvalidDataException(
                     "Error with game version hash : The specified game version is incorrect");
             }
@@ -205,6 +151,61 @@ namespace RazzleServer.Wz
             var tempDirectory = new WzDirectory(reader, Name, _versionHash, _wzIv, this);
             tempDirectory.ParseDirectory();
             WzDirectory = tempDirectory;
+        }
+
+        private bool CalculateVersion(WzBinaryReader reader)
+        {
+            for (var j = 0; j < short.MaxValue; j++)
+            {
+                Version = (short)j;
+                _versionHash = GetVersionHash(_version, Version);
+                if (_versionHash == 0)
+                {
+                    continue;
+                }
+
+                reader.Hash = _versionHash;
+                var position = reader.BaseStream.Position;
+                WzDirectory testDirectory;
+                try
+                {
+                    testDirectory = new WzDirectory(reader, Name, _versionHash, _wzIv, this);
+                    testDirectory.ParseDirectory();
+                }
+                catch
+                {
+                    reader.BaseStream.Position = position;
+                    continue;
+                }
+
+                var testImage = testDirectory.GetChildImages()[0];
+
+                try
+                {
+                    reader.BaseStream.Position = testImage.Offset;
+                    var checkByte = reader.ReadByte();
+                    reader.BaseStream.Position = position;
+                    testDirectory.Dispose();
+                    switch (checkByte)
+                    {
+                        case 0x73:
+                        case 0x1b:
+                            var directory = new WzDirectory(reader, Name, _versionHash, _wzIv, this);
+                            directory.ParseDirectory();
+                            WzDirectory = directory;
+                            return true;
+                        default:
+                            reader.BaseStream.Position = position;
+                            return true;
+                    }
+                }
+                catch
+                {
+                    reader.BaseStream.Position = position;
+                }
+            }
+
+            return false;
         }
 
         private static uint GetVersionHash(int encver, int realver)

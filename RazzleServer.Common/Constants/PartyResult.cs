@@ -1,7 +1,5 @@
 ﻿namespace RazzleServer.Common.Constants
 {
-    #region Social
-
     public enum PartyResult : byte
     {
         Invite = 4,
@@ -11,5 +9,4 @@
         Join = 15,
         ChangeLeader = 26
     }
-    #endregion
 }

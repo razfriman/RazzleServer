@@ -18,17 +18,11 @@ namespace RazzleServer.Wz.WzProperties
     {
         private readonly ILogger _log = Log.ForContext<WzPngProperty>();
 
-        #region Fields
-
         private byte[] _compressedBytes;
         private Bitmap _png;
         private bool _listWzUsed;
         private readonly WzBinaryReader _wzReader;
         private readonly long _offs;
-
-        #endregion
-
-        #region Inherited Members
 
         public override void SetValue(object value)
         {
@@ -70,10 +64,6 @@ namespace RazzleServer.Wz.WzProperties
             _png?.Dispose();
             _png = null;
         }
-
-        #endregion
-
-        #region Custom Members
 
         /// <summary>
         /// The width of the bitmap
@@ -166,10 +156,6 @@ namespace RazzleServer.Wz.WzProperties
 
             _wzReader = reader;
         }
-
-        #endregion
-
-        #region Parsing Methods
 
         public byte[] GetCompressedBytes(bool saveInMemory)
         {
@@ -504,15 +490,7 @@ namespace RazzleServer.Wz.WzProperties
             writer.Close();
         }
 
-        #endregion
-
-        #region Cast Values
-
         public override Bitmap GetBitmap() => GetPng(false);
-
-        #endregion
-
-        #region DXT Format Parser
 
         private static byte[] GetPixelDataDxt3(byte[] rawData, int width, int height)
         {
@@ -684,7 +662,5 @@ namespace RazzleServer.Wz.WzProperties
                 (b << 3) | (b >> 2));
             return c;
         }
-
-        #endregion
     }
 }
