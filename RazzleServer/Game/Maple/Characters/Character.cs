@@ -40,6 +40,7 @@ namespace RazzleServer.Game.Maple.Characters
         public CharacterQuests Quests { get; }
         public CharacterRings Rings { get; }
         public CharacterBuffs Buffs { get; }
+        public CharacterSummons Summons { get; set; }
         public CharacterTeleportRocks TeleportRocks { get; }
         public CharacterStorage Storage { get; }
         public ControlledMobs ControlledMobs { get; }
@@ -144,6 +145,7 @@ namespace RazzleServer.Game.Maple.Characters
             Skills = new CharacterSkills(this);
             Quests = new CharacterQuests(this);
             Rings = new CharacterRings(this);
+            Summons = new CharacterSummons(this);
             Buffs = new CharacterBuffs(this);
             PrimaryStats = new CharacterStats(this);
             Pets = new CharacterPets(this);

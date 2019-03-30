@@ -1,4 +1,5 @@
 ﻿using RazzleServer.Common.Constants;
+using RazzleServer.Game.Maple.Life;
 using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Handlers
@@ -136,15 +137,21 @@ namespace RazzleServer.Game.Handlers
 
                     break;
                 }
+
+                case (int)SkillNames.Priest.SummonDragon:
+                case (int)SkillNames.Ranger.SilverHawk:
+                case (int)SkillNames.Sniper.GoldenEagle:
+                case (int)SkillNames.Ranger.Puppet:
+                case (int)SkillNames.Sniper.Puppet:
+                {
+                    var position = packet.ReadPoint();
+                    client.Character.Summons.Add(skill, position);
+                    break;
+                }
             }
 
             client.Character.Release();
             skill.Cast();
-
-            if (skill.IsSummon)
-            {
-                //client.Character.Summons.Add(skill);
-            }
         }
     }
 }

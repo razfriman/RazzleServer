@@ -90,13 +90,6 @@ namespace RazzleServer.Game.Maple.Skills
 
         public SkillReference CachedReference => DataProvider.Skills.Data[MapleId][CurrentLevel];
 
-        public bool IsPuppet => MapleId == (int)SkillNames.Sniper.Puppet || MapleId == (int)SkillNames.Ranger.Puppet;
-
-        public bool IsSummon => IsPuppet ||
-                                MapleId == (int)SkillNames.Priest.SummonDragon ||
-                                MapleId == (int)SkillNames.Ranger.SilverHawk ||
-                                MapleId == (int)SkillNames.Sniper.GoldenEagle;
-
         public Character Character => Parent.Parent;
 
         private bool Assigned { get; set; }
