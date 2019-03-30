@@ -36,24 +36,24 @@ namespace RazzleServer.Login.Handlers
                 AccountId = client.Account.Id,
                 WorldId = client.World,
                 Name = name,
-                PrimaryStats = new CharacterStats
-                {
-                    Gender = client.Account.Gender,
-                    Skin = skin,
-                    Face = face,
-                    Hair = hair + hairColor,
-                    Level = 1,
-                    Job = Job.Beginner,
-                    Strength = strength,
-                    Dexterity = dexterity,
-                    Intelligence = intelligence,
-                    Luck = luck,
-                    MaxHealth = 50,
-                    MaxMana = 5,
-                    Health = 50,
-                    Mana = 5
-                },
                 Map = new Map(ServerConfig.Instance.DefaultMapId)
+            };
+            character.PrimaryStats = new CharacterStats(character)
+            {
+                Gender = client.Account.Gender,
+                Skin = skin,
+                Face = face,
+                Hair = hair + hairColor,
+                Level = 1,
+                Job = Job.Beginner,
+                Strength = strength,
+                Dexterity = dexterity,
+                Intelligence = intelligence,
+                Luck = luck,
+                MaxHealth = 50,
+                MaxMana = 5,
+                Health = 50,
+                Mana = 5
             };
 
             character.Items.Add(new Item(topId, equipped: true));

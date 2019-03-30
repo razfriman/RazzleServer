@@ -198,7 +198,7 @@ namespace RazzleServer.Game.Maple.Characters
                 Parent.PrimaryStats.UpdateApperance();
             }
 
-            Parent.PrimaryStats.ItemBonuses = CalculateStatBonus();
+            Parent.PrimaryStats.EquipBonuses = CalculateStatBonus();
             Parent.PrimaryStats.Update();
         }
 

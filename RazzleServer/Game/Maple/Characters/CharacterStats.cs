@@ -14,7 +14,6 @@ namespace RazzleServer.Game.Maple.Characters
     {
         public Character Parent { get; set; }
 
-        
         private byte _skin;
         private int _face;
         private int _hair;
@@ -33,7 +32,9 @@ namespace RazzleServer.Game.Maple.Characters
         private int _experience;
         private short _fame;
         private int _meso;
-        
+
+        public CharacterStats(Character character) => Parent = character;
+
         public short BaseStrength { get; set; }
         public short BaseDexterity { get; set; }
         public short BaseIntelligence { get; set; }
@@ -50,20 +51,30 @@ namespace RazzleServer.Game.Maple.Characters
         public byte BaseJump { get; set; }
         public float JumpMode { get; set; }
 
-        public short AdjustedStrength => (short)(BaseStrength + BuffBonuses.Strength + ItemBonuses.Strength);
-        public short AdjustedDexterity => (short)(BaseStrength + BuffBonuses.Strength + ItemBonuses.Strength);
-        public short AdjustedIntelligence => (short)(BaseStrength + BuffBonuses.Strength + ItemBonuses.Strength);
-        public short AdjustedLuck => (short)(BaseStrength + BuffBonuses.Strength + ItemBonuses.Strength);
-        public short AdjustedHealth => (short)(BaseStrength + BuffBonuses.Strength + ItemBonuses.Strength);
-        public short AdjustedMaxHealth => (short)(BaseStrength + BuffBonuses.Strength + ItemBonuses.Strength);
-        public short AdjustedMana => (short)(BaseStrength + BuffBonuses.Strength + ItemBonuses.Strength);
-        public short AdjustedMaxMana => (short)(BaseStrength + BuffBonuses.Strength + ItemBonuses.Strength);
+        public short AdjustedStrength => (short)(BaseStrength + BuffBonuses.Strength + EquipBonuses.Strength);
+        public short AdjustedDexterity => (short)(BaseStrength + BuffBonuses.Strength + EquipBonuses.Strength);
+        public short AdjustedIntelligence => (short)(BaseStrength + BuffBonuses.Strength + EquipBonuses.Strength);
+        public short AdjustedLuck => (short)(BaseStrength + BuffBonuses.Strength + EquipBonuses.Strength);
+        public short AdjustedHealth => (short)(BaseStrength + BuffBonuses.Strength + EquipBonuses.Strength);
+        public short AdjustedMaxHealth => (short)(BaseStrength + BuffBonuses.Strength + EquipBonuses.Strength);
+        public short AdjustedMana => (short)(BaseStrength + BuffBonuses.Strength + EquipBonuses.Strength);
+        public short AdjustedMaxMana => (short)(BaseStrength + BuffBonuses.Strength + EquipBonuses.Strength);
+
+//        public short TotalMAD => (short)Math.Max(0, Math.Min(MAD + EquipBonuses.MAD + BuffBonuses.MAD, 1999));
+//        public short TotalMDD => (short)Math.Max(0, Math.Min(MDD + EquipBonuses.MDD + BuffBonuses.MDD, 1999));
+//        public short TotalPAD => (short)Math.Max(0, Math.Min(EquipBonuses.PAD + BuffBonuses.PAD, 1999));
+//        public short TotalPDD => (short)Math.Max(0, Math.Min(EquipBonuses.PDD + BuffBonuses.PDD, 1999));
+//        public short TotalACC => (short)Math.Max(0, Math.Min(ACC + EquipBonuses.ACC + BuffBonuses.ACC, 999));
+//        public short TotalEVA => (short)Math.Max(0, Math.Min(EVA + EquipBonuses.EVA + BuffBonuses.EVA, 999));
+//        public short TotalCraft => (short)Math.Max(0, Math.Min(Craft + EquipBonuses.Craft + BuffBonuses.Craft, 999));
+//        public short TotalJump => (short)Math.Max(100, Math.Min(EquipBonuses.Jump + BuffBonuses.Jump, 123));
+//        public byte TotalSpeed => (byte)Math.Max(100, Math.Min(EquipBonuses.Speed + BuffBonuses.Speed, 200));
 
         public StatBonus BuffBonuses { get; set; } = new StatBonus();
-        public StatBonus ItemBonuses { get; set; } = new StatBonus();
+        public StatBonus EquipBonuses { get; set; } = new StatBonus();
 
 
-      public byte Skin
+        public byte Skin
         {
             get => _skin;
             set
@@ -462,8 +473,8 @@ namespace RazzleServer.Game.Maple.Characters
                 }
             }
         }
-        
-         public void Update(params StatisticType[] statistics)
+
+        public void Update(params StatisticType[] statistics)
         {
             var oPacket = new PacketWriter(ServerOperationCode.StatsChanged);
             oPacket.WriteBool(true); // itemReaction
@@ -554,90 +565,90 @@ namespace RazzleServer.Game.Maple.Characters
 
             Parent.Send(oPacket);
         }
-         
-         public void UpdateApperance()
-         {
-             using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerChangeEquips))
-             {
-                 oPacket.WriteInt(Parent.Id);
-                 oPacket.WriteBool(true);
-                 oPacket.WriteBytes(Parent.AppearanceToByteArray());
-                 oPacket.WriteByte(0);
-                 oPacket.WriteShort(0);
-                 Parent.Map.Send(oPacket, Parent);
-             }
-         }
-         
-         public void AddAbility(StatisticType statistic, short mod, bool isReset)
-         {
-             var maxStat = short.MaxValue;
 
-             lock (this)
-             {
-                 switch (statistic)
-                 {
-                     case StatisticType.Strength:
-                         if (Strength >= maxStat)
-                         {
-                             return;
-                         }
+        public void UpdateApperance()
+        {
+            using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerChangeEquips))
+            {
+                oPacket.WriteInt(Parent.Id);
+                oPacket.WriteBool(true);
+                oPacket.WriteBytes(Parent.AppearanceToByteArray());
+                oPacket.WriteByte(0);
+                oPacket.WriteShort(0);
+                Parent.Map.Send(oPacket, Parent);
+            }
+        }
 
-                         Strength += mod;
-                         break;
+        public void AddAbility(StatisticType statistic, short mod, bool isReset)
+        {
+            var maxStat = short.MaxValue;
 
-                     case StatisticType.Dexterity:
-                         if (Dexterity >= maxStat)
-                         {
-                             return;
-                         }
+            lock (this)
+            {
+                switch (statistic)
+                {
+                    case StatisticType.Strength:
+                        if (Strength >= maxStat)
+                        {
+                            return;
+                        }
 
-                         Dexterity += mod;
-                         break;
+                        Strength += mod;
+                        break;
 
-                     case StatisticType.Intelligence:
-                         if (Intelligence >= maxStat)
-                         {
-                             return;
-                         }
+                    case StatisticType.Dexterity:
+                        if (Dexterity >= maxStat)
+                        {
+                            return;
+                        }
 
-                         Intelligence += mod;
-                         break;
+                        Dexterity += mod;
+                        break;
 
-                     case StatisticType.Luck:
-                         if (Luck >= maxStat)
-                         {
-                             return;
-                         }
+                    case StatisticType.Intelligence:
+                        if (Intelligence >= maxStat)
+                        {
+                            return;
+                        }
 
-                         Luck += mod;
-                         break;
+                        Intelligence += mod;
+                        break;
 
-                     case StatisticType.MaxHealth:
-                         if (MaxHealth >= 30000)
-                         {
-                             return;
-                         }
+                    case StatisticType.Luck:
+                        if (Luck >= maxStat)
+                        {
+                            return;
+                        }
 
-                         MaxHealth += mod;
-                         break;
-                     case StatisticType.MaxMana:
-                         if (MaxMana >= 30000)
-                         {
-                             return;
-                         }
+                        Luck += mod;
+                        break;
 
-                         MaxMana += mod;
-                         break;
-                 }
+                    case StatisticType.MaxHealth:
+                        if (MaxHealth >= 30000)
+                        {
+                            return;
+                        }
 
-                 if (!isReset)
-                 {
-                     AbilityPoints -= mod;
-                 }
-             }
-         }
-         
-           public void DistributeAp(StatisticType type, short amount = 1)
+                        MaxHealth += mod;
+                        break;
+                    case StatisticType.MaxMana:
+                        if (MaxMana >= 30000)
+                        {
+                            return;
+                        }
+
+                        MaxMana += mod;
+                        break;
+                }
+
+                if (!isReset)
+                {
+                    AbilityPoints -= mod;
+                }
+            }
+        }
+
+        public void DistributeAp(StatisticType type, short amount = 1)
         {
             switch (type)
             {
@@ -667,25 +678,30 @@ namespace RazzleServer.Game.Maple.Characters
 
                     if (Job == Job.Beginner)
                     {
-                        maxHp += Functions.Random(8, 12);
+                        maxHp += Functions.Random(BaseHealthValues.Beginner - BaseHealthValues.Variation,
+                            BaseHealthValues.Beginner);
                     }
                     else if (IsBaseJob(Job.Warrior))
                     {
-                        maxHp += Functions.Random(20, 24);
+                        maxHp += Functions.Random(BaseHealthValues.Warrior - BaseHealthValues.Variation,
+                            BaseHealthValues.Warrior);
                         var skill = Parent.Skills[(int)SkillNames.Swordsman.ImprovedMaxHpIncrease];
                         maxHp += skill?.ParameterB ?? 0;
                     }
                     else if (IsBaseJob(Job.Magician))
                     {
-                        maxHp += Functions.Random(6, 10);
+                        maxHp += Functions.Random(BaseHealthValues.Magician - BaseHealthValues.Variation,
+                            BaseHealthValues.Magician);
                     }
                     else if (IsBaseJob(Job.Bowman))
                     {
-                        maxHp += Functions.Random(16, 20);
+                        maxHp += Functions.Random(BaseHealthValues.Bowman - BaseHealthValues.Variation,
+                            BaseHealthValues.Bowman);
                     }
                     else if (IsBaseJob(Job.Thief))
                     {
-                        maxHp += Functions.Random(20, 24);
+                        maxHp += Functions.Random(BaseHealthValues.Thief - BaseHealthValues.Variation,
+                            BaseHealthValues.Thief);
                     }
 
                     maxHp = Math.Min(30000, maxHp);
@@ -702,26 +718,31 @@ namespace RazzleServer.Game.Maple.Characters
 
                     if (Job == Job.Beginner)
                     {
-                        maxMp += Functions.Random(6, 8);
+                        maxMp += Functions.Random(BaseManaValues.Beginner - BaseManaValues.Variation,
+                            BaseManaValues.Beginner);
                     }
                     else if (IsBaseJob(Job.Warrior))
                     {
-                        maxMp += Functions.Random(2, 4);
+                        maxMp += Functions.Random(BaseManaValues.Warrior - BaseManaValues.Variation,
+                            BaseManaValues.Warrior);
                     }
                     else if (IsBaseJob(Job.Magician))
                     {
-                        maxMp += Functions.Random(18, 20);
+                        maxMp += Functions.Random(BaseManaValues.Magician - BaseManaValues.Variation,
+                            BaseManaValues.Magician);
 
                         var skill = Parent.Skills[(int)SkillNames.Magician.ImprovedMaxMpIncrease];
                         maxMp += skill?.ParameterB ?? 0;
                     }
                     else if (IsBaseJob(Job.Bowman))
                     {
-                        maxMp += Functions.Random(10, 12);
+                        maxMp += Functions.Random(BaseManaValues.Bowman - BaseManaValues.Variation,
+                            BaseManaValues.Bowman);
                     }
                     else if (IsBaseJob(Job.Thief))
                     {
-                        maxMp += Functions.Random(10, 12);
+                        maxMp += Functions.Random(BaseManaValues.Thief - BaseManaValues.Variation,
+                            BaseManaValues.Thief);
                     }
 
 
@@ -733,11 +754,7 @@ namespace RazzleServer.Game.Maple.Characters
             AbilityPoints -= amount;
         }
 
-        private bool IsBaseJob(Job baseJob)
-        {
-            var currentBaseJob = (int)Job / 100 * 100;
-            return currentBaseJob == (int)baseJob;
-        }
+        private bool IsBaseJob(Job baseJob) => (int)Job / 100 * 100 == (int)baseJob;
 
         public void Load(CharacterEntity character)
         {
@@ -763,8 +780,8 @@ namespace RazzleServer.Game.Maple.Characters
             BuddyListSlots = character.BuddyListSlots;
             Gender = (Gender)character.Gender;
         }
-        
-        
+
+
         public void UpdateStatsForParty()
         {
             // TODO

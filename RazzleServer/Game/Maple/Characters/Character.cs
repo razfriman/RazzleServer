@@ -146,6 +146,8 @@ namespace RazzleServer.Game.Maple.Characters
             Quests = new CharacterQuests(this);
             Rings = new CharacterRings(this);
             Buffs = new CharacterBuffs(this);
+            PrimaryStats = new CharacterStats(this);
+            Pets = new CharacterPets(this);
             TeleportRocks = new CharacterTeleportRocks(this);
             Storage = new CharacterStorage(this);
             Position = new Point(0, 0);
@@ -513,8 +515,6 @@ namespace RazzleServer.Game.Maple.Characters
                 Name = character.Name;
                 AccountId = character.AccountId;
                 PrimaryStats.Load(character);
-                
-
                 Map = Client?.Server[character.MapId] ?? new Map(character.MapId);
                 SpawnPoint = character.SpawnPoint;
                 WorldId = character.WorldId;
@@ -539,11 +539,11 @@ namespace RazzleServer.Game.Maple.Characters
         {
             if (isHidden)
             {
-                Map.Characters.Remove(this);
+                Map.Characters.Hide(this);
             }
             else
             {
-                Map.Characters.Remove(this);
+                Map.Characters.Show(this);
             }
             
             using (var pw = new PacketWriter(ServerOperationCode.AdminResult))

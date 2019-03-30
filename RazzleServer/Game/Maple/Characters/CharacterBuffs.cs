@@ -58,7 +58,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Add(Buff buff)
         {
-            foreach (var loopBuff in Buffs)
+            foreach (var loopBuff in Buffs.ToList())
             {
                 if (loopBuff.MapleId == buff.MapleId)
                 {

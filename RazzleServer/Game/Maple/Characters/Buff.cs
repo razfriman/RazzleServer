@@ -74,24 +74,14 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Apply()
         {
-            switch (MapleId)
+            using (var oPacket = new PacketWriter(ServerOperationCode.SkillsGiveBuff))
             {
-                case (int)SkillNames.Gm.Hide:
-                    Character.Hide(true);
-                    break;
-                default:
-                {
-                    using (var oPacket = new PacketWriter(ServerOperationCode.SkillsGiveBuff))
-                    {
-                        Character.Client.Send(oPacket);
-                    }
+                //Character.Client.Send(oPacket);
+            }
 
-                    using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerSkillBuff))
-                    {
-                        Character.Map.Send(oPacket);
-                    }
-                }
-                    break;
+            using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerSkillBuff))
+            {
+                //Character.Map.Send(oPacket);
             }
         }
 
