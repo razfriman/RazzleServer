@@ -10,15 +10,6 @@ namespace RazzleServer.Game.Handlers
         {
             var skillId = packet.ReadInt();
             client.Character.Buffs.Remove(skillId);
-
-            switch (skillId)
-            {
-                case (int)SkillNames.Gm.Hide:
-                {
-                    client.Character.Hide(false);
-                    break;
-                }
-            }
         }
     }
 }

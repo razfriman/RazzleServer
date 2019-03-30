@@ -12,7 +12,6 @@ using RazzleServer.Game.Maple.Life;
 using RazzleServer.Game.Maple.Maps;
 using RazzleServer.Game.Maple.Scripting;
 using RazzleServer.Game.Maple.Shops;
-using RazzleServer.Game.Maple.Skills;
 using RazzleServer.Game.Maple.Util;
 using RazzleServer.Net.Packet;
 using Serilog;
@@ -238,21 +237,15 @@ namespace RazzleServer.Game.Maple.Characters
         {
             var attack = new Attack(packet, type);
 
-            Skill skill = null;
-
-            if (attack.SkillId > 0)
-            {
-                skill = Skills[attack.SkillId];
-
-                skill.Cast();
-            }
+            var skill = attack.SkillId > 0 ? Skills[attack.SkillId] : null;
+            skill?.Cast();
 
             // TODO: Modify packet based on attack type.
             using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerMeleeAttack))
             {
                 oPacket.WriteInt(Id);
                 oPacket.WriteByte((byte)(attack.Targets * 0x10 + attack.Hits));
-                oPacket.WriteByte((byte)(attack.SkillId != 0 ? skill.CurrentLevel : 0)); // NOTE: Skill level.
+                oPacket.WriteByte(skill?.CurrentLevel ?? 0);
 
                 if (attack.SkillId != 0)
                 {

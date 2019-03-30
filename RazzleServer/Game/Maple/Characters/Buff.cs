@@ -18,7 +18,6 @@ namespace RazzleServer.Game.Maple.Characters
         public short Parameter { get; set; }
         public BuffValueTypes Flag { get; set; }
 
-
         public Character Character => Parent.Parent;
 
         public Buff(CharacterBuffs parent, Skill skill, uint value)
@@ -87,6 +86,11 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Cancel()
         {
+            if (MapleId == (int)SkillNames.Gm.Hide)
+            {
+                Character.Hide(false);
+            }
+
             using (var oPacket = new PacketWriter(ServerOperationCode.SkillsGiveBuff))
             {
                 Character.Client.Send(oPacket);

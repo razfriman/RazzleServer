@@ -24,8 +24,6 @@ namespace RazzleServer.Game.Handlers
                 return;
             }
 
-            //MapPacket.SendPlayerSkillAnim(chr, SkillID, SkillLevel);
-
             client.Character.Buffs.Add(skill, 0);
 
             switch (skillId)
@@ -142,10 +140,11 @@ namespace RazzleServer.Game.Handlers
 
             client.Character.Release();
             skill.Cast();
-//            if (Constants.isSummon(SkillID))
-//            {
-//                client.Character.Summons.NewSummon(SkillID, SkillLevel);
-//            }  
+
+            if (skill.IsSummon)
+            {
+                //client.Character.Summons.Add(skill);
+            }
         }
     }
 }

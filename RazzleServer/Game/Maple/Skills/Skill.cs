@@ -90,6 +90,13 @@ namespace RazzleServer.Game.Maple.Skills
 
         public SkillReference CachedReference => DataProvider.Skills.Data[MapleId][CurrentLevel];
 
+        public bool IsPuppet => MapleId == (int)SkillNames.Sniper.Puppet || MapleId == (int)SkillNames.Ranger.Puppet;
+
+        public bool IsSummon => IsPuppet ||
+                                MapleId == (int)SkillNames.Priest.SummonDragon ||
+                                MapleId == (int)SkillNames.Ranger.SilverHawk ||
+                                MapleId == (int)SkillNames.Sniper.GoldenEagle;
+
         public Character Character => Parent.Parent;
 
         private bool Assigned { get; set; }
@@ -216,28 +223,30 @@ namespace RazzleServer.Game.Maple.Skills
             Rb = CachedReference.Rb;
         }
 
-        public void Cast()
+        public void Cast() => ApplyCosts();
+
+        private void ApplyCosts()
         {
             switch (MapleId)
             {
-                case (int)SkillNames.DragonKnight.DragonRoar:
+                case (int) SkillNames.DragonKnight.DragonRoar:
                 {
-                    var lefthp = (int)(Character.PrimaryStats.MaxHealth * (ParameterA / 100.0d));
-                    Character.PrimaryStats.Health -= (short)lefthp;
+                    var lefthp = (int) (Character.PrimaryStats.MaxHealth * (ParameterA / 100.0d));
+                    Character.PrimaryStats.Health -= (short) lefthp;
                     break;
                 }
 
-                case (int)SkillNames.Spearman.HyperBody when Character.Buffs.Contains(MapleId):
+                case (int) SkillNames.Spearman.HyperBody when Character.Buffs.Contains(MapleId):
                     // Already buffed
                     return;
-                case (int)SkillNames.Spearman.HyperBody:
+                case (int) SkillNames.Spearman.HyperBody:
                 {
-                    var lefthp = (int)(Character.PrimaryStats.MaxHealth * (ParameterA / 100.0d));
-                    Character.PrimaryStats.BuffBonuses.MaxHealth = (short)lefthp;
-                    Character.PrimaryStats.MaxHealth += (short)lefthp;
-                    lefthp = (int)(Character.PrimaryStats.MaxMana * (ParameterB / 100.0d));
-                    Character.PrimaryStats.BuffBonuses.MaxMana = (short)lefthp;
-                    Character.PrimaryStats.MaxMana += (short)lefthp;
+                    var lefthp = (int) (Character.PrimaryStats.MaxHealth * (ParameterA / 100.0d));
+                    Character.PrimaryStats.BuffBonuses.MaxHealth = (short) lefthp;
+                    Character.PrimaryStats.MaxHealth += (short) lefthp;
+                    lefthp = (int) (Character.PrimaryStats.MaxMana * (ParameterB / 100.0d));
+                    Character.PrimaryStats.BuffBonuses.MaxMana = (short) lefthp;
+                    Character.PrimaryStats.MaxMana += (short) lefthp;
                     Character.PrimaryStats.MaxMana = Character.PrimaryStats.AdjustedMaxMana;
                     Character.PrimaryStats.MaxHealth = Character.PrimaryStats.AdjustedMaxHealth;
                     break;
@@ -262,9 +271,9 @@ namespace RazzleServer.Game.Maple.Skills
 
             if (CostMeso > 0)
             {
-                var min = (short)(CostMeso - (80 + CurrentLevel * 5));
-                var max = (short)(CostMeso + 80 + CurrentLevel * 5);
-                var realAmount = (short)Functions.Random(min, max);
+                var min = (short) (CostMeso - (80 + CurrentLevel * 5));
+                var max = (short) (CostMeso + 80 + CurrentLevel * 5);
+                var realAmount = (short) Functions.Random(min, max);
                 if (Character.PrimaryStats.Meso - realAmount >= 0)
                 {
                     Character.PrimaryStats.Meso -= realAmount;
