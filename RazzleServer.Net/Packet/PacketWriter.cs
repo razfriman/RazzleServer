@@ -63,6 +63,8 @@ namespace RazzleServer.Net.Packet
         /// </summary>
         /// <param name="writeValue">The byte to write</param>
         public void WriteByte(int writeValue) => _binWriter.Write((byte)writeValue);
+        
+        public void WriteByte<T>(T value) where T : Enum => _binWriter.Write((byte)(object)value);
 
         /// <summary>
         /// Writes a signed byte to the stream

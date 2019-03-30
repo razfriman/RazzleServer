@@ -88,12 +88,12 @@ namespace RazzleServer.Game.Handlers
                     }
                     else
                     {
-                        client.Character.Health -= (short)damage;
+                        client.Character.PrimaryStats.Health -= (short)damage;
                     }
 
                     if (mpBurn > 0)
                     {
-                        client.Character.Mana -= mpBurn;
+                        client.Character.PrimaryStats.Mana -= mpBurn;
                     }
                 }
 

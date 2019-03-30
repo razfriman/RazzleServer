@@ -56,7 +56,7 @@ namespace RazzleServer.Game.Handlers
 
             var item = shop.Items[index];
 
-            if (client.Character.Meso < item.PurchasePrice * quantity)
+            if (client.Character.PrimaryStats.Meso < item.PurchasePrice * quantity)
             {
                 return;
             }
@@ -86,7 +86,7 @@ namespace RazzleServer.Game.Handlers
             }
             else
             {
-                client.Character.Meso -= price;
+                client.Character.PrimaryStats.Meso -= price;
                 client.Character.Items.Add(purchase);
             }
 
@@ -127,11 +127,11 @@ namespace RazzleServer.Game.Handlers
 
             if (item.IsRechargeable)
             {
-                client.Character.Meso += item.SalePrice + (int)(shop.UnitPrices[item.MapleId] * item.Quantity);
+                client.Character.PrimaryStats.Meso += item.SalePrice + (int)(shop.UnitPrices[item.MapleId] * item.Quantity);
             }
             else
             {
-                client.Character.Meso += item.SalePrice * quantity;
+                client.Character.PrimaryStats.Meso += item.SalePrice * quantity;
             }
 
             using (var oPacket = new PacketWriter(ServerOperationCode.NpcShopResult))
@@ -147,13 +147,13 @@ namespace RazzleServer.Game.Handlers
             var item = client.Character.Items[ItemType.Usable, slot];
             var price = (int)(shop.UnitPrices[item.MapleId] * (item.MaxPerStack - item.Quantity));
 
-            if (client.Character.Meso < price)
+            if (client.Character.PrimaryStats.Meso < price)
             {
                 client.Character.Notify("You do not have enough mesos.", NoticeType.Popup);
             }
             else
             {
-                client.Character.Meso -= price;
+                client.Character.PrimaryStats.Meso -= price;
                 item.Quantity = item.MaxPerStack;
                 item.Update();
             }

@@ -19,7 +19,7 @@ namespace RazzleServer.Game.Scripts.Commands
             }
             else
             {
-                caller.Level = byte.Parse(args[0]);
+                caller.PrimaryStats.Level = byte.Parse(args[0]);
             }
         }
     }

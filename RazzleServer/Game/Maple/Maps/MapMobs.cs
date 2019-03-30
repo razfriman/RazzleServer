@@ -149,7 +149,7 @@ namespace RazzleServer.Game.Maple.Maps
                     mostDamage = attacker.Value;
                 }
 
-                attacker.Key.Experience +=
+                attacker.Key.PrimaryStats.Experience +=
                     (int)Math.Min(item.Experience, attacker.Value * item.Experience / item.MaxHealth) *
                     attacker.Key.Client.Server.World.ExperienceRate;
             }

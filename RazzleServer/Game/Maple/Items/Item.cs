@@ -522,10 +522,10 @@ namespace RazzleServer.Game.Maple.Items
                 throw new InvalidOperationException("Can only equip equipment items.");
             }
 
-            if ((Character.Strength < RequiredStrength ||
-                 Character.Dexterity < RequiredDexterity ||
-                 Character.Intelligence < RequiredIntelligence ||
-                 Character.Luck < RequiredLuck) &&
+            if ((Character.PrimaryStats.Strength < RequiredStrength ||
+                 Character.PrimaryStats.Dexterity < RequiredDexterity ||
+                 Character.PrimaryStats.Intelligence < RequiredIntelligence ||
+                 Character.PrimaryStats.Luck < RequiredLuck) &&
                 !Character.IsMaster)
             {
                 return;
@@ -600,7 +600,7 @@ namespace RazzleServer.Game.Maple.Items
                     break;
             }
 
-            Character.UpdateApperance();
+            Character.PrimaryStats.UpdateApperance();
         }
 
         public void Unequip(short destinationSlot = 0)
@@ -632,7 +632,7 @@ namespace RazzleServer.Game.Maple.Items
                 Character.Client.Send(oPacket);
             }
 
-            Character.UpdateApperance();
+            Character.PrimaryStats.UpdateApperance();
         }
 
         public void Drop(short quantity)

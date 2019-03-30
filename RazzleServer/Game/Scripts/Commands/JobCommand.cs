@@ -27,7 +27,7 @@ namespace RazzleServer.Game.Scripts.Commands
 
                     if (Enum.IsDefined(typeof(Job), jobId))
                     {
-                        caller.Job = (Job)jobId;
+                        caller.PrimaryStats.Job = (Job)jobId;
                     }
                     else
                     {
@@ -38,7 +38,7 @@ namespace RazzleServer.Game.Scripts.Commands
                 {
                     try
                     {
-                        caller.Job = (Job)Enum.Parse(typeof(Job), args[0], true);
+                        caller.PrimaryStats.Job = (Job)Enum.Parse(typeof(Job), args[0], true);
                     }
                     catch (ArgumentException)
                     {

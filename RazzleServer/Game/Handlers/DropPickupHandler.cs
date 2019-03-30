@@ -7,8 +7,6 @@ namespace RazzleServer.Game.Handlers
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
-            packet.Skip(1);
-            packet.Skip(4);
             var position = packet.ReadPoint();
 
             // TODO: Validate position relative to the picker.

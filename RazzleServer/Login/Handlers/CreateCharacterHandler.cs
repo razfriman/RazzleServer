@@ -36,6 +36,10 @@ namespace RazzleServer.Login.Handlers
                 AccountId = client.Account.Id,
                 WorldId = client.World,
                 Name = name,
+                Map = new Map(ServerConfig.Instance.DefaultMapId)
+            };
+            character.PrimaryStats = new CharacterStats(character)
+            {
                 Gender = client.Account.Gender,
                 Skin = skin,
                 Face = face,
@@ -49,8 +53,7 @@ namespace RazzleServer.Login.Handlers
                 MaxHealth = 50,
                 MaxMana = 5,
                 Health = 50,
-                Mana = 5,
-                Map = new Map(ServerConfig.Instance.DefaultMapId)
+                Mana = 5
             };
 
             character.Items.Add(new Item(topId, equipped: true));

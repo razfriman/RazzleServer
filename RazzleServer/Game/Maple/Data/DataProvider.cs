@@ -18,9 +18,10 @@ namespace RazzleServer.Game.Maple.Data
         public static CachedCreationData CreationData { get; private set; } = new CachedCreationData();
         public static CachedMaps Maps { get; private set; } = new CachedMaps();
         public static CachedStrings Strings { get; private set; } = new CachedStrings();
-        public static CachedShops Shops { get; private set; } = new CachedShops();
-        public static CachedRechargeTiers RechargeTiers { get; private set; } = new CachedRechargeTiers();
+        public static CachedShops Shops { get; } = new CachedShops();
+        public static CachedRechargeTiers RechargeTiers { get; } = new CachedRechargeTiers();
         public static CachedQuizzes Quizzes { get; private set; } = new CachedQuizzes();
+        public static CachedBuffs Buffs { get; } = new CachedBuffs();
 
         private static readonly ILogger Logger = Log.ForContext<DataProvider>();
 

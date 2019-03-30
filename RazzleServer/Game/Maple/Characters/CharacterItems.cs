@@ -195,8 +195,11 @@ namespace RazzleServer.Game.Maple.Characters
 
             if (wasEquipped)
             {
-                Parent.UpdateApperance();
+                Parent.PrimaryStats.UpdateApperance();
             }
+
+            Parent.PrimaryStats.EquipBonuses = CalculateStatBonus();
+            Parent.PrimaryStats.Update();
         }
 
         public void Clear(bool removeFromSlot)
@@ -319,8 +322,8 @@ namespace RazzleServer.Game.Maple.Characters
 
             switch (drop)
             {
-                case Meso meso when Parent.Meso != int.MaxValue:
-                    Parent.Meso += meso.Amount;
+                case Meso meso when Parent.PrimaryStats.Meso != int.MaxValue:
+                    Parent.PrimaryStats.Meso += meso.Amount;
                     break;
                 case Item item when item.OnlyOne:
                     // TODO: Appropriate message.
@@ -488,6 +491,24 @@ namespace RazzleServer.Game.Maple.Characters
             }
 
             return true;
+        }
+
+        public StatBonus CalculateStatBonus()
+        {
+            var stats = new StatBonus();
+
+            foreach (var item in GetEquipped(EquippedQueryMode.Normal))
+            {
+                stats.MaxMana += item.Mana;
+                stats.MaxHealth += item.Health;
+                stats.Strength += item.Strength;
+                stats.Dexterity += item.Dexterity;
+                stats.Intelligence += item.Intelligence;
+                stats.Luck += item.Luck;
+                stats.Speed += item.Speed;
+            }
+            
+            return stats;
         }
 
         public byte[] ToByteArray()

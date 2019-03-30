@@ -196,9 +196,9 @@ namespace RazzleServer.Game.Maple.Characters
                 Started[quest.MapleId].Add(requiredKills.Key, 0);
             }
 
-            Parent.Experience += quest.ExperienceReward[0];
-            Parent.Fame += (short)quest.FameReward[0];
-            Parent.Meso += quest.MesoReward[0] * Parent.Client.Server.World.MesoRate;
+            Parent.PrimaryStats.Experience += quest.ExperienceReward[0];
+            Parent.PrimaryStats.Fame += (short)quest.FameReward[0];
+            Parent.PrimaryStats.Meso += quest.MesoReward[0] * Parent.Client.Server.World.MesoRate;
 
             // TODO: Skill and pet rewards.
 
@@ -238,9 +238,9 @@ namespace RazzleServer.Game.Maple.Characters
             var mesoReward = quest.MesoReward[1] * Parent.Client.Server.World.MesoRate;
 
 
-            Parent.Experience += quest.ExperienceReward[1];
-            Parent.Fame += (short)quest.FameReward[1];
-            Parent.Meso += mesoReward;
+            Parent.PrimaryStats.Experience += quest.ExperienceReward[1];
+            Parent.PrimaryStats.Fame += (short)quest.FameReward[1];
+            Parent.PrimaryStats.Meso += mesoReward;
 
             Parent.Client.Send(GamePackets.ShowStatusInfo(MessageType.IncreaseExp, amount: quest.ExperienceReward[1],
                 isWhite: true, inChat: true));
@@ -249,7 +249,7 @@ namespace RazzleServer.Game.Maple.Characters
 
             foreach (var skill in quest.PostSkillRewards)
             {
-                if (Parent.Job == skill.Value)
+                if (Parent.PrimaryStats.Job == skill.Value)
                 {
                     Parent.Skills.Add(skill.Key);
 

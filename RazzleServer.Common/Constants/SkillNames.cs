@@ -182,7 +182,6 @@
 
         public enum Assassin
         {
-
             ClawBooster = 4101003,
             ClawMastery = 4100000,
             CriticalThrow = 4100001,
@@ -221,9 +220,18 @@
 
         public enum Gm
         {
-            Haste = 5001000,
-            SuperDragonRoar = 5001001,
-            Teleport = 5001007
+            Bless = 5001003,
+            Haste = 5001001,
+            HealPlusDispell = 5001000,
+            Hide = 5001004,
+            HolySymbol = 5001002,
+            Resurrection = 5001005,
+            SuperDragonRoar = 5001006,
+            Teleport = 5001007,
+
+            ItemExplosion = 5001008,
+            ShadowPartner = 5001009,
+            JumpDown = 50010010
         }
     }
 }

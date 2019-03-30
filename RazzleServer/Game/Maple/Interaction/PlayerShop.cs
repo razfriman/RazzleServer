@@ -162,15 +162,15 @@ namespace RazzleServer.Game.Maple.Interaction
                         return;
                     }
 
-                    if (character.Meso < shopItem.MerchantPrice * quantity)
+                    if (character.PrimaryStats.Meso < shopItem.MerchantPrice * quantity)
                     {
                         return;
                     }
 
                     shopItem.Quantity -= quantity;
 
-                    character.Meso -= shopItem.MerchantPrice * quantity;
-                    Owner.Meso += shopItem.MerchantPrice * quantity;
+                    character.PrimaryStats.Meso -= shopItem.MerchantPrice * quantity;
+                    Owner.PrimaryStats.Meso += shopItem.MerchantPrice * quantity;
 
                     character.Items.Add(new Item(shopItem.MapleId, quantity));
 

@@ -161,7 +161,7 @@ namespace RazzleServer.Game.Maple.Scripting
             var builder = new StringBuilder();
             for (var i = 0; i < ids.Length; i++)
             {
-                builder.Append($"\r\n{i}##{MapNpcListType(type)}{ids[i]}##l");
+                builder.Append($"\r\n#L{i}##{MapNpcListType(type)}{ids[i]}##l");
             }
 
             return builder.ToString();
