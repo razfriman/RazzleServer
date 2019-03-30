@@ -21,7 +21,7 @@ namespace RazzleServer.Game.Scripts.Commands
             {
                 if (uint.TryParse(args[0], out var amount))
                 {
-                    caller.Meso += (int)amount;
+                    caller.PrimaryStats.Meso += (int)amount;
                 }
             }
         }

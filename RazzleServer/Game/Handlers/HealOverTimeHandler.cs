@@ -21,7 +21,7 @@ namespace RazzleServer.Game.Handlers
                     return;
                 }
 
-                client.Character.Health += healthAmount;
+                client.Character.PrimaryStats.Health += healthAmount;
                 client.Character.LastHealthHealOverTime = DateTime.Now;
             }
 
@@ -33,7 +33,7 @@ namespace RazzleServer.Game.Handlers
                     return;
                 }
 
-                client.Character.Mana += manaAmount;
+                client.Character.PrimaryStats.Mana += manaAmount;
                 client.Character.LastManaHealOverTime = DateTime.Now;
             }
         }

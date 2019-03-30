@@ -195,7 +195,7 @@ namespace RazzleServer.Game.Maple.Characters
 
             if (wasEquipped)
             {
-                Parent.UpdateApperance();
+                Parent.PrimaryStats.UpdateApperance();
             }
 
             Parent.PrimaryStats.ItemBonuses = CalculateStatBonus();
@@ -322,8 +322,8 @@ namespace RazzleServer.Game.Maple.Characters
 
             switch (drop)
             {
-                case Meso meso when Parent.Meso != int.MaxValue:
-                    Parent.Meso += meso.Amount;
+                case Meso meso when Parent.PrimaryStats.Meso != int.MaxValue:
+                    Parent.PrimaryStats.Meso += meso.Amount;
                     break;
                 case Item item when item.OnlyOne:
                     // TODO: Appropriate message.

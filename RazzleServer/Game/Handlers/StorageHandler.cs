@@ -83,13 +83,13 @@ namespace RazzleServer.Game.Handlers
                             return;
                         }
 
-                        if (client.Character.Meso <= client.Character.Storage.Npc.CachedReference.StorageCost)
+                        if (client.Character.PrimaryStats.Meso <= client.Character.Storage.Npc.CachedReference.StorageCost)
                         {
                             client.Character.Notify("You don't have enough meso to store the item.", NoticeType.Popup); // TOOD: Is there a packet for client.Character?
                             return;
                         }
 
-                        client.Character.Meso -= client.Character.Storage.Npc.CachedReference.StorageCost;
+                        client.Character.PrimaryStats.Meso -= client.Character.Storage.Npc.CachedReference.StorageCost;
 
                         client.Character.Items.Remove(item, true);
 
@@ -138,8 +138,8 @@ namespace RazzleServer.Game.Handlers
                             // TODO: Meso checks.
                         }
 
-                        client.Character.Meso -= meso;
-                        client.Character.Meso += meso;
+                        client.Character.PrimaryStats.Meso -= meso;
+                        client.Character.PrimaryStats.Meso += meso;
 
                         using (var oPacket = new PacketWriter(ServerOperationCode.StorageResult))
                         {
@@ -149,7 +149,7 @@ namespace RazzleServer.Game.Handlers
                             oPacket.WriteShort(2);
                             oPacket.WriteShort(0);
                             oPacket.WriteInt(0);
-                            oPacket.WriteInt(client.Character.Meso);
+                            oPacket.WriteInt(client.Character.PrimaryStats.Meso);
 
                             client.Send(oPacket);
                         }

@@ -33,25 +33,25 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 oPacket.WriteInt(Id);
                 oPacket.WriteString(Name, 13);
-                oPacket.WriteByte((byte)Gender);
-                oPacket.WriteByte(Skin);
-                oPacket.WriteInt(Face);
-                oPacket.WriteInt(Hair);
+                oPacket.WriteByte((byte)PrimaryStats.Gender);
+                oPacket.WriteByte(PrimaryStats.Skin);
+                oPacket.WriteInt(PrimaryStats.Face);
+                oPacket.WriteInt(PrimaryStats.Hair);
                 oPacket.WriteLong(0); // Pet SN
-                oPacket.WriteByte(Level);
-                oPacket.WriteShort((short)Job);
-                oPacket.WriteShort(Strength);
-                oPacket.WriteShort(Dexterity);
-                oPacket.WriteShort(Intelligence);
-                oPacket.WriteShort(Luck);
-                oPacket.WriteShort(Health);
-                oPacket.WriteShort(MaxHealth);
-                oPacket.WriteShort(Mana);
-                oPacket.WriteShort(MaxMana);
-                oPacket.WriteShort(AbilityPoints);
-                oPacket.WriteShort(SkillPoints);
-                oPacket.WriteInt(Experience);
-                oPacket.WriteShort(Fame);
+                oPacket.WriteByte(PrimaryStats.Level);
+                oPacket.WriteShort((short)PrimaryStats.Job);
+                oPacket.WriteShort(PrimaryStats.Strength);
+                oPacket.WriteShort(PrimaryStats.Dexterity);
+                oPacket.WriteShort(PrimaryStats.Intelligence);
+                oPacket.WriteShort(PrimaryStats.Luck);
+                oPacket.WriteShort(PrimaryStats.Health);
+                oPacket.WriteShort(PrimaryStats.MaxHealth);
+                oPacket.WriteShort(PrimaryStats.Mana);
+                oPacket.WriteShort(PrimaryStats.MaxMana);
+                oPacket.WriteShort(PrimaryStats.AbilityPoints);
+                oPacket.WriteShort(PrimaryStats.SkillPoints);
+                oPacket.WriteInt(PrimaryStats.Experience);
+                oPacket.WriteShort(PrimaryStats.Fame);
                 oPacket.WriteInt(Map.MapleId);
                 oPacket.WriteByte(SpawnPoint);
                 oPacket.WriteLong(0);
@@ -118,8 +118,8 @@ namespace RazzleServer.Game.Maple.Characters
         {
             var pw = new PacketWriter();
             pw.WriteBytes(StatisticsToByteArray());
-            pw.WriteByte(BuddyListSlots);
-            pw.WriteInt(Meso);
+            pw.WriteByte(PrimaryStats.BuddyListSlots);
+            pw.WriteInt(PrimaryStats.Meso);
             pw.WriteBytes(Items.ToByteArray());
             pw.WriteBytes(Skills.ToByteArray());
             pw.WriteBytes(Quests.ToByteArray());
@@ -138,7 +138,7 @@ namespace RazzleServer.Game.Maple.Characters
             pw.WriteInt(Id);
             pw.WriteString(Name);
             pw.WriteBytes(Buffs.ToByteArray());
-            pw.WriteShort((short)Job);
+            pw.WriteShort((short)PrimaryStats.Job);
             pw.WriteBytes(AppearanceToByteArray());
             pw.WriteInt(Items.Available(5110000));
             pw.WriteInt(ItemEffect);

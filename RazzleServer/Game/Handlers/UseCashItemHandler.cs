@@ -42,8 +42,8 @@ namespace RazzleServer.Game.Handlers
                     var statDestination = (StatisticType)packet.ReadInt();
                     var statSource = (StatisticType)packet.ReadInt();
 
-                    client.Character.AddAbility(statDestination, 1, true);
-                    client.Character.AddAbility(statSource, -1, true);
+                    client.Character.PrimaryStats.AddAbility(statDestination, 1, true);
+                    client.Character.PrimaryStats.AddAbility(statSource, -1, true);
 
                     used = true;
                 }
@@ -61,7 +61,7 @@ namespace RazzleServer.Game.Handlers
                     break;
                 case 2081000: // NOTE: Megaphone.
                 {
-                    if (client.Character.Level <= 10)
+                    if (client.Character.PrimaryStats.Level <= 10)
                     {
                         // NOTE: You can't use a megaphone unless you're over level 10.
 
@@ -85,7 +85,7 @@ namespace RazzleServer.Game.Handlers
                     break;
                 case 2082000: // NOTE: Super Megaphone.
                 {
-                    if (client.Character.Level <= 10)
+                    if (client.Character.PrimaryStats.Level <= 10)
                     {
                         // NOTE: You can't use a megaphone unless you're over level 10.
                         return;
@@ -149,7 +149,7 @@ namespace RazzleServer.Game.Handlers
                 case 2140001: // NOTE: Silver Sack of Meso.
                 case 2140002: // NOTE: Gold Sack of Meso.
                 {
-                    client.Character.Meso += item.Meso;
+                    client.Character.PrimaryStats.Meso += item.Meso;
                     client.Send(GamePackets.ShowStatusInfo(MessageType.IncreaseMeso, true, item.Meso));
                     used = true;
                 }

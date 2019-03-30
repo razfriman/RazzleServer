@@ -27,7 +27,7 @@ namespace RazzleServer.Game.Scripts.Commands
                         {
                             if (character != caller && !character.IsMaster)
                             {
-                                character.Health = 0;
+                                character.PrimaryStats.Health = 0;
                             }
                         }
                     }
@@ -51,7 +51,7 @@ namespace RazzleServer.Game.Scripts.Commands
                         }
                         else
                         {
-                            target.Health = 0;
+                            target.PrimaryStats.Health = 0;
                         }
                     }
                         break;

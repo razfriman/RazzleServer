@@ -23,22 +23,22 @@ namespace RazzleServer.Game.Handlers
 
             if (item.CHealth > 0)
             {
-                client.Character.Health += item.CHealth;
+                client.Character.PrimaryStats.Health += item.CHealth;
             }
 
             if (item.CMana > 0)
             {
-                client.Character.Mana += item.CMana;
+                client.Character.PrimaryStats.Mana += item.CMana;
             }
 
             if (item.CHealthPercentage != 0)
             {
-                client.Character.Health += (short)(item.CHealthPercentage * client.Character.MaxHealth / 100);
+                client.Character.PrimaryStats.Health += (short)(item.CHealthPercentage * client.Character.PrimaryStats.MaxHealth / 100);
             }
 
             if (item.CManaPercentage != 0)
             {
-                client.Character.Mana += (short)(item.CManaPercentage * client.Character.MaxMana / 100);
+                client.Character.PrimaryStats.Mana += (short)(item.CManaPercentage * client.Character.PrimaryStats.MaxMana / 100);
             }
 
             if (item.CBuffTime > 0 && item.CProb == 0)

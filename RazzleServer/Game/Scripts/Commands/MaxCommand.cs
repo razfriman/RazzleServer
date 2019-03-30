@@ -13,17 +13,17 @@ namespace RazzleServer.Game.Scripts.Commands
 
         public override void Execute(Character caller, string[] args)
         {
-            caller.Level = 200;
-            caller.Experience = 0;
-            caller.MaxHealth = 30000;
-            caller.Health = 30000;
-            caller.MaxMana = 30000;
-            caller.Mana = 30000;
-            caller.Strength = 10000;
-            caller.Dexterity = 10000;
-            caller.Intelligence = 10000;
-            caller.Luck = 10000;
-            caller.Meso = int.MaxValue;
+            caller.PrimaryStats.Level = 200;
+            caller.PrimaryStats.Experience = 0;
+            caller.PrimaryStats.MaxHealth = 30000;
+            caller.PrimaryStats.Health = 30000;
+            caller.PrimaryStats.MaxMana = 30000;
+            caller.PrimaryStats.Mana = 30000;
+            caller.PrimaryStats.Strength = 10000;
+            caller.PrimaryStats.Dexterity = 10000;
+            caller.PrimaryStats.Intelligence = 10000;
+            caller.PrimaryStats.Luck = 10000;
+            caller.PrimaryStats.Meso = int.MaxValue;
         }
     }
 }

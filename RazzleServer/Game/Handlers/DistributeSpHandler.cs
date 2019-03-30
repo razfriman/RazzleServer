@@ -12,7 +12,7 @@ namespace RazzleServer.Game.Handlers
         {
             var mapleId = packet.ReadInt();
 
-            if (client.Character.SkillPoints == 0 || !DataProvider.Skills.Data.ContainsKey(mapleId))
+            if (client.Character.PrimaryStats.SkillPoints == 0 || !DataProvider.Skills.Data.ContainsKey(mapleId))
             {
                 client.Character.LogCheatWarning(CheatType.InvalidSkillChange);
                 return;
@@ -31,7 +31,7 @@ namespace RazzleServer.Game.Handlers
                 return;
             }
 
-            client.Character.SkillPoints--;
+            client.Character.PrimaryStats.SkillPoints--;
             client.Character.Release();
             skill.CurrentLevel++;
         }

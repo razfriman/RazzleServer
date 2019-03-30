@@ -218,19 +218,60 @@ namespace RazzleServer.Game.Maple.Skills
 
         public void Cast()
         {
-            Character.Health -= CostHp;
-            Character.Mana -= CostMp;
+            switch (MapleId)
+            {
+                case (int)SkillNames.DragonKnight.DragonRoar:
+                {
+                    var lefthp = (int)(Character.PrimaryStats.MaxHealth * (ParameterA / 100.0d));
+                    Character.PrimaryStats.Health -= (short)lefthp;
+                    break;
+                }
+                case (int)SkillNames.Spearman.HyperBody when Character.Buffs.Contains(MapleId):
+                    // Already buffed
+                    return;
+                case (int)SkillNames.Spearman.HyperBody:
+                {
+                    var lefthp = (int)(Character.PrimaryStats.MaxHealth * (ParameterA / 100.0d));
+                    Character.PrimaryStats.BuffBonuses.MaxHealth = (short)lefthp;
+                    Character.PrimaryStats.MaxHealth += (short)lefthp;
+                    lefthp = (int)(Character.PrimaryStats.MaxMana * (ParameterB / 100.0d));
+                    Character.PrimaryStats.BuffBonuses.MaxMana = (short)lefthp;
+                    Character.PrimaryStats.MaxMana += (short)lefthp;
+                    Character.PrimaryStats.MaxMana = Character.PrimaryStats.AdjustedMaxMana;
+                    Character.PrimaryStats.MaxHealth = Character.PrimaryStats.AdjustedMaxHealth;
+                    break;
+                }
+            }
+
+
+            if (CostMp > 0)
+            {
+                Character.PrimaryStats.Mana -= CostMp;
+            }
+
+            if (CostHp > 0)
+            {
+                Character.PrimaryStats.Health -= CostHp;
+            }
 
             if (CostItem > 0)
             {
-            }
-
-            if (CostBullet > 0)
-            {
+                Character.Items.Remove(CostItem, ItemCount);
             }
 
             if (CostMeso > 0)
             {
+                var min = (short)(CostMeso - (80 + CurrentLevel * 5));
+                var max = (short)(CostMeso + 80 + CurrentLevel * 5);
+                var realAmount = (short)Functions.Random(min, max);
+                if (Character.PrimaryStats.Meso - realAmount >= 0)
+                {
+                    Character.PrimaryStats.Meso -= realAmount;
+                }
+                else
+                {
+                    Character.LogCheatWarning(CheatType.InvalidSkillChange);
+                }
             }
         }
 

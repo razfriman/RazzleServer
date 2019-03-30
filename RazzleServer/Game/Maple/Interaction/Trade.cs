@@ -48,8 +48,8 @@ namespace RazzleServer.Game.Maple.Interaction
         {
             if (Owner.Items.CouldReceive(VisitorItems) && Visitor.Items.CouldReceive(OwnerItems))
             {
-                Owner.Meso += VisitorMeso;
-                Visitor.Meso += OwnerMeso;
+                Owner.PrimaryStats.Meso += VisitorMeso;
+                Visitor.PrimaryStats.Meso += OwnerMeso;
 
                 Owner.Items.AddRange(VisitorItems);
                 Visitor.Items.AddRange(OwnerItems);
@@ -58,8 +58,8 @@ namespace RazzleServer.Game.Maple.Interaction
 
         public void Cancel()
         {
-            Owner.Meso += OwnerMeso;
-            Visitor.Meso += VisitorMeso;
+            Owner.PrimaryStats.Meso += OwnerMeso;
+            Visitor.PrimaryStats.Meso += VisitorMeso;
 
             Owner.Items.AddRange(OwnerItems);
             Visitor.Items.AddRange(VisitorItems);
@@ -89,7 +89,7 @@ namespace RazzleServer.Game.Maple.Interaction
                 {
                     var meso = packet.ReadInt();
 
-                    if (meso < 0 || meso > character.Meso)
+                    if (meso < 0 || meso > character.PrimaryStats.Meso)
                     {
                         return;
                     }
@@ -111,7 +111,7 @@ namespace RazzleServer.Game.Maple.Interaction
                             }
 
                             OwnerMeso += meso;
-                            Owner.Meso -= meso;
+                            Owner.PrimaryStats.Meso -= meso;
 
                             Owner.Client.Send(oPacket);
                         }
@@ -123,7 +123,7 @@ namespace RazzleServer.Game.Maple.Interaction
                             }
 
                             VisitorMeso += meso;
-                            Visitor.Meso -= meso;
+                            Visitor.PrimaryStats.Meso -= meso;
 
                             Visitor.Client.Send(oPacket);
                         }

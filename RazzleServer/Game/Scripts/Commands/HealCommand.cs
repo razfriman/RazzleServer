@@ -13,8 +13,8 @@ namespace RazzleServer.Game.Scripts.Commands
 
         public override void Execute(Character caller, string[] args)
         {
-            caller.Health = caller.MaxHealth;
-            caller.Mana = caller.MaxMana;
+            caller.PrimaryStats.Health = caller.PrimaryStats.MaxHealth;
+            caller.PrimaryStats.Mana = caller.PrimaryStats.MaxMana;
         }
     }
 }

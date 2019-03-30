@@ -98,7 +98,7 @@ namespace RazzleServer.Game.Handlers
                 case AdminCommandType.GiveExperience:
                 {
                     var amount = packet.ReadInt();
-                    client.Character.Experience += amount;
+                    client.Character.PrimaryStats.Experience += amount;
                 }
                     break;
 
