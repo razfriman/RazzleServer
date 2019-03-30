@@ -56,6 +56,8 @@ namespace RazzleServer.Game.Maple.Characters
         public CharacterDamage Damage { get; set; }
         private bool Assigned { get; set; }
 
+        public CharacterStats PrimaryStats { get; set; }
+
         public DateTime LastHealthHealOverTime { get; set; } = new DateTime();
         public DateTime LastManaHealOverTime { get; set; } = new DateTime();
 
@@ -259,10 +261,10 @@ namespace RazzleServer.Game.Maple.Characters
 
         public Job Job
         {
-            get => _job;
+            get => PrimaryStats.Job;
             set
             {
-                _job = value;
+                PrimaryStats.Job = value;
 
                 if (IsInitialized)
                 {
@@ -1261,6 +1263,28 @@ namespace RazzleServer.Game.Maple.Characters
             Quests.Load();
             Buffs.Load();
             TeleportRocks.Load();
+        }
+
+        public void Send(PacketWriter packet) => Client.Send(packet);
+        public void Send(byte[] packet) => Client.Send(packet);
+
+        public void Hide(bool isHidden)
+        {
+            if (isHidden)
+            {
+                Map.Characters.Remove(this);
+            }
+            else
+            {
+                Map.Characters.Remove(this);
+            }
+            
+            using (var pw = new PacketWriter(ServerOperationCode.AdminResult))
+            {
+                pw.WriteByte(AdminResultType.Hide);
+                pw.WriteBool(isHidden);
+                Send(pw);
+            }
         }
     }
 }

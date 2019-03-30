@@ -1,7 +1,7 @@
 ﻿using RazzleServer.Common.Constants;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
-using RazzleServer.Game.Packets;
+using RazzleServer.Game.Maple.Maps;
 using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Handlers
@@ -41,39 +41,38 @@ namespace RazzleServer.Game.Handlers
                             healRate = 100;
                         }
 
-                        short healAmount = (short)(healRate * chr.PrimaryStats.GetMaxHP(false) / 100); // Party: / (amount players)
-                        if (!chr.Buffs.mActiveSkillLevels.ContainsKey(SkillID))
+                        short healAmount = (short)(healRate * client.Character.PrimaryStats.MaxHealth / 100); // Party: / (amount players)
+                        if (!client.Character.Buffs.Contains(skillId))
                         {
-                            chr.ModifyMaxHP(healAmount);
+                            client.Character.MaxHealth += healAmount;
                         }
                         break;
                     }
                 case (int)SkillNames.Cleric.Heal:
                     {
-                        ushort healRate = (ushort)sld.HPProperty;
+                        ushort healRate = (ushort)skill.Hp;
                         if (healRate > 100)
                         {
                             healRate = 100;
                         }
 
-                        short healAmount = (short)(healRate * chr.PrimaryStats.GetMaxHP(false) / 100); // Party: / (amount players)
+                        short healAmount = (short)(healRate * client.Character.PrimaryStats.MaxHealth / 100); // Party: / (amount players)
 
-                        chr.ModifyHP(healAmount, true);
+                        client.Character.Health += healAmount;
                         break;
                     }
                 case (int)SkillNames.Gm.Hide:
                     {
-                        client.Character.Map.Characters.Remove(client.Character);
-                        DataProvider.Maps[chr.Map].RemovePlayer(chr, true);
-                        AdminPacket.Hide(client, true);
+                        client.Character.Hide(true);
                         break;
                     }
                 case (int)SkillNames.Priest.MysticDoor:
                     {
-                        Door door = new Door(chr, chr.Map, DataProvider.Maps[chr.Map].ReturnMap, chr.Position.X, chr.Position.Y);
-                        chr.Door = door;
-                        MapPacket.SpawnDoor(chr, true, chr.Position.X, chr.Position.Y);
-                        MapPacket.SpawnPortal(chr, chr.Position);
+                        //var door = new Door(chr, client.Character.Map, DataProvider.Maps[client.Character.Map].ReturnMap, client.Character.Position.X, client.Character.Position.Y);
+                        //client.Character.Door = door;
+                        //client.Character.Map.Doors.Add(door);
+                        //MapPacket.SpawnDoor(chr, true, client.Character.Position.X, client.Character.Position.Y);
+                        //MapPacket.SpawnPortal(chr, client.Character.Position);
                         client.Character.Release();
                         break;
                     }
@@ -85,7 +84,7 @@ namespace RazzleServer.Game.Handlers
                         for (byte i = 0; i < players; i++)
                         {
                             int playerid = packet.ReadInt();
-                            Character victim = DataProvider.Maps[chr.Map].GetPlayer(playerid);
+                            Character victim = DataProvider.Maps[client.Character.Map].GetPlayer(playerid);
                             if (victim != null && victim != chr)
                             {
                                 MapPacket.SendPlayerSkillAnimThirdParty(victim, SkillID, SkillLevel, true, true);
@@ -101,7 +100,7 @@ namespace RazzleServer.Game.Handlers
                         for (byte i = 0; i < players; i++)
                         {
                             int playerid = packet.ReadInt();
-                            Character victim = DataProvider.Maps[chr.Map].GetPlayer(playerid);
+                            Character victim = DataProvider.Maps[client.Character.Map].GetPlayer(playerid);
                             if (victim != null)
                             {
                                 MapPacket.SendPlayerSkillAnimThirdParty(victim, SkillID, SkillLevel, true, true);
@@ -110,8 +109,8 @@ namespace RazzleServer.Game.Handlers
                                 victim.ModifyMP(victim.PrimaryStats.GetMaxMP(false), true);
                             }
                         }
-                        chr.ModifyHP(chr.PrimaryStats.GetMaxMP(false), true);
-                        chr.ModifyMP(chr.PrimaryStats.GetMaxMP(false), true);
+                        client.Character.ModifyHP(client.Character.PrimaryStats.GetMaxMP(false), true);
+                        client.Character.ModifyMP(client.Character.PrimaryStats.GetMaxMP(false), true);
                         break;
                     }
                 case (int)SkillNames.Gm.Resurrection:
@@ -120,7 +119,7 @@ namespace RazzleServer.Game.Handlers
                         for (byte i = 0; i < players; i++)
                         {
                             int playerid = packet.ReadInt();
-                            Character victim = DataProvider.Maps[chr.Map].GetPlayer(playerid);
+                            Character victim = DataProvider.Maps[client.Character.Map].GetPlayer(playerid);
                             if (victim != null && victim.PrimaryStats.HP <= 0)
                             {
                                 MapPacket.SendPlayerSkillAnimThirdParty(victim, SkillID, SkillLevel, true, true);
@@ -133,10 +132,10 @@ namespace RazzleServer.Game.Handlers
             }
             
             client.Character.Release();
-            chr.Skills.DoSkillCost(SkillID, SkillLevel);
+            client.Character.Skills.DoSkillCost(SkillID, SkillLevel);
             if (Constants.isSummon(SkillID))
             {
-                chr.Summons.NewSummon(SkillID, SkillLevel);
+                client.Character.Summons.NewSummon(SkillID, SkillLevel);
             }  
         }
     }

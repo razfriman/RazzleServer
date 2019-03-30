@@ -76,6 +76,9 @@ namespace RazzleServer.Game.Maple.Characters
         {
             switch (MapleId)
             {
+                case (int)SkillNames.Gm.Hide:
+                    Character.Hide(true);
+                    break;
                 default:
                 {
                     using (var oPacket = new PacketWriter(ServerOperationCode.SkillsGiveBuff))

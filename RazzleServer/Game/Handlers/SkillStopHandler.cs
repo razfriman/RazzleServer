@@ -15,8 +15,7 @@ namespace RazzleServer.Game.Handlers
             {
                 case (int)SkillNames.Gm.Hide:
                 {
-                    //DataProvider.Maps[chr.Map].ShowPlayer(chr);
-                    //AdminPacket.Hide(chr, false);
+                    client.Character.Hide(false);
                     break;
                 }
             }

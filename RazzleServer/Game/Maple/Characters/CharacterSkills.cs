@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using RazzleServer.Common;
+using RazzleServer.Common.Constants;
 using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Skills;
 using RazzleServer.Net.Packet;
@@ -89,5 +90,62 @@ namespace RazzleServer.Game.Maple.Characters
         public int GetCurrentLevel(int id) => Contains(id)
             ? this[id].CurrentLevel
             : 0;
+
+        public void DoSkillCost(Skill skill)
+        {
+            if (skill.MapleId == (int)SkillNames.DragonKnight.DragonRoar)
+            {
+                var lefthp = (int)(double)((double)Parent.MaxHealth * ((double)skill.ParameterA / 100.0d));
+                Parent.Health -= (short)lefthp;
+            }
+            else if (skill.MapleId == (int)SkillNames.Spearman.HyperBody)
+            {
+                if (Parent.Buffs.Contains(skill.MapleId))
+                {
+                    // Already buffed
+                    return; 
+                }
+
+                var lefthp = (int)(double)((double)Parent.MaxHealth * ((double)skill.ParameterA / 100.0d));
+                Parent.PrimaryStats.BuffBonuses.MaxHP = (short)lefthp;
+                Parent.MaxHealth += ((short)lefthp);
+                lefthp = (int)(double)((double)Parent.MaxMana * ((double)skill.ParameterB / 100.0d));
+                Parent.PrimaryStats.BuffBonuses.MaxMP = (short)lefthp;
+                Parent.MaxMana += ((short)lefthp);
+                Parent.MaxMana = (Parent.PrimaryStats.GetMaxMP(false));
+                Parent.MaxHealth = (Parent.PrimaryStats.GetMaxHP(false));
+            }
+
+            
+            if (skill.CostMp > 0)
+            {
+                Parent.Mana -= skill.CostMp;
+            }
+
+            if (skill.CostHp > 0)
+            {
+                Parent.Health -= skill.CostHp;
+            }
+
+            if (skill.CostItem > 0)
+            {
+                Parent.Items.Remove(skill.CostItem, skill.ItemCount);
+            }
+
+            if (skill.CostMeso > 0)
+            {
+                var min = (short)(skill.CostMeso - (80 + skill.CurrentLevel * 5));
+                var max = (short)(skill.CostMeso + (80 + skill.CurrentLevel * 5));
+                var realAmount = (short)Functions.Random(min, max);
+                if (Parent.Meso - realAmount >= 0)
+                {
+                    Parent.Meso -= realAmount;
+                }
+                else
+                {
+                    Parent.LogCheatWarning(CheatType.InvalidSkillChange);
+                }
+            }
+        }
     }
 }

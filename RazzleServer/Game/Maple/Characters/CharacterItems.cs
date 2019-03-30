@@ -197,6 +197,9 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 Parent.UpdateApperance();
             }
+
+            Parent.PrimaryStats.ItemBonuses = CalculateStatBonus();
+            Parent.PrimaryStats.Update();
         }
 
         public void Clear(bool removeFromSlot)
@@ -488,6 +491,24 @@ namespace RazzleServer.Game.Maple.Characters
             }
 
             return true;
+        }
+
+        public StatBonus CalculateStatBonus()
+        {
+            var stats = new StatBonus();
+
+            foreach (var item in GetEquipped(EquippedQueryMode.Normal))
+            {
+                stats.MaxMana += item.Mana;
+                stats.MaxHealth += item.Health;
+                stats.Strength += item.Strength;
+                stats.Dexterity += item.Dexterity;
+                stats.Intelligence += item.Intelligence;
+                stats.Luck += item.Luck;
+                stats.Speed += item.Speed;
+            }
+            
+            return stats;
         }
 
         public byte[] ToByteArray()
