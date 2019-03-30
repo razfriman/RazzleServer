@@ -343,7 +343,7 @@ namespace RazzleServer.Wz
                 {
                     return null;
                 }
-                
+
                 var blockData = Reader.ReadBytes(BlockSize);
                 Reader.BaseStream.Position = BlockStart;
                 return blockData;
@@ -392,7 +392,7 @@ namespace RazzleServer.Wz
 
             return objList;
         }
-        
+
         public List<string> GetPaths(string curPath)
         {
             var objList = new List<string>();

@@ -26,7 +26,7 @@ namespace RazzleServer.Tests
                 Assert.AreEqual("01", pw.ToPacketString());
             }
         }
-        
+
         [TestMethod]
         public void WriteSByte_Valid_Succeeds()
         {
@@ -124,7 +124,7 @@ namespace RazzleServer.Tests
         {
             using (var pw = new PacketWriter())
             {
-                pw.WriteBytes(new byte[] { 1, 2, 3, 4 });
+                pw.WriteBytes(new byte[] {1, 2, 3, 4});
                 Assert.AreEqual("01 02 03 04", pw.ToPacketString());
             }
         }
@@ -188,7 +188,7 @@ namespace RazzleServer.Tests
                 Assert.AreEqual("80 5E B2 E1 20 03 00 00", pw.ToPacketString());
             }
         }
-        
+
         [TestMethod]
         public void WriteHexString_Valid_Succeeds()
         {
@@ -241,7 +241,7 @@ namespace RazzleServer.Tests
         [TestMethod]
         public void Constructor_FromBytes_Succeeds()
         {
-            using (var pw = new PacketWriter(new byte[] { 1, 2, 3, 4 }))
+            using (var pw = new PacketWriter(new byte[] {1, 2, 3, 4}))
             {
                 Assert.AreEqual("01 02 03 04", pw.ToPacketString());
             }

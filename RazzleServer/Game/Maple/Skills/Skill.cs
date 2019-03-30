@@ -226,6 +226,7 @@ namespace RazzleServer.Game.Maple.Skills
                     Character.PrimaryStats.Health -= (short)lefthp;
                     break;
                 }
+
                 case (int)SkillNames.Spearman.HyperBody when Character.Buffs.Contains(MapleId):
                     // Already buffed
                     return;

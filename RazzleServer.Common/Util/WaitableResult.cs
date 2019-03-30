@@ -17,6 +17,5 @@ namespace RazzleServer.Common.Util
             Value = value;
             _mEvent.Set();
         }
-
     }
 }

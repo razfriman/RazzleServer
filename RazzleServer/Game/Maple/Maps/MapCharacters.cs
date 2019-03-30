@@ -109,7 +109,7 @@ namespace RazzleServer.Game.Maple.Maps
                 }
             }
         }
-        
+
         public void Hide(Character item) => Map.Send(item.GetDestroyPacket(), item);
 
         public void Show(Character item) => Map.Send(item.GetCreatePacket(), item);

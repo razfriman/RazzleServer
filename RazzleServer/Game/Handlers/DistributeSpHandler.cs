@@ -17,7 +17,7 @@ namespace RazzleServer.Game.Handlers
                 client.Character.LogCheatWarning(CheatType.InvalidSkillChange);
                 return;
             }
-            
+
             if (!client.Character.Skills.Contains(mapleId))
             {
                 client.Character.Skills.Add(new Skill(mapleId));

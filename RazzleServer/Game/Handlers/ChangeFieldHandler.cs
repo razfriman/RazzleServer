@@ -9,7 +9,7 @@ namespace RazzleServer.Game.Handlers
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
             var portals = packet.ReadByte();
-            
+
             if (portals != client.Character.Portals)
             {
                 client.Character.LogCheatWarning(CheatType.InvalidPortals);

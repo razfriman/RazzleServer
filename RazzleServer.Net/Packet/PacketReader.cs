@@ -28,8 +28,10 @@ namespace RazzleServer.Net.Packet
         /// Creates a new instance of PacketReader
         /// </summary>
         /// <param name="arrayOfBytes">Starting byte array</param>
-        public PacketReader(Span<byte> arrayOfBytes) 
-            : this(arrayOfBytes.ToArray()) { }
+        public PacketReader(Span<byte> arrayOfBytes)
+            : this(arrayOfBytes.ToArray())
+        {
+        }
 
         /// <summary>
         /// Creates a new instance of PacketReader
@@ -54,7 +56,7 @@ namespace RazzleServer.Net.Packet
         /// </summary>
         /// <returns> an unsigned byte from the stream</returns>
         public byte ReadByte() => _binReader.ReadByte();
-        
+
         /// <summary>
         /// Reads a signed byte from the stream
         /// </summary>
@@ -115,7 +117,8 @@ namespace RazzleServer.Net.Packet
         /// </summary>
         /// <param name="length">Amount of bytes</param>
         /// <returns>An ASCII string</returns>
-        public string ReadString(int length) => Encoding.ASCII.GetString(ReadBytes(length).Where(x => x != 0x00).ToArray());
+        public string ReadString(int length) =>
+            Encoding.ASCII.GetString(ReadBytes(length).Where(x => x != 0x00).ToArray());
 
         /// <summary>
         /// Reads a maple string from the stream

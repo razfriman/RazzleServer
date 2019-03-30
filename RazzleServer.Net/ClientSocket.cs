@@ -24,7 +24,8 @@ namespace RazzleServer.Net
         public byte[] HostBytes { get; }
         public ushort Port { get; }
 
-        public ClientSocket(Socket socket, AClient client, ushort version, ulong aesKey, bool useAesEncryption, bool toClient)
+        public ClientSocket(Socket socket, AClient client, ushort version, ulong aesKey, bool useAesEncryption,
+            bool toClient)
         {
             _socket = socket;
             _socketBuffer = new byte[8192];

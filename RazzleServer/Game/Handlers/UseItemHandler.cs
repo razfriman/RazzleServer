@@ -33,19 +33,21 @@ namespace RazzleServer.Game.Handlers
 
             if (item.CHealthPercentage != 0)
             {
-                client.Character.PrimaryStats.Health += (short)(item.CHealthPercentage * client.Character.PrimaryStats.MaxHealth / 100);
+                client.Character.PrimaryStats.Health +=
+                    (short)(item.CHealthPercentage * client.Character.PrimaryStats.MaxHealth / 100);
             }
 
             if (item.CManaPercentage != 0)
             {
-                client.Character.PrimaryStats.Mana += (short)(item.CManaPercentage * client.Character.PrimaryStats.MaxMana / 100);
+                client.Character.PrimaryStats.Mana +=
+                    (short)(item.CManaPercentage * client.Character.PrimaryStats.MaxMana / 100);
             }
 
             if (item.CBuffTime > 0 && item.CProb == 0)
             {
                 // TODO: Add buff.
             }
-            
+
             // TODO: Add Monster Book card.
         }
     }

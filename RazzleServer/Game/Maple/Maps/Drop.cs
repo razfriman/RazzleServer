@@ -86,7 +86,7 @@ namespace RazzleServer.Game.Maple.Maps
                 pw.WriteShort(0); // NOTE: Foothold or delay probably.
             }
 
-            
+
             switch (this)
             {
                 case Item item:

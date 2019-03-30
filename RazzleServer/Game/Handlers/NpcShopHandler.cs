@@ -127,7 +127,8 @@ namespace RazzleServer.Game.Handlers
 
             if (item.IsRechargeable)
             {
-                client.Character.PrimaryStats.Meso += item.SalePrice + (int)(shop.UnitPrices[item.MapleId] * item.Quantity);
+                client.Character.PrimaryStats.Meso +=
+                    item.SalePrice + (int)(shop.UnitPrices[item.MapleId] * item.Quantity);
             }
             else
             {

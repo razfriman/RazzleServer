@@ -1,4 +1,3 @@
-
 //        public void EncodeForRemote(ref BuffValueTypes flag, long currentTime, Action<BuffStat> func, BuffValueTypes specificFlag = BuffValueTypes.All)
 //        {
 //            if (!IsSet(currentTime) || !specificFlag.HasFlag(Flag))
@@ -882,3 +881,5 @@
 //        }
 //    }
 //}
+
+

@@ -11,6 +11,7 @@ namespace RazzleServer.Common.Util
         {
             public T Value { get; }
             public DateTime Expiry { get; }
+
             public ExpiringValueHolder(T value, TimeSpan expiresAfter)
             {
                 Value = value;
@@ -123,8 +124,10 @@ namespace RazzleServer.Common.Util
 
         public bool Remove(KeyValuePair<TKey, TValue> item) => _innerDictionary.Remove(item.Key);
 
-        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => _innerDictionary.Select(x => new KeyValuePair<TKey, TValue>(x.Key, x.Value.Value)).GetEnumerator();
+        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => _innerDictionary
+            .Select(x => new KeyValuePair<TKey, TValue>(x.Key, x.Value.Value)).GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator() => _innerDictionary.Select(x => new KeyValuePair<TKey, TValue>(x.Key, x.Value.Value)).GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => _innerDictionary
+            .Select(x => new KeyValuePair<TKey, TValue>(x.Key, x.Value.Value)).GetEnumerator();
     }
 }

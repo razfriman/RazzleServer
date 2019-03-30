@@ -13,6 +13,5 @@ namespace RazzleServer.Net.Packet
         public byte[] ToArray() => Buffer.ToArray();
 
         public string ToPacketString() => ToArray().ByteArrayToString();
-
     }
 }

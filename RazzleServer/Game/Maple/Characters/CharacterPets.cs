@@ -15,7 +15,7 @@ namespace RazzleServer.Game.Maple.Characters
         }
 
         public override int GetKey(Pet item) => item.Item.Id;
-        
+
         public void Save()
         {
         }
@@ -96,7 +96,7 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 return this[item.PetId.Value];
             }
-            
+
             return null;
         }
     }

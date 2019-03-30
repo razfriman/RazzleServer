@@ -17,7 +17,7 @@ namespace RazzleServer.Wz.Util
             _iv = wzIv;
             _aesKey = aesKey;
         }
-     
+
         public byte this[int index]
         {
             get
@@ -26,6 +26,7 @@ namespace RazzleServer.Wz.Util
                 {
                     EnsureKeySize(index + 1);
                 }
+
                 return _keys[index];
             }
         }
@@ -72,6 +73,7 @@ namespace RazzleServer.Wz.Util
                         {
                             block[j] = _iv[j % 4];
                         }
+
                         s.Write(block, 0, block.Length);
                     }
                     else
@@ -83,6 +85,7 @@ namespace RazzleServer.Wz.Util
                 s.Flush();
                 ms.Close();
             }
+
             _keys = newKeys;
         }
     }

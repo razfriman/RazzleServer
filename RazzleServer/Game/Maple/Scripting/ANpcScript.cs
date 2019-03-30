@@ -202,7 +202,5 @@ namespace RazzleServer.Game.Maple.Scripting
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
         }
-
-     
     }
 }

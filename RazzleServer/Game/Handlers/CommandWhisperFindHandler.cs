@@ -15,20 +15,21 @@ namespace RazzleServer.Game.Handlers
             switch (type)
             {
                 case CommandType.Find:
-                    {
-                        ProcessFind(client, targetName, target);
-                    }
+                {
+                    ProcessFind(client, targetName, target);
+                }
                     break;
 
                 case CommandType.Whisper:
-                    {
-                        ProcessWhisper(packet, client, targetName, target);
-                    }
+                {
+                    ProcessWhisper(packet, client, targetName, target);
+                }
                     break;
             }
         }
 
-        private static void ProcessWhisper(PacketReader packet, GameClient client, string targetName, Maple.Characters.Character target)
+        private static void ProcessWhisper(PacketReader packet, GameClient client, string targetName,
+            Maple.Characters.Character target)
         {
             var text = packet.ReadString();
 

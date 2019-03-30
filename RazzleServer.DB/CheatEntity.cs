@@ -4,8 +4,7 @@ namespace RazzleServer.Data
 {
     public class CheatEntity
     {
-        [Key]
-        public int Id { get; set; }
+        [Key] public int Id { get; set; }
 
         public int CharacterId { get; set; }
 

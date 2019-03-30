@@ -13,9 +13,9 @@ namespace RazzleServer.Tests
         [TestMethod]
         public void GetPacketLength_ToClient_Succeeds()
         {
-            var version = (ushort) 55;
-            var aesKey = (ulong) 0x52330F1BB4060813;
-            var iv = (uint) 0;
+            var version = (ushort)55;
+            var aesKey = (ulong)0x52330F1BB4060813;
+            var iv = (uint)0;
             var cryptoInstance = new MapleCipher(version, aesKey);
             cryptoInstance.SetIv(iv);
 
@@ -34,9 +34,9 @@ namespace RazzleServer.Tests
         [TestMethod]
         public void GetPacketLength_ToServer_Succeeds()
         {
-            var version = (ushort) 55;
-            var aesKey = (ulong) 0x52330F1BB4060813;
-            var iv = (uint) 0;
+            var version = (ushort)55;
+            var aesKey = (ulong)0x52330F1BB4060813;
+            var iv = (uint)0;
             var cryptoInstance = new MapleCipher(version, aesKey);
             cryptoInstance.SetIv(iv);
 
@@ -54,9 +54,9 @@ namespace RazzleServer.Tests
         [TestMethod]
         public void CheckHeaderToClient_Valid_Succeeds()
         {
-            var version = (ushort) 55;
-            var aesKey = (ulong) 0x52330F1BB4060813;
-            var iv = (uint) 0;
+            var version = (ushort)55;
+            var aesKey = (ulong)0x52330F1BB4060813;
+            var iv = (uint)0;
             var cryptoInstance = new MapleCipher(version, aesKey);
             cryptoInstance.SetIv(iv);
 
@@ -74,9 +74,9 @@ namespace RazzleServer.Tests
         [TestMethod]
         public void CheckHeaderToServer_Valid_Succeeds()
         {
-            var version = (ushort) 55;
-            var aesKey = (ulong) 0x52330F1BB4060813;
-            var iv = (uint) 0;
+            var version = (ushort)55;
+            var aesKey = (ulong)0x52330F1BB4060813;
+            var iv = (uint)0;
             var cryptoInstance = new MapleCipher(version, aesKey);
             cryptoInstance.SetIv(iv);
 
@@ -94,9 +94,9 @@ namespace RazzleServer.Tests
         [TestMethod]
         public void EncryptDecrypt_ToClient_Succeeds()
         {
-            var version = (ushort) 55;
-            var aesKey = (ulong) 0x52330F1BB4060813;
-            var iv = (uint) 0;
+            var version = (ushort)55;
+            var aesKey = (ulong)0x52330F1BB4060813;
+            var iv = (uint)0;
             var encryptor = new MapleCipher(version, aesKey);
             encryptor.SetIv(iv);
 
@@ -118,9 +118,9 @@ namespace RazzleServer.Tests
         [TestMethod]
         public void EncryptDecrypt_ToServer_Succeeds()
         {
-            var version = (ushort) 55;
-            var aesKey = (ulong) 0x52330F1BB4060813;
-            var iv = (uint) 0;
+            var version = (ushort)55;
+            var aesKey = (ulong)0x52330F1BB4060813;
+            var iv = (uint)0;
             var encryptor = new MapleCipher(version, aesKey);
             encryptor.SetIv(iv);
 
@@ -140,9 +140,9 @@ namespace RazzleServer.Tests
         [TestMethod]
         public void EncryptDecryptProvider_ToServer_Succeeds()
         {
-            var version = (ushort) 55;
-            var aesKey = (ulong) 0x52330F1BB4060813;
-            var iv = (uint) 0;
+            var version = (ushort)55;
+            var aesKey = (ulong)0x52330F1BB4060813;
+            var iv = (uint)0;
             var encryptor = new MapleCipher(version, aesKey);
             encryptor.SetIv(iv);
 
@@ -174,9 +174,9 @@ namespace RazzleServer.Tests
         [TestMethod]
         public void EncryptDecryptProvider_ToClient_Succeeds()
         {
-            var version = (ushort) 55;
-            var aesKey = (ulong) 0x52330F1BB4060813;
-            var iv = (uint) 0;
+            var version = (ushort)55;
+            var aesKey = (ulong)0x52330F1BB4060813;
+            var iv = (uint)0;
             var encryptor = new MapleCipher(version, aesKey);
             encryptor.SetIv(iv);
 

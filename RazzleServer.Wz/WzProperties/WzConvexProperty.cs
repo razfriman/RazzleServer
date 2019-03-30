@@ -58,11 +58,12 @@ namespace RazzleServer.Wz.WzProperties
 
         public override WzImageProperty GetFromPath(string path)
         {
-            var segments = path.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+            var segments = path.Split(new[] {'/'}, StringSplitOptions.RemoveEmptyEntries);
             if (segments[0] == "..")
             {
                 return ((WzImageProperty)Parent)[path.Substring(Name.IndexOf('/') + 1)];
             }
+
             WzImageProperty ret = this;
             foreach (var segment in segments)
             {
@@ -78,13 +79,16 @@ namespace RazzleServer.Wz.WzProperties
                     foundChild = true;
                     break;
                 }
+
                 if (!foundChild)
                 {
                     return null;
                 }
             }
+
             return ret;
         }
+
         public override void WriteValue(WzBinaryWriter writer)
         {
             var extendedProps = _properties.Where(x => x is WzExtended).ToList();
@@ -105,7 +109,7 @@ namespace RazzleServer.Wz.WzProperties
         /// Creates a blank WzConvexProperty
         /// </summary>
         public WzConvexProperty() { }
-        
+
         /// <summary>
         /// Creates a WzConvexProperty with the specified name
         /// </summary>

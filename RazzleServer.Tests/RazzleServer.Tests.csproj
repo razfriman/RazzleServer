@@ -1,18 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
-    <IsPackable>false</IsPackable>
-    <LangVersion>8</LangVersion>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
-    <PackageReference Include="MSTest.TestAdapter" Version="1.4.0" />
-    <PackageReference Include="MSTest.TestFramework" Version="1.4.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\RazzleServer.Common\RazzleServer.Common.csproj" />
-    <ProjectReference Include="..\RazzleServer.Crypto\RazzleServer.Crypto.csproj" />
-    <ProjectReference Include="..\RazzleServer.Net\RazzleServer.Net.csproj" />
-    <ProjectReference Include="..\RazzleServer.Wz\RazzleServer.Wz.csproj" />
-  </ItemGroup>
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.0</TargetFramework>
+        <IsPackable>false</IsPackable>
+        <LangVersion>8</LangVersion>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
+        <PackageReference Include="MSTest.TestAdapter" Version="1.4.0" />
+        <PackageReference Include="MSTest.TestFramework" Version="1.4.0" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\RazzleServer.Common\RazzleServer.Common.csproj" />
+        <ProjectReference Include="..\RazzleServer.Crypto\RazzleServer.Crypto.csproj" />
+        <ProjectReference Include="..\RazzleServer.Net\RazzleServer.Net.csproj" />
+        <ProjectReference Include="..\RazzleServer.Wz\RazzleServer.Wz.csproj" />
+    </ItemGroup>
 </Project>

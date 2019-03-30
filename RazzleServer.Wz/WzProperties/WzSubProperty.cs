@@ -36,7 +36,6 @@ namespace RazzleServer.Wz.WzProperties
         {
             get
             {
-
                 foreach (var iwp in WzProperties)
                 {
                     if (iwp.Name.ToLower() == name.ToLower())
@@ -66,11 +65,12 @@ namespace RazzleServer.Wz.WzProperties
         /// <returns>the wz property with the specified name</returns>
         public override WzImageProperty GetFromPath(string path)
         {
-            var segments = path.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+            var segments = path.Split(new[] {'/'}, StringSplitOptions.RemoveEmptyEntries);
             if (segments[0] == "..")
             {
                 return ((WzImageProperty)Parent)[path.Substring(Name.IndexOf('/') + 1)];
             }
+
             WzImageProperty ret = this;
             foreach (var segment in segments)
             {
@@ -86,13 +86,16 @@ namespace RazzleServer.Wz.WzProperties
                     foundChild = true;
                     break;
                 }
+
                 if (!foundChild)
                 {
                     return null;
                 }
             }
+
             return ret;
         }
+
         public override void WriteValue(WzBinaryWriter writer)
         {
             writer.WriteStringValue("Property", 0x73, 0x1B);
@@ -118,6 +121,7 @@ namespace RazzleServer.Wz.WzProperties
         /// Creates a blank WzSubProperty
         /// </summary>
         public WzSubProperty() { }
+
         /// <summary>
         /// Creates a WzSubProperty with the specified name
         /// </summary>
@@ -126,6 +130,7 @@ namespace RazzleServer.Wz.WzProperties
         {
             Name = name;
         }
+
         /// <summary>
         /// Adds a property to the list
         /// </summary>
@@ -135,6 +140,7 @@ namespace RazzleServer.Wz.WzProperties
             prop.Parent = this;
             WzProperties.Add(prop);
         }
+
         public void AddProperties(IEnumerable<WzImageProperty> props)
         {
             foreach (var prop in props)
@@ -142,11 +148,13 @@ namespace RazzleServer.Wz.WzProperties
                 AddProperty(prop);
             }
         }
+
         public void RemoveProperty(WzImageProperty prop)
         {
             prop.Parent = null;
             WzProperties.Remove(prop);
         }
+
         /// <summary>
         /// Clears the list of properties
         /// </summary>

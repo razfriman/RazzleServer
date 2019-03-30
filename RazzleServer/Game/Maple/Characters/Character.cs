@@ -58,7 +58,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public DateTime LastHealthHealOverTime { get; set; }
         public DateTime LastManaHealOverTime { get; set; }
-        
+
         private int _itemEffect;
 
         private readonly ILogger _log = Log.ForContext<Character>();
@@ -188,7 +188,7 @@ namespace RazzleServer.Game.Maple.Characters
             Task.Factory.StartNew(Client.StartPingCheck);
         }
 
-       
+
         public void Release() => PrimaryStats.Update();
 
         public void Notify(string message, NoticeType type = NoticeType.PinkText)
@@ -233,7 +233,6 @@ namespace RazzleServer.Game.Maple.Characters
             Client.Server[mapId].Characters.Add(this);
         }
 
-      
 
         public void Attack(PacketReader packet, AttackType type)
         {
@@ -350,7 +349,7 @@ namespace RazzleServer.Game.Maple.Characters
             LastQuest = quest;
             npc.Converse(this);
         }
-      
+
         public void LogCheatWarning(CheatType type)
         {
             using (var dbContext = new MapleDbContext())
@@ -545,7 +544,7 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 Map.Characters.Show(this);
             }
-            
+
             using (var pw = new PacketWriter(ServerOperationCode.AdminResult))
             {
                 pw.WriteByte(AdminResultType.Hide);

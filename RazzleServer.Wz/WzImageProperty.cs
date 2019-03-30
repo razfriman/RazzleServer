@@ -212,6 +212,7 @@ namespace RazzleServer.Wz
                         default:
                             throw new InvalidOperationException("Unsupported UOL type");
                     }
+
                 default:
                     throw new InvalidOperationException("Unknown iname: " + iname);
             }

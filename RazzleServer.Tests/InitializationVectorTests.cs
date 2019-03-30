@@ -12,10 +12,10 @@ namespace RazzleServer.Tests
             var iv = new InitializationVector(uint.MaxValue);
             Assert.AreEqual(ushort.MaxValue, iv.HiWord);
             Assert.AreEqual(ushort.MaxValue, iv.LoWord);
-            CollectionAssert.AreEqual(new byte[]{0xFF, 0xFF, 0xFF, 0xFF}, iv.Bytes);
+            CollectionAssert.AreEqual(new byte[] {0xFF, 0xFF, 0xFF, 0xFF}, iv.Bytes);
             Assert.AreEqual(uint.MaxValue, iv.UInt);
         }
-        
+
         [TestMethod]
         public void ZeroValueIvCastsSuccessfully()
         {
@@ -25,14 +25,14 @@ namespace RazzleServer.Tests
             CollectionAssert.AreEqual(new byte[4], iv.Bytes);
             Assert.AreEqual(0u, iv.UInt);
         }
-        
+
         [TestMethod]
         public void ShuffleProvidesExpectedResult()
         {
             var iv = new InitializationVector(0);
             CollectionAssert.AreEqual(new byte[4], iv.Bytes);
             iv.Shuffle();
-            CollectionAssert.AreEqual(new byte[]{ 0x11, 0xBB, 0x64, 0xC7}, iv.Bytes);
+            CollectionAssert.AreEqual(new byte[] {0x11, 0xBB, 0x64, 0xC7}, iv.Bytes);
         }
     }
 }

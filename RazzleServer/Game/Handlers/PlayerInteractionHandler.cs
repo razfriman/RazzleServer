@@ -14,71 +14,69 @@ namespace RazzleServer.Game.Handlers
             switch (code)
             {
                 case InteractionCode.Create:
+                {
+                    var type = (InteractionType)packet.ReadByte();
+
+                    switch (type)
                     {
-                        var type = (InteractionType)packet.ReadByte();
-
-                        switch (type)
+                        case InteractionType.Omok:
                         {
-                            case InteractionType.Omok:
-                                {
-
-                                }
-                                break;
-
-                            case InteractionType.Trade:
-                                {
-                                    if (client.Character.Trade == null)
-                                    {
-                                        client.Character.Trade = new Trade(client.Character);
-                                    }
-                                }
-                                break;
-
-                            case InteractionType.PlayerShop:
-                                {
-                                    var description = packet.ReadString();
-
-                                    if (client.Character.PlayerShop == null)
-                                    {
-                                        client.Character.PlayerShop = new PlayerShop(client.Character, description);
-                                    }
-                                }
-                                break;
-
-                            case InteractionType.HiredMerchant:
-                                {
-
-                                }
-                                break;
                         }
+                            break;
+
+                        case InteractionType.Trade:
+                        {
+                            if (client.Character.Trade == null)
+                            {
+                                client.Character.Trade = new Trade(client.Character);
+                            }
+                        }
+                            break;
+
+                        case InteractionType.PlayerShop:
+                        {
+                            var description = packet.ReadString();
+
+                            if (client.Character.PlayerShop == null)
+                            {
+                                client.Character.PlayerShop = new PlayerShop(client.Character, description);
+                            }
+                        }
+                            break;
+
+                        case InteractionType.HiredMerchant:
+                        {
+                        }
+                            break;
                     }
+                }
                     break;
 
                 case InteractionCode.Visit:
+                {
+                    if (client.Character.PlayerShop == null)
                     {
-                        if (client.Character.PlayerShop == null)
-                        {
-                            var objectId = packet.ReadInt();
+                        var objectId = packet.ReadInt();
 
-                            if (client.Character.Map.PlayerShops.Contains(objectId))
-                            {
-                                client.Character.Map.PlayerShops[objectId].AddVisitor(client.Character);
-                            }
+                        if (client.Character.Map.PlayerShops.Contains(objectId))
+                        {
+                            client.Character.Map.PlayerShops[objectId].AddVisitor(client.Character);
                         }
                     }
+                }
                     break;
 
                 default:
+                {
+                    if (client.Character.Trade != null)
                     {
-                        if (client.Character.Trade != null)
-                        {
-                            client.Character.Trade.Handle(client.Character, code, packet);
-                        }
-                        else
-                        {
-                            client.Character.PlayerShop?.Handle(client.Character, code, packet);
-                        }
+                        client.Character.Trade.Handle(client.Character, code, packet);
                     }
+                    else
+                    {
+                        client.Character.PlayerShop?.Handle(client.Character, code, packet);
+                    }
+                }
                     break;
             }
         }

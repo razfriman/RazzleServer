@@ -10,17 +10,14 @@
         CheckName = 0x06,
         CreateCharacter = 0x07,
         DeleteCharacter = 0x08,
-        [IgnorePacketPrint]
-        Pong = 0x09,
+        [IgnorePacketPrint] Pong = 0x09,
         ClientCrashReport = 0x0A,
-        [IgnorePacketPrint]
-        ClientHash = 0x0E,
+        [IgnorePacketPrint] ClientHash = 0x0E,
 
         ChangeField = 0x11,
         ChangeChannel = 0x12,
         FieldConnectCashShop = 0x13,
-        [IgnorePacketPrint]
-        PlayerMovement = 0x14,
+        [IgnorePacketPrint] PlayerMovement = 0x14,
         FieldPlayerSitMapChair = 0x15,
         AttackMelee = 0x16,
         AttackRanged = 0x17,
@@ -42,7 +39,7 @@
         DistributeAp = 0x2A,
         HealOverTime = 0x2B,
         DistributeSp = 0x2C,
-        UseSkill = 0x2D,
+        SkillUse = 0x2D,
         SkillStop = 0x2E,
 
         MesoDrop = 0x30,
@@ -71,8 +68,7 @@
         SummonAttack = 0x4F,
         SummonDamage = 0x50,
 
-        [IgnorePacketPrint]
-        MobMovement = 0x56,
+        [IgnorePacketPrint] MobMovement = 0x56,
         MobDistanceFromPlayer = 0x57,
         MobPickupDrop = 0x58,
         NpcMovement = 0x5B,
@@ -81,7 +77,7 @@
         CoconutEvent = 0x68,
         AdminEventReset = 0x6A,
         BoatStatusRequest = 0x70,
-        
+
         Unknown = 0xFF
     }
 }

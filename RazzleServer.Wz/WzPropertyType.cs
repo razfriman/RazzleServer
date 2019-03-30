@@ -1,20 +1,20 @@
 ﻿namespace RazzleServer.Wz
 {
-	public enum WzPropertyType
-	{
+    public enum WzPropertyType
+    {
         Null,
-		Short,
-		Int,
+        Short,
+        Int,
         Long,
-		Float,
-		Double,
-		String,
+        Float,
+        Double,
+        String,
         SubProperty,
-		Canvas,
-		Vector,
-		Convex,
-		Sound,
-		Uol,
+        Canvas,
+        Vector,
+        Convex,
+        Sound,
+        Uol,
         Png
-	}
+    }
 }

@@ -12,7 +12,7 @@ namespace RazzleServer.Wz.WzProperties
         /// The value of the property
         /// </summary>
         public short Value { get; set; }
-        
+
         public override void SetValue(object value) => Value = (short)value;
 
         public override WzImageProperty DeepClone() => new WzShortProperty(Name, Value);
@@ -33,7 +33,7 @@ namespace RazzleServer.Wz.WzProperties
         /// Creates a blank WzUnsignedShortProperty
         /// </summary>
         public WzShortProperty() { }
-        
+
         /// <summary>
         /// Creates a WzUnsignedShortProperty with the specified name
         /// </summary>
@@ -42,7 +42,7 @@ namespace RazzleServer.Wz.WzProperties
         {
             Name = name;
         }
-        
+
         /// <summary>
         /// Creates a WzUnsignedShortProperty with the specified name and value
         /// </summary>

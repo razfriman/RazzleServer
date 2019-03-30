@@ -3,8 +3,8 @@ using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Handlers
 {
-    [PacketHandler(ClientOperationCode.UseSkill)]
-    public class UseSkillHandler : GamePacketHandler
+    [PacketHandler(ClientOperationCode.SkillUse)]
+    public class SkillUseHandler : GamePacketHandler
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
         {

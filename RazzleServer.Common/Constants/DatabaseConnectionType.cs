@@ -3,6 +3,7 @@
     public enum DatabaseConnectionType
     {
         Sqlite,
+
         InMemory
         //SqlServer,
         //PostgreSql,

@@ -5,16 +5,14 @@ namespace RazzleServer.Data
 {
     public class ItemEntity
     {
-        [Key]
-        public int Id { get; set; }
+        [Key] public int Id { get; set; }
         public int MapleId { get; set; }
         public int AccountId { get; set; }
         public int CharacterId { get; set; }
         public short Position { get; set; }
         public short Quantity { get; set; }
         public short Flags { get; set; }
-        [MaxLength(13)]
-        public string Creator { get; set; }
+        [MaxLength(13)] public string Creator { get; set; }
         public string Source { get; set; }
         public bool IsStored { get; set; }
         public int? PetId { get; set; }
@@ -47,7 +45,7 @@ namespace RazzleServer.Data
         public short CustomExp { get; set; }
         public byte Enhancements { get; set; }
         public byte CustomLevel { get; set; }
-        
+
         public AccountEntity Account { get; set; }
         public CharacterEntity Character { get; set; }
     }

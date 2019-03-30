@@ -61,7 +61,7 @@ namespace RazzleServer.Wz.WzProperties
         }
 
         public override string GetString() => Value;
-        
+
         public override string ToString() => Value;
     }
 }

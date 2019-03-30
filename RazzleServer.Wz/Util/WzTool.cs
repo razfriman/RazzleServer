@@ -65,6 +65,7 @@ namespace RazzleServer.Wz.Util
 
                 len += s.Length;
             }
+
             return len;
         }
 
@@ -104,7 +105,8 @@ namespace RazzleServer.Wz.Util
                 return reader.ReadInt32() != WzHeader;
             }
         }
-        
-        public static WzMutableKey GenerateWzKey(byte[] wzIv) => new WzMutableKey(wzIv, CryptoConstants.GetTrimmedUserKey());
+
+        public static WzMutableKey GenerateWzKey(byte[] wzIv) =>
+            new WzMutableKey(wzIv, CryptoConstants.GetTrimmedUserKey());
     }
 }

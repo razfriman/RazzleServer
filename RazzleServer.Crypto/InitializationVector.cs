@@ -15,11 +15,12 @@ namespace RazzleServer.Crypto
         /// Gets the uint value from the current container
         /// </summary>
         public uint UInt => MemoryMarshal.Cast<byte, uint>(_data)[0];
+
         /// <summary>
         /// Gets the LOWORD from the current container
         /// </summary>
         public ushort LoWord => MemoryMarshal.Cast<byte, ushort>(_data)[0];
-        
+
         /// <summary>
         /// Gets the HIWORD from the current container
         /// </summary>
@@ -29,7 +30,7 @@ namespace RazzleServer.Crypto
         /// Gets the bytes of the current container
         /// </summary>
         public byte[] Bytes => _data.ToArray();
-        
+
         /// <summary>
         /// IV Security check
         /// </summary>
@@ -53,7 +54,7 @@ namespace RazzleServer.Crypto
         public void Shuffle()
         {
             var newIv = CryptoConstants.DefaultKey.ToArray();
-            
+
             for (var i = 0; i < 4; i++)
             {
                 var input = _data[i];
@@ -72,6 +73,7 @@ namespace RazzleServer.Crypto
                 newIv[2] = (byte)((val2 >> 16) & 0xFF);
                 newIv[3] = (byte)((val2 >> 24) & 0xFF);
             }
+
             Buffer.BlockCopy(newIv, 0, _data, 0, 4);
         }
     }

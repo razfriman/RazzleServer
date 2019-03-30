@@ -30,7 +30,7 @@ namespace RazzleServer.Crypto
         /// Bool stating if the current instance received its handshake
         /// </summary>
         public bool Handshaken { get; set; }
-        
+
         /// <summary>
         /// Apply AES encrpytion. This must be false in v40b.
         /// </summary>

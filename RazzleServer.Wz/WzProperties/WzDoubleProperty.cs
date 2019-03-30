@@ -3,58 +3,58 @@ using RazzleServer.Wz.Util;
 
 namespace RazzleServer.Wz.WzProperties
 {
-	/// <inheritdoc />
+    /// <inheritdoc />
     /// <summary>
     /// A property that has the value of a double
     /// </summary>
-	public class WzDoubleProperty : WzImageProperty
-	{
+    public class WzDoubleProperty : WzImageProperty
+    {
         /// <summary>
         /// The value of this property
         /// </summary>
         public double Value { get; set; }
-        
+
         public override void SetValue(object value) => Value = (double)value;
 
         public override WzImageProperty DeepClone() => new WzDoubleProperty(Name, Value);
 
         public override object WzValue => Value;
 
-		public override WzPropertyType Type => WzPropertyType.Double;
+        public override WzPropertyType Type => WzPropertyType.Double;
 
-		public override void WriteValue(WzBinaryWriter writer)
-		{
-			writer.Write((byte)5);
-			writer.Write(Value);
-		}
-		
-		public override void Dispose() => Name = null;
+        public override void WriteValue(WzBinaryWriter writer)
+        {
+            writer.Write((byte)5);
+            writer.Write(Value);
+        }
+
+        public override void Dispose() => Name = null;
 
 
         /// <summary>
-		/// Creates a blank WzDoubleProperty
-		/// </summary>
-		public WzDoubleProperty() { }
-		
+        /// Creates a blank WzDoubleProperty
+        /// </summary>
+        public WzDoubleProperty() { }
+
         /// <summary>
-		/// Creates a WzDoubleProperty with the specified name
-		/// </summary>
-		/// <param name="name">The name of the property</param>
-		public WzDoubleProperty(string name)
-		{
+        /// Creates a WzDoubleProperty with the specified name
+        /// </summary>
+        /// <param name="name">The name of the property</param>
+        public WzDoubleProperty(string name)
+        {
             Name = name;
-		}
-		
+        }
+
         /// <summary>
-		/// Creates a WzDoubleProperty with the specified name and value
-		/// </summary>
-		/// <param name="name">The name of the property</param>
-		/// <param name="value">The value of the property</param>
-		public WzDoubleProperty(string name, double value)
-		{
+        /// Creates a WzDoubleProperty with the specified name and value
+        /// </summary>
+        /// <param name="name">The name of the property</param>
+        /// <param name="value">The value of the property</param>
+        public WzDoubleProperty(string name, double value)
+        {
             Name = name;
-			Value = value;
-		}
+            Value = value;
+        }
 
         public override float GetFloat() => (float)Value;
 
@@ -67,5 +67,5 @@ namespace RazzleServer.Wz.WzProperties
         public override long GetLong() => (long)Value;
 
         public override string ToString() => Value.ToString(CultureInfo.CurrentCulture);
-	}
+    }
 }

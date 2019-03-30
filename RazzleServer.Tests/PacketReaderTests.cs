@@ -25,10 +25,9 @@ namespace RazzleServer.Tests
                 var result = packet.ReadByte();
                 Assert.AreEqual(1, result);
                 Assert.AreEqual(0, packet.Available);
-
             }
         }
-        
+
         [TestMethod]
         public void ReadSByte_Valid_Succeeds()
         {
@@ -37,7 +36,6 @@ namespace RazzleServer.Tests
                 var result = packet.ReadSByte();
                 Assert.AreEqual(-1, result);
                 Assert.AreEqual(0, packet.Available);
-
             }
         }
 

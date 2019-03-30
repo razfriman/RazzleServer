@@ -21,7 +21,8 @@ namespace RazzleServer.Net
         public string Key { get; set; }
         public abstract ILogger Logger { get; }
 
-        protected AClient(Socket session, ushort version, byte subVersion, byte serverType, ulong aesKey, bool useAesEncryption, bool printPackets, bool toClient)
+        protected AClient(Socket session, ushort version, byte subVersion, byte serverType, ulong aesKey,
+            bool useAesEncryption, bool printPackets, bool toClient)
         {
             Version = version;
             SubVersion = subVersion;

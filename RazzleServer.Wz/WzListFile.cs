@@ -42,6 +42,7 @@ namespace RazzleServer.Wz
                 var decryptedStr = wzParser.DecryptString(strChrs);
                 listEntries.Add(decryptedStr);
             }
+
             wzParser.Close();
             var lastIndex = listEntries.Count - 1;
             var lastEntry = listEntries[lastIndex];
@@ -69,6 +70,7 @@ namespace RazzleServer.Wz
                     wzWriter.Write((short)encryptedChar);
                 }
             }
+
             listEntries[lastIndex] = lastEntry.Substring(0, lastEntry.Length - 1) + "/";
         }
     }

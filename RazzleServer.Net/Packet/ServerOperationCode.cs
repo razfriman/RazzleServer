@@ -17,7 +17,7 @@
         //Unknown = 0x0D,
         //Unknown = 0x0E,
         //Unknown = 0x0F,
-        
+
         //Unknown = 0x10,
         //Unknown = 0x11,
         InventoryOperation = 0x12,
@@ -26,12 +26,15 @@
         SkillsGiveBuff = 0x15,
         SkillsGiveDebuff = 0x16,
         SkillsAddPoint = 0x17,
+
         //Unknown = 0x18,
         Fame = 0x19,
         Message = 0x1A,
+
         //Unknown = 0x1B,
         TeleportRock = 0x1C,
         SueCharacterResult = 0x1D,
+
         //Unknown = 0x1E,
         PlayerInformation = 0x1F,
 
@@ -39,14 +42,17 @@
         BuddyOperation = 0x21,
         PortalEnterField = 0x22,
         Notice = 0x23,
+
         //Unknown = 0x24,
         //Unknown = 0x25,
         SetField = 0x26,
         SetFieldCashShop = 0x27,
+
         //Unknown = 0x28,
         //Unknown = 0x29,
         TransferFieldReqIgnored = 0x2A,
         IncorrectChannelNumber = 0x2B,
+
         //Unknown = 0x2C,
         GroupMessage = 0x2D,
         Whisper = 0x2E,

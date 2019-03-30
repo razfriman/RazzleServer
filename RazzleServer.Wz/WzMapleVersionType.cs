@@ -1,11 +1,11 @@
 ﻿namespace RazzleServer.Wz
 {
-	public enum WzMapleVersionType
-	{
-		Gms,
+    public enum WzMapleVersionType
+    {
+        Gms,
         Ems,
-		Bms,
-		Classic,
-		Generate
-	}
+        Bms,
+        Classic,
+        Generate
+    }
 }

@@ -32,6 +32,7 @@ namespace RazzleServer.Game.Handlers
                 {
                     return;
                 }
+
                 var mob = client.Character.Map.Mobs[mobObjectId];
 
                 if (mobId != mob.MapleId)
@@ -108,32 +109,32 @@ namespace RazzleServer.Game.Handlers
                 switch (type)
                 {
                     case MapDamage:
-                        {
-                            oPacket.WriteInt(damage);
-                            oPacket.WriteInt(damage);
-                        }
+                    {
+                        oPacket.WriteInt(damage);
+                        oPacket.WriteInt(damage);
+                    }
                         break;
 
                     default:
+                    {
+                        oPacket.WriteInt(damage); // TODO: ... or PGMR damage.
+                        oPacket.WriteInt(mobId);
+                        oPacket.WriteByte(hit);
+                        oPacket.WriteByte(reduction);
+
+                        if (reduction > 0)
                         {
-                            oPacket.WriteInt(damage); // TODO: ... or PGMR damage.
-                            oPacket.WriteInt(mobId);
-                            oPacket.WriteByte(hit);
-                            oPacket.WriteByte(reduction);
-
-                            if (reduction > 0)
-                            {
-                                // TODO: PGMR stuff.
-                            }
-
-                            oPacket.WriteByte(stance);
-                            oPacket.WriteInt(damage);
-
-                            if (noDamageSkillId > 0)
-                            {
-                                oPacket.WriteInt(noDamageSkillId);
-                            }
+                            // TODO: PGMR stuff.
                         }
+
+                        oPacket.WriteByte(stance);
+                        oPacket.WriteInt(damage);
+
+                        if (noDamageSkillId > 0)
+                        {
+                            oPacket.WriteInt(noDamageSkillId);
+                        }
+                    }
                         break;
                 }
 

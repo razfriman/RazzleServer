@@ -24,10 +24,10 @@ namespace RazzleServer.Common.Util
         public double DistanceFrom(Point point) => Math.Sqrt(Math.Pow(X - point.X, 2) + Math.Pow(Y - point.Y, 2));
 
         public bool IsInRectangle(Rectangle rectangle) =>
-                X >= rectangle.Lt.X &&
-                Y >= rectangle.Lt.Y &&
-                X <= rectangle.Rb.X &&
-                Y <= rectangle.Rb.Y;
+            X >= rectangle.Lt.X &&
+            Y >= rectangle.Lt.Y &&
+            X <= rectangle.Rb.X &&
+            Y <= rectangle.Rb.Y;
 
         public override bool Equals(object obj)
         {
@@ -49,6 +49,5 @@ namespace RazzleServer.Common.Util
         public static bool operator ==(Point p1, Point p2) => p1.Equals(p2);
 
         public static bool operator !=(Point p1, Point p2) => !p1.Equals(p2);
-
     }
 }

@@ -15,154 +15,153 @@ namespace RazzleServer.Game.Handlers
             switch (action)
             {
                 case StorageAction.Remove:
+                {
+                    var type = (ItemType)packet.ReadByte();
+                    var slot = packet.ReadByte();
+
+                    var item = client.Character.Storage.Items[slot];
+
+                    if (item == null)
                     {
-                        var type = (ItemType)packet.ReadByte();
-                        var slot = packet.ReadByte();
+                        return;
+                    }
 
-                        var item = client.Character.Storage.Items[slot];
+                    client.Character.Storage.Items.Remove(item);
+                    item.Delete();
 
-                        if (item == null)
+                    item.IsStored = false;
+
+                    client.Character.Items.Add(item, forceGetSlot: true);
+
+                    var itemsByType = new List<Item>();
+
+                    foreach (var loopItem in client.Character.Items)
+                    {
+                        if (loopItem.Type == item.Type)
                         {
-                            return;
-                        }
-
-                        client.Character.Storage.Items.Remove(item);
-                        item.Delete();
-
-                        item.IsStored = false;
-
-                        client.Character.Items.Add(item, forceGetSlot: true);
-
-                        var itemsByType = new List<Item>();
-
-                        foreach (var loopItem in client.Character.Items)
-                        {
-                            if (loopItem.Type == item.Type)
-                            {
-                                itemsByType.Add(loopItem);
-                            }
-                        }
-
-                        using (var oPacket = new PacketWriter(ServerOperationCode.StorageResult))
-                        {
-
-                            oPacket.WriteByte(13);
-                            oPacket.WriteByte(client.Character.Storage.Slots);
-                            oPacket.WriteShort((short)(2 << (byte)item.Type));
-                            oPacket.WriteShort(0);
-                            oPacket.WriteInt(0);
-                            oPacket.WriteByte((byte)itemsByType.Count);
-
-                            foreach (var loopItem in itemsByType)
-                            {
-                                oPacket.WriteBytes(loopItem.ToByteArray(true, true));
-                            }
-
-                            client.Send(oPacket);
+                            itemsByType.Add(loopItem);
                         }
                     }
+
+                    using (var oPacket = new PacketWriter(ServerOperationCode.StorageResult))
+                    {
+                        oPacket.WriteByte(13);
+                        oPacket.WriteByte(client.Character.Storage.Slots);
+                        oPacket.WriteShort((short)(2 << (byte)item.Type));
+                        oPacket.WriteShort(0);
+                        oPacket.WriteInt(0);
+                        oPacket.WriteByte((byte)itemsByType.Count);
+
+                        foreach (var loopItem in itemsByType)
+                        {
+                            oPacket.WriteBytes(loopItem.ToByteArray(true, true));
+                        }
+
+                        client.Send(oPacket);
+                    }
+                }
                     break;
 
                 case StorageAction.Add:
+                {
+                    var slot = packet.ReadShort();
+                    var itemId = packet.ReadInt();
+                    var quantity = packet.ReadShort();
+
+                    var item = client.Character.Items[itemId, slot];
+
+                    if (client.Character.Storage.IsFull)
                     {
-                        var slot = packet.ReadShort();
-                        var itemId = packet.ReadInt();
-                        var quantity = packet.ReadShort();
-
-                        var item = client.Character.Items[itemId, slot];
-
-                        if (client.Character.Storage.IsFull)
-                        {
-                            using (var oPacket = new PacketWriter(ServerOperationCode.StorageResult))
-                            {
-                                oPacket.WriteByte(17);
-
-                                client.Send(oPacket);
-                            }
-
-                            return;
-                        }
-
-                        if (client.Character.PrimaryStats.Meso <= client.Character.Storage.Npc.CachedReference.StorageCost)
-                        {
-                            client.Character.Notify("You don't have enough meso to store the item.", NoticeType.Popup); // TOOD: Is there a packet for client.Character?
-                            return;
-                        }
-
-                        client.Character.PrimaryStats.Meso -= client.Character.Storage.Npc.CachedReference.StorageCost;
-
-                        client.Character.Items.Remove(item, true);
-
-                        item.Parent = client.Character.Items; // NOTE: client.Character is needed because when we remove the item is sets parent to none.
-                        item.Slot = (short)client.Character.Storage.Items.Count;
-                        item.IsStored = true;
-
-                        client.Character.Items.Add(item);
-
-                        var itemsByType = new List<Item>();
-
-                        foreach (var loopItem in client.Character.Items)
-                        {
-                            if (loopItem.Type == item.Type)
-                            {
-                                itemsByType.Add(loopItem);
-                            }
-                        }
-
                         using (var oPacket = new PacketWriter(ServerOperationCode.StorageResult))
                         {
-
-                            oPacket.WriteByte(13);
-                            oPacket.WriteByte(client.Character.Storage.Slots);
-                            oPacket.WriteShort((short)(2 << (byte)item.Type));
-                            oPacket.WriteShort(0);
-                            oPacket.WriteInt(0);
-                            oPacket.WriteByte((byte)itemsByType.Count);
-
-                            foreach (var loopItem in itemsByType)
-                            {
-                                oPacket.WriteBytes(loopItem.ToByteArray(true, true));
-                            }
+                            oPacket.WriteByte(17);
 
                             client.Send(oPacket);
                         }
+
+                        return;
                     }
+
+                    if (client.Character.PrimaryStats.Meso <= client.Character.Storage.Npc.CachedReference.StorageCost)
+                    {
+                        client.Character.Notify("You don't have enough meso to store the item.",
+                            NoticeType.Popup); // TOOD: Is there a packet for client.Character?
+                        return;
+                    }
+
+                    client.Character.PrimaryStats.Meso -= client.Character.Storage.Npc.CachedReference.StorageCost;
+
+                    client.Character.Items.Remove(item, true);
+
+                    item.Parent =
+                        client.Character
+                            .Items; // NOTE: client.Character is needed because when we remove the item is sets parent to none.
+                    item.Slot = (short)client.Character.Storage.Items.Count;
+                    item.IsStored = true;
+
+                    client.Character.Items.Add(item);
+
+                    var itemsByType = new List<Item>();
+
+                    foreach (var loopItem in client.Character.Items)
+                    {
+                        if (loopItem.Type == item.Type)
+                        {
+                            itemsByType.Add(loopItem);
+                        }
+                    }
+
+                    using (var oPacket = new PacketWriter(ServerOperationCode.StorageResult))
+                    {
+                        oPacket.WriteByte(13);
+                        oPacket.WriteByte(client.Character.Storage.Slots);
+                        oPacket.WriteShort((short)(2 << (byte)item.Type));
+                        oPacket.WriteShort(0);
+                        oPacket.WriteInt(0);
+                        oPacket.WriteByte((byte)itemsByType.Count);
+
+                        foreach (var loopItem in itemsByType)
+                        {
+                            oPacket.WriteBytes(loopItem.ToByteArray(true, true));
+                        }
+
+                        client.Send(oPacket);
+                    }
+                }
                     break;
 
                 case StorageAction.Meso:
+                {
+                    var meso = packet.ReadInt();
+
+                    if (meso > 0) // NOTE: Withdraw meso.
                     {
-                        var meso = packet.ReadInt();
-
-                        if (meso > 0) // NOTE: Withdraw meso.
-                        {
-                            // TODO: Meso checks.
-                        }
-
-                        client.Character.PrimaryStats.Meso -= meso;
-                        client.Character.PrimaryStats.Meso += meso;
-
-                        using (var oPacket = new PacketWriter(ServerOperationCode.StorageResult))
-                        {
-
-                            oPacket.WriteByte(19);
-                            oPacket.WriteByte(client.Character.Storage.Slots);
-                            oPacket.WriteShort(2);
-                            oPacket.WriteShort(0);
-                            oPacket.WriteInt(0);
-                            oPacket.WriteInt(client.Character.PrimaryStats.Meso);
-
-                            client.Send(oPacket);
-                        }
+                        // TODO: Meso checks.
                     }
+
+                    client.Character.PrimaryStats.Meso -= meso;
+                    client.Character.PrimaryStats.Meso += meso;
+
+                    using (var oPacket = new PacketWriter(ServerOperationCode.StorageResult))
+                    {
+                        oPacket.WriteByte(19);
+                        oPacket.WriteByte(client.Character.Storage.Slots);
+                        oPacket.WriteShort(2);
+                        oPacket.WriteShort(0);
+                        oPacket.WriteInt(0);
+                        oPacket.WriteInt(client.Character.PrimaryStats.Meso);
+
+                        client.Send(oPacket);
+                    }
+                }
                     break;
 
                 case StorageAction.Leave:
-                    {
-                        client.Character.Save();
-                    }
+                {
+                    client.Character.Save();
+                }
                     break;
             }
-
         }
     }
 }

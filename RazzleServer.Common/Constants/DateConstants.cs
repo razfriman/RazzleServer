@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace RazzleServer.Common.Constants
 {
     public static class DateConstants

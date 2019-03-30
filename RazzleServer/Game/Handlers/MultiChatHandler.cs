@@ -9,7 +9,7 @@ namespace RazzleServer.Game.Handlers
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
-            var type = (MultiChatType) packet.ReadByte();
+            var type = (MultiChatType)packet.ReadByte();
             var count = packet.ReadByte();
 
             var recipients = new List<int>();
@@ -26,15 +26,13 @@ namespace RazzleServer.Game.Handlers
             switch (type)
             {
                 case MultiChatType.Buddy:
-                    {
-
-                    }
+                {
+                }
                     break;
 
                 case MultiChatType.Party:
-                    {
-
-                    }
+                {
+                }
                     break;
             }
 

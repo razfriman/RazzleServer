@@ -46,7 +46,8 @@ namespace RazzleServer.Crypto
         /// </summary>
         private readonly object _addLocker = new object();
 
-        public MapleCipherProvider(ushort currentGameVersion, ulong aesKey, bool useAesEncryption = true, ushort initialBufferSize = 0x100,
+        public MapleCipherProvider(ushort currentGameVersion, ulong aesKey, bool useAesEncryption = true,
+            ushort initialBufferSize = 0x100,
             bool toClient = true)
         {
             RecvCipher = new MapleCipher(currentGameVersion, aesKey, useAesEncryption);
@@ -188,7 +189,8 @@ namespace RazzleServer.Crypto
         {
             if (!RecvCipher.Handshaken)
             {
-                var pr = new BinaryReader(new MemoryStream(MapleCipher.Handshake(data).ToArray(), false), Encoding.ASCII);
+                var pr = new BinaryReader(new MemoryStream(MapleCipher.Handshake(data).ToArray(), false),
+                    Encoding.ASCII);
                 var version = pr.ReadInt16();
                 var subVersionLength = pr.ReadInt16();
                 var subVersion = new string(pr.ReadChars(subVersionLength));

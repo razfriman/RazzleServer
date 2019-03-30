@@ -18,14 +18,14 @@ namespace RazzleServer.Game.Handlers
             switch (type)
             {
                 case ReportType.IllegalProgramUsage:
-                    {
-                    }
+                {
+                }
                     break;
 
                 case ReportType.ConversationClaim:
-                    {
-                        var chatLog = packet.ReadString();
-                    }
+                {
+                    var chatLog = packet.ReadString();
+                }
                     break;
             }
 
@@ -36,7 +36,6 @@ namespace RazzleServer.Game.Handlers
                 oPacket.WriteByte((byte)result);
                 client.Send(oPacket);
             }
-
         }
     }
 }

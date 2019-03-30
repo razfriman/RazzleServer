@@ -131,6 +131,7 @@ namespace RazzleServer.Game.Maple.Life
                         script.SetResult(1);
                         script.State++;
                     }
+
                     break;
                 case NpcMessageType.RequestText:
                     if (action != 0)
@@ -138,6 +139,7 @@ namespace RazzleServer.Game.Maple.Life
                         script.SetResult(packet.ReadString());
                         script.State++;
                     }
+
                     break;
                 case NpcMessageType.RequestNumber:
                     if (action == 1)
@@ -145,6 +147,7 @@ namespace RazzleServer.Game.Maple.Life
                         script.SetResult(packet.ReadInt());
                         script.State++;
                     }
+
                     break;
                 case NpcMessageType.Choice:
                 case NpcMessageType.Quiz:
@@ -154,6 +157,7 @@ namespace RazzleServer.Game.Maple.Life
                         script.SetResult(packet.ReadInt());
                         script.State++;
                     }
+
                     break;
             }
         }

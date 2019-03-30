@@ -23,9 +23,10 @@ namespace RazzleServer.Game.Handlers
                 {
                     oPacket.WriteShort(seatId);
                 }
-                
+
                 client.Character.Map.Send(oPacket, client.Character);
             }
+
             client.Character.Release();
         }
     }

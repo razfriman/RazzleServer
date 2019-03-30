@@ -6,17 +6,13 @@ namespace RazzleServer.Common.Util
 {
     public abstract class MapleKeyedCollection<TKey, TValue> where TValue : class
     {
-        [JsonProperty]
-        protected Dictionary<TKey, TValue> Objects { get; set; } = new Dictionary<TKey, TValue>();
+        [JsonProperty] protected Dictionary<TKey, TValue> Objects { get; set; } = new Dictionary<TKey, TValue>();
 
         public TValue this[TKey key] => Objects.ContainsKey(key) ? Objects[key] : null;
 
-        [JsonIgnore]
+        [JsonIgnore] public IEnumerable<TValue> Values => Objects.Values;
 
-        public IEnumerable<TValue> Values => Objects.Values;
-
-        [JsonIgnore]
-        public int Count => Values.Count();
+        [JsonIgnore] public int Count => Values.Count();
 
         public abstract TKey GetKey(TValue item);
 

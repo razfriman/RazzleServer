@@ -25,12 +25,9 @@ namespace RazzleServer.Wz.WzProperties
 
         private static readonly byte[] SoundHeader =
         {
-            0x02,
-            0x83, 0xEB, 0x36, 0xE4, 0x4F, 0x52, 0xCE, 0x11, 0x9F, 0x53, 0x00, 0x20, 0xAF, 0x0B, 0xA7, 0x70,
-            0x8B, 0xEB, 0x36, 0xE4, 0x4F, 0x52, 0xCE, 0x11, 0x9F, 0x53, 0x00, 0x20, 0xAF, 0x0B, 0xA7, 0x70,
-            0x00,
-            0x01,
-            0x81, 0x9F, 0x58, 0x05, 0x56, 0xC3, 0xCE, 0x11, 0xBF, 0x01, 0x00, 0xAA, 0x00, 0x55, 0x59, 0x5A
+            0x02, 0x83, 0xEB, 0x36, 0xE4, 0x4F, 0x52, 0xCE, 0x11, 0x9F, 0x53, 0x00, 0x20, 0xAF, 0x0B, 0xA7, 0x70,
+            0x8B, 0xEB, 0x36, 0xE4, 0x4F, 0x52, 0xCE, 0x11, 0x9F, 0x53, 0x00, 0x20, 0xAF, 0x0B, 0xA7, 0x70, 0x00,
+            0x01, 0x81, 0x9F, 0x58, 0x05, 0x56, 0xC3, 0xCE, 0x11, 0xBF, 0x01, 0x00, 0xAA, 0x00, 0x55, 0x59, 0x5A
         };
 
         public override WzImageProperty DeepClone()
@@ -54,7 +51,7 @@ namespace RazzleServer.Wz.WzProperties
         {
             var data = GetBytes(false);
             writer.WriteStringValue("Sound_DX8", 0x73, 0x1B);
-            writer.Write((byte) 0);
+            writer.Write((byte)0);
             writer.WriteCompressedInt(data.Length);
             writer.WriteCompressedInt(Length);
             writer.Write(Header);
@@ -146,7 +143,7 @@ namespace RazzleServer.Wz.WzProperties
             using (var reader = new Mp3FileReader(file))
             {
                 _wavFormat = reader.Mp3WaveFormat;
-                Length = (int) (reader.Length * 1000d / reader.WaveFormat.AverageBytesPerSecond);
+                Length = (int)(reader.Length * 1000d / reader.WaveFormat.AverageBytesPerSecond);
                 RebuildHeader();
             }
 
@@ -181,7 +178,7 @@ namespace RazzleServer.Wz.WzProperties
                     }
                 }
 
-                bw.Write((byte) wavHeader.Length);
+                bw.Write((byte)wavHeader.Length);
                 bw.Write(wavHeader, 0, wavHeader.Length);
                 Header = ms.ToArray();
             }
@@ -220,7 +217,7 @@ namespace RazzleServer.Wz.WzProperties
             var handle = GCHandle.Alloc(data, GCHandleType.Pinned);
             try
             {
-                var obj = (T) FormatterServices.GetUninitializedObject(typeof(T));
+                var obj = (T)FormatterServices.GetUninitializedObject(typeof(T));
                 Marshal.PtrToStructure(handle.AddrOfPinnedObject(), obj);
                 return obj;
             }

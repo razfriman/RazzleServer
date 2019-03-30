@@ -507,7 +507,7 @@ namespace RazzleServer.Game.Maple.Characters
                 stats.Luck += item.Luck;
                 stats.Speed += item.Speed;
             }
-            
+
             return stats;
         }
 

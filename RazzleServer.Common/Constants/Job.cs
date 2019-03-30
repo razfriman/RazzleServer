@@ -19,7 +19,7 @@
         IceLightningMage = 221,
         Cleric = 230,
         Priest = 231,
-        
+
         Bowman = 300,
         Hunter = 310,
         Ranger = 311,
