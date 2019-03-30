@@ -14,7 +14,7 @@ namespace RazzleServer.Data
         public byte SkillLevel { get; set; }
         public byte Type { get; set; }
         public DateTime End { get; set; }
-        public int Value { get; set; }
+        public uint Value { get; set; }
 
         public CharacterEntity Character { get; set; }
     }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using RazzleServer.Common;
 using RazzleServer.Common.Constants;
-using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Skills;
 using RazzleServer.Net.Packet;
 
@@ -28,7 +27,6 @@ namespace RazzleServer.Game.Maple.Characters
             using (var dbContext = new MapleDbContext())
             {
                 var buffs = dbContext.Buffs.Where(x => x.CharacterId == Parent.Id).ToList();
-
                 buffs.ForEach(x => Add(new Buff(this, x)));
             }
         }
@@ -54,20 +52,9 @@ namespace RazzleServer.Game.Maple.Characters
 
         public bool Contains(Buff buff) => Buffs.Contains(buff);
 
-        public bool Contains(int mapleId)
-        {
-            foreach (var loopBuff in Buffs)
-            {
-                if (loopBuff.MapleId == mapleId)
-                {
-                    return true;
-                }
-            }
+        public bool Contains(int mapleId) => Buffs.Any(x => x.MapleId == mapleId);
 
-            return false;
-        }
-
-        public void Add(Skill skill, int value) => Add(new Buff(this, skill, value));
+        public void Add(Skill skill, uint value) => Add(new Buff(this, skill, value));
 
         public void Add(Buff buff)
         {
@@ -76,7 +63,6 @@ namespace RazzleServer.Game.Maple.Characters
                 if (loopBuff.MapleId == buff.MapleId)
                 {
                     Remove(loopBuff);
-
                     break;
                 }
             }
@@ -85,7 +71,7 @@ namespace RazzleServer.Game.Maple.Characters
 
             Buffs.Add(buff);
 
-            if (Parent.IsInitialized && buff.Type == 1)
+            if (Parent.IsInitialized && buff.Type == BuffType.Skill)
             {
                 buff.Apply();
             }
@@ -111,62 +97,6 @@ namespace RazzleServer.Game.Maple.Characters
         {
             using (var oPacket = new PacketWriter())
             {
-                long mask = 0;
-                var value = 0;
-
-                if (Contains((int)SkillNames.Rogue.DarkSight))
-                {
-                    mask |= (long)SecondaryBuffStat.DarkSight;
-                }
-
-                if (Contains((int)SkillNames.Crusader.ComboAttack))
-                {
-                    mask |= (long)SecondaryBuffStat.Combo;
-                    value = this[(int)SkillNames.Crusader.ComboAttack].Value;
-                }
-
-                if (Contains((int)SkillNames.Hermit.ShadowPartner))
-                {
-                    mask |= (long)SecondaryBuffStat.ShadowPartner;
-                }
-
-                if (Contains((int)SkillNames.Hunter.SoulArrow) || Contains((int)SkillNames.Crossbowman.SoulArrow))
-                {
-                    mask |= (long)SecondaryBuffStat.SoulArrow;
-                }
-
-
-                oPacket.WriteLong(mask);
-                if (value != 0)
-                {
-                    oPacket.WriteByte((byte)value);
-                }
-
-
-                var magic = Functions.Random();
-
-
-                oPacket.WriteZeroBytes(6);
-                oPacket.WriteInt(magic);
-                oPacket.WriteZeroBytes(11);
-                oPacket.WriteInt(magic);
-                oPacket.WriteZeroBytes(11);
-                oPacket.WriteInt(magic);
-                oPacket.WriteShort(0);
-                oPacket.WriteByte(0);
-                oPacket.WriteLong(0);
-                oPacket.WriteInt(magic);
-                oPacket.WriteZeroBytes(9);
-                oPacket.WriteInt(magic);
-                oPacket.WriteShort(0);
-                oPacket.WriteInt(0);
-                oPacket.WriteZeroBytes(10);
-                oPacket.WriteInt(magic);
-                oPacket.WriteZeroBytes(13);
-                oPacket.WriteInt(magic);
-                oPacket.WriteShort(0);
-                oPacket.WriteByte(0);
-
                 return oPacket.ToArray();
             }
         }

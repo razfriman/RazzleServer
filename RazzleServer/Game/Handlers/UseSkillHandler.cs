@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using RazzleServer.Common.Constants;
+﻿using RazzleServer.Common.Constants;
 using RazzleServer.Game.Maple.Characters;
-using RazzleServer.Game.Maple.Interaction;
-using RazzleServer.Game.Maple.Skills;
+using RazzleServer.Game.Maple.Data;
+using RazzleServer.Game.Packets;
 using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Handlers
@@ -19,256 +17,127 @@ namespace RazzleServer.Game.Handlers
 
             if (skill.CurrentLevel != skillLevel)
             {
+                client.Character.LogCheatWarning(CheatType.InvalidSkillChange);
                 return;
             }
 
             if (!client.Character.IsAlive)
             {
+                client.Character.LogCheatWarning(CheatType.InvalidSkillChange);
                 return;
             }
 
-            skill.Character.Health -= skill.CostHp;
-            skill.Character.Mana -= skill.CostMp;
+            //MapPacket.SendPlayerSkillAnim(chr, SkillID, SkillLevel);
 
-            // TODO: Money cost.
-
-            byte type = 0;
-            short addedInfo = 0;
-
-            switch (skill.MapleId)
+            client.Character.Buffs.Add(skill, 0);
+            
+            switch (skillId)
             {
-                case (int)SkillNames.Priest.MysticDoor:
-
-                    HandleMysticDoor(packet);
-                    break;
-
-                case (int)SkillNames.Crusader.ArmorCrash:
-                case (int)SkillNames.WhiteKnight.MagicCrash:
-                case (int)SkillNames.DragonKnight.PowerCrash:
-                {
-                    HandleMobCrash(packet, skill);
-                }
-                    break;
-
-                case (int)SkillNames.FirePoisonWizard.Slow:
-                case (int)SkillNames.IceLightningWizard.Slow:
-                case (int)SkillNames.Page.Threaten:
-                {
-                    packet.ReadInt(); // NOTE: Unknown, probably CRC.
-
-                    var mobs = packet.ReadByte();
-
-                    for (byte i = 0; i < mobs; i++)
-                    {
-                        var objectId = packet.ReadInt();
-
-                        var mob = skill.Character.Map.Mobs[objectId];
-                    }
-
-                    // TODO: Apply mob status.
-                }
-                    break;
-
-                case (int)SkillNames.FirePoisonMage.Seal:
-                case (int)SkillNames.IceLightningMage.Seal:
-                case (int)SkillNames.Priest.Doom:
-                case (int)SkillNames.Hermit.ShadowWeb:
-                {
-                    var mobs = packet.ReadByte();
-
-                    for (byte i = 0; i < mobs; i++)
-                    {
-                        var objectId = packet.ReadInt();
-
-                        var mob = skill.Character.Map.Mobs[objectId];
-                    }
-
-                    // TODO: Apply mob status.
-                }
-                    break;
-
-                case (int)SkillNames.Priest.Dispel:
-                {
-                }
-                    break;
-
-                case (int)SkillNames.Cleric.Heal:
-                    HandleHeal(skill);
-                    break;
-
-                case (int)SkillNames.Fighter.Rage:
-                case (int)SkillNames.Spearman.IronWill:
                 case (int)SkillNames.Spearman.HyperBody:
-                case (int)SkillNames.FirePoisonWizard.Meditation:
-                case (int)SkillNames.IceLightningWizard.Meditation:
-                case (int)SkillNames.Cleric.Bless:
-                case (int)SkillNames.Priest.HolySymbol:
-                case (int)SkillNames.Assassin.Haste:
-                case (int)SkillNames.Hermit.MesoUp:
-                case (int)SkillNames.Bandit.Haste:
-                {
-                    if (skill.Character.Party != null)
                     {
-                        var targets = packet.ReadByte();
-
-                        // TODO: Get affected party members.
-
-                        var affected = new List<PartyMember>();
-
-                        foreach (var member in affected)
+                        ushort healRate = (ushort)skill.Hp;
+                        if (healRate > 100)
                         {
-                            using (var oPacket = new PacketWriter(ServerOperationCode.Effect))
-                            {
-                                oPacket.WriteByte((byte)UserEffect.SkillAffected);
-                                oPacket.WriteInt(skill.MapleId);
-                                oPacket.WriteByte(1);
-                                oPacket.WriteByte(1);
-
-                                member.Character.Client.Send(oPacket);
-                            }
-
-                            using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerEffect))
-                            {
-                                oPacket.WriteInt(member.Character.Id);
-                                oPacket.WriteByte((byte)UserEffect.SkillAffected);
-                                oPacket.WriteInt(skill.MapleId);
-                                oPacket.WriteByte(1);
-                                oPacket.WriteByte(1);
-
-                                member.Character.Map.Send(oPacket, member.Character);
-                            }
-
-                            member.Character.Buffs.Add(skill, 0);
+                            healRate = 100;
                         }
-                    }
-                }
-                    break;
-                default:
-                {
-                    type = packet.ReadByte();
 
-                    switch (type)
-                    {
-                        case 0x80:
-                            addedInfo = packet.ReadShort();
-                            break;
-                    }
-                }
-                    break;
-            }
-
-            using (var oPacket = new PacketWriter(ServerOperationCode.Effect))
-            {
-                oPacket.WriteByte((byte)UserEffect.SkillUse);
-                oPacket.WriteInt(skill.MapleId);
-                oPacket.WriteByte(1);
-                oPacket.WriteByte(1);
-                skill.Character.Client.Send(oPacket);
-            }
-
-            using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerEffect))
-            {
-                oPacket.WriteInt(client.Character.Id);
-                oPacket.WriteByte((byte)UserEffect.SkillUse);
-                oPacket.WriteInt(skill.MapleId);
-                oPacket.WriteByte(1);
-                oPacket.WriteByte(1);
-                skill.Character.Map.Send(oPacket, skill.Character);
-            }
-
-            if (skill.HasBuff)
-            {
-                skill.Character.Buffs.Add(skill, 0);
-            }
-        }
-
-        private static void HandleMysticDoor(PacketReader packet)
-        {
-            var origin = packet.ReadPoint();
-            // NOTe: Prevents the default case from executing, there's no packet data left for it.
-        }
-
-        private static void HandleHeal(Skill skill)
-        {
-            var healthRate = skill.Hp;
-
-            if (healthRate > 100)
-            {
-                healthRate = 100;
-            }
-
-            var partyPlayers = skill.Character.Party?.Count ?? 1;
-            var healthMod = (short)(healthRate * skill.Character.MaxHealth / 100 / partyPlayers);
-
-            if (skill.Character.Party != null)
-            {
-                var experience = 0;
-
-                var members = skill.Character.Party.Values
-                    .Where(member => member.Character != null)
-                    .Where(member => member.Character.Map.MapleId == skill.Character.Map.MapleId)
-                    .ToList();
-
-                foreach (var member in members)
-                {
-                    var memberHealth = member.Character.Health;
-
-                    if (memberHealth > 0 && memberHealth < member.Character.MaxHealth)
-                    {
-                        member.Character.Health += healthMod;
-
-                        if (member.Character != skill.Character)
+                        short healAmount = (short)(healRate * chr.PrimaryStats.GetMaxHP(false) / 100); // Party: / (amount players)
+                        if (!chr.Buffs.mActiveSkillLevels.ContainsKey(SkillID))
                         {
-                            experience += 20 * (member.Character.Health - memberHealth) /
-                                          (8 * member.Character.Level + 190);
+                            chr.ModifyMaxHP(healAmount);
                         }
+                        break;
                     }
-                }
+                case (int)SkillNames.Cleric.Heal:
+                    {
+                        ushort healRate = (ushort)sld.HPProperty;
+                        if (healRate > 100)
+                        {
+                            healRate = 100;
+                        }
 
-                if (experience > 0)
-                {
-                    skill.Character.Experience += experience;
-                }
+                        short healAmount = (short)(healRate * chr.PrimaryStats.GetMaxHP(false) / 100); // Party: / (amount players)
+
+                        chr.ModifyHP(healAmount, true);
+                        break;
+                    }
+                case (int)SkillNames.Gm.Hide:
+                    {
+                        client.Character.Map.Characters.Remove(client.Character);
+                        DataProvider.Maps[chr.Map].RemovePlayer(chr, true);
+                        AdminPacket.Hide(client, true);
+                        break;
+                    }
+                case (int)SkillNames.Priest.MysticDoor:
+                    {
+                        Door door = new Door(chr, chr.Map, DataProvider.Maps[chr.Map].ReturnMap, chr.Position.X, chr.Position.Y);
+                        chr.Door = door;
+                        MapPacket.SpawnDoor(chr, true, chr.Position.X, chr.Position.Y);
+                        MapPacket.SpawnPortal(chr, chr.Position);
+                        client.Character.Release();
+                        break;
+                    }
+                case (int)SkillNames.Gm.Haste:
+                case (int)SkillNames.Gm.HolySymbol:
+                case (int)SkillNames.Gm.Bless:
+                    {
+                        byte players = packet.ReadByte();
+                        for (byte i = 0; i < players; i++)
+                        {
+                            int playerid = packet.ReadInt();
+                            Character victim = DataProvider.Maps[chr.Map].GetPlayer(playerid);
+                            if (victim != null && victim != chr)
+                            {
+                                MapPacket.SendPlayerSkillAnimThirdParty(victim, SkillID, SkillLevel, true, true);
+                                MapPacket.SendPlayerSkillAnimThirdParty(victim, SkillID, SkillLevel, true, false);
+                                victim.Buffs.AddBuff(SkillID, SkillLevel);
+                            }
+                        }
+                        break;
+                    }
+                case (int)SkillNames.Gm.HealPlusDispell:
+                    {
+                        byte players = packet.ReadByte();
+                        for (byte i = 0; i < players; i++)
+                        {
+                            int playerid = packet.ReadInt();
+                            Character victim = DataProvider.Maps[chr.Map].GetPlayer(playerid);
+                            if (victim != null)
+                            {
+                                MapPacket.SendPlayerSkillAnimThirdParty(victim, SkillID, SkillLevel, true, true);
+                                MapPacket.SendPlayerSkillAnimThirdParty(victim, SkillID, SkillLevel, true, false);
+                                victim.ModifyHP(victim.PrimaryStats.GetMaxMP(false), true);
+                                victim.ModifyMP(victim.PrimaryStats.GetMaxMP(false), true);
+                            }
+                        }
+                        chr.ModifyHP(chr.PrimaryStats.GetMaxMP(false), true);
+                        chr.ModifyMP(chr.PrimaryStats.GetMaxMP(false), true);
+                        break;
+                    }
+                case (int)SkillNames.Gm.Resurrection:
+                    {
+                        byte players = packet.ReadByte();
+                        for (byte i = 0; i < players; i++)
+                        {
+                            int playerid = packet.ReadInt();
+                            Character victim = DataProvider.Maps[chr.Map].GetPlayer(playerid);
+                            if (victim != null && victim.PrimaryStats.HP <= 0)
+                            {
+                                MapPacket.SendPlayerSkillAnimThirdParty(victim, SkillID, SkillLevel, true, true);
+                                MapPacket.SendPlayerSkillAnimThirdParty(victim, SkillID, SkillLevel, true, false);
+                                victim.ModifyHP(victim.PrimaryStats.GetMaxHP(false), true);
+                            }
+                        }
+                        break;
+                    }
             }
-            else
+            
+            client.Character.Release();
+            chr.Skills.DoSkillCost(SkillID, SkillLevel);
+            if (Constants.isSummon(SkillID))
             {
-                skill.Character.Health += healthRate;
-            }
-        }
-
-        private static void HandleMobCrash(PacketReader packet, Skill skill)
-        {
-            packet.ReadInt(); // NOTE: Unknown, probably CRC.
-            var mobs = packet.ReadByte();
-
-            for (byte i = 0; i < mobs; i++)
-            {
-                var objectId = packet.ReadInt();
-                var mob = skill.Character.Map.Mobs[objectId];
-                // TODO: Mob crash skill.
-            }
-        }
-
-        private static void HandleMist(PacketReader packet)
-        {
-            var origin = packet.ReadPoint();
-        }
-
-        private static void HandleMonsterMagnet(PacketReader packet, Character character, Skill skill)
-        {
-            var mobs = packet.ReadInt();
-
-            for (var i = 0; i < mobs; i++)
-            {
-                var objectId = packet.ReadInt();
-                var mob = skill.Character.Map.Mobs[objectId];
-                var success = packet.ReadBool();
-                mob?.SwitchController(character);
-            }
-
-            var direction = packet.ReadByte();
-            //player.getMap().broadcastMessage(player, MaplePacketCreator.showBuffeffect(player.getId(), skillId, 1, direction), false);
-            //c.getSession().write(MaplePacketCreator.enableActions());
+                chr.Summons.NewSummon(SkillID, SkillLevel);
+            }  
         }
     }
 }
