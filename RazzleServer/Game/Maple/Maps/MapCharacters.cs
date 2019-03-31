@@ -78,6 +78,11 @@ namespace RazzleServer.Game.Maple.Maps
                     npc.AssignController();
                 }
             }
+            
+            if (Map.CachedReference.TimeLimit > 0)
+            {
+                //TODO(raz): Show the timer
+            }
 
             Map.Send(item.GetCreatePacket(), item);
         }

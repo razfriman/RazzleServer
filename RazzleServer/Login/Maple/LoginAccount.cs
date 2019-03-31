@@ -18,11 +18,11 @@ namespace RazzleServer.Login.Maple
         public Gender Gender { get; set; }
         public BanReasonType BanReason { get; set; }
         public bool IsMaster { get; set; }
+        public bool IsOnline { get; set; }
         public DateTime Birthday { get; set; }
         public DateTime Creation { get; set; }
         public int MaxCharacters { get; set; }
-        public static DateTime PermanentBanDate => DateTime.Now.AddYears(2);
-        private bool Assigned { get; set; }
+
         private readonly ILogger _log = Log.ForContext<LoginAccount>();
 
         public LoginAccount(LoginClient client)

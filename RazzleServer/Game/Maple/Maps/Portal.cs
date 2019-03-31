@@ -7,21 +7,18 @@ using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Data.References;
 using RazzleServer.Net.Packet;
 using RazzleServer.Wz;
-using Serilog;
 
 namespace RazzleServer.Game.Maple.Maps
 {
     public class Portal : MapObject
     {
-        private readonly ILogger _log = Log.ForContext<Portal>();
-
         public byte Id { get; set; }
         public string Label { get; set; }
         public int DestinationMapId { get; set; }
         public string DestinationLabel { get; set; }
-        public string Script { get; set; }
         public bool IsOnlyOnce { get; set; }
         public int PortalType { get; set; }
+        public bool IsOpen { get; set; } = true;
 
         public bool IsSpawnPoint => Label == "sp";
 
@@ -40,22 +37,36 @@ namespace RazzleServer.Game.Maple.Maps
             Label = img["pn"].GetString();
             DestinationMapId = img["tm"].GetInt();
             DestinationLabel = img["tn"]?.GetString();
-            Script = img["script"]?.GetString();
             PortalType = img["pt"].GetInt();
             IsOnlyOnce = (img["onlyOnce"]?.GetInt() ?? 0) > 0;
         }
 
         public void Enter(Character character)
         {
-            _log.Warning($"'{character.Name}' attempted to enter an unimplemented portal '{Script}'");
+            if (!character.Map.Portals.ContainsPortal(Label))
+            {
+                character.LogCheatWarning(CheatType.InvalidMapChange);
+                return;
+            }
 
+            if (!IsOpen)
+            {
+                SendMapTransferResult(character, MapTransferResult.PortalClosed);
+                return;
+            }
+
+            character.ChangeMap(DestinationMapId, DestinationLabel);
+        }
+
+        public static void SendMapTransferResult(Character character, MapTransferResult result)
+        {
             using (var pw = new PacketWriter(ServerOperationCode.TransferFieldReqIgnored))
             {
-                pw.WriteByte(MapTransferResult.NoReason);
+                pw.WriteByte(result);
                 character.Client.Send(pw);
             }
         }
 
-        public void PlaySoundEffect(Character character) => character.ShowLocalUserEffect(UserEffect.PlayPortalSe);
+        public static void PlaySoundEffect(Character character) => character.ShowLocalUserEffect(UserEffect.PlayPortalSe);
     }
 }

@@ -15,6 +15,12 @@ namespace RazzleServer.Login.Handlers
         {
             var accountName = packet.ReadString();
             var accountPassword = packet.ReadString();
+            packet.ReadInt(); // Start up
+            var machineBytes = packet.ReadBytes(16);
+            //01 00 00 00
+            //80 C5 F2 06 A3 B7 CD BB
+            //F6 42 00 00 00 00 FF 3D
+            //00 00 00 00
             var result = Login(client, accountName, accountPassword);
             client.Send(LoginPackets.LoginResult(result, client.Account));
 
@@ -24,6 +30,7 @@ namespace RazzleServer.Login.Handlers
                 return;
             }
 
+            client.SetOnline(true);
             client.Send(LoginPackets.ListWorlds(client.Server.Manager.Worlds));
             client.Send(LoginPackets.EndListWorlds());
         }
@@ -43,9 +50,17 @@ namespace RazzleServer.Login.Handlers
                     return LoginResult.InvalidPassword;
                 }
 
-                return client.Account.BanReason != BanReasonType.None
-                    ? LoginResult.Banned
-                    : LoginResult.Valid;
+                if (client.Account.BanReason != BanReasonType.None)
+                {
+                    return LoginResult.Banned;
+                }
+
+                if (client.Account.IsOnline)
+                {
+                    return LoginResult.LoggedIn;
+                }
+
+                return LoginResult.Valid;
             }
             catch (NoAccountException)
             {

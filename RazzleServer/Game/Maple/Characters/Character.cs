@@ -213,7 +213,7 @@ namespace RazzleServer.Game.Maple.Characters
                 return;
             }
 
-            ChangeMap(mapId, portal.Id);
+            ChangeMap(mapId, portal.Label);
         }
 
         public void ChangeMap(int mapId, byte? portalId = null)
@@ -527,7 +527,6 @@ namespace RazzleServer.Game.Maple.Characters
         }
 
         public void Send(PacketWriter packet) => Client.Send(packet);
-        public void Send(byte[] packet) => Client.Send(packet);
 
         public void Hide(bool isHidden)
         {

@@ -38,7 +38,16 @@ namespace RazzleServer.Net
 
         public abstract void Receive(PacketReader packet);
 
-        public void Send(PacketWriter packet) => Send(packet.ToArray());
+        public void Send(PacketWriter packet)
+        {
+            var packetData = packet.ToArray();
+            if (PrintPackets)
+            {
+                Logger.Information($"Sending [{packet.Header}] {packetData.ByteArrayToString()}");
+            }
+            
+            Socket?.Send(packetData).GetAwaiter().GetResult();
+        }
 
         public void Send(byte[] packet)
         {

@@ -20,7 +20,7 @@ namespace RazzleServer.Login
                 {
                     case Common.Constants.LoginResult.Banned:
                         pw.WriteByte(acc.BanReason);
-                        pw.WriteDateTime(LoginAccount.PermanentBanDate);
+                        pw.WriteDateTime(DateConstants.PermanentBanDate);
                         break;
                     case Common.Constants.LoginResult.Valid:
                         pw.WriteInt(acc.Id);
@@ -40,7 +40,6 @@ namespace RazzleServer.Login
                 pw.WriteLong(0);
                 pw.WriteLong(0);
                 pw.WriteLong(0);
-
 
                 return pw;
             }
