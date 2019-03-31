@@ -16,7 +16,7 @@ namespace RazzleServer.Login.Handlers
 
             using (var pw = new PacketWriter(ServerOperationCode.CharacterList))
             {
-                pw.WriteByte((byte)channelResult);
+                pw.WriteByte(channelResult);
 
                 if (channelResult == SelectChannelResult.Online)
                 {

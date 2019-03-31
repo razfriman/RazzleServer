@@ -30,17 +30,17 @@ namespace RazzleServer.Game.Maple.Interaction
             OwnerLocked = false;
             VisitorLocked = false;
 
-            using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
+            using (var pw = new PacketWriter(ServerOperationCode.PlayerInteraction))
             {
-                oPacket.WriteByte((byte)InteractionCode.Room);
-                oPacket.WriteByte(3);
-                oPacket.WriteByte(2);
-                oPacket.WriteByte(0); // NOTE: Player index.
-                oPacket.WriteByte(0);
-                oPacket.WriteBytes(Owner.AppearanceToByteArray());
-                oPacket.WriteString(Owner.Name);
-                oPacket.WriteByte(byte.MaxValue);
-                Owner.Client.Send(oPacket);
+                pw.WriteByte(InteractionCode.Room);
+                pw.WriteByte(3);
+                pw.WriteByte(2);
+                pw.WriteByte(0); // NOTE: Player index.
+                pw.WriteByte(0);
+                pw.WriteBytes(Owner.AppearanceToByteArray());
+                pw.WriteString(Owner.Name);
+                pw.WriteByte(byte.MaxValue);
+                Owner.Client.Send(pw);
             }
         }
 
@@ -99,7 +99,7 @@ namespace RazzleServer.Game.Maple.Interaction
 
                     using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                     {
-                        oPacket.WriteByte((byte)InteractionCode.SetMeso);
+                        oPacket.WriteByte(InteractionCode.SetMeso);
                         oPacket.WriteByte(0);
                         oPacket.WriteInt(meso);
 
@@ -131,7 +131,7 @@ namespace RazzleServer.Game.Maple.Interaction
 
                     using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                     {
-                        oPacket.WriteByte((byte)InteractionCode.SetMeso);
+                        oPacket.WriteByte(InteractionCode.SetMeso);
                         oPacket.WriteByte(1);
                         oPacket.WriteInt(meso);
 
@@ -157,7 +157,7 @@ namespace RazzleServer.Game.Maple.Interaction
 
                         using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                         {
-                            oPacket.WriteByte((byte)InteractionCode.Exit);
+                            oPacket.WriteByte(InteractionCode.Exit);
                             oPacket.WriteByte(0);
                             oPacket.WriteByte(2);
 
@@ -174,7 +174,7 @@ namespace RazzleServer.Game.Maple.Interaction
                     {
                         using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                         {
-                            oPacket.WriteByte((byte)InteractionCode.Exit);
+                            oPacket.WriteByte(InteractionCode.Exit);
                             oPacket.WriteByte(0);
                             oPacket.WriteByte(2);
 
@@ -191,7 +191,7 @@ namespace RazzleServer.Game.Maple.Interaction
                 {
                     using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                     {
-                        oPacket.WriteByte((byte)InteractionCode.Confirm);
+                        oPacket.WriteByte(InteractionCode.Confirm);
 
                         if (character == Owner)
                         {
@@ -213,7 +213,7 @@ namespace RazzleServer.Game.Maple.Interaction
 
                         using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                         {
-                            oPacket.WriteByte((byte)InteractionCode.Exit);
+                            oPacket.WriteByte(InteractionCode.Exit);
                             oPacket.WriteByte(0);
                             oPacket.WriteByte(6);
 
@@ -235,7 +235,7 @@ namespace RazzleServer.Game.Maple.Interaction
 
                     using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                     {
-                        oPacket.WriteByte((byte)InteractionCode.Chat);
+                        oPacket.WriteByte(InteractionCode.Chat);
                         oPacket.WriteByte(8);
                         oPacket.WriteBool(Owner != character);
                         oPacket.WriteString($"{character.Name} : {text}");
@@ -263,7 +263,7 @@ namespace RazzleServer.Game.Maple.Interaction
 
                 using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                 {
-                    oPacket.WriteByte((byte)InteractionCode.Visit);
+                    oPacket.WriteByte(InteractionCode.Visit);
                     oPacket.WriteByte(1);
                     oPacket.WriteBytes(Visitor.AppearanceToByteArray());
                     oPacket.WriteString(Visitor.Name);
@@ -273,7 +273,7 @@ namespace RazzleServer.Game.Maple.Interaction
 
                 using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                 {
-                    oPacket.WriteByte((byte)InteractionCode.Room);
+                    oPacket.WriteByte(InteractionCode.Room);
                     oPacket.WriteByte(3);
                     oPacket.WriteByte(2);
                     oPacket.WriteByte(1);
@@ -294,7 +294,7 @@ namespace RazzleServer.Game.Maple.Interaction
         {
             using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
             {
-                oPacket.WriteByte((byte)InteractionCode.Decline);
+                oPacket.WriteByte(InteractionCode.Decline);
                 oPacket.WriteByte(3);
                 oPacket.WriteString(character.Name);
 
@@ -323,7 +323,7 @@ namespace RazzleServer.Game.Maple.Interaction
             {
                 using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                 {
-                    oPacket.WriteByte((byte)InteractionCode.Decline);
+                    oPacket.WriteByte(InteractionCode.Decline);
                     oPacket.WriteByte(2);
                     oPacket.WriteString(invitee.Name);
 
@@ -337,7 +337,7 @@ namespace RazzleServer.Game.Maple.Interaction
 
                 using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                 {
-                    oPacket.WriteByte((byte)InteractionCode.Invite);
+                    oPacket.WriteByte(InteractionCode.Invite);
                     oPacket.WriteByte(3);
                     oPacket.WriteString(Owner.Name);
                     oPacket.WriteBytes(new byte[] {0xB7, 0x50, 0x00, 0x00});
@@ -382,7 +382,7 @@ namespace RazzleServer.Game.Maple.Interaction
 
             using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
             {
-                oPacket.WriteByte((byte)InteractionCode.SetItems);
+                oPacket.WriteByte(InteractionCode.SetItems);
                 oPacket.WriteByte(0);
                 oPacket.WriteByte(targetSlot);
                 oPacket.WriteBytes(item.ToByteArray(true));
@@ -403,7 +403,7 @@ namespace RazzleServer.Game.Maple.Interaction
 
             using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
             {
-                oPacket.WriteByte((byte)InteractionCode.SetItems);
+                oPacket.WriteByte(InteractionCode.SetItems);
                 oPacket.WriteByte(1);
                 oPacket.WriteByte(targetSlot);
                 oPacket.WriteBytes(item.ToByteArray(true));

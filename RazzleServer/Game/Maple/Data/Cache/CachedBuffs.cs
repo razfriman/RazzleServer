@@ -22,7 +22,7 @@ namespace RazzleServer.Game.Maple.Data.Cache
             {(int)SkillNames.Magician.MagicGuard, BuffValueTypes.MagicGuard},
             {(int)SkillNames.Magician.MagicArmor, BuffValueTypes.WeaponDefense},
             {(int)SkillNames.Swordsman.IronBody, BuffValueTypes.WeaponDefense},
-            {(int)SkillNames.Archer.Focus, BuffValueTypes.Accurancy | BuffValueTypes.Avoidability},
+            {(int)SkillNames.Archer.Focus, BuffValueTypes.Accuracy | BuffValueTypes.Avoidability},
             {(int)SkillNames.Fighter.Rage, BuffValueTypes.WeaponAttack | BuffValueTypes.WeaponDefense},
             {(int)SkillNames.Fighter.PowerGuard, BuffValueTypes.PowerGuard},
             {(int)SkillNames.Page.PowerGuard, BuffValueTypes.PowerGuard},
@@ -33,13 +33,13 @@ namespace RazzleServer.Game.Maple.Data.Cache
             {(int)SkillNames.Cleric.Invincible, BuffValueTypes.Invincible},
             {
                 (int)SkillNames.Cleric.Bless, BuffValueTypes.WeaponDefense | BuffValueTypes.MagicDefense |
-                                              BuffValueTypes.Accurancy |
+                                              BuffValueTypes.Accuracy |
                                               BuffValueTypes.Avoidability
             },
             {
                 (int)SkillNames.Gm.Bless, BuffValueTypes.WeaponAttack | BuffValueTypes.WeaponDefense |
                                           BuffValueTypes.MagicAttack |
-                                          BuffValueTypes.MagicDefense | BuffValueTypes.Accurancy |
+                                          BuffValueTypes.MagicDefense | BuffValueTypes.Accuracy |
                                           BuffValueTypes.Avoidability
             },
             {(int)SkillNames.ChiefBandit.MesoGuard, BuffValueTypes.MesoGuard},

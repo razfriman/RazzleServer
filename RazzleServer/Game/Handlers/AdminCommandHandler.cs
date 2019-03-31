@@ -1,4 +1,5 @@
-﻿using RazzleServer.Common.Constants;
+﻿using System;
+using RazzleServer.Common.Constants;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Items;
 using RazzleServer.Game.Maple.Life;
@@ -52,11 +53,11 @@ namespace RazzleServer.Game.Handlers
                     }
                     else
                     {
-                        using (var oPacket = new PacketWriter(ServerOperationCode.AdminResult))
+                        using (var pw = new PacketWriter(ServerOperationCode.AdminResult))
                         {
-                            oPacket.WriteByte(6);
-                            oPacket.WriteByte(1);
-                            client.Send(oPacket);
+                            pw.WriteByte(6);
+                            pw.WriteByte(1);
+                            client.Send(pw);
                         }
                     }
                 }
@@ -116,7 +117,7 @@ namespace RazzleServer.Game.Handlers
                     {
                         using (var oPacket = new PacketWriter(ServerOperationCode.AdminResult))
                         {
-                            oPacket.WriteByte(6);
+                            oPacket.WriteByte(AdminResultType.InvalidName);
                             oPacket.WriteByte(1);
 
                             client.Send(oPacket);
@@ -139,7 +140,8 @@ namespace RazzleServer.Game.Handlers
 
                 case AdminCommandType.Snow:
                 {
-                    // TODO: We have yet to implement map weather.
+                    var seconds = packet.ReadInt();
+                    client.Character.Map.SendWeatherEffect(2090000, "", true, seconds * 1000);
                 }
                     break;
 
@@ -166,6 +168,12 @@ namespace RazzleServer.Game.Handlers
                     }
                 }
                     break;
+                case AdminCommandType.Log:
+                    break;
+                case AdminCommandType.SetObjectState:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 

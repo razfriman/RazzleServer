@@ -234,7 +234,7 @@ namespace RazzleServer.Game.Maple.Life
 
             pw.WriteByte(4); // NOTE: Unknown.
             pw.WriteInt(MapleId);
-            pw.WriteByte((byte)stateInfo.Type);
+            pw.WriteByte(stateInfo.Type);
             pw.WriteString(stateInfo.Text);
 
             switch (stateInfo.Type)

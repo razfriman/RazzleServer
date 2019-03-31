@@ -15,7 +15,7 @@ namespace RazzleServer.Login.Handlers
             using (var pw = new PacketWriter(ServerOperationCode.DeleteCharacterResult))
             {
                 pw.WriteInt(characterId);
-                pw.WriteByte((byte)CharacterDeletionResult.Valid);
+                pw.WriteByte(CharacterDeletionResult.Valid);
                 client.Send(pw);
             }
         }

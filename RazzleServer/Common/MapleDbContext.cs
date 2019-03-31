@@ -22,6 +22,7 @@ namespace RazzleServer.Common
         public DbSet<ShopRechargeEntity> ShopRecharges { get; set; }
         public DbSet<LootEntity> Loots { get; set; }
         public DbSet<CheatEntity> Cheats { get; set; }
+        public DbSet<TeleportRockEntity> TeleportRocks { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

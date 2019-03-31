@@ -51,7 +51,7 @@ namespace RazzleServer.Game.Maple.Maps
 
             using (var oPacket = new PacketWriter(ServerOperationCode.TransferFieldReqIgnored))
             {
-                oPacket.WriteByte((byte)MapTransferResult.NoReason);
+                oPacket.WriteByte(MapTransferResult.NoReason);
                 character.Client.Send(oPacket);
             }
         }

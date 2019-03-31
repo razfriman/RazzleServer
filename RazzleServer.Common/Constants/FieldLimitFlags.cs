@@ -9,8 +9,10 @@ namespace RazzleServer.Common.Constants
         SkillLimit = 0x02,
         SummonLimit = 0x04,
         MysticDoorLimit = 0x08,
+        
         MigrateLimit = 0x10,
-        PortalScrollLimit = 0x40,
+        PortalScrollLimit = 0x20,
+        TeleportItemLimit = 0x40,
         MinigameLimit = 0x80,
         SpecificPortalScrollLimit = 0x100,
         TamingMobLimit = 0x200,

@@ -61,7 +61,7 @@ namespace RazzleServer.Game.Maple.Maps
             var pw = new PacketWriter(ServerOperationCode.DropEnterField);
 
 
-            pw.WriteByte((byte)dropAnimationType);
+            pw.WriteByte(dropAnimationType);
             pw.WriteInt(ObjectId);
             pw.WriteBool(this is Meso);
 
@@ -76,7 +76,7 @@ namespace RazzleServer.Game.Maple.Maps
             }
 
             pw.WriteInt(Owner?.Id ?? temporaryOwner.Id);
-            pw.WriteByte((byte)DropType);
+            pw.WriteByte(DropType);
             pw.WritePoint(Position);
             pw.WriteInt(Dropper.ObjectId);
 
@@ -103,7 +103,7 @@ namespace RazzleServer.Game.Maple.Maps
         {
             var oPacket = new PacketWriter(ServerOperationCode.DropLeaveField);
 
-            oPacket.WriteByte((byte)(Picker == null ? 0 : 2));
+            oPacket.WriteByte(Picker == null ? 0 : 2);
             oPacket.WriteInt(ObjectId);
             oPacket.WriteInt(Picker?.Id ?? 0);
 

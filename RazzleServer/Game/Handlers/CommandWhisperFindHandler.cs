@@ -75,7 +75,7 @@ namespace RazzleServer.Game.Handlers
                 {
                     oPacket.WriteByte(0x09);
                     oPacket.WriteString(targetName);
-                    oPacket.WriteByte((byte)(isInSameChannel ? 1 : 3));
+                    oPacket.WriteByte(isInSameChannel ? 1 : 3);
                     oPacket.WriteInt(isInSameChannel ? target.Map.MapleId : target.Client.Server.ChannelId);
                     oPacket.WriteInt(0); // NOTE: Unknown.
                     oPacket.WriteInt(0); // NOTE: Unknown.

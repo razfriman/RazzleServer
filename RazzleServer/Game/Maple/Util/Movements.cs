@@ -119,7 +119,7 @@ namespace RazzleServer.Game.Maple.Util
 
                 foreach (var movement in this)
                 {
-                    pw.WriteByte((byte)movement.Type);
+                    pw.WriteByte(movement.Type);
 
                     switch (movement.Type)
                     {

@@ -42,9 +42,9 @@ namespace RazzleServer.Game.Handlers
                     (short)(item.CManaPercentage * client.Character.PrimaryStats.MaxMana / 100);
             }
 
-            if (item.CBuffTime > 0 && item.CProb == 0)
+            if (item.CBuffTime > 0 || !string.IsNullOrEmpty(item.CCureAilments))
             {
-                // TODO: Add buff.
+                client.Character.Buffs.Add(item);
             }
         }
     }

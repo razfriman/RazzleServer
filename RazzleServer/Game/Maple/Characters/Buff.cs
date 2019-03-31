@@ -3,6 +3,7 @@ using RazzleServer.Common;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Util;
 using RazzleServer.Data;
+using RazzleServer.Game.Maple.Items;
 using RazzleServer.Game.Maple.Skills;
 using RazzleServer.Net.Packet;
 
@@ -30,15 +31,70 @@ namespace RazzleServer.Game.Maple.Characters
             End = DateTime.Now.AddSeconds(skill.BuffTime);
         }
 
-        public void ScheduleExpiration()
+        public Buff(CharacterBuffs parent, Item item)
         {
-            Delay.Execute(() =>
+            Parent = parent;
+            MapleId = item.MapleId;
+            SkillLevel = 0;
+            Type = BuffType.Item;
+            Flag = 0;
+            End = DateTime.Now.AddSeconds(item.CBuffTime);
+
+            if (item.Accuracy > 0)
             {
-                if (Parent.Contains(this))
-                {
-                    Parent.Remove(this);
-                }
-            }, (int)(End - DateTime.Now).TotalMilliseconds);
+                Flag |= BuffValueTypes.Accuracy;
+            }
+
+            if (item.Avoidability > 0)
+            {
+                Flag |= BuffValueTypes.Avoidability;
+            }
+
+            if (item.Speed > 0)
+            {
+                Flag |= BuffValueTypes.Speed;
+            }
+
+            if (item.MagicAttack > 0)
+            {
+                Flag |= BuffValueTypes.MagicAttack;
+            }
+
+            if (item.WeaponAttack > 0)
+            {
+                Flag |= BuffValueTypes.WeaponAttack;
+            }
+
+            if (item.WeaponDefense > 0)
+            {
+                Flag |= BuffValueTypes.WeaponDefense;
+            }
+
+            if (item.Thaw > 0)
+            {
+                Flag |= BuffValueTypes.Thaw;
+            }
+
+//            if (data.Accuracy > 0)
+//                added |= ps.BuffAccurancy.Set(value, data.Accuracy, expireTime);
+//
+//            if (data.Avoidance > 0)
+//                added |= ps.BuffAvoidability.Set(value, data.Avoidance, expireTime);
+//
+//            if (data.Speed > 0)
+//                added |= ps.BuffSpeed.Set(value, data.Speed, expireTime);
+//
+//            if (data.MagicAttack > 0)
+//                added |= ps.BuffMagicAttack.Set(value, data.MagicAttack, expireTime);
+//
+//            if (data.WeaponAttack > 0)
+//                added |= ps.BuffWeaponAttack.Set(value, data.WeaponAttack, expireTime);
+//
+//            if (data.WeaponDefense > 0)
+//                added |= ps.BuffWeaponDefense.Set(value, data.WeaponDefense, expireTime);
+//
+//            if (data.Thaw > 0)
+//                added |= ps.BuffThaw.Set(value, data.Thaw, expireTime);
         }
 
         public Buff(CharacterBuffs parent, BuffEntity entity)
@@ -49,6 +105,17 @@ namespace RazzleServer.Game.Maple.Characters
             Type = (BuffType)entity.Type;
             Flag = (BuffValueTypes)entity.Value;
             End = entity.End;
+        }
+
+        public void ScheduleExpiration()
+        {
+            Delay.Execute(() =>
+            {
+                if (Parent.Contains(this))
+                {
+                    Parent.Remove(this);
+                }
+            }, (int)(End - DateTime.Now).TotalMilliseconds);
         }
 
         public void Save()
@@ -79,7 +146,7 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 //Character.Map.Send(oPacket);
             }
-            
+
             ScheduleExpiration();
         }
 

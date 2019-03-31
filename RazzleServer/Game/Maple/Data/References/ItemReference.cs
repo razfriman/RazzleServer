@@ -37,6 +37,7 @@ namespace RazzleServer.Game.Maple.Data.References
         public short Avoidability { get; set; }
         public short Agility { get; set; }
         public short Speed { get; set; }
+        public short Thaw { get; set; }
         public short Jump { get; set; }
         public byte AttackSpeed { get; set; }
         public short RecoveryRate { get; set; }
@@ -109,6 +110,7 @@ namespace RazzleServer.Game.Maple.Data.References
             Accuracy = info["incACC"]?.GetShort() ?? 0;
             Jump = info["incJump"]?.GetShort() ?? 0;
             Speed = info["incSpeed"]?.GetShort() ?? 0;
+            Thaw = info["thaw"]?.GetShort() ?? 0;
             Avoidability = info["incEVA"]?.GetShort() ?? 0;
             MagicDefense = info["incMDD"]?.GetShort() ?? 0;
             WeaponDefense = info["incPDD"]?.GetShort() ?? 0;
@@ -228,11 +230,9 @@ namespace RazzleServer.Game.Maple.Data.References
 
         public bool IsConsumable => MapleId / 10000 >= 200 && MapleId / 10000 < 204;
 
-        public bool IsRechargeable => IsThrowingStar || IsBullet;
+        public bool IsRechargeable => IsThrowingStar;
 
         public bool IsThrowingStar => MapleId / 10000 == 207;
-
-        public bool IsBullet => MapleId / 10000 == 233;
 
         public bool IsArrow => IsArrowForBow || IsArrowForCrossbow;
 
@@ -266,9 +266,16 @@ namespace RazzleServer.Game.Maple.Data.References
                     case WeaponType.Claw:
                     case WeaponType.Knuckle:
                         return true;
-
-                    default:
+                    case WeaponType.NotAWeapon:
+                    case WeaponType.Dagger:
+                    case WeaponType.Axe1H:
+                    case WeaponType.Sword1H:
+                    case WeaponType.Blunt1H:
+                    case WeaponType.Staff:
+                    case WeaponType.Wand:
                         return false;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
             }
         }

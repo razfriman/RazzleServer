@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using RazzleServer.Common.Constants;
+using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Data.References;
@@ -24,6 +26,7 @@ namespace RazzleServer.Game.Maple.Maps
         public MapMists Mists { get; }
         public MapSummons Summons { get; }
         public MapReference CachedReference => DataProvider.Maps.Data[MapleId];
+        public FieldLimitFlags FieldLimit { get; }
 
         public Map(GameServer server, int id)
         {
@@ -50,6 +53,7 @@ namespace RazzleServer.Game.Maple.Maps
 
             Footholds.CalculateBounds();
             SpawnPoints.Spawn();
+            FieldLimit = reference.FieldLimit;
         }
 
         public Map(int id) => MapleId = id;
@@ -61,5 +65,50 @@ namespace RazzleServer.Game.Maple.Maps
                 .ForEach(x => x.Client.Send(pw));
 
         public int AssignObjectId() => ++_mObjectIds;
+
+        public void SendWeatherEffect(int mapleId, string message, bool isAdmin = false, int delay = 30000)
+        {
+            using (var pw = new PacketWriter(ServerOperationCode.WeatherEffect))
+            {
+                pw.WriteBool(isAdmin);
+                pw.WriteInt(mapleId);
+                if (!isAdmin)
+                {
+                    pw.WriteString(message);
+                }
+
+                Send(pw);
+            }
+
+            if (mapleId != 0)
+            {
+                Delay.Execute(() =>
+                {
+                    SendWeatherEffect(0, message, isAdmin);
+                }, delay);
+            }
+        }
+
+        public void SendJukeboxSong(int mapleId, string characterName, int delay = 30000)
+        {
+            using (var pw = new PacketWriter(ServerOperationCode.JukeboxEffect))
+            {
+                pw.WriteInt(mapleId);
+                if (mapleId != 0)
+                {
+                    pw.WriteString(characterName);
+                }
+
+                Send(pw);
+            }
+
+            if (mapleId != 0)
+            {
+                Delay.Execute(() =>
+                {
+                    SendJukeboxSong(0, characterName);
+                }, delay);
+            }
+        }
     }
 }

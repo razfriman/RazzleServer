@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using RazzleServer.Common;
 using RazzleServer.Common.Constants;
+using RazzleServer.Data;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Net.Packet;
 
@@ -23,62 +26,37 @@ namespace RazzleServer.Game.Maple.Characters
         {
             using (var context = new MapleDbContext())
             {
-                // TODO - Load the 5 rock IDs from the database
+                var rocks = context.TeleportRocks
+                    .Where(x => x.CharacterId == Parent.Id)
+                    .Take(5)
+                    .Select(x => x.MapId)
+                    .ToList();
+                Maps.AddRange(rocks);
             }
         }
 
 
         public void Save()
         {
-            // TODO - Save the 5 rock IDs in the database
+            using (var context = new MapleDbContext())
+            {
+                var existing = context.TeleportRocks.Where(x => x.CharacterId == Parent.Id).ToArray();
+                context.TeleportRocks.RemoveRange(existing);
+                context.TeleportRocks.AddRange(Maps.Select(x => new TeleportRockEntity
+                {
+                    CharacterId = Parent.Id, MapId = x
+                }));
+                context.SaveChanges();
+            }
         }
 
         public bool Contains(int mapId) => Maps.Contains(mapId);
-
-        public void Update(PacketReader iPacket)
-        {
-            var action = (TeleportRockAction)iPacket.ReadByte();
-            var result = TeleportRockResult.Success;
-
-            switch (action)
-            {
-                case TeleportRockAction.Remove:
-                {
-                    var mapId = iPacket.ReadInt();
-                    if (!Maps.Contains(mapId))
-                    {
-                        return;
-                    }
-
-                    Maps.Remove(mapId);
-                    result = TeleportRockResult.Delete;
-                }
-                    break;
-
-                case TeleportRockAction.Add:
-                {
-                    var mapId = Parent.Map.MapleId;
-
-                    // TODO: Check if the map field limits allow teleport rocks (e.g. Maple Island is forbidden).
-
-                    if (true)
-                    {
-                        Maps.Add(mapId);
-                    }
-
-                    result = TeleportRockResult.Add;
-                }
-                    break;
-            }
-
-            SendRockUpdate(result);
-        }
 
         public void SendRockUpdate(TeleportRockResult result)
         {
             using (var pw = new PacketWriter(ServerOperationCode.TeleportRock))
             {
-                pw.WriteByte((byte)result);
+                pw.WriteByte(result);
 
                 if (result == TeleportRockResult.Add || result == TeleportRockResult.Delete)
                 {
@@ -89,37 +67,68 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public bool Use(int itemId, PacketReader packet)
+        public void Add(int mapId)
         {
-            var used = false;
-            var action = packet.ReadByte();
-            var destinationMapId = -1;
-            var result = TeleportRockResult.Success;
-
-            if (action == 0) // NOTE: Preset map.
+            var map = DataProvider.Maps.Data[mapId];
+            if (map.FieldLimit.HasFlag(FieldLimitFlags.TeleportItemLimit))
             {
-                var mapId = packet.ReadInt();
-
-                if (!Parent.TeleportRocks.Contains(mapId))
-                {
-                    result = TeleportRockResult.CannotGo;
-                }
-
-                destinationMapId = mapId;
+                SendRockUpdate(TeleportRockResult.CannotGo);
+                return;
             }
-            else if (action == 1) // NOTE: IGN.
-            {
-                var targetName = packet.ReadString();
-                var target = Parent.Client.Server.GetCharacterByName(targetName);
 
-                if (target == null)
+            Maps.Add(mapId);
+            SendRockUpdate(TeleportRockResult.Add);
+        }
+
+        public void Remove(int mapId)
+        {
+            if (!Contains(mapId))
+            {
+                return;
+            }
+
+            Maps.Remove(mapId);
+            SendRockUpdate(TeleportRockResult.Delete);
+        }
+
+        public bool Use(PacketReader packet)
+        {
+            var action = (TeleportRockUseAction)packet.ReadByte();
+            var destinationMapId = -1;
+
+            switch (action)
+            {
+                case TeleportRockUseAction.ByMap:
                 {
-                    result = TeleportRockResult.DifficultToLocate;
+                    var mapId = packet.ReadInt();
+
+                    if (!Parent.TeleportRocks.Contains(mapId))
+                    {
+                        SendRockUpdate(TeleportRockResult.AlreadyThere);
+                        return false;
+                    }
+
+                    destinationMapId = mapId;
+                    break;
                 }
-                else
+
+                case TeleportRockUseAction.ByPlayer:
                 {
+                    var targetName = packet.ReadString();
+                    var target = Parent.Client.Server.GetCharacterByName(targetName);
+
+                    if (target == null)
+                    {
+                        SendRockUpdate(TeleportRockResult.DifficultToLocate);
+                        return false;
+                    }
+
                     destinationMapId = target.Map.MapleId;
+                    break;
                 }
+
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
             if (destinationMapId != -1)
@@ -127,26 +136,24 @@ namespace RazzleServer.Game.Maple.Characters
                 var originMap = Parent.Map;
                 var destinationMap = DataProvider.Maps.Data[destinationMapId];
 
-                // TODO: Field limit check.
-                // TODO: Origin map field limit check.
-                // TODO: Continent check.
                 if (originMap.MapleId == destinationMap.MapleId)
                 {
-                    result = TeleportRockResult.AlreadyThere;
+                    SendRockUpdate(TeleportRockResult.AlreadyThere);
+                    return false;
                 }
-            }
 
-            if (result == TeleportRockResult.Success)
-            {
+                if (originMap.FieldLimit.HasFlag(FieldLimitFlags.TeleportItemLimit))
+                {
+                    SendRockUpdate(TeleportRockResult.CannotGo);
+                    return false;
+                }
+
                 Parent.ChangeMap(destinationMapId);
-                used = true;
-            }
-            else
-            {
-                SendRockUpdate(result);
+                return true;
             }
 
-            return used;
+            SendRockUpdate(TeleportRockResult.CannotGo);
+            return false;
         }
 
         public byte[] ToByteArray()
@@ -155,7 +162,7 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 for (var i = 0; i < 5; i++)
                 {
-                    pw.WriteInt(9 <= Maps.Count ? Maps[i] : 999999999);
+                    pw.WriteInt(i < Maps.Count ? Maps[i] : 999999999);
                 }
 
                 return pw.ToArray();

@@ -161,7 +161,7 @@ namespace RazzleServer.Net.Packet
             WriteShort(writeValue?.Y ?? 0);
         }
 
-        public void WriteHeader(ServerOperationCode header) => WriteByte((byte)header);
+        public void WriteHeader(ServerOperationCode header) => WriteByte(header);
 
         public void WriteBox(Rectangle? box)
         {

@@ -312,7 +312,7 @@ namespace RazzleServer.Game.Maple.Life
 
             if (requestControl)
             {
-                pw.WriteByte((byte)(IsProvoked ? 2 : 1));
+                pw.WriteByte(IsProvoked ? 2 : 1);
             }
 
             pw.WriteInt(ObjectId);
@@ -324,12 +324,12 @@ namespace RazzleServer.Game.Maple.Life
 
             if (SpawnEffect > 0)
             {
-                pw.WriteByte((byte)SpawnEffect);
+                pw.WriteByte(SpawnEffect);
                 pw.WriteByte(0);
                 pw.WriteShort(0);
             }
 
-            pw.WriteByte((byte)(newSpawn ? -2 : -1));
+            pw.WriteByte(newSpawn ? -2 : -1);
             pw.WriteByte(0);
             pw.WriteLong(0);
             pw.WriteLong(0);
@@ -347,7 +347,7 @@ namespace RazzleServer.Game.Maple.Life
         {
             var pw = new PacketWriter(ServerOperationCode.MobLeaveField);
             pw.WriteInt(ObjectId);
-            pw.WriteByte((byte)DeathEffect);
+            pw.WriteByte(DeathEffect);
             pw.WriteLong(0);
             pw.WriteLong(0);
             return pw;

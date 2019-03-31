@@ -324,7 +324,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             using (var oPacket = new PacketWriter(ServerOperationCode.Effect))
             {
-                oPacket.WriteByte((byte)effect);
+                oPacket.WriteByte(effect);
                 Client.Send(oPacket);
             }
         }

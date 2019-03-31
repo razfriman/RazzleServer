@@ -10,7 +10,7 @@ namespace RazzleServer.Common.Constants
         MagicAttack = 0x04,
         MagicDefense = 0x08,
 
-        Accurancy = 0x10,
+        Accuracy = 0x10,
         Avoidability = 0x20,
         Hands = 0x40, // Yes, this has a modifier too.
         Speed = 0x80,

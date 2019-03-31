@@ -38,7 +38,7 @@ namespace RazzleServer.Game.Handlers
 
             using (var oPacket = new PacketWriter(ServerOperationCode.GroupMessage))
             {
-                oPacket.WriteByte((byte)type);
+                oPacket.WriteByte(type);
                 oPacket.WriteString(client.Character.Name);
                 oPacket.WriteString(text);
 

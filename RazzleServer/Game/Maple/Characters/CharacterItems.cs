@@ -113,8 +113,8 @@ namespace RazzleServer.Game.Maple.Characters
                     {
                         oPacket.WriteBool(fromDrop);
                         oPacket.WriteByte(1);
-                        oPacket.WriteByte((byte)InventoryOperationType.AddItem);
-                        oPacket.WriteByte((byte)item.Type);
+                        oPacket.WriteByte(InventoryOperationType.AddItem);
+                        oPacket.WriteByte(item.Type);
                         oPacket.WriteShort(item.Slot);
                         oPacket.WriteBytes(item.ToByteArray(true));
 
@@ -174,8 +174,8 @@ namespace RazzleServer.Game.Maple.Characters
                 {
                     oPacket.WriteBool(fromDrop);
                     oPacket.WriteByte(1);
-                    oPacket.WriteByte((byte)InventoryOperationType.RemoveItem);
-                    oPacket.WriteByte((byte)item.Type);
+                    oPacket.WriteByte(InventoryOperationType.RemoveItem);
+                    oPacket.WriteByte(item.Type);
                     oPacket.WriteShort(item.Slot);
 
                     Parent.Client.Send(oPacket);

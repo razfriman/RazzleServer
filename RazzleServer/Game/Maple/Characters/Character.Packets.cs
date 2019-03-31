@@ -33,7 +33,7 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 oPacket.WriteInt(Id);
                 oPacket.WriteString(Name, 13);
-                oPacket.WriteByte((byte)PrimaryStats.Gender);
+                oPacket.WriteByte(PrimaryStats.Gender);
                 oPacket.WriteByte(PrimaryStats.Skin);
                 oPacket.WriteInt(PrimaryStats.Face);
                 oPacket.WriteInt(PrimaryStats.Hair);
@@ -163,13 +163,13 @@ namespace RazzleServer.Game.Maple.Characters
 
             if (PlayerShop != null && PlayerShop.Owner == this)
             {
-                pw.WriteByte((byte)InteractionType.PlayerShop);
+                pw.WriteByte(InteractionType.PlayerShop);
                 pw.WriteInt(PlayerShop.ObjectId);
                 pw.WriteString(PlayerShop.Description);
                 pw.WriteBool(PlayerShop.IsPrivate);
                 pw.WriteByte(0);
                 pw.WriteByte(1);
-                pw.WriteByte((byte)(PlayerShop.IsFull ? 1 : 2)); // NOTE: Visitor availability.
+                pw.WriteByte(PlayerShop.IsFull ? 1 : 2); // NOTE: Visitor availability.
                 pw.WriteByte(0);
             }
             else

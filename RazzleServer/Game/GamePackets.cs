@@ -10,7 +10,7 @@ namespace RazzleServer.Game
         {
             using (var pw = new PacketWriter(ServerOperationCode.Notice))
             {
-                pw.WriteByte((byte)type);
+                pw.WriteByte(type);
 
                 if (type == NoticeType.ScrollingText)
                 {
@@ -28,7 +28,7 @@ namespace RazzleServer.Game
         {
             var pw = new PacketWriter(ServerOperationCode.Message);
 
-            pw.WriteByte((byte)type);
+            pw.WriteByte(type);
 
             switch (type)
             {
@@ -69,7 +69,7 @@ namespace RazzleServer.Game
                     break;
                 case MessageType.QuestRecord:
                     pw.WriteShort(mapleId);
-                    pw.WriteByte((byte)questStatus);
+                    pw.WriteByte(questStatus);
 
                     switch (questStatus)
                     {

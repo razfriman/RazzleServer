@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using RazzleServer.Common;
 using RazzleServer.Common.Constants;
+using RazzleServer.Game.Maple.Items;
 using RazzleServer.Game.Maple.Skills;
 using RazzleServer.Net.Packet;
 
@@ -56,6 +57,11 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Add(Skill skill, uint value) => Add(new Buff(this, skill, value));
 
+        public void Add(Item item)
+        {
+            Add(new Buff(this, item));
+        }
+
         public void Add(Buff buff)
         {
             foreach (var loopBuff in Buffs.ToList())
@@ -76,6 +82,7 @@ namespace RazzleServer.Game.Maple.Characters
                 buff.Apply();
             }
         }
+
 
         public void Remove(int mapleId) => Remove(this[mapleId]);
 

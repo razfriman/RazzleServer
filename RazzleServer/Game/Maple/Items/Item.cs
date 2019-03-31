@@ -48,6 +48,7 @@ namespace RazzleServer.Game.Maple.Items
         public short Avoidability { get; }
         public short Agility { get; }
         public short Speed { get; }
+        public short Thaw { get; }
         public short Jump { get; }
         public byte AttackSpeed { get; }
         public short RecoveryRate { get; }
@@ -330,6 +331,7 @@ namespace RazzleServer.Game.Maple.Items
                 Avoidability = CachedReference.Avoidability;
                 Agility = CachedReference.Agility;
                 Speed = CachedReference.Speed;
+                Thaw = CachedReference.Thaw;
                 Jump = CachedReference.Jump;
             }
             else if (IsConsumable)
@@ -506,8 +508,8 @@ namespace RazzleServer.Game.Maple.Items
             {
                 oPacket.WriteBool(true);
                 oPacket.WriteByte(1);
-                oPacket.WriteByte((byte)InventoryOperationType.ModifyQuantity);
-                oPacket.WriteByte((byte)Type);
+                oPacket.WriteByte(InventoryOperationType.ModifyQuantity);
+                oPacket.WriteByte(Type);
                 oPacket.WriteShort(Slot);
                 oPacket.WriteShort(Quantity);
 
@@ -552,8 +554,8 @@ namespace RazzleServer.Game.Maple.Items
             {
                 oPacket.WriteBool(true);
                 oPacket.WriteByte(1);
-                oPacket.WriteByte((byte)InventoryOperationType.ModifySlot);
-                oPacket.WriteByte((byte)Type);
+                oPacket.WriteByte(InventoryOperationType.ModifySlot);
+                oPacket.WriteByte(Type);
                 oPacket.WriteShort(sourceSlot);
                 oPacket.WriteShort((short)destinationSlot);
                 oPacket.WriteByte(1);
@@ -623,8 +625,8 @@ namespace RazzleServer.Game.Maple.Items
             {
                 oPacket.WriteBool(true);
                 oPacket.WriteByte(1);
-                oPacket.WriteByte((byte)InventoryOperationType.ModifySlot);
-                oPacket.WriteByte((byte)Type);
+                oPacket.WriteByte(InventoryOperationType.ModifySlot);
+                oPacket.WriteByte(Type);
                 oPacket.WriteShort(sourceSlot);
                 oPacket.WriteShort(destinationSlot);
                 oPacket.WriteByte(1);
@@ -658,8 +660,8 @@ namespace RazzleServer.Game.Maple.Items
                 {
                     oPacket.WriteBool(true);
                     oPacket.WriteByte(1);
-                    oPacket.WriteByte((byte)InventoryOperationType.RemoveItem);
-                    oPacket.WriteByte((byte)Type);
+                    oPacket.WriteByte(InventoryOperationType.RemoveItem);
+                    oPacket.WriteByte(Type);
                     oPacket.WriteShort(Slot);
 
                     if (IsEquipped)
@@ -685,8 +687,8 @@ namespace RazzleServer.Game.Maple.Items
                 {
                     oPacket.WriteBool(true);
                     oPacket.WriteByte(1);
-                    oPacket.WriteByte((byte)InventoryOperationType.ModifyQuantity);
-                    oPacket.WriteByte((byte)Type);
+                    oPacket.WriteByte(InventoryOperationType.ModifyQuantity);
+                    oPacket.WriteByte(Type);
                     oPacket.WriteShort(Slot);
                     oPacket.WriteShort(Quantity);
 
@@ -719,12 +721,12 @@ namespace RazzleServer.Game.Maple.Items
                     {
                         oPacket.WriteBool(true);
                         oPacket.WriteByte(2);
-                        oPacket.WriteByte((byte)InventoryOperationType.ModifyQuantity);
-                        oPacket.WriteByte((byte)Type);
+                        oPacket.WriteByte(InventoryOperationType.ModifyQuantity);
+                        oPacket.WriteByte(Type);
                         oPacket.WriteShort(sourceSlot);
                         oPacket.WriteShort(Quantity);
-                        oPacket.WriteByte((byte)InventoryOperationType.ModifyQuantity);
-                        oPacket.WriteByte((byte)destination.Type);
+                        oPacket.WriteByte(InventoryOperationType.ModifyQuantity);
+                        oPacket.WriteByte(destination.Type);
                         oPacket.WriteShort(destinationSlot);
                         oPacket.WriteShort(destination.Quantity);
 
@@ -739,11 +741,11 @@ namespace RazzleServer.Game.Maple.Items
                     {
                         oPacket.WriteBool(true);
                         oPacket.WriteByte(2);
-                        oPacket.WriteByte((byte)InventoryOperationType.RemoveItem);
-                        oPacket.WriteByte((byte)Type);
+                        oPacket.WriteByte(InventoryOperationType.RemoveItem);
+                        oPacket.WriteByte(Type);
                         oPacket.WriteShort(sourceSlot);
-                        oPacket.WriteByte((byte)InventoryOperationType.ModifyQuantity);
-                        oPacket.WriteByte((byte)destination.Type);
+                        oPacket.WriteByte(InventoryOperationType.ModifyQuantity);
+                        oPacket.WriteByte(destination.Type);
                         oPacket.WriteShort(destinationSlot);
                         oPacket.WriteShort(destination.Quantity);
 
@@ -764,8 +766,8 @@ namespace RazzleServer.Game.Maple.Items
                 {
                     oPacket.WriteBool(true);
                     oPacket.WriteByte(1);
-                    oPacket.WriteByte((byte)InventoryOperationType.ModifySlot);
-                    oPacket.WriteByte((byte)Type);
+                    oPacket.WriteByte(InventoryOperationType.ModifySlot);
+                    oPacket.WriteByte(Type);
                     oPacket.WriteShort(sourceSlot);
                     oPacket.WriteShort(destinationSlot);
 

@@ -89,7 +89,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             using (var pw = new PacketWriter(ServerOperationCode.StorageResult))
             {
-                pw.WriteByte((byte)result);
+                pw.WriteByte(result);
                 Parent.Client.Send(pw);
             }
         }

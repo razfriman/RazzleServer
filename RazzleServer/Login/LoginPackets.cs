@@ -12,14 +12,14 @@ namespace RazzleServer.Login
         {
             using (var pw = new PacketWriter(ServerOperationCode.CheckPasswordResult))
             {
-                pw.WriteByte((byte)result);
+                pw.WriteByte(result);
                 pw.WriteByte(0);
                 pw.WriteInt(0);
 
                 switch (result)
                 {
                     case Common.Constants.LoginResult.Banned:
-                        pw.WriteByte((byte)acc.BanReason);
+                        pw.WriteByte(acc.BanReason);
                         pw.WriteDateTime(LoginAccount.PermanentBanDate);
                         break;
                     case Common.Constants.LoginResult.Valid:

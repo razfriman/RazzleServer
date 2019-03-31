@@ -30,7 +30,7 @@ namespace RazzleServer.Game.Maple.Interaction
 
             using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
             {
-                oPacket.WriteByte((byte)InteractionCode.Room);
+                oPacket.WriteByte(InteractionCode.Room);
                 oPacket.WriteByte(4);
                 oPacket.WriteByte(4);
                 oPacket.WriteByte(0);
@@ -204,7 +204,7 @@ namespace RazzleServer.Game.Maple.Interaction
 
                     using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                     {
-                        oPacket.WriteByte((byte)InteractionCode.Chat);
+                        oPacket.WriteByte(InteractionCode.Chat);
                         oPacket.WriteByte(8);
 
                         byte sender = 0;
@@ -248,7 +248,7 @@ namespace RazzleServer.Game.Maple.Interaction
                     {
                         using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                         {
-                            oPacket.WriteByte((byte)InteractionCode.Exit);
+                            oPacket.WriteByte(InteractionCode.Exit);
                             oPacket.WriteByte(1);
                             oPacket.WriteByte(10);
 
@@ -267,7 +267,7 @@ namespace RazzleServer.Game.Maple.Interaction
         {
             using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
             {
-                oPacket.WriteByte((byte)InteractionCode.UpdateItems);
+                oPacket.WriteByte(InteractionCode.UpdateItems);
                 oPacket.WriteByte((byte)Items.Count);
 
                 foreach (var loopShopItem in Items)
@@ -303,8 +303,8 @@ namespace RazzleServer.Game.Maple.Interaction
                 {
                     using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                     {
-                        oPacket.WriteByte((byte)InteractionCode.Visit);
-                        oPacket.WriteByte((byte)(i + 1));
+                        oPacket.WriteByte(InteractionCode.Visit);
+                        oPacket.WriteByte(i + 1);
                         oPacket.WriteBytes(visitor.AppearanceToByteArray());
                         oPacket.WriteString(visitor.Name);
 
@@ -316,7 +316,7 @@ namespace RazzleServer.Game.Maple.Interaction
 
                     using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                     {
-                        oPacket.WriteByte((byte)InteractionCode.Room);
+                        oPacket.WriteByte(InteractionCode.Room);
                         oPacket.WriteByte(4);
                         oPacket.WriteByte(4);
                         oPacket.WriteBool(true);
@@ -328,7 +328,7 @@ namespace RazzleServer.Game.Maple.Interaction
                         {
                             if (Visitors[slot] != null)
                             {
-                                oPacket.WriteByte((byte)(slot + 1));
+                                oPacket.WriteByte(slot + 1);
                                 oPacket.WriteBytes(Visitors[slot].AppearanceToByteArray());
                                 oPacket.WriteString(Visitors[slot].Name);
                             }
@@ -367,11 +367,11 @@ namespace RazzleServer.Game.Maple.Interaction
 
                     using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                     {
-                        oPacket.WriteByte((byte)InteractionCode.Exit);
+                        oPacket.WriteByte(InteractionCode.Exit);
 
                         if (i > 0)
                         {
-                            oPacket.WriteByte((byte)(i + 1));
+                            oPacket.WriteByte(i + 1);
                         }
 
                         Broadcast(oPacket, false);
@@ -379,8 +379,8 @@ namespace RazzleServer.Game.Maple.Interaction
 
                     using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
                     {
-                        oPacket.WriteByte((byte)InteractionCode.Exit);
-                        oPacket.WriteByte((byte)(i + 1));
+                        oPacket.WriteByte(InteractionCode.Exit);
+                        oPacket.WriteByte(i + 1);
 
                         Owner.Client.Send(oPacket);
                     }
