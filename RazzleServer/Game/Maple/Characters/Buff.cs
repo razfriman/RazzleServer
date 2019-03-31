@@ -28,10 +28,9 @@ namespace RazzleServer.Game.Maple.Characters
             Type = BuffType.Skill;
             Flag = (BuffValueTypes)value;
             End = DateTime.Now.AddSeconds(skill.BuffTime);
-            ScheduleExpiration();
         }
 
-        private void ScheduleExpiration()
+        public void ScheduleExpiration()
         {
             Delay.Execute(() =>
             {
@@ -50,8 +49,6 @@ namespace RazzleServer.Game.Maple.Characters
             Type = (BuffType)entity.Type;
             Flag = (BuffValueTypes)entity.Value;
             End = entity.End;
-
-            ScheduleExpiration();
         }
 
         public void Save()
@@ -82,6 +79,8 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 //Character.Map.Send(oPacket);
             }
+            
+            ScheduleExpiration();
         }
 
         public void Cancel()
@@ -93,12 +92,12 @@ namespace RazzleServer.Game.Maple.Characters
 
             using (var oPacket = new PacketWriter(ServerOperationCode.SkillsGiveBuff))
             {
-                Character.Client.Send(oPacket);
+                //Character.Client.Send(oPacket);
             }
 
             using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerSkillBuff))
             {
-                Character.Map.Send(oPacket);
+                //Character.Map.Send(oPacket);
             }
         }
     }

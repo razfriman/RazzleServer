@@ -55,7 +55,7 @@ namespace RazzleServer.Game.Maple.Maps
                     item.ObjectId = -1;
                 }
 
-                Objects.Remove(key);
+                Objects.TryRemove(key, out _);
             }
         }
 

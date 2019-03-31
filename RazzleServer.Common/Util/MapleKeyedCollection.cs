@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 
@@ -6,7 +7,7 @@ namespace RazzleServer.Common.Util
 {
     public abstract class MapleKeyedCollection<TKey, TValue> where TValue : class
     {
-        [JsonProperty] protected Dictionary<TKey, TValue> Objects { get; set; } = new Dictionary<TKey, TValue>();
+        [JsonProperty] protected ConcurrentDictionary<TKey, TValue> Objects { get; set; } = new ConcurrentDictionary<TKey, TValue>();
 
         public TValue this[TKey key] => Objects.ContainsKey(key) ? Objects[key] : null;
 
@@ -25,10 +26,7 @@ namespace RazzleServer.Common.Util
         public virtual void Remove(TValue item)
         {
             var key = GetKey(item);
-            if (Contains(key))
-            {
-                Objects.Remove(key);
-            }
+            Objects.TryRemove(key, out _);
         }
 
         public virtual void Remove(TKey key)

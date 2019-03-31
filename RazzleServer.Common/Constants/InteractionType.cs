@@ -6,6 +6,5 @@
         MemoryGame = 2,
         Trade = 3,
         PlayerShop = 4,
-        HiredMerchant = 5
     }
 }

@@ -24,7 +24,10 @@ namespace RazzleServer.Common.Util
             _mAction = action;
             Period = TimeSpan.FromMilliseconds(repeat);
             Next = DateTime.Now.AddMilliseconds(timeout);
-            _mTimer = new Timer(Callback, null, timeout, repeat);
+            if (timeout >= 0)
+            {
+                _mTimer = new Timer(Callback, null, timeout, repeat);
+            }
         }
 
         private void Callback(object state)

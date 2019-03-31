@@ -7,7 +7,7 @@ namespace RazzleServer.Game.Maple.Characters
 {
     public partial class Character
     {
-        public byte[] ToByteArray(bool viewAllCharacters = false)
+        public byte[] ToByteArray()
         {
             using (var pw = new PacketWriter())
             {

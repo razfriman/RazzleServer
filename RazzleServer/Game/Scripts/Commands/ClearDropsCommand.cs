@@ -31,7 +31,6 @@ namespace RazzleServer.Game.Scripts.Commands
                     else
                     {
                         ShowSyntax(caller);
-
                         return;
                     }
                 }
@@ -44,10 +43,12 @@ namespace RazzleServer.Game.Scripts.Commands
                     {
                         if (pickUp)
                         {
-                            loopDrop.Picker = caller;
+                            caller.Items.Pickup(caller.Map.Drops[loopDrop.ObjectId]);
                         }
-
-                        caller.Map.Drops.Remove(loopDrop);
+                        else
+                        {
+                            caller.Map.Drops.Remove(loopDrop);
+                        }
                     }
                 }
             }

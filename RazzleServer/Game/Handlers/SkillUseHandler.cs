@@ -90,8 +90,6 @@ namespace RazzleServer.Game.Handlers
                         var victim = client.Server.GetCharacterById(playerid);
                         if (victim != null && victim.Id != client.Character.Id)
                         {
-                            //MapPacket.SendPlayerSkillAnimThirdParty(victim, SkillID, SkillLevel, true, true);
-                            //MapPacket.SendPlayerSkillAnimThirdParty(victim, SkillID, SkillLevel, true, false);
                             //victim.Buffs.AddBuff(SkillID, SkillLevel);
                         }
                     }

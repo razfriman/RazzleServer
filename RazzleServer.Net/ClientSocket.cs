@@ -28,7 +28,7 @@ namespace RazzleServer.Net
             bool toClient)
         {
             _socket = socket;
-            _socketBuffer = new byte[8192];
+            _socketBuffer = new byte[8192 * 2]; // TODO(raz): Have this be reused instead of a giant buffer
             Endpoint = socket.RemoteEndPoint as IPEndPoint;
             Host = Endpoint?.Address.ToString();
             HostBytes = Endpoint?.Address.GetAddressBytes();

@@ -70,8 +70,8 @@
         RemotePlayerChat = 0x3F,
 
         AnnounceBox = 0x40,
-        SummonMove = 0x4B, // Wrong?
-        SummonLeaveField = 0x4B, // Wrong?
+        SummonMove = 0x4B,
+        SummonLeaveField = 0x4B,
         SummonAttack = 0x4D,
         SummonDamage = 0x4E,
 

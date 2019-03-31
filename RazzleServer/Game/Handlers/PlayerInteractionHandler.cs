@@ -43,11 +43,6 @@ namespace RazzleServer.Game.Handlers
                             }
                         }
                             break;
-
-                        case InteractionType.HiredMerchant:
-                        {
-                        }
-                            break;
                     }
                 }
                     break;

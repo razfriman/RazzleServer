@@ -8,7 +8,6 @@ namespace RazzleServer.Game.Handlers
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
-            packet.ReadInt(); // NOTE: Ticks.
             var slot = packet.ReadShort();
             var itemId = packet.ReadInt();
 
@@ -47,8 +46,6 @@ namespace RazzleServer.Game.Handlers
             {
                 // TODO: Add buff.
             }
-
-            // TODO: Add Monster Book card.
         }
     }
 }

@@ -178,7 +178,6 @@ namespace RazzleServer.Crypto
             DataBuffer.Slice(0, data.Length).CopyTo(data);
             DataBuffer.Slice(length + add, DataBuffer.Length - (length + add)).CopyTo(DataBuffer);
             AvailableData -= length + add;
-
             Decrypt(data.Span);
         }
 
