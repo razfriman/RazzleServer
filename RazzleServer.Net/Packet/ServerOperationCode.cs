@@ -1,6 +1,6 @@
 ﻿namespace RazzleServer.Net.Packet
 {
-    public enum ServerOperationCode : ushort
+    public enum ServerOperationCode : byte
     {
         CheckPasswordResult = 0x01,
         WorldStatus = 0x02,

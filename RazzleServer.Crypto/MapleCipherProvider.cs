@@ -47,8 +47,7 @@ namespace RazzleServer.Crypto
         private readonly object _addLocker = new object();
 
         public MapleCipherProvider(ushort currentGameVersion, ulong aesKey, bool useAesEncryption = true,
-            ushort initialBufferSize = 0x100,
-            bool toClient = true)
+            ushort initialBufferSize = 1024, bool toClient = true)
         {
             RecvCipher = new MapleCipher(currentGameVersion, aesKey, useAesEncryption);
             SendCipher = new MapleCipher(currentGameVersion, aesKey, useAesEncryption);
@@ -87,8 +86,10 @@ namespace RazzleServer.Crypto
         {
             lock (_addLocker)
             {
-                EnsureCapacity(length + AvailableData);
-                data.Slice(offset, length).CopyTo(DataBuffer);
+                EnsureCapacity(length + AvailableData); 
+                var srcSlice = data.Slice(offset, length);
+                var dstSlice = DataBuffer.Slice(AvailableData, length);
+                srcSlice.CopyTo(dstSlice);
                 AvailableData += length;
             }
 
@@ -96,14 +97,9 @@ namespace RazzleServer.Crypto
             {
                 if (WaitForData <= AvailableData)
                 {
-                    var w = WaitForData - 2;
-                    if (RecvCipher.Handshaken)
-                    {
-                        w -= 2;
-                    }
-
+                    var waitAmount = WaitForData;
                     WaitForData = 0;
-                    WaitMore(w);
+                    WaitMore(waitAmount);
                 }
             }
 
@@ -166,18 +162,16 @@ namespace RazzleServer.Crypto
         /// </summary>
         private void WaitMore(int length)
         {
-            var add = RecvCipher.Handshaken ? 4 : 2;
-
-            if (AvailableData < length + add)
+            if (AvailableData < length)
             {
-                WaitForData = length + add;
+                WaitForData = length;
                 return;
             }
 
-            var data = new byte[length + add].AsMemory();
+            var data = new byte[length].AsMemory();
             DataBuffer.Slice(0, data.Length).CopyTo(data);
-            DataBuffer.Slice(length + add, DataBuffer.Length - (length + add)).CopyTo(DataBuffer);
-            AvailableData -= length + add;
+            DataBuffer.Slice(length, DataBuffer.Length - (length)).CopyTo(DataBuffer);
+            AvailableData -= length;
             Decrypt(data.Span);
         }
 
@@ -227,8 +221,8 @@ namespace RazzleServer.Crypto
         {
             var packetLength = RecvCipher
                 .Handshaken
-                ? MapleCipher.GetPacketLength(DataBuffer.Slice(0, 4).Span)
-                : BitConverter.ToUInt16(DataBuffer.Slice(0, 2).Span);
+                ? 4 + MapleCipher.GetPacketLength(DataBuffer.Slice(0, 4).Span)
+                : 2 + BitConverter.ToUInt16(DataBuffer.Slice(0, 2).Span);
 
             WaitMore(packetLength);
         }

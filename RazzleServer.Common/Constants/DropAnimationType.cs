@@ -1,6 +1,6 @@
 namespace RazzleServer.Common.Constants
 {
-    public enum DropAnimationType
+    public enum DropAnimationType : byte
     {
         ShowDrop = 0,
         DropAnimation = 1,

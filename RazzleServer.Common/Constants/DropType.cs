@@ -1,6 +1,6 @@
 namespace RazzleServer.Common.Constants
 {
-    public enum DropType
+    public enum DropType : byte
     {
         Normal = 0,
         Party = 1,

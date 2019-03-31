@@ -1,6 +1,6 @@
 ﻿namespace RazzleServer.Common.Constants
 {
-    public enum LoginResult
+    public enum LoginResult : byte
     {
         Valid = 0,
         Banned = 3,

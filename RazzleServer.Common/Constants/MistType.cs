@@ -1,6 +1,6 @@
 ﻿namespace RazzleServer.Common.Constants
 {
-    public enum MistType
+    public enum MistType : byte
     {
         Mob,
         Poison,
