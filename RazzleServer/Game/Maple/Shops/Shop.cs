@@ -40,12 +40,12 @@ namespace RazzleServer.Game.Maple.Shops
 
         public void Show(Character customer)
         {
-            using (var oPacket = new PacketWriter(ServerOperationCode.NpcShopShow))
+            using (var pw = new PacketWriter(ServerOperationCode.NpcShopShow))
             {
-                oPacket.WriteInt(Id);
-                oPacket.WriteShort((short)Items.Count);
-                Items.ForEach(x => oPacket.WriteBytes(x.ToByteArray()));
-                customer.Client.Send(oPacket);
+                pw.WriteInt(Id);
+                pw.WriteShort((short)Items.Count);
+                Items.ForEach(x => pw.WriteBytes(x.ToByteArray()));
+                customer.Client.Send(pw);
             }
         }
     }

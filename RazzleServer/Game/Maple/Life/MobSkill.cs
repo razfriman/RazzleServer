@@ -175,25 +175,25 @@ namespace RazzleServer.Game.Maple.Life
 
                 if (disease != CharacterDisease.None)
                 {
-                    using (var oPacket = new PacketWriter(ServerOperationCode.SkillsGiveBuff))
+                    using (var pw = new PacketWriter(ServerOperationCode.SkillsGiveBuff))
                     {
-                        oPacket.WriteLong(0);
-                        oPacket.WriteLong((long)disease);
+                        pw.WriteLong(0);
+                        pw.WriteLong((long)disease);
 
-                        oPacket.WriteShort((short)CachedReference.ParameterA);
-                        oPacket.WriteShort(MapleId);
-                        oPacket.WriteShort(Level);
-                        oPacket.WriteInt(CachedReference.Duration);
+                        pw.WriteShort((short)CachedReference.ParameterA);
+                        pw.WriteShort(MapleId);
+                        pw.WriteShort(Level);
+                        pw.WriteInt(CachedReference.Duration);
 
-                        oPacket.WriteShort(0);
-                        oPacket.WriteShort(900);
-                        oPacket.WriteByte(1);
+                        pw.WriteShort(0);
+                        pw.WriteShort(900);
+                        pw.WriteByte(1);
 
-                        affectedCharacter.Client.Send(oPacket);
+                        affectedCharacter.Client.Send(pw);
                     }
 
                     //TODO - the remote packet
-                    using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerSkillBuff))
+                    using (var pw = new PacketWriter(ServerOperationCode.RemotePlayerSkillBuff))
                     {
                     }
                 }

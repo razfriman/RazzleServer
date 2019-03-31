@@ -36,15 +36,15 @@ namespace RazzleServer.Game.Handlers
                     break;
             }
 
-            using (var oPacket = new PacketWriter(ServerOperationCode.GroupMessage))
+            using (var pw = new PacketWriter(ServerOperationCode.GroupMessage))
             {
-                oPacket.WriteByte(type);
-                oPacket.WriteString(client.Character.Name);
-                oPacket.WriteString(text);
+                pw.WriteByte(type);
+                pw.WriteString(client.Character.Name);
+                pw.WriteString(text);
 
                 foreach (var recipient in recipients)
                 {
-                    client.Server.GetCharacterById(recipient).Client.Send(oPacket);
+                    client.Server.GetCharacterById(recipient).Client.Send(pw);
                 }
             }
         }

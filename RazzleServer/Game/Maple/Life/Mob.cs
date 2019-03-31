@@ -197,43 +197,43 @@ namespace RazzleServer.Game.Maple.Life
 
             skill?.Cast(this);
 
-            using (var oPacket = new PacketWriter(ServerOperationCode.MobControlResponse))
+            using (var pw = new PacketWriter(ServerOperationCode.MobControlResponse))
             {
-                oPacket.WriteInt(ObjectId);
-                oPacket.WriteShort(moveAction);
-                oPacket.WriteBool(skill != null); // use skills
-                oPacket.WriteShort((short)Mana);
-                oPacket.WriteShort(0); // skill id, skill level
-                Controller?.Client?.Send(oPacket);
+                pw.WriteInt(ObjectId);
+                pw.WriteShort(moveAction);
+                pw.WriteBool(skill != null); // use skills
+                pw.WriteShort((short)Mana);
+                pw.WriteShort(0); // skill id, skill level
+                Controller?.Client?.Send(pw);
             }
 
-            using (var oPacket = new PacketWriter(ServerOperationCode.MobMove))
+            using (var pw = new PacketWriter(ServerOperationCode.MobMove))
             {
-                oPacket.WriteInt(ObjectId);
-                oPacket.WriteBool(skill != null); // use skills
-                oPacket.WriteInt(skillId);
-                oPacket.WriteByte(0);
-                oPacket.WriteBytes(movements.ToByteArray());
-                Map.Send(oPacket, Controller);
+                pw.WriteInt(ObjectId);
+                pw.WriteBool(skill != null); // use skills
+                pw.WriteInt(skillId);
+                pw.WriteByte(0);
+                pw.WriteBytes(movements.ToByteArray());
+                Map.Send(pw, Controller);
             }
         }
 
         public void Buff(MobStatus buff, short value, MobSkill skill)
         {
-//            using (var oPacket = new PacketWriter(ServerOperationCode.MobStatSet))
+//            using (var pw = new PacketWriter(ServerOperationCode.MobStatSet))
 //            {
-//                oPacket.WriteInt(ObjectId);
-//                oPacket.WriteLong(0);
-//                oPacket.WriteInt(0);
-//                oPacket.WriteInt((int)buff);
-//                oPacket.WriteShort(value);
-//                oPacket.WriteShort(skill.MapleId);
-//                oPacket.WriteShort(skill.Level);
-//                oPacket.WriteShort(-1);
-//                oPacket.WriteShort(0); // Delay
-//                oPacket.WriteInt(0);
+//                pw.WriteInt(ObjectId);
+//                pw.WriteLong(0);
+//                pw.WriteInt(0);
+//                pw.WriteInt((int)buff);
+//                pw.WriteShort(value);
+//                pw.WriteShort(skill.MapleId);
+//                pw.WriteShort(skill.Level);
+//                pw.WriteShort(-1);
+//                pw.WriteShort(0); // Delay
+//                pw.WriteInt(0);
 //
-//                Map.Send(oPacket);
+//                Map.Send(pw);
 //            }
 
             ScheduleBuffExpiration(buff, skill);

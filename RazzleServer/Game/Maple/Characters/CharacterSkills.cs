@@ -60,16 +60,16 @@ namespace RazzleServer.Game.Maple.Characters
 
         public byte[] ToByteArray()
         {
-            using (var oPacket = new PacketWriter())
+            using (var pw = new PacketWriter())
             {
-                oPacket.WriteShort((short)Count);
+                pw.WriteShort((short)Count);
 
                 foreach (var loopSkill in Values)
                 {
-                    oPacket.WriteBytes(loopSkill.ToByteArray());
+                    pw.WriteBytes(loopSkill.ToByteArray());
                 }
 
-                return oPacket.ToArray();
+                return pw.ToArray();
             }
         }
 

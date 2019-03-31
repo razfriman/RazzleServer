@@ -43,21 +43,21 @@ namespace RazzleServer.Game.Handlers
                         }
                     }
 
-                    using (var oPacket = new PacketWriter(ServerOperationCode.StorageResult))
+                    using (var pw = new PacketWriter(ServerOperationCode.StorageResult))
                     {
-                        oPacket.WriteByte(13);
-                        oPacket.WriteByte(client.Character.Storage.Slots);
-                        oPacket.WriteShort((short)(2 << (byte)item.Type));
-                        oPacket.WriteShort(0);
-                        oPacket.WriteInt(0);
-                        oPacket.WriteByte((byte)itemsByType.Count);
+                        pw.WriteByte(13);
+                        pw.WriteByte(client.Character.Storage.Slots);
+                        pw.WriteShort((short)(2 << (byte)item.Type));
+                        pw.WriteShort(0);
+                        pw.WriteInt(0);
+                        pw.WriteByte((byte)itemsByType.Count);
 
                         foreach (var loopItem in itemsByType)
                         {
-                            oPacket.WriteBytes(loopItem.ToByteArray(true, true));
+                            pw.WriteBytes(loopItem.ToByteArray(true, true));
                         }
 
-                        client.Send(oPacket);
+                        client.Send(pw);
                     }
                 }
                     break;
@@ -72,11 +72,11 @@ namespace RazzleServer.Game.Handlers
 
                     if (client.Character.Storage.IsFull)
                     {
-                        using (var oPacket = new PacketWriter(ServerOperationCode.StorageResult))
+                        using (var pw = new PacketWriter(ServerOperationCode.StorageResult))
                         {
-                            oPacket.WriteByte(17);
+                            pw.WriteByte(17);
 
-                            client.Send(oPacket);
+                            client.Send(pw);
                         }
 
                         return;
@@ -111,21 +111,21 @@ namespace RazzleServer.Game.Handlers
                         }
                     }
 
-                    using (var oPacket = new PacketWriter(ServerOperationCode.StorageResult))
+                    using (var pw = new PacketWriter(ServerOperationCode.StorageResult))
                     {
-                        oPacket.WriteByte(13);
-                        oPacket.WriteByte(client.Character.Storage.Slots);
-                        oPacket.WriteShort((short)(2 << (byte)item.Type));
-                        oPacket.WriteShort(0);
-                        oPacket.WriteInt(0);
-                        oPacket.WriteByte((byte)itemsByType.Count);
+                        pw.WriteByte(13);
+                        pw.WriteByte(client.Character.Storage.Slots);
+                        pw.WriteShort((short)(2 << (byte)item.Type));
+                        pw.WriteShort(0);
+                        pw.WriteInt(0);
+                        pw.WriteByte((byte)itemsByType.Count);
 
                         foreach (var loopItem in itemsByType)
                         {
-                            oPacket.WriteBytes(loopItem.ToByteArray(true, true));
+                            pw.WriteBytes(loopItem.ToByteArray(true, true));
                         }
 
-                        client.Send(oPacket);
+                        client.Send(pw);
                     }
                 }
                     break;
@@ -142,16 +142,16 @@ namespace RazzleServer.Game.Handlers
                     client.Character.PrimaryStats.Meso -= meso;
                     client.Character.PrimaryStats.Meso += meso;
 
-                    using (var oPacket = new PacketWriter(ServerOperationCode.StorageResult))
+                    using (var pw = new PacketWriter(ServerOperationCode.StorageResult))
                     {
-                        oPacket.WriteByte(19);
-                        oPacket.WriteByte(client.Character.Storage.Slots);
-                        oPacket.WriteShort(2);
-                        oPacket.WriteShort(0);
-                        oPacket.WriteInt(0);
-                        oPacket.WriteInt(client.Character.PrimaryStats.Meso);
+                        pw.WriteByte(19);
+                        pw.WriteByte(client.Character.Storage.Slots);
+                        pw.WriteShort(2);
+                        pw.WriteShort(0);
+                        pw.WriteInt(0);
+                        pw.WriteInt(client.Character.PrimaryStats.Meso);
 
-                        client.Send(oPacket);
+                        client.Send(pw);
                     }
                 }
                     break;

@@ -29,42 +29,42 @@ namespace RazzleServer.Game.Maple.Characters
 
         public byte[] StatisticsToByteArray()
         {
-            using (var oPacket = new PacketWriter())
+            using (var pw = new PacketWriter())
             {
-                oPacket.WriteInt(Id);
-                oPacket.WriteString(Name, 13);
-                oPacket.WriteByte(PrimaryStats.Gender);
-                oPacket.WriteByte(PrimaryStats.Skin);
-                oPacket.WriteInt(PrimaryStats.Face);
-                oPacket.WriteInt(PrimaryStats.Hair);
-                oPacket.WriteLong(0); // Pet SN
-                oPacket.WriteByte(PrimaryStats.Level);
-                oPacket.WriteShort((short)PrimaryStats.Job);
-                oPacket.WriteShort(PrimaryStats.Strength);
-                oPacket.WriteShort(PrimaryStats.Dexterity);
-                oPacket.WriteShort(PrimaryStats.Intelligence);
-                oPacket.WriteShort(PrimaryStats.Luck);
-                oPacket.WriteShort(PrimaryStats.Health);
-                oPacket.WriteShort(PrimaryStats.MaxHealth);
-                oPacket.WriteShort(PrimaryStats.Mana);
-                oPacket.WriteShort(PrimaryStats.MaxMana);
-                oPacket.WriteShort(PrimaryStats.AbilityPoints);
-                oPacket.WriteShort(PrimaryStats.SkillPoints);
-                oPacket.WriteInt(PrimaryStats.Experience);
-                oPacket.WriteShort(PrimaryStats.Fame);
-                oPacket.WriteInt(Map.MapleId);
-                oPacket.WriteByte(SpawnPoint);
-                oPacket.WriteLong(0);
-                oPacket.WriteInt(0);
-                oPacket.WriteInt(0);
+                pw.WriteInt(Id);
+                pw.WriteString(Name, 13);
+                pw.WriteByte(PrimaryStats.Gender);
+                pw.WriteByte(PrimaryStats.Skin);
+                pw.WriteInt(PrimaryStats.Face);
+                pw.WriteInt(PrimaryStats.Hair);
+                pw.WriteLong(0); // Pet SN
+                pw.WriteByte(PrimaryStats.Level);
+                pw.WriteShort((short)PrimaryStats.Job);
+                pw.WriteShort(PrimaryStats.Strength);
+                pw.WriteShort(PrimaryStats.Dexterity);
+                pw.WriteShort(PrimaryStats.Intelligence);
+                pw.WriteShort(PrimaryStats.Luck);
+                pw.WriteShort(PrimaryStats.Health);
+                pw.WriteShort(PrimaryStats.MaxHealth);
+                pw.WriteShort(PrimaryStats.Mana);
+                pw.WriteShort(PrimaryStats.MaxMana);
+                pw.WriteShort(PrimaryStats.AbilityPoints);
+                pw.WriteShort(PrimaryStats.SkillPoints);
+                pw.WriteInt(PrimaryStats.Experience);
+                pw.WriteShort(PrimaryStats.Fame);
+                pw.WriteInt(Map.MapleId);
+                pw.WriteByte(SpawnPoint);
+                pw.WriteLong(0);
+                pw.WriteInt(0);
+                pw.WriteInt(0);
 
-                return oPacket.ToArray();
+                return pw.ToArray();
             }
         }
 
         public byte[] AppearanceToByteArray()
         {
-            using (var oPacket = new PacketWriter())
+            using (var pw = new PacketWriter())
             {
                 var visibleLayer = new Dictionary<byte, int>();
                 var hiddenLayer = new Dictionary<byte, int>();
@@ -96,21 +96,21 @@ namespace RazzleServer.Game.Maple.Characters
 
                 foreach (var entry in visibleLayer)
                 {
-                    oPacket.WriteByte(entry.Key);
-                    oPacket.WriteInt(entry.Value);
+                    pw.WriteByte(entry.Key);
+                    pw.WriteInt(entry.Value);
                 }
 
-                oPacket.WriteByte(0);
+                pw.WriteByte(0);
 
                 foreach (var entry in hiddenLayer)
                 {
-                    oPacket.WriteByte(entry.Key);
-                    oPacket.WriteInt(entry.Value);
+                    pw.WriteByte(entry.Key);
+                    pw.WriteInt(entry.Value);
                 }
 
-                oPacket.WriteByte(0);
+                pw.WriteByte(0);
 
-                return oPacket.ToArray();
+                return pw.ToArray();
             }
         }
 

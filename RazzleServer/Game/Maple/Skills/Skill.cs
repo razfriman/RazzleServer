@@ -280,11 +280,11 @@ namespace RazzleServer.Game.Maple.Skills
 
         public byte[] ToByteArray()
         {
-            using (var oPacket = new PacketWriter())
+            using (var pw = new PacketWriter())
             {
-                oPacket.WriteInt(MapleId);
-                oPacket.WriteInt(CurrentLevel);
-                return oPacket.ToArray();
+                pw.WriteInt(MapleId);
+                pw.WriteInt(CurrentLevel);
+                return pw.ToArray();
             }
         }
     }

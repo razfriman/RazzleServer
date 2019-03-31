@@ -101,13 +101,13 @@ namespace RazzleServer.Game.Maple.Maps
 
         public PacketWriter GetDestroyPacket()
         {
-            var oPacket = new PacketWriter(ServerOperationCode.DropLeaveField);
+            var pw = new PacketWriter(ServerOperationCode.DropLeaveField);
 
-            oPacket.WriteByte(Picker == null ? 0 : 2);
-            oPacket.WriteInt(ObjectId);
-            oPacket.WriteInt(Picker?.Id ?? 0);
+            pw.WriteByte(Picker == null ? 0 : 2);
+            pw.WriteInt(ObjectId);
+            pw.WriteInt(Picker?.Id ?? 0);
 
-            return oPacket;
+            return pw;
         }
     }
 }

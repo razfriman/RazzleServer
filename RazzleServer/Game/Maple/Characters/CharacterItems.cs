@@ -109,16 +109,16 @@ namespace RazzleServer.Game.Maple.Characters
 
                 if (Parent.IsInitialized)
                 {
-                    using (var oPacket = new PacketWriter(ServerOperationCode.InventoryOperation))
+                    using (var pw = new PacketWriter(ServerOperationCode.InventoryOperation))
                     {
-                        oPacket.WriteBool(fromDrop);
-                        oPacket.WriteByte(1);
-                        oPacket.WriteByte(InventoryOperationType.AddItem);
-                        oPacket.WriteByte(item.Type);
-                        oPacket.WriteShort(item.Slot);
-                        oPacket.WriteBytes(item.ToByteArray(true));
+                        pw.WriteBool(fromDrop);
+                        pw.WriteByte(1);
+                        pw.WriteByte(InventoryOperationType.AddItem);
+                        pw.WriteByte(item.Type);
+                        pw.WriteShort(item.Slot);
+                        pw.WriteBytes(item.ToByteArray(true));
 
-                        Parent.Client.Send(oPacket);
+                        Parent.Client.Send(pw);
                     }
                 }
             }
@@ -170,15 +170,15 @@ namespace RazzleServer.Game.Maple.Characters
 
             if (removeFromSlot)
             {
-                using (var oPacket = new PacketWriter(ServerOperationCode.InventoryOperation))
+                using (var pw = new PacketWriter(ServerOperationCode.InventoryOperation))
                 {
-                    oPacket.WriteBool(fromDrop);
-                    oPacket.WriteByte(1);
-                    oPacket.WriteByte(InventoryOperationType.RemoveItem);
-                    oPacket.WriteByte(item.Type);
-                    oPacket.WriteShort(item.Slot);
+                    pw.WriteBool(fromDrop);
+                    pw.WriteByte(1);
+                    pw.WriteByte(InventoryOperationType.RemoveItem);
+                    pw.WriteByte(item.Type);
+                    pw.WriteShort(item.Slot);
 
-                    Parent.Client.Send(oPacket);
+                    Parent.Client.Send(pw);
                 }
             }
 
@@ -513,63 +513,63 @@ namespace RazzleServer.Game.Maple.Characters
 
         public byte[] ToByteArray()
         {
-            using (var oPacket = new PacketWriter())
+            using (var pw = new PacketWriter())
             {
                 foreach (var item in GetEquipped(EquippedQueryMode.Normal))
                 {
-                    oPacket.WriteBytes(item.ToByteArray());
+                    pw.WriteBytes(item.ToByteArray());
                 }
 
-                oPacket.WriteByte(0);
+                pw.WriteByte(0);
 
                 foreach (var item in GetEquipped(EquippedQueryMode.Cash))
                 {
-                    oPacket.WriteBytes(item.ToByteArray());
+                    pw.WriteBytes(item.ToByteArray());
                 }
 
-                oPacket.WriteByte(0);
+                pw.WriteByte(0);
 
-                oPacket.WriteByte(MaxSlots[ItemType.Equipment]);
+                pw.WriteByte(MaxSlots[ItemType.Equipment]);
                 foreach (var item in this[ItemType.Equipment])
                 {
-                    oPacket.WriteBytes(item.ToByteArray());
+                    pw.WriteBytes(item.ToByteArray());
                 }
 
-                oPacket.WriteByte(0);
+                pw.WriteByte(0);
 
-                oPacket.WriteByte(MaxSlots[ItemType.Usable]);
+                pw.WriteByte(MaxSlots[ItemType.Usable]);
                 foreach (var item in this[ItemType.Usable])
                 {
-                    oPacket.WriteBytes(item.ToByteArray());
+                    pw.WriteBytes(item.ToByteArray());
                 }
 
-                oPacket.WriteByte(0);
+                pw.WriteByte(0);
 
-                oPacket.WriteByte(MaxSlots[ItemType.Setup]);
+                pw.WriteByte(MaxSlots[ItemType.Setup]);
                 foreach (var item in this[ItemType.Setup])
                 {
-                    oPacket.WriteBytes(item.ToByteArray());
+                    pw.WriteBytes(item.ToByteArray());
                 }
 
-                oPacket.WriteByte(0);
+                pw.WriteByte(0);
 
-                oPacket.WriteByte(MaxSlots[ItemType.Etcetera]);
+                pw.WriteByte(MaxSlots[ItemType.Etcetera]);
                 foreach (var item in this[ItemType.Etcetera])
                 {
-                    oPacket.WriteBytes(item.ToByteArray());
+                    pw.WriteBytes(item.ToByteArray());
                 }
 
-                oPacket.WriteByte(0);
+                pw.WriteByte(0);
 
-                oPacket.WriteByte(MaxSlots[ItemType.Cash]);
+                pw.WriteByte(MaxSlots[ItemType.Cash]);
                 foreach (var item in this[ItemType.Cash])
                 {
-                    oPacket.WriteBytes(item.ToByteArray());
+                    pw.WriteBytes(item.ToByteArray());
                 }
 
-                oPacket.WriteByte(0);
+                pw.WriteByte(0);
 
-                return oPacket.ToArray();
+                return pw.ToArray();
             }
         }
 

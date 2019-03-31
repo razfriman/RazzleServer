@@ -35,15 +35,15 @@ namespace RazzleServer.Game.Maple.Characters
 
         public byte[] ToByteArray()
         {
-            using (var oPacket = new PacketWriter())
+            using (var pw = new PacketWriter())
             {
-                oPacket.WriteInt(Id);
-                oPacket.WriteString($"{Sender} "); // NOTE: Space is intentional.
-                oPacket.WriteString(Message);
-                oPacket.WriteDateTime(Received);
-                oPacket.WriteByte(3); // TODO: Memo kind (0 - None, 1 - Fame, 2 - Gift).
+                pw.WriteInt(Id);
+                pw.WriteString($"{Sender} "); // NOTE: Space is intentional.
+                pw.WriteString(Message);
+                pw.WriteDateTime(Received);
+                pw.WriteByte(3); // TODO: Memo kind (0 - None, 1 - Fame, 2 - Gift).
 
-                return oPacket.ToArray();
+                return pw.ToArray();
             }
         }
     }

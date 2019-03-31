@@ -102,9 +102,9 @@ namespace RazzleServer.Game.Maple.Characters
 
         public byte[] ToByteArray()
         {
-            using (var oPacket = new PacketWriter())
+            using (var pw = new PacketWriter())
             {
-                return oPacket.ToArray();
+                return pw.ToArray();
             }
         }
     }

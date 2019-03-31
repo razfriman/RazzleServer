@@ -115,12 +115,12 @@ namespace RazzleServer.Game.Handlers
                     }
                     else
                     {
-                        using (var oPacket = new PacketWriter(ServerOperationCode.AdminResult))
+                        using (var pw = new PacketWriter(ServerOperationCode.AdminResult))
                         {
-                            oPacket.WriteByte(AdminResultType.InvalidName);
-                            oPacket.WriteByte(1);
+                            pw.WriteByte(AdminResultType.InvalidName);
+                            pw.WriteByte(1);
 
-                            client.Send(oPacket);
+                            client.Send(pw);
                         }
                     }
                 }
@@ -160,11 +160,11 @@ namespace RazzleServer.Game.Handlers
 
                     target?.Notify(text, NoticeType.Popup);
 
-                    using (var oPacket = new PacketWriter(ServerOperationCode.AdminResult))
+                    using (var pw = new PacketWriter(ServerOperationCode.AdminResult))
                     {
-                        oPacket.WriteByte(29);
-                        oPacket.WriteBool(target != null);
-                        client.Send(oPacket);
+                        pw.WriteByte(29);
+                        pw.WriteBool(target != null);
+                        client.Send(pw);
                     }
                 }
                     break;

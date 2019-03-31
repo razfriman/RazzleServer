@@ -97,11 +97,11 @@ namespace RazzleServer.Game.Maple.Interaction
                     // TODO: The meso written in this packet is the added meso amount.
                     // The amount that should be written is the total amount.
 
-                    using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
+                    using (var pw = new PacketWriter(ServerOperationCode.PlayerInteraction))
                     {
-                        oPacket.WriteByte(InteractionCode.SetMeso);
-                        oPacket.WriteByte(0);
-                        oPacket.WriteInt(meso);
+                        pw.WriteByte(InteractionCode.SetMeso);
+                        pw.WriteByte(0);
+                        pw.WriteInt(meso);
 
                         if (character == Owner)
                         {
@@ -113,7 +113,7 @@ namespace RazzleServer.Game.Maple.Interaction
                             OwnerMeso += meso;
                             Owner.PrimaryStats.Meso -= meso;
 
-                            Owner.Client.Send(oPacket);
+                            Owner.Client.Send(pw);
                         }
                         else
                         {
@@ -125,25 +125,25 @@ namespace RazzleServer.Game.Maple.Interaction
                             VisitorMeso += meso;
                             Visitor.PrimaryStats.Meso -= meso;
 
-                            Visitor.Client.Send(oPacket);
+                            Visitor.Client.Send(pw);
                         }
                     }
 
-                    using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
+                    using (var pw = new PacketWriter(ServerOperationCode.PlayerInteraction))
                     {
-                        oPacket.WriteByte(InteractionCode.SetMeso);
-                        oPacket.WriteByte(1);
-                        oPacket.WriteInt(meso);
+                        pw.WriteByte(InteractionCode.SetMeso);
+                        pw.WriteByte(1);
+                        pw.WriteInt(meso);
 
                         if (Owner == character)
                         {
-                            Visitor.Client.Send(oPacket);
+                            Visitor.Client.Send(pw);
                         }
                         else
                         {
-                            oPacket.WriteInt(OwnerMeso);
+                            pw.WriteInt(OwnerMeso);
 
-                            Owner.Client.Send(oPacket);
+                            Owner.Client.Send(pw);
                         }
                     }
                 }
@@ -155,14 +155,14 @@ namespace RazzleServer.Game.Maple.Interaction
                     {
                         Cancel();
 
-                        using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
+                        using (var pw = new PacketWriter(ServerOperationCode.PlayerInteraction))
                         {
-                            oPacket.WriteByte(InteractionCode.Exit);
-                            oPacket.WriteByte(0);
-                            oPacket.WriteByte(2);
+                            pw.WriteByte(InteractionCode.Exit);
+                            pw.WriteByte(0);
+                            pw.WriteByte(2);
 
-                            Owner.Client.Send(oPacket);
-                            Visitor.Client.Send(oPacket);
+                            Owner.Client.Send(pw);
+                            Visitor.Client.Send(pw);
                         }
 
                         Owner.Trade = null;
@@ -172,13 +172,13 @@ namespace RazzleServer.Game.Maple.Interaction
                     }
                     else
                     {
-                        using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
+                        using (var pw = new PacketWriter(ServerOperationCode.PlayerInteraction))
                         {
-                            oPacket.WriteByte(InteractionCode.Exit);
-                            oPacket.WriteByte(0);
-                            oPacket.WriteByte(2);
+                            pw.WriteByte(InteractionCode.Exit);
+                            pw.WriteByte(0);
+                            pw.WriteByte(2);
 
-                            Owner.Client.Send(oPacket);
+                            Owner.Client.Send(pw);
                         }
 
                         Owner.Trade = null;
@@ -189,21 +189,21 @@ namespace RazzleServer.Game.Maple.Interaction
 
                 case InteractionCode.Confirm:
                 {
-                    using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
+                    using (var pw = new PacketWriter(ServerOperationCode.PlayerInteraction))
                     {
-                        oPacket.WriteByte(InteractionCode.Confirm);
+                        pw.WriteByte(InteractionCode.Confirm);
 
                         if (character == Owner)
                         {
                             OwnerLocked = true;
 
-                            Visitor.Client.Send(oPacket);
+                            Visitor.Client.Send(pw);
                         }
                         else
                         {
                             VisitorLocked = true;
 
-                            Owner.Client.Send(oPacket);
+                            Owner.Client.Send(pw);
                         }
                     }
 
@@ -211,14 +211,14 @@ namespace RazzleServer.Game.Maple.Interaction
                     {
                         Complete();
 
-                        using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
+                        using (var pw = new PacketWriter(ServerOperationCode.PlayerInteraction))
                         {
-                            oPacket.WriteByte(InteractionCode.Exit);
-                            oPacket.WriteByte(0);
-                            oPacket.WriteByte(6);
+                            pw.WriteByte(InteractionCode.Exit);
+                            pw.WriteByte(0);
+                            pw.WriteByte(6);
 
-                            Owner.Client.Send(oPacket);
-                            Visitor.Client.Send(oPacket);
+                            Owner.Client.Send(pw);
+                            Visitor.Client.Send(pw);
                         }
 
                         Owner.Trade = null;
@@ -233,15 +233,15 @@ namespace RazzleServer.Game.Maple.Interaction
                 {
                     var text = packet.ReadString();
 
-                    using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
+                    using (var pw = new PacketWriter(ServerOperationCode.PlayerInteraction))
                     {
-                        oPacket.WriteByte(InteractionCode.Chat);
-                        oPacket.WriteByte(8);
-                        oPacket.WriteBool(Owner != character);
-                        oPacket.WriteString($"{character.Name} : {text}");
+                        pw.WriteByte(InteractionCode.Chat);
+                        pw.WriteByte(8);
+                        pw.WriteBool(Owner != character);
+                        pw.WriteString($"{character.Name} : {text}");
 
-                        Owner.Client.Send(oPacket);
-                        Visitor.Client.Send(oPacket);
+                        Owner.Client.Send(pw);
+                        Visitor.Client.Send(pw);
                     }
                 }
                     break;
@@ -261,44 +261,44 @@ namespace RazzleServer.Game.Maple.Interaction
             {
                 Started = true;
 
-                using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
+                using (var pw = new PacketWriter(ServerOperationCode.PlayerInteraction))
                 {
-                    oPacket.WriteByte(InteractionCode.Visit);
-                    oPacket.WriteByte(1);
-                    oPacket.WriteBytes(Visitor.AppearanceToByteArray());
-                    oPacket.WriteString(Visitor.Name);
+                    pw.WriteByte(InteractionCode.Visit);
+                    pw.WriteByte(1);
+                    pw.WriteBytes(Visitor.AppearanceToByteArray());
+                    pw.WriteString(Visitor.Name);
 
-                    Owner.Client.Send(oPacket);
+                    Owner.Client.Send(pw);
                 }
 
-                using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
+                using (var pw = new PacketWriter(ServerOperationCode.PlayerInteraction))
                 {
-                    oPacket.WriteByte(InteractionCode.Room);
-                    oPacket.WriteByte(3);
-                    oPacket.WriteByte(2);
-                    oPacket.WriteByte(1);
-                    oPacket.WriteByte(0);
-                    oPacket.WriteBytes(Owner.AppearanceToByteArray());
-                    oPacket.WriteString(Owner.Name);
-                    oPacket.WriteByte(1);
-                    oPacket.WriteBytes(Visitor.AppearanceToByteArray());
-                    oPacket.WriteString(Visitor.Name);
-                    oPacket.WriteByte(byte.MaxValue);
+                    pw.WriteByte(InteractionCode.Room);
+                    pw.WriteByte(3);
+                    pw.WriteByte(2);
+                    pw.WriteByte(1);
+                    pw.WriteByte(0);
+                    pw.WriteBytes(Owner.AppearanceToByteArray());
+                    pw.WriteString(Owner.Name);
+                    pw.WriteByte(1);
+                    pw.WriteBytes(Visitor.AppearanceToByteArray());
+                    pw.WriteString(Visitor.Name);
+                    pw.WriteByte(byte.MaxValue);
 
-                    Visitor.Client.Send(oPacket);
+                    Visitor.Client.Send(pw);
                 }
             }
         }
 
         private void Decline(Character character)
         {
-            using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
+            using (var pw = new PacketWriter(ServerOperationCode.PlayerInteraction))
             {
-                oPacket.WriteByte(InteractionCode.Decline);
-                oPacket.WriteByte(3);
-                oPacket.WriteString(character.Name);
+                pw.WriteByte(InteractionCode.Decline);
+                pw.WriteByte(3);
+                pw.WriteString(character.Name);
 
-                Owner.Client.Send(oPacket);
+                Owner.Client.Send(pw);
             }
 
             Owner.Trade = null;
@@ -321,13 +321,13 @@ namespace RazzleServer.Game.Maple.Interaction
 
             if (invitee.Trade != null)
             {
-                using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
+                using (var pw = new PacketWriter(ServerOperationCode.PlayerInteraction))
                 {
-                    oPacket.WriteByte(InteractionCode.Decline);
-                    oPacket.WriteByte(2);
-                    oPacket.WriteString(invitee.Name);
+                    pw.WriteByte(InteractionCode.Decline);
+                    pw.WriteByte(2);
+                    pw.WriteString(invitee.Name);
 
-                    Owner.Client.Send(oPacket);
+                    Owner.Client.Send(pw);
                 }
             }
             else
@@ -335,14 +335,14 @@ namespace RazzleServer.Game.Maple.Interaction
                 invitee.Trade = this;
                 Visitor = invitee;
 
-                using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
+                using (var pw = new PacketWriter(ServerOperationCode.PlayerInteraction))
                 {
-                    oPacket.WriteByte(InteractionCode.Invite);
-                    oPacket.WriteByte(3);
-                    oPacket.WriteString(Owner.Name);
-                    oPacket.WriteBytes(new byte[] {0xB7, 0x50, 0x00, 0x00});
+                    pw.WriteByte(InteractionCode.Invite);
+                    pw.WriteByte(3);
+                    pw.WriteString(Owner.Name);
+                    pw.WriteBytes(new byte[] {0xB7, 0x50, 0x00, 0x00});
 
-                    Visitor.Client.Send(oPacket);
+                    Visitor.Client.Send(pw);
                 }
             }
         }
@@ -380,41 +380,41 @@ namespace RazzleServer.Game.Maple.Interaction
 
             item.Slot = 0;
 
-            using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
+            using (var pw = new PacketWriter(ServerOperationCode.PlayerInteraction))
             {
-                oPacket.WriteByte(InteractionCode.SetItems);
-                oPacket.WriteByte(0);
-                oPacket.WriteByte(targetSlot);
-                oPacket.WriteBytes(item.ToByteArray(true));
+                pw.WriteByte(InteractionCode.SetItems);
+                pw.WriteByte(0);
+                pw.WriteByte(targetSlot);
+                pw.WriteBytes(item.ToByteArray(true));
 
                 if (character == Owner)
                 {
                     OwnerItems.Add(item);
 
-                    Owner.Client.Send(oPacket);
+                    Owner.Client.Send(pw);
                 }
                 else
                 {
                     VisitorItems.Add(item);
 
-                    Visitor.Client.Send(oPacket);
+                    Visitor.Client.Send(pw);
                 }
             }
 
-            using (var oPacket = new PacketWriter(ServerOperationCode.PlayerInteraction))
+            using (var pw = new PacketWriter(ServerOperationCode.PlayerInteraction))
             {
-                oPacket.WriteByte(InteractionCode.SetItems);
-                oPacket.WriteByte(1);
-                oPacket.WriteByte(targetSlot);
-                oPacket.WriteBytes(item.ToByteArray(true));
+                pw.WriteByte(InteractionCode.SetItems);
+                pw.WriteByte(1);
+                pw.WriteByte(targetSlot);
+                pw.WriteBytes(item.ToByteArray(true));
 
                 if (character == Owner)
                 {
-                    Visitor.Client.Send(oPacket);
+                    Visitor.Client.Send(pw);
                 }
                 else
                 {
-                    Owner.Client.Send(oPacket);
+                    Owner.Client.Send(pw);
                 }
             }
         }

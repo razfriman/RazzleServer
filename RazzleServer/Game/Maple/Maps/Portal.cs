@@ -49,10 +49,10 @@ namespace RazzleServer.Game.Maple.Maps
         {
             _log.Warning($"'{character.Name}' attempted to enter an unimplemented portal '{Script}'");
 
-            using (var oPacket = new PacketWriter(ServerOperationCode.TransferFieldReqIgnored))
+            using (var pw = new PacketWriter(ServerOperationCode.TransferFieldReqIgnored))
             {
-                oPacket.WriteByte(MapTransferResult.NoReason);
-                character.Client.Send(oPacket);
+                pw.WriteByte(MapTransferResult.NoReason);
+                character.Client.Send(pw);
             }
         }
 

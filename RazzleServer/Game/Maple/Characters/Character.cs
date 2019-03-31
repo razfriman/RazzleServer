@@ -79,11 +79,11 @@ namespace RazzleServer.Game.Maple.Characters
             set
             {
                 _itemEffect = value;
-                using (var oPacket = new PacketWriter(ServerOperationCode.ItemEffect))
+                using (var pw = new PacketWriter(ServerOperationCode.ItemEffect))
                 {
-                    oPacket.WriteInt(Id);
-                    oPacket.WriteInt(_itemEffect);
-                    Map.Send(oPacket, this);
+                    pw.WriteInt(Id);
+                    pw.WriteInt(_itemEffect);
+                    Map.Send(pw, this);
                 }
             }
         }
@@ -220,15 +220,15 @@ namespace RazzleServer.Game.Maple.Characters
         {
             Map.Characters.Remove(this);
 
-            using (var oPacket = new PacketWriter(ServerOperationCode.SetField))
+            using (var pw = new PacketWriter(ServerOperationCode.SetField))
             {
-                oPacket.WriteInt(Client.Server.ChannelId);
-                oPacket.WriteByte(++Portals);
-                oPacket.WriteBool(false);
-                oPacket.WriteInt(mapId);
-                oPacket.WriteByte(portalId ?? SpawnPoint);
-                oPacket.WriteShort(PrimaryStats.Health);
-                Client.Send(oPacket);
+                pw.WriteInt(Client.Server.ChannelId);
+                pw.WriteByte(++Portals);
+                pw.WriteBool(false);
+                pw.WriteInt(mapId);
+                pw.WriteByte(portalId ?? SpawnPoint);
+                pw.WriteShort(PrimaryStats.Health);
+                Client.Send(pw);
             }
 
             Client.Server[mapId].Characters.Add(this);
@@ -243,39 +243,39 @@ namespace RazzleServer.Game.Maple.Characters
             skill?.Cast();
 
             // TODO: Modify packet based on attack type.
-            using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerMeleeAttack))
+            using (var pw = new PacketWriter(ServerOperationCode.RemotePlayerMeleeAttack))
             {
-                oPacket.WriteInt(Id);
-                oPacket.WriteByte((byte)(attack.Targets * 0x10 + attack.Hits));
-                oPacket.WriteByte(skill?.CurrentLevel ?? 0);
+                pw.WriteInt(Id);
+                pw.WriteByte((byte)(attack.Targets * 0x10 + attack.Hits));
+                pw.WriteByte(skill?.CurrentLevel ?? 0);
 
                 if (attack.SkillId != 0)
                 {
-                    oPacket.WriteInt(attack.SkillId);
+                    pw.WriteInt(attack.SkillId);
                 }
 
-                oPacket.WriteByte(attack.Display);
-                oPacket.WriteByte(attack.Animation);
-                oPacket.WriteByte(attack.WeaponSpeed);
-                oPacket.WriteByte(0); // NOTE: Skill mastery.
-                oPacket.WriteInt(0); // NOTE: StarId = Item ID at attack.StarPosition
+                pw.WriteByte(attack.Display);
+                pw.WriteByte(attack.Animation);
+                pw.WriteByte(attack.WeaponSpeed);
+                pw.WriteByte(0); // NOTE: Skill mastery.
+                pw.WriteInt(0); // NOTE: StarId = Item ID at attack.StarPosition
 
                 foreach (var target in attack.Damages)
                 {
-                    oPacket.WriteInt(target.Key);
-                    oPacket.WriteByte(6);
+                    pw.WriteInt(target.Key);
+                    pw.WriteByte(6);
                     if (attack.IsMesoExplosion)
                     {
-                        oPacket.WriteByte(target.Value.Count);
+                        pw.WriteByte(target.Value.Count);
                     }
 
                     foreach (var hit in target.Value)
                     {
-                        oPacket.WriteUInt(hit);
+                        pw.WriteUInt(hit);
                     }
                 }
 
-                Map.Send(oPacket, this);
+                Map.Send(pw, this);
             }
 
             foreach (var target in attack.Damages)
@@ -300,42 +300,42 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Talk(string text, bool show = true)
         {
-            using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerChat))
+            using (var pw = new PacketWriter(ServerOperationCode.RemotePlayerChat))
             {
-                oPacket.WriteInt(Id);
-                oPacket.WriteBool(IsMaster);
-                oPacket.WriteString(text);
-                oPacket.WriteBool(show);
-                Map.Send(oPacket);
+                pw.WriteInt(Id);
+                pw.WriteBool(IsMaster);
+                pw.WriteString(text);
+                pw.WriteBool(show);
+                Map.Send(pw);
             }
         }
 
         public void PerformFacialExpression(int expressionId)
         {
-            using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerEmote))
+            using (var pw = new PacketWriter(ServerOperationCode.RemotePlayerEmote))
             {
-                oPacket.WriteInt(Id);
-                oPacket.WriteInt(expressionId);
-                Map.Send(oPacket, this);
+                pw.WriteInt(Id);
+                pw.WriteInt(expressionId);
+                Map.Send(pw, this);
             }
         }
 
         public void ShowLocalUserEffect(UserEffect effect)
         {
-            using (var oPacket = new PacketWriter(ServerOperationCode.Effect))
+            using (var pw = new PacketWriter(ServerOperationCode.Effect))
             {
-                oPacket.WriteByte(effect);
-                Client.Send(oPacket);
+                pw.WriteByte(effect);
+                Client.Send(pw);
             }
         }
 
         public void ShowRemoteUserEffect(UserEffect effect, bool skipSelf = false)
         {
-            using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerEffect))
+            using (var pw = new PacketWriter(ServerOperationCode.RemotePlayerEffect))
             {
-                oPacket.WriteInt(Id);
-                oPacket.WriteByte((int)effect);
-                Map.Send(oPacket, skipSelf ? this : null);
+                pw.WriteInt(Id);
+                pw.WriteByte((int)effect);
+                Map.Send(pw, skipSelf ? this : null);
             }
         }
 

@@ -101,44 +101,44 @@ namespace RazzleServer.Game.Handlers
                 // TODO: Apply damage to buffs.
             }
 
-            using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerGetDamage))
+            using (var pw = new PacketWriter(ServerOperationCode.RemotePlayerGetDamage))
             {
-                oPacket.WriteInt(client.Character.Id);
-                oPacket.WriteByte(type);
+                pw.WriteInt(client.Character.Id);
+                pw.WriteByte(type);
 
                 switch (type)
                 {
                     case MapDamage:
                     {
-                        oPacket.WriteInt(damage);
-                        oPacket.WriteInt(damage);
+                        pw.WriteInt(damage);
+                        pw.WriteInt(damage);
                     }
                         break;
 
                     default:
                     {
-                        oPacket.WriteInt(damage); // TODO: ... or PGMR damage.
-                        oPacket.WriteInt(mobId);
-                        oPacket.WriteByte(hit);
-                        oPacket.WriteByte(reduction);
+                        pw.WriteInt(damage); // TODO: ... or PGMR damage.
+                        pw.WriteInt(mobId);
+                        pw.WriteByte(hit);
+                        pw.WriteByte(reduction);
 
                         if (reduction > 0)
                         {
                             // TODO: PGMR stuff.
                         }
 
-                        oPacket.WriteByte(stance);
-                        oPacket.WriteInt(damage);
+                        pw.WriteByte(stance);
+                        pw.WriteInt(damage);
 
                         if (noDamageSkillId > 0)
                         {
-                            oPacket.WriteInt(noDamageSkillId);
+                            pw.WriteInt(noDamageSkillId);
                         }
                     }
                         break;
                 }
 
-                client.Character.Map.Send(oPacket, client.Character);
+                client.Character.Map.Send(pw, client.Character);
             }
         }
     }

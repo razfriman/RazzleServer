@@ -504,16 +504,16 @@ namespace RazzleServer.Game.Maple.Items
 
         public void Update()
         {
-            using (var oPacket = new PacketWriter(ServerOperationCode.InventoryOperation))
+            using (var pw = new PacketWriter(ServerOperationCode.InventoryOperation))
             {
-                oPacket.WriteBool(true);
-                oPacket.WriteByte(1);
-                oPacket.WriteByte(InventoryOperationType.ModifyQuantity);
-                oPacket.WriteByte(Type);
-                oPacket.WriteShort(Slot);
-                oPacket.WriteShort(Quantity);
+                pw.WriteBool(true);
+                pw.WriteByte(1);
+                pw.WriteByte(InventoryOperationType.ModifyQuantity);
+                pw.WriteByte(Type);
+                pw.WriteShort(Slot);
+                pw.WriteShort(Quantity);
 
-                Character.Client.Send(oPacket);
+                Character.Client.Send(pw);
             }
         }
 
@@ -550,17 +550,17 @@ namespace RazzleServer.Game.Maple.Items
 
             Slot = (short)destinationSlot;
 
-            using (var oPacket = new PacketWriter(ServerOperationCode.InventoryOperation))
+            using (var pw = new PacketWriter(ServerOperationCode.InventoryOperation))
             {
-                oPacket.WriteBool(true);
-                oPacket.WriteByte(1);
-                oPacket.WriteByte(InventoryOperationType.ModifySlot);
-                oPacket.WriteByte(Type);
-                oPacket.WriteShort(sourceSlot);
-                oPacket.WriteShort((short)destinationSlot);
-                oPacket.WriteByte(1);
+                pw.WriteBool(true);
+                pw.WriteByte(1);
+                pw.WriteByte(InventoryOperationType.ModifySlot);
+                pw.WriteByte(Type);
+                pw.WriteShort(sourceSlot);
+                pw.WriteShort((short)destinationSlot);
+                pw.WriteByte(1);
 
-                Character.Client.Send(oPacket);
+                Character.Client.Send(pw);
             }
 
             switch (destinationSlot)
@@ -621,17 +621,17 @@ namespace RazzleServer.Game.Maple.Items
 
             Slot = destinationSlot;
 
-            using (var oPacket = new PacketWriter(ServerOperationCode.InventoryOperation))
+            using (var pw = new PacketWriter(ServerOperationCode.InventoryOperation))
             {
-                oPacket.WriteBool(true);
-                oPacket.WriteByte(1);
-                oPacket.WriteByte(InventoryOperationType.ModifySlot);
-                oPacket.WriteByte(Type);
-                oPacket.WriteShort(sourceSlot);
-                oPacket.WriteShort(destinationSlot);
-                oPacket.WriteByte(1);
+                pw.WriteBool(true);
+                pw.WriteByte(1);
+                pw.WriteByte(InventoryOperationType.ModifySlot);
+                pw.WriteByte(Type);
+                pw.WriteShort(sourceSlot);
+                pw.WriteShort(destinationSlot);
+                pw.WriteByte(1);
 
-                Character.Client.Send(oPacket);
+                Character.Client.Send(pw);
             }
 
             Character.PrimaryStats.UpdateApperance();
@@ -656,20 +656,20 @@ namespace RazzleServer.Game.Maple.Items
 
             if (quantity == Quantity)
             {
-                using (var oPacket = new PacketWriter(ServerOperationCode.InventoryOperation))
+                using (var pw = new PacketWriter(ServerOperationCode.InventoryOperation))
                 {
-                    oPacket.WriteBool(true);
-                    oPacket.WriteByte(1);
-                    oPacket.WriteByte(InventoryOperationType.RemoveItem);
-                    oPacket.WriteByte(Type);
-                    oPacket.WriteShort(Slot);
+                    pw.WriteBool(true);
+                    pw.WriteByte(1);
+                    pw.WriteByte(InventoryOperationType.RemoveItem);
+                    pw.WriteByte(Type);
+                    pw.WriteShort(Slot);
 
                     if (IsEquipped)
                     {
-                        oPacket.WriteByte(1);
+                        pw.WriteByte(1);
                     }
 
-                    Character.Client.Send(oPacket);
+                    Character.Client.Send(pw);
                 }
 
                 Dropper = Character;
@@ -683,16 +683,16 @@ namespace RazzleServer.Game.Maple.Items
             {
                 Quantity -= quantity;
 
-                using (var oPacket = new PacketWriter(ServerOperationCode.InventoryOperation))
+                using (var pw = new PacketWriter(ServerOperationCode.InventoryOperation))
                 {
-                    oPacket.WriteBool(true);
-                    oPacket.WriteByte(1);
-                    oPacket.WriteByte(InventoryOperationType.ModifyQuantity);
-                    oPacket.WriteByte(Type);
-                    oPacket.WriteShort(Slot);
-                    oPacket.WriteShort(Quantity);
+                    pw.WriteBool(true);
+                    pw.WriteByte(1);
+                    pw.WriteByte(InventoryOperationType.ModifyQuantity);
+                    pw.WriteByte(Type);
+                    pw.WriteShort(Slot);
+                    pw.WriteShort(Quantity);
 
-                    Character.Client.Send(oPacket);
+                    Character.Client.Send(pw);
                 }
 
                 var dropped = new Item(MapleId, quantity) {Dropper = Character, Owner = null};
@@ -717,39 +717,39 @@ namespace RazzleServer.Game.Maple.Items
                 {
                     Quantity -= (short)(destination.MaxPerStack - destination.Quantity);
 
-                    using (var oPacket = new PacketWriter(ServerOperationCode.InventoryOperation))
+                    using (var pw = new PacketWriter(ServerOperationCode.InventoryOperation))
                     {
-                        oPacket.WriteBool(true);
-                        oPacket.WriteByte(2);
-                        oPacket.WriteByte(InventoryOperationType.ModifyQuantity);
-                        oPacket.WriteByte(Type);
-                        oPacket.WriteShort(sourceSlot);
-                        oPacket.WriteShort(Quantity);
-                        oPacket.WriteByte(InventoryOperationType.ModifyQuantity);
-                        oPacket.WriteByte(destination.Type);
-                        oPacket.WriteShort(destinationSlot);
-                        oPacket.WriteShort(destination.Quantity);
+                        pw.WriteBool(true);
+                        pw.WriteByte(2);
+                        pw.WriteByte(InventoryOperationType.ModifyQuantity);
+                        pw.WriteByte(Type);
+                        pw.WriteShort(sourceSlot);
+                        pw.WriteShort(Quantity);
+                        pw.WriteByte(InventoryOperationType.ModifyQuantity);
+                        pw.WriteByte(destination.Type);
+                        pw.WriteShort(destinationSlot);
+                        pw.WriteShort(destination.Quantity);
 
-                        Character.Client.Send(oPacket);
+                        Character.Client.Send(pw);
                     }
                 }
                 else
                 {
                     destination.Quantity += Quantity;
 
-                    using (var oPacket = new PacketWriter(ServerOperationCode.InventoryOperation))
+                    using (var pw = new PacketWriter(ServerOperationCode.InventoryOperation))
                     {
-                        oPacket.WriteBool(true);
-                        oPacket.WriteByte(2);
-                        oPacket.WriteByte(InventoryOperationType.RemoveItem);
-                        oPacket.WriteByte(Type);
-                        oPacket.WriteShort(sourceSlot);
-                        oPacket.WriteByte(InventoryOperationType.ModifyQuantity);
-                        oPacket.WriteByte(destination.Type);
-                        oPacket.WriteShort(destinationSlot);
-                        oPacket.WriteShort(destination.Quantity);
+                        pw.WriteBool(true);
+                        pw.WriteByte(2);
+                        pw.WriteByte(InventoryOperationType.RemoveItem);
+                        pw.WriteByte(Type);
+                        pw.WriteShort(sourceSlot);
+                        pw.WriteByte(InventoryOperationType.ModifyQuantity);
+                        pw.WriteByte(destination.Type);
+                        pw.WriteShort(destinationSlot);
+                        pw.WriteShort(destination.Quantity);
 
-                        Character.Client.Send(oPacket);
+                        Character.Client.Send(pw);
                     }
                 }
             }
@@ -762,16 +762,16 @@ namespace RazzleServer.Game.Maple.Items
 
                 Slot = destinationSlot;
 
-                using (var oPacket = new PacketWriter(ServerOperationCode.InventoryOperation))
+                using (var pw = new PacketWriter(ServerOperationCode.InventoryOperation))
                 {
-                    oPacket.WriteBool(true);
-                    oPacket.WriteByte(1);
-                    oPacket.WriteByte(InventoryOperationType.ModifySlot);
-                    oPacket.WriteByte(Type);
-                    oPacket.WriteShort(sourceSlot);
-                    oPacket.WriteShort(destinationSlot);
+                    pw.WriteBool(true);
+                    pw.WriteByte(1);
+                    pw.WriteByte(InventoryOperationType.ModifySlot);
+                    pw.WriteByte(Type);
+                    pw.WriteShort(sourceSlot);
+                    pw.WriteShort(destinationSlot);
 
-                    Character.Client.Send(oPacket);
+                    Character.Client.Send(pw);
                 }
             }
         }

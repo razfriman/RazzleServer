@@ -39,18 +39,18 @@ namespace RazzleServer.Game.Maple.Life
                 ? new Movements(iPacket)
                 : null;
 
-            using (var oPacket = new PacketWriter(ServerOperationCode.NpcMove))
+            using (var pw = new PacketWriter(ServerOperationCode.NpcMove))
             {
-                oPacket.WriteInt(ObjectId);
-                oPacket.WriteByte(action1);
-                oPacket.WriteByte(action2);
+                pw.WriteInt(ObjectId);
+                pw.WriteByte(action1);
+                pw.WriteByte(action2);
 
                 if (movements != null)
                 {
-                    oPacket.WriteBytes(movements.ToByteArray());
+                    pw.WriteBytes(movements.ToByteArray());
                 }
 
-                Map.Send(oPacket);
+                Map.Send(pw);
             }
         }
 
@@ -198,34 +198,34 @@ namespace RazzleServer.Game.Maple.Life
 
         private PacketWriter GetInternalPacket(bool requestControl)
         {
-            var oPacket = new PacketWriter(requestControl
+            var pw = new PacketWriter(requestControl
                 ? ServerOperationCode.NpcControlRequest
                 : ServerOperationCode.NpcEnterField);
 
             if (requestControl)
             {
-                oPacket.WriteBool(true);
+                pw.WriteBool(true);
             }
 
-            oPacket.WriteInt(ObjectId);
-            oPacket.WriteInt(MapleId);
-            oPacket.WritePoint(Position);
-            oPacket.WriteBool(!FacesLeft);
-            oPacket.WriteShort(Foothold);
-            oPacket.WriteShort(MinimumClickX);
-            oPacket.WriteShort(MaximumClickX);
+            pw.WriteInt(ObjectId);
+            pw.WriteInt(MapleId);
+            pw.WritePoint(Position);
+            pw.WriteBool(!FacesLeft);
+            pw.WriteShort(Foothold);
+            pw.WriteShort(MinimumClickX);
+            pw.WriteShort(MaximumClickX);
 
-            return oPacket;
+            return pw;
         }
 
         public PacketWriter GetControlCancelPacket()
         {
-            var oPacket = new PacketWriter(ServerOperationCode.NpcControlRequest);
+            var pw = new PacketWriter(ServerOperationCode.NpcControlRequest);
 
-            oPacket.WriteBool(false);
-            oPacket.WriteInt(ObjectId);
+            pw.WriteBool(false);
+            pw.WriteInt(ObjectId);
 
-            return oPacket;
+            return pw;
         }
 
         public PacketWriter GetDialogPacket(NpcStateInfo stateInfo)
@@ -275,11 +275,11 @@ namespace RazzleServer.Game.Maple.Life
 
         public PacketWriter GetDestroyPacket()
         {
-            var oPacket = new PacketWriter(ServerOperationCode.NpcLeaveField);
+            var pw = new PacketWriter(ServerOperationCode.NpcLeaveField);
 
-            oPacket.WriteInt(ObjectId);
+            pw.WriteInt(ObjectId);
 
-            return oPacket;
+            return pw;
         }
     }
 }

@@ -137,14 +137,14 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Apply()
         {
-            using (var oPacket = new PacketWriter(ServerOperationCode.SkillsGiveBuff))
+            using (var pw = new PacketWriter(ServerOperationCode.SkillsGiveBuff))
             {
-                //Character.Client.Send(oPacket);
+                //Character.Client.Send(pw);
             }
 
-            using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerSkillBuff))
+            using (var pw = new PacketWriter(ServerOperationCode.RemotePlayerSkillBuff))
             {
-                //Character.Map.Send(oPacket);
+                //Character.Map.Send(pw);
             }
 
             ScheduleExpiration();
@@ -157,14 +157,14 @@ namespace RazzleServer.Game.Maple.Characters
                 Character.Hide(false);
             }
 
-            using (var oPacket = new PacketWriter(ServerOperationCode.SkillsGiveBuff))
+            using (var pw = new PacketWriter(ServerOperationCode.SkillsGiveBuff))
             {
-                //Character.Client.Send(oPacket);
+                //Character.Client.Send(pw);
             }
 
-            using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerSkillBuff))
+            using (var pw = new PacketWriter(ServerOperationCode.RemotePlayerSkillBuff))
             {
-                //Character.Map.Send(oPacket);
+                //Character.Map.Send(pw);
             }
         }
     }

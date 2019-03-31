@@ -41,25 +41,25 @@ namespace RazzleServer.Game.Maple.Shops
 
         public byte[] ToByteArray()
         {
-            using (var oPacket = new PacketWriter())
+            using (var pw = new PacketWriter())
             {
-                oPacket.WriteInt(MapleId);
-                oPacket.WriteInt(PurchasePrice);
+                pw.WriteInt(MapleId);
+                pw.WriteInt(PurchasePrice);
                 if (IsRecharageable)
                 {
-                    oPacket.WriteShort(0);
-                    oPacket.WriteInt(0);
-                    oPacket.WriteShort((short)(BitConverter.DoubleToInt64Bits(UnitPrice) >> 48));
+                    pw.WriteShort(0);
+                    pw.WriteInt(0);
+                    pw.WriteShort((short)(BitConverter.DoubleToInt64Bits(UnitPrice) >> 48));
                 }
                 else
                 {
-                    oPacket.WriteShort(Quantity);
+                    pw.WriteShort(Quantity);
                 }
 
-                oPacket.WriteShort(MaxPerStack);
+                pw.WriteShort(MaxPerStack);
 
 
-                return oPacket.ToArray();
+                return pw.ToArray();
             }
         }
     }

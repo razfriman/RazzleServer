@@ -217,14 +217,14 @@ namespace RazzleServer.Game.Maple.Characters
 
             Update(quest.MapleId, QuestStatus.InProgress);
 
-//            using (var oPacket = new PacketWriter(ServerOperationCode.QuestResult))
+//            using (var pw = new PacketWriter(ServerOperationCode.QuestResult))
 //            {
-//                oPacket.WriteByte((byte)QuestResult.Complete);
-//                oPacket.Writeint(quest.MapleId);
-//                oPacket.WriteInt(npcId);
-//                oPacket.WriteInt(0);
+//                pw.WriteByte((byte)QuestResult.Complete);
+//                pw.Writeint(quest.MapleId);
+//                pw.WriteInt(npcId);
+//                pw.WriteInt(0);
 //
-//                Parent.Client.Send(oPacket);
+//                Parent.Client.Send(pw);
 //            }
         }
 
@@ -267,15 +267,15 @@ namespace RazzleServer.Game.Maple.Characters
 
                 //    this.Parent.Items.Add(new Item(item.Key, item.Value));
 
-                //    using (var oPacket = new PacketWriter(ServerOperationCode.Effect))
+                //    using (var pw = new PacketWriter(ServerOperationCode.Effect))
                 //    {
-                //        oPacket
-                //            oPacket.WriteByte((byte)UserEffect.Quest)
-                //            oPacket.WriteByte(1)
-                //            oPacket.WriteInt(item.Key)
-                //            oPacket.WriteInt(item.Value);
+                //        pw
+                //            pw.WriteByte((byte)UserEffect.Quest)
+                //            pw.WriteByte(1)
+                //            pw.WriteInt(item.Key)
+                //            pw.WriteInt(item.Value);
 
-                //        this.Parent.Client.Send(oPacket);
+                //        this.Parent.Client.Send(pw);
                 //    }
                 //}
                 //else
@@ -296,14 +296,14 @@ namespace RazzleServer.Game.Maple.Characters
                         Parent.Items.Remove(item.Key, Math.Abs(item.Value));
                     }
 
-                    using (var oPacket = new PacketWriter(ServerOperationCode.Effect))
+                    using (var pw = new PacketWriter(ServerOperationCode.Effect))
                     {
-                        oPacket.WriteByte(UserEffect.Quest);
-                        oPacket.WriteByte(1);
-                        oPacket.WriteInt(item.Key);
-                        oPacket.WriteInt(item.Value);
+                        pw.WriteByte(UserEffect.Quest);
+                        pw.WriteByte(1);
+                        pw.WriteInt(item.Key);
+                        pw.WriteInt(item.Value);
 
-                        Parent.Client.Send(oPacket);
+                        Parent.Client.Send(pw);
                     }
                 }
             }
@@ -370,22 +370,22 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void NotifyComplete(int questId)
         {
-//            using (var oPacket = new PacketWriter(ServerOperationCode.QuestClear))
+//            using (var pw = new PacketWriter(ServerOperationCode.QuestClear))
 //            {
-//                oPacket.Writeint(questId);
-//                Parent.Client.Send(oPacket);
+//                pw.Writeint(questId);
+//                Parent.Client.Send(pw);
 //            }
         }
 
         public byte[] ToByteArray()
         {
-            using (var oPacket = new PacketWriter())
+            using (var pw = new PacketWriter())
             {
-                oPacket.WriteShort((short)Started.Count);
+                pw.WriteShort((short)Started.Count);
 
                 foreach (var quest in Started)
                 {
-                    oPacket.WriteInt(quest.Key);
+                    pw.WriteInt(quest.Key);
 
                     var kills = string.Empty;
 
@@ -394,10 +394,10 @@ namespace RazzleServer.Game.Maple.Characters
                         kills += kill.ToString().PadLeft(3, '\u0030');
                     }
 
-                    oPacket.WriteString(kills);
+                    pw.WriteString(kills);
                 }
 
-                return oPacket.ToArray();
+                return pw.ToArray();
             }
         }
     }

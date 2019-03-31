@@ -67,11 +67,11 @@ namespace RazzleServer.Game.Handlers
 
                     var text = packet.ReadString();
                     var message = $"{client.Character.Name} : {text}";
-                    using (var oPacket = new PacketWriter(ServerOperationCode.Notice))
+                    using (var pw = new PacketWriter(ServerOperationCode.Notice))
                     {
-                        oPacket.WriteByte(NoticeType.Megaphone);
-                        oPacket.WriteString(message);
-                        client.Character.Map.Send(oPacket);
+                        pw.WriteByte(NoticeType.Megaphone);
+                        pw.WriteString(message);
+                        client.Character.Map.Send(pw);
                     }
 
                     used = true;
@@ -87,13 +87,13 @@ namespace RazzleServer.Game.Handlers
                     var text = packet.ReadString();
                     var whisper = packet.ReadBool();
                     var message = $"{client.Character.Name} : {text}";
-                    using (var oPacket = new PacketWriter(ServerOperationCode.Notice))
+                    using (var pw = new PacketWriter(ServerOperationCode.Notice))
                     {
-                        oPacket.WriteByte(NoticeType.SuperMegaphone);
-                        oPacket.WriteString(message);
-                        oPacket.WriteByte(client.Character.Client.Server.ChannelId);
-                        oPacket.WriteBool(whisper);
-                        client.Character.Client.Server.World.Send(oPacket);
+                        pw.WriteByte(NoticeType.SuperMegaphone);
+                        pw.WriteString(message);
+                        pw.WriteByte(client.Character.Client.Server.ChannelId);
+                        pw.WriteBool(whisper);
+                        client.Character.Client.Server.World.Send(pw);
                     }
 
                     used = true;
@@ -105,15 +105,15 @@ namespace RazzleServer.Game.Handlers
 
                     //string name = iPacket.ReadString();
 
-                    //using (var oPacket = new PacketWriter(ServerOperationCode.PetNameChanged))
+                    //using (var pw = new PacketWriter(ServerOperationCode.PetNameChanged))
                     //{
-                    //    oPacket
-                    //        oPacket.WriteInt(this.client.Character.Id)
-                    //        oPacket.WriteByte() // NOTE: Index.
-                    //        oPacket.WriteString(name)
-                    //        oPacket.WriteByte();
+                    //    pw
+                    //        pw.WriteInt(this.client.Character.Id)
+                    //        pw.WriteByte() // NOTE: Index.
+                    //        pw.WriteString(name)
+                    //        pw.WriteByte();
 
-                    //    this.client.Character.Map.Send(oPacket);
+                    //    this.client.Character.Map.Send(pw);
                     //}
                 }
                     break;

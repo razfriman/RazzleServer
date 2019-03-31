@@ -476,12 +476,12 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Update(params StatisticType[] statistics)
         {
-            var oPacket = new PacketWriter(ServerOperationCode.StatsChanged);
-            oPacket.WriteBool(true); // itemReaction
+            var pw = new PacketWriter(ServerOperationCode.StatsChanged);
+            pw.WriteBool(true); // itemReaction
 
             var flag = statistics.Aggregate(0, (current, statistic) => current | (int)statistic);
 
-            oPacket.WriteInt(flag);
+            pw.WriteInt(flag);
 
             Array.Sort(statistics);
 
@@ -490,92 +490,92 @@ namespace RazzleServer.Game.Maple.Characters
                 switch (statistic)
                 {
                     case StatisticType.Skin:
-                        oPacket.WriteByte(Skin);
+                        pw.WriteByte(Skin);
                         break;
 
                     case StatisticType.Face:
-                        oPacket.WriteInt(Face);
+                        pw.WriteInt(Face);
                         break;
 
                     case StatisticType.Hair:
-                        oPacket.WriteInt(Hair);
+                        pw.WriteInt(Hair);
                         break;
 
                     case StatisticType.Level:
-                        oPacket.WriteByte(Level);
+                        pw.WriteByte(Level);
                         break;
 
                     case StatisticType.Job:
-                        oPacket.WriteShort((short)Job);
+                        pw.WriteShort((short)Job);
                         break;
 
                     case StatisticType.Strength:
-                        oPacket.WriteShort(Strength);
+                        pw.WriteShort(Strength);
                         break;
 
                     case StatisticType.Dexterity:
-                        oPacket.WriteShort(Dexterity);
+                        pw.WriteShort(Dexterity);
                         break;
 
                     case StatisticType.Intelligence:
-                        oPacket.WriteShort(Intelligence);
+                        pw.WriteShort(Intelligence);
                         break;
 
                     case StatisticType.Luck:
-                        oPacket.WriteShort(Luck);
+                        pw.WriteShort(Luck);
                         break;
 
                     case StatisticType.Health:
-                        oPacket.WriteShort(Health);
+                        pw.WriteShort(Health);
                         break;
 
                     case StatisticType.MaxHealth:
-                        oPacket.WriteShort(MaxHealth);
+                        pw.WriteShort(MaxHealth);
                         break;
 
                     case StatisticType.Mana:
-                        oPacket.WriteShort(Mana);
+                        pw.WriteShort(Mana);
                         break;
 
                     case StatisticType.MaxMana:
-                        oPacket.WriteShort(MaxMana);
+                        pw.WriteShort(MaxMana);
                         break;
 
                     case StatisticType.AbilityPoints:
-                        oPacket.WriteShort(AbilityPoints);
+                        pw.WriteShort(AbilityPoints);
                         break;
 
                     case StatisticType.SkillPoints:
-                        oPacket.WriteShort(SkillPoints);
+                        pw.WriteShort(SkillPoints);
                         break;
 
                     case StatisticType.Experience:
-                        oPacket.WriteInt(Experience);
+                        pw.WriteInt(Experience);
                         break;
 
                     case StatisticType.Fame:
-                        oPacket.WriteShort(Fame);
+                        pw.WriteShort(Fame);
                         break;
 
                     case StatisticType.Mesos:
-                        oPacket.WriteInt(Meso);
+                        pw.WriteInt(Meso);
                         break;
                 }
             }
 
-            Parent.Send(oPacket);
+            Parent.Send(pw);
         }
 
         public void UpdateApperance()
         {
-            using (var oPacket = new PacketWriter(ServerOperationCode.RemotePlayerChangeEquips))
+            using (var pw = new PacketWriter(ServerOperationCode.RemotePlayerChangeEquips))
             {
-                oPacket.WriteInt(Parent.Id);
-                oPacket.WriteBool(true);
-                oPacket.WriteBytes(Parent.AppearanceToByteArray());
-                oPacket.WriteByte(0);
-                oPacket.WriteShort(0);
-                Parent.Map.Send(oPacket, Parent);
+                pw.WriteInt(Parent.Id);
+                pw.WriteBool(true);
+                pw.WriteBytes(Parent.AppearanceToByteArray());
+                pw.WriteByte(0);
+                pw.WriteShort(0);
+                Parent.Map.Send(pw, Parent);
             }
         }
 
