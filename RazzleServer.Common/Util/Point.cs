@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace RazzleServer.Common.Util
 {
-    public readonly struct Point
+    public struct Point
     {
         public short X { get; }
         public short Y { get; }
