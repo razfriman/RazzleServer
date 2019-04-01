@@ -1,4 +1,5 @@
-﻿using RazzleServer.Wz;
+﻿using System;
+using RazzleServer.Wz;
 
 namespace RazzleServer.Game.Maple.Data.References
 {
@@ -6,8 +7,8 @@ namespace RazzleServer.Game.Maple.Data.References
     {
         public int MapleId { get; set; }
         public int StorageCost { get; set; }
-        public string Script { get; set; }
 
+        public string Script { get; set; }
         public NpcReference() { }
 
         public NpcReference(WzImage img)
@@ -21,11 +22,16 @@ namespace RazzleServer.Game.Maple.Data.References
             MapleId = id;
             var info = img["info"];
 
-            if (info != null)
+            if (info == null)
             {
-                StorageCost = info["trunkPut"]?.GetInt() ?? 0;
-                Script = info["script"]?["0"]?["script"]?.GetString();
+                return;
             }
+
+            Script = info["quest"]?.GetString();
+            StorageCost = info["trunk"]?.GetInt() ?? 0;
+
+            if (Script != null)
+                Console.WriteLine(Script);
         }
     }
 }
