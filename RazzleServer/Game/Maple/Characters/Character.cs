@@ -186,7 +186,7 @@ namespace RazzleServer.Game.Maple.Characters
             // Update buddy list
             // update quest mob kills
             PrimaryStats.UpdateStatsForParty();
-            Task.Factory.StartNew(Client.StartPingCheck);
+            //Task.Factory.StartNew(Client.StartPingCheck);
         }
 
 

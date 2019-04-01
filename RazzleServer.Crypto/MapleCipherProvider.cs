@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.IO;
 using System.Text;
 
@@ -19,42 +20,13 @@ namespace RazzleServer.Crypto
         /// </summary>
         private MapleCipher SendCipher { get; }
 
-        /// <summary>
-        /// Waiting state
-        /// </summary>
-        private bool IsWaiting { get; set; }
-
-        /// <summary>
-        /// Data buffer
-        /// </summary>
-        private Memory<byte> DataBuffer { get; set; }
-
-        /// <summary>
-        /// Current data in buffer
-        /// </summary>
-        private int AvailableData { get; set; }
-
-        /// <summary>
-        /// Amount of data to wait on
-        /// </summary>
-        private int WaitForData { get; set; }
-
         private bool ToClient { get; }
 
-        /// <summary>
-        /// General locker for adding data
-        /// </summary>
-        private readonly object _addLocker = new object();
-
         public MapleCipherProvider(ushort currentGameVersion, ulong aesKey, bool useAesEncryption = true,
-            ushort initialBufferSize = 1024, bool toClient = true)
+            bool toClient = true)
         {
             RecvCipher = new MapleCipher(currentGameVersion, aesKey, useAesEncryption);
             SendCipher = new MapleCipher(currentGameVersion, aesKey, useAesEncryption);
-            DataBuffer = new byte[initialBufferSize];
-            AvailableData = 0;
-            WaitForData = 0;
-            IsWaiting = true;
             ToClient = toClient;
         }
 
@@ -80,36 +52,6 @@ namespace RazzleServer.Crypto
         public event CallHandshakeFinished HandshakeFinished;
 
         /// <summary>
-        /// Adds data to the buffer to await decryption
-        /// </summary>
-        public void AddData(Memory<byte> data, int offset, int length)
-        {
-            lock (_addLocker)
-            {
-                EnsureCapacity(length + AvailableData); 
-                var srcSlice = data.Slice(offset, length);
-                var dstSlice = DataBuffer.Slice(AvailableData, length);
-                srcSlice.CopyTo(dstSlice);
-                AvailableData += length;
-            }
-
-            if (WaitForData != 0)
-            {
-                if (WaitForData <= AvailableData)
-                {
-                    var waitAmount = WaitForData;
-                    WaitForData = 0;
-                    WaitMore(waitAmount);
-                }
-            }
-
-            if (IsWaiting)
-            {
-                Wait();
-            }
-        }
-
-        /// <summary>
         /// Sets the Recv and Send Vectors for the ciphers
         /// </summary>
         public void SetVectors(uint siv, uint riv)
@@ -124,61 +66,9 @@ namespace RazzleServer.Crypto
         public Span<byte> Encrypt(Span<byte> data, bool toClient = false) => SendCipher.Encrypt(data, toClient);
 
         /// <summary>
-        /// Prevents the buffer being to small
-        /// </summary>
-        private void EnsureCapacity(int length)
-        {
-            if (DataBuffer.Length > length)
-            {
-                return;
-            }
-
-            var newBuffer = new byte[length].AsMemory();
-            DataBuffer.CopyTo(newBuffer);
-            DataBuffer = newBuffer;
-        }
-
-        /// <summary>
-        /// Checks if there is enough data to read, Or waits if there isn't.
-        /// </summary>
-        private void Wait()
-        {
-            if (!IsWaiting)
-            {
-                IsWaiting = true;
-            }
-
-            if (AvailableData <= 4)
-            {
-                return;
-            }
-
-            IsWaiting = false;
-            GetHeader();
-        }
-
-        /// <summary>
-        /// Second step of the wait sequence
-        /// </summary>
-        private void WaitMore(int length)
-        {
-            if (AvailableData < length)
-            {
-                WaitForData = length;
-                return;
-            }
-
-            var data = new byte[length].AsMemory();
-            DataBuffer.Slice(0, data.Length).CopyTo(data);
-            DataBuffer.Slice(length, DataBuffer.Length - (length)).CopyTo(DataBuffer);
-            AvailableData -= length;
-            Decrypt(data.Span);
-        }
-
-        /// <summary>
         /// Decrypts the packet data
         /// </summary>
-        private void Decrypt(Span<byte> data)
+        public void Decrypt(Span<byte> data)
         {
             if (!RecvCipher.Handshaken)
             {
@@ -210,21 +100,16 @@ namespace RazzleServer.Crypto
 
                 PacketFinished?.Invoke(decrypted.ToArray());
             }
-
-            Wait();
         }
 
+        public int ReceiveHeaderSize => RecvCipher.Handshaken ? 4 : 2;
+        
         /// <summary>
         /// Gets the packet header from the current packet.
         /// </summary>
-        private void GetHeader()
-        {
-            var packetLength = RecvCipher
-                .Handshaken
-                ? 4 + MapleCipher.GetPacketLength(DataBuffer.Slice(0, 4).Span)
-                : 2 + BitConverter.ToUInt16(DataBuffer.Slice(0, 2).Span);
-
-            WaitMore(packetLength);
-        }
+        public int GetHeader(ReadOnlySequence<byte> buffer) => RecvCipher
+            .Handshaken
+            ? 4 + MapleCipher.GetPacketLength(buffer.Slice(0, 4).ToArray())
+            : 2 + BitConverter.ToUInt16(buffer.Slice(0, 2).ToArray());
     }
 }
