@@ -166,7 +166,7 @@ namespace RazzleServer.Tests
                 Assert.AreEqual(originalPacket.ByteArrayToString(), received.ByteArrayToString());
                 waiter.Set();
             };
-            provider.Decrypt(buffer.Span);
+            provider.AddData(buffer, 0, encryptedPacket.Length);
 
             waiter.Wait();
         }
@@ -200,7 +200,7 @@ namespace RazzleServer.Tests
                 Assert.AreEqual(originalPacket.ByteArrayToString(), received.ByteArrayToString());
                 waiter.Set();
             };
-            provider.Decrypt(buffer.Span);
+            provider.AddData(buffer, 0, encryptedPacket.Length);
 
             waiter.Wait();
         }
