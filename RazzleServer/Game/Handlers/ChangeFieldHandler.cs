@@ -64,7 +64,7 @@ namespace RazzleServer.Game.Handlers
             }
 
             var portal = client.Character.Map.Portals[portalLabel];
-            client.Character.ChangeMap(portal.DestinationMapId, portal.Link.Id);
+            client.Character.ChangeMap(portal.DestinationMapId, portal.DestinationLabel);
         }
     }
 }
