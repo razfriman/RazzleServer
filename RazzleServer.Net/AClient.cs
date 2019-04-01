@@ -66,7 +66,7 @@ namespace RazzleServer.Net
             var sIv = Functions.RandomUInt();
             var rIv = Functions.RandomUInt();
 
-            Socket.Crypto.SetVectors(sIv, rIv);
+            Socket.SetVectors(sIv, rIv);
 
             var writer = new PacketWriter();
             writer.WriteUShort(0x0E);
