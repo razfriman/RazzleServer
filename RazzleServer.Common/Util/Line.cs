@@ -2,7 +2,7 @@
 
 namespace RazzleServer.Common.Util
 {
-    public struct Line
+    public readonly struct Line
     {
         public Point Start { get; }
         public Point End { get; }
