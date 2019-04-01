@@ -15,7 +15,7 @@ namespace RazzleServer.Game.Maple.Characters
         public Npc Npc { get; private set; }
         public byte Slots { get; private set; }
         public int Meso { get; private set; }
-        public List<Item> Items { get; set; }
+        public List<Item> Items { get; set; } = new List<Item>();
 
         public bool IsFull => Items.Count == Slots;
 
