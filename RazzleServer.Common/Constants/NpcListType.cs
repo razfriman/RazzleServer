@@ -6,8 +6,9 @@ namespace RazzleServer.Common.Constants
         Mob,
         Map,
         Skill,
-        Item,
         SkillIcon,
-        ItemIcon
+        Item,
+        ItemIcon,
+        InventoryItem
     }
 }
