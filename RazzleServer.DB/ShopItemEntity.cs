@@ -6,7 +6,7 @@ namespace RazzleServer.Data
     public class ShopItemEntity
     {
         [Key] public int Id { get; set; }
-        [ForeignKey("Shop")] public int ShopId { get; set; }
+        [Required]public int ShopId { get; set; }
         public int ItemId { get; set; }
         public short Quantity { get; set; }
         public int Price { get; set; }

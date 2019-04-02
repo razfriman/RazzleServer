@@ -368,7 +368,6 @@ namespace RazzleServer.Game.Maple.Items
             MapleId = entity.MapleId;
             Quantity = entity.Quantity;
             Slot = entity.Slot;
-            Creator = entity.Creator;
             Expiration = entity.Expiration;
             PetId = entity.PetId;
 
@@ -456,7 +455,6 @@ namespace RazzleServer.Game.Maple.Items
                 item.Accuracy = Accuracy;
                 item.Agility = Agility;
                 item.Avoidability = Avoidability;
-                item.Creator = Creator;
                 item.Dexterity = Dexterity;
                 item.Expiration = Expiration;
                 item.Flags = Flags;

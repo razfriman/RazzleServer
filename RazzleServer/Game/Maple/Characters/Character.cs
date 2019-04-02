@@ -192,10 +192,8 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Release() => PrimaryStats.Update();
 
-        public void Notify(string message, NoticeType type = NoticeType.PinkText)
-        {
+        public void Notify(string message, NoticeType type = NoticeType.PinkText) =>
             Client.Send(GamePackets.Notify(message, type));
-        }
 
         public void Revive()
         {
@@ -218,7 +216,9 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void ChangeMap(int mapId, byte? portalId = null)
         {
-            _log.Information($"Change Map ID={mapId} Portal={portalId}");
+            var portal = DataProvider.Maps.Data[mapId].Portals.FirstOrDefault(x => x.Id == portalId);
+            _log.Information($"Change Map ID={mapId} Portal={portalId} Name={portal.Label}");
+            
             Map.Characters.Remove(this);
 
             using (var pw = new PacketWriter(ServerOperationCode.SetField))
@@ -356,16 +356,17 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        internal static void Delete(int characterId)
+        internal static void Delete(int accountId, int characterId)
         {
             using (var dbContext = new MapleDbContext())
             {
                 var entity = dbContext.Characters.Find(characterId);
-                if (entity != null)
+                if (entity == null || entity.AccountId != accountId)
                 {
-                    dbContext.Characters.Remove(entity);
+                    return;
                 }
 
+                dbContext.Characters.Remove(entity);
                 dbContext.SaveChanges();
             }
         }

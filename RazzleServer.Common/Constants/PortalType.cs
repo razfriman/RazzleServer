@@ -2,7 +2,8 @@ namespace RazzleServer.Common.Constants
 {
     public enum PortalType : byte
     {
-        Normal,
-        InMapTeleport = 6,
+        SpawnPoint = 0,
+        MapChange = 1,
+        InMapTeleport = 6
     }
 }
