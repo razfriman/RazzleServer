@@ -21,7 +21,7 @@ namespace RazzleServer.Game.Maple.Maps
         public string DestinationLabel { get; set; }
         public string Script { get; set; }
         public bool IsOnlyOnce { get; set; }
-        public int PortalType { get; set; }
+        public PortalType Type { get; set; }
 
         public bool IsSpawnPoint => Label == "sp";
 
@@ -41,7 +41,7 @@ namespace RazzleServer.Game.Maple.Maps
             DestinationMapId = img["tm"].GetInt();
             DestinationLabel = img["tn"]?.GetString();
             Script = img["script"]?.GetString();
-            PortalType = img["pt"].GetInt();
+            Type = (PortalType) img["pt"].GetInt();
             IsOnlyOnce = (img["onlyOnce"]?.GetInt() ?? 0) > 0;
         }
 
