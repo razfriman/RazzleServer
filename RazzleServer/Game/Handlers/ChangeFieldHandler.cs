@@ -65,7 +65,6 @@ namespace RazzleServer.Game.Handlers
             }
 
             var portal = client.Character.Map.Portals[portalLabel];
-            Log.Information($"From: {client.Character.Map.MapleId} - {portalLabel} To: {portal.DestinationMapId} - {portal.DestinationLabel}");
             client.Character.ChangeMap(portal.DestinationMapId, portal.DestinationLabel);
         }
     }

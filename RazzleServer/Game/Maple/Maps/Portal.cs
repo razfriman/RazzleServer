@@ -7,14 +7,11 @@ using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Data.References;
 using RazzleServer.Net.Packet;
 using RazzleServer.Wz;
-using Serilog;
 
 namespace RazzleServer.Game.Maple.Maps
 {
     public class Portal : MapObject
     {
-        private readonly ILogger _log = Log.ForContext<Portal>();
-
         public byte Id { get; set; }
         public string Label { get; set; }
         public int DestinationMapId { get; set; }
