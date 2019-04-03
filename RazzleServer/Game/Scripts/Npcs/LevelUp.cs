@@ -12,7 +12,10 @@ namespace RazzleServer.Game.Scripts.Npcs
             SendOk("Welcome to RazzleServer");
             var mapIds = new[] {100000000, 101000000};
             var result = SendChoice("Where do you want to go?" + Blue(CreateSelectionList(NpcListType.Map, mapIds)));
-            Character.ChangeMap(mapIds[result]);
+            if (result >= 0)
+            {
+                Character.ChangeMap(mapIds[result]);
+            }
         }
     }
 }

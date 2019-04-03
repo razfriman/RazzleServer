@@ -6,7 +6,7 @@ namespace RazzleServer.Data
     {
         [Key] public int Id { get; set; }
         public byte WorldId { get; set; }
-        public int AccountId { get; set; }
+        [Required] public int AccountId { get; set; }
         public string Name { get; set; }
         public byte Level { get; set; }
         public short Job { get; set; }

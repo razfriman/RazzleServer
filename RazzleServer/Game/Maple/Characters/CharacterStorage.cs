@@ -46,8 +46,8 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        private CharacterStorageEntity GenerateDefault() =>
-            new CharacterStorageEntity {AccountId = Parent.AccountId, Slots = 4, Meso = 0};
+        private AccountStorageEntity GenerateDefault() =>
+            new AccountStorageEntity {AccountId = Parent.AccountId, Slots = 4, Meso = 0};
 
         public void Save()
         {

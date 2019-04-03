@@ -1,5 +1,6 @@
 ﻿using RazzleServer.Common.Constants;
 using RazzleServer.Net.Packet;
+using Serilog;
 
 namespace RazzleServer.Game.Handlers
 {

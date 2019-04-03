@@ -6,7 +6,7 @@ namespace RazzleServer.Data
     {
         [Key] public int Id { get; set; }
 
-        public int CharacterId { get; set; }
+        [Required] public int CharacterId { get; set; }
 
         public int CheatType { get; set; }
 

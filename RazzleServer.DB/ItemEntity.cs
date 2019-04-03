@@ -7,13 +7,11 @@ namespace RazzleServer.Data
     {
         [Key] public int Id { get; set; }
         public int MapleId { get; set; }
-        public int AccountId { get; set; }
-        public int CharacterId { get; set; }
+        [Required] public int AccountId { get; set; }
+        [Required] public int CharacterId { get; set; }
         public short Position { get; set; }
         public short Quantity { get; set; }
         public short Flags { get; set; }
-        [MaxLength(13)] public string Creator { get; set; }
-        public string Source { get; set; }
         public bool IsStored { get; set; }
         public int? PetId { get; set; }
         public short Slot { get; set; }

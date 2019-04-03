@@ -40,14 +40,21 @@ namespace RazzleServer.Net
 
         public void Send(PacketWriter packet) => Send(packet.ToArray());
 
-        public void Send(byte[] packet)
+        public void Send(byte[] packet) => SendAsync(packet).ConfigureAwait(false).GetAwaiter().GetResult();
+
+        public async Task SendAsync(byte[] packet)
         {
+            if (Socket == null)
+            {
+                return;
+            }
+
             if (PrintPackets)
             {
                 Logger.Information($"Sending: {packet.ByteArrayToString()}");
             }
 
-            Socket?.Send(packet).GetAwaiter().GetResult();
+            await Socket.Send(packet);
         }
 
         public void Terminate(string message = null)
