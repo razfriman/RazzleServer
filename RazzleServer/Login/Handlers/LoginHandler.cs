@@ -17,11 +17,7 @@ namespace RazzleServer.Login.Handlers
             var accountPassword = packet.ReadString();
             packet.ReadInt(); // Start up
             var machineBytes = packet.ReadBytes(16);
-            //01 00 00 00
-            //80 C5 F2 06 A3 B7 CD BB
-            //F6 42 00 00 00 00 FF 3D
-            //00 00 00 00
-            var result = Login(client, accountName, accountPassword);
+            var result = Login(client, accountName, accountPassword, machineBytes);
             client.Send(LoginPackets.LoginResult(result, client.Account));
 
 
@@ -36,7 +32,7 @@ namespace RazzleServer.Login.Handlers
         }
 
 
-        public static LoginResult Login(LoginClient client, string username, string password)
+        public static LoginResult Login(LoginClient client, string username, string password, byte[] machineBytes)
         {
             client.Account = new LoginAccount(client);
 
