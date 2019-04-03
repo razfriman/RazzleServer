@@ -161,7 +161,7 @@ namespace RazzleServer.Game.Maple.Scripting
             var builder = new StringBuilder();
             for (var i = 0; i < ids.Length; i++)
             {
-                builder.Append($"\r\n#L{i}##{MapNpcListType(type)}{ids[i]}##l");
+                builder.Append($"\r\n#L{i}#{MapNpcListType(type, ids[i])}#l");
             }
 
             return builder.ToString();
@@ -174,30 +174,56 @@ namespace RazzleServer.Game.Maple.Scripting
         public static string Black(string s) => $"#k{s}";
         public static string Red(string s) => $"#r{s}";
         public static string Backwards(string s) => $"\b{s}";
-        public static string NormalText(string s) => $"#n{s}";
-        public static string WzImageByPath(string s) => $"#f{s}#";
+        public static string Normal(string s) => $"#n{s}";
+        public static string FileRef(string s) => $"#f{s}#";
         public static string CountItem(int n) => $"#c{n}#";
-        public static string PlayerName() => "#h #";
+        public static string PlayerRef() => "#h #";
         public static string ProgressBar(int n) => $"#B{n}#";
+        public static string NpcRef(int mapleId) => $"#p{mapleId}#";
+        public static string MobRef(int mapleId) => $"#o{mapleId}#";
+        public static string MapRef(int mapleId) => $"#m{mapleId}#";
+        public static string SkillRef(int mapleId) => $"#q{mapleId}#";
+        public static string SkillIcon(int mapleId) => $"#s{mapleId}#";
+        public static string ItemRef(int mapleId) => $"#t{mapleId}#";
+        public static string AltItemRef(int mapleId) => $"#z{mapleId}#";
+        public static string ItemIcon(int mapleId) => $"#v{mapleId}#";
+        public static string InventoryItemRef(int mapleId) => $"#c{mapleId}#";
 
-        public static string MapNpcListType(NpcListType type)
+        public string GenderedText(string maleText, string femaleText) => Character.PrimaryStats.Gender == Gender.Male
+            ? maleText
+            : femaleText;
+
+        public static string QuestCompleteIcon() => FileRef("UI/UIWindow.img/QuestIcon/4/0");
+
+        public static string QuestExperienceIcon(int exp) =>
+            $"{FileRef("UI/UIWindow.img/QuestIcon/8/0")} {exp} EXP";
+
+        public static string QuestMesoIcon(int mesos) => $"{FileRef("UI/UIWindow.img/QuestIcon/4/0")} {mesos}";
+
+        public static string QuestItemIcon(int mapleId, int quantity) => quantity == 0 || quantity == 1
+            ? $"{ItemIcon(mapleId)} {ItemRef(mapleId)}"
+            : $"{ItemIcon(mapleId)} {quantity} {ItemRef(mapleId)}s";
+
+        public static string MapNpcListType(NpcListType type, int mapleId)
         {
             switch (type)
             {
                 case NpcListType.Npc:
-                    return "p";
+                    return NpcRef(mapleId);
                 case NpcListType.Mob:
-                    return "o";
+                    return MobRef(mapleId);
                 case NpcListType.Map:
-                    return "m";
+                    return MapRef(mapleId);
                 case NpcListType.Skill:
-                    return "q";
+                    return SkillRef(mapleId);
                 case NpcListType.Item:
-                    return "t"; // z
+                    return MobRef(mapleId);
                 case NpcListType.SkillIcon:
-                    return "s";
+                    return SkillIcon(mapleId);
                 case NpcListType.ItemIcon:
-                    return "v"; // i
+                    return ItemIcon(mapleId);
+                case NpcListType.InventoryItem:
+                    return InventoryItemRef(mapleId);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
