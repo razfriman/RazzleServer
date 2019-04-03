@@ -211,7 +211,7 @@ namespace RazzleServer.Game.Maple.Characters
                 return;
             }
 
-            ChangeMap(mapId, portal.Label);
+            ChangeMap(mapId, portal.Id);
         }
 
         public void ChangeMap(int mapId, byte? portalId = null)
