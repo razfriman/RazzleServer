@@ -13,6 +13,7 @@ namespace RazzleServer.Data
         public byte Gender { get; set; }
         public byte BanReason { get; set; }
         public bool IsMaster { get; set; }
+        public bool IsOnline { get; set; }
         public DateTime Birthday { get; set; }
         public DateTime Creation { get; set; }
         public int MaxCharacters { get; set; }

@@ -58,14 +58,8 @@ namespace RazzleServer.Game.Handlers
 
         private static void UsePortal(GameClient client, string portalLabel)
         {
-            if (!client.Character.Map.Portals.ContainsPortal(portalLabel))
-            {
-                client.Character.LogCheatWarning(CheatType.InvalidMapChange);
-                return;
-            }
-
             var portal = client.Character.Map.Portals[portalLabel];
-            client.Character.ChangeMap(portal.DestinationMapId, portal.DestinationLabel);
+            portal.Enter(client.Character);
         }
     }
 }

@@ -22,6 +22,8 @@ namespace RazzleServer.Net.Packet
         /// </summary>
         public short Length => (short)Buffer.Length;
 
+        public ServerOperationCode Header { get; set; }
+
         /// <summary>
         /// Creates a new instance of PacketWriter
         /// </summary>
@@ -41,8 +43,11 @@ namespace RazzleServer.Net.Packet
         /// <summary>
         /// Creates a new instance of PacketWriter
         /// </summary>
-        public PacketWriter(ServerOperationCode header) : this() => WriteHeader(header);
-
+        public PacketWriter(ServerOperationCode header) : this()
+        {
+            Header = header;
+            WriteHeader(header);
+        }
         /// <summary>
         /// Creates a new instance of PacketWriter
         /// </summary>

@@ -76,11 +76,22 @@ namespace RazzleServer.Game
                 Server.RemoveClient(this);
                 Character?.Save();
                 Character?.Map?.Characters?.Remove(Character.Id);
+                SetOnline(false);
                 Character = null;
             }
             catch (Exception e)
             {
                 Logger.Error(e, $"Error while disconnecting. Account [{Account?.Username}] Character [{save?.Name}]");
+            }
+        }
+        
+        public void SetOnline(bool isOnline)
+        {
+            using (var context = new MapleDbContext())
+            {
+                var account = context.Accounts.Find(Account.Id);
+                account.IsOnline = isOnline;
+                context.SaveChanges();
             }
         }
 

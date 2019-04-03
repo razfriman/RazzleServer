@@ -40,13 +40,25 @@ namespace RazzleServer.Game.Maple.Maps
 
         public void Enter(Character character)
         {
+            if (!character.Map.Portals.ContainsPortal(Label))
+            {
+                character.LogCheatWarning(CheatType.InvalidMapChange);
+                SendMapTransferResult(character, MapTransferResult.PortalClosed);
+                return;
+            }
+
+            character.ChangeMap(DestinationMapId, DestinationLabel);
+        }
+
+        public static void SendMapTransferResult(Character character, MapTransferResult result)
+        {
             using (var pw = new PacketWriter(ServerOperationCode.TransferFieldReqIgnored))
             {
-                pw.WriteByte(MapTransferResult.NoReason);
+                pw.WriteByte(result);
                 character.Client.Send(pw);
             }
         }
 
-        public void PlaySoundEffect(Character character) => character.ShowLocalUserEffect(UserEffect.PlayPortalSe);
+        public static void PlaySoundEffect(Character character) => character.ShowLocalUserEffect(UserEffect.PlayPortalSe);
     }
 }

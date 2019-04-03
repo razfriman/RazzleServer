@@ -528,7 +528,6 @@ namespace RazzleServer.Game.Maple.Characters
         }
 
         public void Send(PacketWriter packet) => Client.Send(packet);
-        public void Send(byte[] packet) => Client.Send(packet);
 
         public void Hide(bool isHidden)
         {

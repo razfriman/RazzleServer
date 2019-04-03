@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Sockets;
 using RazzleServer.Common;
 using RazzleServer.Login.Maple;
@@ -68,11 +69,22 @@ namespace RazzleServer.Login
             try
             {
                 base.Disconnected();
+                SetOnline(false);
                 Server.RemoveClient(this);
             }
             catch (Exception e)
             {
                 Logger.Error(e, $"Error while disconnecting. Account [{Account?.Username}]");
+            }
+        }
+
+        public void SetOnline(bool isOnline)
+        {
+            using (var context = new MapleDbContext())
+            {
+                var account = context.Accounts.Find(Account.Id);
+                account.IsOnline = isOnline;
+                context.SaveChanges();
             }
         }
     }
