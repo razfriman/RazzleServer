@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   razzleserver:
-    image: rfriman/razzleserver:latest
+    image: razfriman/razzleserver:latest
     ports:
       - "8484:8484"
       - "7575-7577:7575-7577"

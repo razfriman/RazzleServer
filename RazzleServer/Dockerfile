@@ -17,11 +17,6 @@ FROM build AS publish
 WORKDIR /src/RazzleServer
 RUN dotnet publish -c Release -o /app
 
-# Test
-FROM build AS testrunner
-WORKDIR /src/RazzleServer.Tests
-ENTRYPOINT ["dotnet", "test", "--logger:trx"]
-
 # Run
 FROM mcr.microsoft.com/dotnet/core/runtime:3.0 as runtime
 WORKDIR /app
