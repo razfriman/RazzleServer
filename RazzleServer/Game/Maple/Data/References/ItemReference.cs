@@ -137,6 +137,7 @@ namespace RazzleServer.Game.Maple.Data.References
             Summons = new List<Tuple<int, short>>();
             MaxPerStack = info["slotMax"]?.GetShort() ?? 100;
             IsCash = (info["cash"]?.GetInt() ?? 0) > 0;
+            Meso = info["meso"]?.GetInt() ?? 0;
             Mana = info["recoveryMP"]?.GetShort() ?? 0;
             Health = info["recoveryHP"]?.GetShort() ?? 0;
             RequiredLevel = info["reqLevel"]?.GetShort() ?? 0;

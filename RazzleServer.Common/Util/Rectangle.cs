@@ -2,10 +2,10 @@
 
 namespace RazzleServer.Common.Util
 {
-    public struct Rectangle
+    public readonly struct Rectangle
     {
-        public Point Lt { get; set; }
-        public Point Rb { get; set; }
+        public Point Lt { get; }
+        public Point Rb { get; }
 
         [JsonConstructor]
         public Rectangle(Point lt, Point rb)

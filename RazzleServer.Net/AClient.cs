@@ -49,14 +49,21 @@ namespace RazzleServer.Net
             Socket?.Send(packetData).GetAwaiter().GetResult();
         }
 
-        public void Send(byte[] packet)
+        public void Send(byte[] packet) => SendAsync(packet).ConfigureAwait(false).GetAwaiter().GetResult();
+
+        public async Task SendAsync(byte[] packet)
         {
+            if (Socket == null)
+            {
+                return;
+            }
+
             if (PrintPackets)
             {
                 Logger.Information($"Sending: {packet.ByteArrayToString()}");
             }
 
-            Socket?.Send(packet).GetAwaiter().GetResult();
+            await Socket.Send(packet);
         }
 
         public void Terminate(string message = null)
@@ -74,8 +81,7 @@ namespace RazzleServer.Net
 
             var sIv = Functions.RandomUInt();
             var rIv = Functions.RandomUInt();
-
-            Socket.Crypto.SetVectors(sIv, rIv);
+            Socket.Cipher.SetVectors(sIv, rIv);
 
             var writer = new PacketWriter();
             writer.WriteUShort(0x0E);

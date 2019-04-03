@@ -702,6 +702,10 @@ namespace RazzleServer.Game.Maple.Characters
                     {
                         maxHp += Functions.Random(BaseHealthValues.Thief - BaseHealthValues.Variation,
                             BaseHealthValues.Thief);
+                    } else if (IsBaseJob(Job.Gm))
+                    {
+                        maxHp += Functions.Random(BaseHealthValues.Gm - BaseHealthValues.Variation,
+                            BaseHealthValues.Gm);
                     }
 
                     maxHp = Math.Min(30000, maxHp);
@@ -743,6 +747,11 @@ namespace RazzleServer.Game.Maple.Characters
                     {
                         maxMp += Functions.Random(BaseManaValues.Thief - BaseManaValues.Variation,
                             BaseManaValues.Thief);
+                    }
+                    else if (IsBaseJob(Job.Gm))
+                    {
+                        maxMp += Functions.Random(BaseManaValues.Gm - BaseManaValues.Variation,
+                            BaseManaValues.Gm);
                     }
 
 

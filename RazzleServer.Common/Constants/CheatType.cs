@@ -9,6 +9,7 @@
         InvalidQuest,
         InvalidSkillChange,
         InvalidHeal,
-        InvalidMobMovement
+        InvalidMobMovement,
+        InvalidItem
     }
 }

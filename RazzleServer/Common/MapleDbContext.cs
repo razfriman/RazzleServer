@@ -9,7 +9,7 @@ namespace RazzleServer.Common
         public DbSet<AccountEntity> Accounts { get; set; }
         public DbSet<BuddyEntity> Buddies { get; set; }
         public DbSet<CharacterEntity> Characters { get; set; }
-        public DbSet<CharacterStorageEntity> CharacterStorages { get; set; }
+        public DbSet<AccountStorageEntity> CharacterStorages { get; set; }
         public DbSet<ItemEntity> Items { get; set; }
         public DbSet<QuestStatusEntity> QuestStatus { get; set; }
         public DbSet<QuestMobStatusEntity> QuestStatusMobs { get; set; }

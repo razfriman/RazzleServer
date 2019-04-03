@@ -10,11 +10,11 @@ namespace RazzleServer.Game.Handlers
         {
             var slot = packet.ReadShort();
             var itemId = packet.ReadInt();
-
-            var item = client.Character.Items[ItemType.Cash, slot];
+            var item = client.Character.Items[ItemType.Usable, slot];
 
             if (item == null || itemId != item.MapleId)
             {
+                client.Character.LogCheatWarning(CheatType.InvalidItem);
                 return;
             }
 
@@ -60,11 +60,6 @@ namespace RazzleServer.Game.Handlers
 
                 case 2081000:
                 {
-                    if (client.Character.PrimaryStats.Level <= 10)
-                    {
-                        return;
-                    }
-
                     var text = packet.ReadString();
                     var message = $"{client.Character.Name} : {text}";
                     using (var pw = new PacketWriter(ServerOperationCode.Notice))
@@ -79,11 +74,6 @@ namespace RazzleServer.Game.Handlers
                     break;
                 case 2082000:
                 {
-                    if (client.Character.PrimaryStats.Level <= 10)
-                    {
-                        return;
-                    }
-
                     var text = packet.ReadString();
                     var whisper = packet.ReadBool();
                     var message = $"{client.Character.Name} : {text}";

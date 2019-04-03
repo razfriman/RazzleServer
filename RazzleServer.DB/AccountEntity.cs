@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace RazzleServer.Data
@@ -16,5 +17,7 @@ namespace RazzleServer.Data
         public DateTime Birthday { get; set; }
         public DateTime Creation { get; set; }
         public int MaxCharacters { get; set; }
+
+        public List<CharacterEntity> Characters { get; set; } 
     }
 }
