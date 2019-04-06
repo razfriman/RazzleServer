@@ -42,8 +42,8 @@ steps:
       command: Build an image
       containerregistrytype: "Container Registry"
       dockerRegistryEndpoint: "Docker Hub"
-      dockerFile: RazzleServer/Dockerfile
-      workingDirectory: "."
+      dockerFile: "RazzleServer/Dockerfile"
+      useDefaultContext: false
       includeLatestTag: true
 
   - task: Docker@1
