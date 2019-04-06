@@ -1,23 +1,47 @@
-# Docker image
-# Build a Docker image to deploy, run, or push to a container registry.
-# Add steps that use Docker Compose, tag images, push to a registry, run an image, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
-
 trigger:
-- master
+  - master
 
 pool:
-  vmImage: 'Ubuntu-16.04'
-
-variables:
-  dockerId: razfriman # Replace with your Docker ID for Docker Hub or the admin user name for the Azure Container Registry
-  imageName: razzleserver:$(build.buildId)  # Replace with the name of the image you want to publish
+  name: Hosted Ubuntu 1604
 
 steps:
-- script: |
-    docker build -t $(dockerId)/$(imageName) -f RazzleServer/Dockerfile .
-    docker login -u $(dockerId) -p $pswd
-    docker push $(dockerId)/$(imageName)
-  env:
-    pswd: $(dockerPassword)        # Define dockerPassword in the Variables tab of this pipeline in Pipelines page of web interface
-  displayName: 'docker build and push'
+  - task: DotNetCoreInstaller@0
+    displayName: "Use .NET Core 3 SDK"
+    inputs:
+      version: "3.0.100-preview3-010431"
+
+  - task: DotNetCoreCLI@2
+    displayName: Restore
+    inputs:
+      command: restore
+      projects: "$(Projects)"
+
+  - task: DotNetCoreCLI@2
+    displayName: Build
+    inputs:
+      command: build
+      projects: "$(Projects)"
+      arguments: "--configuration $(BuildConfiguration)"
+
+  - task: DotNetCoreCLI@2
+    displayName: Test
+    inputs:
+      command: test
+      projects: "$(TestProjects)"
+      arguments: '--configuration $(BuildConfiguration) --collect "Code coverage"'
+
+  - task: Docker@1
+    displayName: "Build an image"
+    inputs:
+      command: Build an image
+      containerregistrytype: "Container Registry"
+      dockerRegistryEndpoint: "Docker Hub"
+      dockerFile: RazzleServer/Dockerfile
+      includeLatestTag: true
+
+  - task: Docker@1
+    displayName: "Push an image"
+    inputs:
+      containerregistrytype: "Container Registry"
+      dockerRegistryEndpoint: "Docker Hub"
+      command: "Push an image"
