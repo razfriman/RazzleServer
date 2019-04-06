@@ -1,6 +1,3 @@
-trigger:
-  - master
-
 pool:
   name: Hosted Ubuntu 1604
 
@@ -31,7 +28,16 @@ steps:
       arguments: '--configuration $(BuildConfiguration) --collect "Code coverage"'
 
   - task: Docker@1
+    displayName: Docker login
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    inputs:
+        containerregistrytype: "Container Registry"
+        dockerRegistryEndpoint: "Docker Hub"
+        command: login
+
+  - task: Docker@1
     displayName: "Build an image"
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     inputs:
       command: Build an image
       containerregistrytype: "Container Registry"
@@ -41,6 +47,7 @@ steps:
 
   - task: Docker@1
     displayName: "Push an image"
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     inputs:
       containerregistrytype: "Container Registry"
       dockerRegistryEndpoint: "Docker Hub"
