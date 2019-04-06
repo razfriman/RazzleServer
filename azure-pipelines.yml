@@ -11,20 +11,20 @@ steps:
     displayName: Restore
     inputs:
       command: restore
-      projects: "$(Projects)"
+      projects: "**/*.csproj"
 
   - task: DotNetCoreCLI@2
     displayName: Build
     inputs:
       command: build
-      projects: "$(Projects)"
+      projects: "**/*.csproj"
       arguments: "--configuration $(BuildConfiguration)"
 
   - task: DotNetCoreCLI@2
     displayName: Test
     inputs:
       command: test
-      projects: "$(TestProjects)"
+      projects: "**/*Tests/*.csproj"
       arguments: '--configuration $(BuildConfiguration)'
 
   - task: Docker@1
@@ -43,6 +43,7 @@ steps:
       containerregistrytype: "Container Registry"
       dockerRegistryEndpoint: "Docker Hub"
       dockerFile: RazzleServer/Dockerfile
+      workingDirectory: "."
       includeLatestTag: true
 
   - task: Docker@1
