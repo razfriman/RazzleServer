@@ -23,7 +23,7 @@ namespace RazzleServer.Common.Server
             }
 
             Remove(migration);
-            return (DateTime.Now - migration.Expiry).TotalSeconds > 30 ? 0 : migration.AccountId;
+            return (DateTime.UtcNow - migration.Expiry).TotalSeconds > 30 ? 0 : migration.AccountId;
         }
 
         public override string GetKey(Migration item) => item.Host;

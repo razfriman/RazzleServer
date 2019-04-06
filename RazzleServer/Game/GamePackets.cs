@@ -92,7 +92,7 @@ namespace RazzleServer.Game
 
                         case QuestStatus.Complete:
                             pw.WriteByte(0);
-                            pw.WriteDateTime(DateTime.Now);
+                            pw.WriteDateTime(DateTime.UtcNow);
                             break;
                     }
 

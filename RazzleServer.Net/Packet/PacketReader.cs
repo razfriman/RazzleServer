@@ -135,7 +135,7 @@ namespace RazzleServer.Net.Packet
             var oldPos = Buffer.Position;
             Buffer.Position = 0;
             var ret = ReadByte();
-
+            
             if (oldPos != 0)
             {
                 Buffer.Position = oldPos;

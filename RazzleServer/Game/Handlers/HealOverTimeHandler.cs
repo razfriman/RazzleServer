@@ -15,26 +15,26 @@ namespace RazzleServer.Game.Handlers
 
             if (healthAmount != 0)
             {
-                if ((DateTime.Now - client.Character.LastHealthHealOverTime).TotalSeconds < 2)
+                if ((DateTime.UtcNow - client.Character.LastHealthHealOverTime).TotalSeconds < 2)
                 {
                     client.Character.LogCheatWarning(CheatType.InvalidHeal);
                     return;
                 }
 
                 client.Character.PrimaryStats.Health += healthAmount;
-                client.Character.LastHealthHealOverTime = DateTime.Now;
+                client.Character.LastHealthHealOverTime = DateTime.UtcNow;
             }
 
             if (manaAmount != 0)
             {
-                if ((DateTime.Now - client.Character.LastManaHealOverTime).TotalSeconds < 2)
+                if ((DateTime.UtcNow - client.Character.LastManaHealOverTime).TotalSeconds < 2)
                 {
                     client.Character.LogCheatWarning(CheatType.InvalidHeal);
                     return;
                 }
 
                 client.Character.PrimaryStats.Mana += manaAmount;
-                client.Character.LastManaHealOverTime = DateTime.Now;
+                client.Character.LastManaHealOverTime = DateTime.UtcNow;
             }
         }
     }

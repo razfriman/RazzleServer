@@ -35,7 +35,7 @@ namespace RazzleServer.Game.Maple.Life
                 {
                     Parent.Summons.Remove(this);
                 }
-            }, (int)(Expiration - DateTime.Now).TotalMilliseconds);
+            }, (int)(Expiration - DateTime.UtcNow).TotalMilliseconds);
         }
 
         public PacketWriter GetCreatePacket()

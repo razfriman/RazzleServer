@@ -28,7 +28,7 @@ namespace RazzleServer.Game.Maple.Characters
             SkillLevel = skill.CurrentLevel;
             Type = BuffType.Skill;
             Flag = (BuffValueTypes)value;
-            End = DateTime.Now.AddSeconds(skill.BuffTime);
+            End = DateTime.UtcNow.AddSeconds(skill.BuffTime);
         }
 
         public Buff(CharacterBuffs parent, Item item)
@@ -38,7 +38,7 @@ namespace RazzleServer.Game.Maple.Characters
             SkillLevel = 0;
             Type = BuffType.Item;
             Flag = 0;
-            End = DateTime.Now.AddSeconds(item.CBuffTime);
+            End = DateTime.UtcNow.AddSeconds(item.CBuffTime);
 
             if (item.Accuracy > 0)
             {
@@ -115,7 +115,7 @@ namespace RazzleServer.Game.Maple.Characters
                 {
                     Parent.Remove(this);
                 }
-            }, (int)(End - DateTime.Now).TotalMilliseconds);
+            }, (int)(End - DateTime.UtcNow).TotalMilliseconds);
         }
 
         public void Save()

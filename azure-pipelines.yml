@@ -25,7 +25,7 @@ steps:
     inputs:
       command: test
       projects: "$(TestProjects)"
-      arguments: '--configuration $(BuildConfiguration) --collect "Code coverage"'
+      arguments: '--configuration $(BuildConfiguration)'
 
   - task: Docker@1
     displayName: Docker login

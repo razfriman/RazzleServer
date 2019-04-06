@@ -28,12 +28,34 @@ namespace RazzleServer.Tests
         }
 
         [TestMethod]
-        public void WriteSByte_Valid_Succeeds()
+        [DataRow((byte)0x00, "00")]
+        [DataRow((byte)0x01, "01")]
+        [DataRow((byte)0x07F, "7F")]
+        [DataRow((byte)0x80, "80")]
+        [DataRow((byte)0xFE, "FE")]
+        [DataRow((byte)0xFF, "FF")]
+        public void WriteByte_Succeeds(byte input, string expected)
         {
             using (var pw = new PacketWriter())
             {
-                pw.WriteByte(-1);
-                Assert.AreEqual("FF", pw.ToPacketString());
+                pw.WriteByte(input);
+                Assert.AreEqual(expected, pw.ToPacketString());
+            }
+        }
+
+        [TestMethod]
+        [DataRow((sbyte)0, "00")]
+        [DataRow((sbyte)1, "01")]
+        [DataRow((sbyte)127, "7F")]
+        [DataRow((sbyte)-128, "80")]
+        [DataRow((sbyte)-2, "FE")]
+        [DataRow((sbyte)-1, "FF")]
+        public void WriteSByte_Succeeds(sbyte input, string expected)
+        {
+            using (var pw = new PacketWriter())
+            {
+                pw.WriteSByte(input);
+                Assert.AreEqual(expected, pw.ToPacketString());
             }
         }
 
@@ -174,7 +196,7 @@ namespace RazzleServer.Tests
         {
             using (var pw = new PacketWriter())
             {
-                pw.WriteDateTime(new DateTime(2000, 12, 25));
+                pw.WriteDateTime(new DateTime(2000, 12, 25, 0, 0, 0, DateTimeKind.Utc));
                 Assert.AreEqual("80 70 3E A1 E3 00 00 00", pw.ToPacketString());
             }
         }

@@ -14,7 +14,7 @@ namespace RazzleServer.Common.Server
             Host = host;
             AccountId = accountId;
             CharacterId = characterId;
-            Expiry = DateTime.Now;
+            Expiry = DateTime.UtcNow;
         }
     }
 }

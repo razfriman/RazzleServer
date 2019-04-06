@@ -188,7 +188,7 @@ namespace RazzleServer.Game.Maple.Life
             {
                 if (Health * 100 / MaxHealth > skill.CachedReference.PercentageLimitHp ||
                     Cooldowns.ContainsKey(skill) &&
-                    Cooldowns[skill].AddSeconds(skill.CachedReference.Cooldown) >= DateTime.Now ||
+                    Cooldowns[skill].AddSeconds(skill.CachedReference.Cooldown) >= DateTime.UtcNow ||
                     (MobSkillName)skill.MapleId == MobSkillName.Summon && Map.Mobs.Count >= 100)
                 {
                     skill = null;

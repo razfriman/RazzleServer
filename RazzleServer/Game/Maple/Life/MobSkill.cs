@@ -203,11 +203,11 @@ namespace RazzleServer.Game.Maple.Life
 
             if (caster.Cooldowns.ContainsKey(this))
             {
-                caster.Cooldowns[this] = DateTime.Now;
+                caster.Cooldowns[this] = DateTime.UtcNow;
             }
             else
             {
-                caster.Cooldowns.Add(this, DateTime.Now);
+                caster.Cooldowns.Add(this, DateTime.UtcNow);
             }
         }
 

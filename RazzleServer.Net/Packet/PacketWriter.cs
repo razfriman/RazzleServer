@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using RazzleServer.Common.Constants;
 using RazzleServer.Common.Util;
 
 namespace RazzleServer.Net.Packet
@@ -48,6 +49,7 @@ namespace RazzleServer.Net.Packet
             Header = header;
             WriteHeader(header);
         }
+
         /// <summary>
         /// Creates a new instance of PacketWriter
         /// </summary>
@@ -176,12 +178,16 @@ namespace RazzleServer.Net.Packet
             WriteInt(box?.Rb.Y ?? 0);
         }
 
-        public void WriteDateTime(DateTime item) =>
-            WriteLong((long)(item.ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc))
-                .TotalMilliseconds);
+        public void WriteDateTime(DateTime item)
+        {
+            var offset = (long)(item - DateConstants.MapleDateOffset).TotalMilliseconds;
+            WriteLong(offset);
+        }
 
-        public void WriteKoreanDateTime(DateTime item) => WriteLong(
-            (long)(item.ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds *
-            10000 + 116444592000000000L);
+        public void WriteKoreanDateTime(DateTime item)
+        {
+            var offset = (long)(item - DateConstants.MapleDateOffset).TotalMilliseconds;
+            WriteLong(offset * 10000 + 116444592000000000L);
+        }
     }
 }
