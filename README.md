@@ -1,5 +1,7 @@
 # RazzleServer
 
+[![Build Status](https://dev.azure.com/Razfriman/razzleserver/_apis/build/status/razzleserver-CI?branchName=master)](https://dev.azure.com/Razfriman/razzleserver/_build/latest?definitionId=2&branchName=master)
+
 RazzleServer is a C# server emulator for MapleStory v40b.
 
 ## Requirements
