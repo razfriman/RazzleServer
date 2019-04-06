@@ -1,6 +1,7 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RazzleServer.Common.Constants;
+using RazzleServer.Common.Util;
 using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Tests
@@ -9,7 +10,7 @@ namespace RazzleServer.Tests
     public class PacketWriterTests
     {
         [TestMethod]
-        public void EmptyPacketWriter_Valid_Succeeds()
+        public void Constructor_Empty_Succeeds()
         {
             using (var pw = new PacketWriter())
             {
@@ -18,27 +19,37 @@ namespace RazzleServer.Tests
         }
 
         [TestMethod]
-        public void WriteByte_Valid_Succeeds()
+        [DataRow(ServerOperationCode.CharacterList, "04")]
+        [DataRow(ServerOperationCode.SetField, "26")]
+        [DataRow(ServerOperationCode.Fame, "19")]
+        public void Constructor_FromServerOperationCode_Succeeds(ServerOperationCode input, string expected)
         {
-            using (var pw = new PacketWriter())
+            using (var pw = new PacketWriter(input))
             {
-                pw.WriteByte(1);
-                Assert.AreEqual("01", pw.ToPacketString());
+                Assert.AreEqual(expected, pw.ToPacketString());
             }
         }
 
         [TestMethod]
-        [DataRow((byte)0x00, "00")]
-        [DataRow((byte)0x01, "01")]
-        [DataRow((byte)0x07F, "7F")]
-        [DataRow((byte)0x80, "80")]
-        [DataRow((byte)0xFE, "FE")]
+        [DataRow((byte)0, "00")]
+        [DataRow((byte)1, "01")]
         [DataRow((byte)0xFF, "FF")]
-        public void WriteByte_Succeeds(byte input, string expected)
+        public void Constructor_FromByte_Succeeds(byte input, string expected)
         {
-            using (var pw = new PacketWriter())
+            using (var pw = new PacketWriter(input))
             {
-                pw.WriteByte(input);
+                Assert.AreEqual(expected, pw.ToPacketString());
+            }
+        }
+
+
+        [TestMethod]
+        [DataRow(new byte[] { }, "")]
+        [DataRow(new byte[] {1, 2, 3, 4}, "01 02 03 04")]
+        public void Constructor_FromBytes_Succeeds(byte[] input, string expected)
+        {
+            using (var pw = new PacketWriter(input))
+            {
                 Assert.AreEqual(expected, pw.ToPacketString());
             }
         }
@@ -46,8 +57,8 @@ namespace RazzleServer.Tests
         [TestMethod]
         [DataRow((sbyte)0, "00")]
         [DataRow((sbyte)1, "01")]
-        [DataRow((sbyte)127, "7F")]
-        [DataRow((sbyte)-128, "80")]
+        [DataRow(sbyte.MaxValue, "7F")]
+        [DataRow(sbyte.MinValue, "80")]
         [DataRow((sbyte)-2, "FE")]
         [DataRow((sbyte)-1, "FF")]
         public void WriteSByte_Succeeds(sbyte input, string expected)
@@ -60,134 +71,219 @@ namespace RazzleServer.Tests
         }
 
         [TestMethod]
-        public void WriteShort_Valid_Succeeds()
+        [DataRow((byte)0x00, "00")]
+        [DataRow((byte)0x01, "01")]
+        [DataRow((byte)sbyte.MaxValue, "7F")]
+        [DataRow((byte)((byte)sbyte.MaxValue + 1), "80")]
+        [DataRow((byte) (byte.MaxValue - 1), "FE")]
+        [DataRow(byte.MaxValue, "FF")]
+        public void WriteByte_Succeeds(byte input, string expected)
         {
             using (var pw = new PacketWriter())
             {
-                pw.WriteShort(2);
-                Assert.AreEqual("02 00", pw.ToPacketString());
+                pw.WriteByte(input);
+                Assert.AreEqual(expected, pw.ToPacketString());
             }
         }
 
         [TestMethod]
-        public void WriteInt_Valid_Succeeds()
+        [DataRow((short)0, "00 00")]
+        [DataRow((short)1, "01 00")]
+        [DataRow(short.MaxValue, "FF 7F")]
+        [DataRow(short.MinValue, "00 80")]
+        [DataRow((short)-2, "FE FF")]
+        [DataRow((short)-1, "FF FF")]
+        public void WriteShort_Succeeds(short input, string expected)
         {
             using (var pw = new PacketWriter())
             {
-                pw.WriteInt(4);
-                Assert.AreEqual("04 00 00 00", pw.ToPacketString());
+                pw.WriteShort(input);
+                Assert.AreEqual(expected, pw.ToPacketString());
             }
         }
 
         [TestMethod]
-        public void WriteLong_Valid_Succeeds()
+        [DataRow((ushort)0x00, "00 00")]
+        [DataRow((ushort)0x01, "01 00")]
+        [DataRow((ushort)short.MaxValue, "FF 7F")]
+        [DataRow((ushort)((ushort)short.MaxValue + 1), "00 80")]
+        [DataRow((ushort)(ushort.MaxValue - 1), "FE FF")]
+        [DataRow(ushort.MaxValue, "FF FF")]
+        public void WriteUShort_Succeeds(ushort input, string expected)
         {
             using (var pw = new PacketWriter())
             {
-                pw.WriteLong(8);
-                Assert.AreEqual("08 00 00 00 00 00 00 00", pw.ToPacketString());
-            }
-        }
-
-
-        [TestMethod]
-        public void WriteUShort_Valid_Succeeds()
-        {
-            using (var pw = new PacketWriter())
-            {
-                pw.WriteUShort(ushort.MaxValue);
-                Assert.AreEqual("FF FF", pw.ToPacketString());
+                pw.WriteUShort(input);
+                Assert.AreEqual(expected, pw.ToPacketString());
             }
         }
 
         [TestMethod]
-        public void WriteUInt_Valid_Succeeds()
+        [DataRow(0, "00 00 00 00")]
+        [DataRow(1, "01 00 00 00")]
+        [DataRow(int.MaxValue, "FF FF FF 7F")]
+        [DataRow(int.MinValue, "00 00 00 80")]
+        [DataRow(-2, "FE FF FF FF")]
+        [DataRow(-1, "FF FF FF FF")]
+        public void WriteInt_Succeeds(int input, string expected)
         {
             using (var pw = new PacketWriter())
             {
-                pw.WriteUInt(uint.MaxValue);
-                Assert.AreEqual("FF FF FF FF", pw.ToPacketString());
+                pw.WriteInt(input);
+                Assert.AreEqual(expected, pw.ToPacketString());
             }
         }
 
         [TestMethod]
-        public void WriteULong_Valid_Succeeds()
+        [DataRow((uint)0, "00 00 00 00")]
+        [DataRow((uint)1, "01 00 00 00")]
+        [DataRow((uint)int.MaxValue, "FF FF FF 7F")]
+        [DataRow((uint)int.MaxValue + 1, "00 00 00 80")]
+        [DataRow(uint.MaxValue - 1, "FE FF FF FF")]
+        [DataRow(uint.MaxValue, "FF FF FF FF")]
+        public void WriteUInt_Succeeds(uint input, string expected)
         {
             using (var pw = new PacketWriter())
             {
-                pw.WriteULong(ulong.MaxValue);
-                Assert.AreEqual("FF FF FF FF FF FF FF FF", pw.ToPacketString());
-            }
-        }
-
-
-        [TestMethod]
-        public void WriteBox_Valid_Succeeds()
-        {
-            using (var pw = new PacketWriter())
-            {
-                pw.WriteBox(new Common.Util.Rectangle(new Common.Util.Point(1, 2), new Common.Util.Point(3, 4)));
-                Assert.AreEqual("01 00 00 00 02 00 00 00 03 00 00 00 04 00 00 00", pw.ToPacketString());
+                pw.WriteUInt(input);
+                Assert.AreEqual(expected, pw.ToPacketString());
             }
         }
 
         [TestMethod]
-        public void WriteBool_Valid_Succeeds()
+        [DataRow((long)0, "00 00 00 00 00 00 00 00")]
+        [DataRow((long)1, "01 00 00 00 00 00 00 00")]
+        [DataRow(long.MaxValue, "FF FF FF FF FF FF FF 7F")]
+        [DataRow(long.MinValue, "00 00 00 00 00 00 00 80")]
+        [DataRow((long)-2, "FE FF FF FF FF FF FF FF")]
+        [DataRow((long)-1, "FF FF FF FF FF FF FF FF")]
+        public void WriteLong_Succeeds(long input, string expected)
         {
             using (var pw = new PacketWriter())
             {
-                pw.WriteBool(true);
-                Assert.AreEqual("01", pw.ToPacketString());
+                pw.WriteLong(input);
+                Assert.AreEqual(expected, pw.ToPacketString());
             }
         }
 
         [TestMethod]
-        public void WriteBytes_Valid_Succeeds()
+        [DataRow((ulong)0, "00 00 00 00 00 00 00 00")]
+        [DataRow((ulong)1, "01 00 00 00 00 00 00 00")]
+        [DataRow((ulong)long.MaxValue, "FF FF FF FF FF FF FF 7F")]
+        [DataRow((ulong)long.MaxValue + 1, "00 00 00 00 00 00 00 80")]
+        [DataRow(ulong.MaxValue - 1, "FE FF FF FF FF FF FF FF")]
+        [DataRow(ulong.MaxValue, "FF FF FF FF FF FF FF FF")]
+        public void WriteULong_Succeeds(ulong input, string expected)
         {
             using (var pw = new PacketWriter())
             {
-                pw.WriteBytes(new byte[] {1, 2, 3, 4});
-                Assert.AreEqual("01 02 03 04", pw.ToPacketString());
+                pw.WriteULong(input);
+                Assert.AreEqual(expected, pw.ToPacketString());
             }
         }
 
         [TestMethod]
-        public void WritePoint_Valid_Succeeds()
+        [DataRow(false, "00")]
+        [DataRow(true, "01")]
+        public void WriteBool_Valid_Succeeds(bool input, string expected)
         {
             using (var pw = new PacketWriter())
             {
-                pw.WritePoint(new Common.Util.Point(1, 2));
-                Assert.AreEqual("01 00 02 00", pw.ToPacketString());
+                pw.WriteBool(input);
+                Assert.AreEqual(expected, pw.ToPacketString());
             }
         }
 
         [TestMethod]
-        public void WriteHeader_Valid_Succeeds()
+        [DataRow(0, "")]
+        [DataRow(1, "00")]
+        [DataRow(4, "00 00 00 00")]
+        public void WriteZeroBytes_Succeeds(int input, string expected)
         {
             using (var pw = new PacketWriter())
             {
-                pw.WriteHeader(ServerOperationCode.Fame);
-                Assert.AreEqual("19", pw.ToPacketString());
+                pw.WriteZeroBytes(4);
+                Assert.AreEqual("00 00 00 00", pw.ToPacketString());
+            }
+        }
+
+        [DataRow(-1)]
+        [DataRow(-2)]
+        public void WriteZeroBytes_InvalidArgument_Fails(int input)
+        {
+            var pw = new PacketWriter();
+            Assert.ThrowsException<ArgumentNullException>(() => pw.WriteZeroBytes(input));
+        }
+
+        [TestMethod]
+        [DataRow(new byte[] { }, "")]
+        [DataRow(new byte[] {1, 2, 3, 4}, "01 02 03 04")]
+        public void WriteBytes_Valid_Succeeds(byte[] input, string expected)
+        {
+            using (var pw = new PacketWriter())
+            {
+                pw.WriteBytes(input);
+                Assert.AreEqual(expected, pw.ToPacketString());
             }
         }
 
         [TestMethod]
-        public void WriteString_Valid_Succeeds()
+        [DataRow("", "")]
+        [DataRow("01 02 03 04", "01 02 03 04")]
+        [DataRow("FF FF FF FF", "FF FF FF FF")]
+
+        public void WriteHexString_Valid_Succeeds(string input, string expected)
         {
             using (var pw = new PacketWriter())
             {
-                pw.WriteString("Hello");
-                Assert.AreEqual("05 00 48 65 6C 6C 6F", pw.ToPacketString());
+                pw.WriteHexString(input);
+                Assert.AreEqual(expected, pw.ToPacketString());
             }
         }
 
         [TestMethod]
-        public void WriteString_WithLength_Succeeds()
+        [DataRow("!@#$%^&*()")]
+        [DataRow(",./;'[]<>?:{}")]
+        [DataRow("ghijklmnop")]
+        [DataRow("a-b-c-d-e-f-g")]
+        public void WriteHexString_InvalidCharacters_Fails(string input)
+        {
+            var pw = new PacketWriter();
+            Assert.ThrowsException<ArgumentNullException>(() => pw.WriteHexString(input));
+        }
+
+        [TestMethod]
+        [DataRow(ServerOperationCode.CharacterList, "04")]
+        [DataRow(ServerOperationCode.SetField, "26")]
+        [DataRow(ServerOperationCode.Fame, "19")]
+        public void WriteHeader_Succeeds(ServerOperationCode input, string expected)
         {
             using (var pw = new PacketWriter())
             {
-                pw.WriteString("Hello", 10);
-                Assert.AreEqual("48 65 6C 6C 6F 00 00 00 00 00", pw.ToPacketString());
+                pw.WriteHeader(input);
+                Assert.AreEqual(expected, pw.ToPacketString());
+            }
+        }
+
+        [TestMethod]
+        [DataRow("Hello", "05 00 48 65 6C 6C 6F")]
+        public void WriteString_Valid_Succeeds(string input, string expected)
+        {
+            using (var pw = new PacketWriter())
+            {
+                pw.WriteString(input);
+                Assert.AreEqual(expected, pw.ToPacketString());
+            }
+        }
+
+        [TestMethod]
+        [DataRow("Hello", 10, "48 65 6C 6C 6F 00 00 00 00 00")]
+        public void WriteString_WithLength_Succeeds(string input, int inputLength, string expected)
+        {
+            using (var pw = new PacketWriter())
+            {
+                pw.WriteString(input, inputLength);
+                Assert.AreEqual(expected, pw.ToPacketString());
             }
         }
 
@@ -212,26 +308,6 @@ namespace RazzleServer.Tests
         }
 
         [TestMethod]
-        public void WriteHexString_Valid_Succeeds()
-        {
-            using (var pw = new PacketWriter())
-            {
-                pw.WriteHexString("01 02 03 04");
-                Assert.AreEqual("01 02 03 04", pw.ToPacketString());
-            }
-        }
-
-        [TestMethod]
-        public void _Valid_Succeeds()
-        {
-            using (var pw = new PacketWriter())
-            {
-                pw.WriteZeroBytes(4);
-                Assert.AreEqual("00 00 00 00", pw.ToPacketString());
-            }
-        }
-
-        [TestMethod]
         public void WriteKoreanDateTime_Valid_Succeeds()
         {
             using (var pw = new PacketWriter())
@@ -242,30 +318,22 @@ namespace RazzleServer.Tests
         }
 
         [TestMethod]
-        public void Constructor_FromServerOperationCode_Succeeds()
+        public void WritePoint_Valid_Succeeds()
         {
-            using (var pw = new PacketWriter(ServerOperationCode.Fame))
+            using (var pw = new PacketWriter())
             {
-                Assert.AreEqual("19", pw.ToPacketString());
+                pw.WritePoint(new Point(1, 2));
+                Assert.AreEqual("01 00 02 00", pw.ToPacketString());
             }
         }
 
         [TestMethod]
-        public void Constructor_FromByte_Succeeds()
+        public void WriteBox_Valid_Succeeds()
         {
-            using (var pw = new PacketWriter(1))
+            using (var pw = new PacketWriter())
             {
-                Assert.AreEqual("01", pw.ToPacketString());
-            }
-        }
-
-
-        [TestMethod]
-        public void Constructor_FromBytes_Succeeds()
-        {
-            using (var pw = new PacketWriter(new byte[] {1, 2, 3, 4}))
-            {
-                Assert.AreEqual("01 02 03 04", pw.ToPacketString());
+                pw.WriteBox(new Rectangle(new Point(1, 2), new Point(3, 4)));
+                Assert.AreEqual("01 00 00 00 02 00 00 00 03 00 00 00 04 00 00 00", pw.ToPacketString());
             }
         }
     }
