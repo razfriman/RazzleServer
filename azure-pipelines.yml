@@ -47,9 +47,18 @@ steps:
       includeLatestTag: true
 
   - task: Docker@1
-    displayName: "Push an image"
+    displayName: "Push versioned image"
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     inputs:
       containerregistrytype: "Container Registry"
       dockerRegistryEndpoint: "Docker Hub"
       command: "Push an image"
+
+  - task: Docker@1
+    displayName: "Push latest image"
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    inputs:
+      containerregistrytype: "Container Registry"
+      dockerRegistryEndpoint: "Docker Hub"
+      command: "Push an image"
+      imageName: "$(Build.Repository.Name):latest"
