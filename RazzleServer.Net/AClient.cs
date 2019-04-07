@@ -45,7 +45,7 @@ namespace RazzleServer.Net
             {
                 Logger.Information($"Sending [{packet.Header}] {packetData.ByteArrayToString()}");
             }
-            
+
             Socket?.Send(packetData).GetAwaiter().GetResult();
         }
 
@@ -53,28 +53,25 @@ namespace RazzleServer.Net
 
         public virtual async Task SendAsync(byte[] packet)
         {
-            if (Socket == null)
-            {
-                return;
-            }
-
             if (PrintPackets)
             {
                 Logger.Information($"Sending: {packet.ByteArrayToString()}");
             }
 
-            await Socket.Send(packet);
+            if (Socket != null)
+            {
+                await Socket.Send(packet);
+            }
         }
 
         public virtual void Terminate(string message = null)
         {
             Logger.Information($"Disconnecting Client - {Key}. Reason: {message}");
-            Socket.Disconnect();
+            Socket?.Disconnect();
         }
 
         public async Task SendHandshake()
         {
-            Console.WriteLine("Sending handshake");
             if (Socket == null)
             {
                 return;

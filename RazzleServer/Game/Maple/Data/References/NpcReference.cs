@@ -1,5 +1,4 @@
-﻿using System;
-using RazzleServer.Wz;
+﻿using RazzleServer.Wz;
 
 namespace RazzleServer.Game.Maple.Data.References
 {

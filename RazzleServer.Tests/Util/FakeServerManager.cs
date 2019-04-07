@@ -1,12 +1,13 @@
-using System.Linq;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
+using RazzleServer.Common;
 using RazzleServer.Common.Constants;
 using RazzleServer.Game;
 using RazzleServer.Login;
 using Serilog;
 
-namespace RazzleServer.Common
+namespace RazzleServer.Tests.Util
 {
     public class FakeServerManager : AServerManager
     {
@@ -19,6 +20,7 @@ namespace RazzleServer.Common
 
             var config = ServerConfig.Instance;
             config.DatabaseConnectionType = DatabaseConnectionType.InMemory;
+            config.DatabaseConnection = Guid.NewGuid().ToString();
             config.AddDefaultWorld();
             return base.Configure();
         }
@@ -43,6 +45,6 @@ namespace RazzleServer.Common
 
         public override Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 
-        public TestLoginClient AddFakeLoginClient() => new TestLoginClient(Login);
+        public FakeLoginClient AddFakeLoginClient() => new FakeLoginClient(Login);
     }
 }

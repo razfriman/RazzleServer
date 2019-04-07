@@ -4,8 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using RazzleServer.Common.Server;
 using RazzleServer.Game;
-using RazzleServer.Game.Maple.Data;
-using RazzleServer.Game.Maple.Scripting;
 using RazzleServer.Login;
 using Serilog;
 

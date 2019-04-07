@@ -17,6 +17,8 @@ namespace RazzleServer.Login
         public string LastUsername { get; internal set; }
         public string LastPassword { get; internal set; }
         public LoginServer Server { get; internal set; }
+        
+        public bool ThrowOnExceptions { get; protected internal set; }
 
         public override ILogger Logger => Log.ForContext<LoginClient>();
 
@@ -61,6 +63,11 @@ namespace RazzleServer.Login
             catch (Exception e)
             {
                 Logger.Error(e, $"Packet Processing Error [{header.ToString()}] - {e.Message} - {e.StackTrace}");
+
+                if (ThrowOnExceptions)
+                {
+                    throw;
+                }
             }
         }
 

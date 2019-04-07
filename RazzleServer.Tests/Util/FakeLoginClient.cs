@@ -1,14 +1,10 @@
-using System;
-using System.Net.Sockets;
 using System.Threading.Tasks;
 using RazzleServer.Login;
-using RazzleServer.Net;
 using RazzleServer.Net.Packet;
-using Serilog;
 
-namespace RazzleServer.Common
+namespace RazzleServer.Tests.Util
 {
-    public class TestLoginClient : LoginClient
+    public class FakeLoginClient : LoginClient
     {
         public delegate void OnServerToClientPacket(PacketReader packet);
 
@@ -19,8 +15,10 @@ namespace RazzleServer.Common
         public event OnClientToServerPacket ClientToServerPacket;
 
 
-        public TestLoginClient(LoginServer server) : base(new Socket(SocketType.Stream, ProtocolType.Tcp), server)
+        //public FakeLoginClient(LoginServer server) : base(new Socket(SocketType.Stream, ProtocolType.Tcp), server)
+        public FakeLoginClient(LoginServer server) : base(null, server)
         {
+            ThrowOnExceptions = true;
         }
 
         public override void Receive(PacketReader packet)

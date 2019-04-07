@@ -24,9 +24,6 @@ namespace RazzleServer.Game
             ServerConfig.Instance.UseAesEncryption, ServerConfig.Instance.PrintPackets, true)
         {
             Server = server;
-            Host = Socket.Host;
-            Port = Socket.Port;
-            Connected = true;
         }
 
         public override void Receive(PacketReader packet)
