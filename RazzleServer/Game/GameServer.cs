@@ -34,13 +34,14 @@ namespace RazzleServer.Game
         public override ILogger Logger => Log.ForContext<GameServer>();
 
 
-        public GameServer(ServerManager manager, World world, ushort port, byte channelId) : base(manager)
+        public GameServer(AServerManager manager, World world, ushort port, byte channelId) : base(manager)
         {
             World = world;
             Port = port;
             ChannelId = channelId;
-            Start(new IPAddress(new byte[] {0, 0, 0, 0}), Port);
         }
+
+        public void Start() => Start(new IPAddress(new byte[] {0, 0, 0, 0}), Port);
 
         public override void Dispose() => Shutdown();
 

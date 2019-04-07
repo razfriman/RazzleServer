@@ -9,11 +9,12 @@ namespace RazzleServer.Login
 {
     public class LoginServer : MapleServer<LoginClient, LoginPacketHandler>
     {
-        public LoginServer(ServerManager manager) : base(manager)
+        public LoginServer(AServerManager manager) : base(manager)
         {
             Port = ServerConfig.Instance.LoginPort;
-            Start(new IPAddress(new byte[] {0, 0, 0, 0}), Port);
         }
+
+        public void Start() => Start(new IPAddress(new byte[] {0, 0, 0, 0}), Port);
 
         public override ILogger Logger => Log.ForContext<LoginServer>();
 

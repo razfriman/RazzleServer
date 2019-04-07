@@ -24,13 +24,13 @@ namespace RazzleServer.Common
         public HashSet<ClientOperationCode> IgnorePacketPrintSet { get; } = new HashSet<ClientOperationCode>();
 
         public ushort Port;
-        public ServerManager Manager { get; set; }
+        public AServerManager Manager { get; set; }
         private TcpListener _listener;
         private bool _disposed;
         private const int BacklogSize = 50;
         public abstract ILogger Logger { get; }
 
-        protected MapleServer(ServerManager manager)
+        protected MapleServer(AServerManager manager)
         {
             Manager = manager;
             RegisterPacketHandlers();
@@ -178,7 +178,7 @@ namespace RazzleServer.Common
 
         public void RegisterPacketHandlers()
         {
-            var types = Assembly.GetEntryAssembly()
+            var types = Assembly.GetExecutingAssembly()
                 .GetTypes()
                 .Where(x => x.IsSubclassOf(typeof(TPacketHandler)));
 

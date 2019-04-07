@@ -25,7 +25,7 @@ namespace RazzleServer.Net
         public string Host { get; }
         public byte[] HostBytes { get; }
         public ushort Port { get; }
-        
+
         public MapleCipherProvider Cipher { get; }
 
         public const int MinimumBufferSize = 512;
@@ -38,14 +38,16 @@ namespace RazzleServer.Net
             _toClient = toClient;
             _pipe = new Pipe();
 
-            Endpoint = socket.RemoteEndPoint as IPEndPoint;
+            Endpoint = socket?.RemoteEndPoint as IPEndPoint;
             Host = Endpoint?.Address.ToString();
             HostBytes = Endpoint?.Address.GetAddressBytes();
-            Port = (ushort)((IPEndPoint)socket.LocalEndPoint).Port;
+            Port = (ushort)(((IPEndPoint)socket?.LocalEndPoint)?.Port ?? 0);
             Cipher = new MapleCipherProvider(version, aesKey, useAesEncryption, toClient);
             Cipher.PacketFinished += data => _client.Receive(new PacketReader(data));
-            
-            Task.Factory.StartNew(ListenForData);
+            if (socket != null && socket.Connected)
+            {
+                Task.Factory.StartNew(ListenForData);
+            }
         }
 
         public async Task ListenForData()
@@ -63,6 +65,7 @@ namespace RazzleServer.Net
                 {
                     var memory = _pipe.Writer.GetMemory(MinimumBufferSize);
                     var bytesRead = await _socket.ReceiveAsync(memory, SocketFlags.None);
+
                     if (bytesRead == 0)
                     {
                         break;

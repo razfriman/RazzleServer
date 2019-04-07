@@ -9,7 +9,7 @@ using Serilog;
 
 namespace RazzleServer.Login
 {
-    public sealed class LoginClient : AClient
+    public class LoginClient : AClient
     {
         public byte World { get; internal set; }
         public byte Channel { get; internal set; }
@@ -82,7 +82,12 @@ namespace RazzleServer.Login
         {
             using (var context = new MapleDbContext())
             {
-                var account = context.Accounts.Find(Account.Id);
+                var account = context.Accounts.FirstOrDefault(x => x.Id == Account.Id);
+                if (account == null)
+                {
+                    return;
+                }
+
                 account.IsOnline = isOnline;
                 context.SaveChanges();
             }
