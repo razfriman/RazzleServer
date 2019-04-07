@@ -24,19 +24,22 @@ namespace RazzleServer.Common
         public bool EnableAutoRegister { get; set; } = true;
         public bool EnableMultiLeveling { get; set; } = true;
         public string CommandIndicator { get; set; } = "!";
-        public int DefaultCreationSlots { get; set; } = 3;
         public List<WorldConfig> Worlds { get; set; }
 
-        public static ServerConfig GetDefaultConfig()
+        private static ServerConfig _instance;
+        public static ServerConfig Instance => _instance ??= new ServerConfig();
+
+        public static void Load(IConfiguration configuration)
         {
-            return new ServerConfig
+            configuration.GetSection("RazzleServerConfig").Bind(Instance);
+
+            if (Instance.Worlds.Count == 0)
             {
-                Worlds = new List<WorldConfig>
-                {
+                Instance.Worlds.Add(
                     new WorldConfig
                     {
                         Id = 0,
-                        Name = WorldName.Scania.ToString(),
+                        Name = WorldName.Tespia.ToString(),
                         Channels = 3,
                         Flag = WorldStatusFlag.None,
                         EventMessage = "",
@@ -47,18 +50,8 @@ namespace RazzleServer.Common
                         PartyQuestExperienceRate = 1,
                         MesoRate = 1,
                         DropRate = 1
-                    }
-                }
-            };
-        }
-
-        private static ServerConfig _instance;
-        public static ServerConfig Instance => _instance ??= new ServerConfig();
-
-        public static void Load(IConfiguration configuration)
-        {
-            _instance = GetDefaultConfig();
-            configuration.GetSection("RazzleServerConfig").Bind(_instance);
+                    });
+            }
         }
     }
 }

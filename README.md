@@ -7,18 +7,24 @@ RazzleServer is a C# server emulator for MapleStory v40b.
 
 ## Requirements
 
-- MapleStory V40b
+- MapleStory v40b
 - [.NET Core 3.0](https://dotnet.microsoft.com/download/dotnet-core/3.0)
 
-## Running
+## Run
 
 ### Via [Docker](https://www.docker.com/)
+
+```
+docker run razfriman/razzleserver
+```
+
+### Via [Docker Compose](https://docs.docker.com/compose/) (Using the included `docker-compose.yml` file)
 
 ```
 docker-compose up
 ```
 
-### Via [.NET CLI](https://docs.microsoft.com/en-us/dotnet/core/tools/)
+### Build and Run via [.NET CLI](https://docs.microsoft.com/en-us/dotnet/core/tools/)
 
 ```
 cd RazzleServer
@@ -80,3 +86,25 @@ RazzleServer is currently configured to use SQLite via [EF Core (Entity Framewor
 The database will automatically be created at run-time. There is no setup required.
 
 Further, RazzleServer is designed such that it can be extended to support any other [providers supported by EF Core](https://docs.microsoft.com/en-us/ef/core/providers/)
+
+### Docker Configuration
+
+Use `docker-compose` to easily define volumes where you can configure server settings. This lets you view/change the `appsettings.json` file as well as view the logs. This is also possible via the `Docker CLI` in a more verbose way.
+
+#### Docker Compose Sample:
+
+```yaml
+version: "3.7"
+
+services:
+  razzleserver:
+    image: razfriman/razzleserver:latest
+    ports:
+      - "8484:8484"
+      - "7575-7577:7575-7577"
+    volumes:
+      - ./Data/appsettings.json:/app/appsettings.json
+      - ./Data/DataCache:/app/Data/DataCache
+      - ./Data/WZ:/app/Data/WZ:ro
+      - ./Logs:/app/Logs
+```

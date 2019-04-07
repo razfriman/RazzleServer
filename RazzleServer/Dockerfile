@@ -3,6 +3,7 @@ FROM scratch as data
 WORKDIR /app
 COPY Data/DataCache Data/DataCache
 COPY Data/appsettings.json .
+COPY Data/DB Data/DB
 
 # Build
 FROM mcr.microsoft.com/dotnet/core/sdk:3.0 as build

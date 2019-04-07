@@ -9,6 +9,7 @@ services:
     volumes:
       - ./Data/appsettings.json:/app/appsettings.json
       - ./Data/DataCache:/app/Data/DataCache
+      - ./Data/DB:/app/Data/DB
       - ./Data/WZ:/app/Data/WZ:ro
       - ./Logs:/app/Logs
     build:

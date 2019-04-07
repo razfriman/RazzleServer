@@ -9,3 +9,4 @@ docker-compose.*.yml
 */bin
 */obj
 Data/WZ
+Data/DB/MapleServer.db

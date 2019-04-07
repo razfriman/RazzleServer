@@ -36,8 +36,7 @@ namespace RazzleServer.Common
 
         private void InitializeDatabase()
         {
-            _log.Information("Initializing Database");
-
+            _log.Information($"Initializing Database Type={ServerConfig.Instance.DatabaseConnectionType} Connection={ServerConfig.Instance.DatabaseConnection}");
             using (var context = new MapleDbContext())
             {
                 context.Database.EnsureCreated();
