@@ -101,3 +101,27 @@ public class PongHandler : GamePacketHandler
     public override void HandlePacket(PacketReader packet, GameClient client) => client.LastPong = DateTime.UtcNow;
 }
 ```
+
+## Logging
+
+Sample logs with rich context to assis with debugging packets 
+
+Example:
+```json
+{"@t":"2019-04-01","@mt":"Starting LoginServer on port [8484]","SourceContext":"RazzleServer.Login.LoginServer"}
+{"@t":"2019-04-01","@mt":"Starting GameServer on port [7575]","SourceContext":"RazzleServer.Game.GameServer"}
+{"@t":"2019-04-01","@mt":"Client Connected","SourceContext":"RazzleServer.Login.LoginServer"}
+{"@t":"2019-04-01","@mt":"Received [Login] 01 05 00 00 00 FF 3D 00 00 00 00","SourceContext":"RazzleServer.Login.LoginClient"}
+{"@t":"2019-04-01","@mt":"Sending [CheckPasswordResult] 01 00 05 00 61 64 6D 69 6E","SourceContext":"RazzleServer.Login.LoginClient"}
+{"@t":"2019-04-01","@mt":"Sending [WorldInformation] 03 00 06 00 54 00 00 00 00 02 00","SourceContext":"RazzleServer.Login.LoginClient"}
+{"@t":"2019-04-01","@mt":"Sending [WorldInformation] 03 FF 00","SourceContext":"RazzleServer.Login.LoginClient"}
+{"@t":"2019-04-01","@mt":"Received [WorldStatus] 03 00 00","SourceContext":"RazzleServer.Login.LoginClient"}
+{"@t":"2019-04-01","@mt":"Sending [WorldStatus] 02 00 00","SourceContext":"RazzleServer.Login.LoginClient"}
+{"@t":"2019-04-01","@mt":"Received [SelectChannel] 02 00 00","SourceContext":"RazzleServer.Login.LoginClient"}
+{"@t":"2019-04-01","@mt":"Sending [CharacterList] 04 00 01 02 00 00 00 00 00 00 00 00 00","SourceContext":"RazzleServer.Login.LoginClient"}
+{"@t":"2019-04-01","@mt":"Received [SelectCharacter] 04 02 00 00 00","SourceContext":"RazzleServer.Login.LoginClient"}
+{"@t":"2019-04-01","@mt":"Sending [ClientConnectToServerLogin] 05 00 1D 02 00 00 00 00","SourceContext":"RazzleServer.Login.LoginClient"}
+{"@t":"2019-04-01","@mt":"Client Connected","SourceContext":"RazzleServer.Game.GameServer"}
+{"@t":"2019-04-01","@mt":"Received [CharacterLoad] 05 02 00 00 00","SourceContext":"RazzleServer.Game.GameClient"}
+
+```
