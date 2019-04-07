@@ -32,7 +32,7 @@ namespace RazzleServer.Common
                     optionsBuilder.UseSqlite($"Filename=./{ServerConfig.Instance.DatabaseConnection}");
                     break;
                 case Constants.DatabaseConnectionType.InMemory:
-                    optionsBuilder.UseInMemoryDatabase("RazzleServer");
+                    optionsBuilder.UseInMemoryDatabase(ServerConfig.Instance.DatabaseConnection);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

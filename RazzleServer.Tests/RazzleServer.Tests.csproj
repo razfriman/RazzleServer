@@ -14,5 +14,6 @@
         <ProjectReference Include="..\RazzleServer.Crypto\RazzleServer.Crypto.csproj" />
         <ProjectReference Include="..\RazzleServer.Net\RazzleServer.Net.csproj" />
         <ProjectReference Include="..\RazzleServer.Wz\RazzleServer.Wz.csproj" />
+        <ProjectReference Include="..\RazzleServer\RazzleServer.csproj" />
     </ItemGroup>
 </Project>

@@ -24,7 +24,7 @@ namespace RazzleServer.Common
         public bool EnableAutoRegister { get; set; } = true;
         public bool EnableMultiLeveling { get; set; } = true;
         public string CommandIndicator { get; set; } = "!";
-        public List<WorldConfig> Worlds { get; set; }
+        public List<WorldConfig> Worlds { get; set; } = new List<WorldConfig>();
 
         private static ServerConfig _instance;
         public static ServerConfig Instance => _instance ??= new ServerConfig();
@@ -35,23 +35,28 @@ namespace RazzleServer.Common
 
             if (Instance.Worlds.Count == 0)
             {
-                Instance.Worlds.Add(
-                    new WorldConfig
-                    {
-                        Id = 0,
-                        Name = WorldName.Tespia.ToString(),
-                        Channels = 3,
-                        Flag = WorldStatusFlag.None,
-                        EventMessage = "",
-                        TickerMessage = "",
-                        EnableCharacterCreation = true,
-                        ExperienceRate = 1,
-                        QuestExperienceRate = 1,
-                        PartyQuestExperienceRate = 1,
-                        MesoRate = 1,
-                        DropRate = 1
-                    });
+                Instance.AddDefaultWorld();
             }
+        }
+
+        public void AddDefaultWorld()
+        {
+            Worlds.Add(
+                new WorldConfig
+                {
+                    Id = 0,
+                    Name = WorldName.Tespia.ToString(),
+                    Channels = 1,
+                    Flag = WorldStatusFlag.None,
+                    EventMessage = "",
+                    TickerMessage = "",
+                    EnableCharacterCreation = true,
+                    ExperienceRate = 1,
+                    QuestExperienceRate = 1,
+                    PartyQuestExperienceRate = 1,
+                    MesoRate = 1,
+                    DropRate = 1
+                });
         }
     }
 }

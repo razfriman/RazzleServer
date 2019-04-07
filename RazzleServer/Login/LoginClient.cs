@@ -9,7 +9,7 @@ using Serilog;
 
 namespace RazzleServer.Login
 {
-    public sealed class LoginClient : AClient
+    public class LoginClient : AClient
     {
         public byte World { get; internal set; }
         public byte Channel { get; internal set; }
@@ -17,6 +17,8 @@ namespace RazzleServer.Login
         public string LastUsername { get; internal set; }
         public string LastPassword { get; internal set; }
         public LoginServer Server { get; internal set; }
+        
+        public bool ThrowOnExceptions { get; protected internal set; }
 
         public override ILogger Logger => Log.ForContext<LoginClient>();
 
@@ -61,6 +63,11 @@ namespace RazzleServer.Login
             catch (Exception e)
             {
                 Logger.Error(e, $"Packet Processing Error [{header.ToString()}] - {e.Message} - {e.StackTrace}");
+
+                if (ThrowOnExceptions)
+                {
+                    throw;
+                }
             }
         }
 
@@ -82,7 +89,12 @@ namespace RazzleServer.Login
         {
             using (var context = new MapleDbContext())
             {
-                var account = context.Accounts.Find(Account.Id);
+                var account = context.Accounts.FirstOrDefault(x => x.Id == Account.Id);
+                if (account == null)
+                {
+                    return;
+                }
+
                 account.IsOnline = isOnline;
                 context.SaveChanges();
             }
