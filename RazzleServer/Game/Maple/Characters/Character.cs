@@ -418,7 +418,7 @@ namespace RazzleServer.Game.Maple.Characters
                 character.UsableSlots = Items.MaxSlots[ItemType.Usable];
                 character.SetupSlots = Items.MaxSlots[ItemType.Setup];
                 character.EtceteraSlots = Items.MaxSlots[ItemType.Etcetera];
-                character.CashSlots = Items.MaxSlots[ItemType.Cash];
+                character.CashSlots = Items.MaxSlots[ItemType.Pet];
 
                 dbContext.SaveChanges();
             }
@@ -478,7 +478,7 @@ namespace RazzleServer.Game.Maple.Characters
                     UsableSlots = Items.MaxSlots[ItemType.Usable],
                     SetupSlots = Items.MaxSlots[ItemType.Setup],
                     EtceteraSlots = Items.MaxSlots[ItemType.Etcetera],
-                    CashSlots = Items.MaxSlots[ItemType.Cash]
+                    CashSlots = Items.MaxSlots[ItemType.Pet]
                 };
 
                 dbContext.Characters.Add(character);
@@ -517,7 +517,7 @@ namespace RazzleServer.Game.Maple.Characters
                 Items.MaxSlots[ItemType.Usable] = character.UsableSlots;
                 Items.MaxSlots[ItemType.Setup] = character.SetupSlots;
                 Items.MaxSlots[ItemType.Etcetera] = character.EtceteraSlots;
-                Items.MaxSlots[ItemType.Cash] = character.CashSlots;
+                Items.MaxSlots[ItemType.Pet] = character.CashSlots;
             }
 
             Items.Load();

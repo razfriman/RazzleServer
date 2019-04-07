@@ -19,6 +19,9 @@ namespace RazzleServer.Game.Maple.Characters
 
         public bool IsFull => Items.Count == Slots;
 
+        public List<Item> ItemsByType(ItemType type) => Parent.Storage.Items.Where(x => x.Type == type).ToList();
+        public List<Item> ItemsByType(byte type) => ItemsByType((ItemType)type);
+
         public CharacterStorage(Character parent) => Parent = parent;
 
         public void Load()
@@ -71,16 +74,7 @@ namespace RazzleServer.Game.Maple.Characters
             using (var pw = new PacketWriter(ServerOperationCode.StorageShow))
             {
                 pw.WriteInt(npc.MapleId);
-                pw.WriteByte(Slots);
-                pw.WriteShort(0x7E);
-                pw.WriteInt(Meso);
-
-                pw.WriteByte((byte)Items.Count);
-                Items.ForEach(item => item.ToByteArray(true, true));
-                pw.WriteLong(0);
-                pw.WriteLong(0);
-                pw.WriteLong(0);
-                pw.WriteLong(0);
+                pw.WriteBytes(EncodeStorage(StorageEncodeFlags.EncodeAll));
                 Parent.Client.Send(pw);
             }
         }
@@ -92,6 +86,72 @@ namespace RazzleServer.Game.Maple.Characters
                 pw.WriteByte(result);
                 Parent.Client.Send(pw);
             }
+        }
+
+
+        public void Update(StorageResult result, StorageEncodeFlags flags)
+        {
+            using (var pw = new PacketWriter(ServerOperationCode.StorageResult))
+            {
+                pw.WriteByte(result);
+                pw.WriteBytes(EncodeStorage(flags));
+                Parent.Send(pw);
+            }
+        }
+
+        private byte[] EncodeStorage(StorageEncodeFlags flags)
+        {
+            var packet = new PacketWriter();
+            packet.WriteByte(Parent.Storage.Slots);
+            packet.WriteShort((short)flags);
+
+            if (flags.HasFlag(StorageEncodeFlags.EncodeMesos))
+            {
+                packet.WriteInt(Parent.Storage.Meso);
+            }
+
+            for (byte i = 1; i <= 5; i++)
+            {
+                var flag = GetEncodeFlagForInventory((ItemType)i);
+                if (!flags.HasFlag(flag))
+                {
+                    continue;
+                }
+
+                var itemsInInventory = ItemsByType(i);
+                packet.WriteByte((byte)itemsInInventory.Count);
+                itemsInInventory.ForEach(item => packet.WriteBytes(item.ToByteArray(true, true)));
+            }
+
+            return packet.ToArray();
+        }
+
+        public static StorageEncodeFlags GetEncodeFlagForInventory(ItemType inventory)
+        {
+            StorageEncodeFlags flag;
+            switch (inventory)
+            {
+                case ItemType.Equipment:
+                    flag = StorageEncodeFlags.EncodeInventoryEquip;
+                    break;
+                case ItemType.Usable:
+                    flag = StorageEncodeFlags.EncodeInventoryUse;
+                    break;
+                case ItemType.Setup:
+                    flag = StorageEncodeFlags.EncodeInventorySetUp;
+                    break;
+                case ItemType.Etcetera:
+                    flag = StorageEncodeFlags.EncodeInventoryEtc;
+                    break;
+                case ItemType.Pet:
+                    flag = StorageEncodeFlags.EncodeInventoryPet;
+                    break;
+                default:
+                    flag = 0;
+                    break;
+            }
+
+            return flag;
         }
     }
 }
