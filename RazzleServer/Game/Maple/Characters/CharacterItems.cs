@@ -28,7 +28,7 @@ namespace RazzleServer.Game.Maple.Characters
                 {ItemType.Usable, usableSlots},
                 {ItemType.Setup, setupSlots},
                 {ItemType.Etcetera, etceteraSlots},
-                {ItemType.Cash, cashSlots}
+                {ItemType.Pet, cashSlots}
             };
 
 
@@ -474,7 +474,7 @@ namespace RazzleServer.Game.Maple.Characters
                 spaceCount.Add(ItemType.Usable, 0);
                 spaceCount.Add(ItemType.Setup, 0);
                 spaceCount.Add(ItemType.Etcetera, 0);
-                spaceCount.Add(ItemType.Cash, 0);
+                spaceCount.Add(ItemType.Pet, 0);
             }
 
             foreach (var loopItem in items)
@@ -561,8 +561,8 @@ namespace RazzleServer.Game.Maple.Characters
 
                 pw.WriteByte(0);
 
-                pw.WriteByte(MaxSlots[ItemType.Cash]);
-                foreach (var item in this[ItemType.Cash])
+                pw.WriteByte(MaxSlots[ItemType.Pet]);
+                foreach (var item in this[ItemType.Pet])
                 {
                     pw.WriteBytes(item.ToByteArray());
                 }

@@ -90,7 +90,7 @@ namespace RazzleServer.Game.Maple.Characters
 //
         public Pet GetEquippedPet()
         {
-            var item = Parent.Items[ItemType.Cash, CurrentPetId];
+            var item = Parent.Items[ItemType.Pet, CurrentPetId];
 
             if (CurrentPetId != 0 && item?.PetId != null)
             {
