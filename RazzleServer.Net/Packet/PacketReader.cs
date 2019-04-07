@@ -46,10 +46,26 @@ namespace RazzleServer.Net.Packet
         /// <summary>
         /// Restart reading from the point specified.
         /// </summary>
-        /// <param name="length">The point of the packet to start reading from.</param>
-        public void Reset(int length) => Buffer.Seek(length, SeekOrigin.Begin);
+        /// <param name="position">The point of the packet to start reading from.</param>
+        public void Seek(int position)
+        {
+            if (position < 0 || position > Buffer.Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(position));
+            }
+            
+            Buffer.Seek(position, SeekOrigin.Begin);
+        }
 
-        public void Skip(int pLength) => Buffer.Position += Math.Min(pLength, Available);
+        public void Skip(int length)
+        {
+            if (length < 0 || length > Available)
+            {
+                throw new ArgumentOutOfRangeException(nameof(length));
+            }
+
+            Buffer.Position += length;
+        }
 
         /// <summary>
         /// Reads an unsigned byte from the stream
@@ -117,8 +133,15 @@ namespace RazzleServer.Net.Packet
         /// </summary>
         /// <param name="length">Amount of bytes</param>
         /// <returns>An ASCII string</returns>
-        public string ReadString(int length) =>
-            Encoding.ASCII.GetString(ReadBytes(length).Where(x => x != 0x00).ToArray());
+        public string ReadString(int length)
+        {
+            if (length > Available)
+            {
+                throw new ArgumentOutOfRangeException(nameof(length));
+            }
+
+            return Encoding.ASCII.GetString(ReadBytes(length).Where(x => x != 0x00).ToArray());
+        }
 
         /// <summary>
         /// Reads a maple string from the stream
@@ -135,7 +158,7 @@ namespace RazzleServer.Net.Packet
             var oldPos = Buffer.Position;
             Buffer.Position = 0;
             var ret = ReadByte();
-            
+
             if (oldPos != 0)
             {
                 Buffer.Position = oldPos;
