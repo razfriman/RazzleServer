@@ -1,3 +1,10 @@
+# Data
+FROM scratch as data
+WORKDIR /app
+COPY Data/DataCache Data/DataCache
+COPY Data/appsettings.json .
+COPY Data/DB Data/DB
+
 # Build
 FROM mcr.microsoft.com/dotnet/core/sdk:3.0 as build
 WORKDIR /src
@@ -21,4 +28,6 @@ RUN dotnet publish -c Release -o /app
 FROM mcr.microsoft.com/dotnet/core/runtime:3.0 as runtime
 WORKDIR /app
 COPY --from=publish /app .
+COPY --from=data /app .
+
 ENTRYPOINT ["dotnet", "RazzleServer.dll"]

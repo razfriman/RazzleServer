@@ -27,14 +27,14 @@ namespace RazzleServer.Game.Maple.Data.Loaders
                 }
                 catch (Exception e)
                 {
-                    Logger.Error(e, $"Error loading [{CacheName}] cache. Attempting to load from WZ");
+                    Logger.Error(e, $"Error loading [{CacheName}] cache. Attempting to load from WZ. CachePath={path}");
                     LoadFromWz();
                     await SaveToCache();
                 }
             }
             else
             {
-                Logger.Information($"[{CacheName}] cache not found. Attempting to load from WZ");
+                Logger.Information($"[{CacheName}] cache not found. Attempting to load from WZ. CachePath={path}");
                 LoadFromWz();
                 await SaveToCache();
             }

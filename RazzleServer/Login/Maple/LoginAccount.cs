@@ -21,7 +21,6 @@ namespace RazzleServer.Login.Maple
         public bool IsOnline { get; set; }
         public DateTime Birthday { get; set; }
         public DateTime Creation { get; set; }
-        public int MaxCharacters { get; set; }
 
         private readonly ILogger _log = Log.ForContext<LoginAccount>();
 
@@ -46,7 +45,6 @@ namespace RazzleServer.Login.Maple
                 Gender = (Gender)account.Gender;
                 Password = account.Password;
                 Salt = account.Salt;
-                MaxCharacters = account.MaxCharacters;
                 Birthday = account.Birthday;
                 Creation = account.Creation;
                 BanReason = (BanReasonType)account.BanReason;
@@ -74,7 +72,6 @@ namespace RazzleServer.Login.Maple
                 account.Creation = Creation;
                 account.BanReason = (byte)BanReason;
                 account.IsMaster = IsMaster;
-                account.MaxCharacters = MaxCharacters;
 
                 dbContext.SaveChanges();
             }
@@ -102,7 +99,6 @@ namespace RazzleServer.Login.Maple
                     Creation = Creation,
                     BanReason = (byte)BanReason,
                     IsMaster = IsMaster,
-                    MaxCharacters = MaxCharacters
                 };
 
                 dbContext.Accounts.Add(account);

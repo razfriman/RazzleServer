@@ -84,7 +84,6 @@ namespace RazzleServer.Login.Handlers
             client.Account.Gender = Gender.Male;
             client.Account.Birthday = DateTime.UtcNow;
             client.Account.Creation = DateTime.UtcNow;
-            client.Account.MaxCharacters = ServerConfig.Instance.DefaultCreationSlots;
             client.Account.IsMaster = true;
             client.Account.Create();
         }
