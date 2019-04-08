@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using RazzleServer.Common;
 using RazzleServer.Common.Constants;
 using RazzleServer.Data;
@@ -15,13 +14,8 @@ namespace RazzleServer.Game.Maple.Characters
         public Npc Npc { get; private set; }
         public byte Slots { get; set; }
         public int Meso { get; set; }
-        public CharacterItems Items2 { get; set; }
-        public List<Item> Items { get; set; } = new List<Item>();
-
+        public CharacterItems Items { get; set; }
         public bool IsFull => Items.Count == Slots;
-
-        public List<Item> ItemsByType(ItemType type) => Parent.Storage.Items.Where(x => x.Type == type).ToList();
-        public List<Item> ItemsByType(byte type) => ItemsByType((ItemType)type);
 
         public CharacterStorage(Character parent) => Parent = parent;
 
@@ -40,7 +34,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                 Slots = entity.Slots;
                 Meso = entity.Meso;
-                Items2 = new CharacterItems(Parent, Slots, Slots, Slots, Slots, Slots);
+                Items = new CharacterItems(Parent, Slots, Slots, Slots, Slots, Slots);
 
                 var itemEntities = dbContext.Items
                     .Where(x => x.AccountId == Parent.AccountId)
@@ -64,7 +58,7 @@ namespace RazzleServer.Game.Maple.Characters
                 dbContext.SaveChanges();
             }
 
-            Items.ForEach(item => item.Save());
+            Items.Save();
         }
 
         public void Show(Npc npc)
@@ -120,7 +114,7 @@ namespace RazzleServer.Game.Maple.Characters
                     continue;
                 }
 
-                var itemsInInventory = ItemsByType(i);
+                var itemsInInventory = Items[(ItemType)i].ToList();
                 packet.WriteByte((byte)itemsInInventory.Count);
                 itemsInInventory.ForEach(item => packet.WriteBytes(item.ToByteArray(true, true)));
             }

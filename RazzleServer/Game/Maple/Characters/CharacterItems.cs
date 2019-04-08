@@ -16,6 +16,8 @@ namespace RazzleServer.Game.Maple.Characters
         public Character Parent { get; }
         public Dictionary<ItemType, byte> MaxSlots { get; }
         private List<Item> Items { get; }
+        
+        public int Count => Items.Count;
 
         public CharacterItems(Character parent, byte equipmentSlots, byte usableSlots, byte setupSlots,
             byte etceteraSlots, byte cashSlots)

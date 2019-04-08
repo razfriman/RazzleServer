@@ -91,9 +91,7 @@ namespace RazzleServer.Game.Handlers
             client.Character.Items.Remove(item, true);
             item.Slot = (short)client.Character.Storage.Items.Count;
             item.IsStored = true;
-            item.Parent = client.Character.Storage.Items2;
-            item.Save();
-            client.Character.Storage.Items.Add(item);
+            client.Character.Storage.Items.Add(item, false, false);
             client.Character.Storage.Update(StorageResult.AddItem,
                 CharacterStorage.GetEncodeFlagForInventory(item.Type));
         }
@@ -124,9 +122,9 @@ namespace RazzleServer.Game.Handlers
                 client.Character.Storage.StorageError(StorageResult.NotEnoughMesos);
                 return;
             }
-            
+
             client.Character.PrimaryStats.Meso -= client.Character.Storage.Npc.CachedReference.StorageCost;
-            client.Character.Storage.Items.Remove(item);
+            client.Character.Storage.Items.Remove(item, true);
             item.Delete();
             item.IsStored = false;
             client.Character.Items.Add(item, forceGetSlot: true);
