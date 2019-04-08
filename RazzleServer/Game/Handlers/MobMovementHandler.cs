@@ -1,5 +1,4 @@
-﻿using RazzleServer.Common.Constants;
-using RazzleServer.Net.Packet;
+﻿using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Handlers
 {
@@ -11,7 +10,7 @@ namespace RazzleServer.Game.Handlers
             var objectId = packet.ReadInt();
             if (!client.Character.ControlledMobs.Contains(objectId))
             {
-                client.Character.LogCheatWarning(CheatType.InvalidMobMovement);
+                // Monster is already dead
                 return;
             }
 

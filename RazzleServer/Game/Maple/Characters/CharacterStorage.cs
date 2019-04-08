@@ -13,8 +13,9 @@ namespace RazzleServer.Game.Maple.Characters
     {
         public Character Parent { get; }
         public Npc Npc { get; private set; }
-        public byte Slots { get; private set; }
-        public int Meso { get; private set; }
+        public byte Slots { get; set; }
+        public int Meso { get; set; }
+        public CharacterItems Items2 { get; set; }
         public List<Item> Items { get; set; } = new List<Item>();
 
         public bool IsFull => Items.Count == Slots;
@@ -39,6 +40,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                 Slots = entity.Slots;
                 Meso = entity.Meso;
+                Items2 = new CharacterItems(Parent, Slots, Slots, Slots, Slots, Slots);
 
                 var itemEntities = dbContext.Items
                     .Where(x => x.AccountId == Parent.AccountId)
@@ -123,6 +125,7 @@ namespace RazzleServer.Game.Maple.Characters
                 itemsInInventory.ForEach(item => packet.WriteBytes(item.ToByteArray(true, true)));
             }
 
+            packet.WriteLong(0);
             return packet.ToArray();
         }
 
