@@ -1,4 +1,5 @@
-using System.Threading.Tasks;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore.Internal;
 using RazzleServer.Login;
 using RazzleServer.Net.Packet;
 
@@ -6,16 +7,12 @@ namespace RazzleServer.Tests.Util
 {
     public class FakeLoginClient : LoginClient
     {
-        public delegate void OnServerToClientPacket(PacketReader packet);
+        private readonly Dictionary<ServerOperationCode, Queue<PacketReader>> _serverToClientPackets =
+            new Dictionary<ServerOperationCode, Queue<PacketReader>>();
 
-        public event OnServerToClientPacket ServerToClientPacket;
+        private readonly Dictionary<ClientOperationCode, Queue<PacketReader>> _clientToServerPackets =
+            new Dictionary<ClientOperationCode, Queue<PacketReader>>();
 
-        public delegate void OnClientToServerPacket(PacketReader packet);
-
-        public event OnClientToServerPacket ClientToServerPacket;
-
-
-        //public FakeLoginClient(LoginServer server) : base(new Socket(SocketType.Stream, ProtocolType.Tcp), server)
         public FakeLoginClient(LoginServer server) : base(null, server)
         {
             ThrowOnExceptions = true;
@@ -24,19 +21,47 @@ namespace RazzleServer.Tests.Util
         public override void Receive(PacketReader packet)
         {
             base.Receive(packet);
-            ClientToServerPacket?.Invoke(new PacketReader(packet.ToArray()));
+            var queuePacket = new PacketReader(packet.ToArray());
+            var header = (ClientOperationCode)queuePacket.ReadByte();
+            if (!_clientToServerPackets.ContainsKey(header))
+            {
+                _clientToServerPackets[header] = new Queue<PacketReader>();
+            }
+
+            _clientToServerPackets[header].Enqueue(queuePacket);
         }
 
         public override void Send(PacketWriter packet)
         {
             base.Send(packet);
-            ServerToClientPacket?.Invoke(new PacketReader(packet.ToArray()));
+            var queuePacket = new PacketReader(packet.ToArray());
+            var header = (ServerOperationCode)queuePacket.ReadByte();
+            if (!_serverToClientPackets.ContainsKey(header))
+            {
+                _serverToClientPackets[header] = new Queue<PacketReader>();
+            }
+
+            _serverToClientPackets[header].Enqueue(queuePacket);
         }
 
-        public override async Task SendAsync(byte[] packet)
+        public PacketReader GetPacket(ServerOperationCode header)
         {
-            await base.SendAsync(packet);
-            ServerToClientPacket?.Invoke(new PacketReader(packet));
+            if (_serverToClientPackets.ContainsKey(header) && _serverToClientPackets[header].Any())
+            {
+                return _serverToClientPackets[header].Dequeue();
+            }
+
+            return null;
+        }
+
+        public PacketReader GetPacket(ClientOperationCode header)
+        {
+            if (_clientToServerPackets.ContainsKey(header) && _clientToServerPackets[header].Any())
+            {
+                return _clientToServerPackets[header].Dequeue();
+            }
+
+            return null;
         }
     }
 }

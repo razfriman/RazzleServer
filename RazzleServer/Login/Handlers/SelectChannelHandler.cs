@@ -11,7 +11,8 @@ namespace RazzleServer.Login.Handlers
             client.World = packet.ReadByte();
             client.Channel = packet.ReadByte();
 
-            var channelResult = client.Server.Manager.Worlds[client.World].CheckChannel(client.Channel);
+            var channelResult = client.Server.Manager.Worlds[client.World]?.CheckChannel(client.Channel) ??
+                                SelectChannelResult.Offline;
             var characters = client.Server.GetCharacters(client.World, client.Account.Id);
 
             using (var pw = new PacketWriter(ServerOperationCode.CharacterList))
