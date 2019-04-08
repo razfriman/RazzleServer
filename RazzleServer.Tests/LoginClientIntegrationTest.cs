@@ -11,8 +11,6 @@ namespace RazzleServer.Tests
     [TestClass]
     public class LoginClientIntegrationTest
     {
-        private const int Timeout = 2000;
-
         private FakeServerManager _server;
 
         [TestInitialize]
@@ -77,74 +75,49 @@ namespace RazzleServer.Tests
             var password = "admin";
             SendLogin(client, username, password, LoginResult.InvalidUsername);
             SendLogin(client, username, password, LoginResult.Valid);
-            CheckWorldInformation(client, false);    
+            CheckWorldInformation(client, false);
             CheckWorldInformation(client, true);
         }
 
-        private void CheckWorldInformation(FakeLoginClient client, bool isEnd)
+        [TestMethod]
+        public void ChannelSelect_Succeeds()
         {
-            var packetEvent = new ManualResetEventSlim();
+            ServerConfig.Instance.EnableAutoRegister = true;
+            var client = _server.AddFakeLoginClient();
+            var username = "admin";
+            var password = "admin";
+            SendLogin(client, username, password, LoginResult.InvalidUsername);
+            SendLogin(client, username, password, LoginResult.Valid);
+            SendChannelSelection(client, 0, 0, SelectChannelResult.Online, 0);
+        }
 
-            void WorldInformationHandler(PacketReader packet)
-            {
-                if (packetEvent.IsSet)
-                {
-                    return;
-                }
-                
-                var header = (ServerOperationCode)packet.ReadByte();
-                Assert.AreEqual(ServerOperationCode.WorldInformation, header);
-                
-                var worldId = packet.ReadByte();
+        [TestMethod]
+        public void ChannelSelect_InvalidWorld_Fails()
+        {
+            ServerConfig.Instance.EnableAutoRegister = true;
+            var client = _server.AddFakeLoginClient();
+            var username = "admin";
+            var password = "admin";
+            SendLogin(client, username, password, LoginResult.InvalidUsername);
+            SendLogin(client, username, password, LoginResult.Valid);
+            SendChannelSelection(client, -1, 0, SelectChannelResult.Offline, 0);
+        }
 
-                if (isEnd)
-                {
-                    Assert.AreEqual(0xFF, worldId);
-                }
-                else
-                {
-                    Assert.IsTrue(client.Server.Manager.Worlds.Contains(worldId));
-                    var world = client.Server.Manager.Worlds[worldId];
-                    var worldName = packet.ReadString();
-                    var channels = packet.ReadByte();
-                    
-                    Assert.AreEqual(world.Name, worldName);
-                    Assert.AreEqual(world.Channels, channels);
-                }
-
-                packetEvent.Set();
-                client.ServerToClientPacket -= WorldInformationHandler;
-            }
-
-            client.ServerToClientPacket += WorldInformationHandler;
-            packetEvent.Wait(Timeout);
+        [TestMethod]
+        public void ChannelSelect_InvalidChannel_Fails()
+        {
+            ServerConfig.Instance.EnableAutoRegister = true;
+            var client = _server.AddFakeLoginClient();
+            var username = "admin";
+            var password = "admin";
+            SendLogin(client, username, password, LoginResult.InvalidUsername);
+            SendLogin(client, username, password, LoginResult.Valid);
+            SendChannelSelection(client, 0, -1, SelectChannelResult.Offline, 0);
         }
 
         private static void SendLogin(FakeLoginClient client, string username, string password,
             LoginResult expectedResult)
         {
-            var loginEvent = new ManualResetEventSlim();
-
-            void LoginHandler(PacketReader packet)
-            {
-                if (loginEvent.IsSet)
-                {
-                    return;
-                }
-
-                var header = (ServerOperationCode)packet.ReadByte();
-                var actualResult = (LoginResult)packet.ReadByte();
-
-                Assert.AreEqual(ServerOperationCode.CheckPasswordResult, header);
-                Assert.AreEqual(expectedResult, actualResult);
-
-                loginEvent.Set();
-                client.ServerToClientPacket -= LoginHandler;
-            }
-
-            client.ServerToClientPacket += LoginHandler;
-
-
             var pw = new PacketWriter();
             pw.WriteByte((ClientOperationCode.Login));
             pw.WriteString(username);
@@ -152,8 +125,52 @@ namespace RazzleServer.Tests
             pw.WriteZeroBytes(4);
             pw.WriteZeroBytes(16);
             client.Receive(new PacketReader(pw.ToArray()));
+            var packet = client.GetPacket(ServerOperationCode.CheckPasswordResult);
+            var actualResult = (LoginResult)packet.ReadByte();
+            Assert.AreEqual(expectedResult, actualResult);
+        }
 
-            loginEvent.Wait(Timeout);
+        private static void CheckWorldInformation(FakeLoginClient client, bool isEnd)
+        {
+            var packet = client.GetPacket(ServerOperationCode.WorldInformation);
+            var worldId = packet.ReadByte();
+
+            if (isEnd)
+            {
+                Assert.AreEqual(0xFF, worldId);
+            }
+            else
+            {
+                Assert.IsTrue(client.Server.Manager.Worlds.Contains(worldId));
+                var world = client.Server.Manager.Worlds[worldId];
+                var worldName = packet.ReadString();
+                var channels = packet.ReadByte();
+
+                Assert.AreEqual(world.Name, worldName);
+                Assert.AreEqual(world.Channels, channels);
+            }
+        }
+
+        private static void SendChannelSelection(FakeLoginClient client, int world, int channel,
+            SelectChannelResult expectedResult, byte expectedCharacters)
+        {
+            var pw = new PacketWriter();
+            pw.WriteByte((ClientOperationCode.SelectChannel));
+            pw.WriteByte(world);
+            pw.WriteByte(channel);
+            client.Receive(new PacketReader(pw.ToArray()));
+
+            var packet = client.GetPacket(ServerOperationCode.CharacterList);
+            var actualResult = (SelectChannelResult)packet.ReadByte();
+            Assert.AreEqual(expectedResult, actualResult);
+
+            if (expectedResult == SelectChannelResult.Offline)
+            {
+                return;
+            }
+
+            var actualCharacters = packet.ReadByte();
+            Assert.AreEqual(expectedCharacters, actualCharacters);
         }
     }
 }
