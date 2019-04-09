@@ -80,7 +80,7 @@ namespace RazzleServer.Login.Handlers
             var error = name.Length < 4
                         || name.Length > 12
                         || server.CharacterExists(name, world)
-                        || DataProvider.CreationData.ForbiddenNames.Any(name.Contains);
+                        || DataProvider.CreationData.ForbiddenNames.Any(x => x.Equals(name, StringComparison.CurrentCultureIgnoreCase));
 
             switch (gender)
             {
