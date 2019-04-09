@@ -1,7 +1,8 @@
-pool:
-  name: Hosted Ubuntu 1604
-
-steps:
+jobs:
+- job: Build+Test
+  pool:
+    name: Hosted Ubuntu 1604
+  steps:
   - task: DotNetCoreInstaller@0
     displayName: "Use .NET Core 3 SDK"
     inputs:
@@ -26,7 +27,10 @@ steps:
       command: test
       projects: "**/*Tests/*.csproj"
       arguments: '--configuration $(BuildConfiguration)'
-
+- job: Docker
+  pool:
+    name: Hosted Ubuntu 1604
+  steps:
   - task: Docker@1
     displayName: Docker login
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
@@ -37,7 +41,6 @@ steps:
 
   - task: Docker@1
     displayName: "Build an image"
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     inputs:
       command: Build an image
       containerregistrytype: "Container Registry"
