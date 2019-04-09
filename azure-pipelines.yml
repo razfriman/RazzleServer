@@ -1,5 +1,5 @@
 jobs:
-- job: Build and Test
+- job: Build
   pool:
     name: Hosted Ubuntu 1604
   steps:
