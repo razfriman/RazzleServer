@@ -16,7 +16,7 @@ namespace RazzleServer.Game.Maple.Characters
         public Character Parent { get; }
         public Dictionary<ItemType, byte> MaxSlots { get; }
         private List<Item> Items { get; }
-        
+
         public int Count => Items.Count;
 
         public CharacterItems(Character parent, byte equipmentSlots, byte usableSlots, byte setupSlots,
@@ -70,7 +70,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Add(Item item, bool fromDrop = false, bool autoMerge = true, bool forceGetSlot = false)
         {
-            if (Available(item.MapleId) % item.MaxPerStack != 0 && autoMerge)
+            if (autoMerge && Available(item.MapleId) % item.MaxPerStack != 0)
             {
                 foreach (var loopItem in this.Where(x => x.MapleId == item.MapleId && x.Quantity < x.MaxPerStack))
                 {
@@ -102,14 +102,18 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 item.Parent = this;
 
-                if (Parent.IsInitialized && item.Slot == 0 || forceGetSlot)
+                if (item.IsStored)
+                {
+                    item.Slot = (short)Items.Count;
+                }
+                else if (Parent.IsInitialized && item.Slot == 0 || forceGetSlot)
                 {
                     item.Slot = GetNextFreeSlot(item.Type);
                 }
 
                 Items.Add(item);
 
-                if (Parent.IsInitialized)
+                if (Parent.IsInitialized && !item.IsStored)
                 {
                     using (var pw = new PacketWriter(ServerOperationCode.InventoryOperation))
                     {

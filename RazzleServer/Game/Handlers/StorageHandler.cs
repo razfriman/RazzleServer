@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using RazzleServer.Common.Constants;
-using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Handlers
@@ -89,11 +88,7 @@ namespace RazzleServer.Game.Handlers
 
             client.Character.PrimaryStats.Meso -= client.Character.Storage.Npc.CachedReference.StorageCost;
             client.Character.Items.Remove(item, true);
-            item.Slot = (short)client.Character.Storage.Items.Count;
-            item.IsStored = true;
-            client.Character.Storage.Items.Add(item, false, false);
-            client.Character.Storage.Update(StorageResult.AddItem,
-                CharacterStorage.GetEncodeFlagForInventory(item.Type));
+            client.Character.Storage.Add(item);
         }
 
         private static void HandleRemove(PacketReader packet, GameClient client)
@@ -108,6 +103,7 @@ namespace RazzleServer.Game.Handlers
             if (item == null)
             {
                 client.Character.LogCheatWarning(CheatType.InvalidStorageUpdate);
+                client.Character.Storage.StorageError(StorageResult.InventoryFullOrNot);
                 return;
             }
 
@@ -124,12 +120,9 @@ namespace RazzleServer.Game.Handlers
             }
 
             client.Character.PrimaryStats.Meso -= client.Character.Storage.Npc.CachedReference.StorageCost;
-            client.Character.Storage.Items.Remove(item, true);
-            item.Delete();
-            item.IsStored = false;
+            client.Character.Storage.Remove(item);
             client.Character.Items.Add(item, forceGetSlot: true);
             item.Save();
-            client.Character.Storage.Update(StorageResult.RemoveItem, CharacterStorage.GetEncodeFlagForInventory(type));
         }
     }
 }

@@ -150,5 +150,21 @@ namespace RazzleServer.Game.Maple.Characters
 
             return flag;
         }
+
+        public void Add(Item item)
+        {
+            item.IsStored = true;
+            Items.Add(item, false, false);
+            Save();
+            Update(StorageResult.AddItem, GetEncodeFlagForInventory(item.Type));
+        }
+
+        public void Remove(Item item)
+        {
+            Items.Remove(item, true);
+            item.Delete();
+            item.IsStored = false;
+            Update(StorageResult.RemoveItem, GetEncodeFlagForInventory(item.Type));
+        }
     }
 }
