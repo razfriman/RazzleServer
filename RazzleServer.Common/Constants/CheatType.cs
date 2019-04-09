@@ -11,6 +11,7 @@
         InvalidHeal,
         InvalidMobMovement,
         InvalidItem,
-        InvalidStorageUpdate
+        InvalidStorageUpdate,
+        InvalidShop
     }
 }

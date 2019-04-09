@@ -12,7 +12,6 @@ namespace RazzleServer.Common
             await DataProvider.Initialize();
             await ScriptProvider.Initialize();
             await LootProvider.Initialize();
-            await ShopProvider.Initialize();
         }
     }
 }

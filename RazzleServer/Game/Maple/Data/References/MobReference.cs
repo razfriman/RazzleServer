@@ -1,41 +1,36 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using RazzleServer.Common.Constants;
 using RazzleServer.Game.Maple.Life;
 using RazzleServer.Wz;
+using Serilog;
 
 namespace RazzleServer.Game.Maple.Data.References
 {
     public class MobReference
     {
+        private readonly ILogger _log = Log.ForContext<MobReference>();
+        
         public int MapleId { get; set; }
-        public byte Stance { get; set; }
-        public bool IsProvoked { get; set; }
-        public bool CanDrop { get; set; }
-        public List<Loot> Loots { get; set; }
-        public short Foothold { get; set; }
+
+        public List<Loot> Loots { get; set; } = new List<Loot>();
         public List<MobSkillReference> Skills { get; set; } = new List<MobSkillReference>();
-        public List<MobStatus> Buffs { get; set; }
-        public List<int> DeathSummons { get; set; }
+        public List<MobStatus> Buffs { get; set; } = new List<MobStatus>();
+        public List<int> DeathSummons { get; set; } = new List<int>();
+        public readonly Dictionary<byte, MobAttackDataReference> Attacks = new Dictionary<byte, MobAttackDataReference>();
         public short Level { get; set; }
         public uint Health { get; set; }
         public uint Mana { get; set; }
         public uint MaxHealth { get; set; }
         public uint MaxMana { get; set; }
-        public uint HealthRecovery { get; set; }
-        public uint ManaRecovery { get; set; }
-        public int ExplodeHealth { get; set; }
+        public int HealthRecovery { get; set; }
+        public int ManaRecovery { get; set; }
         public uint Experience { get; set; }
         public int Link { get; set; }
         public short SummonType { get; set; }
-        public int FixedDamage { get; set; }
-        public int DeathBuff { get; set; }
-        public int DeathAfter { get; set; }
         public double Traction { get; set; }
-        public bool DamagedByMobOnly { get; set; }
-        public int DropItemPeriod { get; set; }
         public byte HpBarForeColor { get; set; }
         public byte HpBarBackColor { get; set; }
-        public byte CarnivalPoints { get; set; }
         public int WeaponAttack { get; set; }
         public int WeaponDefense { get; set; }
         public int MagicAttack { get; set; }
@@ -43,14 +38,34 @@ namespace RazzleServer.Game.Maple.Data.References
         public short Accuracy { get; set; }
         public short Avoidability { get; set; }
         public short Speed { get; set; }
-        public short ChaseSpeed { get; set; }
-        public bool IsFacingLeft => Stance % 2 == 0;
+        public bool IsUndead { get; set; }
+
+        public bool IsBodyAttack { get; set; }
+
+        public string ElementAttribute { get; set; }
+
+        public bool IsNoRegen { get; set; }
+
+        public bool IsInvincible { get; set; }
+
+        public bool IsSelfDestruction { get; set; }
+
+        public bool IsFirstAttack { get; set; }
+        public bool IsNoFlip { get; set; }
+
+        public bool IsPublicReward { get; set; }
+
+        public bool IsFlies { get; set; }
+
+        public bool IsPushed { get; set; }
+
+        public bool IsBoss { get; set; }
 
         public MobReference()
         {
         }
 
-        public MobReference(WzImage img)
+        public MobReference(WzImage img, WzImage linkImg = null)
         {
             var name = img.Name.Remove(7);
             if (!int.TryParse(name, out var id))
@@ -59,53 +74,122 @@ namespace RazzleServer.Game.Maple.Data.References
             }
 
             MapleId = id;
-
             var info = img["info"];
-            Level = info["level"]?.GetShort() ?? 1;
-            MaxHealth = (uint)(info["maxHP"]?.GetInt() ?? 0);
-            Health = MaxHealth;
-            MaxMana = (uint)(info["maxMP"]?.GetInt() ?? 0);
-            Mana = MaxHealth;
-            Speed = info["speed"]?.GetShort() ?? 0;
-            HpBarForeColor = (byte)(info["hpTagColor"]?.GetInt() ?? 0);
-            HpBarBackColor = (byte)(info["hpTagBgcolor"]?.GetInt() ?? 0);
-            SummonType = info["summonType"]?.GetShort() ?? 0;
+            info.WzProperties.ForEach(node =>
+            {
+                switch (node.Name)
+                {
+                    case "link":
+                        break;
+                    case "level":
+                        Level = (byte)node.GetInt();
+                        break;
+                    case "undead":
+                        IsUndead = node.GetInt() > 0;
+                        break;
+                    case "bodyAttack":
+                        IsBodyAttack = node.GetInt() > 0;
+                        break;
+                    case "summonType":
+                        SummonType = node.GetShort();
+                        break;
+                    case "exp":
+                        Experience = (uint)node.GetInt();
+                        break;
+                    case "maxHP":
+                        MaxHealth = (uint)node.GetInt();
+                        Health = MaxHealth;
+                        break;
+                    case "maxMP":
+                        MaxMana = (uint)node.GetInt();
+                        Mana = MaxMana;
+                        break;
+                    case "elemAttr":
+                        ElementAttribute = node.GetString();
+                        break;
+                    case "PADamage":
+                        WeaponAttack = node.GetInt();
+                        break;
+                    case "PDDamage":
+                        WeaponDefense = node.GetInt();
+                        break;
+                    case "MADamage":
+                        MagicAttack = node.GetInt();
+                        break;
+                    case "MDDamage":
+                        MagicDefense = node.GetInt();
+                        break;
+                    case "eva":
+                        Avoidability = node.GetShort();
+                        break;
+                    case "pushed":
+                        IsPushed = node.GetInt() > 0;
+                        break;
+                    case "noregen":
+                        IsNoRegen = node.GetInt() > 0;
+                        break;
+                    case "invincible":
+                        IsInvincible = node.GetInt() > 0;
+                        break;
+                    case "selfDestruction":
+                        IsSelfDestruction = node.GetInt() > 0;
+                        break;
+                    case "firstAttack":
+                        IsFirstAttack = node.GetInt() > 0;
+                        break;
+                    case "noFlip":
+                        IsNoFlip = node.GetInt() > 0;
+                        break;
+                    case "acc":
+                        Accuracy = node.GetShort();
+                        break;
+                    case "publicReward":
+                        IsPublicReward = node.GetInt() > 0;
+                        break;
+                    case "fs":
+                        Traction = node.GetFloat();
+                        break;
+                    case "flySpeed":
+                    case "speed":
+                        IsFlies = node.Name == "flySpeed";
+                        Speed = node.GetShort();
+                        break;
+                    case "revive":
+                        node.WzProperties?.ForEach(x => DeathSummons.Add(x.GetInt()));
+                        break;
+                    case "skill":
+                        node.WzProperties.ForEach(x => Skills.Add(new MobSkillReference(x)));
+                        break;
+                    case "hpRecovery":
+                        HealthRecovery = node.GetInt();
+                        break;
+                    case "mpRecovery":
+                        ManaRecovery = node.GetInt();
+                        break;
+                    case "hpTagColor":
+                        HpBarForeColor = (byte)node.GetInt();
+                        break;
+                    case "hpTagBgcolor":
+                        HpBarBackColor = (byte)node.GetInt();
+                        break;
+                    case "boss":
+                        IsBoss = node.GetInt() > 0;
+                        break;
+                    default:
+                        _log.Warning($"Unknown mob info node Mob={MapleId} Name={node.Name} Value={node.WzValue}");
+                        break;
+                }
+            });
+
             Link = info["link"]?.GetInt() ?? 0;
-            WeaponAttack = info["PADamage"]?.GetInt() ?? 0;
-            WeaponDefense = info["PDDamage"]?.GetInt() ?? 0;
-            MagicAttack = info["MADamage"]?.GetInt() ?? 0;
-            MagicDefense = info["MDDamage"]?.GetInt() ?? 0;
-            Accuracy = info["acc"]?.GetShort() ?? 0;
-            Avoidability = info["eva"]?.GetShort() ?? 0;
-            Experience = (uint)(info["exp"]?.GetInt() ?? 0);
-            HealthRecovery = (uint)(info["hpRecovery"]?.GetInt() ?? 0);
-            ManaRecovery = (uint)(info["mpRecovery"]?.GetInt() ?? 0);
-            ChaseSpeed = info["chaseSpeed"]?.GetShort() ?? 0;
-            FixedDamage = info["fixedDamage"]?.GetInt() ?? 0;
-            DropItemPeriod = info["dropItemPeriod"]?.GetInt() ?? 0;
-            DamagedByMobOnly = (info["damagedByMob"]?.GetInt() ?? 0) > 0;
-            Traction = info["fs"]?.GetDouble() ?? 0d;
-            DeathAfter = info["removeAfter"]?.GetInt() ?? 0;
+            var nonInfoNodes = Link > 0 && linkImg != null ? linkImg.WzProperties : img.WzProperties;
+            var attackNodes = nonInfoNodes.Where(x => x.Name.StartsWith("attack")).ToList();
 
-            //publicReward
-            //explosiveReward
-            //HPgaugeHide
-            //firstAttack
-            //boss
-            //undead
-            //pushed
-            //bodyAttack
-            //elemAttr
-            //noFlip
-            //damagedBySelectedMob/0 = 9300150
-            //doNotRemove
-            //onlyNormalAttack
-            //buff
-
-            Loots = new List<Loot>();
-            DeathSummons = new List<int>();
-            info["skill"]?.WzProperties.ForEach(x => Skills.Add(new MobSkillReference(x)));
-            info["revive"]?.WzProperties?.ForEach(x => DeathSummons.Add(x.GetInt()));
+            foreach (var attackNode in attackNodes)
+            {
+                var attackData = new MobAttackDataReference(attackNode);
+                Attacks.Add(attackData.Id, attackData);
+            }
         }
     }
 }

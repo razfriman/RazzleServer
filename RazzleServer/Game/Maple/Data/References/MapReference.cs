@@ -24,6 +24,7 @@ namespace RazzleServer.Game.Maple.Data.References
         public bool IsSwim { get; set; }
         public bool IsShop { get; set; }
         public bool NoPartyLeaderPass { get; set; }
+        public MapFieldType FieldType { get; set; }
         public int VrRight { get; set; }
 
         public int VrBottom { get; set; }
@@ -83,6 +84,7 @@ namespace RazzleServer.Game.Maple.Data.References
             VrLeft = info["VRLeft"]?.GetInt() ?? 0;
             VrBottom = info["VRBottom"]?.GetInt() ?? 0;
             VrRight = info["VRRight"]?.GetInt() ?? 0;
+            FieldType = (MapFieldType)(info["fieldType"]?.GetInt() ?? 0);
             //mapMark
             //fieldType
             //cloud

@@ -11,7 +11,6 @@ using RazzleServer.Game.Maple.Interaction;
 using RazzleServer.Game.Maple.Life;
 using RazzleServer.Game.Maple.Maps;
 using RazzleServer.Game.Maple.Scripting;
-using RazzleServer.Game.Maple.Shops;
 using RazzleServer.Game.Maple.Util;
 using RazzleServer.Net.Packet;
 using Serilog;
@@ -50,7 +49,7 @@ namespace RazzleServer.Game.Maple.Characters
         public CharacterPets Pets { get; set; }
         public CharacterParty Party { get; set; }
         public ANpcScript NpcScript { get; set; }
-        public Shop CurrentNpcShop { get; set; }
+        public Npc CurrentNpcShop { get; set; }
         public CharacterDamage Damage { get; set; }
         private bool Assigned { get; set; }
 

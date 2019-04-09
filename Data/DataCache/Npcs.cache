@@ -1,1 +1,1381 @@
-{"Data":{"2000":{"MapleId":2000,"Script":"begin2"},"2001":{"MapleId":2001,"Script":"begin3_2"},"2002":{"MapleId":2002,"Script":"begin4"},"2003":{"MapleId":2003,"Script":"begin5"},"2100":{"MapleId":2100,"Script":"begin1_2"},"2101":{"MapleId":2101,"Script":"begin1_1"},"2102":{"MapleId":2102,"Script":"begin3_1"},"2103":{"MapleId":2103,"Script":"begin6_1"},"10000":{"MapleId":10000,"Script":"pio"},"11000":{"MapleId":11000},"11100":{"MapleId":11100},"12000":{"MapleId":12000,"Script":"begin6_2"},"12100":{"MapleId":12100},"12101":{"MapleId":12101,"Script":"rein"},"20000":{"MapleId":20000,"Script":"weapon"},"20001":{"MapleId":20001,"Script":"bari"},"20002":{"MapleId":20002,"Script":"bics"},"20100":{"MapleId":20100},"21000":{"MapleId":21000},"22000":{"MapleId":22000,"Script":"begin7"},"1001000":{"MapleId":1001000},"1001001":{"MapleId":1001001},"1001100":{"MapleId":1001100},"1002000":{"MapleId":1002000,"Script":"rithTeleport"},"1002001":{"MapleId":1002001,"Script":"teo"},"1002002":{"MapleId":1002002,"Script":"florina2"},"1002003":{"MapleId":1002003,"Script":"friend00"},"1002004":{"MapleId":1002004,"Script":"mTaxi"},"1002005":{"MapleId":1002005,"StorageCost":100},"1002006":{"MapleId":1002006,"Script":"bookPrize"},"1002100":{"MapleId":1002100,"Script":"jane"},"1010100":{"MapleId":1010100,"Script":"rina"},"1011000":{"MapleId":1011000},"1011001":{"MapleId":1011001},"1011100":{"MapleId":1011100},"1012000":{"MapleId":1012000,"Script":"taxi2"},"1012001":{"MapleId":1012001},"1012002":{"MapleId":1012002,"Script":"refine_henesys"},"1012003":{"MapleId":1012003,"Script":"stan"},"1012004":{"MapleId":1012004},"1012005":{"MapleId":1012005,"Script":"petmaster"},"1012006":{"MapleId":1012006,"Script":"pet_lifeitem"},"1012007":{"MapleId":1012007,"Script":"pet_letter"},"1012008":{"MapleId":1012008,"Script":"minigame00"},"1012009":{"MapleId":1012009,"StorageCost":100},"1012100":{"MapleId":1012100,"Script":"bowman"},"1012101":{"MapleId":1012101,"Script":"maya"},"1012102":{"MapleId":1012102,"Script":"pia"},"1012103":{"MapleId":1012103,"Script":"hair_henesys1"},"1012104":{"MapleId":1012104,"Script":"hair_henesys2"},"1012105":{"MapleId":1012105,"Script":"skin_henesys1"},"1020000":{"MapleId":1020000,"Script":"wood"},"1021000":{"MapleId":1021000},"1021001":{"MapleId":1021001},"1021100":{"MapleId":1021100},"1022000":{"MapleId":1022000,"Script":"fighter"},"1022001":{"MapleId":1022001,"Script":"taxi1"},"1022002":{"MapleId":1022002,"Script":"manji"},"1022003":{"MapleId":1022003,"Script":"refine_perion"},"1022004":{"MapleId":1022004,"Script":"refine_perion2"},"1022005":{"MapleId":1022005,"StorageCost":100},"1022100":{"MapleId":1022100,"Script":"sopia"},"1022101":{"MapleId":1022101,"Script":"go_xmas"},"1031000":{"MapleId":1031000},"1031001":{"MapleId":1031001},"1031100":{"MapleId":1031100},"1032000":{"MapleId":1032000,"Script":"taxi4"},"1032001":{"MapleId":1032001,"Script":"magician"},"1032002":{"MapleId":1032002,"Script":"refine_ellinia"},"1032003":{"MapleId":1032003,"Script":"herb_in"},"1032004":{"MapleId":1032004,"Script":"herb_out"},"1032005":{"MapleId":1032005,"Script":"mTaxi"},"1032006":{"MapleId":1032006,"StorageCost":100},"1032007":{"MapleId":1032007,"Script":"sell_ticket"},"1032008":{"MapleId":1032008,"Script":"get_ticket"},"1032009":{"MapleId":1032009,"Script":"goOutWaitingRoom"},"1032100":{"MapleId":1032100,"Script":"owen"},"1032101":{"MapleId":1032101,"Script":"rowen"},"1032102":{"MapleId":1032102,"Script":"pet_life"},"1040000":{"MapleId":1040000,"Script":"ruke"},"1040001":{"MapleId":1040001,"Script":"mike"},"1043000":{"MapleId":1043000,"Script":"bush1"},"1043001":{"MapleId":1043001,"Script":"bush2"},"1051000":{"MapleId":1051000},"1051001":{"MapleId":1051001},"1051002":{"MapleId":1051002},"1052000":{"MapleId":1052000,"Script":"alex"},"1052001":{"MapleId":1052001,"Script":"rogue"},"1052002":{"MapleId":1052002,"Script":"refine_kerning"},"1052003":{"MapleId":1052003,"Script":"refine_kerning2"},"1052004":{"MapleId":1052004,"Script":"face_henesys1"},"1052005":{"MapleId":1052005,"Script":"face_henesys2"},"1052006":{"MapleId":1052006,"Script":"subway_ticket"},"1052007":{"MapleId":1052007,"Script":"subway_in"},"1052008":{"MapleId":1052008,"Script":"subway_get1"},"1052009":{"MapleId":1052009,"Script":"subway_get2"},"1052010":{"MapleId":1052010,"Script":"subway_get3"},"1052011":{"MapleId":1052011,"Script":"subway_out"},"1052012":{"MapleId":1052012,"Script":"go_pc"},"1052013":{"MapleId":1052013,"Script":"go_pcmap"},"1052014":{"MapleId":1052014},"1052015":{"MapleId":1052015,"Script":"mouse"},"1052016":{"MapleId":1052016,"Script":"taxi3"},"1052017":{"MapleId":1052017,"StorageCost":100},"1052100":{"MapleId":1052100,"Script":"hair_kerning1"},"1052101":{"MapleId":1052101,"Script":"hair_kerning2"},"1052102":{"MapleId":1052102,"Script":"shumi"},"1052103":{"MapleId":1052103,"Script":"nelra"},"1061000":{"MapleId":1061000,"Script":"refine_sleepy"},"1061001":{"MapleId":1061001},"1061002":{"MapleId":1061002},"1061003":{"MapleId":1061003,"Script":"cool"},"1061004":{"MapleId":1061004,"Script":"rony"},"1061005":{"MapleId":1061005,"Script":"herb"},"1061006":{"MapleId":1061006,"Script":"flower_in"},"1061007":{"MapleId":1061007,"Script":"flower_out"},"1061008":{"MapleId":1061008,"StorageCost":100},"1061009":{"MapleId":1061009,"Script":"crack"},"1061010":{"MapleId":1061010,"Script":"3jobExit"},"1061100":{"MapleId":1061100,"Script":"hotel1"},"1063000":{"MapleId":1063000,"Script":"viola_pink"},"1063001":{"MapleId":1063001,"Script":"viola_blue"},"1063002":{"MapleId":1063002,"Script":"viola_white"},"1072000":{"MapleId":1072000,"Script":"change_swordman"},"1072001":{"MapleId":1072001,"Script":"change_magician"},"1072002":{"MapleId":1072002,"Script":"change_archer"},"1072003":{"MapleId":1072003,"Script":"change_rogue"},"1072004":{"MapleId":1072004,"Script":"inside_swordman"},"1072005":{"MapleId":1072005,"Script":"inside_magician"},"1072006":{"MapleId":1072006,"Script":"inside_archer"},"1072007":{"MapleId":1072007,"Script":"inside_rogue"},"1081000":{"MapleId":1081000},"1081001":{"MapleId":1081001,"Script":"florina1"},"1081100":{"MapleId":1081100},"1081101":{"MapleId":1081101},"1081102":{"MapleId":1081102},"2001000":{"MapleId":2001000,"Script":"desc_tree"},"2001001":{"MapleId":2001001,"Script":"go_tree1"},"2001002":{"MapleId":2001002,"Script":"go_tree2"},"2001003":{"MapleId":2001003,"Script":"go_tree3"},"2001004":{"MapleId":2001004,"Script":"out_tree"},"2001005":{"MapleId":2001005,"Script":"job_3th"},"2002000":{"MapleId":2002000,"Script":"go_victoria"},"2002001":{"MapleId":2002001},"2002002":{"MapleId":2002002,"Script":"thor"},"2010000":{"MapleId":2010000,"Script":"charlie"},"2010001":{"MapleId":2010001,"Script":"hair_orbis1"},"2010002":{"MapleId":2010002,"Script":"face_orbis1"},"2010003":{"MapleId":2010003,"Script":"make_orbis"},"2010004":{"MapleId":2010004},"2012000":{"MapleId":2012000,"Script":"sell_ticket"},"2012001":{"MapleId":2012001,"Script":"get_ticket"},"2012002":{"MapleId":2012002,"Script":"goOutWaitingRoom"},"2012003":{"MapleId":2012003},"2012004":{"MapleId":2012004},"2012005":{"MapleId":2012005},"2012006":{"MapleId":2012006,"Script":"getAboard"},"2012007":{"MapleId":2012007,"Script":"hair_orbis2"},"2012008":{"MapleId":2012008,"Script":"skin_orbis1"},"2012009":{"MapleId":2012009,"Script":"face_orbis2"},"2012010":{"MapleId":2012010,"Script":"oldBook3"},"2012011":{"MapleId":2012011,"Script":"oldBook8"},"2012012":{"MapleId":2012012,"Script":"oldBook2"},"2012013":{"MapleId":2012013,"Script":"get_ticket"},"2012014":{"MapleId":2012014,"Script":"ossyria3_1"},"2012015":{"MapleId":2012015,"Script":"ossyria3_2"},"2020000":{"MapleId":2020000,"Script":"refine_elnath"},"2020001":{"MapleId":2020001},"2020002":{"MapleId":2020002,"Script":"make_elnath"},"2020003":{"MapleId":2020003,"Script":"alpha_fox"},"2020004":{"MapleId":2020004,"StorageCost":150},"2020005":{"MapleId":2020005,"Script":"oldBook1"},"2020006":{"MapleId":2020006,"Script":"oldBook4"},"2020007":{"MapleId":2020007,"Script":"oldBook10"},"2020008":{"MapleId":2020008,"Script":"warrior3"},"2020009":{"MapleId":2020009,"Script":"wizard3"},"2020010":{"MapleId":2020010,"Script":"bowman3"},"2020011":{"MapleId":2020011,"Script":"thief3"},"2022000":{"MapleId":2022000},"2022001":{"MapleId":2022001},"2030000":{"MapleId":2030000,"Script":"goDungeon"},"2030001":{"MapleId":2030001,"Script":"alpha_bravo"},"2030002":{"MapleId":2030002,"Script":"alpha_easy"},"2030003":{"MapleId":2030003,"Script":"oldBook6"},"2030004":{"MapleId":2030004,"Script":"oldBook9"},"2030005":{"MapleId":2030005,"Script":"oldBook11"},"2030006":{"MapleId":2030006,"Script":"holyStone"},"2030007":{"MapleId":2030007,"Script":"ska_ring"},"2030008":{"MapleId":2030008,"Script":"Zakum00"},"2030009":{"MapleId":2030009},"2030010":{"MapleId":2030010,"Script":"Zakum06"},"2030011":{"MapleId":2030011,"Script":"Zakum04"},"2030012":{"MapleId":2030012,"Script":"ossyria3_3"},"2032000":{"MapleId":2032000,"Script":"oldBook7"},"2032001":{"MapleId":2032001,"Script":"oldBook5"},"2032002":{"MapleId":2032002,"Script":"Zakum01"},"2032003":{"MapleId":2032003,"Script":"Zakum02"},"2040000":{"MapleId":2040000,"Script":"sell_ticket"},"2040001":{"MapleId":2040001},"2040002":{"MapleId":2040002},"2040003":{"MapleId":2040003},"2040004":{"MapleId":2040004,"Script":"ludi001"},"2040005":{"MapleId":2040005,"Script":"ludi002"},"2040006":{"MapleId":2040006,"Script":"ludi003"},"2040007":{"MapleId":2040007,"Script":"ludi004"},"2040008":{"MapleId":2040008,"Script":"ludi005"},"2040009":{"MapleId":2040009,"Script":"ludi006"},"2040010":{"MapleId":2040010,"Script":"ludi007"},"2040011":{"MapleId":2040011,"Script":"ludi008"},"2040012":{"MapleId":2040012,"Script":"ludi009"},"2040013":{"MapleId":2040013,"Script":"ludi010"},"2040014":{"MapleId":2040014,"Script":"minigame00"},"2040015":{"MapleId":2040015,"Script":"ludi000"},"2040016":{"MapleId":2040016,"Script":"make_ludi1"},"2040017":{"MapleId":2040017},"2040018":{"MapleId":2040018},"2040019":{"MapleId":2040019,"Script":"face_ludi2"},"2040020":{"MapleId":2040020,"Script":"make_ludi2"},"2040021":{"MapleId":2040021,"Script":"make_ludi3"},"2040022":{"MapleId":2040022,"Script":"make_ludi4"},"2040023":{"MapleId":2040023,"Script":"ludi13"},"2040024":{"MapleId":2040024,"Script":"ludi14"},"2040025":{"MapleId":2040025,"Script":"ludi15"},"2040026":{"MapleId":2040026,"Script":"ludi16"},"2040027":{"MapleId":2040027,"Script":"ludi17"},"2041000":{"MapleId":2041000,"Script":"get_ticket"},"2041001":{"MapleId":2041001,"Script":"goOutWaitingRoom"},"2041002":{"MapleId":2041002},"2041003":{"MapleId":2041003},"2041004":{"MapleId":2041004,"Script":"ludi12"},"2041005":{"MapleId":2041005},"2041006":{"MapleId":2041006},"2041007":{"MapleId":2041007,"Script":"hair_ludi1"},"2041008":{"MapleId":2041008,"StorageCost":100},"2041009":{"MapleId":2041009,"Script":"hair_ludi2"},"2041010":{"MapleId":2041010,"Script":"face_ludi1"},"2041011":{"MapleId":2041011},"2041012":{"MapleId":2041012},"2041013":{"MapleId":2041013,"Script":"skin_ludi1"},"2041014":{"MapleId":2041014},"2050000":{"MapleId":2050000},"2050001":{"MapleId":2050001},"2050002":{"MapleId":2050002},"2050003":{"MapleId":2050003},"2050004":{"MapleId":2050004,"StorageCost":100},"2050005":{"MapleId":2050005},"2050006":{"MapleId":2050006},"2050007":{"MapleId":2050007},"2051000":{"MapleId":2051000},"9000000":{"MapleId":9000000,"Script":"Event00"},"9000001":{"MapleId":9000001,"Script":"Event00"},"9000002":{"MapleId":9000002,"Script":"Event02"},"9000003":{"MapleId":9000003,"Script":"Event03"},"9000004":{"MapleId":9000004,"Script":"Event03"},"9000005":{"MapleId":9000005,"Script":"Event03"},"9000006":{"MapleId":9000006,"Script":"Event03"},"9000007":{"MapleId":9000007,"Script":"Event04"},"9000008":{"MapleId":9000008,"Script":"Event05"},"9000009":{"MapleId":9000009,"Script":"Event03_1"},"9000010":{"MapleId":9000010,"Script":"Event06"},"9000011":{"MapleId":9000011,"Script":"Event00"},"9000012":{"MapleId":9000012,"Script":"Event09"},"9000013":{"MapleId":9000013,"Script":"Event00"},"9000014":{"MapleId":9000014,"Script":"Event01"},"9010000":{"MapleId":9010000,"Script":"cakePrize"},"9010001":{"MapleId":9010001,"Script":"Event07"},"9010002":{"MapleId":9010002,"Script":"Event07"},"9010003":{"MapleId":9010003,"Script":"Event07"},"9010004":{"MapleId":9010004,"Script":"ludiEvent"},"9020000":{"MapleId":9020000,"Script":"party1_enter"},"9020001":{"MapleId":9020001,"Script":"party1_play"},"9020002":{"MapleId":9020002,"Script":"party1_out"},"9100000":{"MapleId":9100000,"Script":"neko1"},"9100001":{"MapleId":9100001,"Script":"neko2"},"9100002":{"MapleId":9100002,"Script":"neko3"},"9100003":{"MapleId":9100003,"Script":"neko4"},"9100004":{"MapleId":9100004,"Script":"neko5"},"9110000":{"MapleId":9110000,"Script":"goKinoc"},"9110001":{"MapleId":9110001},"9110002":{"MapleId":9110002,"Script":"mushgirl"},"9110003":{"MapleId":9110003},"9110004":{"MapleId":9110004},"9110005":{"MapleId":9110005},"9110006":{"MapleId":9110006},"9110007":{"MapleId":9110007},"9110008":{"MapleId":9110008,"Script":"goKerning"},"9110009":{"MapleId":9110009,"Script":"gachapon1"},"9110010":{"MapleId":9110010,"Script":"gachapon2"},"9110011":{"MapleId":9110011,"Script":"gachapon3"},"9110012":{"MapleId":9110012,"Script":"gachapon4"},"9110013":{"MapleId":9110013,"Script":"gachapon5"},"9110014":{"MapleId":9110014,"Script":"gachapon6"},"9110015":{"MapleId":9110015,"Script":"surfing"},"9900000":{"MapleId":9900000,"Script":"levelUP"},"9900001":{"MapleId":9900001,"Script":"levelUP2"}}}
+{"Data":{"2000":{"ShopItems":[],"Variables":{},"MapleId":2000,"Script":"begin2","SpeakLineCount":3},"2001":{"ShopItems":[],"Variables":{},"MapleId":2001,"Script":"begin3_2","SpeakLineCount":2},"2002":{"ShopItems":[],"Variables":{},"MapleId":2002,"Script":"begin4","SpeakLineCount":3},"2003":{"ShopItems":[],"Variables":{},"MapleId":2003,"Script":"begin5","SpeakLineCount":4},"2100":{"ShopItems":[],"Variables":{},"MapleId":2100,"Script":"begin1_2","SpeakLineCount":4},"2101":{"ShopItems":[],"Variables":{},"MapleId":2101,"Script":"begin1_1","SpeakLineCount":3},"2102":{"ShopItems":[],"Variables":{},"MapleId":2102,"Script":"begin3_1","SpeakLineCount":1},"2103":{"ShopItems":[],"Variables":{},"MapleId":2103,"Script":"begin6_1","SpeakLineCount":1},"10000":{"ShopItems":[],"Variables":{},"MapleId":10000,"Script":"pio","SpeakLineCount":3},"11000":{"ShopItems":[{"MapleId":1302000,"Period":6,"Price":50,"Stock":100},{"MapleId":1312004,"Period":6,"Price":50,"Stock":100},{"MapleId":1322005,"Period":6,"Price":50,"Stock":100},{"MapleId":1332005,"Period":6,"Price":500,"Stock":100}],"Variables":{},"MapleId":11000,"SpeakLineCount":2},"11100":{"ShopItems":[{"MapleId":2000000,"Period":4,"Price":50,"Stock":100000},{"MapleId":2000001,"Period":4,"Price":160,"Stock":100000},{"MapleId":2000002,"Period":4,"Price":320,"Stock":100000},{"MapleId":2010000,"Period":4,"Price":30,"Stock":100000},{"MapleId":2010002,"Period":4,"Price":50,"Stock":100000}],"Variables":{},"MapleId":11100,"SpeakLineCount":3},"12000":{"ShopItems":[],"Variables":{},"MapleId":12000,"Script":"begin6_2","SpeakLineCount":3},"12100":{"ShopItems":[],"Variables":{},"MapleId":12100,"SpeakLineCount":3},"12101":{"ShopItems":[],"Variables":{},"MapleId":12101,"Script":"rein","SpeakLineCount":3},"20000":{"ShopItems":[],"Variables":{},"MapleId":20000,"Script":"weapon","SpeakLineCount":3},"20001":{"ShopItems":[],"Variables":{},"MapleId":20001,"Script":"bari","SpeakLineCount":1},"20002":{"ShopItems":[],"Variables":{},"MapleId":20002,"Script":"bics","SpeakLineCount":3},"20100":{"ShopItems":[],"Variables":{},"MapleId":20100,"SpeakLineCount":1},"21000":{"ShopItems":[{"MapleId":1040002,"Period":6,"Price":50,"Stock":100},{"MapleId":1040006,"Period":6,"Price":50,"Stock":100},{"MapleId":1040010,"Period":6,"Price":50,"Stock":100},{"MapleId":1041002,"Period":6,"Price":50,"Stock":100},{"MapleId":1041006,"Period":6,"Price":50,"Stock":100},{"MapleId":1041010,"Period":6,"Price":50,"Stock":100},{"MapleId":1041011,"Period":6,"Price":50,"Stock":100},{"MapleId":1060002,"Period":6,"Price":50,"Stock":100},{"MapleId":1060006,"Period":6,"Price":50,"Stock":100},{"MapleId":1061002,"Period":6,"Price":50,"Stock":100},{"MapleId":1061008,"Period":6,"Price":50,"Stock":100},{"MapleId":1072001,"Period":6,"Price":50,"Stock":100},{"MapleId":1072005,"Period":6,"Price":50,"Stock":100}],"Variables":{},"MapleId":21000,"SpeakLineCount":3},"22000":{"ShopItems":[],"Variables":{},"MapleId":22000,"Script":"begin7","SpeakLineCount":2},"1001000":{"ShopItems":[{"MapleId":1302000,"Period":6,"Price":50,"Stock":100},{"MapleId":1312004,"Period":6,"Price":50,"Stock":100},{"MapleId":1322005,"Period":6,"Price":50,"Stock":100},{"MapleId":1302007,"Period":6,"Price":3000,"Stock":100},{"MapleId":1312000,"Period":6,"Price":3000,"Stock":100},{"MapleId":1332007,"Period":6,"Price":1000,"Stock":100}],"Variables":{},"MapleId":1001000,"SpeakLineCount":2},"1001001":{"ShopItems":[{"MapleId":1002008,"Period":6,"Price":500,"Stock":100},{"MapleId":1002014,"Period":6,"Price":1000,"Stock":100},{"MapleId":1002066,"Period":6,"Price":450,"Stock":100},{"MapleId":1002067,"Period":6,"Price":450,"Stock":100},{"MapleId":1002068,"Period":6,"Price":450,"Stock":100},{"MapleId":1002069,"Period":6,"Price":450,"Stock":100},{"MapleId":1002132,"Period":6,"Price":800,"Stock":100},{"MapleId":1002133,"Period":6,"Price":800,"Stock":100},{"MapleId":1002134,"Period":6,"Price":800,"Stock":100},{"MapleId":1002019,"Period":6,"Price":2000,"Stock":100},{"MapleId":1002001,"Period":6,"Price":3000,"Stock":100},{"MapleId":1040013,"Period":6,"Price":3000,"Stock":100},{"MapleId":1040014,"Period":6,"Price":3000,"Stock":100},{"MapleId":1041004,"Period":6,"Price":3000,"Stock":100},{"MapleId":1041012,"Period":6,"Price":3000,"Stock":100},{"MapleId":1060007,"Period":6,"Price":1000,"Stock":100},{"MapleId":1060004,"Period":6,"Price":2800,"Stock":100},{"MapleId":1062000,"Period":6,"Price":4800,"Stock":100},{"MapleId":1062001,"Period":6,"Price":4800,"Stock":100},{"MapleId":1072001,"Period":6,"Price":50,"Stock":100},{"MapleId":1072037,"Period":6,"Price":50,"Stock":100},{"MapleId":1072038,"Period":6,"Price":50,"Stock":100},{"MapleId":1072005,"Period":6,"Price":50,"Stock":100},{"MapleId":1072008,"Period":6,"Price":5000,"Stock":100},{"MapleId":1072048,"Period":6,"Price":5000,"Stock":100},{"MapleId":1072049,"Period":6,"Price":5000,"Stock":100},{"MapleId":1072017,"Period":6,"Price":10000,"Stock":100},{"MapleId":1072062,"Period":6,"Price":10000,"Stock":100},{"MapleId":1072063,"Period":6,"Price":10000,"Stock":100},{"MapleId":1092003,"Period":6,"Price":2000,"Stock":100},{"MapleId":2070000,"Period":4,"Price":500,"Stock":100000,"UnitRechargeRate":0.3},{"MapleId":2070001,"Period":4,"Stock":100000,"UnitRechargeRate":0.4},{"MapleId":2070002,"Period":4,"Stock":100000,"UnitRechargeRate":0.5},{"MapleId":2070003,"Period":4,"Stock":100000,"UnitRechargeRate":0.6},{"MapleId":2070004,"Period":4,"Stock":100000,"UnitRechargeRate":0.6},{"MapleId":2070005,"Period":4,"Stock":100000,"UnitRechargeRate":0.7},{"MapleId":2070006,"Period":4,"Stock":100000,"UnitRechargeRate":0.8},{"MapleId":2070007,"Period":4,"Stock":100000,"UnitRechargeRate":1.0},{"MapleId":2070008,"Period":4,"Stock":100000,"UnitRechargeRate":1.0},{"MapleId":2070009,"Period":4,"Stock":100000,"UnitRechargeRate":1.0},{"MapleId":2070010,"Period":4,"Stock":100000,"UnitRechargeRate":1.0}],"Variables":{},"MapleId":1001001,"SpeakLineCount":3},"1001100":{"ShopItems":[{"MapleId":2000000,"Period":4,"Price":50,"Stock":100000},{"MapleId":2000001,"Period":4,"Price":160,"Stock":100000},{"MapleId":2000002,"Period":4,"Price":320,"Stock":100000},{"MapleId":2000003,"Period":4,"Price":200,"Stock":100000},{"MapleId":2000006,"Period":4,"Price":620,"Stock":100000},{"MapleId":2002000,"Period":4,"Price":500,"Stock":100000},{"MapleId":2002001,"Period":4,"Price":400,"Stock":100000},{"MapleId":2002002,"Period":4,"Price":500,"Stock":100000},{"MapleId":2002004,"Period":4,"Price":500,"Stock":100000},{"MapleId":2002005,"Period":4,"Price":500,"Stock":100000},{"MapleId":2010000,"Period":4,"Price":30,"Stock":100000},{"MapleId":2010002,"Period":4,"Price":50,"Stock":100000},{"MapleId":2010001,"Period":4,"Price":106,"Stock":100000},{"MapleId":2010003,"Period":4,"Price":100,"Stock":100000},{"MapleId":2010004,"Period":4,"Price":310,"Stock":100000},{"MapleId":2060000,"Period":4,"Price":1},{"MapleId":2061000,"Period":4,"Price":1},{"MapleId":2030000,"Period":4,"Price":400,"Stock":100000},{"MapleId":2030001,"Period":4,"Price":500,"Stock":100000}],"Variables":{},"MapleId":1001100,"SpeakLineCount":3},"1002000":{"ShopItems":[],"Variables":{},"MapleId":1002000,"Script":"rithTeleport","SpeakLineCount":3},"1002001":{"ShopItems":[],"Variables":{},"MapleId":1002001,"Script":"teo","SpeakLineCount":3},"1002002":{"ShopItems":[],"Variables":{},"MapleId":1002002,"Script":"florina2","SpeakLineCount":2},"1002003":{"ShopItems":[],"Variables":{},"MapleId":1002003,"Script":"friend00","SpeakLineCount":2},"1002004":{"ShopItems":[],"Variables":{},"MapleId":1002004,"Script":"mTaxi"},"1002005":{"ShopItems":[],"Variables":{},"MapleId":1002005,"StorageCost":100,"SpeakLineCount":2},"1002006":{"ShopItems":[],"Variables":{},"MapleId":1002006,"Script":"bookPrize","SpeakLineCount":2},"1002100":{"ShopItems":[],"Variables":{},"MapleId":1002100,"Script":"jane","SpeakLineCount":2},"1010100":{"ShopItems":[],"Variables":{},"MapleId":1010100,"Script":"rina","SpeakLineCount":3},"1011000":{"ShopItems":[{"MapleId":1452002,"Period":6,"Price":3000,"Stock":100},{"MapleId":1452003,"Period":6,"Price":6000,"Stock":100},{"MapleId":1452001,"Period":6,"Price":10000,"Stock":100},{"MapleId":1452000,"Period":6,"Price":20000,"Stock":100},{"MapleId":1462001,"Period":6,"Price":4000,"Stock":100},{"MapleId":1462002,"Period":6,"Price":8000,"Stock":100},{"MapleId":1462003,"Period":6,"Price":12000,"Stock":100},{"MapleId":1462000,"Period":6,"Price":30000,"Stock":100},{"MapleId":1302007,"Period":6,"Price":3000,"Stock":100},{"MapleId":1322007,"Period":6,"Price":6000,"Stock":100},{"MapleId":1322008,"Period":6,"Price":12000,"Stock":100},{"MapleId":1422004,"Period":6,"Price":20000,"Stock":100},{"MapleId":1442004,"Period":6,"Price":24000,"Stock":100}],"Variables":{},"MapleId":1011000,"SpeakLineCount":2},"1011001":{"ShopItems":[{"MapleId":1002008,"Period":6,"Price":500,"Stock":100},{"MapleId":1002033,"Period":6,"Price":3000,"Stock":100},{"MapleId":1002012,"Period":6,"Price":3000,"Stock":100},{"MapleId":1002060,"Period":6,"Price":3000,"Stock":100},{"MapleId":1002061,"Period":6,"Price":3000,"Stock":100},{"MapleId":1002062,"Period":6,"Price":3000,"Stock":100},{"MapleId":1002063,"Period":6,"Price":3000,"Stock":100},{"MapleId":1002112,"Period":4,"Price":4000,"Stock":100},{"MapleId":1002113,"Period":4,"Price":4000,"Stock":100},{"MapleId":1002114,"Period":4,"Price":4000,"Stock":100},{"MapleId":1002115,"Period":4,"Price":4000,"Stock":100},{"MapleId":1002116,"Period":4,"Price":4000,"Stock":100},{"MapleId":1002117,"Period":6,"Price":12000,"Stock":100},{"MapleId":1002118,"Period":6,"Price":12000,"Stock":100},{"MapleId":1002119,"Period":6,"Price":12000,"Stock":100},{"MapleId":1002120,"Period":6,"Price":12000,"Stock":100},{"MapleId":1002121,"Period":6,"Price":12000,"Stock":100},{"MapleId":1002010,"Period":6,"Price":800,"Stock":100},{"MapleId":1002057,"Period":6,"Price":800,"Stock":100},{"MapleId":1002156,"Period":6,"Price":20000,"Stock":100},{"MapleId":1002157,"Period":6,"Price":20000,"Stock":100},{"MapleId":1002158,"Period":6,"Price":20000,"Stock":100},{"MapleId":1002159,"Period":6,"Price":20000,"Stock":100},{"MapleId":1002160,"Period":6,"Price":20000,"Stock":100},{"MapleId":1002161,"Period":6,"Price":30000,"Stock":100},{"MapleId":1002162,"Period":6,"Price":30000,"Stock":100},{"MapleId":1002163,"Period":6,"Price":30000,"Stock":100},{"MapleId":1002164,"Period":6,"Price":30000,"Stock":100},{"MapleId":1002165,"Period":6,"Price":30000,"Stock":100},{"MapleId":1032001,"Period":6,"Price":7000,"Stock":100},{"MapleId":1032003,"Period":6,"Price":7000,"Stock":100},{"MapleId":1040008,"Period":6,"Price":3200,"Stock":100},{"MapleId":1040071,"Period":6,"Price":3200,"Stock":100},{"MapleId":1040007,"Period":6,"Price":5500,"Stock":100},{"MapleId":1040011,"Period":6,"Price":5500,"Stock":100},{"MapleId":1040003,"Period":6,"Price":9000,"Stock":100},{"MapleId":1040022,"Period":6,"Price":15000,"Stock":100},{"MapleId":1040023,"Period":6,"Price":15000,"Stock":100},{"MapleId":1040024,"Period":6,"Price":15000,"Stock":100},{"MapleId":1040025,"Period":6,"Price":15000,"Stock":100},{"MapleId":1040067,"Period":6,"Price":50000,"Stock":100},{"MapleId":1040068,"Period":6,"Price":50000,"Stock":100},{"MapleId":1040069,"Period":6,"Price":50000,"Stock":100},{"MapleId":1040070,"Period":6,"Price":50000,"Stock":100},{"MapleId":1041007,"Period":6,"Price":3200,"Stock":100},{"MapleId":1041061,"Period":6,"Price":3200,"Stock":100},{"MapleId":1041008,"Period":6,"Price":5500,"Stock":100},{"MapleId":1041062,"Period":6,"Price":5500,"Stock":100},{"MapleId":1041063,"Period":6,"Price":5500,"Stock":100},{"MapleId":1041013,"Period":6,"Price":9000,"Stock":100},{"MapleId":1041027,"Period":6,"Price":9000,"Stock":100},{"MapleId":1041028,"Period":6,"Price":9000,"Stock":100},{"MapleId":1041032,"Period":6,"Price":15000,"Stock":100},{"MapleId":1041033,"Period":6,"Price":15000,"Stock":100},{"MapleId":1041034,"Period":6,"Price":15000,"Stock":100},{"MapleId":1041035,"Period":6,"Price":15000,"Stock":100},{"MapleId":1041054,"Period":6,"Price":50000,"Stock":100},{"MapleId":1041055,"Period":6,"Price":50000,"Stock":100},{"MapleId":1041056,"Period":6,"Price":50000,"Stock":100},{"MapleId":1060005,"Period":6,"Price":14000,"Stock":100},{"MapleId":1060056,"Period":6,"Price":44000,"Stock":100},{"MapleId":1060057,"Period":6,"Price":44000,"Stock":100},{"MapleId":1060058,"Period":6,"Price":44000,"Stock":100},{"MapleId":1060059,"Period":6,"Price":44000,"Stock":100},{"MapleId":1061009,"Period":6,"Price":3000,"Stock":100},{"MapleId":1061057,"Period":6,"Price":3000,"Stock":100},{"MapleId":1061006,"Period":6,"Price":5000,"Stock":100},{"MapleId":1061058,"Period":6,"Price":5000,"Stock":100},{"MapleId":1061059,"Period":6,"Price":5000,"Stock":100},{"MapleId":1061024,"Period":6,"Price":9000,"Stock":100},{"MapleId":1061025,"Period":6,"Price":9000,"Stock":100},{"MapleId":1061026,"Period":6,"Price":9000,"Stock":100},{"MapleId":1061050,"Period":6,"Price":44000,"Stock":100},{"MapleId":1061051,"Period":6,"Price":44000,"Stock":100},{"MapleId":1061052,"Period":6,"Price":44000,"Stock":100},{"MapleId":1062004,"Period":6,"Price":3000,"Stock":100},{"MapleId":1062002,"Period":6,"Price":9000,"Stock":100},{"MapleId":1062006,"Period":6,"Price":13000,"Stock":100},{"MapleId":1072015,"Period":6,"Price":1800,"Stock":100},{"MapleId":1072059,"Period":6,"Price":1800,"Stock":100},{"MapleId":1072016,"Period":6,"Price":4500,"Stock":100},{"MapleId":1072060,"Period":6,"Price":4500,"Stock":100},{"MapleId":1072061,"Period":6,"Price":4500,"Stock":100},{"MapleId":1072025,"Period":6,"Price":9000,"Stock":100},{"MapleId":1072026,"Period":6,"Price":9000,"Stock":100},{"MapleId":1072067,"Period":6,"Price":9000,"Stock":100},{"MapleId":1072068,"Period":6,"Price":9000,"Stock":100},{"MapleId":1072012,"Period":6,"Price":15000,"Stock":100},{"MapleId":1072054,"Period":6,"Price":15000,"Stock":100},{"MapleId":1072055,"Period":6,"Price":15000,"Stock":100},{"MapleId":1072056,"Period":6,"Price":15000,"Stock":100},{"MapleId":1072018,"Period":6,"Price":30000,"Stock":100},{"MapleId":1072064,"Period":6,"Price":30000,"Stock":100},{"MapleId":2070000,"Period":4,"Price":500,"Stock":100000,"UnitRechargeRate":0.3},{"MapleId":2070001,"Period":4,"Stock":100000,"UnitRechargeRate":0.4},{"MapleId":2070002,"Period":4,"Stock":100000,"UnitRechargeRate":0.5},{"MapleId":2070003,"Period":4,"Stock":100000,"UnitRechargeRate":0.6},{"MapleId":2070004,"Period":4,"Stock":100000,"UnitRechargeRate":0.6},{"MapleId":2070005,"Period":4,"Stock":100000,"UnitRechargeRate":0.7},{"MapleId":2070006,"Period":4,"Stock":100000,"UnitRechargeRate":0.8},{"MapleId":2070007,"Period":4,"Stock":100000,"UnitRechargeRate":1.0},{"MapleId":2070008,"Period":4,"Stock":100000,"UnitRechargeRate":1.0},{"MapleId":2070009,"Period":4,"Stock":100000,"UnitRechargeRate":1.0},{"MapleId":2070010,"Period":4,"Stock":100000,"UnitRechargeRate":1.0}],"Variables":{},"MapleId":1011001,"SpeakLineCount":2},"1011100":{"ShopItems":[{"MapleId":2000000,"Period":4,"Price":50,"Stock":100000},{"MapleId":2000001,"Period":4,"Price":160,"Stock":100000},{"MapleId":2000002,"Period":4,"Price":320,"Stock":100000},{"MapleId":2000003,"Period":4,"Price":200,"Stock":100000},{"MapleId":2000006,"Period":4,"Price":620,"Stock":100000},{"MapleId":2002000,"Period":4,"Price":500,"Stock":100000},{"MapleId":2002001,"Period":4,"Price":400,"Stock":100000},{"MapleId":2002002,"Period":4,"Price":500,"Stock":100000},{"MapleId":2002004,"Period":4,"Price":500,"Stock":100000},{"MapleId":2002005,"Period":4,"Price":500,"Stock":100000},{"MapleId":2010000,"Period":4,"Price":30,"Stock":100000},{"MapleId":2010002,"Period":4,"Price":50,"Stock":100000},{"MapleId":2010001,"Period":4,"Price":106,"Stock":100000},{"MapleId":2010003,"Period":4,"Price":100,"Stock":100000},{"MapleId":2010004,"Period":4,"Price":310,"Stock":100000},{"MapleId":2060000,"Period":4,"Price":1},{"MapleId":2061000,"Period":4,"Price":1},{"MapleId":2030000,"Period":4,"Price":400,"Stock":100000},{"MapleId":2030004,"Period":4,"Price":500,"Stock":100000},{"MapleId":2050000,"Period":2,"Price":200,"Stock":100000},{"MapleId":2050001,"Period":2,"Price":200,"Stock":100000},{"MapleId":2050002,"Period":2,"Price":300,"Stock":100000},{"MapleId":2040000,"Period":4,"Price":35000,"Stock":20},{"MapleId":2040400,"Period":4,"Price":35000,"Stock":20},{"MapleId":2040600,"Period":4,"Price":35000,"Stock":20},{"MapleId":2040700,"Period":4,"Price":35000,"Stock":20},{"MapleId":2044500,"Period":4,"Price":70000,"Stock":20},{"MapleId":2044600,"Period":4,"Price":70000,"Stock":20}],"Variables":{},"MapleId":1011100,"SpeakLineCount":1},"1012000":{"ShopItems":[],"Variables":{},"MapleId":1012000,"Script":"taxi2"},"1012001":{"ShopItems":[],"Variables":{},"MapleId":1012001,"SpeakLineCount":3},"1012002":{"ShopItems":[],"Variables":{},"MapleId":1012002,"Script":"refine_henesys","SpeakLineCount":1},"1012003":{"ShopItems":[],"Variables":{},"MapleId":1012003,"Script":"stan","SpeakLineCount":2},"1012004":{"ShopItems":[{"MapleId":2120000,"Period":1,"Price":30,"Stock":1000000000}],"Variables":{},"MapleId":1012004,"SpeakLineCount":2},"1012005":{"ShopItems":[],"Variables":{},"MapleId":1012005,"Script":"petmaster","SpeakLineCount":2},"1012006":{"ShopItems":[],"Variables":{},"MapleId":1012006,"Script":"pet_lifeitem","SpeakLineCount":2},"1012007":{"ShopItems":[],"Variables":{},"MapleId":1012007,"Script":"pet_letter","SpeakLineCount":2},"1012008":{"ShopItems":[],"Variables":{},"MapleId":1012008,"Script":"minigame00","SpeakLineCount":2},"1012009":{"ShopItems":[],"Variables":{},"MapleId":1012009,"StorageCost":100,"SpeakLineCount":2},"1012100":{"ShopItems":[],"Variables":{},"MapleId":1012100,"Script":"bowman","SpeakLineCount":1},"1012101":{"ShopItems":[],"Variables":{},"MapleId":1012101,"Script":"maya","SpeakLineCount":1},"1012102":{"ShopItems":[],"Variables":{},"MapleId":1012102,"Script":"pia","SpeakLineCount":3},"1012103":{"ShopItems":[],"Variables":{},"MapleId":1012103,"Script":"hair_henesys1","SpeakLineCount":2},"1012104":{"ShopItems":[],"Variables":{},"MapleId":1012104,"Script":"hair_henesys2","SpeakLineCount":2},"1012105":{"ShopItems":[],"Variables":{},"MapleId":1012105,"Script":"skin_henesys1","SpeakLineCount":3},"1020000":{"ShopItems":[],"Variables":{},"MapleId":1020000,"Script":"wood","SpeakLineCount":3},"1021000":{"ShopItems":[{"MapleId":1302007,"Period":6,"Price":3000,"Stock":100},{"MapleId":1302005,"Period":6,"Price":6000,"Stock":100},{"MapleId":1302002,"Period":6,"Price":10000,"Stock":100},{"MapleId":1302006,"Period":6,"Price":10000,"Stock":100},{"MapleId":1302003,"Period":6,"Price":20000,"Stock":100},{"MapleId":1302008,"Period":6,"Price":40000,"Stock":100},{"MapleId":1332006,"Period":6,"Price":7000,"Stock":100},{"MapleId":1332008,"Period":6,"Price":10000,"Stock":100},{"MapleId":1332010,"Period":6,"Price":22000,"Stock":100},{"MapleId":1312001,"Period":6,"Price":6000,"Stock":100},{"MapleId":1312003,"Period":6,"Price":20000,"Stock":100},{"MapleId":1312005,"Period":6,"Price":40000,"Stock":100},{"MapleId":1322000,"Period":6,"Price":6000,"Stock":100},{"MapleId":1322002,"Period":6,"Price":10000,"Stock":100},{"MapleId":1322004,"Period":6,"Price":22000,"Stock":100},{"MapleId":1322014,"Period":6,"Price":40000,"Stock":100},{"MapleId":1402001,"Period":6,"Price":3000,"Stock":100},{"MapleId":1402000,"Period":6,"Price":12000,"Stock":100},{"MapleId":1402008,"Period":6,"Price":22000,"Stock":100},{"MapleId":1412001,"Period":6,"Price":3000,"Stock":100},{"MapleId":1412002,"Period":6,"Price":10000,"Stock":100},{"MapleId":1412000,"Period":6,"Price":22000,"Stock":100},{"MapleId":1412006,"Period":6,"Price":45000,"Stock":100},{"MapleId":1422000,"Period":6,"Price":3000,"Stock":100},{"MapleId":1422002,"Period":6,"Price":6000,"Stock":100},{"MapleId":1422003,"Period":6,"Price":10000,"Stock":100},{"MapleId":1422006,"Period":6,"Price":10000,"Stock":100},{"MapleId":1422004,"Period":6,"Price":20000,"Stock":100},{"MapleId":1432000,"Period":6,"Price":3000,"Stock":100},{"MapleId":1432001,"Period":6,"Price":7000,"Stock":100},{"MapleId":1442000,"Period":6,"Price":3000,"Stock":100},{"MapleId":1442006,"Period":6,"Price":8000,"Stock":100},{"MapleId":1442007,"Period":6,"Price":12000,"Stock":100},{"MapleId":1442004,"Period":6,"Price":24000,"Stock":100}],"Variables":{},"MapleId":1021000,"SpeakLineCount":2},"1021001":{"ShopItems":[{"MapleId":1002043,"Period":6,"Price":2400,"Stock":100},{"MapleId":1002039,"Period":6,"Price":2700,"Stock":100},{"MapleId":1002051,"Period":6,"Price":3500,"Stock":100},{"MapleId":1002055,"Period":6,"Price":8700,"Stock":100},{"MapleId":1002059,"Period":6,"Price":8500,"Stock":100},{"MapleId":1002027,"Period":6,"Price":11500,"Stock":100},{"MapleId":1002005,"Period":6,"Price":19000,"Stock":100},{"MapleId":1040015,"Period":6,"Price":3200,"Stock":100},{"MapleId":1040038,"Period":6,"Price":3200,"Stock":100},{"MapleId":1040009,"Period":6,"Price":5500,"Stock":100},{"MapleId":1040037,"Period":6,"Price":5500,"Stock":100},{"MapleId":1040012,"Period":6,"Price":9000,"Stock":100},{"MapleId":1040039,"Period":6,"Price":9000,"Stock":100},{"MapleId":1040040,"Period":6,"Price":16000,"Stock":100},{"MapleId":1040016,"Period":6,"Price":16000,"Stock":100},{"MapleId":1040041,"Period":6,"Price":16000,"Stock":100},{"MapleId":1040021,"Period":6,"Price":40000,"Stock":100},{"MapleId":1040026,"Period":6,"Price":40000,"Stock":100},{"MapleId":1041014,"Period":6,"Price":3200,"Stock":100},{"MapleId":1041064,"Period":6,"Price":3200,"Stock":100},{"MapleId":1041019,"Period":6,"Price":9000,"Stock":100},{"MapleId":1041020,"Period":6,"Price":9000,"Stock":100},{"MapleId":1041021,"Period":6,"Price":9000,"Stock":100},{"MapleId":1041022,"Period":6,"Price":16000,"Stock":100},{"MapleId":1041023,"Period":6,"Price":16000,"Stock":100},{"MapleId":1041024,"Period":6,"Price":16000,"Stock":100},{"MapleId":1050005,"Period":6,"Price":15000,"Stock":100},{"MapleId":1050006,"Period":6,"Price":15000,"Stock":100},{"MapleId":1050007,"Period":6,"Price":15000,"Stock":100},{"MapleId":1050011,"Period":6,"Price":70000,"Stock":100},{"MapleId":1051000,"Period":6,"Price":8000,"Stock":100},{"MapleId":1051010,"Period":6,"Price":60000,"Stock":100},{"MapleId":1051011,"Period":6,"Price":60000,"Stock":100},{"MapleId":1051012,"Period":6,"Price":60000,"Stock":100},{"MapleId":1051013,"Period":6,"Price":60000,"Stock":100},{"MapleId":1060008,"Period":6,"Price":3000,"Stock":100},{"MapleId":1060028,"Period":6,"Price":3000,"Stock":100},{"MapleId":1060009,"Period":6,"Price":5000,"Stock":100},{"MapleId":1060027,"Period":6,"Price":5000,"Stock":100},{"MapleId":1060010,"Period":6,"Price":9000,"Stock":100},{"MapleId":1060029,"Period":6,"Price":9000,"Stock":100},{"MapleId":1060011,"Period":6,"Price":14000,"Stock":100},{"MapleId":1060030,"Period":6,"Price":14000,"Stock":100},{"MapleId":1060060,"Period":6,"Price":14000,"Stock":100},{"MapleId":1060016,"Period":6,"Price":38000,"Stock":100},{"MapleId":1060017,"Period":6,"Price":38000,"Stock":100},{"MapleId":1060018,"Period":6,"Price":38000,"Stock":100},{"MapleId":1060019,"Period":6,"Price":38000,"Stock":100},{"MapleId":1061014,"Period":6,"Price":3000,"Stock":100},{"MapleId":1061023,"Period":6,"Price":3000,"Stock":100},{"MapleId":1061016,"Period":6,"Price":9000,"Stock":100},{"MapleId":1061017,"Period":6,"Price":9000,"Stock":100},{"MapleId":1061018,"Period":6,"Price":9000,"Stock":100},{"MapleId":1061015,"Period":6,"Price":14000,"Stock":100},{"MapleId":1061019,"Period":6,"Price":14000,"Stock":100},{"MapleId":1061020,"Period":6,"Price":14000,"Stock":100},{"MapleId":1072009,"Period":6,"Price":5000,"Stock":100},{"MapleId":1072050,"Period":6,"Price":5000,"Stock":100},{"MapleId":1072007,"Period":6,"Price":10000,"Stock":100},{"MapleId":1072046,"Period":6,"Price":10000,"Stock":100},{"MapleId":1072047,"Period":6,"Price":10000,"Stock":100},{"MapleId":1072011,"Period":6,"Price":15000,"Stock":100},{"MapleId":1092005,"Period":6,"Price":4000,"Stock":100},{"MapleId":1092000,"Period":6,"Price":6000,"Stock":100},{"MapleId":2070000,"Period":4,"Price":500,"Stock":100000,"UnitRechargeRate":0.3},{"MapleId":2070001,"Period":4,"Stock":100000,"UnitRechargeRate":0.4},{"MapleId":2070002,"Period":4,"Stock":100000,"UnitRechargeRate":0.5},{"MapleId":2070003,"Period":4,"Stock":100000,"UnitRechargeRate":0.6},{"MapleId":2070004,"Period":4,"Stock":100000,"UnitRechargeRate":0.6},{"MapleId":2070005,"Period":4,"Stock":100000,"UnitRechargeRate":0.7},{"MapleId":2070006,"Period":4,"Stock":100000,"UnitRechargeRate":0.8},{"MapleId":2070007,"Period":4,"Stock":100000,"UnitRechargeRate":1.0},{"MapleId":2070008,"Period":4,"Stock":100000,"UnitRechargeRate":1.0},{"MapleId":2070009,"Period":4,"Stock":100000,"UnitRechargeRate":1.0},{"MapleId":2070010,"Period":4,"Stock":100000,"UnitRechargeRate":1.0}],"Variables":{},"MapleId":1021001,"SpeakLineCount":3},"1021100":{"ShopItems":[{"MapleId":2000000,"Period":4,"Price":50,"Stock":100000},{"MapleId":2000001,"Period":4,"Price":160,"Stock":100000},{"MapleId":2000002,"Period":4,"Price":320,"Stock":100000},{"MapleId":2000003,"Period":4,"Price":200,"Stock":100000},{"MapleId":2000006,"Period":4,"Price":620,"Stock":100000},{"MapleId":2002000,"Period":4,"Price":500,"Stock":100000},{"MapleId":2002001,"Period":4,"Price":400,"Stock":100000},{"MapleId":2002002,"Period":4,"Price":500,"Stock":100000},{"MapleId":2002004,"Period":4,"Price":500,"Stock":100000},{"MapleId":2002005,"Period":4,"Price":500,"Stock":100000},{"MapleId":2010000,"Period":4,"Price":30,"Stock":10000},{"MapleId":2010002,"Period":4,"Price":50,"Stock":10000},{"MapleId":2010001,"Period":4,"Price":106,"Stock":10000},{"MapleId":2010003,"Period":4,"Price":100,"Stock":10000},{"MapleId":2010004,"Period":4,"Price":310,"Stock":100000},{"MapleId":2060000,"Period":4,"Price":1},{"MapleId":2061000,"Period":4,"Price":1},{"MapleId":2030000,"Period":4,"Price":400,"Stock":100000},{"MapleId":2030003,"Period":4,"Price":500,"Stock":100000},{"MapleId":2050000,"Period":2,"Price":200,"Stock":100000},{"MapleId":2050001,"Period":2,"Price":200,"Stock":100000},{"MapleId":2050002,"Period":2,"Price":300,"Stock":100000},{"MapleId":2040000,"Period":4,"Price":35000,"Stock":50},{"MapleId":2040003,"Period":4,"Price":35000,"Stock":50},{"MapleId":2040500,"Period":4,"Price":35000,"Stock":50},{"MapleId":2043000,"Period":4,"Price":70000,"Stock":50},{"MapleId":2043100,"Period":4,"Price":70000,"Stock":50},{"MapleId":2043200,"Period":4,"Price":70000,"Stock":50},{"MapleId":2044000,"Period":4,"Price":70000,"Stock":50},{"MapleId":2044100,"Period":4,"Price":70000,"Stock":50},{"MapleId":2044200,"Period":4,"Price":70000,"Stock":50},{"MapleId":2044300,"Period":4,"Price":70000,"Stock":50},{"MapleId":2044400,"Period":4,"Price":70000,"Stock":50}],"Variables":{},"MapleId":1021100,"SpeakLineCount":2},"1022000":{"ShopItems":[],"Variables":{},"MapleId":1022000,"Script":"fighter","SpeakLineCount":2},"1022001":{"ShopItems":[],"Variables":{},"MapleId":1022001,"Script":"taxi1"},"1022002":{"ShopItems":[],"Variables":{},"MapleId":1022002,"Script":"manji","SpeakLineCount":3},"1022003":{"ShopItems":[],"Variables":{},"MapleId":1022003,"Script":"refine_perion","SpeakLineCount":2},"1022004":{"ShopItems":[],"Variables":{},"MapleId":1022004,"Script":"refine_perion2","SpeakLineCount":2},"1022005":{"ShopItems":[],"Variables":{},"MapleId":1022005,"StorageCost":100,"SpeakLineCount":2},"1022100":{"ShopItems":[],"Variables":{},"MapleId":1022100,"Script":"sopia","SpeakLineCount":3},"1022101":{"ShopItems":[],"Variables":{},"MapleId":1022101,"Script":"go_xmas","SpeakLineCount":2},"1031000":{"ShopItems":[{"MapleId":1372005,"Period":6,"Price":2000,"Stock":100},{"MapleId":1372006,"Period":6,"Price":5000,"Stock":100},{"MapleId":1372002,"Period":6,"Price":9000,"Stock":100},{"MapleId":1372004,"Period":6,"Price":18000,"Stock":100},{"MapleId":1372003,"Period":6,"Price":38000,"Stock":100},{"MapleId":1382000,"Period":6,"Price":3000,"Stock":100},{"MapleId":1382003,"Period":6,"Price":6000,"Stock":100},{"MapleId":1382005,"Period":6,"Price":6000,"Stock":100},{"MapleId":1382004,"Period":6,"Price":10000,"Stock":100},{"MapleId":1382002,"Period":6,"Price":20000,"Stock":100},{"MapleId":1322002,"Period":6,"Price":10000,"Stock":100}],"Variables":{},"MapleId":1031000,"SpeakLineCount":2},"1031001":{"ShopItems":[{"MapleId":1002017,"Period":6,"Price":1200,"Stock":100},{"MapleId":1002102,"Period":6,"Price":3800,"Stock":100},{"MapleId":1002103,"Period":6,"Price":3800,"Stock":100},{"MapleId":1002104,"Period":6,"Price":3800,"Stock":100},{"MapleId":1002105,"Period":6,"Price":3800,"Stock":100},{"MapleId":1002106,"Period":6,"Price":3800,"Stock":100},{"MapleId":1002016,"Period":6,"Price":8000,"Stock":100},{"MapleId":1040004,"Period":6,"Price":2000,"Stock":100},{"MapleId":1040017,"Period":6,"Price":2000,"Stock":100},{"MapleId":1040018,"Period":6,"Price":8500,"Stock":100},{"MapleId":1040019,"Period":6,"Price":8500,"Stock":100},{"MapleId":1040020,"Period":6,"Price":8500,"Stock":100},{"MapleId":1041015,"Period":6,"Price":2000,"Stock":100},{"MapleId":1041016,"Period":6,"Price":2000,"Stock":100},{"MapleId":1041017,"Period":6,"Price":4000,"Stock":100},{"MapleId":1041018,"Period":6,"Price":4000,"Stock":100},{"MapleId":1041025,"Period":6,"Price":4000,"Stock":100},{"MapleId":1041026,"Period":6,"Price":4000,"Stock":100},{"MapleId":1041029,"Period":6,"Price":8500,"Stock":100},{"MapleId":1041030,"Period":6,"Price":8500,"Stock":100},{"MapleId":1041031,"Period":6,"Price":8500,"Stock":100},{"MapleId":1041041,"Period":6,"Price":42000,"Stock":100},{"MapleId":1041042,"Period":6,"Price":42000,"Stock":100},{"MapleId":1041043,"Period":6,"Price":42000,"Stock":100},{"MapleId":1050008,"Period":6,"Price":7000,"Stock":100},{"MapleId":1050009,"Period":6,"Price":7000,"Stock":100},{"MapleId":1050010,"Period":6,"Price":7000,"Stock":100},{"MapleId":1050001,"Period":6,"Price":16000,"Stock":100},{"MapleId":1050023,"Period":6,"Price":16000,"Stock":100},{"MapleId":1050024,"Period":6,"Price":16000,"Stock":100},{"MapleId":1050025,"Period":6,"Price":16000,"Stock":100},{"MapleId":1050003,"Period":6,"Price":40000,"Stock":100},{"MapleId":1050026,"Period":6,"Price":40000,"Stock":100},{"MapleId":1050027,"Period":6,"Price":40000,"Stock":100},{"MapleId":1050028,"Period":6,"Price":40000,"Stock":100},{"MapleId":1051004,"Period":6,"Price":16000,"Stock":100},{"MapleId":1051005,"Period":6,"Price":16000,"Stock":100},{"MapleId":1051003,"Period":6,"Price":16000,"Stock":100},{"MapleId":1060012,"Period":6,"Price":2000,"Stock":100},{"MapleId":1060013,"Period":6,"Price":2000,"Stock":100},{"MapleId":1060014,"Period":6,"Price":8000,"Stock":100},{"MapleId":1060015,"Period":6,"Price":8000,"Stock":100},{"MapleId":1061010,"Period":6,"Price":2000,"Stock":100},{"MapleId":1061011,"Period":6,"Price":2000,"Stock":100},{"MapleId":1061012,"Period":6,"Price":4000,"Stock":100},{"MapleId":1061013,"Period":6,"Price":4000,"Stock":100},{"MapleId":1061021,"Period":6,"Price":4000,"Stock":100},{"MapleId":1061022,"Period":6,"Price":4000,"Stock":100},{"MapleId":1061027,"Period":6,"Price":8000,"Stock":100},{"MapleId":1061028,"Period":6,"Price":8000,"Stock":100},{"MapleId":1061034,"Period":6,"Price":40000,"Stock":100},{"MapleId":1061035,"Period":6,"Price":40000,"Stock":100},{"MapleId":1061036,"Period":6,"Price":40000,"Stock":100},{"MapleId":1072006,"Period":6,"Price":1500,"Stock":100},{"MapleId":1072044,"Period":6,"Price":1500,"Stock":100},{"MapleId":1072045,"Period":6,"Price":1500,"Stock":100},{"MapleId":1072023,"Period":6,"Price":4000,"Stock":100},{"MapleId":1072024,"Period":6,"Price":4000,"Stock":100},{"MapleId":2070000,"Period":4,"Price":500,"Stock":100000,"UnitRechargeRate":0.3},{"MapleId":2070001,"Period":4,"Stock":100000,"UnitRechargeRate":0.4},{"MapleId":2070002,"Period":4,"Stock":100000,"UnitRechargeRate":0.5},{"MapleId":2070003,"Period":4,"Stock":100000,"UnitRechargeRate":0.6},{"MapleId":2070004,"Period":4,"Stock":100000,"UnitRechargeRate":0.6},{"MapleId":2070005,"Period":4,"Stock":100000,"UnitRechargeRate":0.7},{"MapleId":2070006,"Period":4,"Stock":100000,"UnitRechargeRate":0.8},{"MapleId":2070007,"Period":4,"Stock":100000,"UnitRechargeRate":1.0},{"MapleId":2070008,"Period":4,"Stock":100000,"UnitRechargeRate":1.0},{"MapleId":2070009,"Period":4,"Stock":100000,"UnitRechargeRate":1.0},{"MapleId":2070010,"Period":4,"Stock":100000,"UnitRechargeRate":1.0}],"Variables":{},"MapleId":1031001,"SpeakLineCount":2},"1031100":{"ShopItems":[{"MapleId":2000000,"Period":4,"Price":50,"Stock":100000},{"MapleId":2000001,"Period":4,"Price":160,"Stock":100000},{"MapleId":2000002,"Period":4,"Price":320,"Stock":100000},{"MapleId":2000003,"Period":4,"Price":192,"Stock":100000},{"MapleId":2000006,"Period":4,"Price":604,"Stock":100000},{"MapleId":2002000,"Period":4,"Price":500,"Stock":100000},{"MapleId":2002001,"Period":4,"Price":400,"Stock":100000},{"MapleId":2002002,"Period":4,"Price":500,"Stock":100000},{"MapleId":2002004,"Period":4,"Price":500,"Stock":100000},{"MapleId":2002005,"Period":4,"Price":500,"Stock":100000},{"MapleId":2010000,"Period":4,"Price":30,"Stock":100000},{"MapleId":2010002,"Period":4,"Price":50,"Stock":100000},{"MapleId":2010001,"Period":4,"Price":106,"Stock":100000},{"MapleId":2010003,"Period":4,"Price":97,"Stock":100000},{"MapleId":2010004,"Period":4,"Price":305,"Stock":100000},{"MapleId":2060000,"Period":4,"Price":1},{"MapleId":2061000,"Period":4,"Price":1},{"MapleId":2030000,"Period":4,"Price":400,"Stock":100000},{"MapleId":2030002,"Period":4,"Price":500,"Stock":100000},{"MapleId":2050000,"Period":2,"Price":200,"Stock":100000},{"MapleId":2050001,"Period":2,"Price":200,"Stock":100000},{"MapleId":2050002,"Period":2,"Price":300,"Stock":100000},{"MapleId":2050003,"Period":2,"Price":500,"Stock":100000},{"MapleId":2040300,"Period":4,"Price":35000,"Stock":50},{"MapleId":2043700,"Period":4,"Price":70000,"Stock":50},{"MapleId":2043800,"Period":4,"Price":70000,"Stock":50}],"Variables":{},"MapleId":1031100,"SpeakLineCount":2},"1032000":{"ShopItems":[],"Variables":{},"MapleId":1032000,"Script":"taxi4"},"1032001":{"ShopItems":[],"Variables":{},"MapleId":1032001,"Script":"magician","SpeakLineCount":1},"1032002":{"ShopItems":[],"Variables":{},"MapleId":1032002,"Script":"refine_ellinia","SpeakLineCount":2},"1032003":{"ShopItems":[],"Variables":{},"MapleId":1032003,"Script":"herb_in","SpeakLineCount":2},"1032004":{"ShopItems":[],"Variables":{},"MapleId":1032004,"Script":"herb_out","SpeakLineCount":1},"1032005":{"ShopItems":[],"Variables":{},"MapleId":1032005,"Script":"mTaxi"},"1032006":{"ShopItems":[],"Variables":{},"MapleId":1032006,"StorageCost":100,"SpeakLineCount":2},"1032007":{"ShopItems":[],"Variables":{},"MapleId":1032007,"Script":"sell_ticket","SpeakLineCount":2},"1032008":{"ShopItems":[],"Variables":{},"MapleId":1032008,"Script":"get_ticket","SpeakLineCount":3},"1032009":{"ShopItems":[],"Variables":{},"MapleId":1032009,"Script":"goOutWaitingRoom","SpeakLineCount":3},"1032100":{"ShopItems":[],"Variables":{},"MapleId":1032100,"Script":"owen","SpeakLineCount":2},"1032101":{"ShopItems":[],"Variables":{},"MapleId":1032101,"Script":"rowen","SpeakLineCount":3},"1032102":{"ShopItems":[],"Variables":{},"MapleId":1032102,"Script":"pet_life","SpeakLineCount":2},"1040000":{"ShopItems":[],"Variables":{},"MapleId":1040000,"Script":"ruke","SpeakLineCount":3},"1040001":{"ShopItems":[],"Variables":{},"MapleId":1040001,"Script":"mike","SpeakLineCount":3},"1043000":{"ShopItems":[],"Variables":{},"MapleId":1043000,"Script":"bush1"},"1043001":{"ShopItems":[],"Variables":{},"MapleId":1043001,"Script":"bush2"},"1051000":{"ShopItems":[{"MapleId":1302007,"Period":6,"Price":3000,"Stock":100},{"MapleId":1332000,"Period":6,"Price":4000,"Stock":100},{"MapleId":1332006,"Period":6,"Price":7000,"Stock":100},{"MapleId":1332002,"Period":6,"Price":8000,"Stock":100},{"MapleId":1332008,"Period":6,"Price":10000,"Stock":100},{"MapleId":1332013,"Period":6,"Price":15000,"Stock":100},{"MapleId":1332010,"Period":6,"Price":22000,"Stock":100},{"MapleId":1332004,"Period":6,"Price":38000,"Stock":100},{"MapleId":1332012,"Period":6,"Price":40000,"Stock":100},{"MapleId":1332009,"Period":6,"Price":42000,"Stock":100},{"MapleId":1322009,"Period":6,"Price":20000,"Stock":100},{"MapleId":1402001,"Period":6,"Price":3000,"Stock":100},{"MapleId":1412001,"Period":6,"Price":3000,"Stock":100},{"MapleId":1422000,"Period":6,"Price":3000,"Stock":100},{"MapleId":1432000,"Period":6,"Price":3000,"Stock":100},{"MapleId":1432001,"Period":6,"Price":7000,"Stock":100},{"MapleId":1442000,"Period":6,"Price":3000,"Stock":100},{"MapleId":1472000,"Period":6,"Price":3000,"Stock":100}],"Variables":{},"MapleId":1051000,"SpeakLineCount":2},"1051001":{"ShopItems":[{"MapleId":1002122,"Period":4,"Price":900,"Stock":100},{"MapleId":1002123,"Period":4,"Price":900,"Stock":100},{"MapleId":1002124,"Period":4,"Price":900,"Stock":100},{"MapleId":1002125,"Period":4,"Price":900,"Stock":100},{"MapleId":1002126,"Period":4,"Price":900,"Stock":100},{"MapleId":1002001,"Period":6,"Price":3000,"Stock":100},{"MapleId":1002107,"Period":4,"Price":4000,"Stock":100},{"MapleId":1002108,"Period":4,"Price":4000,"Stock":100},{"MapleId":1002109,"Period":4,"Price":4000,"Stock":100},{"MapleId":1002110,"Period":4,"Price":4000,"Stock":100},{"MapleId":1002111,"Period":4,"Price":4000,"Stock":100},{"MapleId":1002127,"Period":4,"Price":12000,"Stock":100},{"MapleId":1002128,"Period":4,"Price":12000,"Stock":100},{"MapleId":1002129,"Period":4,"Price":12000,"Stock":100},{"MapleId":1002130,"Period":4,"Price":12000,"Stock":100},{"MapleId":1002131,"Period":4,"Price":12000,"Stock":100},{"MapleId":1002020,"Period":6,"Price":7400,"Stock":100},{"MapleId":1002096,"Period":6,"Price":7400,"Stock":100},{"MapleId":1002097,"Period":6,"Price":7400,"Stock":100},{"MapleId":1002146,"Period":4,"Price":20000,"Stock":100},{"MapleId":1002147,"Period":4,"Price":20000,"Stock":100},{"MapleId":1002148,"Period":4,"Price":20000,"Stock":100},{"MapleId":1002149,"Period":4,"Price":20000,"Stock":100},{"MapleId":1002150,"Period":4,"Price":20000,"Stock":100},{"MapleId":1002171,"Period":4,"Price":30000,"Stock":100},{"MapleId":1002172,"Period":4,"Price":30000,"Stock":100},{"MapleId":1002173,"Period":4,"Price":30000,"Stock":100},{"MapleId":1002174,"Period":4,"Price":30000,"Stock":100},{"MapleId":1002175,"Period":4,"Price":30000,"Stock":100},{"MapleId":1040031,"Period":6,"Price":3000,"Stock":100},{"MapleId":1040032,"Period":6,"Price":3000,"Stock":100},{"MapleId":1040033,"Period":6,"Price":3000,"Stock":100},{"MapleId":1040034,"Period":6,"Price":5000,"Stock":100},{"MapleId":1040035,"Period":6,"Price":5000,"Stock":100},{"MapleId":1040042,"Period":4,"Price":9000,"Stock":100},{"MapleId":1040043,"Period":4,"Price":9000,"Stock":100},{"MapleId":1040044,"Period":4,"Price":9000,"Stock":100},{"MapleId":1040048,"Period":4,"Price":16000,"Stock":100},{"MapleId":1040049,"Period":4,"Price":16000,"Stock":100},{"MapleId":1040050,"Period":4,"Price":16000,"Stock":100},{"MapleId":1040057,"Period":4,"Price":45000,"Stock":100},{"MapleId":1040058,"Period":4,"Price":45000,"Stock":100},{"MapleId":1040059,"Period":4,"Price":45000,"Stock":100},{"MapleId":1040060,"Period":4,"Price":45000,"Stock":100},{"MapleId":1041036,"Period":6,"Price":3000,"Stock":100},{"MapleId":1041037,"Period":6,"Price":3000,"Stock":100},{"MapleId":1041038,"Period":6,"Price":3000,"Stock":100},{"MapleId":1041044,"Period":6,"Price":5000,"Stock":100},{"MapleId":1041045,"Period":6,"Price":5000,"Stock":100},{"MapleId":1041003,"Period":6,"Price":9000,"Stock":100},{"MapleId":1041039,"Period":6,"Price":9000,"Stock":100},{"MapleId":1041040,"Period":6,"Price":9000,"Stock":100},{"MapleId":1041057,"Period":4,"Price":18000,"Stock":100},{"MapleId":1041058,"Period":4,"Price":18000,"Stock":100},{"MapleId":1041059,"Period":4,"Price":18000,"Stock":100},{"MapleId":1041060,"Period":4,"Price":18000,"Stock":100},{"MapleId":1041047,"Period":4,"Price":45000,"Stock":100},{"MapleId":1041048,"Period":4,"Price":45000,"Stock":100},{"MapleId":1041049,"Period":4,"Price":45000,"Stock":100},{"MapleId":1041050,"Period":4,"Price":45000,"Stock":100},{"MapleId":1060021,"Period":6,"Price":2800,"Stock":100},{"MapleId":1060022,"Period":6,"Price":2800,"Stock":100},{"MapleId":1060023,"Period":6,"Price":2800,"Stock":100},{"MapleId":1060024,"Period":6,"Price":4800,"Stock":100},{"MapleId":1060025,"Period":6,"Price":4800,"Stock":100},{"MapleId":1060031,"Period":4,"Price":8000,"Stock":100},{"MapleId":1060032,"Period":4,"Price":8000,"Stock":100},{"MapleId":1060033,"Period":4,"Price":8000,"Stock":100},{"MapleId":1060037,"Period":4,"Price":19000,"Stock":100},{"MapleId":1060038,"Period":4,"Price":19000,"Stock":100},{"MapleId":1060039,"Period":4,"Price":19000,"Stock":100},{"MapleId":1060043,"Period":4,"Price":40000,"Stock":100},{"MapleId":1060044,"Period":4,"Price":40000,"Stock":100},{"MapleId":1060045,"Period":4,"Price":40000,"Stock":100},{"MapleId":1060046,"Period":4,"Price":40000,"Stock":100},{"MapleId":1061029,"Period":6,"Price":2800,"Stock":100},{"MapleId":1061030,"Period":6,"Price":2800,"Stock":100},{"MapleId":1061031,"Period":6,"Price":2800,"Stock":100},{"MapleId":1061037,"Period":6,"Price":4800,"Stock":100},{"MapleId":1061038,"Period":6,"Price":4800,"Stock":100},{"MapleId":1061003,"Period":6,"Price":8000,"Stock":100},{"MapleId":1061032,"Period":6,"Price":8000,"Stock":100},{"MapleId":1061033,"Period":6,"Price":8000,"Stock":100},{"MapleId":1061040,"Period":6,"Price":12000,"Stock":100},{"MapleId":1061041,"Period":6,"Price":12000,"Stock":100},{"MapleId":1061042,"Period":6,"Price":12000,"Stock":100},{"MapleId":1061053,"Period":4,"Price":18000,"Stock":100},{"MapleId":1061054,"Period":4,"Price":18000,"Stock":100},{"MapleId":1061055,"Period":4,"Price":18000,"Stock":100},{"MapleId":1061056,"Period":4,"Price":18000,"Stock":100},{"MapleId":1061043,"Period":6,"Price":40000,"Stock":100},{"MapleId":1061044,"Period":6,"Price":40000,"Stock":100},{"MapleId":1061045,"Period":6,"Price":40000,"Stock":100},{"MapleId":1061046,"Period":6,"Price":40000,"Stock":100},{"MapleId":1072070,"Period":4,"Price":1800,"Stock":100},{"MapleId":1072071,"Period":4,"Price":1800,"Stock":100},{"MapleId":1072004,"Period":6,"Price":2000,"Stock":100},{"MapleId":1072042,"Period":6,"Price":2000,"Stock":100},{"MapleId":1072043,"Period":6,"Price":2000,"Stock":100},{"MapleId":1072028,"Period":4,"Price":4500,"Stock":100},{"MapleId":1072029,"Period":4,"Price":4500,"Stock":100},{"MapleId":1072030,"Period":4,"Price":4500,"Stock":100},{"MapleId":1072031,"Period":4,"Price":4500,"Stock":100},{"MapleId":1072022,"Period":4,"Price":9000,"Stock":100},{"MapleId":1072065,"Period":4,"Price":9000,"Stock":100},{"MapleId":1072066,"Period":4,"Price":9000,"Stock":100},{"MapleId":2070000,"Period":4,"Price":500,"Stock":100000,"UnitRechargeRate":0.3},{"MapleId":2070001,"Period":4,"Stock":100000,"UnitRechargeRate":0.4},{"MapleId":2070002,"Period":4,"Stock":100000,"UnitRechargeRate":0.5},{"MapleId":2070003,"Period":4,"Stock":100000,"UnitRechargeRate":0.6},{"MapleId":2070004,"Period":4,"Stock":100000,"UnitRechargeRate":0.6},{"MapleId":2070005,"Period":4,"Stock":100000,"UnitRechargeRate":0.7},{"MapleId":2070006,"Period":4,"Stock":100000,"UnitRechargeRate":0.8},{"MapleId":2070007,"Period":4,"Stock":100000,"UnitRechargeRate":1.0},{"MapleId":2070008,"Period":4,"Stock":100000,"UnitRechargeRate":1.0},{"MapleId":2070009,"Period":4,"Stock":100000,"UnitRechargeRate":1.0},{"MapleId":2070010,"Period":4,"Stock":100000,"UnitRechargeRate":1.0}],"Variables":{},"MapleId":1051001,"SpeakLineCount":2},"1051002":{"ShopItems":[{"MapleId":2000000,"Period":4,"Price":50,"Stock":100000},{"MapleId":2000001,"Period":4,"Price":160,"Stock":100000},{"MapleId":2000002,"Period":4,"Price":320,"Stock":100000},{"MapleId":2000003,"Period":4,"Price":200,"Stock":100000},{"MapleId":2000006,"Period":4,"Price":620,"Stock":100000},{"MapleId":2002000,"Period":4,"Price":500,"Stock":100000},{"MapleId":2002001,"Period":4,"Price":400,"Stock":100000},{"MapleId":2002002,"Period":4,"Price":500,"Stock":100000},{"MapleId":2002004,"Period":4,"Price":500,"Stock":100000},{"MapleId":2002005,"Period":4,"Price":500,"Stock":100000},{"MapleId":2010000,"Period":4,"Price":30,"Stock":1000},{"MapleId":2010002,"Period":4,"Price":50,"Stock":1000},{"MapleId":2010001,"Period":4,"Price":106,"Stock":1000},{"MapleId":2010003,"Period":4,"Price":100,"Stock":1000},{"MapleId":2010004,"Period":4,"Price":310,"Stock":100000},{"MapleId":2060000,"Period":4,"Price":1},{"MapleId":2061000,"Period":4,"Price":1},{"MapleId":2030000,"Period":4,"Price":400,"Stock":100000},{"MapleId":2030005,"Period":4,"Price":500,"Stock":100000},{"MapleId":2050000,"Period":2,"Price":200,"Stock":100000},{"MapleId":2050001,"Period":2,"Price":200,"Stock":100000},{"MapleId":2050002,"Period":2,"Price":300,"Stock":100000},{"MapleId":2040000,"Period":4,"Price":35000,"Stock":50},{"MapleId":2040400,"Period":4,"Price":35000,"Stock":50},{"MapleId":2040600,"Period":4,"Price":35000,"Stock":50},{"MapleId":2040700,"Period":4,"Price":35000,"Stock":50},{"MapleId":2040703,"Period":4,"Price":35000,"Stock":50},{"MapleId":2043300,"Period":4,"Price":70000,"Stock":50},{"MapleId":2043000,"Period":4,"Price":70000,"Stock":50},{"MapleId":2043200,"Period":4,"Price":70000,"Stock":50},{"MapleId":2044700,"Period":4,"Price":70000,"Stock":50}],"Variables":{},"MapleId":1051002,"SpeakLineCount":2},"1052000":{"ShopItems":[],"Variables":{},"MapleId":1052000,"Script":"alex","SpeakLineCount":1},"1052001":{"ShopItems":[],"Variables":{},"MapleId":1052001,"Script":"rogue","SpeakLineCount":1},"1052002":{"ShopItems":[],"Variables":{},"MapleId":1052002,"Script":"refine_kerning","SpeakLineCount":2},"1052003":{"ShopItems":[],"Variables":{},"MapleId":1052003,"Script":"refine_kerning2","SpeakLineCount":2},"1052004":{"ShopItems":[],"Variables":{},"MapleId":1052004,"Script":"face_henesys1","SpeakLineCount":2},"1052005":{"ShopItems":[],"Variables":{},"MapleId":1052005,"Script":"face_henesys2","SpeakLineCount":3},"1052006":{"ShopItems":[],"Variables":{},"MapleId":1052006,"Script":"subway_ticket","SpeakLineCount":2},"1052007":{"ShopItems":[],"Variables":{},"MapleId":1052007,"Script":"subway_in"},"1052008":{"ShopItems":[],"Variables":{},"MapleId":1052008,"Script":"subway_get1"},"1052009":{"ShopItems":[],"Variables":{},"MapleId":1052009,"Script":"subway_get2"},"1052010":{"ShopItems":[],"Variables":{},"MapleId":1052010,"Script":"subway_get3"},"1052011":{"ShopItems":[],"Variables":{},"MapleId":1052011,"Script":"subway_out"},"1052012":{"ShopItems":[],"Variables":{},"MapleId":1052012,"Script":"go_pc","SpeakLineCount":2},"1052013":{"ShopItems":[],"Variables":{},"MapleId":1052013,"Script":"go_pcmap"},"1052014":{"ShopItems":[{"MapleId":2020007,"Period":2,"Price":620,"Stock":10000000},{"MapleId":2020008,"Period":2,"Price":1260,"Stock":10000000},{"MapleId":2020009,"Period":2,"Price":920,"Stock":10000000},{"MapleId":2020010,"Period":2,"Price":1860,"Stock":10000000}],"Variables":{},"MapleId":1052014},"1052015":{"ShopItems":[],"Variables":{},"MapleId":1052015,"Script":"mouse","SpeakLineCount":2},"1052016":{"ShopItems":[],"Variables":{},"MapleId":1052016,"Script":"taxi3"},"1052017":{"ShopItems":[],"Variables":{},"MapleId":1052017,"StorageCost":100,"SpeakLineCount":2},"1052100":{"ShopItems":[],"Variables":{},"MapleId":1052100,"Script":"hair_kerning1","SpeakLineCount":2},"1052101":{"ShopItems":[],"Variables":{},"MapleId":1052101,"Script":"hair_kerning2","SpeakLineCount":2},"1052102":{"ShopItems":[],"Variables":{},"MapleId":1052102,"Script":"shumi","SpeakLineCount":3},"1052103":{"ShopItems":[],"Variables":{},"MapleId":1052103,"Script":"nelra","SpeakLineCount":2},"1061000":{"ShopItems":[],"Variables":{},"MapleId":1061000,"Script":"refine_sleepy","SpeakLineCount":1},"1061001":{"ShopItems":[{"MapleId":2020001,"Period":4,"Price":220,"Stock":100000},{"MapleId":2020005,"Period":4,"Price":320,"Stock":100000},{"MapleId":2020003,"Period":4,"Price":450,"Stock":100000},{"MapleId":2020004,"Period":4,"Price":450,"Stock":100000},{"MapleId":2020006,"Period":4,"Price":530,"Stock":100000},{"MapleId":2022003,"Period":4,"Price":1100,"Stock":100000},{"MapleId":2020000,"Period":4,"Price":420,"Stock":100000},{"MapleId":2022000,"Period":4,"Price":1650,"Stock":100000},{"MapleId":2020002,"Period":4,"Price":320,"Stock":100000},{"MapleId":2060000,"Period":4,"Price":2,"Stock":10000000},{"MapleId":2061000,"Period":4,"Price":2,"Stock":10000000},{"MapleId":2070000,"Period":4,"Stock":100000,"UnitRechargeRate":1.0},{"MapleId":2070001,"Period":4,"Stock":100000,"UnitRechargeRate":2.0},{"MapleId":2070002,"Period":4,"Stock":100000,"UnitRechargeRate":3.0},{"MapleId":2070003,"Period":4,"Stock":100000,"UnitRechargeRate":4.0},{"MapleId":2070004,"Period":4,"Stock":100000,"UnitRechargeRate":4.0},{"MapleId":2070005,"Period":4,"Stock":100000,"UnitRechargeRate":5.0},{"MapleId":2070006,"Period":4,"Stock":100000,"UnitRechargeRate":6.0},{"MapleId":2070007,"Period":4,"Stock":100000,"UnitRechargeRate":7.0},{"MapleId":2070008,"Period":4,"Stock":100000,"UnitRechargeRate":3.0},{"MapleId":2070009,"Period":4,"Stock":100000,"UnitRechargeRate":4.0},{"MapleId":2070010,"Period":4,"Stock":100000,"UnitRechargeRate":5.0}],"Variables":{},"MapleId":1061001,"SpeakLineCount":2},"1061002":{"ShopItems":[{"MapleId":2000000,"Period":4,"Price":50,"Stock":1000000},{"MapleId":2000001,"Period":4,"Price":160,"Stock":1000000},{"MapleId":2000002,"Period":4,"Price":320,"Stock":1000000},{"MapleId":2000003,"Period":4,"Price":200,"Stock":1000000},{"MapleId":2000006,"Period":4,"Price":620,"Stock":1000000},{"MapleId":2010000,"Period":4,"Price":30,"Stock":1000000},{"MapleId":2010002,"Period":4,"Price":50,"Stock":1000000},{"MapleId":2010001,"Period":4,"Price":106,"Stock":1000000},{"MapleId":2010003,"Period":4,"Price":100,"Stock":1000000},{"MapleId":2010004,"Period":4,"Price":310,"Stock":1000000},{"MapleId":2022000,"Period":4,"Price":1650,"Stock":1000000},{"MapleId":2022003,"Period":4,"Price":1100,"Stock":1000000},{"MapleId":2030006,"Period":4,"Price":600,"Stock":1000000},{"MapleId":2060000,"Period":4,"Price":1},{"MapleId":2061000,"Period":4,"Price":1},{"MapleId":2070000,"Period":4,"Price":500,"Stock":100000,"UnitRechargeRate":0.4},{"MapleId":2070001,"Period":4,"Stock":100000,"UnitRechargeRate":0.5},{"MapleId":2070002,"Period":4,"Stock":100000,"UnitRechargeRate":0.6},{"MapleId":2070003,"Period":4,"Stock":100000,"UnitRechargeRate":0.7},{"MapleId":2070004,"Period":4,"Stock":100000,"UnitRechargeRate":0.7},{"MapleId":2070005,"Period":4,"Stock":100000,"UnitRechargeRate":0.8},{"MapleId":2070006,"Period":4,"Stock":100000,"UnitRechargeRate":0.9},{"MapleId":2070007,"Period":4,"Stock":100000,"UnitRechargeRate":1.0},{"MapleId":2070008,"Period":4,"Stock":100000,"UnitRechargeRate":1.0},{"MapleId":2070009,"Period":4,"Stock":100000,"UnitRechargeRate":1.0},{"MapleId":2070010,"Period":4,"Stock":100000,"UnitRechargeRate":1.0}],"Variables":{},"MapleId":1061002,"SpeakLineCount":2},"1061003":{"ShopItems":[],"Variables":{},"MapleId":1061003,"Script":"cool","SpeakLineCount":1},"1061004":{"ShopItems":[],"Variables":{},"MapleId":1061004,"Script":"rony","SpeakLineCount":2},"1061005":{"ShopItems":[],"Variables":{},"MapleId":1061005,"Script":"herb","SpeakLineCount":1},"1061006":{"ShopItems":[],"Variables":{},"MapleId":1061006,"Script":"flower_in"},"1061007":{"ShopItems":[],"Variables":{},"MapleId":1061007,"Script":"flower_out"},"1061008":{"ShopItems":[],"Variables":{},"MapleId":1061008,"StorageCost":100,"SpeakLineCount":2},"1061009":{"ShopItems":[],"Variables":{},"MapleId":1061009,"Script":"crack"},"1061010":{"ShopItems":[],"Variables":{},"MapleId":1061010,"Script":"3jobExit"},"1061100":{"ShopItems":[],"Variables":{},"MapleId":1061100,"Script":"hotel1","SpeakLineCount":2},"1063000":{"ShopItems":[],"Variables":{},"MapleId":1063000,"Script":"viola_pink"},"1063001":{"ShopItems":[],"Variables":{},"MapleId":1063001,"Script":"viola_blue"},"1063002":{"ShopItems":[],"Variables":{},"MapleId":1063002,"Script":"viola_white"},"1072000":{"ShopItems":[],"Variables":{},"MapleId":1072000,"Script":"change_swordman","SpeakLineCount":2},"1072001":{"ShopItems":[],"Variables":{},"MapleId":1072001,"Script":"change_magician","SpeakLineCount":2},"1072002":{"ShopItems":[],"Variables":{},"MapleId":1072002,"Script":"change_archer","SpeakLineCount":2},"1072003":{"ShopItems":[],"Variables":{},"MapleId":1072003,"Script":"change_rogue","SpeakLineCount":2},"1072004":{"ShopItems":[],"Variables":{},"MapleId":1072004,"Script":"inside_swordman","SpeakLineCount":2},"1072005":{"ShopItems":[],"Variables":{},"MapleId":1072005,"Script":"inside_magician","SpeakLineCount":2},"1072006":{"ShopItems":[],"Variables":{},"MapleId":1072006,"Script":"inside_archer","SpeakLineCount":2},"1072007":{"ShopItems":[],"Variables":{},"MapleId":1072007,"Script":"inside_rogue","SpeakLineCount":2},"1081000":{"ShopItems":[{"MapleId":2000000,"Period":4,"Price":50,"Stock":100000},{"MapleId":2000001,"Period":4,"Price":160,"Stock":100000},{"MapleId":2000002,"Period":4,"Price":320,"Stock":100000},{"MapleId":2000003,"Period":4,"Price":200,"Stock":100000},{"MapleId":2010000,"Period":4,"Price":30,"Stock":10000},{"MapleId":2010002,"Period":4,"Price":50,"Stock":10000},{"MapleId":2010001,"Period":4,"Price":106,"Stock":10000},{"MapleId":2010003,"Period":4,"Price":100,"Stock":10000},{"MapleId":2010004,"Period":4,"Price":310,"Stock":10000},{"MapleId":2020001,"Period":4,"Price":220,"Stock":10000},{"MapleId":2020005,"Period":4,"Price":320,"Stock":10000},{"MapleId":2020003,"Period":4,"Price":450,"Stock":10000},{"MapleId":2020004,"Period":4,"Price":450,"Stock":10000},{"MapleId":2020006,"Period":4,"Price":530,"Stock":10000},{"MapleId":2022003,"Period":4,"Price":1100,"Stock":10000},{"MapleId":2020000,"Period":4,"Price":420,"Stock":10000},{"MapleId":2022000,"Period":4,"Price":1650,"Stock":10000},{"MapleId":2020002,"Period":4,"Price":320,"Stock":10000},{"MapleId":2001000,"Period":4,"Price":3200,"Stock":10000000},{"MapleId":2001001,"Period":4,"Price":2300,"Stock":10000000},{"MapleId":2001002,"Period":4,"Price":4000,"Stock":10000000},{"MapleId":2070000,"Period":4,"Price":500,"Stock":100000,"UnitRechargeRate":0.3},{"MapleId":2070001,"Period":4,"Stock":100000,"UnitRechargeRate":0.4},{"MapleId":2070002,"Period":4,"Stock":100000,"UnitRechargeRate":0.5},{"MapleId":2070003,"Period":4,"Stock":100000,"UnitRechargeRate":0.6},{"MapleId":2070004,"Period":4,"Stock":100000,"UnitRechargeRate":0.6},{"MapleId":2070005,"Period":4,"Stock":100000,"UnitRechargeRate":0.7},{"MapleId":2070006,"Period":4,"Stock":100000,"UnitRechargeRate":0.8},{"MapleId":2070007,"Period":4,"Stock":100000,"UnitRechargeRate":1.0}],"Variables":{},"MapleId":1081000,"SpeakLineCount":2},"1081001":{"ShopItems":[],"Variables":{},"MapleId":1081001,"Script":"florina1","SpeakLineCount":2},"1081100":{"ShopItems":[],"Variables":{},"MapleId":1081100,"SpeakLineCount":2},"1081101":{"ShopItems":[],"Variables":{},"MapleId":1081101,"SpeakLineCount":2},"1081102":{"ShopItems":[],"Variables":{},"MapleId":1081102,"SpeakLineCount":2},"2001000":{"ShopItems":[],"Variables":{},"MapleId":2001000,"Script":"desc_tree","SpeakLineCount":2},"2001001":{"ShopItems":[],"Variables":{},"MapleId":2001001,"Script":"go_tree1","SpeakLineCount":2},"2001002":{"ShopItems":[],"Variables":{},"MapleId":2001002,"Script":"go_tree2","SpeakLineCount":2},"2001003":{"ShopItems":[],"Variables":{},"MapleId":2001003,"Script":"go_tree3","SpeakLineCount":2},"2001004":{"ShopItems":[],"Variables":{},"MapleId":2001004,"Script":"out_tree","SpeakLineCount":2},"2001005":{"ShopItems":[],"Variables":{},"MapleId":2001005,"Script":"job_3th","SpeakLineCount":2},"2002000":{"ShopItems":[],"Variables":{},"MapleId":2002000,"Script":"go_victoria","SpeakLineCount":2},"2002001":{"ShopItems":[{"MapleId":3990000,"Period":4,"Price":100,"Stock":100000},{"MapleId":3990001,"Period":4,"Price":100,"Stock":100000},{"MapleId":3990002,"Period":4,"Price":100,"Stock":100000},{"MapleId":3990003,"Period":4,"Price":100,"Stock":100000},{"MapleId":3990004,"Period":4,"Price":100,"Stock":100000},{"MapleId":3990005,"Period":4,"Price":100,"Stock":100000},{"MapleId":3990006,"Period":4,"Price":100,"Stock":100000},{"MapleId":3990007,"Period":4,"Price":100,"Stock":100000},{"MapleId":3990008,"Period":4,"Price":100,"Stock":100000},{"MapleId":3990009,"Period":4,"Price":100,"Stock":100000},{"MapleId":3990010,"Period":4,"Price":100,"Stock":100000},{"MapleId":3990011,"Period":4,"Price":100,"Stock":100000},{"MapleId":3990012,"Period":4,"Price":100,"Stock":100000},{"MapleId":3990013,"Period":4,"Price":100,"Stock":100000},{"MapleId":3990014,"Period":4,"Price":100,"Stock":100000},{"MapleId":3990015,"Period":4,"Price":100,"Stock":100000},{"MapleId":3990016,"Period":4,"Price":100,"Stock":100000},{"MapleId":3990017,"Period":4,"Price":100,"Stock":100000},{"MapleId":3990018,"Period":4,"Price":100,"Stock":100000},{"MapleId":3990019,"Period":4,"Price":100,"Stock":100000},{"MapleId":3990020,"Period":4,"Price":100,"Stock":100000},{"MapleId":3990021,"Period":4,"Price":100,"Stock":100000},{"MapleId":3990022,"Period":4,"Price":100,"Stock":100000},{"MapleId":3990023,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991000,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991001,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991002,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991003,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991004,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991005,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991006,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991007,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991008,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991009,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991010,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991011,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991012,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991013,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991014,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991015,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991016,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991017,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991018,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991019,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991020,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991021,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991022,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991023,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991024,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991025,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991026,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991027,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991028,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991029,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991030,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991031,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991032,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991033,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991034,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991035,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991036,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991037,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991038,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991039,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991040,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991041,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991042,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991043,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991044,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991045,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991046,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991047,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991048,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991049,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991050,"Period":4,"Price":100,"Stock":100000},{"MapleId":3991051,"Period":4,"Price":100,"Stock":100000},{"MapleId":3992000,"Period":4,"Price":150,"Stock":100000},{"MapleId":3992001,"Period":4,"Price":150,"Stock":100000},{"MapleId":3992002,"Period":4,"Price":150,"Stock":100000},{"MapleId":3992003,"Period":4,"Price":150,"Stock":100000},{"MapleId":3992004,"Period":4,"Price":150,"Stock":100000},{"MapleId":3992005,"Period":4,"Price":150,"Stock":100000},{"MapleId":3992006,"Period":4,"Price":150,"Stock":100000},{"MapleId":3992007,"Period":4,"Price":150,"Stock":100000},{"MapleId":3992008,"Period":4,"Price":150,"Stock":100000},{"MapleId":3992009,"Period":4,"Price":150,"Stock":100000},{"MapleId":3992010,"Period":4,"Price":150,"Stock":100000},{"MapleId":3992011,"Period":4,"Price":150,"Stock":100000},{"MapleId":3992012,"Period":4,"Price":150,"Stock":100000},{"MapleId":3992013,"Period":4,"Price":150,"Stock":100000},{"MapleId":3992014,"Period":4,"Price":150,"Stock":100000},{"MapleId":3992015,"Period":4,"Price":150,"Stock":100000},{"MapleId":3992016,"Period":4,"Price":150,"Stock":100000},{"MapleId":3992017,"Period":4,"Price":150,"Stock":100000},{"MapleId":3992018,"Period":4,"Price":150,"Stock":100000},{"MapleId":3992019,"Period":4,"Price":150,"Stock":100000},{"MapleId":3992020,"Period":4,"Price":150,"Stock":100000},{"MapleId":3992021,"Period":4,"Price":150,"Stock":100000},{"MapleId":3992022,"Period":4,"Price":150,"Stock":100000},{"MapleId":3992023,"Period":4,"Price":150,"Stock":100000},{"MapleId":3992027,"Period":4,"Price":150,"Stock":100000},{"MapleId":3992028,"Period":4,"Price":150,"Stock":100000},{"MapleId":3992029,"Period":4,"Price":150,"Stock":100000},{"MapleId":3992030,"Period":4,"Price":150,"Stock":100000},{"MapleId":3992031,"Period":4,"Price":150,"Stock":100000},{"MapleId":3992032,"Period":4,"Price":150,"Stock":100000},{"MapleId":3992033,"Period":4,"Price":150,"Stock":100000},{"MapleId":3992034,"Period":4,"Price":150,"Stock":100000},{"MapleId":3992035,"Period":4,"Price":150,"Stock":100000},{"MapleId":3992036,"Period":4,"Price":150,"Stock":100000},{"MapleId":3992037,"Period":4,"Price":150,"Stock":100000},{"MapleId":3992038,"Period":4,"Price":150,"Stock":100000}],"Variables":{},"MapleId":2002001,"SpeakLineCount":2},"2002002":{"ShopItems":[],"Variables":{},"MapleId":2002002,"Script":"thor","SpeakLineCount":2},"2010000":{"ShopItems":[],"Variables":{},"MapleId":2010000,"Script":"charlie","SpeakLineCount":2},"2010001":{"ShopItems":[],"Variables":{},"MapleId":2010001,"Script":"hair_orbis1","SpeakLineCount":2},"2010002":{"ShopItems":[],"Variables":{},"MapleId":2010002,"Script":"face_orbis1","SpeakLineCount":2},"2010003":{"ShopItems":[],"Variables":{},"MapleId":2010003,"Script":"make_orbis"},"2010004":{"ShopItems":[{"MapleId":2120000,"Period":1,"Price":30,"Stock":1000000000}],"Variables":{},"MapleId":2010004,"SpeakLineCount":2},"2012000":{"ShopItems":[],"Variables":{},"MapleId":2012000,"Script":"sell_ticket","SpeakLineCount":2},"2012001":{"ShopItems":[],"Variables":{},"MapleId":2012001,"Script":"get_ticket","SpeakLineCount":3},"2012002":{"ShopItems":[],"Variables":{},"MapleId":2012002,"Script":"goOutWaitingRoom","SpeakLineCount":3},"2012003":{"ShopItems":[{"MapleId":1302008,"Period":2,"Price":40000,"Stock":10000},{"MapleId":1312005,"Period":2,"Price":40000,"Stock":10000},{"MapleId":1322014,"Period":2,"Price":40000,"Stock":10000},{"MapleId":1332009,"Period":2,"Price":42000,"Stock":10000},{"MapleId":1332012,"Period":2,"Price":40000,"Stock":10000},{"MapleId":1372003,"Period":2,"Price":38000,"Stock":10000},{"MapleId":1382002,"Period":2,"Price":20000,"Stock":10000},{"MapleId":1402002,"Period":2,"Price":150000,"Stock":10000},{"MapleId":1412006,"Period":2,"Price":45000,"Stock":10000},{"MapleId":1422001,"Period":2,"Price":45000,"Stock":10000},{"MapleId":1432002,"Period":2,"Price":60000,"Stock":10000},{"MapleId":1442001,"Period":2,"Price":60000,"Stock":10000},{"MapleId":1452005,"Period":2,"Price":150000,"Stock":10000},{"MapleId":1462000,"Period":2,"Price":30000,"Stock":10000},{"MapleId":1472001,"Period":2,"Price":20000,"Stock":10000}],"Variables":{},"MapleId":2012003,"SpeakLineCount":2},"2012004":{"ShopItems":[{"MapleId":1002023,"Period":2,"Price":120000,"Stock":10000},{"MapleId":1040021,"Period":2,"Price":40000,"Stock":10000},{"MapleId":1040026,"Period":2,"Price":40000,"Stock":10000},{"MapleId":1051010,"Period":2,"Price":60000,"Stock":10000},{"MapleId":1051011,"Period":2,"Price":60000,"Stock":10000},{"MapleId":1051012,"Period":2,"Price":60000,"Stock":10000},{"MapleId":1051013,"Period":2,"Price":60000,"Stock":10000},{"MapleId":1060016,"Period":2,"Price":38000,"Stock":10000},{"MapleId":1060017,"Period":2,"Price":38000,"Stock":10000},{"MapleId":1060018,"Period":2,"Price":38000,"Stock":10000},{"MapleId":1060019,"Period":2,"Price":38000,"Stock":10000},{"MapleId":1092006,"Period":2,"Price":60000,"Stock":10000},{"MapleId":1002064,"Period":2,"Price":40000,"Stock":10000},{"MapleId":1041041,"Period":2,"Price":42000,"Stock":10000},{"MapleId":1041042,"Period":2,"Price":42000,"Stock":10000},{"MapleId":1041043,"Period":2,"Price":42000,"Stock":10000},{"MapleId":1050003,"Period":2,"Price":40000,"Stock":10000},{"MapleId":1050026,"Period":2,"Price":40000,"Stock":10000},{"MapleId":1050027,"Period":2,"Price":40000,"Stock":10000},{"MapleId":1050028,"Period":2,"Price":40000,"Stock":10000},{"MapleId":1061034,"Period":2,"Price":40000,"Stock":10000},{"MapleId":1061035,"Period":2,"Price":40000,"Stock":10000},{"MapleId":1061036,"Period":2,"Price":40000,"Stock":10000},{"MapleId":1002161,"Period":2,"Price":30000,"Stock":10000},{"MapleId":1002162,"Period":2,"Price":30000,"Stock":10000},{"MapleId":1002163,"Period":2,"Price":30000,"Stock":10000},{"MapleId":1002164,"Period":2,"Price":30000,"Stock":10000},{"MapleId":1002165,"Period":2,"Price":30000,"Stock":10000},{"MapleId":1040069,"Period":2,"Price":50000,"Stock":10000},{"MapleId":1040070,"Period":2,"Price":50000,"Stock":10000},{"MapleId":1040067,"Period":2,"Price":50000,"Stock":10000},{"MapleId":1040068,"Period":2,"Price":50000,"Stock":10000},{"MapleId":1041056,"Period":2,"Price":50000,"Stock":10000},{"MapleId":1041054,"Period":2,"Price":50000,"Stock":10000},{"MapleId":1041055,"Period":2,"Price":50000,"Stock":10000},{"MapleId":1060059,"Period":2,"Price":44000,"Stock":10000},{"MapleId":1060058,"Period":2,"Price":44000,"Stock":10000},{"MapleId":1060056,"Period":2,"Price":44000,"Stock":10000},{"MapleId":1060057,"Period":2,"Price":44000,"Stock":10000},{"MapleId":1061052,"Period":2,"Price":44000,"Stock":10000},{"MapleId":1061050,"Period":2,"Price":44000,"Stock":10000},{"MapleId":1061051,"Period":2,"Price":44000,"Stock":10000},{"MapleId":1002171,"Period":2,"Price":30000,"Stock":10000},{"MapleId":1002172,"Period":2,"Price":30000,"Stock":10000},{"MapleId":1002173,"Period":2,"Price":30000,"Stock":10000},{"MapleId":1002174,"Period":2,"Price":30000,"Stock":10000},{"MapleId":1002175,"Period":2,"Price":30000,"Stock":10000},{"MapleId":1040057,"Period":2,"Price":45000,"Stock":10000},{"MapleId":1040058,"Period":2,"Price":45000,"Stock":10000},{"MapleId":1040059,"Period":2,"Price":45000,"Stock":10000},{"MapleId":1040060,"Period":2,"Price":45000,"Stock":10000},{"MapleId":1041047,"Period":2,"Price":45000,"Stock":10000},{"MapleId":1041048,"Period":2,"Price":45000,"Stock":10000},{"MapleId":1041049,"Period":2,"Price":45000,"Stock":10000},{"MapleId":1041050,"Period":2,"Price":45000,"Stock":10000},{"MapleId":1060043,"Period":2,"Price":40000,"Stock":10000},{"MapleId":1060044,"Period":2,"Price":40000,"Stock":10000},{"MapleId":1060045,"Period":2,"Price":40000,"Stock":10000},{"MapleId":1060046,"Period":2,"Price":40000,"Stock":10000},{"MapleId":1061043,"Period":2,"Price":40000,"Stock":10000},{"MapleId":1061044,"Period":2,"Price":40000,"Stock":10000},{"MapleId":1061045,"Period":2,"Price":40000,"Stock":10000},{"MapleId":1061046,"Period":2,"Price":40000,"Stock":10000},{"MapleId":2070000,"Period":4,"Price":500,"Stock":100000,"UnitRechargeRate":0.3},{"MapleId":2070001,"Period":4,"Stock":100000,"UnitRechargeRate":0.4},{"MapleId":2070002,"Period":4,"Stock":100000,"UnitRechargeRate":0.5},{"MapleId":2070003,"Period":4,"Stock":100000,"UnitRechargeRate":0.6},{"MapleId":2070004,"Period":4,"Stock":100000,"UnitRechargeRate":0.6},{"MapleId":2070005,"Period":4,"Stock":100000,"UnitRechargeRate":0.7},{"MapleId":2070006,"Period":4,"Stock":100000,"UnitRechargeRate":0.8},{"MapleId":2070007,"Period":4,"Stock":100000,"UnitRechargeRate":1.0},{"MapleId":2070008,"Period":4,"Stock":100000,"UnitRechargeRate":1.0},{"MapleId":2070009,"Period":4,"Stock":100000,"UnitRechargeRate":1.0},{"MapleId":2070010,"Period":4,"Stock":100000,"UnitRechargeRate":1.0}],"Variables":{},"MapleId":2012004,"SpeakLineCount":2},"2012005":{"ShopItems":[{"MapleId":2000000,"Period":2,"Price":50,"Stock":1000000},{"MapleId":2000001,"Period":2,"Price":160,"Stock":1000000},{"MapleId":2000002,"Period":2,"Price":320,"Stock":1000000},{"MapleId":2000003,"Period":2,"Price":200,"Stock":1000000},{"MapleId":2000006,"Period":2,"Price":620,"Stock":1000000},{"MapleId":2002000,"Period":2,"Price":500,"Stock":1000000},{"MapleId":2002001,"Period":2,"Price":400,"Stock":1000000},{"MapleId":2002002,"Period":2,"Price":500,"Stock":1000000},{"MapleId":2002004,"Period":2,"Price":500,"Stock":1000000},{"MapleId":2002005,"Period":2,"Price":500,"Stock":1000000},{"MapleId":2022003,"Period":2,"Price":1100,"Stock":1000000},{"MapleId":2022000,"Period":2,"Price":1650,"Stock":1000000},{"MapleId":2001000,"Period":2,"Price":3200,"Stock":1000000},{"MapleId":2001001,"Period":2,"Price":2300,"Stock":1000000},{"MapleId":2001002,"Period":2,"Price":4000,"Stock":1000000},{"MapleId":2010000,"Period":2,"Price":30,"Stock":1000000},{"MapleId":2010002,"Period":2,"Price":50,"Stock":1000000},{"MapleId":2010001,"Period":2,"Price":106,"Stock":1000000},{"MapleId":2010003,"Period":2,"Price":100,"Stock":1000000},{"MapleId":2010004,"Period":2,"Price":310,"Stock":1000000},{"MapleId":2050000,"Period":2,"Price":200,"Stock":100000},{"MapleId":2050001,"Period":2,"Price":200,"Stock":100000},{"MapleId":2050002,"Period":2,"Price":300,"Stock":100000},{"MapleId":2050003,"Period":2,"Price":500,"Stock":100000},{"MapleId":2040003,"Period":4,"Price":35000,"Stock":100},{"MapleId":2040300,"Period":4,"Price":35000,"Stock":100},{"MapleId":2040400,"Period":4,"Price":35000,"Stock":100},{"MapleId":2040503,"Period":4,"Price":35000,"Stock":100},{"MapleId":2040600,"Period":4,"Price":35000,"Stock":100},{"MapleId":2040700,"Period":4,"Price":35000,"Stock":100},{"MapleId":2040800,"Period":4,"Price":35000,"Stock":100},{"MapleId":2040900,"Period":4,"Price":35000,"Stock":100},{"MapleId":2041000,"Period":4,"Price":35000,"Stock":100},{"MapleId":2041003,"Period":4,"Price":35000,"Stock":100},{"MapleId":2060000,"Period":2,"Price":1,"Stock":9999999},{"MapleId":2061000,"Period":2,"Price":1,"Stock":9999999},{"MapleId":2030000,"Period":2,"Price":400,"Stock":1000000}],"Variables":{},"MapleId":2012005,"SpeakLineCount":2},"2012006":{"ShopItems":[],"Variables":{},"MapleId":2012006,"Script":"getAboard","SpeakLineCount":2},"2012007":{"ShopItems":[],"Variables":{},"MapleId":2012007,"Script":"hair_orbis2","SpeakLineCount":2},"2012008":{"ShopItems":[],"Variables":{},"MapleId":2012008,"Script":"skin_orbis1","SpeakLineCount":2},"2012009":{"ShopItems":[],"Variables":{},"MapleId":2012009,"Script":"face_orbis2","SpeakLineCount":2},"2012010":{"ShopItems":[],"Variables":{},"MapleId":2012010,"Script":"oldBook3","SpeakLineCount":2},"2012011":{"ShopItems":[],"Variables":{},"MapleId":2012011,"Script":"oldBook8","SpeakLineCount":2},"2012012":{"ShopItems":[],"Variables":{},"MapleId":2012012,"Script":"oldBook2","SpeakLineCount":2},"2012013":{"ShopItems":[],"Variables":{},"MapleId":2012013,"Script":"get_ticket","SpeakLineCount":3},"2012014":{"ShopItems":[],"Variables":{},"MapleId":2012014,"Script":"ossyria3_1"},"2012015":{"ShopItems":[],"Variables":{},"MapleId":2012015,"Script":"ossyria3_2"},"2020000":{"ShopItems":[],"Variables":{},"MapleId":2020000,"Script":"refine_elnath","SpeakLineCount":2},"2020001":{"ShopItems":[{"MapleId":1302004,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1302009,"Period":2,"Price":225000,"Stock":10000},{"MapleId":1312006,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1312007,"Period":2,"Price":175000,"Stock":10000},{"MapleId":1322015,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1322016,"Period":2,"Price":175000,"Stock":10000},{"MapleId":1332001,"Period":2,"Price":200000,"Stock":10000},{"MapleId":1332014,"Period":2,"Price":375000,"Stock":10000},{"MapleId":1332011,"Period":2,"Price":425000,"Stock":10000},{"MapleId":1372001,"Period":2,"Price":175000,"Stock":10000},{"MapleId":1372000,"Period":2,"Price":400000,"Stock":10000},{"MapleId":1402006,"Period":2,"Price":350000,"Stock":10000},{"MapleId":1402007,"Period":2,"Price":450000,"Stock":10000},{"MapleId":1412004,"Period":2,"Price":200000,"Stock":10000},{"MapleId":1412005,"Period":2,"Price":250000,"Stock":10000},{"MapleId":1422008,"Period":2,"Price":200000,"Stock":10000},{"MapleId":1422007,"Period":2,"Price":250000,"Stock":10000},{"MapleId":1432003,"Period":2,"Price":175000,"Stock":10000},{"MapleId":1432005,"Period":2,"Price":225000,"Stock":10000},{"MapleId":1442003,"Period":2,"Price":175000,"Stock":10000},{"MapleId":1442009,"Period":2,"Price":300000,"Stock":10000},{"MapleId":1452006,"Period":2,"Price":250000,"Stock":10000},{"MapleId":1452007,"Period":2,"Price":375000,"Stock":10000},{"MapleId":1462004,"Period":2,"Price":200000,"Stock":10000},{"MapleId":1462005,"Period":2,"Price":250000,"Stock":10000},{"MapleId":1472004,"Period":2,"Price":30000,"Stock":10000},{"MapleId":1472007,"Period":2,"Price":60000,"Stock":10000}],"Variables":{},"MapleId":2020001,"SpeakLineCount":2},"2020002":{"ShopItems":[],"Variables":{},"MapleId":2020002,"Script":"make_elnath","SpeakLineCount":2},"2020003":{"ShopItems":[],"Variables":{},"MapleId":2020003,"Script":"alpha_fox","SpeakLineCount":2},"2020004":{"ShopItems":[],"Variables":{},"MapleId":2020004,"StorageCost":150,"SpeakLineCount":2},"2020005":{"ShopItems":[],"Variables":{},"MapleId":2020005,"Script":"oldBook1","SpeakLineCount":2,"Speed":-40},"2020006":{"ShopItems":[],"Variables":{},"MapleId":2020006,"Script":"oldBook4","SpeakLineCount":2},"2020007":{"ShopItems":[],"Variables":{},"MapleId":2020007,"Script":"oldBook10","SpeakLineCount":2},"2020008":{"ShopItems":[],"Variables":{},"MapleId":2020008,"Script":"warrior3","SpeakLineCount":2},"2020009":{"ShopItems":[],"Variables":{},"MapleId":2020009,"Script":"wizard3","SpeakLineCount":2},"2020010":{"ShopItems":[],"Variables":{},"MapleId":2020010,"Script":"bowman3","SpeakLineCount":2},"2020011":{"ShopItems":[],"Variables":{},"MapleId":2020011,"Script":"thief3","SpeakLineCount":2},"2022000":{"ShopItems":[{"MapleId":1072168,"Period":2,"Price":30000,"Stock":1000},{"MapleId":1072169,"Period":2,"Price":28000,"Stock":1000},{"MapleId":1072170,"Period":2,"Price":29000,"Stock":1000},{"MapleId":1072171,"Period":2,"Price":29000,"Stock":1000},{"MapleId":1002004,"Period":2,"Price":160000,"Stock":10000},{"MapleId":1040000,"Period":2,"Price":200000,"Stock":10000},{"MapleId":1040085,"Period":2,"Price":200000,"Stock":10000},{"MapleId":1041084,"Period":2,"Price":200000,"Stock":10000},{"MapleId":1041085,"Period":2,"Price":200000,"Stock":10000},{"MapleId":1050000,"Period":2,"Price":112500,"Stock":10000},{"MapleId":1050021,"Period":2,"Price":112500,"Stock":10000},{"MapleId":1051001,"Period":2,"Price":112500,"Stock":10000},{"MapleId":1051014,"Period":2,"Price":112500,"Stock":10000},{"MapleId":1060075,"Period":2,"Price":180000,"Stock":10000},{"MapleId":1060074,"Period":2,"Price":180000,"Stock":10000},{"MapleId":1061083,"Period":2,"Price":180000,"Stock":10000},{"MapleId":1061084,"Period":2,"Price":180000,"Stock":10000},{"MapleId":1092001,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1092002,"Period":2,"Price":200000,"Stock":10000},{"MapleId":1002141,"Period":2,"Price":96000,"Stock":10000},{"MapleId":1002142,"Period":2,"Price":96000,"Stock":10000},{"MapleId":1002143,"Period":2,"Price":96000,"Stock":10000},{"MapleId":1002144,"Period":2,"Price":96000,"Stock":10000},{"MapleId":1041052,"Period":2,"Price":120000,"Stock":10000},{"MapleId":1041051,"Period":2,"Price":120000,"Stock":10000},{"MapleId":1050031,"Period":2,"Price":300000,"Stock":10000},{"MapleId":1050002,"Period":2,"Price":300000,"Stock":10000},{"MapleId":1050035,"Period":2,"Price":450000,"Stock":10000},{"MapleId":1050038,"Period":2,"Price":450000,"Stock":10000},{"MapleId":1050036,"Period":2,"Price":450000,"Stock":10000},{"MapleId":1050037,"Period":2,"Price":450000,"Stock":10000},{"MapleId":1051023,"Period":2,"Price":450000,"Stock":10000},{"MapleId":1051025,"Period":2,"Price":450000,"Stock":10000},{"MapleId":1051024,"Period":2,"Price":450000,"Stock":10000},{"MapleId":1051027,"Period":2,"Price":450000,"Stock":10000},{"MapleId":1061048,"Period":2,"Price":120000,"Stock":10000},{"MapleId":1061047,"Period":2,"Price":120000,"Stock":10000},{"MapleId":1002138,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1002139,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1002135,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1002137,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1040072,"Period":2,"Price":114000,"Stock":10000},{"MapleId":1040073,"Period":2,"Price":114000,"Stock":10000},{"MapleId":1040074,"Period":2,"Price":114000,"Stock":10000},{"MapleId":1040076,"Period":2,"Price":114000,"Stock":10000},{"MapleId":1040081,"Period":2,"Price":180000,"Stock":10000},{"MapleId":1040079,"Period":2,"Price":180000,"Stock":10000},{"MapleId":1041066,"Period":2,"Price":114000,"Stock":10000},{"MapleId":1041069,"Period":2,"Price":114000,"Stock":10000},{"MapleId":1041065,"Period":2,"Price":114000,"Stock":10000},{"MapleId":1041067,"Period":2,"Price":114000,"Stock":10000},{"MapleId":1041082,"Period":2,"Price":180000,"Stock":10000},{"MapleId":1041081,"Period":2,"Price":180000,"Stock":10000},{"MapleId":1060062,"Period":2,"Price":108000,"Stock":10000},{"MapleId":1060065,"Period":2,"Price":108000,"Stock":10000},{"MapleId":1060061,"Period":2,"Price":108000,"Stock":10000},{"MapleId":1060063,"Period":2,"Price":108000,"Stock":10000},{"MapleId":1060070,"Period":2,"Price":160000,"Stock":10000},{"MapleId":1060069,"Period":2,"Price":160000,"Stock":10000},{"MapleId":1061061,"Period":2,"Price":108000,"Stock":10000},{"MapleId":1061064,"Period":2,"Price":108000,"Stock":10000},{"MapleId":1061060,"Period":2,"Price":108000,"Stock":10000},{"MapleId":1061062,"Period":2,"Price":108000,"Stock":10000},{"MapleId":1061081,"Period":2,"Price":160000,"Stock":10000},{"MapleId":1061080,"Period":2,"Price":160000,"Stock":10000},{"MapleId":1002176,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1002177,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1002178,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1002179,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1002180,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1040063,"Period":2,"Price":114000,"Stock":10000},{"MapleId":1040062,"Period":2,"Price":114000,"Stock":10000},{"MapleId":1040061,"Period":2,"Price":114000,"Stock":10000},{"MapleId":1040082,"Period":2,"Price":180000,"Stock":10000},{"MapleId":1040083,"Period":2,"Price":180000,"Stock":10000},{"MapleId":1041075,"Period":2,"Price":180000,"Stock":10000},{"MapleId":1041074,"Period":2,"Price":180000,"Stock":10000},{"MapleId":1051007,"Period":2,"Price":111000,"Stock":10000},{"MapleId":1051008,"Period":2,"Price":111000,"Stock":10000},{"MapleId":1051009,"Period":2,"Price":111000,"Stock":10000},{"MapleId":1060051,"Period":2,"Price":108000,"Stock":10000},{"MapleId":1060050,"Period":2,"Price":108000,"Stock":10000},{"MapleId":1060052,"Period":2,"Price":108000,"Stock":10000},{"MapleId":1060071,"Period":2,"Price":160000,"Stock":10000},{"MapleId":1060072,"Period":2,"Price":160000,"Stock":10000},{"MapleId":1061070,"Period":2,"Price":160000,"Stock":10000},{"MapleId":1061069,"Period":2,"Price":160000,"Stock":10000},{"MapleId":2070000,"Period":4,"Price":500,"Stock":100000,"UnitRechargeRate":0.3},{"MapleId":2070001,"Period":4,"Stock":100000,"UnitRechargeRate":0.4},{"MapleId":2070002,"Period":4,"Stock":100000,"UnitRechargeRate":0.5},{"MapleId":2070003,"Period":4,"Stock":100000,"UnitRechargeRate":0.6},{"MapleId":2070004,"Period":4,"Stock":100000,"UnitRechargeRate":0.6},{"MapleId":2070005,"Period":4,"Stock":100000,"UnitRechargeRate":0.7},{"MapleId":2070006,"Period":4,"Stock":100000,"UnitRechargeRate":0.8},{"MapleId":2070007,"Period":4,"Stock":100000,"UnitRechargeRate":1.0},{"MapleId":2070008,"Period":4,"Stock":100000,"UnitRechargeRate":1.0},{"MapleId":2070009,"Period":4,"Stock":100000,"UnitRechargeRate":1.0},{"MapleId":2070010,"Period":4,"Stock":100000,"UnitRechargeRate":1.0}],"Variables":{},"MapleId":2022000,"SpeakLineCount":2},"2022001":{"ShopItems":[{"MapleId":2022001,"Period":2,"Price":400,"Stock":1000000},{"MapleId":2000000,"Period":2,"Price":50,"Stock":1000000},{"MapleId":2000001,"Period":2,"Price":160,"Stock":1000000},{"MapleId":2000002,"Period":2,"Price":320,"Stock":1000000},{"MapleId":2000003,"Period":2,"Price":200,"Stock":1000000},{"MapleId":2000006,"Period":2,"Price":620,"Stock":1000000},{"MapleId":2002000,"Period":2,"Price":500,"Stock":1000000},{"MapleId":2002001,"Period":2,"Price":400,"Stock":1000000},{"MapleId":2002002,"Period":2,"Price":500,"Stock":1000000},{"MapleId":2002004,"Period":2,"Price":500,"Stock":1000000},{"MapleId":2002005,"Period":2,"Price":500,"Stock":1000000},{"MapleId":2001000,"Period":2,"Price":3200,"Stock":1000000},{"MapleId":2001001,"Period":2,"Price":2300,"Stock":1000000},{"MapleId":2001002,"Period":2,"Price":4000,"Stock":1000000},{"MapleId":2010000,"Period":2,"Price":30,"Stock":1000000},{"MapleId":2010002,"Period":2,"Price":50,"Stock":1000000},{"MapleId":2010001,"Period":2,"Price":106,"Stock":1000000},{"MapleId":2010003,"Period":2,"Price":100,"Stock":1000000},{"MapleId":2010004,"Period":2,"Price":310,"Stock":1000000},{"MapleId":2020012,"Period":2,"Price":4500,"Stock":1000000},{"MapleId":2020013,"Period":2,"Price":5600,"Stock":1000000},{"MapleId":2020014,"Period":2,"Price":8100,"Stock":1000000},{"MapleId":2020015,"Period":2,"Price":10200,"Stock":1000000},{"MapleId":2030000,"Period":2,"Price":400,"Stock":1000000},{"MapleId":2050000,"Period":2,"Price":200,"Stock":100000},{"MapleId":2050001,"Period":2,"Price":200,"Stock":100000},{"MapleId":2050002,"Period":2,"Price":300,"Stock":100000},{"MapleId":2043000,"Period":4,"Price":70000,"Stock":100},{"MapleId":2043100,"Period":4,"Price":70000,"Stock":100},{"MapleId":2043200,"Period":4,"Price":70000,"Stock":100},{"MapleId":2043300,"Period":4,"Price":70000,"Stock":100},{"MapleId":2043700,"Period":4,"Price":70000,"Stock":100},{"MapleId":2043800,"Period":4,"Price":70000,"Stock":100},{"MapleId":2044000,"Period":4,"Price":70000,"Stock":100},{"MapleId":2044100,"Period":4,"Price":70000,"Stock":100},{"MapleId":2044200,"Period":4,"Price":70000,"Stock":100},{"MapleId":2044300,"Period":4,"Price":70000,"Stock":100},{"MapleId":2044400,"Period":4,"Price":70000,"Stock":100},{"MapleId":2044500,"Period":4,"Price":70000,"Stock":100},{"MapleId":2044600,"Period":4,"Price":70000,"Stock":100},{"MapleId":2044700,"Period":4,"Price":70000,"Stock":100},{"MapleId":2060000,"Period":2,"Price":1,"Stock":9999999},{"MapleId":2061000,"Period":2,"Price":1,"Stock":9999999}],"Variables":{},"MapleId":2022001,"SpeakLineCount":2},"2030000":{"ShopItems":[],"Variables":{},"MapleId":2030000,"Script":"goDungeon","SpeakLineCount":2},"2030001":{"ShopItems":[],"Variables":{},"MapleId":2030001,"Script":"alpha_bravo","SpeakLineCount":2},"2030002":{"ShopItems":[],"Variables":{},"MapleId":2030002,"Script":"alpha_easy","SpeakLineCount":2},"2030003":{"ShopItems":[],"Variables":{},"MapleId":2030003,"Script":"oldBook6"},"2030004":{"ShopItems":[],"Variables":{},"MapleId":2030004,"Script":"oldBook9"},"2030005":{"ShopItems":[],"Variables":{},"MapleId":2030005,"Script":"oldBook11"},"2030006":{"ShopItems":[],"Variables":{},"MapleId":2030006,"Script":"holyStone"},"2030007":{"ShopItems":[],"Variables":{},"MapleId":2030007,"Script":"ska_ring"},"2030008":{"ShopItems":[],"Variables":{},"MapleId":2030008,"Script":"Zakum00","SpeakLineCount":3},"2030009":{"ShopItems":[{"MapleId":2000001,"Period":1,"Price":166,"Stock":100000},{"MapleId":2000002,"Period":1,"Price":332,"Stock":100000},{"MapleId":2000003,"Period":1,"Price":208,"Stock":100000},{"MapleId":2000006,"Period":1,"Price":644,"Stock":100000},{"MapleId":2002000,"Period":1,"Price":520,"Stock":100000},{"MapleId":2002001,"Period":1,"Price":416,"Stock":100000},{"MapleId":2002002,"Period":1,"Price":520,"Stock":100000},{"MapleId":2002004,"Period":1,"Price":520,"Stock":100000},{"MapleId":2002005,"Period":1,"Price":520,"Stock":100000},{"MapleId":2001000,"Period":1,"Price":3328,"Stock":100000},{"MapleId":2001001,"Period":1,"Price":2392,"Stock":100000},{"MapleId":2001002,"Period":1,"Price":4160,"Stock":100000},{"MapleId":2020005,"Period":1,"Price":332,"Stock":100000},{"MapleId":2010004,"Period":1,"Price":322,"Stock":100000},{"MapleId":2020001,"Period":1,"Price":228,"Stock":100000},{"MapleId":2020003,"Period":1,"Price":468,"Stock":100000},{"MapleId":2020004,"Period":1,"Price":468,"Stock":100000},{"MapleId":2020006,"Period":1,"Price":551,"Stock":100000},{"MapleId":2022003,"Period":1,"Price":1144,"Stock":100000},{"MapleId":2022000,"Period":1,"Price":1716,"Stock":100000},{"MapleId":2020012,"Period":1,"Price":4680,"Stock":100000},{"MapleId":2020013,"Period":1,"Price":5824,"Stock":100000},{"MapleId":2020014,"Period":1,"Price":8424,"Stock":100000},{"MapleId":2020015,"Period":1,"Price":10608,"Stock":100000},{"MapleId":2060000,"Period":4,"Price":1},{"MapleId":2061000,"Period":4,"Price":1},{"MapleId":2070000,"Period":4,"Price":500,"Stock":100000,"UnitRechargeRate":0.4},{"MapleId":2070001,"Period":4,"Stock":100000,"UnitRechargeRate":0.5},{"MapleId":2070002,"Period":4,"Stock":100000,"UnitRechargeRate":0.6},{"MapleId":2070003,"Period":4,"Stock":100000,"UnitRechargeRate":0.7},{"MapleId":2070004,"Period":4,"Stock":100000,"UnitRechargeRate":0.7},{"MapleId":2070005,"Period":4,"Stock":100000,"UnitRechargeRate":0.8},{"MapleId":2070006,"Period":4,"Stock":100000,"UnitRechargeRate":0.9},{"MapleId":2070007,"Period":4,"Stock":100000,"UnitRechargeRate":1.1},{"MapleId":2070008,"Period":4,"Stock":100000,"UnitRechargeRate":1.1},{"MapleId":2070009,"Period":4,"Stock":100000,"UnitRechargeRate":1.1},{"MapleId":2070010,"Period":4,"Stock":100000,"UnitRechargeRate":1.1}],"Variables":{},"MapleId":2030009,"SpeakLineCount":3},"2030010":{"ShopItems":[],"Variables":{},"MapleId":2030010,"Script":"Zakum06","SpeakLineCount":2},"2030011":{"ShopItems":[],"Variables":{},"MapleId":2030011,"Script":"Zakum04","SpeakLineCount":2},"2030012":{"ShopItems":[],"Variables":{},"MapleId":2030012,"Script":"ossyria3_3","SpeakLineCount":2},"2032000":{"ShopItems":[],"Variables":{},"MapleId":2032000,"Script":"oldBook7","SpeakLineCount":2},"2032001":{"ShopItems":[],"Variables":{},"MapleId":2032001,"Script":"oldBook5","SpeakLineCount":2},"2032002":{"ShopItems":[],"Variables":{},"MapleId":2032002,"Script":"Zakum01","SpeakLineCount":2},"2032003":{"ShopItems":[],"Variables":{},"MapleId":2032003,"Script":"Zakum02","SpeakLineCount":2},"2040000":{"ShopItems":[],"Variables":{},"MapleId":2040000,"Script":"sell_ticket","SpeakLineCount":2},"2040001":{"ShopItems":[],"Variables":{},"MapleId":2040001,"SpeakLineCount":2},"2040002":{"ShopItems":[],"Variables":{},"MapleId":2040002,"SpeakLineCount":2},"2040003":{"ShopItems":[],"Variables":{},"MapleId":2040003,"SpeakLineCount":2},"2040004":{"ShopItems":[],"Variables":{},"MapleId":2040004,"Script":"ludi001","SpeakLineCount":2},"2040005":{"ShopItems":[],"Variables":{},"MapleId":2040005,"Script":"ludi002","SpeakLineCount":2},"2040006":{"ShopItems":[],"Variables":{},"MapleId":2040006,"Script":"ludi003","SpeakLineCount":2},"2040007":{"ShopItems":[],"Variables":{},"MapleId":2040007,"Script":"ludi004","SpeakLineCount":2},"2040008":{"ShopItems":[],"Variables":{},"MapleId":2040008,"Script":"ludi005","SpeakLineCount":2},"2040009":{"ShopItems":[],"Variables":{},"MapleId":2040009,"Script":"ludi006","SpeakLineCount":2},"2040010":{"ShopItems":[],"Variables":{},"MapleId":2040010,"Script":"ludi007","SpeakLineCount":2},"2040011":{"ShopItems":[],"Variables":{},"MapleId":2040011,"Script":"ludi008","SpeakLineCount":2},"2040012":{"ShopItems":[],"Variables":{},"MapleId":2040012,"Script":"ludi009","SpeakLineCount":2},"2040013":{"ShopItems":[],"Variables":{},"MapleId":2040013,"Script":"ludi010","SpeakLineCount":2},"2040014":{"ShopItems":[],"Variables":{},"MapleId":2040014,"Script":"minigame00","SpeakLineCount":2},"2040015":{"ShopItems":[],"Variables":{},"MapleId":2040015,"Script":"ludi000","SpeakLineCount":1},"2040016":{"ShopItems":[],"Variables":{},"MapleId":2040016,"Script":"make_ludi1","SpeakLineCount":2},"2040017":{"ShopItems":[],"Variables":{},"MapleId":2040017,"SpeakLineCount":2},"2040018":{"ShopItems":[],"Variables":{},"MapleId":2040018,"SpeakLineCount":2},"2040019":{"ShopItems":[],"Variables":{},"MapleId":2040019,"Script":"face_ludi2","SpeakLineCount":2},"2040020":{"ShopItems":[],"Variables":{},"MapleId":2040020,"Script":"make_ludi2","SpeakLineCount":2},"2040021":{"ShopItems":[],"Variables":{},"MapleId":2040021,"Script":"make_ludi3","SpeakLineCount":2},"2040022":{"ShopItems":[],"Variables":{},"MapleId":2040022,"Script":"make_ludi4","SpeakLineCount":2},"2040023":{"ShopItems":[],"Variables":{},"MapleId":2040023,"Script":"ludi13","SpeakLineCount":2},"2040024":{"ShopItems":[],"Variables":{},"MapleId":2040024,"Script":"ludi14"},"2040025":{"ShopItems":[],"Variables":{},"MapleId":2040025,"Script":"ludi15"},"2040026":{"ShopItems":[],"Variables":{},"MapleId":2040026,"Script":"ludi16"},"2040027":{"ShopItems":[],"Variables":{},"MapleId":2040027,"Script":"ludi17"},"2041000":{"ShopItems":[],"Variables":{},"MapleId":2041000,"Script":"get_ticket","SpeakLineCount":3},"2041001":{"ShopItems":[],"Variables":{},"MapleId":2041001,"Script":"goOutWaitingRoom","SpeakLineCount":3},"2041002":{"ShopItems":[{"MapleId":1302008,"Period":2,"Price":40000,"Stock":10000},{"MapleId":1302004,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1302009,"Period":2,"Price":225000,"Stock":10000},{"MapleId":1312005,"Period":2,"Price":40000,"Stock":10000},{"MapleId":1312006,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1312007,"Period":2,"Price":175000,"Stock":10000},{"MapleId":1322014,"Period":2,"Price":40000,"Stock":10000},{"MapleId":1322015,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1322016,"Period":2,"Price":175000,"Stock":10000},{"MapleId":1332009,"Period":2,"Price":42000,"Stock":10000},{"MapleId":1332012,"Period":2,"Price":40000,"Stock":10000},{"MapleId":1332001,"Period":2,"Price":200000,"Stock":10000},{"MapleId":1332014,"Period":2,"Price":375000,"Stock":10000},{"MapleId":1332011,"Period":2,"Price":425000,"Stock":10000},{"MapleId":1372003,"Period":2,"Price":38000,"Stock":10000},{"MapleId":1372001,"Period":2,"Price":175000,"Stock":10000},{"MapleId":1372000,"Period":2,"Price":400000,"Stock":10000},{"MapleId":1382002,"Period":2,"Price":20000,"Stock":10000},{"MapleId":1402002,"Period":2,"Price":150000,"Stock":10000},{"MapleId":1402006,"Period":2,"Price":350000,"Stock":10000},{"MapleId":1402007,"Period":2,"Price":450000,"Stock":10000},{"MapleId":1412006,"Period":2,"Price":45000,"Stock":10000},{"MapleId":1412004,"Period":2,"Price":200000,"Stock":10000},{"MapleId":1412005,"Period":2,"Price":250000,"Stock":10000},{"MapleId":1422001,"Period":2,"Price":45000,"Stock":10000},{"MapleId":1422008,"Period":2,"Price":200000,"Stock":10000},{"MapleId":1422007,"Period":2,"Price":250000,"Stock":10000},{"MapleId":1432002,"Period":2,"Price":60000,"Stock":10000},{"MapleId":1432003,"Period":2,"Price":175000,"Stock":10000},{"MapleId":1432005,"Period":2,"Price":225000,"Stock":10000},{"MapleId":1442001,"Period":2,"Price":60000,"Stock":10000},{"MapleId":1442003,"Period":2,"Price":175000,"Stock":10000},{"MapleId":1442009,"Period":2,"Price":300000,"Stock":10000},{"MapleId":1452005,"Period":2,"Price":150000,"Stock":10000},{"MapleId":1452006,"Period":2,"Price":250000,"Stock":10000},{"MapleId":1452007,"Period":2,"Price":375000,"Stock":10000},{"MapleId":1462000,"Period":2,"Price":30000,"Stock":10000},{"MapleId":1462004,"Period":2,"Price":200000,"Stock":10000},{"MapleId":1462005,"Period":2,"Price":250000,"Stock":10000},{"MapleId":1472001,"Period":2,"Price":20000,"Stock":10000},{"MapleId":1472004,"Period":2,"Price":30000,"Stock":10000},{"MapleId":1472007,"Period":2,"Price":60000,"Stock":10000}],"Variables":{},"MapleId":2041002,"SpeakLineCount":2},"2041003":{"ShopItems":[{"MapleId":1002004,"Period":2,"Price":160000,"Stock":10000},{"MapleId":1040000,"Period":2,"Price":200000,"Stock":10000},{"MapleId":1040085,"Period":2,"Price":200000,"Stock":10000},{"MapleId":1041084,"Period":2,"Price":200000,"Stock":10000},{"MapleId":1041085,"Period":2,"Price":200000,"Stock":10000},{"MapleId":1050000,"Period":2,"Price":112500,"Stock":10000},{"MapleId":1050021,"Period":2,"Price":112500,"Stock":10000},{"MapleId":1051001,"Period":2,"Price":112500,"Stock":10000},{"MapleId":1051014,"Period":2,"Price":112500,"Stock":10000},{"MapleId":1060075,"Period":2,"Price":180000,"Stock":10000},{"MapleId":1060074,"Period":2,"Price":180000,"Stock":10000},{"MapleId":1061083,"Period":2,"Price":180000,"Stock":10000},{"MapleId":1061084,"Period":2,"Price":180000,"Stock":10000},{"MapleId":1092001,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1092002,"Period":2,"Price":200000,"Stock":10000},{"MapleId":1002141,"Period":2,"Price":96000,"Stock":10000},{"MapleId":1002142,"Period":2,"Price":96000,"Stock":10000},{"MapleId":1002143,"Period":2,"Price":96000,"Stock":10000},{"MapleId":1002144,"Period":2,"Price":96000,"Stock":10000},{"MapleId":1041052,"Period":2,"Price":120000,"Stock":10000},{"MapleId":1041051,"Period":2,"Price":120000,"Stock":10000},{"MapleId":1050031,"Period":2,"Price":300000,"Stock":10000},{"MapleId":1050002,"Period":2,"Price":300000,"Stock":10000},{"MapleId":1050035,"Period":2,"Price":450000,"Stock":10000},{"MapleId":1050038,"Period":2,"Price":450000,"Stock":10000},{"MapleId":1050036,"Period":2,"Price":450000,"Stock":10000},{"MapleId":1050037,"Period":2,"Price":450000,"Stock":10000},{"MapleId":1051023,"Period":2,"Price":450000,"Stock":10000},{"MapleId":1051025,"Period":2,"Price":450000,"Stock":10000},{"MapleId":1051024,"Period":2,"Price":450000,"Stock":10000},{"MapleId":1051027,"Period":2,"Price":450000,"Stock":10000},{"MapleId":1061048,"Period":2,"Price":120000,"Stock":10000},{"MapleId":1061047,"Period":2,"Price":120000,"Stock":10000},{"MapleId":1002138,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1002139,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1002135,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1002137,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1040072,"Period":2,"Price":114000,"Stock":10000},{"MapleId":1040073,"Period":2,"Price":114000,"Stock":10000},{"MapleId":1040074,"Period":2,"Price":114000,"Stock":10000},{"MapleId":1040076,"Period":2,"Price":114000,"Stock":10000},{"MapleId":1040081,"Period":2,"Price":180000,"Stock":10000},{"MapleId":1040079,"Period":2,"Price":180000,"Stock":10000},{"MapleId":1041066,"Period":2,"Price":114000,"Stock":10000},{"MapleId":1041069,"Period":2,"Price":114000,"Stock":10000},{"MapleId":1041065,"Period":2,"Price":114000,"Stock":10000},{"MapleId":1041067,"Period":2,"Price":114000,"Stock":10000},{"MapleId":1041082,"Period":2,"Price":180000,"Stock":10000},{"MapleId":1041081,"Period":2,"Price":180000,"Stock":10000},{"MapleId":1060062,"Period":2,"Price":108000,"Stock":10000},{"MapleId":1060065,"Period":2,"Price":108000,"Stock":10000},{"MapleId":1060061,"Period":2,"Price":108000,"Stock":10000},{"MapleId":1060063,"Period":2,"Price":108000,"Stock":10000},{"MapleId":1060070,"Period":2,"Price":160000,"Stock":10000},{"MapleId":1060069,"Period":2,"Price":160000,"Stock":10000},{"MapleId":1061061,"Period":2,"Price":108000,"Stock":10000},{"MapleId":1061064,"Period":2,"Price":108000,"Stock":10000},{"MapleId":1061060,"Period":2,"Price":108000,"Stock":10000},{"MapleId":1061062,"Period":2,"Price":108000,"Stock":10000},{"MapleId":1061081,"Period":2,"Price":160000,"Stock":10000},{"MapleId":1061080,"Period":2,"Price":160000,"Stock":10000},{"MapleId":1002176,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1002177,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1002178,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1002179,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1002180,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1040063,"Period":2,"Price":114000,"Stock":10000},{"MapleId":1040062,"Period":2,"Price":114000,"Stock":10000},{"MapleId":1040061,"Period":2,"Price":114000,"Stock":10000},{"MapleId":1040082,"Period":2,"Price":180000,"Stock":10000},{"MapleId":1040083,"Period":2,"Price":180000,"Stock":10000},{"MapleId":1041075,"Period":2,"Price":180000,"Stock":10000},{"MapleId":1041074,"Period":2,"Price":180000,"Stock":10000},{"MapleId":1051007,"Period":2,"Price":111000,"Stock":10000},{"MapleId":1051008,"Period":2,"Price":111000,"Stock":10000},{"MapleId":1051009,"Period":2,"Price":111000,"Stock":10000},{"MapleId":1060051,"Period":2,"Price":108000,"Stock":10000},{"MapleId":1060050,"Period":2,"Price":108000,"Stock":10000},{"MapleId":1060052,"Period":2,"Price":108000,"Stock":10000},{"MapleId":1060071,"Period":2,"Price":160000,"Stock":10000},{"MapleId":1060072,"Period":2,"Price":160000,"Stock":10000},{"MapleId":1061070,"Period":2,"Price":160000,"Stock":10000},{"MapleId":1061069,"Period":2,"Price":160000,"Stock":10000},{"MapleId":2070000,"Period":4,"Price":500,"Stock":100000,"UnitRechargeRate":0.3},{"MapleId":2070001,"Period":4,"Stock":100000,"UnitRechargeRate":0.4},{"MapleId":2070002,"Period":4,"Stock":100000,"UnitRechargeRate":0.5},{"MapleId":2070003,"Period":4,"Stock":100000,"UnitRechargeRate":0.6},{"MapleId":2070004,"Period":4,"Stock":100000,"UnitRechargeRate":0.6},{"MapleId":2070005,"Period":4,"Stock":100000,"UnitRechargeRate":0.7},{"MapleId":2070006,"Period":4,"Stock":100000,"UnitRechargeRate":0.8},{"MapleId":2070007,"Period":4,"Stock":100000,"UnitRechargeRate":1.0},{"MapleId":2070008,"Period":4,"Stock":100000,"UnitRechargeRate":1.0},{"MapleId":2070009,"Period":4,"Stock":100000,"UnitRechargeRate":1.0},{"MapleId":2070010,"Period":4,"Stock":100000,"UnitRechargeRate":1.0}],"Variables":{},"MapleId":2041003,"SpeakLineCount":2},"2041004":{"ShopItems":[],"Variables":{},"MapleId":2041004,"Script":"ludi12","SpeakLineCount":2},"2041005":{"ShopItems":[],"Variables":{},"MapleId":2041005,"SpeakLineCount":2},"2041006":{"ShopItems":[{"MapleId":2000007,"Period":2,"Price":50,"Stock":50000},{"MapleId":2000000,"Period":2,"Price":47,"Stock":9999999},{"MapleId":2000008,"Period":2,"Price":160,"Stock":50000},{"MapleId":2000001,"Period":2,"Price":152,"Stock":9999999},{"MapleId":2000009,"Period":2,"Price":320,"Stock":50000},{"MapleId":2000002,"Period":2,"Price":304,"Stock":9999999},{"MapleId":2000010,"Period":2,"Price":200,"Stock":50000},{"MapleId":2000003,"Period":2,"Price":190,"Stock":9999999},{"MapleId":2000011,"Period":2,"Price":620,"Stock":50000},{"MapleId":2000006,"Period":2,"Price":589,"Stock":9999999},{"MapleId":2001001,"Period":2,"Price":2185,"Stock":9999999},{"MapleId":2001002,"Period":2,"Price":3800,"Stock":9999999},{"MapleId":2002006,"Period":2,"Price":570,"Stock":9999999},{"MapleId":2002007,"Period":2,"Price":570,"Stock":9999999},{"MapleId":2002008,"Period":2,"Price":570,"Stock":9999999},{"MapleId":2002009,"Period":2,"Price":570,"Stock":9999999},{"MapleId":2002010,"Period":2,"Price":475,"Stock":9999999},{"MapleId":2010001,"Period":2,"Price":106,"Stock":9999999},{"MapleId":2010002,"Period":2,"Price":47,"Stock":9999999},{"MapleId":2020001,"Period":2,"Price":209,"Stock":9999999},{"MapleId":2020002,"Period":2,"Price":304,"Stock":9999999},{"MapleId":2020003,"Period":2,"Price":427,"Stock":9999999},{"MapleId":2020004,"Period":2,"Price":427,"Stock":9999999},{"MapleId":2020005,"Period":2,"Price":304,"Stock":9999999},{"MapleId":2020006,"Period":2,"Price":503,"Stock":9999999},{"MapleId":2040300,"Period":2,"Price":34000,"Stock":9999999},{"MapleId":2043000,"Period":2,"Price":69000,"Stock":9999999},{"MapleId":2043100,"Period":2,"Price":69000,"Stock":9999999},{"MapleId":2043200,"Period":2,"Price":69000,"Stock":9999999},{"MapleId":2043300,"Period":2,"Price":69000,"Stock":9999999},{"MapleId":2044000,"Period":2,"Price":69000,"Stock":9999999},{"MapleId":2044100,"Period":2,"Price":69000,"Stock":9999999},{"MapleId":2044200,"Period":2,"Price":69000,"Stock":9999999},{"MapleId":2044300,"Period":2,"Price":69000,"Stock":9999999},{"MapleId":2044400,"Period":2,"Price":69000,"Stock":9999999},{"MapleId":2043700,"Period":2,"Price":69000,"Stock":9999999},{"MapleId":2043800,"Period":2,"Price":69000,"Stock":9999999},{"MapleId":2044500,"Period":2,"Price":69000,"Stock":9999999},{"MapleId":2044600,"Period":2,"Price":69000,"Stock":9999999},{"MapleId":2044700,"Period":2,"Price":69000,"Stock":9999999},{"MapleId":2030000,"Period":2,"Price":400,"Stock":9999999},{"MapleId":2060000,"Period":2,"Price":1,"Stock":9999999},{"MapleId":2060001,"Period":2,"Price":10,"Stock":9999999},{"MapleId":2061000,"Period":2,"Price":1,"Stock":9999999},{"MapleId":2061001,"Period":2,"Price":10,"Stock":9999999}],"Variables":{},"MapleId":2041006,"SpeakLineCount":2},"2041007":{"ShopItems":[],"Variables":{},"MapleId":2041007,"Script":"hair_ludi1","SpeakLineCount":2},"2041008":{"ShopItems":[],"Variables":{},"MapleId":2041008,"StorageCost":100,"SpeakLineCount":2},"2041009":{"ShopItems":[],"Variables":{},"MapleId":2041009,"Script":"hair_ludi2","SpeakLineCount":2},"2041010":{"ShopItems":[],"Variables":{},"MapleId":2041010,"Script":"face_ludi1","SpeakLineCount":2},"2041011":{"ShopItems":[],"Variables":{},"MapleId":2041011,"SpeakLineCount":2},"2041012":{"ShopItems":[],"Variables":{},"MapleId":2041012,"SpeakLineCount":2},"2041013":{"ShopItems":[],"Variables":{},"MapleId":2041013,"Script":"skin_ludi1","SpeakLineCount":2},"2041014":{"ShopItems":[{"MapleId":2120000,"Period":1,"Price":25,"Stock":1000000000}],"Variables":{},"MapleId":2041014,"SpeakLineCount":2},"2050000":{"ShopItems":[{"MapleId":1302004,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1302009,"Period":2,"Price":225000,"Stock":10000},{"MapleId":1312006,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1312007,"Period":2,"Price":175000,"Stock":10000},{"MapleId":1322015,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1322016,"Period":2,"Price":175000,"Stock":10000},{"MapleId":1332001,"Period":2,"Price":200000,"Stock":10000},{"MapleId":1332014,"Period":2,"Price":375000,"Stock":10000},{"MapleId":1332011,"Period":2,"Price":425000,"Stock":10000},{"MapleId":1372001,"Period":2,"Price":175000,"Stock":10000},{"MapleId":1372000,"Period":2,"Price":400000,"Stock":10000},{"MapleId":1402006,"Period":2,"Price":350000,"Stock":10000},{"MapleId":1402007,"Period":2,"Price":450000,"Stock":10000},{"MapleId":1412004,"Period":2,"Price":200000,"Stock":10000},{"MapleId":1412005,"Period":2,"Price":250000,"Stock":10000},{"MapleId":1422008,"Period":2,"Price":200000,"Stock":10000},{"MapleId":1422007,"Period":2,"Price":250000,"Stock":10000},{"MapleId":1432003,"Period":2,"Price":175000,"Stock":10000},{"MapleId":1432005,"Period":2,"Price":225000,"Stock":10000},{"MapleId":1442003,"Period":2,"Price":175000,"Stock":10000},{"MapleId":1442009,"Period":2,"Price":300000,"Stock":10000},{"MapleId":1452006,"Period":2,"Price":250000,"Stock":10000},{"MapleId":1452007,"Period":2,"Price":375000,"Stock":10000},{"MapleId":1462004,"Period":2,"Price":200000,"Stock":10000},{"MapleId":1462005,"Period":2,"Price":250000,"Stock":10000},{"MapleId":1472004,"Period":2,"Price":30000,"Stock":10000},{"MapleId":1472007,"Period":2,"Price":60000,"Stock":10000}],"Variables":{},"MapleId":2050000,"SpeakLineCount":2},"2050001":{"ShopItems":[],"Variables":{},"MapleId":2050001,"SpeakLineCount":2},"2050002":{"ShopItems":[],"Variables":{},"MapleId":2050002,"SpeakLineCount":2},"2050003":{"ShopItems":[{"MapleId":1002004,"Period":2,"Price":160000,"Stock":10000},{"MapleId":1040000,"Period":2,"Price":200000,"Stock":10000},{"MapleId":1040085,"Period":2,"Price":200000,"Stock":10000},{"MapleId":1041084,"Period":2,"Price":200000,"Stock":10000},{"MapleId":1041085,"Period":2,"Price":200000,"Stock":10000},{"MapleId":1050000,"Period":2,"Price":112500,"Stock":10000},{"MapleId":1050021,"Period":2,"Price":112500,"Stock":10000},{"MapleId":1051001,"Period":2,"Price":112500,"Stock":10000},{"MapleId":1051014,"Period":2,"Price":112500,"Stock":10000},{"MapleId":1060075,"Period":2,"Price":180000,"Stock":10000},{"MapleId":1060074,"Period":2,"Price":180000,"Stock":10000},{"MapleId":1061083,"Period":2,"Price":180000,"Stock":10000},{"MapleId":1061084,"Period":2,"Price":180000,"Stock":10000},{"MapleId":1092001,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1092002,"Period":2,"Price":200000,"Stock":10000},{"MapleId":1002141,"Period":2,"Price":96000,"Stock":10000},{"MapleId":1002142,"Period":2,"Price":96000,"Stock":10000},{"MapleId":1002143,"Period":2,"Price":96000,"Stock":10000},{"MapleId":1002144,"Period":2,"Price":96000,"Stock":10000},{"MapleId":1041052,"Period":2,"Price":120000,"Stock":10000},{"MapleId":1041051,"Period":2,"Price":120000,"Stock":10000},{"MapleId":1050031,"Period":2,"Price":300000,"Stock":10000},{"MapleId":1050002,"Period":2,"Price":300000,"Stock":10000},{"MapleId":1050035,"Period":2,"Price":450000,"Stock":10000},{"MapleId":1050038,"Period":2,"Price":450000,"Stock":10000},{"MapleId":1050036,"Period":2,"Price":450000,"Stock":10000},{"MapleId":1050037,"Period":2,"Price":450000,"Stock":10000},{"MapleId":1051023,"Period":2,"Price":450000,"Stock":10000},{"MapleId":1051025,"Period":2,"Price":450000,"Stock":10000},{"MapleId":1051024,"Period":2,"Price":450000,"Stock":10000},{"MapleId":1051027,"Period":2,"Price":450000,"Stock":10000},{"MapleId":1061048,"Period":2,"Price":120000,"Stock":10000},{"MapleId":1061047,"Period":2,"Price":120000,"Stock":10000},{"MapleId":1002138,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1002139,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1002135,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1002137,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1040072,"Period":2,"Price":114000,"Stock":10000},{"MapleId":1040073,"Period":2,"Price":114000,"Stock":10000},{"MapleId":1040074,"Period":2,"Price":114000,"Stock":10000},{"MapleId":1040076,"Period":2,"Price":114000,"Stock":10000},{"MapleId":1040081,"Period":2,"Price":180000,"Stock":10000},{"MapleId":1040079,"Period":2,"Price":180000,"Stock":10000},{"MapleId":1041066,"Period":2,"Price":114000,"Stock":10000},{"MapleId":1041069,"Period":2,"Price":114000,"Stock":10000},{"MapleId":1041065,"Period":2,"Price":114000,"Stock":10000},{"MapleId":1041067,"Period":2,"Price":114000,"Stock":10000},{"MapleId":1041082,"Period":2,"Price":180000,"Stock":10000},{"MapleId":1041081,"Period":2,"Price":180000,"Stock":10000},{"MapleId":1060062,"Period":2,"Price":108000,"Stock":10000},{"MapleId":1060065,"Period":2,"Price":108000,"Stock":10000},{"MapleId":1060061,"Period":2,"Price":108000,"Stock":10000},{"MapleId":1060063,"Period":2,"Price":108000,"Stock":10000},{"MapleId":1060070,"Period":2,"Price":160000,"Stock":10000},{"MapleId":1060069,"Period":2,"Price":160000,"Stock":10000},{"MapleId":1061061,"Period":2,"Price":108000,"Stock":10000},{"MapleId":1061064,"Period":2,"Price":108000,"Stock":10000},{"MapleId":1061060,"Period":2,"Price":108000,"Stock":10000},{"MapleId":1061062,"Period":2,"Price":108000,"Stock":10000},{"MapleId":1061081,"Period":2,"Price":160000,"Stock":10000},{"MapleId":1061080,"Period":2,"Price":160000,"Stock":10000},{"MapleId":1002176,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1002177,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1002178,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1002179,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1002180,"Period":2,"Price":100000,"Stock":10000},{"MapleId":1040063,"Period":2,"Price":114000,"Stock":10000},{"MapleId":1040062,"Period":2,"Price":114000,"Stock":10000},{"MapleId":1040061,"Period":2,"Price":114000,"Stock":10000},{"MapleId":1040082,"Period":2,"Price":180000,"Stock":10000},{"MapleId":1040083,"Period":2,"Price":180000,"Stock":10000},{"MapleId":1041075,"Period":2,"Price":180000,"Stock":10000},{"MapleId":1041074,"Period":2,"Price":180000,"Stock":10000},{"MapleId":1051007,"Period":2,"Price":111000,"Stock":10000},{"MapleId":1051008,"Period":2,"Price":111000,"Stock":10000},{"MapleId":1051009,"Period":2,"Price":111000,"Stock":10000},{"MapleId":1060051,"Period":2,"Price":108000,"Stock":10000},{"MapleId":1060050,"Period":2,"Price":108000,"Stock":10000},{"MapleId":1060052,"Period":2,"Price":108000,"Stock":10000},{"MapleId":1060071,"Period":2,"Price":160000,"Stock":10000},{"MapleId":1060072,"Period":2,"Price":160000,"Stock":10000},{"MapleId":1061070,"Period":2,"Price":160000,"Stock":10000},{"MapleId":1061069,"Period":2,"Price":160000,"Stock":10000},{"MapleId":2070000,"Period":4,"Price":500,"Stock":100000,"UnitRechargeRate":0.3},{"MapleId":2070001,"Period":4,"Stock":100000,"UnitRechargeRate":0.4},{"MapleId":2070002,"Period":4,"Stock":100000,"UnitRechargeRate":0.5},{"MapleId":2070003,"Period":4,"Stock":100000,"UnitRechargeRate":0.6},{"MapleId":2070004,"Period":4,"Stock":100000,"UnitRechargeRate":0.6},{"MapleId":2070005,"Period":4,"Stock":100000,"UnitRechargeRate":0.7},{"MapleId":2070006,"Period":4,"Stock":100000,"UnitRechargeRate":0.8},{"MapleId":2070007,"Period":4,"Stock":100000,"UnitRechargeRate":1.0},{"MapleId":2070008,"Period":4,"Stock":100000,"UnitRechargeRate":1.0},{"MapleId":2070009,"Period":4,"Stock":100000,"UnitRechargeRate":1.0},{"MapleId":2070010,"Period":4,"Stock":100000,"UnitRechargeRate":1.0}],"Variables":{},"MapleId":2050003,"SpeakLineCount":2},"2050004":{"ShopItems":[],"Variables":{},"MapleId":2050004,"StorageCost":100,"SpeakLineCount":2},"2050005":{"ShopItems":[],"Variables":{},"MapleId":2050005,"SpeakLineCount":2},"2050006":{"ShopItems":[],"Variables":{},"MapleId":2050006,"SpeakLineCount":2},"2050007":{"ShopItems":[],"Variables":{},"MapleId":2050007,"SpeakLineCount":2},"2051000":{"ShopItems":[{"MapleId":2000000,"Period":2,"Price":47,"Stock":9999999},{"MapleId":2000001,"Period":2,"Price":152,"Stock":9999999},{"MapleId":2000002,"Period":2,"Price":304,"Stock":9999999},{"MapleId":2000003,"Period":2,"Price":190,"Stock":9999999},{"MapleId":2000006,"Period":2,"Price":589,"Stock":9999999},{"MapleId":2002000,"Period":2,"Price":475,"Stock":9999999},{"MapleId":2002001,"Period":2,"Price":380,"Stock":9999999},{"MapleId":2002002,"Period":2,"Price":475,"Stock":9999999},{"MapleId":2002004,"Period":2,"Price":475,"Stock":9999999},{"MapleId":2002005,"Period":2,"Price":475,"Stock":9999999},{"MapleId":2001000,"Period":2,"Price":3040,"Stock":9999999},{"MapleId":2001001,"Period":2,"Price":2185,"Stock":9999999},{"MapleId":2001002,"Period":2,"Price":3800,"Stock":9999999},{"MapleId":2010000,"Period":2,"Price":28,"Stock":9999999},{"MapleId":2010001,"Period":2,"Price":106,"Stock":9999999},{"MapleId":2010002,"Period":2,"Price":47,"Stock":9999999},{"MapleId":2010003,"Period":2,"Price":95,"Stock":9999999},{"MapleId":2010004,"Period":2,"Price":294,"Stock":9999999},{"MapleId":2020012,"Period":2,"Price":4275,"Stock":9999999},{"MapleId":2020013,"Period":2,"Price":5320,"Stock":9999999},{"MapleId":2020014,"Period":2,"Price":7695,"Stock":9999999},{"MapleId":2020015,"Period":2,"Price":9690,"Stock":9999999},{"MapleId":2022003,"Period":2,"Price":1045,"Stock":9999999},{"MapleId":2022000,"Period":2,"Price":1567,"Stock":9999999},{"MapleId":2040000,"Period":2,"Price":34000,"Stock":9999999},{"MapleId":2040400,"Period":2,"Price":34000,"Stock":9999999},{"MapleId":2040503,"Period":2,"Price":34000,"Stock":9999999},{"MapleId":2040600,"Period":2,"Price":34000,"Stock":9999999},{"MapleId":2040700,"Period":2,"Price":34000,"Stock":9999999},{"MapleId":2040703,"Period":2,"Price":34000,"Stock":9999999},{"MapleId":2040706,"Period":2,"Price":34000,"Stock":9999999},{"MapleId":2040800,"Period":2,"Price":34000,"Stock":9999999},{"MapleId":2040900,"Period":2,"Price":34000,"Stock":9999999},{"MapleId":2041000,"Period":2,"Price":34000,"Stock":9999999},{"MapleId":2041003,"Period":2,"Price":34000,"Stock":9999999},{"MapleId":2030000,"Period":2,"Price":400,"Stock":9999999},{"MapleId":2060000,"Period":2,"Price":1,"Stock":9999999},{"MapleId":2060001,"Period":2,"Price":10,"Stock":9999999},{"MapleId":2061000,"Period":2,"Price":1,"Stock":9999999},{"MapleId":2061001,"Period":2,"Price":10,"Stock":9999999}],"Variables":{},"MapleId":2051000,"SpeakLineCount":2},"9000000":{"ShopItems":[],"Variables":{"count":0,"map":-1},"MapleId":9000000,"Script":"Event00","SpeakLineCount":2},"9000001":{"ShopItems":[],"Variables":{"count":0,"map":-1},"MapleId":9000001,"Script":"Event00","SpeakLineCount":2},"9000002":{"ShopItems":[],"Variables":{},"MapleId":9000002,"Script":"Event02","SpeakLineCount":1},"9000003":{"ShopItems":[],"Variables":{},"MapleId":9000003,"Script":"Event03","SpeakLineCount":1},"9000004":{"ShopItems":[],"Variables":{},"MapleId":9000004,"Script":"Event03","SpeakLineCount":1},"9000005":{"ShopItems":[],"Variables":{},"MapleId":9000005,"Script":"Event03","SpeakLineCount":1},"9000006":{"ShopItems":[],"Variables":{},"MapleId":9000006,"Script":"Event03","SpeakLineCount":1},"9000007":{"ShopItems":[],"Variables":{},"MapleId":9000007,"Script":"Event04","SpeakLineCount":3},"9000008":{"ShopItems":[],"Variables":{},"MapleId":9000008,"Script":"Event05","SpeakLineCount":1},"9000009":{"ShopItems":[],"Variables":{},"MapleId":9000009,"Script":"Event03_1","SpeakLineCount":1},"9000010":{"ShopItems":[],"Variables":{},"MapleId":9000010,"Script":"Event06","SpeakLineCount":2},"9000011":{"ShopItems":[],"Variables":{"count":0,"map":-1},"MapleId":9000011,"Script":"Event00","SpeakLineCount":2},"9000012":{"ShopItems":[],"Variables":{},"MapleId":9000012,"Script":"Event09","SpeakLineCount":4},"9000013":{"ShopItems":[],"Variables":{"count":0,"map":-1},"MapleId":9000013,"Script":"Event00","SpeakLineCount":2},"9000014":{"ShopItems":[],"Variables":{},"MapleId":9000014,"Script":"Event01","SpeakLineCount":1},"9010000":{"ShopItems":[],"Variables":{},"MapleId":9010000,"Script":"cakePrize","SpeakLineCount":2},"9010001":{"ShopItems":[],"Variables":{},"MapleId":9010001,"Script":"Event07","SpeakLineCount":2},"9010002":{"ShopItems":[],"Variables":{},"MapleId":9010002,"Script":"Event07","SpeakLineCount":2},"9010003":{"ShopItems":[],"Variables":{},"MapleId":9010003,"Script":"Event07","SpeakLineCount":2},"9010004":{"ShopItems":[],"Variables":{},"MapleId":9010004,"Script":"ludiEvent","SpeakLineCount":2},"9020000":{"ShopItems":[],"Variables":{},"MapleId":9020000,"Script":"party1_enter","SpeakLineCount":2},"9020001":{"ShopItems":[],"Variables":{},"MapleId":9020001,"Script":"party1_play","SpeakLineCount":2},"9020002":{"ShopItems":[],"Variables":{},"MapleId":9020002,"Script":"party1_out","SpeakLineCount":2},"9100000":{"ShopItems":[],"Variables":{},"MapleId":9100000,"Script":"neko1"},"9100001":{"ShopItems":[],"Variables":{},"MapleId":9100001,"Script":"neko2"},"9100002":{"ShopItems":[],"Variables":{},"MapleId":9100002,"Script":"neko3"},"9100003":{"ShopItems":[],"Variables":{},"MapleId":9100003,"Script":"neko4"},"9100004":{"ShopItems":[],"Variables":{},"MapleId":9100004,"Script":"neko5"},"9110000":{"ShopItems":[],"Variables":{},"MapleId":9110000,"Script":"goKinoc","SpeakLineCount":3},"9110001":{"ShopItems":[{"MapleId":1432009,"Period":2,"Price":60000,"Stock":10000000}],"Variables":{},"MapleId":9110001,"SpeakLineCount":3},"9110002":{"ShopItems":[],"Variables":{},"MapleId":9110002,"Script":"mushgirl","SpeakLineCount":3},"9110003":{"ShopItems":[{"MapleId":2022021,"Period":2,"Price":500,"Stock":10000000},{"MapleId":2022022,"Period":2,"Price":1000,"Stock":10000000}],"Variables":{},"MapleId":9110003,"SpeakLineCount":3},"9110004":{"ShopItems":[{"MapleId":2022014,"Period":2,"Price":600,"Stock":10000000},{"MapleId":2022023,"Period":2,"Price":1000,"Stock":10000000}],"Variables":{},"MapleId":9110004,"SpeakLineCount":3},"9110005":{"ShopItems":[{"MapleId":2022024,"Period":2,"Price":1800,"Stock":10000000},{"MapleId":2022025,"Period":2,"Price":5000,"Stock":10000000}],"Variables":{},"MapleId":9110005,"SpeakLineCount":3},"9110006":{"ShopItems":[{"MapleId":2022026,"Period":2,"Price":1800,"Stock":10000000},{"MapleId":2022027,"Period":2,"Price":5000,"Stock":10000000}],"Variables":{},"MapleId":9110006,"SpeakLineCount":3},"9110007":{"ShopItems":[{"MapleId":2022017,"Period":2,"Price":1000,"Stock":10000000},{"MapleId":2022018,"Period":2,"Price":1500,"Stock":10000000},{"MapleId":2022019,"Period":2,"Price":800,"Stock":10000000},{"MapleId":2022020,"Period":2,"Price":500,"Stock":10000000}],"Variables":{},"MapleId":9110007,"SpeakLineCount":3},"9110008":{"ShopItems":[],"Variables":{},"MapleId":9110008,"Script":"goKerning","SpeakLineCount":3},"9110009":{"ShopItems":[],"Variables":{},"MapleId":9110009,"Script":"gachapon1"},"9110010":{"ShopItems":[],"Variables":{},"MapleId":9110010,"Script":"gachapon2"},"9110011":{"ShopItems":[],"Variables":{},"MapleId":9110011,"Script":"gachapon3"},"9110012":{"ShopItems":[],"Variables":{},"MapleId":9110012,"Script":"gachapon4"},"9110013":{"ShopItems":[],"Variables":{},"MapleId":9110013,"Script":"gachapon5"},"9110014":{"ShopItems":[],"Variables":{},"MapleId":9110014,"Script":"gachapon6"},"9110015":{"ShopItems":[],"Variables":{},"MapleId":9110015,"Script":"surfing","SpeakLineCount":1},"9900000":{"ShopItems":[],"Variables":{"name":0},"MapleId":9900000,"Script":"levelUP","SpeakLineCount":1},"9900001":{"ShopItems":[],"Variables":{"name":0},"MapleId":9900001,"Script":"levelUP2","SpeakLineCount":1}}}
+        { "MapleId": 2000002, "Period": 2, "Price": 320, "Stock": 1000000 },
+        { "MapleId": 2000003, "Period": 2, "Price": 200, "Stock": 1000000 },
+        { "MapleId": 2000006, "Period": 2, "Price": 620, "Stock": 1000000 },
+        { "MapleId": 2002000, "Period": 2, "Price": 500, "Stock": 1000000 },
+        { "MapleId": 2002001, "Period": 2, "Price": 400, "Stock": 1000000 },
+        { "MapleId": 2002002, "Period": 2, "Price": 500, "Stock": 1000000 },
+        { "MapleId": 2002004, "Period": 2, "Price": 500, "Stock": 1000000 },
+        { "MapleId": 2002005, "Period": 2, "Price": 500, "Stock": 1000000 },
+        { "MapleId": 2001000, "Period": 2, "Price": 3200, "Stock": 1000000 },
+        { "MapleId": 2001001, "Period": 2, "Price": 2300, "Stock": 1000000 },
+        { "MapleId": 2001002, "Period": 2, "Price": 4000, "Stock": 1000000 },
+        { "MapleId": 2010000, "Period": 2, "Price": 30, "Stock": 1000000 },
+        { "MapleId": 2010002, "Period": 2, "Price": 50, "Stock": 1000000 },
+        { "MapleId": 2010001, "Period": 2, "Price": 106, "Stock": 1000000 },
+        { "MapleId": 2010003, "Period": 2, "Price": 100, "Stock": 1000000 },
+        { "MapleId": 2010004, "Period": 2, "Price": 310, "Stock": 1000000 },
+        { "MapleId": 2020012, "Period": 2, "Price": 4500, "Stock": 1000000 },
+        { "MapleId": 2020013, "Period": 2, "Price": 5600, "Stock": 1000000 },
+        { "MapleId": 2020014, "Period": 2, "Price": 8100, "Stock": 1000000 },
+        { "MapleId": 2020015, "Period": 2, "Price": 10200, "Stock": 1000000 },
+        { "MapleId": 2030000, "Period": 2, "Price": 400, "Stock": 1000000 },
+        { "MapleId": 2050000, "Period": 2, "Price": 200, "Stock": 100000 },
+        { "MapleId": 2050001, "Period": 2, "Price": 200, "Stock": 100000 },
+        { "MapleId": 2050002, "Period": 2, "Price": 300, "Stock": 100000 },
+        { "MapleId": 2043000, "Period": 4, "Price": 70000, "Stock": 100 },
+        { "MapleId": 2043100, "Period": 4, "Price": 70000, "Stock": 100 },
+        { "MapleId": 2043200, "Period": 4, "Price": 70000, "Stock": 100 },
+        { "MapleId": 2043300, "Period": 4, "Price": 70000, "Stock": 100 },
+        { "MapleId": 2043700, "Period": 4, "Price": 70000, "Stock": 100 },
+        { "MapleId": 2043800, "Period": 4, "Price": 70000, "Stock": 100 },
+        { "MapleId": 2044000, "Period": 4, "Price": 70000, "Stock": 100 },
+        { "MapleId": 2044100, "Period": 4, "Price": 70000, "Stock": 100 },
+        { "MapleId": 2044200, "Period": 4, "Price": 70000, "Stock": 100 },
+        { "MapleId": 2044300, "Period": 4, "Price": 70000, "Stock": 100 },
+        { "MapleId": 2044400, "Period": 4, "Price": 70000, "Stock": 100 },
+        { "MapleId": 2044500, "Period": 4, "Price": 70000, "Stock": 100 },
+        { "MapleId": 2044600, "Period": 4, "Price": 70000, "Stock": 100 },
+        { "MapleId": 2044700, "Period": 4, "Price": 70000, "Stock": 100 },
+        { "MapleId": 2060000, "Period": 2, "Price": 1, "Stock": 9999999 },
+        { "MapleId": 2061000, "Period": 2, "Price": 1, "Stock": 9999999 }
+      ],
+      "Variables": {},
+      "MapleId": 2022001,
+      "SpeakLineCount": 2
+    },
+    "2030000": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2030000,
+      "Script": "goDungeon",
+      "SpeakLineCount": 2
+    },
+    "2030001": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2030001,
+      "Script": "alpha_bravo",
+      "SpeakLineCount": 2
+    },
+    "2030002": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2030002,
+      "Script": "alpha_easy",
+      "SpeakLineCount": 2
+    },
+    "2030003": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2030003,
+      "Script": "oldBook6"
+    },
+    "2030004": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2030004,
+      "Script": "oldBook9"
+    },
+    "2030005": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2030005,
+      "Script": "oldBook11"
+    },
+    "2030006": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2030006,
+      "Script": "holyStone"
+    },
+    "2030007": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2030007,
+      "Script": "ska_ring"
+    },
+    "2030008": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2030008,
+      "Script": "Zakum00",
+      "SpeakLineCount": 3
+    },
+    "2030009": {
+      "ShopItems": [
+        { "MapleId": 2000001, "Period": 1, "Price": 166, "Stock": 100000 },
+        { "MapleId": 2000002, "Period": 1, "Price": 332, "Stock": 100000 },
+        { "MapleId": 2000003, "Period": 1, "Price": 208, "Stock": 100000 },
+        { "MapleId": 2000006, "Period": 1, "Price": 644, "Stock": 100000 },
+        { "MapleId": 2002000, "Period": 1, "Price": 520, "Stock": 100000 },
+        { "MapleId": 2002001, "Period": 1, "Price": 416, "Stock": 100000 },
+        { "MapleId": 2002002, "Period": 1, "Price": 520, "Stock": 100000 },
+        { "MapleId": 2002004, "Period": 1, "Price": 520, "Stock": 100000 },
+        { "MapleId": 2002005, "Period": 1, "Price": 520, "Stock": 100000 },
+        { "MapleId": 2001000, "Period": 1, "Price": 3328, "Stock": 100000 },
+        { "MapleId": 2001001, "Period": 1, "Price": 2392, "Stock": 100000 },
+        { "MapleId": 2001002, "Period": 1, "Price": 4160, "Stock": 100000 },
+        { "MapleId": 2020005, "Period": 1, "Price": 332, "Stock": 100000 },
+        { "MapleId": 2010004, "Period": 1, "Price": 322, "Stock": 100000 },
+        { "MapleId": 2020001, "Period": 1, "Price": 228, "Stock": 100000 },
+        { "MapleId": 2020003, "Period": 1, "Price": 468, "Stock": 100000 },
+        { "MapleId": 2020004, "Period": 1, "Price": 468, "Stock": 100000 },
+        { "MapleId": 2020006, "Period": 1, "Price": 551, "Stock": 100000 },
+        { "MapleId": 2022003, "Period": 1, "Price": 1144, "Stock": 100000 },
+        { "MapleId": 2022000, "Period": 1, "Price": 1716, "Stock": 100000 },
+        { "MapleId": 2020012, "Period": 1, "Price": 4680, "Stock": 100000 },
+        { "MapleId": 2020013, "Period": 1, "Price": 5824, "Stock": 100000 },
+        { "MapleId": 2020014, "Period": 1, "Price": 8424, "Stock": 100000 },
+        { "MapleId": 2020015, "Period": 1, "Price": 10608, "Stock": 100000 },
+        { "MapleId": 2060000, "Period": 4, "Price": 1 },
+        { "MapleId": 2061000, "Period": 4, "Price": 1 },
+        {
+          "MapleId": 2070000,
+          "Period": 4,
+          "Price": 500,
+          "Stock": 100000,
+          "UnitRechargeRate": 0.4
+        },
+        {
+          "MapleId": 2070001,
+          "Period": 4,
+          "Stock": 100000,
+          "UnitRechargeRate": 0.5
+        },
+        {
+          "MapleId": 2070002,
+          "Period": 4,
+          "Stock": 100000,
+          "UnitRechargeRate": 0.6
+        },
+        {
+          "MapleId": 2070003,
+          "Period": 4,
+          "Stock": 100000,
+          "UnitRechargeRate": 0.7
+        },
+        {
+          "MapleId": 2070004,
+          "Period": 4,
+          "Stock": 100000,
+          "UnitRechargeRate": 0.7
+        },
+        {
+          "MapleId": 2070005,
+          "Period": 4,
+          "Stock": 100000,
+          "UnitRechargeRate": 0.8
+        },
+        {
+          "MapleId": 2070006,
+          "Period": 4,
+          "Stock": 100000,
+          "UnitRechargeRate": 0.9
+        },
+        {
+          "MapleId": 2070007,
+          "Period": 4,
+          "Stock": 100000,
+          "UnitRechargeRate": 1.1
+        },
+        {
+          "MapleId": 2070008,
+          "Period": 4,
+          "Stock": 100000,
+          "UnitRechargeRate": 1.1
+        },
+        {
+          "MapleId": 2070009,
+          "Period": 4,
+          "Stock": 100000,
+          "UnitRechargeRate": 1.1
+        },
+        {
+          "MapleId": 2070010,
+          "Period": 4,
+          "Stock": 100000,
+          "UnitRechargeRate": 1.1
+        }
+      ],
+      "Variables": {},
+      "MapleId": 2030009,
+      "SpeakLineCount": 3
+    },
+    "2030010": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2030010,
+      "Script": "Zakum06",
+      "SpeakLineCount": 2
+    },
+    "2030011": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2030011,
+      "Script": "Zakum04",
+      "SpeakLineCount": 2
+    },
+    "2030012": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2030012,
+      "Script": "ossyria3_3",
+      "SpeakLineCount": 2
+    },
+    "2032000": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2032000,
+      "Script": "oldBook7",
+      "SpeakLineCount": 2
+    },
+    "2032001": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2032001,
+      "Script": "oldBook5",
+      "SpeakLineCount": 2
+    },
+    "2032002": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2032002,
+      "Script": "Zakum01",
+      "SpeakLineCount": 2
+    },
+    "2032003": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2032003,
+      "Script": "Zakum02",
+      "SpeakLineCount": 2
+    },
+    "2040000": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2040000,
+      "Script": "sell_ticket",
+      "SpeakLineCount": 2
+    },
+    "2040001": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2040001,
+      "SpeakLineCount": 2
+    },
+    "2040002": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2040002,
+      "SpeakLineCount": 2
+    },
+    "2040003": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2040003,
+      "SpeakLineCount": 2
+    },
+    "2040004": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2040004,
+      "Script": "ludi001",
+      "SpeakLineCount": 2
+    },
+    "2040005": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2040005,
+      "Script": "ludi002",
+      "SpeakLineCount": 2
+    },
+    "2040006": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2040006,
+      "Script": "ludi003",
+      "SpeakLineCount": 2
+    },
+    "2040007": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2040007,
+      "Script": "ludi004",
+      "SpeakLineCount": 2
+    },
+    "2040008": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2040008,
+      "Script": "ludi005",
+      "SpeakLineCount": 2
+    },
+    "2040009": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2040009,
+      "Script": "ludi006",
+      "SpeakLineCount": 2
+    },
+    "2040010": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2040010,
+      "Script": "ludi007",
+      "SpeakLineCount": 2
+    },
+    "2040011": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2040011,
+      "Script": "ludi008",
+      "SpeakLineCount": 2
+    },
+    "2040012": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2040012,
+      "Script": "ludi009",
+      "SpeakLineCount": 2
+    },
+    "2040013": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2040013,
+      "Script": "ludi010",
+      "SpeakLineCount": 2
+    },
+    "2040014": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2040014,
+      "Script": "minigame00",
+      "SpeakLineCount": 2
+    },
+    "2040015": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2040015,
+      "Script": "ludi000",
+      "SpeakLineCount": 1
+    },
+    "2040016": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2040016,
+      "Script": "make_ludi1",
+      "SpeakLineCount": 2
+    },
+    "2040017": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2040017,
+      "SpeakLineCount": 2
+    },
+    "2040018": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2040018,
+      "SpeakLineCount": 2
+    },
+    "2040019": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2040019,
+      "Script": "face_ludi2",
+      "SpeakLineCount": 2
+    },
+    "2040020": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2040020,
+      "Script": "make_ludi2",
+      "SpeakLineCount": 2
+    },
+    "2040021": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2040021,
+      "Script": "make_ludi3",
+      "SpeakLineCount": 2
+    },
+    "2040022": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2040022,
+      "Script": "make_ludi4",
+      "SpeakLineCount": 2
+    },
+    "2040023": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2040023,
+      "Script": "ludi13",
+      "SpeakLineCount": 2
+    },
+    "2040024": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2040024,
+      "Script": "ludi14"
+    },
+    "2040025": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2040025,
+      "Script": "ludi15"
+    },
+    "2040026": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2040026,
+      "Script": "ludi16"
+    },
+    "2040027": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2040027,
+      "Script": "ludi17"
+    },
+    "2041000": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2041000,
+      "Script": "get_ticket",
+      "SpeakLineCount": 3
+    },
+    "2041001": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2041001,
+      "Script": "goOutWaitingRoom",
+      "SpeakLineCount": 3
+    },
+    "2041002": {
+      "ShopItems": [
+        { "MapleId": 1302008, "Period": 2, "Price": 40000, "Stock": 10000 },
+        { "MapleId": 1302004, "Period": 2, "Price": 100000, "Stock": 10000 },
+        { "MapleId": 1302009, "Period": 2, "Price": 225000, "Stock": 10000 },
+        { "MapleId": 1312005, "Period": 2, "Price": 40000, "Stock": 10000 },
+        { "MapleId": 1312006, "Period": 2, "Price": 100000, "Stock": 10000 },
+        { "MapleId": 1312007, "Period": 2, "Price": 175000, "Stock": 10000 },
+        { "MapleId": 1322014, "Period": 2, "Price": 40000, "Stock": 10000 },
+        { "MapleId": 1322015, "Period": 2, "Price": 100000, "Stock": 10000 },
+        { "MapleId": 1322016, "Period": 2, "Price": 175000, "Stock": 10000 },
+        { "MapleId": 1332009, "Period": 2, "Price": 42000, "Stock": 10000 },
+        { "MapleId": 1332012, "Period": 2, "Price": 40000, "Stock": 10000 },
+        { "MapleId": 1332001, "Period": 2, "Price": 200000, "Stock": 10000 },
+        { "MapleId": 1332014, "Period": 2, "Price": 375000, "Stock": 10000 },
+        { "MapleId": 1332011, "Period": 2, "Price": 425000, "Stock": 10000 },
+        { "MapleId": 1372003, "Period": 2, "Price": 38000, "Stock": 10000 },
+        { "MapleId": 1372001, "Period": 2, "Price": 175000, "Stock": 10000 },
+        { "MapleId": 1372000, "Period": 2, "Price": 400000, "Stock": 10000 },
+        { "MapleId": 1382002, "Period": 2, "Price": 20000, "Stock": 10000 },
+        { "MapleId": 1402002, "Period": 2, "Price": 150000, "Stock": 10000 },
+        { "MapleId": 1402006, "Period": 2, "Price": 350000, "Stock": 10000 },
+        { "MapleId": 1402007, "Period": 2, "Price": 450000, "Stock": 10000 },
+        { "MapleId": 1412006, "Period": 2, "Price": 45000, "Stock": 10000 },
+        { "MapleId": 1412004, "Period": 2, "Price": 200000, "Stock": 10000 },
+        { "MapleId": 1412005, "Period": 2, "Price": 250000, "Stock": 10000 },
+        { "MapleId": 1422001, "Period": 2, "Price": 45000, "Stock": 10000 },
+        { "MapleId": 1422008, "Period": 2, "Price": 200000, "Stock": 10000 },
+        { "MapleId": 1422007, "Period": 2, "Price": 250000, "Stock": 10000 },
+        { "MapleId": 1432002, "Period": 2, "Price": 60000, "Stock": 10000 },
+        { "MapleId": 1432003, "Period": 2, "Price": 175000, "Stock": 10000 },
+        { "MapleId": 1432005, "Period": 2, "Price": 225000, "Stock": 10000 },
+        { "MapleId": 1442001, "Period": 2, "Price": 60000, "Stock": 10000 },
+        { "MapleId": 1442003, "Period": 2, "Price": 175000, "Stock": 10000 },
+        { "MapleId": 1442009, "Period": 2, "Price": 300000, "Stock": 10000 },
+        { "MapleId": 1452005, "Period": 2, "Price": 150000, "Stock": 10000 },
+        { "MapleId": 1452006, "Period": 2, "Price": 250000, "Stock": 10000 },
+        { "MapleId": 1452007, "Period": 2, "Price": 375000, "Stock": 10000 },
+        { "MapleId": 1462000, "Period": 2, "Price": 30000, "Stock": 10000 },
+        { "MapleId": 1462004, "Period": 2, "Price": 200000, "Stock": 10000 },
+        { "MapleId": 1462005, "Period": 2, "Price": 250000, "Stock": 10000 },
+        { "MapleId": 1472001, "Period": 2, "Price": 20000, "Stock": 10000 },
+        { "MapleId": 1472004, "Period": 2, "Price": 30000, "Stock": 10000 },
+        { "MapleId": 1472007, "Period": 2, "Price": 60000, "Stock": 10000 }
+      ],
+      "Variables": {},
+      "MapleId": 2041002,
+      "SpeakLineCount": 2
+    },
+    "2041003": {
+      "ShopItems": [
+        { "MapleId": 1002004, "Period": 2, "Price": 160000, "Stock": 10000 },
+        { "MapleId": 1040000, "Period": 2, "Price": 200000, "Stock": 10000 },
+        { "MapleId": 1040085, "Period": 2, "Price": 200000, "Stock": 10000 },
+        { "MapleId": 1041084, "Period": 2, "Price": 200000, "Stock": 10000 },
+        { "MapleId": 1041085, "Period": 2, "Price": 200000, "Stock": 10000 },
+        { "MapleId": 1050000, "Period": 2, "Price": 112500, "Stock": 10000 },
+        { "MapleId": 1050021, "Period": 2, "Price": 112500, "Stock": 10000 },
+        { "MapleId": 1051001, "Period": 2, "Price": 112500, "Stock": 10000 },
+        { "MapleId": 1051014, "Period": 2, "Price": 112500, "Stock": 10000 },
+        { "MapleId": 1060075, "Period": 2, "Price": 180000, "Stock": 10000 },
+        { "MapleId": 1060074, "Period": 2, "Price": 180000, "Stock": 10000 },
+        { "MapleId": 1061083, "Period": 2, "Price": 180000, "Stock": 10000 },
+        { "MapleId": 1061084, "Period": 2, "Price": 180000, "Stock": 10000 },
+        { "MapleId": 1092001, "Period": 2, "Price": 100000, "Stock": 10000 },
+        { "MapleId": 1092002, "Period": 2, "Price": 200000, "Stock": 10000 },
+        { "MapleId": 1002141, "Period": 2, "Price": 96000, "Stock": 10000 },
+        { "MapleId": 1002142, "Period": 2, "Price": 96000, "Stock": 10000 },
+        { "MapleId": 1002143, "Period": 2, "Price": 96000, "Stock": 10000 },
+        { "MapleId": 1002144, "Period": 2, "Price": 96000, "Stock": 10000 },
+        { "MapleId": 1041052, "Period": 2, "Price": 120000, "Stock": 10000 },
+        { "MapleId": 1041051, "Period": 2, "Price": 120000, "Stock": 10000 },
+        { "MapleId": 1050031, "Period": 2, "Price": 300000, "Stock": 10000 },
+        { "MapleId": 1050002, "Period": 2, "Price": 300000, "Stock": 10000 },
+        { "MapleId": 1050035, "Period": 2, "Price": 450000, "Stock": 10000 },
+        { "MapleId": 1050038, "Period": 2, "Price": 450000, "Stock": 10000 },
+        { "MapleId": 1050036, "Period": 2, "Price": 450000, "Stock": 10000 },
+        { "MapleId": 1050037, "Period": 2, "Price": 450000, "Stock": 10000 },
+        { "MapleId": 1051023, "Period": 2, "Price": 450000, "Stock": 10000 },
+        { "MapleId": 1051025, "Period": 2, "Price": 450000, "Stock": 10000 },
+        { "MapleId": 1051024, "Period": 2, "Price": 450000, "Stock": 10000 },
+        { "MapleId": 1051027, "Period": 2, "Price": 450000, "Stock": 10000 },
+        { "MapleId": 1061048, "Period": 2, "Price": 120000, "Stock": 10000 },
+        { "MapleId": 1061047, "Period": 2, "Price": 120000, "Stock": 10000 },
+        { "MapleId": 1002138, "Period": 2, "Price": 100000, "Stock": 10000 },
+        { "MapleId": 1002139, "Period": 2, "Price": 100000, "Stock": 10000 },
+        { "MapleId": 1002135, "Period": 2, "Price": 100000, "Stock": 10000 },
+        { "MapleId": 1002137, "Period": 2, "Price": 100000, "Stock": 10000 },
+        { "MapleId": 1040072, "Period": 2, "Price": 114000, "Stock": 10000 },
+        { "MapleId": 1040073, "Period": 2, "Price": 114000, "Stock": 10000 },
+        { "MapleId": 1040074, "Period": 2, "Price": 114000, "Stock": 10000 },
+        { "MapleId": 1040076, "Period": 2, "Price": 114000, "Stock": 10000 },
+        { "MapleId": 1040081, "Period": 2, "Price": 180000, "Stock": 10000 },
+        { "MapleId": 1040079, "Period": 2, "Price": 180000, "Stock": 10000 },
+        { "MapleId": 1041066, "Period": 2, "Price": 114000, "Stock": 10000 },
+        { "MapleId": 1041069, "Period": 2, "Price": 114000, "Stock": 10000 },
+        { "MapleId": 1041065, "Period": 2, "Price": 114000, "Stock": 10000 },
+        { "MapleId": 1041067, "Period": 2, "Price": 114000, "Stock": 10000 },
+        { "MapleId": 1041082, "Period": 2, "Price": 180000, "Stock": 10000 },
+        { "MapleId": 1041081, "Period": 2, "Price": 180000, "Stock": 10000 },
+        { "MapleId": 1060062, "Period": 2, "Price": 108000, "Stock": 10000 },
+        { "MapleId": 1060065, "Period": 2, "Price": 108000, "Stock": 10000 },
+        { "MapleId": 1060061, "Period": 2, "Price": 108000, "Stock": 10000 },
+        { "MapleId": 1060063, "Period": 2, "Price": 108000, "Stock": 10000 },
+        { "MapleId": 1060070, "Period": 2, "Price": 160000, "Stock": 10000 },
+        { "MapleId": 1060069, "Period": 2, "Price": 160000, "Stock": 10000 },
+        { "MapleId": 1061061, "Period": 2, "Price": 108000, "Stock": 10000 },
+        { "MapleId": 1061064, "Period": 2, "Price": 108000, "Stock": 10000 },
+        { "MapleId": 1061060, "Period": 2, "Price": 108000, "Stock": 10000 },
+        { "MapleId": 1061062, "Period": 2, "Price": 108000, "Stock": 10000 },
+        { "MapleId": 1061081, "Period": 2, "Price": 160000, "Stock": 10000 },
+        { "MapleId": 1061080, "Period": 2, "Price": 160000, "Stock": 10000 },
+        { "MapleId": 1002176, "Period": 2, "Price": 100000, "Stock": 10000 },
+        { "MapleId": 1002177, "Period": 2, "Price": 100000, "Stock": 10000 },
+        { "MapleId": 1002178, "Period": 2, "Price": 100000, "Stock": 10000 },
+        { "MapleId": 1002179, "Period": 2, "Price": 100000, "Stock": 10000 },
+        { "MapleId": 1002180, "Period": 2, "Price": 100000, "Stock": 10000 },
+        { "MapleId": 1040063, "Period": 2, "Price": 114000, "Stock": 10000 },
+        { "MapleId": 1040062, "Period": 2, "Price": 114000, "Stock": 10000 },
+        { "MapleId": 1040061, "Period": 2, "Price": 114000, "Stock": 10000 },
+        { "MapleId": 1040082, "Period": 2, "Price": 180000, "Stock": 10000 },
+        { "MapleId": 1040083, "Period": 2, "Price": 180000, "Stock": 10000 },
+        { "MapleId": 1041075, "Period": 2, "Price": 180000, "Stock": 10000 },
+        { "MapleId": 1041074, "Period": 2, "Price": 180000, "Stock": 10000 },
+        { "MapleId": 1051007, "Period": 2, "Price": 111000, "Stock": 10000 },
+        { "MapleId": 1051008, "Period": 2, "Price": 111000, "Stock": 10000 },
+        { "MapleId": 1051009, "Period": 2, "Price": 111000, "Stock": 10000 },
+        { "MapleId": 1060051, "Period": 2, "Price": 108000, "Stock": 10000 },
+        { "MapleId": 1060050, "Period": 2, "Price": 108000, "Stock": 10000 },
+        { "MapleId": 1060052, "Period": 2, "Price": 108000, "Stock": 10000 },
+        { "MapleId": 1060071, "Period": 2, "Price": 160000, "Stock": 10000 },
+        { "MapleId": 1060072, "Period": 2, "Price": 160000, "Stock": 10000 },
+        { "MapleId": 1061070, "Period": 2, "Price": 160000, "Stock": 10000 },
+        { "MapleId": 1061069, "Period": 2, "Price": 160000, "Stock": 10000 },
+        {
+          "MapleId": 2070000,
+          "Period": 4,
+          "Price": 500,
+          "Stock": 100000,
+          "UnitRechargeRate": 0.3
+        },
+        {
+          "MapleId": 2070001,
+          "Period": 4,
+          "Stock": 100000,
+          "UnitRechargeRate": 0.4
+        },
+        {
+          "MapleId": 2070002,
+          "Period": 4,
+          "Stock": 100000,
+          "UnitRechargeRate": 0.5
+        },
+        {
+          "MapleId": 2070003,
+          "Period": 4,
+          "Stock": 100000,
+          "UnitRechargeRate": 0.6
+        },
+        {
+          "MapleId": 2070004,
+          "Period": 4,
+          "Stock": 100000,
+          "UnitRechargeRate": 0.6
+        },
+        {
+          "MapleId": 2070005,
+          "Period": 4,
+          "Stock": 100000,
+          "UnitRechargeRate": 0.7
+        },
+        {
+          "MapleId": 2070006,
+          "Period": 4,
+          "Stock": 100000,
+          "UnitRechargeRate": 0.8
+        },
+        {
+          "MapleId": 2070007,
+          "Period": 4,
+          "Stock": 100000,
+          "UnitRechargeRate": 1.0
+        },
+        {
+          "MapleId": 2070008,
+          "Period": 4,
+          "Stock": 100000,
+          "UnitRechargeRate": 1.0
+        },
+        {
+          "MapleId": 2070009,
+          "Period": 4,
+          "Stock": 100000,
+          "UnitRechargeRate": 1.0
+        },
+        {
+          "MapleId": 2070010,
+          "Period": 4,
+          "Stock": 100000,
+          "UnitRechargeRate": 1.0
+        }
+      ],
+      "Variables": {},
+      "MapleId": 2041003,
+      "SpeakLineCount": 2
+    },
+    "2041004": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2041004,
+      "Script": "ludi12",
+      "SpeakLineCount": 2
+    },
+    "2041005": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2041005,
+      "SpeakLineCount": 2
+    },
+    "2041006": {
+      "ShopItems": [
+        { "MapleId": 2000007, "Period": 2, "Price": 50, "Stock": 50000 },
+        { "MapleId": 2000000, "Period": 2, "Price": 47, "Stock": 9999999 },
+        { "MapleId": 2000008, "Period": 2, "Price": 160, "Stock": 50000 },
+        { "MapleId": 2000001, "Period": 2, "Price": 152, "Stock": 9999999 },
+        { "MapleId": 2000009, "Period": 2, "Price": 320, "Stock": 50000 },
+        { "MapleId": 2000002, "Period": 2, "Price": 304, "Stock": 9999999 },
+        { "MapleId": 2000010, "Period": 2, "Price": 200, "Stock": 50000 },
+        { "MapleId": 2000003, "Period": 2, "Price": 190, "Stock": 9999999 },
+        { "MapleId": 2000011, "Period": 2, "Price": 620, "Stock": 50000 },
+        { "MapleId": 2000006, "Period": 2, "Price": 589, "Stock": 9999999 },
+        { "MapleId": 2001001, "Period": 2, "Price": 2185, "Stock": 9999999 },
+        { "MapleId": 2001002, "Period": 2, "Price": 3800, "Stock": 9999999 },
+        { "MapleId": 2002006, "Period": 2, "Price": 570, "Stock": 9999999 },
+        { "MapleId": 2002007, "Period": 2, "Price": 570, "Stock": 9999999 },
+        { "MapleId": 2002008, "Period": 2, "Price": 570, "Stock": 9999999 },
+        { "MapleId": 2002009, "Period": 2, "Price": 570, "Stock": 9999999 },
+        { "MapleId": 2002010, "Period": 2, "Price": 475, "Stock": 9999999 },
+        { "MapleId": 2010001, "Period": 2, "Price": 106, "Stock": 9999999 },
+        { "MapleId": 2010002, "Period": 2, "Price": 47, "Stock": 9999999 },
+        { "MapleId": 2020001, "Period": 2, "Price": 209, "Stock": 9999999 },
+        { "MapleId": 2020002, "Period": 2, "Price": 304, "Stock": 9999999 },
+        { "MapleId": 2020003, "Period": 2, "Price": 427, "Stock": 9999999 },
+        { "MapleId": 2020004, "Period": 2, "Price": 427, "Stock": 9999999 },
+        { "MapleId": 2020005, "Period": 2, "Price": 304, "Stock": 9999999 },
+        { "MapleId": 2020006, "Period": 2, "Price": 503, "Stock": 9999999 },
+        { "MapleId": 2040300, "Period": 2, "Price": 34000, "Stock": 9999999 },
+        { "MapleId": 2043000, "Period": 2, "Price": 69000, "Stock": 9999999 },
+        { "MapleId": 2043100, "Period": 2, "Price": 69000, "Stock": 9999999 },
+        { "MapleId": 2043200, "Period": 2, "Price": 69000, "Stock": 9999999 },
+        { "MapleId": 2043300, "Period": 2, "Price": 69000, "Stock": 9999999 },
+        { "MapleId": 2044000, "Period": 2, "Price": 69000, "Stock": 9999999 },
+        { "MapleId": 2044100, "Period": 2, "Price": 69000, "Stock": 9999999 },
+        { "MapleId": 2044200, "Period": 2, "Price": 69000, "Stock": 9999999 },
+        { "MapleId": 2044300, "Period": 2, "Price": 69000, "Stock": 9999999 },
+        { "MapleId": 2044400, "Period": 2, "Price": 69000, "Stock": 9999999 },
+        { "MapleId": 2043700, "Period": 2, "Price": 69000, "Stock": 9999999 },
+        { "MapleId": 2043800, "Period": 2, "Price": 69000, "Stock": 9999999 },
+        { "MapleId": 2044500, "Period": 2, "Price": 69000, "Stock": 9999999 },
+        { "MapleId": 2044600, "Period": 2, "Price": 69000, "Stock": 9999999 },
+        { "MapleId": 2044700, "Period": 2, "Price": 69000, "Stock": 9999999 },
+        { "MapleId": 2030000, "Period": 2, "Price": 400, "Stock": 9999999 },
+        { "MapleId": 2060000, "Period": 2, "Price": 1, "Stock": 9999999 },
+        { "MapleId": 2060001, "Period": 2, "Price": 10, "Stock": 9999999 },
+        { "MapleId": 2061000, "Period": 2, "Price": 1, "Stock": 9999999 },
+        { "MapleId": 2061001, "Period": 2, "Price": 10, "Stock": 9999999 }
+      ],
+      "Variables": {},
+      "MapleId": 2041006,
+      "SpeakLineCount": 2
+    },
+    "2041007": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2041007,
+      "Script": "hair_ludi1",
+      "SpeakLineCount": 2
+    },
+    "2041008": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2041008,
+      "StorageCost": 100,
+      "SpeakLineCount": 2
+    },
+    "2041009": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2041009,
+      "Script": "hair_ludi2",
+      "SpeakLineCount": 2
+    },
+    "2041010": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2041010,
+      "Script": "face_ludi1",
+      "SpeakLineCount": 2
+    },
+    "2041011": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2041011,
+      "SpeakLineCount": 2
+    },
+    "2041012": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2041012,
+      "SpeakLineCount": 2
+    },
+    "2041013": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2041013,
+      "Script": "skin_ludi1",
+      "SpeakLineCount": 2
+    },
+    "2041014": {
+      "ShopItems": [
+        { "MapleId": 2120000, "Period": 1, "Price": 25, "Stock": 1000000000 }
+      ],
+      "Variables": {},
+      "MapleId": 2041014,
+      "SpeakLineCount": 2
+    },
+    "2050000": {
+      "ShopItems": [
+        { "MapleId": 1302004, "Period": 2, "Price": 100000, "Stock": 10000 },
+        { "MapleId": 1302009, "Period": 2, "Price": 225000, "Stock": 10000 },
+        { "MapleId": 1312006, "Period": 2, "Price": 100000, "Stock": 10000 },
+        { "MapleId": 1312007, "Period": 2, "Price": 175000, "Stock": 10000 },
+        { "MapleId": 1322015, "Period": 2, "Price": 100000, "Stock": 10000 },
+        { "MapleId": 1322016, "Period": 2, "Price": 175000, "Stock": 10000 },
+        { "MapleId": 1332001, "Period": 2, "Price": 200000, "Stock": 10000 },
+        { "MapleId": 1332014, "Period": 2, "Price": 375000, "Stock": 10000 },
+        { "MapleId": 1332011, "Period": 2, "Price": 425000, "Stock": 10000 },
+        { "MapleId": 1372001, "Period": 2, "Price": 175000, "Stock": 10000 },
+        { "MapleId": 1372000, "Period": 2, "Price": 400000, "Stock": 10000 },
+        { "MapleId": 1402006, "Period": 2, "Price": 350000, "Stock": 10000 },
+        { "MapleId": 1402007, "Period": 2, "Price": 450000, "Stock": 10000 },
+        { "MapleId": 1412004, "Period": 2, "Price": 200000, "Stock": 10000 },
+        { "MapleId": 1412005, "Period": 2, "Price": 250000, "Stock": 10000 },
+        { "MapleId": 1422008, "Period": 2, "Price": 200000, "Stock": 10000 },
+        { "MapleId": 1422007, "Period": 2, "Price": 250000, "Stock": 10000 },
+        { "MapleId": 1432003, "Period": 2, "Price": 175000, "Stock": 10000 },
+        { "MapleId": 1432005, "Period": 2, "Price": 225000, "Stock": 10000 },
+        { "MapleId": 1442003, "Period": 2, "Price": 175000, "Stock": 10000 },
+        { "MapleId": 1442009, "Period": 2, "Price": 300000, "Stock": 10000 },
+        { "MapleId": 1452006, "Period": 2, "Price": 250000, "Stock": 10000 },
+        { "MapleId": 1452007, "Period": 2, "Price": 375000, "Stock": 10000 },
+        { "MapleId": 1462004, "Period": 2, "Price": 200000, "Stock": 10000 },
+        { "MapleId": 1462005, "Period": 2, "Price": 250000, "Stock": 10000 },
+        { "MapleId": 1472004, "Period": 2, "Price": 30000, "Stock": 10000 },
+        { "MapleId": 1472007, "Period": 2, "Price": 60000, "Stock": 10000 }
+      ],
+      "Variables": {},
+      "MapleId": 2050000,
+      "SpeakLineCount": 2
+    },
+    "2050001": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2050001,
+      "SpeakLineCount": 2
+    },
+    "2050002": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2050002,
+      "SpeakLineCount": 2
+    },
+    "2050003": {
+      "ShopItems": [
+        { "MapleId": 1002004, "Period": 2, "Price": 160000, "Stock": 10000 },
+        { "MapleId": 1040000, "Period": 2, "Price": 200000, "Stock": 10000 },
+        { "MapleId": 1040085, "Period": 2, "Price": 200000, "Stock": 10000 },
+        { "MapleId": 1041084, "Period": 2, "Price": 200000, "Stock": 10000 },
+        { "MapleId": 1041085, "Period": 2, "Price": 200000, "Stock": 10000 },
+        { "MapleId": 1050000, "Period": 2, "Price": 112500, "Stock": 10000 },
+        { "MapleId": 1050021, "Period": 2, "Price": 112500, "Stock": 10000 },
+        { "MapleId": 1051001, "Period": 2, "Price": 112500, "Stock": 10000 },
+        { "MapleId": 1051014, "Period": 2, "Price": 112500, "Stock": 10000 },
+        { "MapleId": 1060075, "Period": 2, "Price": 180000, "Stock": 10000 },
+        { "MapleId": 1060074, "Period": 2, "Price": 180000, "Stock": 10000 },
+        { "MapleId": 1061083, "Period": 2, "Price": 180000, "Stock": 10000 },
+        { "MapleId": 1061084, "Period": 2, "Price": 180000, "Stock": 10000 },
+        { "MapleId": 1092001, "Period": 2, "Price": 100000, "Stock": 10000 },
+        { "MapleId": 1092002, "Period": 2, "Price": 200000, "Stock": 10000 },
+        { "MapleId": 1002141, "Period": 2, "Price": 96000, "Stock": 10000 },
+        { "MapleId": 1002142, "Period": 2, "Price": 96000, "Stock": 10000 },
+        { "MapleId": 1002143, "Period": 2, "Price": 96000, "Stock": 10000 },
+        { "MapleId": 1002144, "Period": 2, "Price": 96000, "Stock": 10000 },
+        { "MapleId": 1041052, "Period": 2, "Price": 120000, "Stock": 10000 },
+        { "MapleId": 1041051, "Period": 2, "Price": 120000, "Stock": 10000 },
+        { "MapleId": 1050031, "Period": 2, "Price": 300000, "Stock": 10000 },
+        { "MapleId": 1050002, "Period": 2, "Price": 300000, "Stock": 10000 },
+        { "MapleId": 1050035, "Period": 2, "Price": 450000, "Stock": 10000 },
+        { "MapleId": 1050038, "Period": 2, "Price": 450000, "Stock": 10000 },
+        { "MapleId": 1050036, "Period": 2, "Price": 450000, "Stock": 10000 },
+        { "MapleId": 1050037, "Period": 2, "Price": 450000, "Stock": 10000 },
+        { "MapleId": 1051023, "Period": 2, "Price": 450000, "Stock": 10000 },
+        { "MapleId": 1051025, "Period": 2, "Price": 450000, "Stock": 10000 },
+        { "MapleId": 1051024, "Period": 2, "Price": 450000, "Stock": 10000 },
+        { "MapleId": 1051027, "Period": 2, "Price": 450000, "Stock": 10000 },
+        { "MapleId": 1061048, "Period": 2, "Price": 120000, "Stock": 10000 },
+        { "MapleId": 1061047, "Period": 2, "Price": 120000, "Stock": 10000 },
+        { "MapleId": 1002138, "Period": 2, "Price": 100000, "Stock": 10000 },
+        { "MapleId": 1002139, "Period": 2, "Price": 100000, "Stock": 10000 },
+        { "MapleId": 1002135, "Period": 2, "Price": 100000, "Stock": 10000 },
+        { "MapleId": 1002137, "Period": 2, "Price": 100000, "Stock": 10000 },
+        { "MapleId": 1040072, "Period": 2, "Price": 114000, "Stock": 10000 },
+        { "MapleId": 1040073, "Period": 2, "Price": 114000, "Stock": 10000 },
+        { "MapleId": 1040074, "Period": 2, "Price": 114000, "Stock": 10000 },
+        { "MapleId": 1040076, "Period": 2, "Price": 114000, "Stock": 10000 },
+        { "MapleId": 1040081, "Period": 2, "Price": 180000, "Stock": 10000 },
+        { "MapleId": 1040079, "Period": 2, "Price": 180000, "Stock": 10000 },
+        { "MapleId": 1041066, "Period": 2, "Price": 114000, "Stock": 10000 },
+        { "MapleId": 1041069, "Period": 2, "Price": 114000, "Stock": 10000 },
+        { "MapleId": 1041065, "Period": 2, "Price": 114000, "Stock": 10000 },
+        { "MapleId": 1041067, "Period": 2, "Price": 114000, "Stock": 10000 },
+        { "MapleId": 1041082, "Period": 2, "Price": 180000, "Stock": 10000 },
+        { "MapleId": 1041081, "Period": 2, "Price": 180000, "Stock": 10000 },
+        { "MapleId": 1060062, "Period": 2, "Price": 108000, "Stock": 10000 },
+        { "MapleId": 1060065, "Period": 2, "Price": 108000, "Stock": 10000 },
+        { "MapleId": 1060061, "Period": 2, "Price": 108000, "Stock": 10000 },
+        { "MapleId": 1060063, "Period": 2, "Price": 108000, "Stock": 10000 },
+        { "MapleId": 1060070, "Period": 2, "Price": 160000, "Stock": 10000 },
+        { "MapleId": 1060069, "Period": 2, "Price": 160000, "Stock": 10000 },
+        { "MapleId": 1061061, "Period": 2, "Price": 108000, "Stock": 10000 },
+        { "MapleId": 1061064, "Period": 2, "Price": 108000, "Stock": 10000 },
+        { "MapleId": 1061060, "Period": 2, "Price": 108000, "Stock": 10000 },
+        { "MapleId": 1061062, "Period": 2, "Price": 108000, "Stock": 10000 },
+        { "MapleId": 1061081, "Period": 2, "Price": 160000, "Stock": 10000 },
+        { "MapleId": 1061080, "Period": 2, "Price": 160000, "Stock": 10000 },
+        { "MapleId": 1002176, "Period": 2, "Price": 100000, "Stock": 10000 },
+        { "MapleId": 1002177, "Period": 2, "Price": 100000, "Stock": 10000 },
+        { "MapleId": 1002178, "Period": 2, "Price": 100000, "Stock": 10000 },
+        { "MapleId": 1002179, "Period": 2, "Price": 100000, "Stock": 10000 },
+        { "MapleId": 1002180, "Period": 2, "Price": 100000, "Stock": 10000 },
+        { "MapleId": 1040063, "Period": 2, "Price": 114000, "Stock": 10000 },
+        { "MapleId": 1040062, "Period": 2, "Price": 114000, "Stock": 10000 },
+        { "MapleId": 1040061, "Period": 2, "Price": 114000, "Stock": 10000 },
+        { "MapleId": 1040082, "Period": 2, "Price": 180000, "Stock": 10000 },
+        { "MapleId": 1040083, "Period": 2, "Price": 180000, "Stock": 10000 },
+        { "MapleId": 1041075, "Period": 2, "Price": 180000, "Stock": 10000 },
+        { "MapleId": 1041074, "Period": 2, "Price": 180000, "Stock": 10000 },
+        { "MapleId": 1051007, "Period": 2, "Price": 111000, "Stock": 10000 },
+        { "MapleId": 1051008, "Period": 2, "Price": 111000, "Stock": 10000 },
+        { "MapleId": 1051009, "Period": 2, "Price": 111000, "Stock": 10000 },
+        { "MapleId": 1060051, "Period": 2, "Price": 108000, "Stock": 10000 },
+        { "MapleId": 1060050, "Period": 2, "Price": 108000, "Stock": 10000 },
+        { "MapleId": 1060052, "Period": 2, "Price": 108000, "Stock": 10000 },
+        { "MapleId": 1060071, "Period": 2, "Price": 160000, "Stock": 10000 },
+        { "MapleId": 1060072, "Period": 2, "Price": 160000, "Stock": 10000 },
+        { "MapleId": 1061070, "Period": 2, "Price": 160000, "Stock": 10000 },
+        { "MapleId": 1061069, "Period": 2, "Price": 160000, "Stock": 10000 },
+        {
+          "MapleId": 2070000,
+          "Period": 4,
+          "Price": 500,
+          "Stock": 100000,
+          "UnitRechargeRate": 0.3
+        },
+        {
+          "MapleId": 2070001,
+          "Period": 4,
+          "Stock": 100000,
+          "UnitRechargeRate": 0.4
+        },
+        {
+          "MapleId": 2070002,
+          "Period": 4,
+          "Stock": 100000,
+          "UnitRechargeRate": 0.5
+        },
+        {
+          "MapleId": 2070003,
+          "Period": 4,
+          "Stock": 100000,
+          "UnitRechargeRate": 0.6
+        },
+        {
+          "MapleId": 2070004,
+          "Period": 4,
+          "Stock": 100000,
+          "UnitRechargeRate": 0.6
+        },
+        {
+          "MapleId": 2070005,
+          "Period": 4,
+          "Stock": 100000,
+          "UnitRechargeRate": 0.7
+        },
+        {
+          "MapleId": 2070006,
+          "Period": 4,
+          "Stock": 100000,
+          "UnitRechargeRate": 0.8
+        },
+        {
+          "MapleId": 2070007,
+          "Period": 4,
+          "Stock": 100000,
+          "UnitRechargeRate": 1.0
+        },
+        {
+          "MapleId": 2070008,
+          "Period": 4,
+          "Stock": 100000,
+          "UnitRechargeRate": 1.0
+        },
+        {
+          "MapleId": 2070009,
+          "Period": 4,
+          "Stock": 100000,
+          "UnitRechargeRate": 1.0
+        },
+        {
+          "MapleId": 2070010,
+          "Period": 4,
+          "Stock": 100000,
+          "UnitRechargeRate": 1.0
+        }
+      ],
+      "Variables": {},
+      "MapleId": 2050003,
+      "SpeakLineCount": 2
+    },
+    "2050004": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2050004,
+      "StorageCost": 100,
+      "SpeakLineCount": 2
+    },
+    "2050005": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2050005,
+      "SpeakLineCount": 2
+    },
+    "2050006": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2050006,
+      "SpeakLineCount": 2
+    },
+    "2050007": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 2050007,
+      "SpeakLineCount": 2
+    },
+    "2051000": {
+      "ShopItems": [
+        { "MapleId": 2000000, "Period": 2, "Price": 47, "Stock": 9999999 },
+        { "MapleId": 2000001, "Period": 2, "Price": 152, "Stock": 9999999 },
+        { "MapleId": 2000002, "Period": 2, "Price": 304, "Stock": 9999999 },
+        { "MapleId": 2000003, "Period": 2, "Price": 190, "Stock": 9999999 },
+        { "MapleId": 2000006, "Period": 2, "Price": 589, "Stock": 9999999 },
+        { "MapleId": 2002000, "Period": 2, "Price": 475, "Stock": 9999999 },
+        { "MapleId": 2002001, "Period": 2, "Price": 380, "Stock": 9999999 },
+        { "MapleId": 2002002, "Period": 2, "Price": 475, "Stock": 9999999 },
+        { "MapleId": 2002004, "Period": 2, "Price": 475, "Stock": 9999999 },
+        { "MapleId": 2002005, "Period": 2, "Price": 475, "Stock": 9999999 },
+        { "MapleId": 2001000, "Period": 2, "Price": 3040, "Stock": 9999999 },
+        { "MapleId": 2001001, "Period": 2, "Price": 2185, "Stock": 9999999 },
+        { "MapleId": 2001002, "Period": 2, "Price": 3800, "Stock": 9999999 },
+        { "MapleId": 2010000, "Period": 2, "Price": 28, "Stock": 9999999 },
+        { "MapleId": 2010001, "Period": 2, "Price": 106, "Stock": 9999999 },
+        { "MapleId": 2010002, "Period": 2, "Price": 47, "Stock": 9999999 },
+        { "MapleId": 2010003, "Period": 2, "Price": 95, "Stock": 9999999 },
+        { "MapleId": 2010004, "Period": 2, "Price": 294, "Stock": 9999999 },
+        { "MapleId": 2020012, "Period": 2, "Price": 4275, "Stock": 9999999 },
+        { "MapleId": 2020013, "Period": 2, "Price": 5320, "Stock": 9999999 },
+        { "MapleId": 2020014, "Period": 2, "Price": 7695, "Stock": 9999999 },
+        { "MapleId": 2020015, "Period": 2, "Price": 9690, "Stock": 9999999 },
+        { "MapleId": 2022003, "Period": 2, "Price": 1045, "Stock": 9999999 },
+        { "MapleId": 2022000, "Period": 2, "Price": 1567, "Stock": 9999999 },
+        { "MapleId": 2040000, "Period": 2, "Price": 34000, "Stock": 9999999 },
+        { "MapleId": 2040400, "Period": 2, "Price": 34000, "Stock": 9999999 },
+        { "MapleId": 2040503, "Period": 2, "Price": 34000, "Stock": 9999999 },
+        { "MapleId": 2040600, "Period": 2, "Price": 34000, "Stock": 9999999 },
+        { "MapleId": 2040700, "Period": 2, "Price": 34000, "Stock": 9999999 },
+        { "MapleId": 2040703, "Period": 2, "Price": 34000, "Stock": 9999999 },
+        { "MapleId": 2040706, "Period": 2, "Price": 34000, "Stock": 9999999 },
+        { "MapleId": 2040800, "Period": 2, "Price": 34000, "Stock": 9999999 },
+        { "MapleId": 2040900, "Period": 2, "Price": 34000, "Stock": 9999999 },
+        { "MapleId": 2041000, "Period": 2, "Price": 34000, "Stock": 9999999 },
+        { "MapleId": 2041003, "Period": 2, "Price": 34000, "Stock": 9999999 },
+        { "MapleId": 2030000, "Period": 2, "Price": 400, "Stock": 9999999 },
+        { "MapleId": 2060000, "Period": 2, "Price": 1, "Stock": 9999999 },
+        { "MapleId": 2060001, "Period": 2, "Price": 10, "Stock": 9999999 },
+        { "MapleId": 2061000, "Period": 2, "Price": 1, "Stock": 9999999 },
+        { "MapleId": 2061001, "Period": 2, "Price": 10, "Stock": 9999999 }
+      ],
+      "Variables": {},
+      "MapleId": 2051000,
+      "SpeakLineCount": 2
+    },
+    "9000000": {
+      "ShopItems": [],
+      "Variables": { "count": 0, "map": -1 },
+      "MapleId": 9000000,
+      "Script": "Event00",
+      "SpeakLineCount": 2
+    },
+    "9000001": {
+      "ShopItems": [],
+      "Variables": { "count": 0, "map": -1 },
+      "MapleId": 9000001,
+      "Script": "Event00",
+      "SpeakLineCount": 2
+    },
+    "9000002": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 9000002,
+      "Script": "Event02",
+      "SpeakLineCount": 1
+    },
+    "9000003": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 9000003,
+      "Script": "Event03",
+      "SpeakLineCount": 1
+    },
+    "9000004": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 9000004,
+      "Script": "Event03",
+      "SpeakLineCount": 1
+    },
+    "9000005": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 9000005,
+      "Script": "Event03",
+      "SpeakLineCount": 1
+    },
+    "9000006": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 9000006,
+      "Script": "Event03",
+      "SpeakLineCount": 1
+    },
+    "9000007": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 9000007,
+      "Script": "Event04",
+      "SpeakLineCount": 3
+    },
+    "9000008": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 9000008,
+      "Script": "Event05",
+      "SpeakLineCount": 1
+    },
+    "9000009": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 9000009,
+      "Script": "Event03_1",
+      "SpeakLineCount": 1
+    },
+    "9000010": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 9000010,
+      "Script": "Event06",
+      "SpeakLineCount": 2
+    },
+    "9000011": {
+      "ShopItems": [],
+      "Variables": { "count": 0, "map": -1 },
+      "MapleId": 9000011,
+      "Script": "Event00",
+      "SpeakLineCount": 2
+    },
+    "9000012": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 9000012,
+      "Script": "Event09",
+      "SpeakLineCount": 4
+    },
+    "9000013": {
+      "ShopItems": [],
+      "Variables": { "count": 0, "map": -1 },
+      "MapleId": 9000013,
+      "Script": "Event00",
+      "SpeakLineCount": 2
+    },
+    "9000014": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 9000014,
+      "Script": "Event01",
+      "SpeakLineCount": 1
+    },
+    "9010000": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 9010000,
+      "Script": "cakePrize",
+      "SpeakLineCount": 2
+    },
+    "9010001": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 9010001,
+      "Script": "Event07",
+      "SpeakLineCount": 2
+    },
+    "9010002": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 9010002,
+      "Script": "Event07",
+      "SpeakLineCount": 2
+    },
+    "9010003": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 9010003,
+      "Script": "Event07",
+      "SpeakLineCount": 2
+    },
+    "9010004": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 9010004,
+      "Script": "ludiEvent",
+      "SpeakLineCount": 2
+    },
+    "9020000": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 9020000,
+      "Script": "party1_enter",
+      "SpeakLineCount": 2
+    },
+    "9020001": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 9020001,
+      "Script": "party1_play",
+      "SpeakLineCount": 2
+    },
+    "9020002": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 9020002,
+      "Script": "party1_out",
+      "SpeakLineCount": 2
+    },
+    "9100000": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 9100000,
+      "Script": "neko1"
+    },
+    "9100001": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 9100001,
+      "Script": "neko2"
+    },
+    "9100002": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 9100002,
+      "Script": "neko3"
+    },
+    "9100003": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 9100003,
+      "Script": "neko4"
+    },
+    "9100004": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 9100004,
+      "Script": "neko5"
+    },
+    "9110000": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 9110000,
+      "Script": "goKinoc",
+      "SpeakLineCount": 3
+    },
+    "9110001": {
+      "ShopItems": [
+        { "MapleId": 1432009, "Period": 2, "Price": 60000, "Stock": 10000000 }
+      ],
+      "Variables": {},
+      "MapleId": 9110001,
+      "SpeakLineCount": 3
+    },
+    "9110002": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 9110002,
+      "Script": "mushgirl",
+      "SpeakLineCount": 3
+    },
+    "9110003": {
+      "ShopItems": [
+        { "MapleId": 2022021, "Period": 2, "Price": 500, "Stock": 10000000 },
+        { "MapleId": 2022022, "Period": 2, "Price": 1000, "Stock": 10000000 }
+      ],
+      "Variables": {},
+      "MapleId": 9110003,
+      "SpeakLineCount": 3
+    },
+    "9110004": {
+      "ShopItems": [
+        { "MapleId": 2022014, "Period": 2, "Price": 600, "Stock": 10000000 },
+        { "MapleId": 2022023, "Period": 2, "Price": 1000, "Stock": 10000000 }
+      ],
+      "Variables": {},
+      "MapleId": 9110004,
+      "SpeakLineCount": 3
+    },
+    "9110005": {
+      "ShopItems": [
+        { "MapleId": 2022024, "Period": 2, "Price": 1800, "Stock": 10000000 },
+        { "MapleId": 2022025, "Period": 2, "Price": 5000, "Stock": 10000000 }
+      ],
+      "Variables": {},
+      "MapleId": 9110005,
+      "SpeakLineCount": 3
+    },
+    "9110006": {
+      "ShopItems": [
+        { "MapleId": 2022026, "Period": 2, "Price": 1800, "Stock": 10000000 },
+        { "MapleId": 2022027, "Period": 2, "Price": 5000, "Stock": 10000000 }
+      ],
+      "Variables": {},
+      "MapleId": 9110006,
+      "SpeakLineCount": 3
+    },
+    "9110007": {
+      "ShopItems": [
+        { "MapleId": 2022017, "Period": 2, "Price": 1000, "Stock": 10000000 },
+        { "MapleId": 2022018, "Period": 2, "Price": 1500, "Stock": 10000000 },
+        { "MapleId": 2022019, "Period": 2, "Price": 800, "Stock": 10000000 },
+        { "MapleId": 2022020, "Period": 2, "Price": 500, "Stock": 10000000 }
+      ],
+      "Variables": {},
+      "MapleId": 9110007,
+      "SpeakLineCount": 3
+    },
+    "9110008": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 9110008,
+      "Script": "goKerning",
+      "SpeakLineCount": 3
+    },
+    "9110009": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 9110009,
+      "Script": "gachapon1"
+    },
+    "9110010": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 9110010,
+      "Script": "gachapon2"
+    },
+    "9110011": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 9110011,
+      "Script": "gachapon3"
+    },
+    "9110012": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 9110012,
+      "Script": "gachapon4"
+    },
+    "9110013": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 9110013,
+      "Script": "gachapon5"
+    },
+    "9110014": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 9110014,
+      "Script": "gachapon6"
+    },
+    "9110015": {
+      "ShopItems": [],
+      "Variables": {},
+      "MapleId": 9110015,
+      "Script": "surfing",
+      "SpeakLineCount": 1
+    },
+    "9900000": {
+      "ShopItems": [],
+      "Variables": { "name": 0 },
+      "MapleId": 9900000,
+      "Script": "levelUP",
+      "SpeakLineCount": 1
+    },
+    "9900001": {
+      "ShopItems": [],
+      "Variables": { "name": 0 },
+      "MapleId": 9900001,
+      "Script": "levelUP2",
+      "SpeakLineCount": 1
+    }
+  }
+}
