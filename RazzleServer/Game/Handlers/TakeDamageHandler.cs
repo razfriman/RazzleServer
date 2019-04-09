@@ -13,7 +13,7 @@ namespace RazzleServer.Game.Handlers
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
-            var attackType = (sbyte)packet.ReadByte();
+            var attack = (sbyte)packet.ReadByte();
             var damage = packet.ReadInt();
             var reducedDamage = damage;
             var actualHpEffect = -damage;
@@ -23,7 +23,7 @@ namespace RazzleServer.Game.Handlers
             var mobSkillLevel = (byte)0;
             Mob mob = null;
 
-            if (attackType <= -2)
+            if (attack <= -2)
             {
                 // Mob Skill
                 mobSkillLevel = packet.ReadByte();
@@ -77,7 +77,7 @@ namespace RazzleServer.Game.Handlers
 
                 SendDamage(
                     client.Character,
-                    attackType,
+                    attack,
                     damage,
                     reducedDamage,
                     healSkillId,
@@ -114,25 +114,24 @@ namespace RazzleServer.Game.Handlers
             }
             else if (mob != null)
             {
-//                if (mob.Attacks == null ||
-//                    !mob.Data.Attacks.TryGetValue((byte)attack, out var mad))
-//                {
-//                    return;
-//                }
-//
-//                if (mad.Disease <= 0)
-//                {
-//                    return;
-//                }
-//
-//                if (!DataProvider.MobSkills.Data.ContainsKey(mad.Disease) ||
-//                    !DataProvider.MobSkills.Data[mad.Disease].ContainsKey(mad.SkillLevel))
-//                {
-//                    return;
-//                }
-//
-//                var diseaseSkill = DataProvider.MobSkills.Data[mobSkillId][mobSkillLevel];
-//                OnStatChangeByMobSkill(client.Character, diseaseSkill);
+                if (!mob.CachedReference.Attacks.TryGetValue((byte)attack, out var mobAttack))
+                {
+                    return;
+                }
+
+                if (mobAttack.Disease <= 0)
+                {
+                    return;
+                }
+
+                if (!DataProvider.MobSkills.Data.ContainsKey(mobAttack.Disease) ||
+                    !DataProvider.MobSkills.Data[mobAttack.Disease].ContainsKey(mobAttack.SkillLevel))
+                {
+                    return;
+                }
+
+                var diseaseSkill = DataProvider.MobSkills.Data[mobSkillId][mobSkillLevel];
+                OnStatChangeByMobSkill(client.Character, diseaseSkill);
             }
         }
         

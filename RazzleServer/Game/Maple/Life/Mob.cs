@@ -33,21 +33,14 @@ namespace RazzleServer.Game.Maple.Life
         public uint Mana { get; set; }
         public uint MaxHealth { get; }
         public uint MaxMana { get; }
-        public uint HealthRecovery { get; }
-        public uint ManaRecovery { get; }
-        public int ExplodeHealth { get; }
+        public int HealthRecovery { get; }
+        public int ManaRecovery { get; }
         public uint Experience { get; }
         public int Link { get; }
         public short SummonType { get; }
-        public int FixedDamage { get; }
-        public int DeathBuff { get; }
-        public int DeathAfter { get; }
         public double Traction { get; }
-        public bool DamagedByMobOnly { get; }
-        public int DropItemPeriod { get; }
         public byte HpBarForeColor { get; }
         public byte HpBarBackColor { get; }
-        public byte CarnivalPoints { get; }
         public int WeaponAttack { get; }
         public int WeaponDefense { get; }
         public int MagicAttack { get; }
@@ -55,8 +48,6 @@ namespace RazzleServer.Game.Maple.Life
         public short Accuracy { get; }
         public short Avoidability { get; }
         public short Speed { get; }
-        public short ChaseSpeed { get; }
-
         public bool IsFacingLeft => Stance % 2 == 0;
 
         public bool CanRespawn => true;
@@ -77,19 +68,12 @@ namespace RazzleServer.Game.Maple.Life
             MaxMana = CachedReference.MaxMana;
             HealthRecovery = CachedReference.HealthRecovery;
             ManaRecovery = CachedReference.ManaRecovery;
-            ExplodeHealth = CachedReference.ExplodeHealth;
             Experience = CachedReference.Experience;
             Link = CachedReference.Link;
             SummonType = CachedReference.SummonType;
-            FixedDamage = CachedReference.FixedDamage;
-            DeathBuff = CachedReference.DeathBuff;
-            DeathAfter = CachedReference.DeathAfter;
             Traction = CachedReference.Traction;
-            DamagedByMobOnly = CachedReference.DamagedByMobOnly;
-            DropItemPeriod = CachedReference.DropItemPeriod;
             HpBarForeColor = CachedReference.HpBarForeColor;
             HpBarBackColor = CachedReference.HpBarBackColor;
-            CarnivalPoints = CachedReference.CarnivalPoints;
             WeaponAttack = CachedReference.WeaponAttack;
             WeaponDefense = CachedReference.WeaponDefense;
             MagicAttack = CachedReference.MagicAttack;
@@ -97,7 +81,6 @@ namespace RazzleServer.Game.Maple.Life
             Accuracy = CachedReference.Accuracy;
             Avoidability = CachedReference.Avoidability;
             Speed = CachedReference.Speed;
-            ChaseSpeed = CachedReference.ChaseSpeed;
             Loots = CachedReference.Loots;
             Skills = new MobSkills(this);
             CachedReference.Skills.ForEach(x =>

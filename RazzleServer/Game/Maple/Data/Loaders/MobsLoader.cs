@@ -20,7 +20,9 @@ namespace RazzleServer.Game.Maple.Data.Loaders
                 var dir = file.WzDirectory.GetDirectoryByName("Mob");
                 dir.WzImages.ForEach(x =>
                 {
-                    var mob = new MobReference(x);
+                    var link = x["info"]["link"]?.GetString();
+                    
+                    var mob = new MobReference(x, link != null ? dir.GetImageByName($"{link}.img") : null);
                     Data.Data.Add(mob.MapleId, mob);
                 });
             }

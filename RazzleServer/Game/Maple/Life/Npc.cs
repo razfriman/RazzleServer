@@ -6,7 +6,6 @@ using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Data.References;
 using RazzleServer.Game.Maple.Scripting;
-using RazzleServer.Game.Maple.Shops;
 using RazzleServer.Game.Maple.Util;
 using RazzleServer.Net.Packet;
 using RazzleServer.Wz;
@@ -17,13 +16,13 @@ namespace RazzleServer.Game.Maple.Life
     {
         [JsonIgnore] public Character Controller { get; set; }
 
-        [JsonIgnore] public Shop Shop => DataProvider.Shops.Data.GetValueOrDefault(MapleId);
+        [JsonIgnore] public Dictionary<int, NpcShopItem> ShopItems = new Dictionary<int, NpcShopItem>();
 
         [JsonIgnore] public NpcReference CachedReference => DataProvider.Npcs.Data[MapleId];
 
-        //private readonly ILogger _log = LogManager.Log;
-
-        public Npc() { }
+        public Npc()
+        {
+        }
 
         public Npc(WzImageProperty img)
             : base(img, LifeObjectType.Npc)
@@ -54,12 +53,33 @@ namespace RazzleServer.Game.Maple.Life
             }
         }
 
+        public void ShowShop(Character customer)
+        {
+            using (var pw = new PacketWriter(ServerOperationCode.NpcShopShow))
+            {
+                pw.WriteInt(MapleId);
+                pw.WriteShort((short)ShopItems.Count);
+                ShopItems.Values.ToList().ForEach(x => pw.WriteBytes(x.ToByteArray()));
+                pw.WriteLong(0);
+                pw.WriteLong(0);
+                pw.WriteLong(0);
+                customer.Client.Send(pw);
+            }
+        }
+
         public void Converse(Character talker)
         {
-            if (Shop != null)
+            if (CachedReference.ShopItems.Any())
             {
-                talker.CurrentNpcShop = Shop;
-                Shop.Show(talker);
+                if (!ShopItems.Any())
+                {
+                    ShopItems = DataProvider.Npcs.Data.GetValueOrDefault(MapleId).ShopItems
+                        .Select(x => new NpcShopItem(x))
+                        .ToDictionary(x => x.MapleId, x => x);
+                }
+
+                talker.CurrentNpcShop = this;
+                ShowShop(talker);
             }
             else if (CachedReference.StorageCost > 0)
             {

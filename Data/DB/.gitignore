@@ -1,0 +1,5 @@
+# This folder is created for the docker build to copy properly
+# Ignore everything in this directory
+*
+# Except this file
+!.gitignore
