@@ -17,6 +17,8 @@ namespace RazzleServer.Game.Maple.Characters
         public Dictionary<ItemType, byte> MaxSlots { get; }
         private List<Item> Items { get; }
 
+        public int Count => Items.Count;
+
         public CharacterItems(Character parent, byte equipmentSlots, byte usableSlots, byte setupSlots,
             byte etceteraSlots, byte cashSlots)
         {
@@ -28,7 +30,7 @@ namespace RazzleServer.Game.Maple.Characters
                 {ItemType.Usable, usableSlots},
                 {ItemType.Setup, setupSlots},
                 {ItemType.Etcetera, etceteraSlots},
-                {ItemType.Cash, cashSlots}
+                {ItemType.Pet, cashSlots}
             };
 
 
@@ -68,7 +70,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Add(Item item, bool fromDrop = false, bool autoMerge = true, bool forceGetSlot = false)
         {
-            if (Available(item.MapleId) % item.MaxPerStack != 0 && autoMerge)
+            if (autoMerge && Available(item.MapleId) % item.MaxPerStack != 0)
             {
                 foreach (var loopItem in this.Where(x => x.MapleId == item.MapleId && x.Quantity < x.MaxPerStack))
                 {
@@ -100,14 +102,18 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 item.Parent = this;
 
-                if (Parent.IsInitialized && item.Slot == 0 || forceGetSlot)
+                if (item.IsStored)
+                {
+                    item.Slot = (short)Items.Count;
+                }
+                else if (Parent.IsInitialized && item.Slot == 0 || forceGetSlot)
                 {
                     item.Slot = GetNextFreeSlot(item.Type);
                 }
 
                 Items.Add(item);
 
-                if (Parent.IsInitialized)
+                if (Parent.IsInitialized && !item.IsStored)
                 {
                     using (var pw = new PacketWriter(ServerOperationCode.InventoryOperation))
                     {
@@ -474,7 +480,7 @@ namespace RazzleServer.Game.Maple.Characters
                 spaceCount.Add(ItemType.Usable, 0);
                 spaceCount.Add(ItemType.Setup, 0);
                 spaceCount.Add(ItemType.Etcetera, 0);
-                spaceCount.Add(ItemType.Cash, 0);
+                spaceCount.Add(ItemType.Pet, 0);
             }
 
             foreach (var loopItem in items)
@@ -561,8 +567,8 @@ namespace RazzleServer.Game.Maple.Characters
 
                 pw.WriteByte(0);
 
-                pw.WriteByte(MaxSlots[ItemType.Cash]);
-                foreach (var item in this[ItemType.Cash])
+                pw.WriteByte(MaxSlots[ItemType.Pet]);
+                foreach (var item in this[ItemType.Pet])
                 {
                     pw.WriteBytes(item.ToByteArray());
                 }

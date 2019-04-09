@@ -1,4 +1,5 @@
-﻿using RazzleServer.Common.Constants;
+﻿using System;
+using RazzleServer.Common.Constants;
 using RazzleServer.Game.Maple.Items;
 using RazzleServer.Game.Maple.Shops;
 using RazzleServer.Net.Packet;
@@ -23,28 +24,22 @@ namespace RazzleServer.Game.Handlers
             switch (action)
             {
                 case ShopAction.Buy:
-                {
                     Buy(packet, client, shop);
-                }
                     break;
 
                 case ShopAction.Sell:
-                {
                     Sell(packet, client, shop);
-                }
                     break;
 
                 case ShopAction.Recharge:
-                {
                     Recharge(packet, client, shop);
-                }
                     break;
 
                 case ShopAction.Leave:
-                {
                     client.Character.CurrentNpcShop = null;
-                }
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
@@ -112,6 +107,7 @@ namespace RazzleServer.Game.Handlers
 
             if (quantity > item.Quantity)
             {
+                client.Character.LogCheatWarning(CheatType.InvalidItem);
                 return;
             }
 

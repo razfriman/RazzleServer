@@ -10,6 +10,7 @@
         InvalidSkillChange,
         InvalidHeal,
         InvalidMobMovement,
-        InvalidItem
+        InvalidItem,
+        InvalidStorageUpdate
     }
 }
