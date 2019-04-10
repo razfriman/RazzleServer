@@ -119,13 +119,13 @@ namespace RazzleServer.Game.Handlers
                     return;
                 }
 
-                if (mobAttack.Disease <= 0)
+                if (mobAttack.SkillId <= 0)
                 {
                     return;
                 }
 
-                if (!DataProvider.MobSkills.Data.ContainsKey(mobAttack.Disease) ||
-                    !DataProvider.MobSkills.Data[mobAttack.Disease].ContainsKey(mobAttack.SkillLevel))
+                if (!DataProvider.MobSkills.Data.ContainsKey(mobAttack.SkillId) ||
+                    !DataProvider.MobSkills.Data[mobAttack.SkillId].ContainsKey(mobAttack.SkillLevel))
                 {
                     return;
                 }
