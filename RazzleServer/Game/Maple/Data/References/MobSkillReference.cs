@@ -9,7 +9,6 @@ namespace RazzleServer.Game.Maple.Data.References
         public byte Action { get; set; }
         public short EffectDelay { get; set; }
 
-
         public MobSkillReference()
         {
         }
