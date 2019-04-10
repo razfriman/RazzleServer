@@ -2,11 +2,11 @@ using RazzleServer.Common.Constants;
 
 namespace RazzleServer.Game.Maple.Buffs
 {
-    public class BuffStat_MesoGuard : BuffStat
+    public class BuffStatMesoGuard : BuffStat
     {
         public int MesosLeft { get; set; }
 
-        public BuffStat_MesoGuard(BuffValueTypes flag) : base(flag)
+        public BuffStatMesoGuard(BuffValueTypes flag) : base(flag)
         {
         }
     }

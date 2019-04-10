@@ -240,8 +240,8 @@ namespace RazzleServer.Game.Maple.Skills
                     lefthp = (int) (Character.PrimaryStats.MaxMana * (ParameterB / 100.0d));
                     Character.PrimaryStats.BuffBonuses.MaxMana = (short) lefthp;
                     Character.PrimaryStats.MaxMana += (short) lefthp;
-                    Character.PrimaryStats.MaxMana = Character.PrimaryStats.AdjustedMaxMana;
-                    Character.PrimaryStats.MaxHealth = Character.PrimaryStats.AdjustedMaxHealth;
+                    Character.PrimaryStats.MaxMana = Character.PrimaryStats.TotalMaxMana;
+                    Character.PrimaryStats.MaxHealth = Character.PrimaryStats.TotalMaxHealth;
                     break;
                 }
             }

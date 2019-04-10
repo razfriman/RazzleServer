@@ -2,11 +2,11 @@ using RazzleServer.Common.Constants;
 
 namespace RazzleServer.Game.Maple.Buffs
 {
-    public class BuffStat_ComboAttack : BuffStat
+    public class BuffStatComboAttack : BuffStat
     {
         public int MaxOrbs { get; set; }
 
-        public BuffStat_ComboAttack(BuffValueTypes flag) : base(flag)
+        public BuffStatComboAttack(BuffValueTypes flag) : base(flag)
         {
         }
 
