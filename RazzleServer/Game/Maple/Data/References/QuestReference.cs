@@ -20,24 +20,22 @@ namespace RazzleServer.Game.Maple.Data.References
         public int TimeLimit { get; set; }
         public bool AutoStart { get; set; }
         public bool SelectedMob { get; set; }
-
-        public List<ushort> PreRequiredQuests { get; set; }
-        public List<ushort> PostRequiredQuests { get; set; }
-        public Dictionary<int, short> PreRequiredItems { get; set; }
-        public Dictionary<int, short> PostRequiredItems { get; set; }
-        public Dictionary<int, short> PostRequiredKills { get; set; }
+        public List<ushort> PreRequiredQuests { get; set; } = new List<ushort>();
+        public List<ushort> PostRequiredQuests { get; set; } = new List<ushort>();
+        public Dictionary<int, short> PreRequiredItems { get; set; } = new Dictionary<int, short>();
+        public Dictionary<int, short> PostRequiredItems { get; set; } = new Dictionary<int, short>();
+        public Dictionary<int, short> PostRequiredKills { get; set; } = new Dictionary<int, short>();
         public List<Job> ValidJobs { get; set; }
-
-        public int[] ExperienceReward { get; set; }
-        public int[] MesoReward { get; set; }
-        public int[] PetClosenessReward { get; set; }
-        public bool[] PetSpeedReward { get; set; }
-        public int[] FameReward { get; set; }
-        public int[] PetSkillReward { get; set; }
-        public Dictionary<int, short> PreItemRewards { get; set; }
-        public Dictionary<int, short> PostItemRewards { get; set; }
-        public Dictionary<Skill, Job> PreSkillRewards { get; set; }
-        public Dictionary<Skill, Job> PostSkillRewards { get; set; }
+        public List<int> ExperienceReward { get; set; } = new List<int>();
+        public List<int> MesoReward { get; set; } = new List<int>();
+        public List<int> PetClosenessReward { get; set; } = new List<int>();
+        public List<int> PetSpeedReward { get; set; } = new List<int>();
+        public List<int> FameReward { get; set; } = new List<int>();
+        public List<int> PetSkillReward { get; set; } = new List<int>();
+        public Dictionary<int, short> PreItemRewards { get; set; } = new Dictionary<int, short>();
+        public Dictionary<int, short> PostItemRewards { get; set; } = new Dictionary<int, short>();
+        public Dictionary<Skill, Job> PreSkillRewards { get; set; } = new Dictionary<Skill, Job>();
+        public Dictionary<Skill, Job> PostSkillRewards { get; set; } = new Dictionary<Skill, Job>();
 
         public byte Flags
         {
@@ -78,26 +76,6 @@ namespace RazzleServer.Game.Maple.Data.References
             //this.TimeLimit = (int)img["time_limit"];
             //this.AutoStart = img["flags"].ToString().Contains("auto_start");
             //this.SelectedMob = img["flags"].ToString().Contains("selected_mob");
-
-            PreRequiredQuests = new List<ushort>();
-            PostRequiredQuests = new List<ushort>();
-            PreRequiredItems = new Dictionary<int, short>();
-            PostRequiredItems = new Dictionary<int, short>();
-            PostRequiredKills = new Dictionary<int, short>();
-
-            ExperienceReward = new int[2];
-            MesoReward = new int[2];
-            PetClosenessReward = new int[2];
-            PetSpeedReward = new bool[2];
-            FameReward = new int[2];
-            PetSkillReward = new int[2];
-
-            PreItemRewards = new Dictionary<int, short>();
-            PostItemRewards = new Dictionary<int, short>();
-            PreSkillRewards = new Dictionary<Skill, Job>();
-            PostSkillRewards = new Dictionary<Skill, Job>();
-
-            ValidJobs = new List<Job>();
         }
     }
 }

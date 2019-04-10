@@ -72,7 +72,7 @@ namespace RazzleServer.Game.Maple.Data.References
         public short CJump { get; set; }
         public short CMorph { get; set; }
         public short MaxPerStack { get; set; }
-        public List<Tuple<int, short>> Summons { get; set; }
+        public List<Tuple<int, short>> Summons { get; set; } = new List<Tuple<int, short>>();
 
         public ItemReference()
         {
