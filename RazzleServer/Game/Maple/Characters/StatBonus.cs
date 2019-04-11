@@ -9,5 +9,6 @@ namespace RazzleServer.Game.Maple.Characters
         public short MaxHealth { get; set; }
         public short MaxMana { get; set; }
         public short Speed { get; set; }
+        public short Avoidability { get; set; }
     }
 }

@@ -351,7 +351,7 @@ namespace RazzleServer.Game.Maple.Items
                 CWeaponDefense = CachedReference.CWeaponDefense;
                 CMagicDefense = CachedReference.CMagicDefense;
                 CAccuracy = CachedReference.CAccuracy;
-                CAvoid = CachedReference.CAvoid;
+                CAvoid = CachedReference.CAvoidability;
                 CSpeed = CachedReference.CSpeed;
                 CJump = CachedReference.CJump;
                 CMorph = CachedReference.CMorph;
@@ -427,7 +427,7 @@ namespace RazzleServer.Game.Maple.Items
                 CWeaponDefense = CachedReference.CWeaponDefense;
                 CMagicDefense = CachedReference.CMagicDefense;
                 CAccuracy = CachedReference.CAccuracy;
-                CAvoid = CachedReference.CAvoid;
+                CAvoid = CachedReference.CAvoidability;
                 CSpeed = CachedReference.CSpeed;
                 CJump = CachedReference.CJump;
                 CMorph = CachedReference.CMorph;

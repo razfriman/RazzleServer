@@ -86,8 +86,8 @@ namespace RazzleServer.Game.Maple.Characters
 
         public override int GetKey(Skill item) => item.MapleId;
 
-        public int GetCurrentLevel(int id) => Contains(id)
+        public byte GetCurrentLevel(int id) => Contains(id)
             ? this[id].CurrentLevel
-            : 0;
+            : (byte)0;
     }
 }

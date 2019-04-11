@@ -64,9 +64,9 @@ namespace RazzleServer.Game.Maple.Characters
         public int TotalStr => Strength + EquipBonuses.Strength;
         public int TotalDex => Dexterity + EquipBonuses.Dexterity;
         public int TotalInt => Intelligence + EquipBonuses.Intelligence;
-        public int TotalLuk => Luck + EquipBonuses.Luck;
-        public int TotalMaxHealth => MaxHealth + EquipBonuses.MaxHealth + BuffBonuses.MaxHealth;
-        public int TotalMaxMana => MaxMana + EquipBonuses.MaxMana + BuffBonuses.MaxMana;
+        public int TotalLuck => Luck + EquipBonuses.Luck;
+        public short TotalMaxHealth => (short)(MaxHealth + EquipBonuses.MaxHealth + BuffBonuses.MaxHealth);
+        public short TotalMaxMana => (short)(MaxMana + EquipBonuses.MaxMana + BuffBonuses.MaxMana);
 
         public int Acc
         {
@@ -140,8 +140,8 @@ namespace RazzleServer.Game.Maple.Characters
         public BuffStat BuffDarkSight { get; } = new BuffStat(BuffValueTypes.DarkSight);
         public BuffStat BuffBooster { get; } = new BuffStat(BuffValueTypes.Booster);
         public BuffStat BuffPowerGuard { get; } = new BuffStat(BuffValueTypes.PowerGuard);
-        public BuffStat BuffMaxHp { get; } = new BuffStat(BuffValueTypes.MaxHp);
-        public BuffStat BuffMaxMp { get; } = new BuffStat(BuffValueTypes.MaxMp);
+        public BuffStat BuffMaxHealth { get; } = new BuffStat(BuffValueTypes.MaxHealth);
+        public BuffStat BuffMaxMana { get; } = new BuffStat(BuffValueTypes.MaxMana);
         public BuffStat BuffInvincible { get; } = new BuffStat(BuffValueTypes.Invincible);
         public BuffStat BuffSoulArrow { get; } = new BuffStat(BuffValueTypes.SoulArrow);
         public BuffStat BuffStun { get; } = new BuffStat(BuffValueTypes.Stun);
@@ -274,47 +274,47 @@ namespace RazzleServer.Game.Maple.Characters
             _abilityPoints += 5;
             _skillPoints += 3;
 
-            var maxHp = (int)_maxHealth;
-            var maxMp = (int)_maxMana;
+            var MaxHealth = (int)_maxHealth;
+            var MaxMana = (int)_maxMana;
 
             if (Job == Job.Beginner)
             {
-                maxHp += Functions.Random(12, 16);
-                maxMp += Functions.Random(10, 12);
+                MaxHealth += Functions.Random(12, 16);
+                MaxMana += Functions.Random(10, 12);
             }
             else if (IsBaseJob(Job.Warrior))
             {
-                maxHp += Functions.Random(24, 28);
-                maxMp += Functions.Random(4, 6);
+                MaxHealth += Functions.Random(24, 28);
+                MaxMana += Functions.Random(4, 6);
             }
             else if (IsBaseJob(Job.Magician))
             {
-                maxHp += Functions.Random(10, 14);
-                maxMp += Functions.Random(22, 24);
+                MaxHealth += Functions.Random(10, 14);
+                MaxMana += Functions.Random(22, 24);
             }
             else if (IsBaseJob(Job.Bowman) || IsBaseJob(Job.Thief) || IsBaseJob(Job.Gm))
             {
-                maxHp += Functions.Random(20, 24);
-                maxMp += Functions.Random(14, 16);
+                MaxHealth += Functions.Random(20, 24);
+                MaxMana += Functions.Random(14, 16);
             }
 
             if (Parent.Skills.GetCurrentLevel((int)SkillNames.Swordsman.ImprovedMaxHpIncrease) > 0)
             {
-                maxHp += Parent.Skills[(int)SkillNames.Swordsman.ImprovedMaxHpIncrease].ParameterA;
+                MaxHealth += Parent.Skills[(int)SkillNames.Swordsman.ImprovedMaxHpIncrease].ParameterA;
             }
 
             if (Parent.Skills.GetCurrentLevel((int)SkillNames.Magician.ImprovedMaxMpIncrease) > 0)
             {
-                maxMp += Parent.Skills[(int)SkillNames.Magician.ImprovedMaxMpIncrease].ParameterA;
+                MaxMana += Parent.Skills[(int)SkillNames.Magician.ImprovedMaxMpIncrease].ParameterA;
             }
 
-            maxMp += Intelligence / 10;
+            MaxMana += Intelligence / 10;
 
-            maxHp = Math.Min(30000, maxHp);
-            maxMp = Math.Min(30000, maxMp);
+            MaxHealth = Math.Min(30000, MaxHealth);
+            MaxMana = Math.Min(30000, MaxMana);
 
-            _maxHealth = (short)maxHp;
-            _maxMana = (short)maxMp;
+            _maxHealth = (short)MaxHealth;
+            _maxMana = (short)MaxMana;
 
             Update(StatisticType.Level, StatisticType.MaxHealth, StatisticType.MaxMana, StatisticType.AbilityPoints,
                 StatisticType.SkillPoints);
@@ -756,96 +756,113 @@ namespace RazzleServer.Game.Maple.Characters
                     break;
 
                 case StatisticType.MaxHealth:
-                    var maxHp = (int)MaxHealth;
+                    var maxHealth = (int)MaxHealth;
 
-                    if (MaxHealth >= 30000)
+                    if (maxHealth >= 30000)
                     {
                         return;
                     }
 
                     if (Job == Job.Beginner)
                     {
-                        maxHp += Functions.Random(BaseHealthValues.Beginner - BaseHealthValues.Variation,
+                        maxHealth += Functions.Random(BaseHealthValues.Beginner - BaseHealthValues.Variation,
                             BaseHealthValues.Beginner);
                     }
                     else if (IsBaseJob(Job.Warrior))
                     {
-                        maxHp += Functions.Random(BaseHealthValues.Warrior - BaseHealthValues.Variation,
+                        maxHealth += Functions.Random(BaseHealthValues.Warrior - BaseHealthValues.Variation,
                             BaseHealthValues.Warrior);
                         var skill = Parent.Skills[(int)SkillNames.Swordsman.ImprovedMaxHpIncrease];
-                        maxHp += skill?.ParameterB ?? 0;
+                        maxHealth += skill?.ParameterB ?? 0;
                     }
                     else if (IsBaseJob(Job.Magician))
                     {
-                        maxHp += Functions.Random(BaseHealthValues.Magician - BaseHealthValues.Variation,
+                        maxHealth += Functions.Random(BaseHealthValues.Magician - BaseHealthValues.Variation,
                             BaseHealthValues.Magician);
                     }
                     else if (IsBaseJob(Job.Bowman))
                     {
-                        maxHp += Functions.Random(BaseHealthValues.Bowman - BaseHealthValues.Variation,
+                        maxHealth += Functions.Random(BaseHealthValues.Bowman - BaseHealthValues.Variation,
                             BaseHealthValues.Bowman);
                     }
                     else if (IsBaseJob(Job.Thief))
                     {
-                        maxHp += Functions.Random(BaseHealthValues.Thief - BaseHealthValues.Variation,
+                        maxHealth += Functions.Random(BaseHealthValues.Thief - BaseHealthValues.Variation,
                             BaseHealthValues.Thief);
                     }
                     else if (IsBaseJob(Job.Gm))
                     {
-                        maxHp += Functions.Random(BaseHealthValues.Gm - BaseHealthValues.Variation,
+                        maxHealth += Functions.Random(BaseHealthValues.Gm - BaseHealthValues.Variation,
                             BaseHealthValues.Gm);
                     }
 
-                    maxHp = Math.Min(30000, maxHp);
-                    MaxHealth = (short)maxHp;
+                    maxHealth = Math.Min(30000, maxHealth);
+                    MaxHealth = (short)maxHealth;
                     break;
 
                 case StatisticType.MaxMana:
-                    var maxMp = (int)MaxMana;
+                    var maxMana = (int)MaxMana;
 
-                    if (MaxMana >= 30000)
+                    if (maxMana >= 30000)
                     {
                         return;
                     }
 
                     if (Job == Job.Beginner)
                     {
-                        maxMp += Functions.Random(BaseManaValues.Beginner - BaseManaValues.Variation,
+                        maxMana += Functions.Random(BaseManaValues.Beginner - BaseManaValues.Variation,
                             BaseManaValues.Beginner);
                     }
                     else if (IsBaseJob(Job.Warrior))
                     {
-                        maxMp += Functions.Random(BaseManaValues.Warrior - BaseManaValues.Variation,
+                        maxMana += Functions.Random(BaseManaValues.Warrior - BaseManaValues.Variation,
                             BaseManaValues.Warrior);
                     }
                     else if (IsBaseJob(Job.Magician))
                     {
-                        maxMp += Functions.Random(BaseManaValues.Magician - BaseManaValues.Variation,
+                        maxMana += Functions.Random(BaseManaValues.Magician - BaseManaValues.Variation,
                             BaseManaValues.Magician);
 
                         var skill = Parent.Skills[(int)SkillNames.Magician.ImprovedMaxMpIncrease];
-                        maxMp += skill?.ParameterB ?? 0;
+                        maxMana += skill?.ParameterB ?? 0;
                     }
                     else if (IsBaseJob(Job.Bowman))
                     {
-                        maxMp += Functions.Random(BaseManaValues.Bowman - BaseManaValues.Variation,
+                        maxMana += Functions.Random(BaseManaValues.Bowman - BaseManaValues.Variation,
                             BaseManaValues.Bowman);
                     }
                     else if (IsBaseJob(Job.Thief))
                     {
-                        maxMp += Functions.Random(BaseManaValues.Thief - BaseManaValues.Variation,
+                        maxMana += Functions.Random(BaseManaValues.Thief - BaseManaValues.Variation,
                             BaseManaValues.Thief);
                     }
                     else if (IsBaseJob(Job.Gm))
                     {
-                        maxMp += Functions.Random(BaseManaValues.Gm - BaseManaValues.Variation,
+                        maxMana += Functions.Random(BaseManaValues.Gm - BaseManaValues.Variation,
                             BaseManaValues.Gm);
                     }
 
-
-                    maxMp = Math.Min(30000, maxMp);
-                    MaxMana = (short)maxMp;
+                    maxMana = Math.Min(30000, maxMana);
+                    MaxMana = (short)maxMana;
                     break;
+                case StatisticType.None:
+                case StatisticType.Skin:
+                case StatisticType.Face:
+                case StatisticType.Hair:
+                case StatisticType.Level:
+                case StatisticType.Job:
+                case StatisticType.Health:
+                case StatisticType.Mana:
+                case StatisticType.AbilityPoints:
+                case StatisticType.SkillPoints:
+                case StatisticType.Experience:
+                case StatisticType.Fame:
+                case StatisticType.Mesos:
+                case StatisticType.Pet:
+                case StatisticType.GachaponExperience:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
 
             AbilityPoints -= amount;
@@ -922,8 +939,8 @@ namespace RazzleServer.Game.Maple.Characters
                 BuffDarkSight.HasReferenceId(skillOrItemId, currentTime) ||
                 BuffBooster.HasReferenceId(skillOrItemId, currentTime) ||
                 BuffPowerGuard.HasReferenceId(skillOrItemId, currentTime) ||
-                BuffMaxHp.HasReferenceId(skillOrItemId, currentTime) ||
-                BuffMaxMp.HasReferenceId(skillOrItemId, currentTime) ||
+                BuffMaxHealth.HasReferenceId(skillOrItemId, currentTime) ||
+                BuffMaxMana.HasReferenceId(skillOrItemId, currentTime) ||
                 BuffInvincible.HasReferenceId(skillOrItemId, currentTime) ||
                 BuffSoulArrow.HasReferenceId(skillOrItemId, currentTime) ||
                 BuffStun.HasReferenceId(skillOrItemId, currentTime) ||
@@ -947,7 +964,6 @@ namespace RazzleServer.Game.Maple.Characters
         {
             var currentTime = BuffStat.GetTimeForBuff();
             BuffValueTypes endFlag = 0;
-
             var buffPacket = new PacketWriter();
             BuffWeaponAttack.EncodeForLocal(buffPacket, ref endFlag, currentTime, pSpecificFlag);
             BuffWeaponDefense.EncodeForLocal(buffPacket, ref endFlag, currentTime, pSpecificFlag);
@@ -963,11 +979,10 @@ namespace RazzleServer.Game.Maple.Characters
             // Do not activate it in hide
             if (BuffDarkSight.HasReferenceId((int)SkillNames.Gm.Hide) == false)
                 BuffDarkSight.EncodeForLocal(buffPacket, ref endFlag, currentTime, pSpecificFlag);
-
             BuffBooster.EncodeForLocal(buffPacket, ref endFlag, currentTime, pSpecificFlag);
             BuffPowerGuard.EncodeForLocal(buffPacket, ref endFlag, currentTime, pSpecificFlag);
-            BuffMaxHp.EncodeForLocal(buffPacket, ref endFlag, currentTime, pSpecificFlag);
-            BuffMaxMp.EncodeForLocal(buffPacket, ref endFlag, currentTime, pSpecificFlag);
+            BuffMaxHealth.EncodeForLocal(buffPacket, ref endFlag, currentTime, pSpecificFlag);
+            BuffMaxMana.EncodeForLocal(buffPacket, ref endFlag, currentTime, pSpecificFlag);
             BuffInvincible.EncodeForLocal(buffPacket, ref endFlag, currentTime, pSpecificFlag);
             BuffSoulArrow.EncodeForLocal(buffPacket, ref endFlag, currentTime, pSpecificFlag);
             BuffStun.EncodeForLocal(buffPacket, ref endFlag, currentTime, pSpecificFlag);
@@ -985,7 +1000,6 @@ namespace RazzleServer.Game.Maple.Characters
             BuffThaw.EncodeForLocal(buffPacket, ref endFlag, currentTime, pSpecificFlag);
             BuffWeakness.EncodeForLocal(buffPacket, ref endFlag, currentTime, pSpecificFlag);
             BuffCurse.EncodeForLocal(buffPacket, ref endFlag, currentTime, pSpecificFlag);
-
             packet.WriteUInt((uint)endFlag);
             packet.WriteBytes(buffPacket.ToArray());
         }
@@ -993,9 +1007,7 @@ namespace RazzleServer.Game.Maple.Characters
         public BuffValueTypes RemoveByReference(int pBuffValue, bool onlyReturn = false)
         {
             if (pBuffValue == 0) return 0;
-
             BuffValueTypes endFlag = 0;
-
             BuffWeaponAttack.TryResetByReference(pBuffValue, ref endFlag);
             BuffWeaponDefense.TryResetByReference(pBuffValue, ref endFlag);
             BuffMagicAttack.TryResetByReference(pBuffValue, ref endFlag);
@@ -1009,8 +1021,8 @@ namespace RazzleServer.Game.Maple.Characters
             BuffDarkSight.TryResetByReference(pBuffValue, ref endFlag);
             BuffBooster.TryResetByReference(pBuffValue, ref endFlag);
             BuffPowerGuard.TryResetByReference(pBuffValue, ref endFlag);
-            BuffMaxHp.TryResetByReference(pBuffValue, ref endFlag);
-            BuffMaxMp.TryResetByReference(pBuffValue, ref endFlag);
+            BuffMaxHealth.TryResetByReference(pBuffValue, ref endFlag);
+            BuffMaxMana.TryResetByReference(pBuffValue, ref endFlag);
             BuffInvincible.TryResetByReference(pBuffValue, ref endFlag);
             BuffSoulArrow.TryResetByReference(pBuffValue, ref endFlag);
             BuffStun.TryResetByReference(pBuffValue, ref endFlag);
@@ -1028,7 +1040,6 @@ namespace RazzleServer.Game.Maple.Characters
             BuffThaw.TryResetByReference(pBuffValue, ref endFlag);
             BuffWeakness.TryResetByReference(pBuffValue, ref endFlag);
             BuffCurse.TryResetByReference(pBuffValue, ref endFlag);
-
             if (!onlyReturn)
             {
                 Parent.Buffs.FinalizeDebuff(endFlag);
@@ -1054,8 +1065,8 @@ namespace RazzleServer.Game.Maple.Characters
             flags |= BuffDarkSight.GetState(currentTime);
             flags |= BuffBooster.GetState(currentTime);
             flags |= BuffPowerGuard.GetState(currentTime);
-            flags |= BuffMaxHp.GetState(currentTime);
-            flags |= BuffMaxMp.GetState(currentTime);
+            flags |= BuffMaxHealth.GetState(currentTime);
+            flags |= BuffMaxMana.GetState(currentTime);
             flags |= BuffInvincible.GetState(currentTime);
             flags |= BuffSoulArrow.GetState(currentTime);
             flags |= BuffStun.GetState(currentTime);
@@ -1073,14 +1084,12 @@ namespace RazzleServer.Game.Maple.Characters
             flags |= BuffThaw.GetState(currentTime);
             flags |= BuffWeakness.GetState(currentTime);
             flags |= BuffCurse.GetState(currentTime);
-
             return flags;
         }
 
         public void CheckExpired(long currentTime)
         {
             BuffValueTypes endFlag = 0;
-
             BuffWeaponAttack.TryReset(currentTime, ref endFlag);
             BuffWeaponDefense.TryReset(currentTime, ref endFlag);
             BuffMagicAttack.TryReset(currentTime, ref endFlag);
@@ -1094,8 +1103,8 @@ namespace RazzleServer.Game.Maple.Characters
             BuffDarkSight.TryReset(currentTime, ref endFlag);
             BuffBooster.TryReset(currentTime, ref endFlag);
             BuffPowerGuard.TryReset(currentTime, ref endFlag);
-            if (BuffMaxHp.TryReset(currentTime, ref endFlag) &&
-                BuffMaxMp.TryReset(currentTime, ref endFlag))
+            if (BuffMaxHealth.TryReset(currentTime, ref endFlag) &&
+                BuffMaxMana.TryReset(currentTime, ref endFlag))
                 Parent.Buffs.CancelHyperBody();
             BuffInvincible.TryReset(currentTime, ref endFlag);
             BuffSoulArrow.TryReset(currentTime, ref endFlag);
@@ -1114,7 +1123,6 @@ namespace RazzleServer.Game.Maple.Characters
             BuffThaw.TryReset(currentTime, ref endFlag);
             BuffWeakness.TryReset(currentTime, ref endFlag);
             BuffCurse.TryReset(currentTime, ref endFlag);
-
             Parent.Buffs.FinalizeDebuff(endFlag);
         }
 
@@ -1134,10 +1142,8 @@ namespace RazzleServer.Game.Maple.Characters
             flags |= BuffDarkSight.Reset();
             flags |= BuffBooster.Reset();
             flags |= BuffPowerGuard.Reset();
-            flags |= BuffMaxHp.Reset();
-            flags |= BuffMaxMp.Reset();
-            if (flags.HasFlag(BuffValueTypes.MaxHP))
-                Char.Buffs.CancelHyperBody();
+            flags |= BuffMaxHealth.Reset();
+            flags |= BuffMaxMana.Reset();
             flags |= BuffInvincible.Reset();
             flags |= BuffSoulArrow.Reset();
             flags |= BuffStun.Reset();
@@ -1156,51 +1162,50 @@ namespace RazzleServer.Game.Maple.Characters
             flags |= BuffWeakness.Reset();
             flags |= BuffCurse.Reset();
 
-            Char.Buffs.FinalizeDebuff(flags, sendPacket);
+            if (flags.HasFlag(BuffValueTypes.MaxHealth))
+            {
+                Parent.Buffs.CancelHyperBody();
+            }
+
+            Parent.Buffs.FinalizeDebuff(flags, sendPacket);
         }
 
         public void AddEquipStats(sbyte slot, Item equip, bool isLoading)
         {
-            try
+            byte realSlot = (byte)Math.Abs(slot);
+            if (equip != null)
             {
-                byte realSlot = (byte)Math.Abs(slot);
-                if (equip != null)
+                EquipBonus equipBonus;
+                if (!EquipStats.TryGetValue(realSlot, out equipBonus))
                 {
-                    EquipBonus equipBonus;
-                    if (!EquipStats.TryGetValue(realSlot, out equipBonus))
-                    {
-                        equipBonus = new EquipBonus();
-                    }
-
-                    equipBonus.Id = equip.MapleId;
-                    equipBonus.MaxHp = equip.Health;
-                    equipBonus.MaxMp = equip.Mana;
-                    equipBonus.Str = equip.Strength;
-                    equipBonus.Int = equip.Intelligence;
-                    equipBonus.Dex = equip.Dexterity;
-                    equipBonus.Luk = equip.Luck;
-                    equipBonus.Speed = equip.Speed;
-                    equipBonus.Pad = equip.WeaponAttack;
-                    equipBonus.Pdd = equip.WeaponDefense;
-                    equipBonus.Mad = equip.MagicAttack;
-                    equipBonus.Mdd = equip.MagicDefense;
-                    equipBonus.Eva = equip.Avoidability;
-                    equipBonus.Acc = equip.Accuracy;
-                    equipBonus.Craft = equip.Hands;
-                    equipBonus.Jump = equip.Jump;
-                    EquipStats[realSlot] = equipBonus;
-                }
-                else
-                {
-                    EquipStats.Remove(realSlot);
+                    equipBonus = new EquipBonus();
                 }
 
-                CalculateAdditions(true, isLoading);
+                equipBonus.MapleId = equip.MapleId;
+                equipBonus.MaxHealth = equip.Health;
+                equipBonus.MaxMana = equip.Mana;
+                equipBonus.Strength = equip.Strength;
+                equipBonus.Intelligence = equip.Intelligence;
+                equipBonus.Dexterity = equip.Dexterity;
+                equipBonus.Luck = equip.Luck;
+                equipBonus.Speed = equip.Speed;
+                equipBonus.WeaponAttack = equip.WeaponAttack;
+                equipBonus.WeaponDefense = equip.WeaponDefense;
+                equipBonus.MagicAttack = equip.MagicAttack;
+                equipBonus.MagicDefense = equip.MagicDefense;
+                equipBonus.Avoidability = equip.Avoidability;
+                equipBonus.Accuracy = equip.Accuracy;
+                equipBonus.Agility = equip.Agility;
+                equipBonus.Jump = equip.Jump;
+                EquipStats[realSlot] = equipBonus;
             }
-            catch (Exception ex)
+
+            else
             {
-                Program.MainForm.LogAppend(ex.ToString());
+                EquipStats.Remove(realSlot);
             }
+
+            CalculateAdditions(true, isLoading);
         }
 
         public void CalculateAdditions(bool updateEquips, bool isLoading)
@@ -1211,35 +1216,35 @@ namespace RazzleServer.Game.Maple.Characters
                 foreach (var data in EquipStats)
                 {
                     EquipBonus item = data.Value;
-                    if (EquipBonuses.Dex + item.Dex > short.MaxValue) EquipBonuses.Dex = short.MaxValue;
-                    else EquipBonuses.Dex += item.Dex;
-                    if (EquipBonuses.Int + item.Int > short.MaxValue) EquipBonuses.Int = short.MaxValue;
-                    else EquipBonuses.Int += item.Int;
-                    if (EquipBonuses.Luk + item.Luk > short.MaxValue) EquipBonuses.Luk = short.MaxValue;
-                    else EquipBonuses.Luk += item.Luk;
-                    if (EquipBonuses.Str + item.Str > short.MaxValue) EquipBonuses.Str = short.MaxValue;
-                    else EquipBonuses.Str += item.Str;
-                    if (EquipBonuses.MaxMp + item.MaxMp > short.MaxValue) EquipBonuses.MaxMp = short.MaxValue;
-                    else EquipBonuses.MaxMp += item.MaxMp;
-                    if (EquipBonuses.MaxHp + item.MaxHp > short.MaxValue) EquipBonuses.MaxHp = short.MaxValue;
-                    else EquipBonuses.MaxHp += item.MaxHp;
+                    if (EquipBonuses.Dexterity + item.Dexterity > short.MaxValue) EquipBonuses.Dexterity = short.MaxValue;
+                    else EquipBonuses.Dexterity += item.Dexterity;
+                    if (EquipBonuses.Intelligence + item.Intelligence > short.MaxValue)
+                        EquipBonuses.Intelligence = short.MaxValue;
+                    else EquipBonuses.Intelligence += item.Intelligence;
+                    if (EquipBonuses.Luck + item.Luck > short.MaxValue) EquipBonuses.Luck = short.MaxValue;
+                    else EquipBonuses.Luck += item.Luck;
+                    if (EquipBonuses.Strength + item.Strength > short.MaxValue) EquipBonuses.Strength = short.MaxValue;
+                    else EquipBonuses.Strength += item.Strength;
+                    if (EquipBonuses.MaxMana + item.MaxMana > short.MaxValue) EquipBonuses.MaxMana = short.MaxValue;
+                    else EquipBonuses.MaxMana += item.MaxMana;
+                    if (EquipBonuses.MaxHealth + item.MaxHealth > short.MaxValue)
+                        EquipBonuses.MaxHealth = short.MaxValue;
+                    else EquipBonuses.MaxHealth += item.MaxHealth;
+                    EquipBonuses.Pad += item.WeaponAttack;
 
-                    EquipBonuses.Pad += item.Pad;
-
-                    // TODO: Shield mastery buff
+// TODO: Shield mastery buff
                     if (data.Key == (byte)EquipSlot.Shield)
                     {
                     }
 
-                    EquipBonuses.Pdd += item.Pdd;
-                    EquipBonuses.Mad += item.Mad;
-                    EquipBonuses.Mdd += item.Mdd;
-                    EquipBonuses.Acc += item.Acc;
-                    EquipBonuses.Eva += item.Eva;
+                    EquipBonuses.Pdd += item.WeaponDefense;
+                    EquipBonuses.Mad += item.MagicAttack;
+                    EquipBonuses.Mdd += item.MagicDefense;
+                    EquipBonuses.Acc += item.Accuracy;
+                    EquipBonuses.Eva += item.Avoidability;
                     EquipBonuses.Speed += item.Speed;
                     EquipBonuses.Jump += item.Jump;
-                    EquipBonuses.Craft += item.Craft;
-
+                    EquipBonuses.Craft += item.Agility;
                     EquipBonuses.Pad = (short)Math.Max(0, Math.Min((int)EquipBonuses.Pad, 1999));
                     EquipBonuses.Pdd = (short)Math.Max(0, Math.Min((int)EquipBonuses.Pdd, 1999));
                     EquipBonuses.Mad = (short)Math.Max(0, Math.Min((int)EquipBonuses.Mad, 1999));
@@ -1257,12 +1262,11 @@ namespace RazzleServer.Game.Maple.Characters
                 CheckHpmp();
             }
         }
-        
-        
+
         public void CheckHpmp()
         {
-            short mhp = GetMaxHp(false);
-            short mmp = GetMaxMp(false);
+            short mhp = GetMaxHealth(false);
+            short mmp = GetMaxMana(false);
             if (Health > mhp)
             {
                 Char.ModifyHP(mhp);
@@ -1277,23 +1281,20 @@ namespace RazzleServer.Game.Maple.Characters
         public void CheckBoosters()
         {
             var equippedId = Char.Inventory.GetEquippedItemId(Constants.EquipSlots.Slots.Weapon, false);
-
             if (equippedId != 0) return;
-
             BuffValueTypes removed = 0;
             var currentTime = BuffStat.GetTimeForBuff();
             if (BuffBooster.IsSet(currentTime)) removed |= RemoveByReference(BuffBooster.ReferenceId, true);
             if (BuffCharges.IsSet(currentTime)) removed |= RemoveByReference(BuffCharges.ReferenceId, true);
             if (BuffComboAttack.IsSet(currentTime)) removed |= RemoveByReference(BuffComboAttack.ReferenceId, true);
             if (BuffSoulArrow.IsSet(currentTime)) removed |= RemoveByReference(BuffSoulArrow.ReferenceId, true);
-
             Char.Buffs.FinalizeDebuff(removed);
         }
 
         public short GetTotalStr() { return (short)(Str + EquipBonuses.Str); }
         public short GetTotalDex() { return (short)(Dex + EquipBonuses.Dex); }
-        public short GetTotalInt() { return (short)(Int + EquipBonuses.Int); }
-        public short GetTotalLuk() { return (short)(Luk + EquipBonuses.Luk); }
+        public short GetTotalInt() { return (short)(Int + EquipBonuses.Intelligence); }
+        public short GetTotalLuck() { return (short)(Luck + EquipBonuses.Luck); }
         public short GetTotalMagicAttack() { return (short)(Int + EquipBonuses.Mad); }
         public short GetTotalMagicDef() { return (short)(Int + EquipBonuses.Mdd); }
 
@@ -1325,49 +1326,48 @@ namespace RazzleServer.Game.Maple.Characters
         {
             if (!nobonus)
             {
-                return (short)((Int + EquipBonuses.Int + BuffBonuses.Int) > short.MaxValue
+                return (short)((Int + EquipBonuses.Intelligence + BuffBonuses.Intelligence) > short.MaxValue
                     ? short.MaxValue
-                    : (Int + EquipBonuses.Int + BuffBonuses.Int));
+                    : (Int + EquipBonuses.Intelligence + BuffBonuses.Intelligence));
             }
 
             return Int;
         }
 
-        public short GetLukAddition(bool nobonus = false)
+        public short GetLuckAddition(bool nobonus = false)
         {
             if (!nobonus)
             {
-                return (short)((Luk + EquipBonuses.Luk + BuffBonuses.Luk) > short.MaxValue
+                return (short)((Luck + EquipBonuses.Luck + BuffBonuses.Luck) > short.MaxValue
                     ? short.MaxValue
-                    : (Luk + EquipBonuses.Luk + BuffBonuses.Luk));
+                    : (Luck + EquipBonuses.Luck + BuffBonuses.Luck));
             }
 
-            return Luk;
+            return Luck;
         }
 
-        public short GetMaxHp(bool nobonus = false)
+        public short GetMaxHealth(bool nobonus = false)
         {
             if (!nobonus)
             {
-                return (short)((MaxHp + EquipBonuses.MaxHp + BuffBonuses.MaxHp) > short.MaxValue
+                return (short)((MaxHealth + EquipBonuses.MaxHealth + BuffBonuses.MaxHealth) > short.MaxValue
                     ? short.MaxValue
-                    : (MaxHp + EquipBonuses.MaxHp + BuffBonuses.MaxHp));
+                    : (MaxHealth + EquipBonuses.MaxHealth + BuffBonuses.MaxHealth));
             }
 
-            return MaxHp;
+            return MaxHealth;
         }
 
-        public short GetMaxMp(bool nobonus = false)
+        public short GetMaxMana(bool nobonus = false)
         {
             if (!nobonus)
             {
-                return (short)((MaxMp + EquipBonuses.MaxMp + BuffBonuses.MaxMp) > short.MaxValue
+                return (short)((MaxMana + EquipBonuses.MaxMana + BuffBonuses.MaxMana) > short.MaxValue
                     ? short.MaxValue
-                    : (MaxMp + EquipBonuses.MaxMp + BuffBonuses.MaxMp));
+                    : (MaxMana + EquipBonuses.MaxMana + BuffBonuses.MaxMana));
             }
 
-            return MaxMp;
+            return MaxMana;
         }
-
     }
 }
