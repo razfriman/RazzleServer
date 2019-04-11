@@ -6,8 +6,8 @@ namespace RazzleServer.Game.Maple.Buffs
 {
     public class BuffStat
     {
-        public static long GetTimeForBuff(long additionalMillis = 0) =>
-            DateTime.UtcNow.AddMilliseconds(additionalMillis).ToFileTimeUtc() / 10000;
+        public static DateTime GetTimeForBuff(long additionalMillis = 0) =>
+            DateTime.UtcNow.AddMilliseconds(additionalMillis);
 
         // Number. Most of the time, this is the X or Y value of the skill/buff
         public short Value { get; set; }
@@ -16,22 +16,26 @@ namespace RazzleServer.Game.Maple.Buffs
         public int ReferenceId { get; set; }
 
         // Expire Time. Extended version of T (full time in millis)
-        public long ExpireTime { get; set; }
+        public DateTime ExpireTime { get; set; }
         public BuffValueTypes Flag { get; set; }
 
-        public bool IsSet(long? time = null)
+        public bool IsSet(DateTime? time)
         {
             if (Value == 0) return false;
-            if (time == null) time = GetTimeForBuff();
+            if (time == null)
+            {
+                time = GetTimeForBuff();
+            }
+
             return ExpireTime > time;
         }
 
-        public BuffValueTypes GetState(long? time = null)
+        public BuffValueTypes GetState(DateTime? time = null)
         {
             return IsSet(time) ? Flag : 0;
         }
 
-        public bool HasReferenceId(int referenceId, long? currenTime = null)
+        public bool HasReferenceId(int referenceId, DateTime? currenTime = null)
         {
             return IsSet(currenTime) && ReferenceId == referenceId;
         }
@@ -85,7 +89,7 @@ namespace RazzleServer.Game.Maple.Buffs
             return Flag;
         }
 
-        public void EncodeForRemote(ref BuffValueTypes flag, long currentTime, Action<BuffStat> func,
+        public void EncodeForRemote(ref BuffValueTypes flag, DateTime currentTime, Action<BuffStat> func,
             BuffValueTypes specificFlag = BuffValueTypes.All)
         {
             if (!IsSet(currentTime) || !specificFlag.HasFlag(Flag))

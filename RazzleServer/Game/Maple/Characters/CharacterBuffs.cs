@@ -1,4 +1,5 @@
-﻿using RazzleServer.Common.Constants;
+﻿using System;
+using RazzleServer.Common.Constants;
 using RazzleServer.Game.Maple.Buffs;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Net.Packet;
@@ -227,6 +228,68 @@ namespace RazzleServer.Game.Maple.Characters
 
             //BuffPacket.ResetTempStats(Character, removed);
             //MapPacket.SendPlayerDebuffed(Character, removed);
+        }
+
+        public static void AddMapBuffValues(Character chr, PacketWriter pw,
+            BuffValueTypes pBuffFlags = BuffValueTypes.ALL)
+        {
+            var ps = chr.PrimaryStats;
+            var currentTime = DateTime.UtcNow;
+            BuffValueTypes added = 0;
+            var buffWriter = new PacketWriter();
+            ps.BuffSpeed.EncodeForRemote(ref added, currentTime, stat => buffWriter.WriteByte((byte)stat.Value),
+                pBuffFlags);
+            ps.BuffComboAttack.EncodeForRemote(ref added, currentTime, stat => buffWriter.WriteByte((byte)stat.Value),
+                pBuffFlags);
+            ps.BuffCharges.EncodeForRemote(ref added, currentTime, stat => buffWriter.WriteInt(stat.ReferenceId),
+                pBuffFlags);
+            ps.BuffStun.EncodeForRemote(ref added, currentTime, stat => buffWriter.WriteInt(stat.ReferenceId),
+                pBuffFlags);
+            ps.BuffDarkness.EncodeForRemote(ref added, currentTime, stat => buffWriter.WriteInt(stat.ReferenceId),
+                pBuffFlags);
+            ps.BuffSeal.EncodeForRemote(ref added, currentTime, stat => buffWriter.WriteInt(stat.ReferenceId),
+                pBuffFlags);
+            ps.BuffWeakness.EncodeForRemote(ref added, currentTime, stat => buffWriter.WriteInt(stat.ReferenceId),
+                pBuffFlags);
+            ps.BuffPoison.EncodeForRemote(ref added, currentTime, stat =>
+            {
+                pw.WriteShort(stat.N);
+                pw.WriteInt(stat.R);
+            }, pBuffFlags);
+            ps.BuffSoulArrow.EncodeForRemote(ref added, currentTime, null, pBuffFlags);
+            ps.BuffShadowPartner.EncodeForRemote(ref added, currentTime, null, pBuffFlags);
+            ps.BuffDarkSight.EncodeForRemote(ref added, currentTime, null, pBuffFlags);
+
+            pw.WriteUInt((uint)added);
+            pw.WriteBytes(buffWriter.ToArray());
+        }
+
+        public static void SetTempStats(Character chr, BuffValueTypes flagsAdded, short pDelay = 0)
+        {
+            if (flagsAdded == 0) return;
+            var pw = new PacketWriter(ServerOperationCode.StatsChanged);
+            chr.PrimaryStats.EncodeForLocal(pw, flagsAdded);
+            pw.WriteShort(pDelay);
+            if (flagsAdded.HasFlag(BuffValueTypes.SpeedBuffElement))
+            {
+                pw.WriteByte(0); // FIX: This should be the 'movement info index'
+            }
+
+            chr.Send(pw);
+        }
+
+        public static void ResetTempStats(Character chr, BuffValueTypes removedFlags)
+        {
+            if (removedFlags == 0) return;
+
+            var pw = new PacketWriter(ServerOperationCode.StatsChanged);
+            pw.WriteUInt((uint)removedFlags);
+            if (removedFlags.HasFlag(BuffValueTypes.SpeedBuffElement))
+            {
+                pw.WriteByte(0); // FIX: This should be the 'movement info index'
+            }
+
+            chr.Send(pw);
         }
     }
 }
