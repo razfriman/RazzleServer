@@ -229,7 +229,7 @@ namespace RazzleServer.Game.Maple.Skills
                     break;
                 }
 
-                case (int) SkillNames.Spearman.HyperBody when Character.Buffs.Contains(MapleId):
+                case (int) SkillNames.Spearman.HyperBody when Character.PrimaryStats.HasBuff(MapleId):
                     // Already buffed
                     return;
                 case (int) SkillNames.Spearman.HyperBody:

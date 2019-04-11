@@ -65,7 +65,7 @@ namespace RazzleServer.Game.Handlers
                     reflectPosition = packet.ReadPoint();
                 }
 
-                if (client.Character.Buffs.Contains((int)SkillNames.Magician.MagicGuard) &&
+                if (client.Character.PrimaryStats.HasBuff((int)SkillNames.Magician.MagicGuard) &&
                     client.Character.PrimaryStats.Mana > 0)
                 {
                     // Absorb damage
@@ -134,10 +134,9 @@ namespace RazzleServer.Game.Handlers
                 OnStatChangeByMobSkill(client.Character, diseaseSkill);
             }
         }
-        
+
         public static void OnStatChangeByMobSkill(Character chr, MobSkillDataReference mobSkill, short delay = 0)
         {
-
             // See if we can actually set the effect...
 //            int prop = 100;
 //            if (mobSkill.Prop != 0)

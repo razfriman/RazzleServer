@@ -44,7 +44,7 @@ namespace RazzleServer.Game.Handlers
 
             if (item.CBuffTime > 0 || !string.IsNullOrEmpty(item.CCureAilments))
             {
-                client.Character.Buffs.Add(item);
+                client.Character.Buffs.AddBuff(item.MapleId);
             }
         }
     }

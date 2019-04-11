@@ -57,6 +57,12 @@ namespace RazzleServer.Game.Maple.Characters
         public float SpeedMode { get; set; }
         public byte BaseJump { get; set; }
         public float JumpMode { get; set; }
+        public short WeaponAttack { get; set; }
+        public short WeaponDefense { get; set; }
+        public short MagicAttack { get; set; }
+        public short MagicDefense { get; set; }
+        public short Accuracy { get; set; }
+        public short Agility { get; set; }
 
 
         public int Craft => Dexterity + Luck + Intelligence;
@@ -72,7 +78,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             get
             {
-                int acc = 0;
+                var acc = 0;
 
                 if (IsBaseJob(Job.Bowman) || IsBaseJob(Job.Thief))
                 {
@@ -109,16 +115,27 @@ namespace RazzleServer.Game.Maple.Characters
         }
 
 
-        public short TotalMAD => (short)Math.Max(0, Math.Min(MAD + EquipBonuses.MAD + BuffBonuses.MAD, 1999));
-        public short TotalMDD => (short)Math.Max(0, Math.Min(MDD + EquipBonuses.MDD + BuffBonuses.MDD, 1999));
-        public short TotalPAD => (short)Math.Max(0, Math.Min(EquipBonuses.PAD + BuffBonuses.PAD, 1999));
-        public short TotalPDD => (short)Math.Max(0, Math.Min(EquipBonuses.PDD + BuffBonuses.PDD, 1999));
-        public short TotalACC => (short)Math.Max(0, Math.Min(ACC + EquipBonuses.ACC + BuffBonuses.ACC, 999));
+        public short TotalMagicAttack => (short)Math.Max(0,
+            Math.Min(MagicAttack + EquipBonuses.MagicAttack + BuffBonuses.MagicAttack, 1999));
 
-        public short TotalEVA => (short)Math.Max(0,
+        public short TotalMagicDefense => (short)Math.Max(0,
+            Math.Min(MagicDefense + EquipBonuses.MagicDefense + BuffBonuses.MagicDefense, 1999));
+
+        public short TotalWeaponAttack =>
+            (short)Math.Max(0, Math.Min(EquipBonuses.WeaponAttack + BuffBonuses.WeaponAttack, 1999));
+
+        public short TotalWeaponDefense =>
+            (short)Math.Max(0, Math.Min(EquipBonuses.WeaponDefense + BuffBonuses.WeaponDefense, 1999));
+
+        public short TotalAccuracy =>
+            (short)Math.Max(0, Math.Min(Accuracy + EquipBonuses.Accuracy + BuffBonuses.Accuracy, 999));
+
+        public short TotalAvoidability => (short)Math.Max(0,
             Math.Min(Avoidability + EquipBonuses.Avoidability + BuffBonuses.Avoidability, 999));
 
-        public short TotalCraft => (short)Math.Max(0, Math.Min(Craft + EquipBonuses.Craft + BuffBonuses.Craft, 999));
+        public short TotalAgility =>
+            (short)Math.Max(0, Math.Min(Agility + EquipBonuses.Agility + BuffBonuses.Agility, 999));
+
         public short TotalJump => (short)Math.Max(100, Math.Min(EquipBonuses.Jump + BuffBonuses.Jump, 123));
         public byte TotalSpeed => (byte)Math.Max(100, Math.Min(EquipBonuses.Speed + BuffBonuses.Speed, 200));
 
@@ -131,7 +148,7 @@ namespace RazzleServer.Game.Maple.Characters
         public BuffStat BuffWeaponDefense { get; } = new BuffStat(BuffValueTypes.WeaponDefense);
         public BuffStat BuffMagicAttack { get; } = new BuffStat(BuffValueTypes.MagicAttack);
         public BuffStat BuffMagicDefense { get; } = new BuffStat(BuffValueTypes.MagicDefense);
-        public BuffStat BuffAccurancy { get; } = new BuffStat(BuffValueTypes.Accuracy);
+        public BuffStat BuffAccuracy { get; } = new BuffStat(BuffValueTypes.Accuracy);
         public BuffStat BuffAvoidability { get; } = new BuffStat(BuffValueTypes.Avoidability);
         public BuffStat BuffHands { get; } = new BuffStat(BuffValueTypes.Hands);
         public BuffStat BuffSpeed { get; } = new BuffStat(BuffValueTypes.Speed);
@@ -924,13 +941,13 @@ namespace RazzleServer.Game.Maple.Characters
 
         public bool HasBuff(int skillOrItemId)
         {
-            long currentTime = BuffStat.GetTimeForBuff();
+            var currentTime = BuffStat.GetTimeForBuff();
             return
                 BuffWeaponAttack.HasReferenceId(skillOrItemId, currentTime) ||
                 BuffWeaponDefense.HasReferenceId(skillOrItemId, currentTime) ||
                 BuffMagicAttack.HasReferenceId(skillOrItemId, currentTime) ||
                 BuffMagicDefense.HasReferenceId(skillOrItemId, currentTime) ||
-                BuffAccurancy.HasReferenceId(skillOrItemId, currentTime) ||
+                BuffAccuracy.HasReferenceId(skillOrItemId, currentTime) ||
                 BuffAvoidability.HasReferenceId(skillOrItemId, currentTime) ||
                 BuffHands.HasReferenceId(skillOrItemId, currentTime) ||
                 BuffSpeed.HasReferenceId(skillOrItemId, currentTime) ||
@@ -969,7 +986,7 @@ namespace RazzleServer.Game.Maple.Characters
             BuffWeaponDefense.EncodeForLocal(buffPacket, ref endFlag, currentTime, pSpecificFlag);
             BuffMagicAttack.EncodeForLocal(buffPacket, ref endFlag, currentTime, pSpecificFlag);
             BuffMagicDefense.EncodeForLocal(buffPacket, ref endFlag, currentTime, pSpecificFlag);
-            BuffAccurancy.EncodeForLocal(buffPacket, ref endFlag, currentTime, pSpecificFlag);
+            BuffAccuracy.EncodeForLocal(buffPacket, ref endFlag, currentTime, pSpecificFlag);
             BuffAvoidability.EncodeForLocal(buffPacket, ref endFlag, currentTime, pSpecificFlag);
             BuffHands.EncodeForLocal(buffPacket, ref endFlag, currentTime, pSpecificFlag);
             BuffSpeed.EncodeForLocal(buffPacket, ref endFlag, currentTime, pSpecificFlag);
@@ -1012,7 +1029,7 @@ namespace RazzleServer.Game.Maple.Characters
             BuffWeaponDefense.TryResetByReference(pBuffValue, ref endFlag);
             BuffMagicAttack.TryResetByReference(pBuffValue, ref endFlag);
             BuffMagicDefense.TryResetByReference(pBuffValue, ref endFlag);
-            BuffAccurancy.TryResetByReference(pBuffValue, ref endFlag);
+            BuffAccuracy.TryResetByReference(pBuffValue, ref endFlag);
             BuffAvoidability.TryResetByReference(pBuffValue, ref endFlag);
             BuffHands.TryResetByReference(pBuffValue, ref endFlag);
             BuffSpeed.TryResetByReference(pBuffValue, ref endFlag);
@@ -1050,13 +1067,13 @@ namespace RazzleServer.Game.Maple.Characters
 
         public BuffValueTypes AllActiveBuffs()
         {
-            long currentTime = BuffStat.GetTimeForBuff();
+            var currentTime = BuffStat.GetTimeForBuff();
             BuffValueTypes flags = 0;
             flags |= BuffWeaponAttack.GetState(currentTime);
             flags |= BuffWeaponDefense.GetState(currentTime);
             flags |= BuffMagicAttack.GetState(currentTime);
             flags |= BuffMagicDefense.GetState(currentTime);
-            flags |= BuffAccurancy.GetState(currentTime);
+            flags |= BuffAccuracy.GetState(currentTime);
             flags |= BuffAvoidability.GetState(currentTime);
             flags |= BuffHands.GetState(currentTime);
             flags |= BuffSpeed.GetState(currentTime);
@@ -1094,7 +1111,7 @@ namespace RazzleServer.Game.Maple.Characters
             BuffWeaponDefense.TryReset(currentTime, ref endFlag);
             BuffMagicAttack.TryReset(currentTime, ref endFlag);
             BuffMagicDefense.TryReset(currentTime, ref endFlag);
-            BuffAccurancy.TryReset(currentTime, ref endFlag);
+            BuffAccuracy.TryReset(currentTime, ref endFlag);
             BuffAvoidability.TryReset(currentTime, ref endFlag);
             BuffHands.TryReset(currentTime, ref endFlag);
             BuffSpeed.TryReset(currentTime, ref endFlag);
@@ -1133,7 +1150,7 @@ namespace RazzleServer.Game.Maple.Characters
             flags |= BuffWeaponDefense.Reset();
             flags |= BuffMagicAttack.Reset();
             flags |= BuffMagicDefense.Reset();
-            flags |= BuffAccurancy.Reset();
+            flags |= BuffAccuracy.Reset();
             flags |= BuffAvoidability.Reset();
             flags |= BuffHands.Reset();
             flags |= BuffSpeed.Reset();
@@ -1172,7 +1189,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void AddEquipStats(sbyte slot, Item equip, bool isLoading)
         {
-            byte realSlot = (byte)Math.Abs(slot);
+            var realSlot = (byte)Math.Abs(slot);
             if (equip != null)
             {
                 EquipBonus equipBonus;
@@ -1212,11 +1229,12 @@ namespace RazzleServer.Game.Maple.Characters
         {
             if (updateEquips)
             {
-                EquipBonuses = new BonusSet();
+                EquipBonuses = new StatBonus();
                 foreach (var data in EquipStats)
                 {
-                    EquipBonus item = data.Value;
-                    if (EquipBonuses.Dexterity + item.Dexterity > short.MaxValue) EquipBonuses.Dexterity = short.MaxValue;
+                    var item = data.Value;
+                    if (EquipBonuses.Dexterity + item.Dexterity > short.MaxValue)
+                        EquipBonuses.Dexterity = short.MaxValue;
                     else EquipBonuses.Dexterity += item.Dexterity;
                     if (EquipBonuses.Intelligence + item.Intelligence > short.MaxValue)
                         EquipBonuses.Intelligence = short.MaxValue;
@@ -1230,28 +1248,28 @@ namespace RazzleServer.Game.Maple.Characters
                     if (EquipBonuses.MaxHealth + item.MaxHealth > short.MaxValue)
                         EquipBonuses.MaxHealth = short.MaxValue;
                     else EquipBonuses.MaxHealth += item.MaxHealth;
-                    EquipBonuses.Pad += item.WeaponAttack;
+                    EquipBonuses.WeaponAttack += item.WeaponAttack;
 
 // TODO: Shield mastery buff
                     if (data.Key == (byte)EquipSlot.Shield)
                     {
                     }
 
-                    EquipBonuses.Pdd += item.WeaponDefense;
-                    EquipBonuses.Mad += item.MagicAttack;
-                    EquipBonuses.Mdd += item.MagicDefense;
-                    EquipBonuses.Acc += item.Accuracy;
-                    EquipBonuses.Eva += item.Avoidability;
+                    EquipBonuses.WeaponDefense += item.WeaponDefense;
+                    EquipBonuses.MagicAttack += item.MagicAttack;
+                    EquipBonuses.MagicDefense += item.MagicDefense;
+                    EquipBonuses.Accuracy += item.Accuracy;
+                    EquipBonuses.Avoidability += item.Avoidability;
                     EquipBonuses.Speed += item.Speed;
                     EquipBonuses.Jump += item.Jump;
-                    EquipBonuses.Craft += item.Agility;
-                    EquipBonuses.Pad = (short)Math.Max(0, Math.Min((int)EquipBonuses.Pad, 1999));
-                    EquipBonuses.Pdd = (short)Math.Max(0, Math.Min((int)EquipBonuses.Pdd, 1999));
-                    EquipBonuses.Mad = (short)Math.Max(0, Math.Min((int)EquipBonuses.Mad, 1999));
-                    EquipBonuses.Mdd = (short)Math.Max(0, Math.Min((int)EquipBonuses.Mdd, 1999));
-                    EquipBonuses.Acc = (short)Math.Max(0, Math.Min((int)EquipBonuses.Acc, 999));
-                    EquipBonuses.Eva = (short)Math.Max(0, Math.Min((int)EquipBonuses.Eva, 999));
-                    EquipBonuses.Craft = (short)Math.Max(0, Math.Min((int)EquipBonuses.Craft, 999));
+                    EquipBonuses.Agility += item.Agility;
+                    EquipBonuses.WeaponAttack = (short)Math.Max(0, Math.Min((int)EquipBonuses.WeaponAttack, 1999));
+                    EquipBonuses.WeaponDefense = (short)Math.Max(0, Math.Min((int)EquipBonuses.WeaponDefense, 1999));
+                    EquipBonuses.MagicAttack = (short)Math.Max(0, Math.Min((int)EquipBonuses.MagicAttack, 1999));
+                    EquipBonuses.MagicDefense = (short)Math.Max(0, Math.Min((int)EquipBonuses.MagicDefense, 1999));
+                    EquipBonuses.Accuracy = (short)Math.Max(0, Math.Min((int)EquipBonuses.Accuracy, 999));
+                    EquipBonuses.Avoidability = (short)Math.Max(0, Math.Min((int)EquipBonuses.Avoidability, 999));
+                    EquipBonuses.Agility = (short)Math.Max(0, Math.Min((int)EquipBonuses.Agility, 999));
                     EquipBonuses.Speed = (short)Math.Max(100, Math.Min((int)EquipBonuses.Speed, 200));
                     EquipBonuses.Jump = (short)Math.Max(100, Math.Min((int)EquipBonuses.Jump, 123));
                 }
@@ -1265,73 +1283,78 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void CheckHpmp()
         {
-            short mhp = GetMaxHealth(false);
-            short mmp = GetMaxMana(false);
+            var mhp = GetMaxHealth(false);
+            var mmp = GetMaxMana(false);
             if (Health > mhp)
             {
-                Char.ModifyHP(mhp);
+                Health = mhp;
             }
 
-            if (Mp > mmp)
+            if (Mana > mmp)
             {
-                Char.ModifyMP(mmp);
+                Mana = mmp;
             }
         }
 
         public void CheckBoosters()
         {
-            var equippedId = Char.Inventory.GetEquippedItemId(Constants.EquipSlots.Slots.Weapon, false);
-            if (equippedId != 0) return;
+            var equippedId = Parent.Items[EquipmentSlot.Weapon];
+            if (equippedId == null)
+            {
+                return;
+            }
+
             BuffValueTypes removed = 0;
             var currentTime = BuffStat.GetTimeForBuff();
             if (BuffBooster.IsSet(currentTime)) removed |= RemoveByReference(BuffBooster.ReferenceId, true);
             if (BuffCharges.IsSet(currentTime)) removed |= RemoveByReference(BuffCharges.ReferenceId, true);
             if (BuffComboAttack.IsSet(currentTime)) removed |= RemoveByReference(BuffComboAttack.ReferenceId, true);
             if (BuffSoulArrow.IsSet(currentTime)) removed |= RemoveByReference(BuffSoulArrow.ReferenceId, true);
-            Char.Buffs.FinalizeDebuff(removed);
+            Parent.Buffs.FinalizeDebuff(removed);
         }
 
-        public short GetTotalStr() { return (short)(Str + EquipBonuses.Str); }
-        public short GetTotalDex() { return (short)(Dex + EquipBonuses.Dex); }
-        public short GetTotalInt() { return (short)(Int + EquipBonuses.Intelligence); }
+        public short GetTotalStr() { return (short)(BaseStrength + EquipBonuses.Strength); }
+        public short GetTotalDex() { return (short)(BaseDexterity + EquipBonuses.Dexterity); }
+        public short GetTotalInt() { return (short)(BaseIntelligence + EquipBonuses.Intelligence); }
         public short GetTotalLuck() { return (short)(Luck + EquipBonuses.Luck); }
-        public short GetTotalMagicAttack() { return (short)(Int + EquipBonuses.Mad); }
-        public short GetTotalMagicDef() { return (short)(Int + EquipBonuses.Mdd); }
+        public short GetTotalMagicAttack() { return (short)(BaseIntelligence + EquipBonuses.MagicAttack); }
+        public short GetTotalMagicDef() { return (short)(BaseIntelligence + EquipBonuses.MagicDefense); }
 
         public short GetStrAddition(bool nobonus = false)
         {
             if (!nobonus)
             {
-                return (short)((Str + EquipBonuses.Str + BuffBonuses.Str) > short.MaxValue
+                return (short)((BaseStrength + EquipBonuses.Strength + BuffBonuses.Strength) > short.MaxValue
                     ? short.MaxValue
-                    : (Str + EquipBonuses.Str + BuffBonuses.Str));
+                    : (BaseStrength + EquipBonuses.Strength + BuffBonuses.Strength));
             }
 
-            return Str;
+            return BaseStrength;
         }
 
         public short GetDexAddition(bool nobonus = false)
         {
             if (!nobonus)
             {
-                return (short)((Dex + EquipBonuses.Dex + BuffBonuses.Dex) > short.MaxValue
+                return (short)((BaseDexterity + EquipBonuses.Dexterity + BuffBonuses.Dexterity) > short.MaxValue
                     ? short.MaxValue
-                    : (Dex + EquipBonuses.Dex + BuffBonuses.Dex));
+                    : (BaseDexterity + EquipBonuses.Dexterity + BuffBonuses.Dexterity));
             }
 
-            return Dex;
+            return BaseDexterity;
         }
 
         public short GetIntAddition(bool nobonus = false)
         {
             if (!nobonus)
             {
-                return (short)((Int + EquipBonuses.Intelligence + BuffBonuses.Intelligence) > short.MaxValue
+                return (short)((BaseIntelligence + EquipBonuses.Intelligence + BuffBonuses.Intelligence) >
+                               short.MaxValue
                     ? short.MaxValue
-                    : (Int + EquipBonuses.Intelligence + BuffBonuses.Intelligence));
+                    : (BaseIntelligence + EquipBonuses.Intelligence + BuffBonuses.Intelligence));
             }
 
-            return Int;
+            return BaseIntelligence;
         }
 
         public short GetLuckAddition(bool nobonus = false)

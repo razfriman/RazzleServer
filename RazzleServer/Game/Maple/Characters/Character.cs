@@ -426,7 +426,6 @@ namespace RazzleServer.Game.Maple.Characters
             Skills.Save();
             Quests.Save();
             Rings.Save();
-            Buffs.Save();
             TeleportRocks.Save();
 
             _log.Information($"Saved character '{Name}' to database.");
@@ -488,7 +487,6 @@ namespace RazzleServer.Game.Maple.Characters
                 Skills.Save();
                 Quests.Save();
                 Rings.Save();
-                Buffs.Save();
                 TeleportRocks.Save();
             }
         }
@@ -522,7 +520,6 @@ namespace RazzleServer.Game.Maple.Characters
             Items.Load();
             Skills.Load();
             Quests.Load();
-            Buffs.Load();
             TeleportRocks.Load();
         }
 
