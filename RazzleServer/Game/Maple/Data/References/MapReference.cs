@@ -4,11 +4,14 @@ using RazzleServer.Common.Constants;
 using RazzleServer.Game.Maple.Life;
 using RazzleServer.Game.Maple.Maps;
 using RazzleServer.Wz;
+using Serilog;
 
 namespace RazzleServer.Game.Maple.Data.References
 {
     public class MapReference
     {
+        private readonly ILogger _log = Log.ForContext<MapReference>();
+
         public int MapleId { get; set; }
         public int ReturnMapId { get; set; }
         public int ForcedReturnMapId { get; set; }
@@ -67,30 +70,85 @@ namespace RazzleServer.Game.Maple.Data.References
 
             var info = img["info"];
 
-            IsTown = (info["town"]?.GetInt() ?? 0) > 0;
-            SpawnRate = info["mobRate"]?.GetDouble() ?? 1.0;
-            ReturnMapId = info["returnMap"]?.GetInt() ?? 0;
-            ForcedReturnMapId = info["forcedReturn"]?.GetInt() ?? 0;
-            FieldLimit = (FieldLimitFlags)(info["fieldLimit"]?.GetInt() ?? 0);
-            IsUnableToChangeChannel = (info["bUnableToChangeChannel"]?.GetInt() ?? 0) > 0;
-            IsUnableToShop = (info["bUnableToShop"]?.GetInt() ?? 0) > 0;
-            IsEverlastDrops = (info["everlast"]?.GetInt() ?? 0) > 0;
-            IsPersonalShop = (info["personalShop"]?.GetInt() ?? 0) > 0;
-            RecoveryHp = (byte)(info["recovery"]?.GetInt() ?? 0);
-            DecreaseHp = (byte)(info["decHP"]?.GetInt() ?? 0);
-            IsScrollDisable = (info["scrollDisable"]?.GetInt() ?? 0) > 0;
-            TimeLimit = info["timeLimit"]?.GetInt() ?? 0;
-            VrTop = info["VRTop"]?.GetInt() ?? 0;
-            VrLeft = info["VRLeft"]?.GetInt() ?? 0;
-            VrBottom = info["VRBottom"]?.GetInt() ?? 0;
-            VrRight = info["VRRight"]?.GetInt() ?? 0;
-            FieldType = (MapFieldType)(info["fieldType"]?.GetInt() ?? 0);
-            //mapMark
-            //fieldType
-            //cloud
-            //snow
-            //rain
-            //fs
+            foreach (var node in info.WzProperties)
+            {
+                switch (node.Name)
+                {
+                    case "mapMark":
+                    case "cloud":
+                    case "snow":
+                    case "rain":
+                    case "fs":
+                    case "bgm":
+                    case "version":
+                    case "mapDesc":
+                    case "mapName":
+                    case "help":
+                    case "streetName":
+                    case "moveLimit":
+                    case "hideMinimap":
+                        break;
+                    case "town":
+                        IsTown = node.GetInt() > 0;
+                        break;
+                    case "mobRate":
+                        SpawnRate = node.GetDouble();
+                        break;
+                    case "returnMap":
+                        ReturnMapId = node.GetInt();
+                        break;
+                    case "forcedReturn":
+                        ForcedReturnMapId = node.GetInt();
+                        break;
+                    case "fieldLimit":
+                        FieldLimit = (FieldLimitFlags)node.GetInt();
+                        break;
+                    case "bUnableToChangeChannel":
+                        IsUnableToChangeChannel = node.GetInt() > 0;
+                        break;
+                    case "bUnableToShop":
+                        IsUnableToShop = node.GetInt() > 0;
+                        break;
+                    case "everlast":
+                        IsEverlastDrops = node.GetInt() > 0;
+                        break;
+                    case "personalShop":
+                        IsPersonalShop = node.GetInt() > 0;
+                        break;
+                    case "recovery":
+                        RecoveryHp = (byte)node.GetInt();
+                        break;
+                    case "decHP":
+                        DecreaseHp = (byte)node.GetInt();
+                        break;
+                    case "scrollDisable":
+                        IsScrollDisable = node.GetInt() > 0;
+                        break;
+                    case "timeLimit":
+                        TimeLimit = node.GetInt();
+                        break;
+                    case "VRTop":
+                        VrTop = node.GetInt();
+                        break;
+                    case "VRLeft":
+                        VrLeft = node.GetInt();
+                        break;
+                    case "VRBottom":
+                        VrBottom = node.GetInt();
+                        break;
+                    case "VRRight":
+                        VrRight = node.GetInt();
+                        break;
+                    case "fieldType":
+                        FieldType = (MapFieldType)node.GetInt();
+                        break;
+                    default:
+                        _log.Warning(
+                            $"Unknown map node Skill={MapleId} Name={node.Name} Value={node.WzValue}");
+                        break;
+                }
+            }
+
             HasClock = img["clock"] != null;
             HasShip = img["shipObj"] != null;
             img["portal"]?.WzProperties?.ForEach(x => Portals.Add(new Portal(x)));

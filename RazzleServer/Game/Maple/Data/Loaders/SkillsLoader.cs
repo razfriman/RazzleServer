@@ -48,7 +48,7 @@ namespace RazzleServer.Game.Maple.Data.Loaders
                                 continue;
                             }
 
-                            Data.Data[id][level] = new SkillReference(levelImg);
+                            Data.Data[id][level] = new SkillReference(id, level, levelImg);
                         }
                     }
                 }

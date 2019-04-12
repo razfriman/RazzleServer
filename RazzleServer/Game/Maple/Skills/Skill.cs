@@ -28,7 +28,6 @@ namespace RazzleServer.Game.Maple.Skills
         public short CostMp { get; set; }
         public short CostHp { get; set; }
         public short Damage { get; set; }
-        public int FixedDamage { get; set; }
         public byte CriticalDamage { get; set; }
         public sbyte Mastery { get; set; }
         public int OptionalItemCost { get; set; }
@@ -38,6 +37,7 @@ namespace RazzleServer.Game.Maple.Skills
         public short CostMeso { get; set; }
         public short ParameterA { get; set; }
         public short ParameterB { get; set; }
+        public short ParameterC { get; set; }
         public short Speed { get; set; }
         public short Jump { get; set; }
         public short Strength { get; set; }
@@ -50,7 +50,6 @@ namespace RazzleServer.Game.Maple.Skills
         public short Hp { get; set; }
         public short Mp { get; set; }
         public short Probability { get; set; }
-        public short Morph { get; set; }
         public Point? Lt { get; private set; }
         public Point? Rb { get; private set; }
         public bool HasBuff => BuffTime > 0;
@@ -189,7 +188,6 @@ namespace RazzleServer.Game.Maple.Skills
             CostMp = CachedReference.CostMp;
             CostHp = CachedReference.CostHp;
             Damage = CachedReference.Damage;
-            FixedDamage = CachedReference.FixedDamage;
             CriticalDamage = CachedReference.CriticalDamage;
             Mastery = CachedReference.Mastery;
             OptionalItemCost = CachedReference.OptionalItemCost;
@@ -199,6 +197,7 @@ namespace RazzleServer.Game.Maple.Skills
             CostMeso = CachedReference.CostMeso;
             ParameterA = CachedReference.ParameterA;
             ParameterB = CachedReference.ParameterB;
+            ParameterC = CachedReference.ParameterC;
             Speed = CachedReference.Speed;
             Jump = CachedReference.Jump;
             Strength = CachedReference.Strength;
@@ -211,7 +210,6 @@ namespace RazzleServer.Game.Maple.Skills
             Hp = CachedReference.Hp;
             Mp = CachedReference.Mp;
             Probability = CachedReference.Probability;
-            Morph = CachedReference.Morph;
             Lt = CachedReference.Lt;
             Rb = CachedReference.Rb;
         }

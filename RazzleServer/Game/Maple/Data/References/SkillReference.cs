@@ -1,10 +1,15 @@
 ﻿using RazzleServer.Common.Util;
 using RazzleServer.Wz;
+using Serilog;
 
 namespace RazzleServer.Game.Maple.Data.References
 {
     public class SkillReference
     {
+        private readonly ILogger _log = Log.ForContext<SkillReference>();
+
+        public int MapleId { get; set; }
+        public byte Level { get; set; }
         public sbyte MobCount { get; set; }
         public sbyte HitCount { get; set; }
         public short Range { get; set; }
@@ -12,7 +17,6 @@ namespace RazzleServer.Game.Maple.Data.References
         public short CostMp { get; set; }
         public short CostHp { get; set; }
         public short Damage { get; set; }
-        public int FixedDamage { get; set; }
         public byte CriticalDamage { get; set; }
         public sbyte Mastery { get; set; }
         public int OptionalItemCost { get; set; }
@@ -22,6 +26,7 @@ namespace RazzleServer.Game.Maple.Data.References
         public short CostMeso { get; set; }
         public short ParameterA { get; set; }
         public short ParameterB { get; set; }
+        public short ParameterC { get; set; }
         public short Speed { get; set; }
         public short Jump { get; set; }
         public short Strength { get; set; }
@@ -34,7 +39,6 @@ namespace RazzleServer.Game.Maple.Data.References
         public short Hp { get; set; }
         public short Mp { get; set; }
         public short Probability { get; set; }
-        public short Morph { get; set; }
         public Point? Lt { get; private set; }
         public Point? Rb { get; private set; }
 
@@ -42,39 +46,114 @@ namespace RazzleServer.Game.Maple.Data.References
         {
         }
 
-        public SkillReference(WzImageProperty img)
+        public SkillReference(int mapleId, byte level, WzImageProperty img)
         {
-            ParameterA = img["x"]?.GetShort() ?? 0;
-            ParameterB = img["y"]?.GetShort() ?? 0;
-            CostMp = img["mpCon"]?.GetShort() ?? 0;
-            CostHp = img["hpCon"]?.GetShort() ?? 0;
-            WeaponDefense = img["pdd"]?.GetShort() ?? 0;
-            MagicDefense = img["mdd"]?.GetShort() ?? 0;
-            WeaponAttack = img["pad"]?.GetShort() ?? 0;
-            MagicAttack = img["mad"]?.GetShort() ?? 0;
-            BuffTime = img["time"]?.GetInt() ?? 0;
-            Damage = img["damage"]?.GetShort() ?? 0;
-            Range = img["range"]?.GetShort() ?? 0;
-            MobCount = (sbyte)(img["mobCount"]?.GetShort() ?? 0);
-            HitCount = (sbyte)(img["attackCount"]?.GetShort() ?? 0);
-            Lt = img["lt"]?.GetPoint();
-            Rb = img["rb"]?.GetPoint();
-            Mastery = (sbyte)(img["mastery"]?.GetShort() ?? 0);
-            Speed = img["speed"]?.GetShort() ?? 0;
-            CostItem = img["itemCon"]?.GetInt() ?? 0;
-            ItemCount = img["itemConNo"]?.GetShort() ?? 0;
-            CostBullet = img["bulletCount"]?.GetShort() ?? 0;
-            Jump = img["jump"]?.GetShort() ?? 0;
-            Accuracy = img["acc"]?.GetShort() ?? 0;
-            Avoidability = img["eva"]?.GetShort() ?? 0;
-            Probability = img["prop"]?.GetShort() ?? 0;
-            FixedDamage = img["fixDamage"]?.GetInt() ?? 0;
-            CriticalDamage = (byte)(img["criticalDamage"]?.GetInt() ?? 0);
-            CostMeso = img["moneyCon"]?.GetShort() ?? 0;
-            Hp = img["hp"]?.GetShort() ?? 0;
-            Mp = img["mp"]?.GetShort() ?? 0;
-            //Strength = "str";
-            //Morph = "morph";
+            MapleId = mapleId;
+            Level = level;
+
+            foreach (var node in img.WzProperties)
+            {
+                switch (node.Name)
+                {
+                    case "hs":
+                    case "hit":
+                    case "ball":
+                    case "action":
+                    case "58":
+                        break;
+                    case "x":
+                        ParameterA = node.GetShort();
+                        break;
+                    case "y":
+                        ParameterB = node.GetShort();
+                        break;
+                    case "z":
+                        ParameterC = node.GetShort();
+                        break;
+                    case "hpCon":
+                        CostHp = node.GetShort();
+                        break;
+                    case "mpCon":
+                        CostMp = node.GetShort();
+                        break;
+                    case "pdd":
+                        WeaponDefense = node.GetShort();
+                        break;
+                    case "mdd":
+                        MagicDefense = node.GetShort();
+                        break;
+                    case "pad":
+                        WeaponAttack = node.GetShort();
+                        break;
+                    case "mad":
+                        MagicAttack = node.GetShort();
+                        break;
+                    case "time":
+                        BuffTime = node.GetInt();
+                        break;
+                    case "damage":
+                        Damage = node.GetShort();
+                        break;
+                    case "range":
+                        Range = node.GetShort();
+                        break;
+                    case "mobCount":
+                        MobCount = (sbyte)node.GetShort();
+                        break;
+                    case "attackCount":
+                        HitCount = (sbyte)node.GetShort();
+                        break;
+                    case "lt":
+                        Lt = node.GetPoint();
+                        break;
+                    case "rb":
+                        Rb = node.GetPoint();
+                        break;
+                    case "mastery":
+                        Mastery = (sbyte)node.GetShort();
+                        break;
+                    case "speed":
+                        Speed = node.GetShort();
+                        break;
+                    case "itemCon":
+                        CostItem = node.GetInt();
+                        break;
+                    case "itemConNo":
+                        ItemCount = node.GetShort();
+                        break;
+                    case "bulletCount":
+                        CostBullet = node.GetShort();
+                        break;
+                    case "bulletConsume":
+                        CostBullet = node.GetShort();
+                        break;
+                    case "jump":
+                        Jump = node.GetShort();
+                        break;
+                    case "acc":
+                        Accuracy = node.GetShort();
+                        break;
+                    case "eva":
+                        Avoidability = node.GetShort();
+                        break;
+                    case "prop":
+                        Probability = node.GetShort();
+                        break;
+                    case "moneyCon":
+                        CostMeso = node.GetShort();
+                        break;
+                    case "hp":
+                        Hp = node.GetShort();
+                        break;
+                    case "mp":
+                        Mp = node.GetShort();
+                        break;
+                    default:
+                        _log.Warning(
+                            $"Unknown skill node Skill={MapleId} Name={node.Name} Value={node.WzValue}");
+                        break;
+                }
+            }
         }
     }
 }

@@ -20,8 +20,10 @@ namespace RazzleServer.Game.Maple.Data.References
 
         public bool Magic { get; set; }
 
-        // Actually skillid
-        public byte Disease { get; set; }
+        /// <summary>
+        /// Referred to as "disease" in the data files
+        /// </summary>
+        public byte SkillId { get; set; }
         public byte SkillLevel { get; set; }
 
         public MobAttackDataReference()
@@ -56,7 +58,7 @@ namespace RazzleServer.Game.Maple.Data.References
                         break;
 
                     case "disease":
-                        Disease = (byte)node.GetInt();
+                        SkillId = (byte)node.GetInt();
                         break;
                     case "elemAttr":
                         ElemAttr = node.GetString();

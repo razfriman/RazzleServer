@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 using RazzleServer.Common.Util;
 using RazzleServer.Wz;
+using Serilog;
 
 namespace RazzleServer.Game.Maple.Data.References
 {
     public class MobSkillDataReference
     {
+        private readonly ILogger _log = Log.ForContext<SkillReference>();
+
         public List<int> Summons { get; set; } = new List<int>();
         public int Duration { get; private set; }
         public short MpCost { get; private set; }
@@ -26,26 +29,64 @@ namespace RazzleServer.Game.Maple.Data.References
 
         public MobSkillDataReference(WzImageProperty img)
         {
-            if (int.TryParse(img.Name, out _))
+            if (!int.TryParse(img.Name, out var id))
             {
-                Duration = img["time"]?.GetInt() ?? 0;
-                MpCost = img["mpCon"]?.GetShort() ?? 0;
-                ParameterA = img["x"]?.GetInt() ?? 0;
-                ParameterB = img["y"]?.GetInt() ?? 0;
-                Chance = img["prop"]?.GetShort() ?? 0;
-                TargetCount = img["count"]?.GetShort() ?? 0;
-                Cooldown = img["interval"]?.GetShort() ?? 0;
-                Lt = img["lt"]?.GetPoint();
-                Rb = img["rb"]?.GetPoint();
-                PercentageLimitHp = img["hp"]?.GetShort() ?? 0;
-                SummonLimit = img["limit"]?.GetShort() ?? 0;
-                SummonEffect = img["summonEffect"]?.GetShort() ?? 0;
+                return;
+            }
 
-                var i = 0;
-                while (img[i.ToString()] != null)
+            foreach (var node in img.WzProperties)
+            {
+                switch (node.Name)
                 {
-                    Summons.Add(img[i.ToString()].GetInt());
-                    i++;
+                    case "affected":
+                    case "effect":
+                    case "mob":
+                    case "mob0":
+                    case "tile":
+                        break;
+                    case "time":
+                        Duration = node.GetShort();
+                        break;
+                    case "mpCon":
+                        MpCost = node.GetShort();
+                        break;
+                    case "x":
+                        ParameterA = node.GetInt();
+                        break;
+                    case "y":
+                        ParameterB = node.GetInt();
+                        break;
+                    case "prop":
+                        Chance = node.GetShort();
+                        break;
+                    case "count":
+                        TargetCount = node.GetShort();
+                        break;
+                    case "interval":
+                        Cooldown = node.GetShort();
+                        break;
+                    case "lt":
+                        Lt = node.GetPoint();
+                        break;
+                    case "rb":
+                        Rb = node.GetPoint();
+                        break;
+                    case "hp":
+                        PercentageLimitHp = node.GetShort();
+                        break;
+                    case "limit":
+                        SummonLimit = node.GetShort();
+                        break;
+                    case "summonEffect":
+                        SummonEffect = node.GetShort();
+                        break;
+                    case string summonId when int.TryParse(summonId, out _):
+                        Summons.Add(node.GetInt());
+                        break;
+                    default:
+                        _log.Warning(
+                            $"Unknown mob skill data node Skill={id} Name={node.Name} Value={node.WzValue}");
+                        break;
                 }
             }
         }
