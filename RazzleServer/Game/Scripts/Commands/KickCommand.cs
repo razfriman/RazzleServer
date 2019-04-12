@@ -27,6 +27,18 @@ namespace RazzleServer.Game.Scripts.Commands
                     caller.Notify($"[Command] Character '{name}' could not be found.");
                     return;
                 }
+                
+                if (target.Name == caller.Name)
+                {
+                    caller.Notify("You cannot kick yourself");
+                    return;
+                }
+
+                if (target.IsMaster)
+                {
+                    caller.Notify("You cannot kick a GM");
+                    return;
+                }
 
                 target.Client.Terminate($"Player was kicked by {caller.Name}");
             }
