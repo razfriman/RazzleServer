@@ -71,6 +71,8 @@ namespace RazzleServer.Game
             var save = Character;
             try
             {
+                PingToken?.Cancel();
+                PingToken?.Dispose();
                 base.Disconnected();
                 Server.RemoveClient(this);
                 Character?.Save();

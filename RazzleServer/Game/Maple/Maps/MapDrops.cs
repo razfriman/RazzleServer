@@ -26,9 +26,9 @@ namespace RazzleServer.Game.Maple.Maps
 
         private void ScheduleExpiration(Drop item)
         {
+            item.Expiry?.Cancel();
             item.Expiry?.Dispose();
 
-            // TODO(what if the item is no-expire)
             item.Expiry = TaskRunner.Run(() =>
             {
                 if (item.Map == Map)
@@ -41,6 +41,7 @@ namespace RazzleServer.Game.Maple.Maps
 
         public override void Remove(Drop item)
         {
+            item.Expiry?.Cancel();
             item.Expiry?.Dispose();
             Map.Send(item.GetDestroyPacket());
             base.Remove(item);
