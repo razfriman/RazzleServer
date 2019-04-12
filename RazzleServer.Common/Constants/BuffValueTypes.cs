@@ -21,8 +21,8 @@ namespace RazzleServer.Common.Constants
         Booster = 0x800,
 
         PowerGuard = 0x1000,
-        MaxHp = 0x2000,
-        MaxMp = 0x4000,
+        MaxHealth = 0x2000,
+        MaxMana = 0x4000,
         Invincible = 0x8000,
 
         SoulArrow = 0x10000,

@@ -8,7 +8,12 @@ namespace RazzleServer.Game.Handlers
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
             var skillId = packet.ReadInt();
-            client.Character.Buffs.Remove(skillId);
+            if (!client.Character.PrimaryStats.HasBuff(skillId))
+            {
+                return;
+            }
+
+            client.Character.PrimaryStats.RemoveByReference(skillId);
         }
     }
 }

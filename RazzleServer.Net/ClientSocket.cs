@@ -157,9 +157,17 @@ namespace RazzleServer.Net
 
         public async Task Send(byte[] data)
         {
-            if (!_disposed)
+            if (!_disposed && Connected)
             {
-                await SendRawPacket(Cipher.Encrypt(data, _toClient).ToArray());
+                try
+                {
+                    await SendRawPacket(Cipher.Encrypt(data, _toClient).ToArray());
+                }
+                catch (Exception e)
+                {
+                    _log.Error(e, "Error sending packet");
+                    Disconnect();
+                }
             }
         }
 
@@ -187,6 +195,7 @@ namespace RazzleServer.Net
             finally
             {
                 _client.Disconnected();
+                _client.Connected = false;
             }
         }
     }

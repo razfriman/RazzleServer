@@ -83,8 +83,6 @@ namespace RazzleServer.Game.Maple.Items
         public short CAvoid { get; }
         public short CSpeed { get; }
         public short CJump { get; }
-        public short CMorph { get; }
-
         public List<Tuple<int, short>> Summons { get; }
 
         public ItemType Type => GetType(MapleId);
@@ -351,10 +349,9 @@ namespace RazzleServer.Game.Maple.Items
                 CWeaponDefense = CachedReference.CWeaponDefense;
                 CMagicDefense = CachedReference.CMagicDefense;
                 CAccuracy = CachedReference.CAccuracy;
-                CAvoid = CachedReference.CAvoid;
+                CAvoid = CachedReference.CAvoidability;
                 CSpeed = CachedReference.CSpeed;
                 CJump = CachedReference.CJump;
-                CMorph = CachedReference.CMorph;
             }
 
             Summons = CachedReference.Summons;
@@ -427,10 +424,9 @@ namespace RazzleServer.Game.Maple.Items
                 CWeaponDefense = CachedReference.CWeaponDefense;
                 CMagicDefense = CachedReference.CMagicDefense;
                 CAccuracy = CachedReference.CAccuracy;
-                CAvoid = CachedReference.CAvoid;
+                CAvoid = CachedReference.CAvoidability;
                 CSpeed = CachedReference.CSpeed;
                 CJump = CachedReference.CJump;
-                CMorph = CachedReference.CMorph;
             }
 
             Summons = CachedReference.Summons;

@@ -27,7 +27,7 @@ namespace RazzleServer.Game.Maple.Data.Cache
             {(int)SkillNames.Fighter.PowerGuard, BuffValueTypes.PowerGuard},
             {(int)SkillNames.Page.PowerGuard, BuffValueTypes.PowerGuard},
             {(int)SkillNames.Spearman.IronWill, BuffValueTypes.WeaponDefense | BuffValueTypes.MagicDefense},
-            {(int)SkillNames.Spearman.HyperBody, BuffValueTypes.MaxHp | BuffValueTypes.MaxMp},
+            {(int)SkillNames.Spearman.HyperBody, BuffValueTypes.MaxHealth | BuffValueTypes.MaxMana},
             {(int)SkillNames.FirePoisonWizard.Meditation, BuffValueTypes.MagicAttack},
             {(int)SkillNames.IceLightningWizard.Meditation, BuffValueTypes.MagicAttack},
             {(int)SkillNames.Cleric.Invincible, BuffValueTypes.Invincible},

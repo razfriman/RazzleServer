@@ -24,7 +24,7 @@ namespace RazzleServer.Game.Handlers
                 return;
             }
 
-            client.Character.Buffs.Add(skill, 0);
+            client.Character.Buffs.AddBuff(skill.MapleId, skill.CurrentLevel);
 
             switch (skillId)
             {
@@ -38,7 +38,7 @@ namespace RazzleServer.Game.Handlers
 
                     var healAmount =
                         (short)(healRate * client.Character.PrimaryStats.MaxHealth / 100); // Party: / (amount players)
-                    if (!client.Character.Buffs.Contains(skillId))
+                    if (!client.Character.PrimaryStats.HasBuff(skillId))
                     {
                         client.Character.PrimaryStats.MaxHealth += healAmount;
                     }

@@ -137,7 +137,7 @@ namespace RazzleServer.Game.Maple.Characters
 
             pw.WriteInt(Id);
             pw.WriteString(Name);
-            pw.WriteBytes(Buffs.ToByteArray());
+            pw.WriteBytes(Buffs.ToMapBuffValues());
             pw.WriteShort((short)PrimaryStats.Job);
             pw.WriteBytes(AppearanceToByteArray());
             pw.WriteInt(Items.Available(5110000));

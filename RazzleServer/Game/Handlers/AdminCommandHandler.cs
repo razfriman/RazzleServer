@@ -3,7 +3,6 @@ using RazzleServer.Common.Constants;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Items;
 using RazzleServer.Game.Maple.Life;
-using RazzleServer.Game.Maple.Skills;
 using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Handlers
@@ -31,11 +30,11 @@ namespace RazzleServer.Game.Handlers
 
                     if (hide)
                     {
-                        client.Character.Buffs.Add(new Skill((int)SkillNames.Gm.Hide), 1);
+                        client.Character.Buffs.AddBuff((int)SkillNames.Gm.Hide);
                     }
                     else
                     {
-                        client.Character.Buffs.Remove((int)SkillNames.Gm.Hide);
+                        client.Character.PrimaryStats.RemoveByReference((int)SkillNames.Gm.Hide);
                     }
                 }
                     break;

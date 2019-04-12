@@ -138,8 +138,12 @@
 
         public enum Archer
         {
+            BlessingOfAmazon = 3000000,
             CriticalShot = 3000001,
-            Focus = 3001003
+            TheEyeOfAmazon = 3000002,
+            Focus = 3001003,
+            ArrowBlow = 3001004,
+            DoubleShot = 3001005
         }
 
         public enum Hunter
@@ -174,19 +178,22 @@
 
         public enum Rogue
         {
-            DarkSight = 4001003,
+            NimbleBody = 4001000,
+            KeenEyes = 4001001,
             Disorder = 4001002,
+            DarkSight = 4001003,
             DoubleStab = 4001334,
             LuckySeven = 4001344
         }
 
         public enum Assassin
         {
-            ClawBooster = 4101003,
             ClawMastery = 4100000,
             CriticalThrow = 4100001,
-            Drain = 4101005,
-            Haste = 4101004
+            Endure = 4100002,
+            ClawBooster = 4101003,
+            Haste = 4101004,
+            Drain = 4101005
         }
 
         public enum Hermit
