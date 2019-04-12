@@ -20,20 +20,18 @@ namespace RazzleServer.Game.Maple.Data
 
         internal static async Task Initialize()
         {
-            using (var context = new MapleDbContext())
+            using var context = new MapleDbContext();
+            if (!context.Loots.Any())
             {
-                if (!context.Loots.Any())
-                {
-                    Logger.Information("Cannot find any loot in the database, attempting to load from JSON");
-                    await LoadFromJson();
-                }
-
-                var sw = Stopwatch.StartNew();
-
-                await LoadFromDatabase(context);
-
-                Logger.Information("Data loaded in {0}ms.", sw.ElapsedMilliseconds);
+                Logger.Information("Cannot find any loot in the database, attempting to load from JSON");
+                await LoadFromJson();
             }
+
+            var sw = Stopwatch.StartNew();
+
+            await LoadFromDatabase(context);
+
+            Logger.Information("Data loaded in {0}ms.", sw.ElapsedMilliseconds);
         }
 
         private static async Task LoadFromDatabase(MapleDbContext context)
@@ -94,51 +92,49 @@ namespace RazzleServer.Game.Maple.Data
                 return;
             }
 
-            using (var s = File.OpenRead(InitialDataFile))
-            using (var sr = new StreamReader(s))
-            using (var reader = new JsonTextReader(sr))
-            using (var context = new MapleDbContext())
+            using var s = File.OpenRead(InitialDataFile);
+            using var sr = new StreamReader(s);
+            using var reader = new JsonTextReader(sr);
+            using var context = new MapleDbContext();
+            try
             {
-                try
+                var sw = Stopwatch.StartNew();
+
+                var serializer = new JsonSerializer();
+                var data = serializer.Deserialize<Dictionary<int, List<Loot>>>(reader);
+
+                foreach (var item in data.Values.SelectMany(x => x))
                 {
-                    var sw = Stopwatch.StartNew();
-
-                    var serializer = new JsonSerializer();
-                    var data = serializer.Deserialize<Dictionary<int, List<Loot>>>(reader);
-
-                    foreach (var item in data.Values.SelectMany(x => x))
+                    if (!DataProvider.Mobs.Data.ContainsKey(item.MobId))
                     {
-                        if (!DataProvider.Mobs.Data.ContainsKey(item.MobId))
-                        {
-                            Logger.Warning($"Skipping loot - Cannot find Mob with ID={item.MobId} in DataProvider");
-                            continue;
-                        }
-
-                        if (!item.IsMeso && !DataProvider.Items.Data.ContainsKey(item.ItemId))
-                        {
-                            Logger.Warning($"Skipping loot - Cannot find Item with ID={item.ItemId} in DataProvider");
-                            continue;
-                        }
-
-                        context.Loots.Add(new LootEntity
-                        {
-                            Chance = item.Chance,
-                            IsMeso = item.IsMeso,
-                            ItemId = item.ItemId,
-                            MaximumQuantity = item.MaximumQuantity,
-                            MinimumQuantity = item.MinimumQuantity,
-                            MobId = item.MobId,
-                            QuestId = item.QuestId
-                        });
+                        Logger.Warning($"Skipping loot - Cannot find Mob with ID={item.MobId} in DataProvider");
+                        continue;
                     }
 
-                    await context.SaveChangesAsync();
-                    Logger.Information("Populated database in {0}ms.", sw.ElapsedMilliseconds);
+                    if (!item.IsMeso && !DataProvider.Items.Data.ContainsKey(item.ItemId))
+                    {
+                        Logger.Warning($"Skipping loot - Cannot find Item with ID={item.ItemId} in DataProvider");
+                        continue;
+                    }
+
+                    context.Loots.Add(new LootEntity
+                    {
+                        Chance = item.Chance,
+                        IsMeso = item.IsMeso,
+                        ItemId = item.ItemId,
+                        MaximumQuantity = item.MaximumQuantity,
+                        MinimumQuantity = item.MinimumQuantity,
+                        MobId = item.MobId,
+                        QuestId = item.QuestId
+                    });
                 }
-                catch (Exception e)
-                {
-                    Logger.Error(e, "Error while loading changes from JSON");
-                }
+
+                await context.SaveChangesAsync();
+                Logger.Information("Populated database in {0}ms.", sw.ElapsedMilliseconds);
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e, "Error while loading changes from JSON");
             }
         }
     }

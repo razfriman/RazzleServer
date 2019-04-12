@@ -38,33 +38,29 @@ namespace RazzleServer.Game.Maple.Life
                 ? new Movements(iPacket)
                 : null;
 
-            using (var pw = new PacketWriter(ServerOperationCode.NpcMove))
+            using var pw = new PacketWriter(ServerOperationCode.NpcMove);
+            pw.WriteInt(ObjectId);
+            pw.WriteByte(action1);
+            pw.WriteByte(action2);
+
+            if (movements != null)
             {
-                pw.WriteInt(ObjectId);
-                pw.WriteByte(action1);
-                pw.WriteByte(action2);
-
-                if (movements != null)
-                {
-                    pw.WriteBytes(movements.ToByteArray());
-                }
-
-                Map.Send(pw);
+                pw.WriteBytes(movements.ToByteArray());
             }
+
+            Map.Send(pw);
         }
 
         public void ShowShop(Character customer)
         {
-            using (var pw = new PacketWriter(ServerOperationCode.NpcShopShow))
-            {
-                pw.WriteInt(MapleId);
-                pw.WriteShort((short)ShopItems.Count);
-                ShopItems.Values.ToList().ForEach(x => pw.WriteBytes(x.ToByteArray()));
-                pw.WriteLong(0);
-                pw.WriteLong(0);
-                pw.WriteLong(0);
-                customer.Client.Send(pw);
-            }
+            using var pw = new PacketWriter(ServerOperationCode.NpcShopShow);
+            pw.WriteInt(MapleId);
+            pw.WriteShort((short)ShopItems.Count);
+            ShopItems.Values.ToList().ForEach(x => pw.WriteBytes(x.ToByteArray()));
+            pw.WriteLong(0);
+            pw.WriteLong(0);
+            pw.WriteLong(0);
+            customer.Client.Send(pw);
         }
 
         public void Converse(Character talker)

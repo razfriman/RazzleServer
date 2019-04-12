@@ -22,29 +22,25 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Delete()
         {
-            using (var dbContext = new MapleDbContext())
+            using var dbContext = new MapleDbContext();
+            var item = dbContext.Memos.Find(Id);
+            if (item != null)
             {
-                var item = dbContext.Memos.Find(Id);
-                if (item != null)
-                {
-                    dbContext.Remove(item);
-                    dbContext.SaveChanges();
-                }
+                dbContext.Remove(item);
+                dbContext.SaveChanges();
             }
         }
 
         public byte[] ToByteArray()
         {
-            using (var pw = new PacketWriter())
-            {
-                pw.WriteInt(Id);
-                pw.WriteString($"{Sender} "); // NOTE: Space is intentional.
-                pw.WriteString(Message);
-                pw.WriteDateTime(Received);
-                pw.WriteByte(3); // TODO: Memo kind (0 - None, 1 - Fame, 2 - Gift).
+            using var pw = new PacketWriter();
+            pw.WriteInt(Id);
+            pw.WriteString($"{Sender} "); // NOTE: Space is intentional.
+            pw.WriteString(Message);
+            pw.WriteDateTime(Received);
+            pw.WriteByte(3); // TODO: Memo kind (0 - None, 1 - Fame, 2 - Gift).
 
-                return pw.ToArray();
-            }
+            return pw.ToArray();
         }
     }
 }

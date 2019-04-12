@@ -180,25 +180,21 @@ namespace RazzleServer.Game.Maple.Life
 
             skill?.Cast(this);
 
-            using (var pw = new PacketWriter(ServerOperationCode.MobControlResponse))
-            {
-                pw.WriteInt(ObjectId);
-                pw.WriteShort(moveAction);
-                pw.WriteBool(skill != null); // use skills
-                pw.WriteShort((short)Mana);
-                pw.WriteShort(0); // skill id, skill level
-                Controller?.Client?.Send(pw);
-            }
+            using var pwControl = new PacketWriter(ServerOperationCode.MobControlResponse);
+            pwControl.WriteInt(ObjectId);
+            pwControl.WriteShort(moveAction);
+            pwControl.WriteBool(skill != null); // use skills
+            pwControl.WriteShort((short)Mana);
+            pwControl.WriteShort(0); // skill id, skill level
+            Controller?.Client?.Send(pwControl);
 
-            using (var pw = new PacketWriter(ServerOperationCode.MobMove))
-            {
-                pw.WriteInt(ObjectId);
-                pw.WriteBool(skill != null); // use skills
-                pw.WriteInt(skillId);
-                pw.WriteByte(0);
-                pw.WriteBytes(movements.ToByteArray());
-                Map.Send(pw, Controller);
-            }
+            using var pwMove = new PacketWriter(ServerOperationCode.MobMove);
+            pwMove.WriteInt(ObjectId);
+            pwMove.WriteBool(skill != null); // use skills
+            pwMove.WriteInt(skillId);
+            pwMove.WriteByte(0);
+            pwMove.WriteBytes(movements.ToByteArray());
+            Map.Send(pwMove, Controller);
         }
 
         public void Buff(MobStatus buff, short value, MobSkill skill)
@@ -245,15 +241,13 @@ namespace RazzleServer.Game.Maple.Life
         {
             Health = Math.Min(MaxHealth, (uint)(Health + hp + Functions.Random(-range / 2, range / 2)));
 
-            using (var pw = new PacketWriter(ServerOperationCode.MobChangeHealth))
-            {
-                pw.WriteInt(ObjectId);
-                pw.WriteByte(0);
-                pw.WriteInt((int)-hp);
-                pw.WriteLong(0);
-                pw.WriteLong(0);
-                Map.Send(pw);
-            }
+            using var pw = new PacketWriter(ServerOperationCode.MobChangeHealth);
+            pw.WriteInt(ObjectId);
+            pw.WriteByte(0);
+            pw.WriteInt((int)-hp);
+            pw.WriteLong(0);
+            pw.WriteLong(0);
+            Map.Send(pw);
         }
 
         public void Die() => Map.Mobs.Remove(this);

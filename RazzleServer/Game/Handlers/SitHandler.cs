@@ -15,18 +15,14 @@ namespace RazzleServer.Game.Handlers
                 client.Character.Chair = seatId;
             }
 
-            using (var pw = new PacketWriter(ServerOperationCode.RemotePlayerSitOnChair))
+            using var pw = new PacketWriter(ServerOperationCode.RemotePlayerSitOnChair);
+            pw.WriteBool(hasSeat);
+            if (hasSeat)
             {
-                pw.WriteBool(hasSeat);
-
-                if (hasSeat)
-                {
-                    pw.WriteShort(seatId);
-                }
-
-                client.Character.Map.Send(pw, client.Character);
+                pw.WriteShort(seatId);
             }
 
+            client.Character.Map.Send(pw, client.Character);
             client.Character.Release();
         }
     }

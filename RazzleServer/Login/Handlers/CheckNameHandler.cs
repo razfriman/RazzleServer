@@ -16,12 +16,10 @@ namespace RazzleServer.Login.Handlers
                         || client.Server.CharacterExists(name, client.World)
                         || DataProvider.CreationData.ForbiddenNames.Any(x => x.Equals(name, StringComparison.CurrentCultureIgnoreCase));
 
-            using (var pw = new PacketWriter(ServerOperationCode.CheckNameResult))
-            {
-                pw.WriteString(name);
-                pw.WriteBool(error);
-                client.Send(pw);
-            }
+            using var pw = new PacketWriter(ServerOperationCode.CheckNameResult);
+            pw.WriteString(name);
+            pw.WriteBool(error);
+            client.Send(pw);
         }
     }
 }

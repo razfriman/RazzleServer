@@ -15,19 +15,17 @@ namespace RazzleServer.Login.Handlers
                                 SelectChannelResult.Offline;
             var characters = client.Server.GetCharacters(client.World, client.Account.Id);
 
-            using (var pw = new PacketWriter(ServerOperationCode.CharacterList))
+            using var pw = new PacketWriter(ServerOperationCode.CharacterList);
+            pw.WriteByte(channelResult);
+
+            if (channelResult == SelectChannelResult.Online)
             {
-                pw.WriteByte(channelResult);
-
-                if (channelResult == SelectChannelResult.Online)
-                {
-                    pw.WriteByte((byte)characters.Count);
-                    characters.ForEach(x => pw.WriteBytes(x.ToByteArray()));
-                    pw.WriteLong(0);
-                }
-
-                client.Send(pw);
+                pw.WriteByte((byte)characters.Count);
+                characters.ForEach(x => pw.WriteBytes(x.ToByteArray()));
+                pw.WriteLong(0);
             }
+
+            client.Send(pw);
         }
     }
 }

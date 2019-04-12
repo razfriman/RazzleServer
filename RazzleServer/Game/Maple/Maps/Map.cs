@@ -68,17 +68,15 @@ namespace RazzleServer.Game.Maple.Maps
 
         public void SendWeatherEffect(int mapleId, string message, bool isAdmin = false, int delay = 30000)
         {
-            using (var pw = new PacketWriter(ServerOperationCode.WeatherEffect))
+            using var pw = new PacketWriter(ServerOperationCode.WeatherEffect);
+            pw.WriteBool(isAdmin);
+            pw.WriteInt(mapleId);
+            if (!isAdmin)
             {
-                pw.WriteBool(isAdmin);
-                pw.WriteInt(mapleId);
-                if (!isAdmin)
-                {
-                    pw.WriteString(message);
-                }
-
-                Send(pw);
+                pw.WriteString(message);
             }
+
+            Send(pw);
 
             if (mapleId != 0)
             {
@@ -91,16 +89,14 @@ namespace RazzleServer.Game.Maple.Maps
 
         public void SendJukeboxSong(int mapleId, string characterName, int delay = 30000)
         {
-            using (var pw = new PacketWriter(ServerOperationCode.JukeboxEffect))
+            using var pw = new PacketWriter(ServerOperationCode.JukeboxEffect);
+            pw.WriteInt(mapleId);
+            if (mapleId != 0)
             {
-                pw.WriteInt(mapleId);
-                if (mapleId != 0)
-                {
-                    pw.WriteString(characterName);
-                }
-
-                Send(pw);
+                pw.WriteString(characterName);
             }
+
+            Send(pw);
 
             if (mapleId != 0)
             {

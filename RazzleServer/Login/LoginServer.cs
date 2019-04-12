@@ -20,36 +20,32 @@ namespace RazzleServer.Login
 
         internal bool CharacterExists(string name, byte world)
         {
-            using (var dbContext = new MapleDbContext())
-            {
-                return dbContext.Characters
-                    .Where(x => x.WorldId == world)
-                    .Any(x => x.Name == name);
-            }
+            using var dbContext = new MapleDbContext();
+            return dbContext.Characters
+                .Where(x => x.WorldId == world)
+                .Any(x => x.Name == name);
         }
 
         internal List<Character> GetCharacters(byte worldId, int accountId)
         {
-            using (var dbContext = new MapleDbContext())
-            {
-                var result = new List<Character>();
+            using var dbContext = new MapleDbContext();
+            var result = new List<Character>();
 
-                var characters = dbContext
-                    .Characters
-                    .Where(x => x.AccountId == accountId)
-                    .Where(x => x.WorldId == worldId);
+            var characters = dbContext
+                .Characters
+                .Where(x => x.AccountId == accountId)
+                .Where(x => x.WorldId == worldId);
 
-                characters
-                    .ToList()
-                    .ForEach(x =>
-                    {
-                        var c = new Character {Id = x.Id};
-                        c.Load();
-                        result.Add(c);
-                    });
+            characters
+                .ToList()
+                .ForEach(x =>
+                {
+                    var c = new Character {Id = x.Id};
+                    c.Load();
+                    result.Add(c);
+                });
 
-                return result;
-            }
+            return result;
         }
     }
 }

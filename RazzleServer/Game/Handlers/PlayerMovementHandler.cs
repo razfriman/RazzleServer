@@ -17,12 +17,10 @@ namespace RazzleServer.Game.Handlers
             client.Character.Foothold = movements.Foothold;
             client.Character.Stance = movements.Stance;
 
-            using (var pw = new PacketWriter(ServerOperationCode.RemotePlayerMove))
-            {
-                pw.WriteInt(client.Character.Id);
-                pw.WriteBytes(movements.ToByteArray());
-                client.Character.Map.Send(pw, client.Character);
-            }
+            using var pw = new PacketWriter(ServerOperationCode.RemotePlayerMove);
+            pw.WriteInt(client.Character.Id);
+            pw.WriteBytes(movements.ToByteArray());
+            client.Character.Map.Send(pw, client.Character);
         }
     }
 }

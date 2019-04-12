@@ -55,36 +55,34 @@ namespace RazzleServer.Wz.Util
                 startIndex = _keys.Length;
             }
 
-            using (var aes = Rijndael.Create())
+            using var aes = Rijndael.Create();
+            aes.KeySize = 256;
+            aes.BlockSize = 128;
+            aes.Key = _aesKey;
+            aes.Mode = CipherMode.ECB;
+            var ms = new MemoryStream(newKeys, startIndex, newKeys.Length - startIndex, true);
+            var s = new CryptoStream(ms, aes.CreateEncryptor(), CryptoStreamMode.Write);
+
+            for (var i = startIndex; i < size; i += 16)
             {
-                aes.KeySize = 256;
-                aes.BlockSize = 128;
-                aes.Key = _aesKey;
-                aes.Mode = CipherMode.ECB;
-                var ms = new MemoryStream(newKeys, startIndex, newKeys.Length - startIndex, true);
-                var s = new CryptoStream(ms, aes.CreateEncryptor(), CryptoStreamMode.Write);
-
-                for (var i = startIndex; i < size; i += 16)
+                if (i == 0)
                 {
-                    if (i == 0)
+                    var block = new byte[16];
+                    for (var j = 0; j < block.Length; j++)
                     {
-                        var block = new byte[16];
-                        for (var j = 0; j < block.Length; j++)
-                        {
-                            block[j] = _iv[j % 4];
-                        }
+                        block[j] = _iv[j % 4];
+                    }
 
-                        s.Write(block, 0, block.Length);
-                    }
-                    else
-                    {
-                        s.Write(newKeys, i - 16, 16);
-                    }
+                    s.Write(block, 0, block.Length);
                 }
-
-                s.Flush();
-                ms.Close();
+                else
+                {
+                    s.Write(newKeys, i - 16, 16);
+                }
             }
+
+            s.Flush();
+            ms.Close();
 
             _keys = newKeys;
         }

@@ -15,16 +15,14 @@ namespace RazzleServer.Game.Maple.Data.Loaders
         {
             Logger.Information("Loading Strings");
 
-            using (var file = GetWzFile("Data.wz"))
-            {
-                file.ParseWzFile();
-                var dir = file.WzDirectory.GetDirectoryByName("String");
-                ProcessItems(dir.GetImageByName("Item.img"));
-                ProcessMaps(dir.GetImageByName("Map.img"));
-                ProcessMobs(dir.GetImageByName("Mob.img"));
-                ProcessNpcs(dir.GetImageByName("Npc.img"));
-                ProcessSkills(dir.GetImageByName("Skill.img"));
-            }
+            using var file = GetWzFile("Data.wz");
+            file.ParseWzFile();
+            var dir = file.WzDirectory.GetDirectoryByName("String");
+            ProcessItems(dir.GetImageByName("Item.img"));
+            ProcessMaps(dir.GetImageByName("Map.img"));
+            ProcessMobs(dir.GetImageByName("Mob.img"));
+            ProcessNpcs(dir.GetImageByName("Npc.img"));
+            ProcessSkills(dir.GetImageByName("Skill.img"));
         }
 
         private void ProcessSkills(WzImage wzImage)

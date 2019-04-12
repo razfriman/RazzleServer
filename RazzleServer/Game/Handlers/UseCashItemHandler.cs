@@ -62,13 +62,10 @@ namespace RazzleServer.Game.Handlers
                 {
                     var text = packet.ReadString();
                     var message = $"{client.Character.Name} : {text}";
-                    using (var pw = new PacketWriter(ServerOperationCode.Notice))
-                    {
-                        pw.WriteByte(NoticeType.Megaphone);
-                        pw.WriteString(message);
-                        client.Character.Map.Send(pw);
-                    }
-
+                    using var pw = new PacketWriter(ServerOperationCode.Notice);
+                    pw.WriteByte(NoticeType.Megaphone);
+                    pw.WriteString(message);
+                    client.Character.Map.Send(pw);
                     used = true;
                 }
                     break;
@@ -77,14 +74,12 @@ namespace RazzleServer.Game.Handlers
                     var text = packet.ReadString();
                     var whisper = packet.ReadBool();
                     var message = $"{client.Character.Name} : {text}";
-                    using (var pw = new PacketWriter(ServerOperationCode.Notice))
-                    {
-                        pw.WriteByte(NoticeType.SuperMegaphone);
-                        pw.WriteString(message);
-                        pw.WriteByte(client.Character.Client.Server.ChannelId);
-                        pw.WriteBool(whisper);
-                        client.Character.Client.Server.World.Send(pw);
-                    }
+                    using var pw = new PacketWriter(ServerOperationCode.Notice);
+                    pw.WriteByte(NoticeType.SuperMegaphone);
+                    pw.WriteString(message);
+                    pw.WriteByte(client.Character.Client.Server.ChannelId);
+                    pw.WriteBool(whisper);
+                    client.Character.Client.Server.World.Send(pw);
 
                     used = true;
                 }

@@ -14,13 +14,11 @@ namespace RazzleServer.Tests
         {
             var file = new WzFile(1, WzMapleVersionType.Classic);
 
-            using (var ms = new MemoryStream())
-            {
-                file.Serialize(ms);
-                var contents = Encoding.ASCII.GetString(ms.ToArray());
-                var deserialized = WzObject.DeserializeFile(contents);
-                Assert.IsNotNull(deserialized);
-            }
+            using var ms = new MemoryStream();
+            file.Serialize(ms);
+            var contents = Encoding.ASCII.GetString(ms.ToArray());
+            var deserialized = WzObject.DeserializeFile(contents);
+            Assert.IsNotNull(deserialized);
         }
 
         [TestMethod]
@@ -32,15 +30,13 @@ namespace RazzleServer.Tests
             img.AddProperty(intProp);
             file.WzDirectory.WzImages.Add(img);
 
-            using (var ms = new MemoryStream())
-            {
-                file.Serialize(ms);
-                var contents = Encoding.ASCII.GetString(ms.ToArray());
-                var deserialized = WzObject.DeserializeFile(contents);
-                var deserializedImg = deserialized[img.Name];
-                Assert.IsNotNull(deserializedImg);
-                Assert.AreEqual(intProp.Value, deserializedImg[intProp.Name].GetInt());
-            }
+            using var ms = new MemoryStream();
+            file.Serialize(ms);
+            var contents = Encoding.ASCII.GetString(ms.ToArray());
+            var deserialized = WzObject.DeserializeFile(contents);
+            var deserializedImg = deserialized[img.Name];
+            Assert.IsNotNull(deserializedImg);
+            Assert.AreEqual(intProp.Value, deserializedImg[intProp.Name].GetInt());
         }
     }
 }

@@ -296,15 +296,13 @@ namespace RazzleServer.Game.Maple.Characters
                         Parent.Items.Remove(item.Key, Math.Abs(item.Value));
                     }
 
-                    using (var pw = new PacketWriter(ServerOperationCode.Effect))
-                    {
-                        pw.WriteByte(UserEffect.Quest);
-                        pw.WriteByte(1);
-                        pw.WriteInt(item.Key);
-                        pw.WriteInt(item.Value);
+                    using var pw = new PacketWriter(ServerOperationCode.Effect);
+                    pw.WriteByte(UserEffect.Quest);
+                    pw.WriteByte(1);
+                    pw.WriteInt(item.Key);
+                    pw.WriteInt(item.Value);
 
-                        Parent.Client.Send(pw);
-                    }
+                    Parent.Client.Send(pw);
                 }
             }
 
@@ -379,26 +377,24 @@ namespace RazzleServer.Game.Maple.Characters
 
         public byte[] ToByteArray()
         {
-            using (var pw = new PacketWriter())
+            using var pw = new PacketWriter();
+            pw.WriteShort((short)Started.Count);
+
+            foreach (var quest in Started)
             {
-                pw.WriteShort((short)Started.Count);
+                pw.WriteInt(quest.Key);
 
-                foreach (var quest in Started)
+                var kills = string.Empty;
+
+                foreach (int kill in quest.Value.Values)
                 {
-                    pw.WriteInt(quest.Key);
-
-                    var kills = string.Empty;
-
-                    foreach (int kill in quest.Value.Values)
-                    {
-                        kills += kill.ToString().PadLeft(3, '\u0030');
-                    }
-
-                    pw.WriteString(kills);
+                    kills += kill.ToString().PadLeft(3, '\u0030');
                 }
 
-                return pw.ToArray();
+                pw.WriteString(kills);
             }
+
+            return pw.ToArray();
         }
     }
 }

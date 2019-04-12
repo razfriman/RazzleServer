@@ -434,81 +434,75 @@ namespace RazzleServer.Game.Maple.Items
 
         public void Save()
         {
-            using (var dbContext = new MapleDbContext())
+            using var dbContext = new MapleDbContext();
+            var item = dbContext.Items.Find(Id);
+            var isNewItem = item == null;
+
+            if (isNewItem)
             {
-                var item = dbContext.Items.Find(Id);
-                var isNewItem = item == null;
+                item = new ItemEntity();
+                dbContext.Items.Add(item);
+            }
 
-                if (isNewItem)
-                {
-                    item = new ItemEntity();
-                    dbContext.Items.Add(item);
-                }
+            item.AccountId = Character.AccountId;
+            item.CharacterId = Character.Id;
+            item.MapleId = MapleId;
+            item.Accuracy = Accuracy;
+            item.Agility = Agility;
+            item.Avoidability = Avoidability;
+            item.Dexterity = Dexterity;
+            item.Expiration = Expiration;
+            item.Flags = Flags;
+            item.Health = Health;
+            item.Intelligence = Intelligence;
+            item.MagicAttack = MagicAttack;
+            item.MagicDefense = MagicAttack;
+            item.WeaponDefense = WeaponDefense;
+            item.WeaponAttack = WeaponAttack;
+            item.UpgradesAvailable = UpgradesAvailable;
+            item.UpgradesApplied = UpgradesApplied;
+            item.IsStored = IsStored;
+            item.Jump = Jump;
+            item.Luck = Luck;
+            item.Mana = Mana;
+            item.Quantity = Quantity;
+            item.Slot = Slot;
+            item.Speed = Speed;
+            item.Strength = Strength;
+            item.PetId = PetId;
 
-                item.AccountId = Character.AccountId;
-                item.CharacterId = Character.Id;
-                item.MapleId = MapleId;
-                item.Accuracy = Accuracy;
-                item.Agility = Agility;
-                item.Avoidability = Avoidability;
-                item.Dexterity = Dexterity;
-                item.Expiration = Expiration;
-                item.Flags = Flags;
-                item.Health = Health;
-                item.Intelligence = Intelligence;
-                item.MagicAttack = MagicAttack;
-                item.MagicDefense = MagicAttack;
-                item.WeaponDefense = WeaponDefense;
-                item.WeaponAttack = WeaponAttack;
-                item.UpgradesAvailable = UpgradesAvailable;
-                item.UpgradesApplied = UpgradesApplied;
-                item.IsStored = IsStored;
-                item.Jump = Jump;
-                item.Luck = Luck;
-                item.Mana = Mana;
-                item.Quantity = Quantity;
-                item.Slot = Slot;
-                item.Speed = Speed;
-                item.Strength = Strength;
-                item.PetId = PetId;
+            dbContext.SaveChanges();
 
-                dbContext.SaveChanges();
-
-                if (isNewItem)
-                {
-                    Id = item.Id;
-                }
+            if (isNewItem)
+            {
+                Id = item.Id;
             }
         }
 
         public void Delete()
         {
-            using (var dbContext = new MapleDbContext())
+            using var dbContext = new MapleDbContext();
+            var item = dbContext.Items.Find(Id);
+            if (item != null)
             {
-                var item = dbContext.Items.Find(Id);
-                if (item != null)
-                {
-                    dbContext.Remove(item);
-                    dbContext.SaveChanges();
-                }
-
-                Assigned = false;
+                dbContext.Remove(item);
+                dbContext.SaveChanges();
             }
+
+            Assigned = false;
         }
 
         public void Update()
         {
-            using (var pw = new PacketWriter(ServerOperationCode.InventoryOperation))
-            {
-                pw.WriteBool(true);
-                pw.WriteByte(1);
-                pw.WriteByte(InventoryOperationType.ModifyQuantity);
-                pw.WriteByte(Type);
-                pw.WriteShort(Slot);
-                pw.WriteShort(Quantity);
+            using var pw = new PacketWriter(ServerOperationCode.InventoryOperation);
+            pw.WriteBool(true);
+            pw.WriteByte(1);
+            pw.WriteByte(InventoryOperationType.ModifyQuantity);
+            pw.WriteByte(Type);
+            pw.WriteShort(Slot);
+            pw.WriteShort(Quantity);
 
-                Character.Client.Send(pw);
-            }
+            Character.Client.Send(pw);
         }
 
         public void Equip()
@@ -544,18 +538,15 @@ namespace RazzleServer.Game.Maple.Items
 
             Slot = (short)destinationSlot;
 
-            using (var pw = new PacketWriter(ServerOperationCode.InventoryOperation))
-            {
-                pw.WriteBool(true);
-                pw.WriteByte(1);
-                pw.WriteByte(InventoryOperationType.ModifySlot);
-                pw.WriteByte(Type);
-                pw.WriteShort(sourceSlot);
-                pw.WriteShort((short)destinationSlot);
-                pw.WriteByte(1);
-
-                Character.Client.Send(pw);
-            }
+            using var pw = new PacketWriter(ServerOperationCode.InventoryOperation);
+            pw.WriteBool(true);
+            pw.WriteByte(1);
+            pw.WriteByte(InventoryOperationType.ModifySlot);
+            pw.WriteByte(Type);
+            pw.WriteShort(sourceSlot);
+            pw.WriteShort((short)destinationSlot);
+            pw.WriteByte(1);
+            Character.Client.Send(pw);
 
             switch (destinationSlot)
             {
@@ -615,19 +606,15 @@ namespace RazzleServer.Game.Maple.Items
 
             Slot = destinationSlot;
 
-            using (var pw = new PacketWriter(ServerOperationCode.InventoryOperation))
-            {
-                pw.WriteBool(true);
-                pw.WriteByte(1);
-                pw.WriteByte(InventoryOperationType.ModifySlot);
-                pw.WriteByte(Type);
-                pw.WriteShort(sourceSlot);
-                pw.WriteShort(destinationSlot);
-                pw.WriteByte(1);
-
-                Character.Client.Send(pw);
-            }
-
+            using var pw = new PacketWriter(ServerOperationCode.InventoryOperation);
+            pw.WriteBool(true);
+            pw.WriteByte(1);
+            pw.WriteByte(InventoryOperationType.ModifySlot);
+            pw.WriteByte(Type);
+            pw.WriteShort(sourceSlot);
+            pw.WriteShort(destinationSlot);
+            pw.WriteByte(1);
+            Character.Client.Send(pw);
             Character.PrimaryStats.UpdateApperance();
         }
 
@@ -650,21 +637,19 @@ namespace RazzleServer.Game.Maple.Items
 
             if (quantity == Quantity)
             {
-                using (var pw = new PacketWriter(ServerOperationCode.InventoryOperation))
+                using var pw = new PacketWriter(ServerOperationCode.InventoryOperation);
+                pw.WriteBool(true);
+                pw.WriteByte(1);
+                pw.WriteByte(InventoryOperationType.RemoveItem);
+                pw.WriteByte(Type);
+                pw.WriteShort(Slot);
+
+                if (IsEquipped)
                 {
-                    pw.WriteBool(true);
                     pw.WriteByte(1);
-                    pw.WriteByte(InventoryOperationType.RemoveItem);
-                    pw.WriteByte(Type);
-                    pw.WriteShort(Slot);
-
-                    if (IsEquipped)
-                    {
-                        pw.WriteByte(1);
-                    }
-
-                    Character.Client.Send(pw);
                 }
+
+                Character.Client.Send(pw);
 
                 Dropper = Character;
                 Owner = null;
@@ -677,17 +662,14 @@ namespace RazzleServer.Game.Maple.Items
             {
                 Quantity -= quantity;
 
-                using (var pw = new PacketWriter(ServerOperationCode.InventoryOperation))
-                {
-                    pw.WriteBool(true);
-                    pw.WriteByte(1);
-                    pw.WriteByte(InventoryOperationType.ModifyQuantity);
-                    pw.WriteByte(Type);
-                    pw.WriteShort(Slot);
-                    pw.WriteShort(Quantity);
-
-                    Character.Client.Send(pw);
-                }
+                using var pw = new PacketWriter(ServerOperationCode.InventoryOperation);
+                pw.WriteBool(true);
+                pw.WriteByte(1);
+                pw.WriteByte(InventoryOperationType.ModifyQuantity);
+                pw.WriteByte(Type);
+                pw.WriteShort(Slot);
+                pw.WriteShort(Quantity);
+                Character.Client.Send(pw);
 
                 var dropped = new Item(MapleId, quantity) {Dropper = Character, Owner = null};
 
@@ -711,40 +693,36 @@ namespace RazzleServer.Game.Maple.Items
                 {
                     Quantity -= (short)(destination.MaxPerStack - destination.Quantity);
 
-                    using (var pw = new PacketWriter(ServerOperationCode.InventoryOperation))
-                    {
-                        pw.WriteBool(true);
-                        pw.WriteByte(2);
-                        pw.WriteByte(InventoryOperationType.ModifyQuantity);
-                        pw.WriteByte(Type);
-                        pw.WriteShort(sourceSlot);
-                        pw.WriteShort(Quantity);
-                        pw.WriteByte(InventoryOperationType.ModifyQuantity);
-                        pw.WriteByte(destination.Type);
-                        pw.WriteShort(destinationSlot);
-                        pw.WriteShort(destination.Quantity);
+                    using var pw = new PacketWriter(ServerOperationCode.InventoryOperation);
+                    pw.WriteBool(true);
+                    pw.WriteByte(2);
+                    pw.WriteByte(InventoryOperationType.ModifyQuantity);
+                    pw.WriteByte(Type);
+                    pw.WriteShort(sourceSlot);
+                    pw.WriteShort(Quantity);
+                    pw.WriteByte(InventoryOperationType.ModifyQuantity);
+                    pw.WriteByte(destination.Type);
+                    pw.WriteShort(destinationSlot);
+                    pw.WriteShort(destination.Quantity);
 
-                        Character.Client.Send(pw);
-                    }
+                    Character.Client.Send(pw);
                 }
                 else
                 {
                     destination.Quantity += Quantity;
 
-                    using (var pw = new PacketWriter(ServerOperationCode.InventoryOperation))
-                    {
-                        pw.WriteBool(true);
-                        pw.WriteByte(2);
-                        pw.WriteByte(InventoryOperationType.RemoveItem);
-                        pw.WriteByte(Type);
-                        pw.WriteShort(sourceSlot);
-                        pw.WriteByte(InventoryOperationType.ModifyQuantity);
-                        pw.WriteByte(destination.Type);
-                        pw.WriteShort(destinationSlot);
-                        pw.WriteShort(destination.Quantity);
+                    using var pw = new PacketWriter(ServerOperationCode.InventoryOperation);
+                    pw.WriteBool(true);
+                    pw.WriteByte(2);
+                    pw.WriteByte(InventoryOperationType.RemoveItem);
+                    pw.WriteByte(Type);
+                    pw.WriteShort(sourceSlot);
+                    pw.WriteByte(InventoryOperationType.ModifyQuantity);
+                    pw.WriteByte(destination.Type);
+                    pw.WriteShort(destinationSlot);
+                    pw.WriteShort(destination.Quantity);
 
-                        Character.Client.Send(pw);
-                    }
+                    Character.Client.Send(pw);
                 }
             }
             else
@@ -756,80 +734,76 @@ namespace RazzleServer.Game.Maple.Items
 
                 Slot = destinationSlot;
 
-                using (var pw = new PacketWriter(ServerOperationCode.InventoryOperation))
-                {
-                    pw.WriteBool(true);
-                    pw.WriteByte(1);
-                    pw.WriteByte(InventoryOperationType.ModifySlot);
-                    pw.WriteByte(Type);
-                    pw.WriteShort(sourceSlot);
-                    pw.WriteShort(destinationSlot);
+                using var pw = new PacketWriter(ServerOperationCode.InventoryOperation);
+                pw.WriteBool(true);
+                pw.WriteByte(1);
+                pw.WriteByte(InventoryOperationType.ModifySlot);
+                pw.WriteByte(Type);
+                pw.WriteShort(sourceSlot);
+                pw.WriteShort(destinationSlot);
 
-                    Character.Client.Send(pw);
-                }
+                Character.Client.Send(pw);
             }
         }
 
         public byte[] ToByteArray(bool zeroPosition = false, bool leaveOut = false)
         {
-            using (var pw = new PacketWriter())
+            using var pw = new PacketWriter();
+            if (!zeroPosition && !leaveOut)
             {
-                if (!zeroPosition && !leaveOut)
-                {
-                    var slot = ComputedSlot;
-                    pw.WriteByte(slot);
-                }
-
-                pw.WriteInt(MapleId);
-                pw.WriteBool(IsCash);
-
-                if (IsCash)
-                {
-                    pw.WriteLong(1); // TODO: Unique Id for cash items. CashId
-                }
-
-                pw.WriteDateTime(Expiration);
-
-                if (PetId != null)
-                {
-                    pw.WriteString("Pet Name", 13);
-                    pw.WriteByte(1); // Level
-                    pw.WriteShort(0); // Closeness
-                    pw.WriteByte(0); // Fullness
-                    pw.WriteDateTime(DateConstants.Permanent); // Expiration
-                }
-                else if (Type == ItemType.Equipment)
-                {
-                    pw.WriteByte(UpgradesAvailable);
-                    pw.WriteByte(UpgradesApplied);
-                    pw.WriteShort(Strength);
-                    pw.WriteShort(Dexterity);
-                    pw.WriteShort(Intelligence);
-                    pw.WriteShort(Luck);
-                    pw.WriteShort(Health);
-                    pw.WriteShort(Mana);
-                    pw.WriteShort(WeaponAttack);
-                    pw.WriteShort(MagicAttack);
-                    pw.WriteShort(WeaponDefense);
-                    pw.WriteShort(MagicDefense);
-                    pw.WriteShort(Accuracy);
-                    pw.WriteShort(Avoidability);
-                    pw.WriteShort(Agility);
-                    pw.WriteShort(Speed);
-                    pw.WriteShort(Jump);
-                }
-                else
-                {
-                    pw.WriteShort(Quantity);
-
-                    if (IsRechargeable)
-                    {
-                        pw.WriteLong(0); // TODO: Unique Id.
-                    }
-                }
-
-                return pw.ToArray();
+                var slot = ComputedSlot;
+                pw.WriteByte(slot);
             }
+
+            pw.WriteInt(MapleId);
+            pw.WriteBool(IsCash);
+
+            if (IsCash)
+            {
+                pw.WriteLong(1); // TODO: Unique Id for cash items. CashId
+            }
+
+            pw.WriteDateTime(Expiration);
+
+            if (PetId != null)
+            {
+                pw.WriteString("Pet Name", 13);
+                pw.WriteByte(1); // Level
+                pw.WriteShort(0); // Closeness
+                pw.WriteByte(0); // Fullness
+                pw.WriteDateTime(DateConstants.Permanent); // Expiration
+            }
+            else if (Type == ItemType.Equipment)
+            {
+                pw.WriteByte(UpgradesAvailable);
+                pw.WriteByte(UpgradesApplied);
+                pw.WriteShort(Strength);
+                pw.WriteShort(Dexterity);
+                pw.WriteShort(Intelligence);
+                pw.WriteShort(Luck);
+                pw.WriteShort(Health);
+                pw.WriteShort(Mana);
+                pw.WriteShort(WeaponAttack);
+                pw.WriteShort(MagicAttack);
+                pw.WriteShort(WeaponDefense);
+                pw.WriteShort(MagicDefense);
+                pw.WriteShort(Accuracy);
+                pw.WriteShort(Avoidability);
+                pw.WriteShort(Agility);
+                pw.WriteShort(Speed);
+                pw.WriteShort(Jump);
+            }
+            else
+            {
+                pw.WriteShort(Quantity);
+
+                if (IsRechargeable)
+                {
+                    pw.WriteLong(0); // TODO: Unique Id.
+                }
+            }
+
+            return pw.ToArray();
         }
 
         private EquipmentSlot GetEquippedSlot()

@@ -17,10 +17,8 @@ namespace RazzleServer.Game.Maple.Maps
             {
                 foreach (var character in Map.Characters.Values)
                 {
-                    using (var pw = item.GetCreatePacket(item.Owner == null ? character : null))
-                    {
-                        character.Client.Send(pw);
-                    }
+                    using var pw = item.GetCreatePacket(item.Owner == null ? character : null);
+                    character.Client.Send(pw);
                 }
             }
         }

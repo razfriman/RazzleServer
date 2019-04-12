@@ -17,11 +17,9 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Load()
         {
-            using (var dbContext = new MapleDbContext())
-            {
-                var skills = dbContext.Skills.Where(x => x.CharacterId == Parent.Id).ToList();
-                skills.ForEach(x => Add(new Skill(x)));
-            }
+            using var dbContext = new MapleDbContext();
+            var skills = dbContext.Skills.Where(x => x.CharacterId == Parent.Id).ToList();
+            skills.ForEach(x => Add(new Skill(x)));
         }
 
         public void Save()
@@ -59,17 +57,15 @@ namespace RazzleServer.Game.Maple.Characters
 
         public byte[] ToByteArray()
         {
-            using (var pw = new PacketWriter())
+            using var pw = new PacketWriter();
+            pw.WriteShort((short)Count);
+
+            foreach (var loopSkill in Values)
             {
-                pw.WriteShort((short)Count);
-
-                foreach (var loopSkill in Values)
-                {
-                    pw.WriteBytes(loopSkill.ToByteArray());
-                }
-
-                return pw.ToArray();
+                pw.WriteBytes(loopSkill.ToByteArray());
             }
+
+            return pw.ToArray();
         }
 
         public override void Add(Skill item)

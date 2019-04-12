@@ -64,12 +64,10 @@ namespace RazzleServer.Game
 
         public bool CharacterExists(string name)
         {
-            using (var dbContext = new MapleDbContext())
-            {
-                return dbContext.Characters
-                    .Where(x => x.WorldId == World.Id)
-                    .Any(x => x.Name == name);
-            }
+            using var dbContext = new MapleDbContext();
+            return dbContext.Characters
+                .Where(x => x.WorldId == World.Id)
+                .Any(x => x.Name == name);
         }
     }
 }

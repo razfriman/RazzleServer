@@ -27,11 +27,8 @@ namespace RazzleServer.Wz.Util
                 existingValue = contract.DefaultCreator();
             }
 
-            using (var subReader = token.CreateReader())
-            {
-                // Using "populate" avoids infinite recursion.
-                serializer.Populate(subReader, existingValue);
-            }
+            using var subReader = token.CreateReader();
+            serializer.Populate(subReader, existingValue);
 
             return existingValue;
         }

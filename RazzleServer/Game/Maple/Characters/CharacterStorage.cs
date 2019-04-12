@@ -21,28 +21,26 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Load()
         {
-            using (var dbContext = new MapleDbContext())
+            using var dbContext = new MapleDbContext();
+            var entity = dbContext.CharacterStorages.FirstOrDefault(x => x.AccountId == Parent.AccountId);
+
+            if (entity == null)
             {
-                var entity = dbContext.CharacterStorages.FirstOrDefault(x => x.AccountId == Parent.AccountId);
-
-                if (entity == null)
-                {
-                    entity = GenerateDefault();
-                    dbContext.CharacterStorages.Add(entity);
-                    dbContext.SaveChanges();
-                }
-
-                Slots = entity.Slots;
-                Meso = entity.Meso;
-                Items = new CharacterItems(Parent, Slots, Slots, Slots, Slots, Slots);
-
-                var itemEntities = dbContext.Items
-                    .Where(x => x.AccountId == Parent.AccountId)
-                    .Where(x => x.IsStored)
-                    .ToList();
-
-                itemEntities.ForEach(x => Items.Add(new Item(x)));
+                entity = GenerateDefault();
+                dbContext.CharacterStorages.Add(entity);
+                dbContext.SaveChanges();
             }
+
+            Slots = entity.Slots;
+            Meso = entity.Meso;
+            Items = new CharacterItems(Parent, Slots, Slots, Slots, Slots, Slots);
+
+            var itemEntities = dbContext.Items
+                .Where(x => x.AccountId == Parent.AccountId)
+                .Where(x => x.IsStored)
+                .ToList();
+
+            itemEntities.ForEach(x => Items.Add(new Item(x)));
         }
 
         private AccountStorageEntity GenerateDefault() =>
@@ -50,14 +48,11 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Save()
         {
-            using (var dbContext = new MapleDbContext())
-            {
-                var entity = dbContext.CharacterStorages.FirstOrDefault(x => x.AccountId == Parent.AccountId);
-                entity.Slots = Slots;
-                entity.Meso = Meso;
-                dbContext.SaveChanges();
-            }
-
+            using var dbContext = new MapleDbContext();
+            var entity = dbContext.CharacterStorages.FirstOrDefault(x => x.AccountId == Parent.AccountId);
+            entity.Slots = Slots;
+            entity.Meso = Meso;
+            dbContext.SaveChanges();
             Items.Save();
         }
 
@@ -67,32 +62,26 @@ namespace RazzleServer.Game.Maple.Characters
 
             Load();
 
-            using (var pw = new PacketWriter(ServerOperationCode.StorageShow))
-            {
-                pw.WriteInt(npc.MapleId);
-                pw.WriteBytes(EncodeStorage(StorageEncodeFlags.EncodeAll));
-                Parent.Client.Send(pw);
-            }
+            using var pw = new PacketWriter(ServerOperationCode.StorageShow);
+            pw.WriteInt(npc.MapleId);
+            pw.WriteBytes(EncodeStorage(StorageEncodeFlags.EncodeAll));
+            Parent.Client.Send(pw);
         }
 
         public void StorageError(StorageResult result)
         {
-            using (var pw = new PacketWriter(ServerOperationCode.StorageResult))
-            {
-                pw.WriteByte(result);
-                Parent.Client.Send(pw);
-            }
+            using var pw = new PacketWriter(ServerOperationCode.StorageResult);
+            pw.WriteByte(result);
+            Parent.Client.Send(pw);
         }
 
 
         public void Update(StorageResult result, StorageEncodeFlags flags)
         {
-            using (var pw = new PacketWriter(ServerOperationCode.StorageResult))
-            {
-                pw.WriteByte(result);
-                pw.WriteBytes(EncodeStorage(flags));
-                Parent.Send(pw);
-            }
+            using var pw = new PacketWriter(ServerOperationCode.StorageResult);
+            pw.WriteByte(result);
+            pw.WriteBytes(EncodeStorage(flags));
+            Parent.Send(pw);
         }
 
         private byte[] EncodeStorage(StorageEncodeFlags flags)

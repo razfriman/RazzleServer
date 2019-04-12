@@ -87,17 +87,15 @@ namespace RazzleServer.Login
 
         public void SetOnline(bool isOnline)
         {
-            using (var context = new MapleDbContext())
+            using var context = new MapleDbContext();
+            var account = context.Accounts.FirstOrDefault(x => x.Id == Account.Id);
+            if (account == null)
             {
-                var account = context.Accounts.FirstOrDefault(x => x.Id == Account.Id);
-                if (account == null)
-                {
-                    return;
-                }
-
-                account.IsOnline = isOnline;
-                context.SaveChanges();
+                return;
             }
+
+            account.IsOnline = isOnline;
+            context.SaveChanges();
         }
     }
 }

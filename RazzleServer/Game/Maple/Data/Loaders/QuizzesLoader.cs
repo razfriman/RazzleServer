@@ -14,40 +14,38 @@ namespace RazzleServer.Game.Maple.Data.Loaders
         {
             Logger.Information("Loading Quizzes");
 
-            using (var file = GetWzFile("Data.wz"))
+            using var file = GetWzFile("Data.wz");
+            file.ParseWzFile();
+            var dir = file.WzDirectory.GetDirectoryByName("Etc");
+            var img = dir.GetImageByName("OXQuiz.img");
+            img.WzProperties.ForEach(quizImg =>
             {
-                file.ParseWzFile();
-                var dir = file.WzDirectory.GetDirectoryByName("Etc");
-                var img = dir.GetImageByName("OXQuiz.img");
-                img.WzProperties.ForEach(quizImg =>
+                if (!int.TryParse(quizImg.Name, out var quizId))
                 {
-                    if (!int.TryParse(quizImg.Name, out var quizId))
+                    return;
+                }
+
+                var quiz = new QuizReference {Id = quizId};
+
+                quizImg.WzProperties.ForEach(questionImg =>
+                {
+                    if (!int.TryParse(questionImg.Name, out var questionId))
                     {
                         return;
                     }
 
-                    var quiz = new QuizReference {Id = quizId};
 
-                    quizImg.WzProperties.ForEach(questionImg =>
+                    var question = questionImg["q"]?.GetString();
+                    var answer = (questionImg["a"]?.GetInt() ?? 0) > 0;
+                    var response = questionImg["d"]?.GetString();
+                    quiz.Questions.Add(new QuizQuestionReference
                     {
-                        if (!int.TryParse(questionImg.Name, out var questionId))
-                        {
-                            return;
-                        }
-
-
-                        var question = questionImg["q"]?.GetString();
-                        var answer = (questionImg["a"]?.GetInt() ?? 0) > 0;
-                        var response = questionImg["d"]?.GetString();
-                        quiz.Questions.Add(new QuizQuestionReference
-                        {
-                            Id = questionId, Question = question, Answer = answer, Response = response
-                        });
+                        Id = questionId, Question = question, Answer = answer, Response = response
                     });
-
-                    Data.Data.Add(quiz.Id, quiz);
                 });
-            }
+
+                Data.Data.Add(quiz.Id, quiz);
+            });
         }
     }
 }

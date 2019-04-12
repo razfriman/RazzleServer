@@ -31,11 +31,9 @@ namespace RazzleServer.Game.Handlers
 
             result = ReportResult.Success;
 
-            using (var pw = new PacketWriter(ServerOperationCode.SueCharacterResult))
-            {
-                pw.WriteByte(result);
-                client.Send(pw);
-            }
+            using var pw = new PacketWriter(ServerOperationCode.SueCharacterResult);
+            pw.WriteByte(result);
+            client.Send(pw);
         }
     }
 }

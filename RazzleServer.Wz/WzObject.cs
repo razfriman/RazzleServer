@@ -127,25 +127,21 @@ namespace RazzleServer.Wz
             }
             else
             {
-                using (var stream = File.OpenWrite(path))
-                {
-                    Serialize(stream, serializer);
-                }
+                using var stream = File.OpenWrite(path);
+                Serialize(stream, serializer);
             }
         }
 
         public void Serialize(Stream stream, JsonSerializer serializer = null)
         {
-            using (var sr = new StreamWriter(stream))
-            using (var writer = new JsonTextWriter(sr))
+            using var sr = new StreamWriter(stream);
+            using var writer = new JsonTextWriter(sr);
+            serializer ??= new JsonSerializer
             {
-                serializer ??= new JsonSerializer
-                {
-                    NullValueHandling = NullValueHandling.Ignore, Formatting = Formatting.None
-                };
+                NullValueHandling = NullValueHandling.Ignore, Formatting = Formatting.None
+            };
 
-                serializer.Serialize(writer, this);
-            }
+            serializer.Serialize(writer, this);
         }
 
         public static WzFile DeserializeFile(string contents) => Deserialize<WzFile>(contents);

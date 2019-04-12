@@ -14,18 +14,16 @@ namespace RazzleServer.Game.Maple.Data.Loaders
         {
             Logger.Information("Loading Mobs");
 
-            using (var file = GetWzFile("Data.wz"))
+            using var file = GetWzFile("Data.wz");
+            file.ParseWzFile();
+            var dir = file.WzDirectory.GetDirectoryByName("Mob");
+            dir.WzImages.ForEach(x =>
             {
-                file.ParseWzFile();
-                var dir = file.WzDirectory.GetDirectoryByName("Mob");
-                dir.WzImages.ForEach(x =>
-                {
-                    var link = x["info"]["link"]?.GetString();
+                var link = x["info"]["link"]?.GetString();
                     
-                    var mob = new MobReference(x, link != null ? dir.GetImageByName($"{link}.img") : null);
-                    Data.Data.Add(mob.MapleId, mob);
-                });
-            }
+                var mob = new MobReference(x, link != null ? dir.GetImageByName($"{link}.img") : null);
+                Data.Data.Add(mob.MapleId, mob);
+            });
         }
     }
 }
