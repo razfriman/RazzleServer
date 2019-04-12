@@ -210,8 +210,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void ChangeMap(int mapId, byte? portalId = null)
         {
-            _log.Information($"ChangeMap: Character={Id} Map={mapId} Portal={portalId}" +
-                             $"");
+            _log.Information($"ChangeMap: Character={Id} Map={mapId} Portal={portalId}");
             Map.Characters.Remove(this);
 
             using var pw = new PacketWriter(ServerOperationCode.SetField);

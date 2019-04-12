@@ -9,6 +9,6 @@ namespace RazzleServer.Common.Constants
         Weakness = 0x2,
         Curse = 0x4,
         Darkness = 0x8,
-        Seal = 0x10,
+        Seal = 0x10
     }
 }

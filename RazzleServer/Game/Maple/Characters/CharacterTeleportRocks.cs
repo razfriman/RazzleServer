@@ -88,7 +88,7 @@ namespace RazzleServer.Game.Maple.Characters
         public bool Use(PacketReader packet)
         {
             var action = (TeleportRockUseAction)packet.ReadByte();
-            var destinationMapId = -1;
+            int destinationMapId;
 
             switch (action)
             {

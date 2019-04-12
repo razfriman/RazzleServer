@@ -13,6 +13,6 @@ namespace RazzleServer.Common.Constants
         EncodeInventoryPet = 0x40, // Cash in newer versions
 
         EncodeAll = EncodeMesos | EncodeInventoryEquip | EncodeInventoryUse | EncodeInventorySetUp |
-                    EncodeInventoryEtc | EncodeInventoryPet,
+                    EncodeInventoryEtc | EncodeInventoryPet
     }
 }

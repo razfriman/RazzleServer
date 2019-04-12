@@ -40,17 +40,17 @@ namespace RazzleServer.Game.Maple.Life
 
         public PacketWriter GetCreatePacket()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public PacketWriter GetDestroyPacket()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public PacketWriter GetSpawnPacket()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

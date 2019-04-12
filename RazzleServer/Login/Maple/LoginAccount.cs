@@ -93,7 +93,7 @@ namespace RazzleServer.Login.Maple
                 Birthday = Birthday,
                 Creation = Creation,
                 BanReason = (byte)BanReason,
-                IsMaster = IsMaster,
+                IsMaster = IsMaster
             };
 
             dbContext.Accounts.Add(account);
