@@ -82,5 +82,7 @@ namespace RazzleServer.Common
 
         public SelectChannelResult CheckChannel(byte channel) =>
             Contains(channel) ? SelectChannelResult.Online : SelectChannelResult.Offline;
+
+        public void UpdateTicker() => Send(GamePackets.Notify(TickerMessage, NoticeType.ScrollingText));
     }
 }
