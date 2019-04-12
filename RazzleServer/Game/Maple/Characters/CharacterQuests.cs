@@ -224,7 +224,7 @@ namespace RazzleServer.Game.Maple.Characters
 //                pw.WriteInt(npcId);
 //                pw.WriteInt(0);
 //
-//                Parent.Client.Send(pw);
+//                Parent.Send(pw);
 //            }
         }
 
@@ -242,10 +242,10 @@ namespace RazzleServer.Game.Maple.Characters
             Parent.PrimaryStats.Fame += (short)quest.FameReward[1];
             Parent.PrimaryStats.Meso += mesoReward;
 
-            Parent.Client.Send(GamePackets.ShowStatusInfo(MessageType.IncreaseExp, amount: quest.ExperienceReward[1],
+            Parent.Send(GamePackets.ShowStatusInfo(MessageType.IncreaseExp, amount: quest.ExperienceReward[1],
                 isWhite: true, inChat: true));
-            Parent.Client.Send(GamePackets.ShowStatusInfo(MessageType.IncreaseFame, amount: quest.FameReward[1]));
-            Parent.Client.Send(GamePackets.ShowStatusInfo(MessageType.IncreaseMeso, amount: mesoReward));
+            Parent.Send(GamePackets.ShowStatusInfo(MessageType.IncreaseFame, amount: quest.FameReward[1]));
+            Parent.Send(GamePackets.ShowStatusInfo(MessageType.IncreaseMeso, amount: mesoReward));
 
             foreach (var skill in quest.PostSkillRewards)
             {
@@ -275,7 +275,7 @@ namespace RazzleServer.Game.Maple.Characters
                 //            pw.WriteInt(item.Key)
                 //            pw.WriteInt(item.Value);
 
-                //        this.Parent.Client.Send(pw);
+                //        this.Parent.Send(pw);
                 //    }
                 //}
                 //else
@@ -302,7 +302,7 @@ namespace RazzleServer.Game.Maple.Characters
                     pw.WriteInt(item.Key);
                     pw.WriteInt(item.Value);
 
-                    Parent.Client.Send(pw);
+                    Parent.Send(pw);
                 }
             }
 
@@ -321,7 +321,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         private void Update(int questId, QuestStatus status, string progress = "")
         {
-            Parent.Client.Send(GamePackets.ShowStatusInfo(MessageType.QuestRecord, mapleId: questId,
+            Parent.Send(GamePackets.ShowStatusInfo(MessageType.QuestRecord, mapleId: questId,
                 questStatus: status, questString: progress));
         }
 
@@ -371,7 +371,7 @@ namespace RazzleServer.Game.Maple.Characters
 //            using (var pw = new PacketWriter(ServerOperationCode.QuestClear))
 //            {
 //                pw.Writeint(questId);
-//                Parent.Client.Send(pw);
+//                Parent.Send(pw);
 //            }
         }
 

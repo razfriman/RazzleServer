@@ -121,7 +121,7 @@ namespace RazzleServer.Game.Maple.Characters
                     pw.WriteShort(item.Slot);
                     pw.WriteBytes(item.ToByteArray(true));
 
-                    Parent.Client.Send(pw);
+                    Parent.Send(pw);
                 }
             }
         }
@@ -179,7 +179,7 @@ namespace RazzleServer.Game.Maple.Characters
                 pw.WriteByte(item.Type);
                 pw.WriteShort(item.Slot);
 
-                Parent.Client.Send(pw);
+                Parent.Send(pw);
             }
 
             if (item.Assigned)
@@ -338,7 +338,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
 
             Parent.Map.Drops.Remove(drop);
-            drop.Picker.Client.Send(drop.GetShowGainPacket());
+            drop.Picker.Send(drop.GetShowGainPacket());
         }
 
         public Item this[ItemType type, short slot]

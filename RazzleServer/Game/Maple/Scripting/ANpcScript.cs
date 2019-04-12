@@ -35,7 +35,7 @@ namespace RazzleServer.Game.Maple.Scripting
                 States.Add(state);
             }
 
-            Character.Client.Send(Npc.GetDialogPacket(state));
+            Character.Send(Npc.GetDialogPacket(state));
         }
 
         protected int SendOk(string text)

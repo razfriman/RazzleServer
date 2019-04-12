@@ -39,7 +39,7 @@ namespace RazzleServer.Game.Maple.Interaction
             pw.WriteBytes(Owner.AppearanceToByteArray());
             pw.WriteString(Owner.Name);
             pw.WriteByte(byte.MaxValue);
-            Owner.Client.Send(pw);
+            Owner.Send(pw);
         }
 
         public void Complete()
@@ -110,7 +110,7 @@ namespace RazzleServer.Game.Maple.Interaction
                         OwnerMeso += meso;
                         Owner.PrimaryStats.Meso -= meso;
 
-                        Owner.Client.Send(pw);
+                        Owner.Send(pw);
                     }
                     else
                     {
@@ -122,7 +122,7 @@ namespace RazzleServer.Game.Maple.Interaction
                         VisitorMeso += meso;
                         Visitor.PrimaryStats.Meso -= meso;
 
-                        Visitor.Client.Send(pw);
+                        Visitor.Send(pw);
                     }
 
                     using var pw2 = new PacketWriter(ServerOperationCode.PlayerInteraction);
@@ -132,13 +132,13 @@ namespace RazzleServer.Game.Maple.Interaction
 
                     if (Owner == character)
                     {
-                        Visitor.Client.Send(pw2);
+                        Visitor.Send(pw2);
                     }
                     else
                     {
                         pw2.WriteInt(OwnerMeso);
 
-                        Owner.Client.Send(pw2);
+                        Owner.Send(pw2);
                     }
                 }
                     break;
@@ -153,8 +153,8 @@ namespace RazzleServer.Game.Maple.Interaction
                         pw.WriteByte(InteractionCode.Exit);
                         pw.WriteByte(0);
                         pw.WriteByte(2);
-                        Owner.Client.Send(pw);
-                        Visitor.Client.Send(pw);
+                        Owner.Send(pw);
+                        Visitor.Send(pw);
 
                         Owner.Trade = null;
                         Visitor.Trade = null;
@@ -167,7 +167,7 @@ namespace RazzleServer.Game.Maple.Interaction
                         pw.WriteByte(InteractionCode.Exit);
                         pw.WriteByte(0);
                         pw.WriteByte(2);
-                        Owner.Client.Send(pw);
+                        Owner.Send(pw);
 
                         Owner.Trade = null;
                         Owner = null;
@@ -182,12 +182,12 @@ namespace RazzleServer.Game.Maple.Interaction
                     if (character == Owner)
                     {
                         OwnerLocked = true;
-                        Visitor.Client.Send(pwConfirm);
+                        Visitor.Send(pwConfirm);
                     }
                     else
                     {
                         VisitorLocked = true;
-                        Owner.Client.Send(pwConfirm);
+                        Owner.Send(pwConfirm);
                     }
 
                     if (OwnerLocked && VisitorLocked)
@@ -198,8 +198,8 @@ namespace RazzleServer.Game.Maple.Interaction
                         pw.WriteByte(InteractionCode.Exit);
                         pw.WriteByte(0);
                         pw.WriteByte(6);
-                        Owner.Client.Send(pw);
-                        Visitor.Client.Send(pw);
+                        Owner.Send(pw);
+                        Visitor.Send(pw);
 
                         Owner.Trade = null;
                         Visitor.Trade = null;
@@ -219,8 +219,8 @@ namespace RazzleServer.Game.Maple.Interaction
                     pw.WriteBool(Owner != character);
                     pw.WriteString($"{character.Name} : {text}");
 
-                    Owner.Client.Send(pw);
-                    Visitor.Client.Send(pw);
+                    Owner.Send(pw);
+                    Visitor.Send(pw);
                 }
                     break;
             }
@@ -244,7 +244,7 @@ namespace RazzleServer.Game.Maple.Interaction
                 pw.WriteByte(1);
                 pw.WriteBytes(Visitor.AppearanceToByteArray());
                 pw.WriteString(Visitor.Name);
-                Owner.Client.Send(pw);
+                Owner.Send(pw);
 
                 using var pw2 = new PacketWriter(ServerOperationCode.PlayerInteraction);
                 pw2.WriteByte(InteractionCode.Room);
@@ -258,7 +258,7 @@ namespace RazzleServer.Game.Maple.Interaction
                 pw2.WriteBytes(Visitor.AppearanceToByteArray());
                 pw2.WriteString(Visitor.Name);
                 pw2.WriteByte(byte.MaxValue);
-                Visitor.Client.Send(pw2);
+                Visitor.Send(pw2);
             }
         }
 
@@ -268,7 +268,7 @@ namespace RazzleServer.Game.Maple.Interaction
             pw.WriteByte(InteractionCode.Decline);
             pw.WriteByte(3);
             pw.WriteString(character.Name);
-            Owner.Client.Send(pw);
+            Owner.Send(pw);
 
             Owner.Trade = null;
             Visitor.Trade = null;
@@ -295,7 +295,7 @@ namespace RazzleServer.Game.Maple.Interaction
                 pw.WriteByte(2);
                 pw.WriteString(invitee.Name);
 
-                Owner.Client.Send(pw);
+                Owner.Send(pw);
             }
             else
             {
@@ -308,7 +308,7 @@ namespace RazzleServer.Game.Maple.Interaction
                 pw.WriteString(Owner.Name);
                 pw.WriteBytes(new byte[] {0xB7, 0x50, 0x00, 0x00});
 
-                Visitor.Client.Send(pw);
+                Visitor.Send(pw);
             }
         }
 
@@ -355,13 +355,13 @@ namespace RazzleServer.Game.Maple.Interaction
             {
                 OwnerItems.Add(item);
 
-                Owner.Client.Send(pw);
+                Owner.Send(pw);
             }
             else
             {
                 VisitorItems.Add(item);
 
-                Visitor.Client.Send(pw);
+                Visitor.Send(pw);
             }
 
             using var pw2 = new PacketWriter(ServerOperationCode.PlayerInteraction);
@@ -372,11 +372,11 @@ namespace RazzleServer.Game.Maple.Interaction
 
             if (character == Owner)
             {
-                Visitor.Client.Send(pw2);
+                Visitor.Send(pw2);
             }
             else
             {
-                Owner.Client.Send(pw2);
+                Owner.Send(pw2);
             }
         }
     }

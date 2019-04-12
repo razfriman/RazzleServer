@@ -22,7 +22,7 @@ namespace RazzleServer.Game.Maple.Characters
 
                     base.Add(item);
 
-                    Parent.Client.Send(item.GetControlRequestPacket());
+                    Parent.Send(item.GetControlRequestPacket());
                 }
                 else
                 {
@@ -37,7 +37,7 @@ namespace RazzleServer.Game.Maple.Characters
             {
 //                if (Parent.Client.Connected)
 //                {
-//                    Parent.Client.Send(item.GetControlCancelPacket());
+//                    Parent.Send(item.GetControlCancelPacket());
 //                }
 
                 item.Controller = null;

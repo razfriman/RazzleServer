@@ -502,7 +502,7 @@ namespace RazzleServer.Game.Maple.Items
             pw.WriteShort(Slot);
             pw.WriteShort(Quantity);
 
-            Character.Client.Send(pw);
+            Character.Send(pw);
         }
 
         public void Equip()
@@ -546,7 +546,7 @@ namespace RazzleServer.Game.Maple.Items
             pw.WriteShort(sourceSlot);
             pw.WriteShort((short)destinationSlot);
             pw.WriteByte(1);
-            Character.Client.Send(pw);
+            Character.Send(pw);
 
             switch (destinationSlot)
             {
@@ -614,7 +614,7 @@ namespace RazzleServer.Game.Maple.Items
             pw.WriteShort(sourceSlot);
             pw.WriteShort(destinationSlot);
             pw.WriteByte(1);
-            Character.Client.Send(pw);
+            Character.Send(pw);
             Character.PrimaryStats.UpdateApperance();
         }
 
@@ -649,7 +649,7 @@ namespace RazzleServer.Game.Maple.Items
                     pw.WriteByte(1);
                 }
 
-                Character.Client.Send(pw);
+                Character.Send(pw);
 
                 Dropper = Character;
                 Owner = null;
@@ -669,7 +669,7 @@ namespace RazzleServer.Game.Maple.Items
                 pw.WriteByte(Type);
                 pw.WriteShort(Slot);
                 pw.WriteShort(Quantity);
-                Character.Client.Send(pw);
+                Character.Send(pw);
 
                 var dropped = new Item(MapleId, quantity) {Dropper = Character, Owner = null};
 
@@ -705,7 +705,7 @@ namespace RazzleServer.Game.Maple.Items
                     pw.WriteShort(destinationSlot);
                     pw.WriteShort(destination.Quantity);
 
-                    Character.Client.Send(pw);
+                    Character.Send(pw);
                 }
                 else
                 {
@@ -722,7 +722,7 @@ namespace RazzleServer.Game.Maple.Items
                     pw.WriteShort(destinationSlot);
                     pw.WriteShort(destination.Quantity);
 
-                    Character.Client.Send(pw);
+                    Character.Send(pw);
                 }
             }
             else
@@ -742,7 +742,7 @@ namespace RazzleServer.Game.Maple.Items
                 pw.WriteShort(sourceSlot);
                 pw.WriteShort(destinationSlot);
 
-                Character.Client.Send(pw);
+                Character.Send(pw);
             }
         }
 

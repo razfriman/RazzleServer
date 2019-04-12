@@ -58,7 +58,7 @@ namespace RazzleServer.Game.Maple.Characters
                 pw.WriteBytes(ToByteArray());
             }
 
-            Parent.Client.Send(pw);
+            Parent.Send(pw);
         }
 
         public void Add(int mapId)

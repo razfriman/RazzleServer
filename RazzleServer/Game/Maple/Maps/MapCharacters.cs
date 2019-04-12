@@ -21,7 +21,7 @@ namespace RazzleServer.Game.Maple.Maps
             {
                 foreach (var character in Values)
                 {
-                    item.Client.Send(character.GetSpawnPacket());
+                    item.Send(character.GetSpawnPacket());
                 }
             }
 
@@ -42,7 +42,7 @@ namespace RazzleServer.Game.Maple.Maps
             {
                 foreach (var drop in Map.Drops.Values)
                 {
-                    item.Client.Send(drop.GetSpawnPacket(drop.Owner == null ? item : null));
+                    item.Send(drop.GetSpawnPacket(drop.Owner == null ? item : null));
                 }
             }
 
@@ -50,7 +50,7 @@ namespace RazzleServer.Game.Maple.Maps
             {
                 foreach (var mob in Map.Mobs.Values)
                 {
-                    item.Client.Send(mob.GetSpawnPacket());
+                    item.Send(mob.GetSpawnPacket());
                 }
             }
 
@@ -59,7 +59,7 @@ namespace RazzleServer.Game.Maple.Maps
             {
                 foreach (var npc in Map.Npcs.Values)
                 {
-                    item.Client.Send(npc.GetSpawnPacket());
+                    item.Send(npc.GetSpawnPacket());
                 }
             }
 

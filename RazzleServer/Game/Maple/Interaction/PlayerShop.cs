@@ -41,7 +41,7 @@ namespace RazzleServer.Game.Maple.Interaction
             pw.WriteByte(16);
             pw.WriteByte(0);
 
-            Owner.Client.Send(pw);
+            Owner.Send(pw);
         }
 
         public void Handle(Character character, InteractionCode code, PacketReader iPacket)
@@ -246,7 +246,7 @@ namespace RazzleServer.Game.Maple.Interaction
                         pw.WriteByte(InteractionCode.Exit);
                         pw.WriteByte(1);
                         pw.WriteByte(10);
-                        visitor.Client.Send(pw);
+                        visitor.Send(pw);
                         visitor.PlayerShop = null;
                     }
                 }
@@ -276,12 +276,12 @@ namespace RazzleServer.Game.Maple.Interaction
         {
             if (includeOwner)
             {
-                Owner.Client.Send(pw);
+                Owner.Send(pw);
             }
 
             foreach (var visitor in Visitors)
             {
-                visitor?.Client.Send(pw);
+                visitor?.Send(pw);
             }
         }
 
@@ -334,7 +334,7 @@ namespace RazzleServer.Game.Maple.Interaction
                         pwVisitor.WriteBytes(loopShopItem.ToByteArray(true, true));
                     }
 
-                    visitor.Client.Send(pwVisitor);
+                    visitor.Send(pwVisitor);
 
                     break;
                 }
@@ -362,7 +362,7 @@ namespace RazzleServer.Game.Maple.Interaction
                     using var pwLocal = new PacketWriter(ServerOperationCode.PlayerInteraction);
                     pwLocal.WriteByte(InteractionCode.Exit);
                     pwLocal.WriteByte(i + 1);
-                    Owner.Client.Send(pwLocal);
+                    Owner.Send(pwLocal);
 
                     break;
                 }

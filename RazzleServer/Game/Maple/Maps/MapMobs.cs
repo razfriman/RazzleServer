@@ -72,7 +72,7 @@ namespace RazzleServer.Game.Maple.Maps
                     kills += kill.ToString().PadLeft(3, '0');
                 }
 
-                owner.Client.Send(GamePackets.ShowStatusInfo(MessageType.QuestRecord,
+                owner.Send(GamePackets.ShowStatusInfo(MessageType.QuestRecord,
                     mapleId: loopStarted.Key, questStatus: QuestStatus.InProgress, questString: kills));
 
                 if (owner.Quests.CanComplete(loopStarted.Key, true))
