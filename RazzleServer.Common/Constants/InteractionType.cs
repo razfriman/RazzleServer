@@ -5,6 +5,6 @@
         Omok = 1,
         MemoryGame = 2,
         Trade = 3,
-        PlayerShop = 4,
+        PlayerShop = 4
     }
 }

@@ -23,10 +23,8 @@ namespace RazzleServer.Game.Maple.Scripting.Cache
                     $"Script not implemented for Npc={npc.MapleId} Script={npc.CachedReference.Script} on Map={npc.Map.MapleId}");
                 return;
             }
-            
-            var npcScript = Activator.CreateInstance(Data[script]) as ANpcScript;
-            
-            if (npcScript == null)
+
+            if (!(Activator.CreateInstance(Data[script]) is ANpcScript npcScript))
             {
                 _log.Warning(
                     $"Cannot instantiate script for Npc={npc.MapleId} Script={npc.CachedReference.Script} on Map={npc.Map.MapleId}");

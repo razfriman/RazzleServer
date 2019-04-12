@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Characters;
@@ -11,21 +12,10 @@ namespace RazzleServer.Game.Maple.Maps
 
         protected MapObjects() { }
 
-        protected MapObjects(Map map) : this()
-        {
-            Map = map;
-        }
+        protected MapObjects(Map map) : this() => Map = map;
 
-        public IEnumerable<T> GetInRange(MapObject reference, int range)
-        {
-            foreach (var loopObject in Objects.Values)
-            {
-                if (reference.Position.DistanceFrom(loopObject.Position) <= range)
-                {
-                    yield return loopObject;
-                }
-            }
-        }
+        public IEnumerable<T> GetInRange(MapObject reference, int range) => Objects.Values.Where(loopObject =>
+            reference.Position.DistanceFrom(loopObject.Position) <= range);
 
         public override int GetKey(T item) => item.ObjectId;
 

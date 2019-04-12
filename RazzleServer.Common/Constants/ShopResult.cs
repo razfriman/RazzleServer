@@ -14,6 +14,6 @@ namespace RazzleServer.Common.Constants
         RechargeNoStock,
         RechargeNoMoney,
         RechargeIncorrectRequest,
-        RechargeUnknown,
+        RechargeUnknown
     }
 }

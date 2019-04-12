@@ -13,23 +13,16 @@ namespace RazzleServer.Game.Handlers
             packet.ReadByte(); // NOTE: Unknown.
             var description = packet.ReadString();
 
-            ReportResult result;
-
             switch (type)
             {
                 case ReportType.IllegalProgramUsage:
-                {
-                }
                     break;
-
                 case ReportType.ConversationClaim:
-                {
                     var chatLog = packet.ReadString();
-                }
                     break;
             }
 
-            result = ReportResult.Success;
+            var result = ReportResult.Success;
 
             using var pw = new PacketWriter(ServerOperationCode.SueCharacterResult);
             pw.WriteByte(result);

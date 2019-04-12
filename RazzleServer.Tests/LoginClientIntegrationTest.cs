@@ -119,7 +119,7 @@ namespace RazzleServer.Tests
             LoginResult expectedResult)
         {
             var pw = new PacketWriter();
-            pw.WriteByte((ClientOperationCode.Login));
+            pw.WriteByte(ClientOperationCode.Login);
             pw.WriteString(username);
             pw.WriteString(password);
             pw.WriteZeroBytes(4);
@@ -155,7 +155,7 @@ namespace RazzleServer.Tests
             SelectChannelResult expectedResult, byte expectedCharacters)
         {
             var pw = new PacketWriter();
-            pw.WriteByte((ClientOperationCode.SelectChannel));
+            pw.WriteByte(ClientOperationCode.SelectChannel);
             pw.WriteByte(world);
             pw.WriteByte(channel);
             client.Receive(new PacketReader(pw.ToArray()));

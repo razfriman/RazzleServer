@@ -46,6 +46,6 @@ namespace RazzleServer.Common.Constants
         Curse = 0x80000000, // Mob Skill: Curse
 
         All = 0xFFFFFFFF,
-        SpeedBuffElement = Speed | Jump | Stun | Weakness,
+        SpeedBuffElement = Speed | Jump | Stun | Weakness
     }
 }

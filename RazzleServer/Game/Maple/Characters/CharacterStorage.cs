@@ -50,6 +50,11 @@ namespace RazzleServer.Game.Maple.Characters
         {
             using var dbContext = new MapleDbContext();
             var entity = dbContext.CharacterStorages.FirstOrDefault(x => x.AccountId == Parent.AccountId);
+            if (entity == null)
+            {
+                return;
+            }
+
             entity.Slots = Slots;
             entity.Meso = Meso;
             dbContext.SaveChanges();

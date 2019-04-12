@@ -80,7 +80,7 @@ namespace RazzleServer.Game.Maple.Data.References
                     case "summonEffect":
                         SummonEffect = node.GetShort();
                         break;
-                    case string summonId when int.TryParse(summonId, out _):
+                    case { } summonId when int.TryParse(summonId, out _):
                         Summons.Add(node.GetInt());
                         break;
                     default:
