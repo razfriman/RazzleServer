@@ -60,7 +60,7 @@ namespace RazzleServer.Game.Maple.Life
             pw.WriteLong(0);
             pw.WriteLong(0);
             pw.WriteLong(0);
-            customer.Client.Send(pw);
+            customer.Send(pw);
         }
 
         public void Converse(Character talker)

@@ -170,7 +170,7 @@ namespace RazzleServer.Game.Maple.Skills
             pw.WriteInt(MaxLevel);
             pw.WriteDateTime(Expiration);
             pw.WriteByte(4);
-            Character.Client.Send(pw);
+            Character.Send(pw);
         }
 
         public void Recalculate()

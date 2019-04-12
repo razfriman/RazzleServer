@@ -50,7 +50,7 @@ namespace RazzleServer.Game.Handlers
             pwTarget.WriteByte(client.Server.ChannelId);
             pwTarget.WriteByte(0);
             pwTarget.WriteString(text);
-            target.Client.Send(pwTarget);
+            target.Send(pwTarget);
         }
 
         private static void ProcessFind(GameClient client, string targetName, Maple.Characters.Character target)

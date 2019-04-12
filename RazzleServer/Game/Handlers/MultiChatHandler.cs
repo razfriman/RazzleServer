@@ -43,7 +43,7 @@ namespace RazzleServer.Game.Handlers
 
             foreach (var recipient in recipients)
             {
-                client.Server.GetCharacterById(recipient).Client.Send(pw);
+                client.Server.GetCharacterById(recipient).Send(pw);
             }
         }
     }

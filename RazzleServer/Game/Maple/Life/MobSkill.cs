@@ -188,7 +188,7 @@ namespace RazzleServer.Game.Maple.Life
                     pw.WriteShort(900);
                     pw.WriteByte(1);
 
-                    affectedCharacter.Client.Send(pw);
+                    affectedCharacter.Send(pw);
 
                     //TODO - the remote packet
                     using var pw1 = new PacketWriter(ServerOperationCode.RemotePlayerSkillBuff);

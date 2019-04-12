@@ -62,7 +62,7 @@ namespace RazzleServer.Game.Maple.Maps
             Characters.Values
                 .Where(x => x.Id != except?.Id)
                 .ToList()
-                .ForEach(x => x.Client.Send(pw));
+                .ForEach(x => x.Send(pw));
 
         public int AssignObjectId() => ++_mObjectIds;
 

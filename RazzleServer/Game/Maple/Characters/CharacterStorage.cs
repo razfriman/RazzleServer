@@ -65,14 +65,14 @@ namespace RazzleServer.Game.Maple.Characters
             using var pw = new PacketWriter(ServerOperationCode.StorageShow);
             pw.WriteInt(npc.MapleId);
             pw.WriteBytes(EncodeStorage(StorageEncodeFlags.EncodeAll));
-            Parent.Client.Send(pw);
+            Parent.Send(pw);
         }
 
         public void StorageError(StorageResult result)
         {
             using var pw = new PacketWriter(ServerOperationCode.StorageResult);
             pw.WriteByte(result);
-            Parent.Client.Send(pw);
+            Parent.Send(pw);
         }
 
 

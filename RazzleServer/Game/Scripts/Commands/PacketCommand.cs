@@ -22,7 +22,7 @@ namespace RazzleServer.Game.Scripts.Commands
                 var packet = args.Fuse(1);
                 if (args[0].ToLower() == "server")
                 {
-                    caller.Client.Send(Functions.HexToBytes(packet));
+                    caller.Send(new PacketWriter(Functions.HexToBytes(packet)));
                 }
                 else if (args[0].ToLower().Equals("client"))
                 {

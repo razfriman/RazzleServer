@@ -153,7 +153,7 @@ namespace RazzleServer.Game.Handlers
 
             using var pw = new PacketWriter(ServerOperationCode.NpcShopResult);
             pw.WriteByte(8);
-            client.Character.Client.Send(pw);
+            client.Character.Send(pw);
         }
 
         private static void Recharge(PacketReader packet, GameClient client, Npc shop)
@@ -175,7 +175,7 @@ namespace RazzleServer.Game.Handlers
 
             using var pw = new PacketWriter(ServerOperationCode.NpcShopResult);
             pw.WriteByte(8);
-            client.Character.Client.Send(pw);
+            client.Character.Send(pw);
         }
 
         private static void SendShopResult(GameClient client, ShopResult result)

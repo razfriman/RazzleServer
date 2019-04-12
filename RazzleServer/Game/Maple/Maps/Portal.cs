@@ -54,7 +54,7 @@ namespace RazzleServer.Game.Maple.Maps
         {
             using var pw = new PacketWriter(ServerOperationCode.TransferFieldReqIgnored);
             pw.WriteByte(result);
-            character.Client.Send(pw);
+            character.Send(pw);
         }
 
         public static void PlaySoundEffect(Character character) => character.ShowLocalUserEffect(UserEffect.PlayPortalSe);
