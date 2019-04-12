@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Threading;
+using Newtonsoft.Json;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Characters;
@@ -15,7 +16,7 @@ namespace RazzleServer.Game.Maple.Maps
         [JsonIgnore] public Character Owner { get; set; }
         [JsonIgnore] public Character Picker { get; set; }
         public Point Origin { get; set; }
-        public Delay Expiry { get; set; }
+        public CancellationTokenSource Expiry { get; set; }
 
         public DropType DropType { get; set; } = DropType.Normal;
 

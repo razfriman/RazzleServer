@@ -992,8 +992,11 @@ namespace RazzleServer.Game.Maple.Characters
             BuffMagicGuard.EncodeForLocal(buffPacket, ref endFlag, currentTime, pSpecificFlag);
 
             // Do not activate it in hide
-            if (BuffDarkSight.HasReferenceId((int)SkillNames.Gm.Hide) == false)
+            if (!BuffDarkSight.HasReferenceId((int)SkillNames.Gm.Hide))
+            {
                 BuffDarkSight.EncodeForLocal(buffPacket, ref endFlag, currentTime, pSpecificFlag);
+            }
+
             BuffBooster.EncodeForLocal(buffPacket, ref endFlag, currentTime, pSpecificFlag);
             BuffPowerGuard.EncodeForLocal(buffPacket, ref endFlag, currentTime, pSpecificFlag);
             BuffMaxHealth.EncodeForLocal(buffPacket, ref endFlag, currentTime, pSpecificFlag);
@@ -1021,7 +1024,11 @@ namespace RazzleServer.Game.Maple.Characters
 
         public BuffValueTypes RemoveByReference(int pBuffValue, bool onlyReturn = false)
         {
-            if (pBuffValue == 0) return 0;
+            if (pBuffValue == 0)
+            {
+                return 0;
+            }
+
             BuffValueTypes endFlag = 0;
             BuffWeaponAttack.TryResetByReference(pBuffValue, ref endFlag);
             BuffWeaponDefense.TryResetByReference(pBuffValue, ref endFlag);
@@ -1120,7 +1127,10 @@ namespace RazzleServer.Game.Maple.Characters
             BuffPowerGuard.TryReset(currentTime, ref endFlag);
             if (BuffMaxHealth.TryReset(currentTime, ref endFlag) &&
                 BuffMaxMana.TryReset(currentTime, ref endFlag))
+            {
                 Parent.Buffs.CancelHyperBody();
+            }
+
             BuffInvincible.TryReset(currentTime, ref endFlag);
             BuffSoulArrow.TryReset(currentTime, ref endFlag);
             BuffStun.TryReset(currentTime, ref endFlag);
@@ -1232,20 +1242,59 @@ namespace RazzleServer.Game.Maple.Characters
                 {
                     var item = data.Value;
                     if (EquipBonuses.Dexterity + item.Dexterity > short.MaxValue)
+                    {
                         EquipBonuses.Dexterity = short.MaxValue;
-                    else EquipBonuses.Dexterity += item.Dexterity;
+                    }
+                    else
+                    {
+                        EquipBonuses.Dexterity += item.Dexterity;
+                    }
+
                     if (EquipBonuses.Intelligence + item.Intelligence > short.MaxValue)
+                    {
                         EquipBonuses.Intelligence = short.MaxValue;
-                    else EquipBonuses.Intelligence += item.Intelligence;
-                    if (EquipBonuses.Luck + item.Luck > short.MaxValue) EquipBonuses.Luck = short.MaxValue;
-                    else EquipBonuses.Luck += item.Luck;
-                    if (EquipBonuses.Strength + item.Strength > short.MaxValue) EquipBonuses.Strength = short.MaxValue;
-                    else EquipBonuses.Strength += item.Strength;
-                    if (EquipBonuses.MaxMana + item.MaxMana > short.MaxValue) EquipBonuses.MaxMana = short.MaxValue;
-                    else EquipBonuses.MaxMana += item.MaxMana;
+                    }
+                    else
+                    {
+                        EquipBonuses.Intelligence += item.Intelligence;
+                    }
+
+                    if (EquipBonuses.Luck + item.Luck > short.MaxValue)
+                    {
+                        EquipBonuses.Luck = short.MaxValue;
+                    }
+                    else
+                    {
+                        EquipBonuses.Luck += item.Luck;
+                    }
+
+                    if (EquipBonuses.Strength + item.Strength > short.MaxValue)
+                    {
+                        EquipBonuses.Strength = short.MaxValue;
+                    }
+                    else
+                    {
+                        EquipBonuses.Strength += item.Strength;
+                    }
+
+                    if (EquipBonuses.MaxMana + item.MaxMana > short.MaxValue)
+                    {
+                        EquipBonuses.MaxMana = short.MaxValue;
+                    }
+                    else
+                    {
+                        EquipBonuses.MaxMana += item.MaxMana;
+                    }
+
                     if (EquipBonuses.MaxHealth + item.MaxHealth > short.MaxValue)
+                    {
                         EquipBonuses.MaxHealth = short.MaxValue;
-                    else EquipBonuses.MaxHealth += item.MaxHealth;
+                    }
+                    else
+                    {
+                        EquipBonuses.MaxHealth += item.MaxHealth;
+                    }
+
                     EquipBonuses.WeaponAttack += item.WeaponAttack;
 
 // TODO: Shield mastery buff
@@ -1304,10 +1353,26 @@ namespace RazzleServer.Game.Maple.Characters
 
             BuffValueTypes removed = 0;
             var currentTime = DateTime.UtcNow;
-            if (BuffBooster.IsActive(currentTime)) removed |= RemoveByReference(BuffBooster.ReferenceId, true);
-            if (BuffCharges.IsActive(currentTime)) removed |= RemoveByReference(BuffCharges.ReferenceId, true);
-            if (BuffComboAttack.IsActive(currentTime)) removed |= RemoveByReference(BuffComboAttack.ReferenceId, true);
-            if (BuffSoulArrow.IsActive(currentTime)) removed |= RemoveByReference(BuffSoulArrow.ReferenceId, true);
+            if (BuffBooster.IsActive(currentTime))
+            {
+                removed |= RemoveByReference(BuffBooster.ReferenceId, true);
+            }
+
+            if (BuffCharges.IsActive(currentTime))
+            {
+                removed |= RemoveByReference(BuffCharges.ReferenceId, true);
+            }
+
+            if (BuffComboAttack.IsActive(currentTime))
+            {
+                removed |= RemoveByReference(BuffComboAttack.ReferenceId, true);
+            }
+
+            if (BuffSoulArrow.IsActive(currentTime))
+            {
+                removed |= RemoveByReference(BuffSoulArrow.ReferenceId, true);
+            }
+
             Parent.Buffs.FinalizeDebuff(removed);
         }
 

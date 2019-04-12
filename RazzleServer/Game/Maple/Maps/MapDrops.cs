@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using RazzleServer.Common.Util;
 
 namespace RazzleServer.Game.Maple.Maps
@@ -27,14 +28,15 @@ namespace RazzleServer.Game.Maple.Maps
         {
             item.Expiry?.Dispose();
 
-            item.Expiry = new Delay(() =>
+            // TODO(what if the item is no-expire)
+            item.Expiry = TaskRunner.Run(() =>
             {
                 if (item.Map == Map)
                 {
                     item.Picker = null;
                     Remove(item);
                 }
-            }, Drop.ExpiryTime);
+            }, TimeSpan.FromMilliseconds(Drop.ExpiryTime));
         }
 
         public override void Remove(Drop item)
