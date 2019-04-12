@@ -30,25 +30,39 @@ namespace RazzleServer.Game.Maple.Characters
             BuffValueTypes added = 0;
 
             if (data.Accuracy > 0)
+            {
                 added |= ps.BuffAccuracy.Set(value, data.Accuracy, expireTime);
+            }
 
             if (data.Avoidability > 0)
+            {
                 added |= ps.BuffAvoidability.Set(value, data.Avoidability, expireTime);
+            }
 
             if (data.Speed > 0)
+            {
                 added |= ps.BuffSpeed.Set(value, data.Speed, expireTime);
+            }
 
             if (data.MagicAttack > 0)
+            {
                 added |= ps.BuffMagicAttack.Set(value, data.MagicAttack, expireTime);
+            }
 
             if (data.WeaponAttack > 0)
+            {
                 added |= ps.BuffWeaponAttack.Set(value, data.WeaponAttack, expireTime);
+            }
 
             if (data.WeaponDefense > 0)
+            {
                 added |= ps.BuffWeaponDefense.Set(value, data.WeaponDefense, expireTime);
+            }
 
             if (data.Thaw > 0)
+            {
                 added |= ps.BuffThaw.Set(value, data.Thaw, expireTime);
+            }
 
             if (added != 0)
             {
@@ -58,19 +72,29 @@ namespace RazzleServer.Game.Maple.Characters
             BuffValueTypes removed = 0;
 
             if (data.Cures.HasFlag(CureFlags.Weakness))
+            {
                 removed |= ps.BuffWeakness.Reset();
+            }
 
             if (data.Cures.HasFlag(CureFlags.Poison))
+            {
                 removed |= ps.BuffPoison.Reset();
+            }
 
             if (data.Cures.HasFlag(CureFlags.Curse))
+            {
                 removed |= ps.BuffCurse.Reset();
+            }
 
             if (data.Cures.HasFlag(CureFlags.Darkness))
+            {
                 removed |= ps.BuffDarkness.Reset();
+            }
 
             if (data.Cures.HasFlag(CureFlags.Seal))
+            {
                 removed |= ps.BuffSeal.Reset();
+            }
 
             FinalizeDebuff(removed);
         }

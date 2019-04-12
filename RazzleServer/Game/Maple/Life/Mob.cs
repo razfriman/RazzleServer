@@ -220,8 +220,8 @@ namespace RazzleServer.Game.Maple.Life
 
         private void ScheduleBuffExpiration(MobStatus buff, MobSkill skill)
         {
-            Delay.Execute(() =>
-                {
+            TaskRunner.Run(() =>
+            {
 //                    using (var packet = new PacketWriter(ServerOperationCode.MobStatReset))
 //                    {
 //                        packet.WriteInt(ObjectId);
@@ -233,8 +233,8 @@ namespace RazzleServer.Game.Maple.Life
 //                        Map.Send(packet);
 //                    }
 
-                    Buffs.Remove(buff);
-                }, skill.CachedReference.Duration * 1000);
+                Buffs.Remove(buff);
+            }, TimeSpan.FromSeconds(skill.CachedReference.Duration));
         }
 
         public void Heal(uint hp, int range)

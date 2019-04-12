@@ -1,4 +1,5 @@
-﻿using RazzleServer.Common.Util;
+﻿using System;
+using RazzleServer.Common.Util;
 using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Handlers
@@ -11,7 +12,7 @@ namespace RazzleServer.Game.Handlers
             var channel = packet.ReadByte();
             client.ChangeChannel(channel);
 
-            Delay.Execute(() => client.Terminate($"Changing Channels: {client.Server.ChannelId} -> {channel}"), 5000);
+            TaskRunner.Run(() => client.Terminate($"Changing Channels: {client.Server.ChannelId} -> {channel}"), TimeSpan.FromSeconds(5));
         }
     }
 }

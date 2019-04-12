@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Sockets;
+using System.Threading;
 using RazzleServer.Common;
 using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple;
@@ -17,6 +18,7 @@ namespace RazzleServer.Game
         public GameAccount Account { get; set; }
         public GameServer Server { get; set; }
         public Character Character { get; set; }
+        public CancellationTokenSource PingToken { get; set; }
         public override ILogger Logger => Log.ForContext<GameClient>();
 
         public GameClient(Socket session, GameServer server) : base(session, ServerConfig.Instance.Version,
@@ -69,6 +71,8 @@ namespace RazzleServer.Game
             var save = Character;
             try
             {
+                PingToken?.Cancel();
+                PingToken?.Dispose();
                 base.Disconnected();
                 Server.RemoveClient(this);
                 Character?.Save();
@@ -102,15 +106,7 @@ namespace RazzleServer.Game
             Send(outPacket);
         }
 
-        public void StartPingCheck()
-        {
-            Ping();
-
-            if (Socket?.Connected ?? false)
-            {
-                Delay.Execute(StartPingCheck, PingDelay);
-            }
-        }
+        public void StartPingCheck() => PingToken = TaskRunner.RunRepeated(Ping, TimeSpan.FromMilliseconds(PingDelay));
 
         public void Ping() => Send(new PacketWriter(ServerOperationCode.Ping));
     }

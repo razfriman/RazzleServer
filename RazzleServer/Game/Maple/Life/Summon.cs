@@ -29,13 +29,13 @@ namespace RazzleServer.Game.Maple.Life
 
         public void ScheduleExpiration()
         {
-            Delay.Execute(() =>
+            TaskRunner.Run(() =>
             {
                 if (Parent.Summons.Contains(MapleId))
                 {
                     Parent.Summons.Remove(this);
                 }
-            }, (int)(Expiration - DateTime.UtcNow).TotalMilliseconds);
+            }, TimeSpan.FromMilliseconds((Expiration - DateTime.UtcNow).TotalMilliseconds));
         }
 
         public PacketWriter GetCreatePacket()

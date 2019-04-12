@@ -86,7 +86,7 @@ namespace RazzleServer.Game.Maple.Maps
         {
             if (item.SpawnPoint != null)
             {
-                Delay.Execute(item.SpawnPoint.Spawn, 15 * 1000); // TODO: Actual respawn time.
+                TaskRunner.Run(item.SpawnPoint.Spawn, TimeSpan.FromSeconds(15));
             }
         }
 

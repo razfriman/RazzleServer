@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
 using RazzleServer.Common;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Util;
@@ -180,7 +179,7 @@ namespace RazzleServer.Game.Maple.Characters
             // Update buddy list
             // update quest mob kills
             PrimaryStats.UpdateStatsForParty();
-            Task.Factory.StartNew(Client.StartPingCheck);
+            Client.StartPingCheck();
         }
 
 

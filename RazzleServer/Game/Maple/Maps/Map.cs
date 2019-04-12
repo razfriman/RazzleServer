@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Characters;
@@ -80,10 +81,10 @@ namespace RazzleServer.Game.Maple.Maps
 
             if (mapleId != 0)
             {
-                Delay.Execute(() =>
+                TaskRunner.Run(() =>
                 {
                     SendWeatherEffect(0, message, isAdmin);
-                }, delay);
+                }, TimeSpan.FromMilliseconds(delay));
             }
         }
 
@@ -100,10 +101,10 @@ namespace RazzleServer.Game.Maple.Maps
 
             if (mapleId != 0)
             {
-                Delay.Execute(() =>
+                TaskRunner.Run(() =>
                 {
                     SendJukeboxSong(0, characterName);
-                }, delay);
+                }, TimeSpan.FromMilliseconds(delay));
             }
         }
     }
