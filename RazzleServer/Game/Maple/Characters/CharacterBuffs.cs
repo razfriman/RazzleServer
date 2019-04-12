@@ -1,6 +1,5 @@
 ﻿using System;
 using RazzleServer.Common.Constants;
-using RazzleServer.Game.Maple.Buffs;
 using RazzleServer.Game.Maple.Data;
 using RazzleServer.Net.Packet;
 
@@ -18,14 +17,6 @@ namespace RazzleServer.Game.Maple.Characters
             Parent = parent;
         }
 
-        public byte[] ToByteArray()
-        {
-            using (var pw = new PacketWriter())
-            {
-                return pw.ToArray();
-            }
-        }
-
         public bool HasGmHide() => Parent.PrimaryStats.HasBuff((int)SkillNames.Gm.Hide);
 
         public void AddItemBuff(int itemid)
@@ -33,7 +24,7 @@ namespace RazzleServer.Game.Maple.Characters
             var data = DataProvider.Items.Data[itemid];
             long buffTime = data.CBuffTime;
 
-            var expireTime = BuffStat.GetTimeForBuff(buffTime);
+            var expireTime = DateTime.UtcNow.AddMilliseconds(buffTime);
             var ps = Parent.PrimaryStats;
             var value = -itemid;
             BuffValueTypes added = 0;
@@ -142,53 +133,125 @@ namespace RazzleServer.Game.Maple.Characters
                 time += 1000 * 1000;
             }
 
-            var expireTime = BuffStat.GetTimeForBuff(time);
+            var expireTime = DateTime.UtcNow.AddMilliseconds(time);
             var ps = Parent.PrimaryStats;
             BuffValueTypes added = 0;
 
             if (flags.HasFlag(BuffValueTypes.WeaponAttack))
+            {
                 added |= ps.BuffWeaponAttack.Set(skillId, data.WeaponAttack, expireTime);
+            }
+
             if (flags.HasFlag(BuffValueTypes.WeaponDefense))
+            {
                 added |= ps.BuffWeaponDefense.Set(skillId, data.WeaponDefense, expireTime);
+            }
+
             if (flags.HasFlag(BuffValueTypes.MagicAttack))
+            {
                 added |= ps.BuffMagicAttack.Set(skillId, data.MagicAttack, expireTime);
+            }
+
             if (flags.HasFlag(BuffValueTypes.MagicDefense))
+            {
                 added |= ps.BuffMagicDefense.Set(skillId, data.MagicDefense, expireTime);
+            }
+
             if (flags.HasFlag(BuffValueTypes.Accuracy))
+            {
                 added |= ps.BuffAccuracy.Set(skillId, data.Accuracy, expireTime);
+            }
+
             if (flags.HasFlag(BuffValueTypes.Avoidability))
+            {
                 added |= ps.BuffAvoidability.Set(skillId, data.Avoidability, expireTime);
-            if (flags.HasFlag(BuffValueTypes.Speed)) added |= ps.BuffSpeed.Set(skillId, data.Speed, expireTime);
-            if (flags.HasFlag(BuffValueTypes.Jump)) added |= ps.BuffJump.Set(skillId, data.Jump, expireTime);
+            }
+
+            if (flags.HasFlag(BuffValueTypes.Speed))
+            {
+                added |= ps.BuffSpeed.Set(skillId, data.Speed, expireTime);
+            }
+
+            if (flags.HasFlag(BuffValueTypes.Jump))
+            {
+                added |= ps.BuffJump.Set(skillId, data.Jump, expireTime);
+            }
+
             if (flags.HasFlag(BuffValueTypes.MagicGuard))
+            {
                 added |= ps.BuffMagicGuard.Set(skillId, data.ParameterA, expireTime);
+            }
+
             if (flags.HasFlag(BuffValueTypes.DarkSight))
+            {
                 added |= ps.BuffDarkSight.Set(skillId, data.ParameterA, expireTime);
+            }
+
             if (flags.HasFlag(BuffValueTypes.Booster))
+            {
                 added |= ps.BuffBooster.Set(skillId, data.ParameterA, expireTime);
+            }
+
             if (flags.HasFlag(BuffValueTypes.PowerGuard))
+            {
                 added |= ps.BuffPowerGuard.Set(skillId, data.ParameterA, expireTime);
+            }
+
             if (flags.HasFlag(BuffValueTypes.MaxHealth))
+            {
                 added |= ps.BuffMaxHealth.Set(skillId, data.ParameterA, expireTime);
+            }
+
             if (flags.HasFlag(BuffValueTypes.MaxMana))
+            {
                 added |= ps.BuffMaxMana.Set(skillId, data.ParameterB, expireTime);
+            }
+
             if (flags.HasFlag(BuffValueTypes.Invincible))
+            {
                 added |= ps.BuffInvincible.Set(skillId, data.ParameterA, expireTime);
+            }
+
             if (flags.HasFlag(BuffValueTypes.SoulArrow))
+            {
                 added |= ps.BuffSoulArrow.Set(skillId, data.ParameterA, expireTime);
+            }
+
             if (flags.HasFlag(BuffValueTypes.ComboAttack))
+            {
                 added |= ps.BuffComboAttack.Set(skillId, data.ParameterA, expireTime);
+            }
+
             if (flags.HasFlag(BuffValueTypes.Charges))
+            {
                 added |= ps.BuffCharges.Set(skillId, data.ParameterA, expireTime);
+            }
+
             if (flags.HasFlag(BuffValueTypes.DragonBlood))
+            {
                 added |= ps.BuffDragonBlood.Set(skillId, data.ParameterA, expireTime);
+            }
+
             if (flags.HasFlag(BuffValueTypes.HolySymbol))
+            {
                 added |= ps.BuffHolySymbol.Set(skillId, data.ParameterA, expireTime);
-            if (flags.HasFlag(BuffValueTypes.MesoUp)) added |= ps.BuffMesoUp.Set(skillId, data.ParameterA, expireTime);
+            }
+
+            if (flags.HasFlag(BuffValueTypes.MesoUp))
+            {
+                added |= ps.BuffMesoUp.Set(skillId, data.ParameterA, expireTime);
+            }
+
             if (flags.HasFlag(BuffValueTypes.ShadowPartner))
+            {
                 added |= ps.BuffShadowPartner.Set(skillId, data.ParameterA, expireTime);
+            }
+
             if (flags.HasFlag(BuffValueTypes.PickPocketMesoUp))
+            {
                 added |= ps.BuffPickPocketMesoUp.Set(skillId, data.ParameterA, expireTime);
+            }
+
             if (flags.HasFlag(BuffValueTypes.MesoGuard))
             {
                 added |= ps.BuffMesoGuard.Set(skillId, data.ParameterA, expireTime);
@@ -210,8 +273,7 @@ namespace RazzleServer.Game.Maple.Characters
                 return;
             }
 
-            //BuffPacket.SetTempStats(Character, added, delay);
-            //MapPacket.SendPlayerBuffed(Character, added, delay);
+            SendBuff(Parent, added, delay);
         }
 
         public void FinalizeDebuff(BuffValueTypes removed, bool sendPacket = true)
@@ -226,14 +288,13 @@ namespace RazzleServer.Game.Maple.Characters
                 return;
             }
 
-            //BuffPacket.ResetTempStats(Character, removed);
-            //MapPacket.SendPlayerDebuffed(Character, removed);
+            SendDebuff(Parent, removed);
         }
 
-        public static void AddMapBuffValues(Character chr, PacketWriter pw,
-            BuffValueTypes pBuffFlags = BuffValueTypes.ALL)
+        public byte[] ToMapBuffValues(BuffValueTypes pBuffFlags = BuffValueTypes.All)
         {
-            var ps = chr.PrimaryStats;
+            var pw = new PacketWriter();
+            var ps = Parent.PrimaryStats;
             var currentTime = DateTime.UtcNow;
             BuffValueTypes added = 0;
             var buffWriter = new PacketWriter();
@@ -253,8 +314,8 @@ namespace RazzleServer.Game.Maple.Characters
                 pBuffFlags);
             ps.BuffPoison.EncodeForRemote(ref added, currentTime, stat =>
             {
-                pw.WriteShort(stat.N);
-                pw.WriteInt(stat.R);
+                pw.WriteShort(stat.Value);
+                pw.WriteInt(stat.ReferenceId);
             }, pBuffFlags);
             ps.BuffSoulArrow.EncodeForRemote(ref added, currentTime, null, pBuffFlags);
             ps.BuffShadowPartner.EncodeForRemote(ref added, currentTime, null, pBuffFlags);
@@ -262,27 +323,48 @@ namespace RazzleServer.Game.Maple.Characters
 
             pw.WriteUInt((uint)added);
             pw.WriteBytes(buffWriter.ToArray());
+            return pw.ToArray();
         }
 
-        public static void SetTempStats(Character chr, BuffValueTypes flagsAdded, short pDelay = 0)
+        public static void SendBuff(Character chr, BuffValueTypes flagsAdded, short pDelay = 0)
         {
-            if (flagsAdded == 0) return;
-            var pw = new PacketWriter(ServerOperationCode.StatsChanged);
+            if (flagsAdded == 0)
+            {
+                return;
+            }
+
+            SendBuffLocal(chr, flagsAdded, pDelay);
+            SendBuffRemote(chr, flagsAdded, pDelay);
+        }
+
+        public static void SendDebuff(Character chr, BuffValueTypes removedFlags)
+        {
+            if (removedFlags == 0)
+            {
+                return;
+            }
+
+            SendDebuffLocal(chr, removedFlags);
+            SendDebuffRemote(chr, removedFlags);
+        }
+
+        private static void SendBuffLocal(Character chr, BuffValueTypes flagsAdded, short pDelay)
+        {
+            var pw = new PacketWriter(ServerOperationCode.SkillsGiveBuff);
             chr.PrimaryStats.EncodeForLocal(pw, flagsAdded);
             pw.WriteShort(pDelay);
             if (flagsAdded.HasFlag(BuffValueTypes.SpeedBuffElement))
             {
                 pw.WriteByte(0); // FIX: This should be the 'movement info index'
             }
+            pw.WriteLong(0);
 
             chr.Send(pw);
         }
 
-        public static void ResetTempStats(Character chr, BuffValueTypes removedFlags)
+        private static void SendDebuffLocal(Character chr, BuffValueTypes removedFlags)
         {
-            if (removedFlags == 0) return;
-
-            var pw = new PacketWriter(ServerOperationCode.StatsChanged);
+            var pw = new PacketWriter(ServerOperationCode.SkillsGiveDebuff);
             pw.WriteUInt((uint)removedFlags);
             if (removedFlags.HasFlag(BuffValueTypes.SpeedBuffElement))
             {
@@ -290,6 +372,23 @@ namespace RazzleServer.Game.Maple.Characters
             }
 
             chr.Send(pw);
+        }
+
+        private static void SendBuffRemote(Character chr, BuffValueTypes flagsAdded, short pDelay)
+        {
+            var pw = new PacketWriter(ServerOperationCode.RemotePlayerSkillBuff);
+            pw.WriteInt(chr.Id);
+            pw.WriteBytes(chr.Buffs.ToMapBuffValues(flagsAdded));
+            pw.WriteShort(pDelay);
+            chr.Map.Send(pw, chr);
+        }
+
+        private static void SendDebuffRemote(Character chr, BuffValueTypes removedFlags)
+        {
+            var pw = new PacketWriter(ServerOperationCode.RemotePlayerSkillDebuff);
+            pw.WriteInt(chr.Id);
+            pw.WriteUInt((uint)removedFlags);
+            chr.Map.Send(pw, chr);
         }
     }
 }

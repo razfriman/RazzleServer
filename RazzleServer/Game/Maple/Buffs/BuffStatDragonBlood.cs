@@ -14,13 +14,13 @@ namespace RazzleServer.Game.Maple.Buffs
             _owner = own;
         }
 
-        public override BuffValueTypes Set(int referenceId, short nValue, long expireTime)
+        public override BuffValueTypes Set(int referenceId, short nValue, DateTime expireTime)
         {
             _tLastDamaged = DateTime.UtcNow;
             return base.Set(referenceId, nValue, expireTime);
         }
 
-        public override bool TryReset(long currentTime, ref BuffValueTypes flag)
+        public override bool TryReset(DateTime currentTime, ref BuffValueTypes flag)
         {
             if (DateTime.UtcNow - _tLastDamaged >= TimeSpan.FromMilliseconds(4000))
             {

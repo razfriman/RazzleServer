@@ -6,64 +6,45 @@ namespace RazzleServer.Game.Maple.Buffs
 {
     public class BuffStat
     {
-        public static DateTime GetTimeForBuff(long additionalMillis = 0) =>
-            DateTime.UtcNow.AddMilliseconds(additionalMillis);
-
-        // Number. Most of the time, this is the X or Y value of the skill/buff
         public short Value { get; set; }
-
-        // Reference ID. For Item IDs, use a negative number
         public int ReferenceId { get; set; }
-
-        // Expire Time. Extended version of T (full time in millis)
         public DateTime ExpireTime { get; set; }
         public BuffValueTypes Flag { get; set; }
+        public BuffType Type => ReferenceId == 0 ? BuffType.None : ReferenceId > 0 ? BuffType.Skill : BuffType.Item;
 
-        public bool IsSet(DateTime? time)
-        {
-            if (Value == 0) return false;
-            if (time == null)
-            {
-                time = GetTimeForBuff();
-            }
+        public bool IsActive(DateTime? time) => Value != 0 && ExpireTime > (time ?? DateTime.UtcNow);
 
-            return ExpireTime > time;
-        }
+        public BuffValueTypes GetState(DateTime? time = null) => IsActive(time) ? Flag : 0;
 
-        public BuffValueTypes GetState(DateTime? time = null)
-        {
-            return IsSet(time) ? Flag : 0;
-        }
-
-        public bool HasReferenceId(int referenceId, DateTime? currenTime = null)
-        {
-            return IsSet(currenTime) && ReferenceId == referenceId;
-        }
+        public bool HasReferenceId(int referenceId, DateTime? currenTime = null) => IsActive(currenTime) && ReferenceId == referenceId;
 
         public BuffStat(BuffValueTypes flag)
         {
             Flag = flag;
             Value = 0;
             ReferenceId = 0;
-            ExpireTime = 0;
+            ExpireTime = DateTime.MinValue;
         }
 
         public BuffValueTypes Reset()
         {
-            if (ReferenceId == 0 && Value == 0 && ExpireTime == 0)
+            if (ReferenceId == 0 && Value == 0 && ExpireTime == DateTime.MinValue)
             {
                 return 0;
             }
 
             Value = 0;
             ReferenceId = 0;
-            ExpireTime = 0;
+            ExpireTime = DateTime.MinValue;
             return Flag;
         }
 
-        public virtual bool TryReset(long currentTime, ref BuffValueTypes flag)
+        public virtual bool TryReset(DateTime currentTime, ref BuffValueTypes flag)
         {
-            if (Value == 0 || ExpireTime >= currentTime) return false;
+            if (Value == 0 || ExpireTime >= currentTime)
+            {
+                return false;
+            }
 
             flag |= Reset();
             return true;
@@ -71,20 +52,23 @@ namespace RazzleServer.Game.Maple.Buffs
 
         public void TryResetByReference(int reference, ref BuffValueTypes flag)
         {
-            if (Value == 0 || ReferenceId != reference) return;
+            if (Value == 0 || ReferenceId != reference)
+            {
+                return;
+            }
+
             flag |= Reset();
         }
 
-        public virtual BuffValueTypes Set(int referenceId, short nValue, long expireTime)
+        public virtual BuffValueTypes Set(int referenceId, short value, DateTime expireTime)
         {
-            // Ignore 0 N-values
-            if (nValue == 0)
+            if (value == 0)
             {
                 return 0;
             }
 
             ReferenceId = referenceId;
-            Value = nValue;
+            Value = value;
             ExpireTime = expireTime;
             return Flag;
         }
@@ -92,7 +76,7 @@ namespace RazzleServer.Game.Maple.Buffs
         public void EncodeForRemote(ref BuffValueTypes flag, DateTime currentTime, Action<BuffStat> func,
             BuffValueTypes specificFlag = BuffValueTypes.All)
         {
-            if (!IsSet(currentTime) || !specificFlag.HasFlag(Flag))
+            if (!IsActive(currentTime) || !specificFlag.HasFlag(Flag))
             {
                 return;
             }
@@ -101,10 +85,10 @@ namespace RazzleServer.Game.Maple.Buffs
             func?.Invoke(this);
         }
 
-        public void EncodeForLocal(PacketWriter pw, ref BuffValueTypes flag, long currentTime,
+        public void EncodeForLocal(PacketWriter pw, ref BuffValueTypes flag, DateTime currentTime,
             BuffValueTypes specificFlag = BuffValueTypes.All)
         {
-            if (!IsSet(currentTime) || !specificFlag.HasFlag(Flag))
+            if (!IsActive(currentTime) || !specificFlag.HasFlag(Flag))
             {
                 return;
             }
@@ -112,7 +96,7 @@ namespace RazzleServer.Game.Maple.Buffs
             flag |= Flag;
             pw.WriteShort(Value);
             pw.WriteInt(ReferenceId);
-            pw.WriteShort((short)((ExpireTime - currentTime) / 100)); // If its not divided, it will not flash.
+            pw.WriteShort((short)((ExpireTime - currentTime).TotalMilliseconds / 100));
         }
     }
 }

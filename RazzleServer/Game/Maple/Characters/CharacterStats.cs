@@ -941,7 +941,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public bool HasBuff(int skillOrItemId)
         {
-            var currentTime = BuffStat.GetTimeForBuff();
+            var currentTime = DateTime.UtcNow;
             return
                 BuffWeaponAttack.HasReferenceId(skillOrItemId, currentTime) ||
                 BuffWeaponDefense.HasReferenceId(skillOrItemId, currentTime) ||
@@ -979,7 +979,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void EncodeForLocal(PacketWriter packet, BuffValueTypes pSpecificFlag = BuffValueTypes.All)
         {
-            var currentTime = BuffStat.GetTimeForBuff();
+            var currentTime = DateTime.UtcNow;
             BuffValueTypes endFlag = 0;
             var buffPacket = new PacketWriter();
             BuffWeaponAttack.EncodeForLocal(buffPacket, ref endFlag, currentTime, pSpecificFlag);
@@ -1067,7 +1067,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public BuffValueTypes AllActiveBuffs()
         {
-            var currentTime = BuffStat.GetTimeForBuff();
+            var currentTime = DateTime.UtcNow;
             BuffValueTypes flags = 0;
             flags |= BuffWeaponAttack.GetState(currentTime);
             flags |= BuffWeaponDefense.GetState(currentTime);
@@ -1104,7 +1104,7 @@ namespace RazzleServer.Game.Maple.Characters
             return flags;
         }
 
-        public void CheckExpired(long currentTime)
+        public void CheckExpired(DateTime currentTime)
         {
             BuffValueTypes endFlag = 0;
             BuffWeaponAttack.TryReset(currentTime, ref endFlag);
@@ -1305,11 +1305,11 @@ namespace RazzleServer.Game.Maple.Characters
             }
 
             BuffValueTypes removed = 0;
-            var currentTime = BuffStat.GetTimeForBuff();
-            if (BuffBooster.IsSet(currentTime)) removed |= RemoveByReference(BuffBooster.ReferenceId, true);
-            if (BuffCharges.IsSet(currentTime)) removed |= RemoveByReference(BuffCharges.ReferenceId, true);
-            if (BuffComboAttack.IsSet(currentTime)) removed |= RemoveByReference(BuffComboAttack.ReferenceId, true);
-            if (BuffSoulArrow.IsSet(currentTime)) removed |= RemoveByReference(BuffSoulArrow.ReferenceId, true);
+            var currentTime = DateTime.UtcNow;
+            if (BuffBooster.IsActive(currentTime)) removed |= RemoveByReference(BuffBooster.ReferenceId, true);
+            if (BuffCharges.IsActive(currentTime)) removed |= RemoveByReference(BuffCharges.ReferenceId, true);
+            if (BuffComboAttack.IsActive(currentTime)) removed |= RemoveByReference(BuffComboAttack.ReferenceId, true);
+            if (BuffSoulArrow.IsActive(currentTime)) removed |= RemoveByReference(BuffSoulArrow.ReferenceId, true);
             Parent.Buffs.FinalizeDebuff(removed);
         }
 

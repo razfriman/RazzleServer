@@ -166,6 +166,7 @@ namespace RazzleServer.Net
                 catch (Exception e)
                 {
                     _log.Error(e, "Error sending packet");
+                    Disconnect();
                 }
             }
         }
@@ -194,6 +195,7 @@ namespace RazzleServer.Net
             finally
             {
                 _client.Disconnected();
+                _client.Connected = false;
             }
         }
     }

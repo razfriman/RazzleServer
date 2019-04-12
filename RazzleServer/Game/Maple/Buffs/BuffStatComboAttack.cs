@@ -1,3 +1,4 @@
+using System;
 using RazzleServer.Common.Constants;
 
 namespace RazzleServer.Game.Maple.Buffs
@@ -10,9 +11,9 @@ namespace RazzleServer.Game.Maple.Buffs
         {
         }
 
-        public override BuffValueTypes Set(int referenceId, short nValue, long expireTime)
+        public override BuffValueTypes Set(int referenceId, short value, DateTime expireTime)
         {
-            MaxOrbs = nValue;
+            MaxOrbs = value;
             return base.Set(referenceId, 1, expireTime);
         }
     }
