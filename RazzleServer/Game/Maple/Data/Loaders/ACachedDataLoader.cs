@@ -47,17 +47,15 @@ namespace RazzleServer.Game.Maple.Data.Loaders
             Directory.CreateDirectory(ServerConfig.Instance.CacheFolder);
             var path = Path.Combine(ServerConfig.Instance.CacheFolder, $"{CacheName}.cache");
 
-            using (var s = File.OpenWrite(path))
-            using (var sr = new StreamWriter(s))
-            using (var writer = new JsonTextWriter(sr))
+            using var s = File.OpenWrite(path);
+            using var sr = new StreamWriter(s);
+            using var writer = new JsonTextWriter(sr);
+            var serializer = new JsonSerializer
             {
-                var serializer = new JsonSerializer
-                {
-                    DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
-                    Formatting = ServerConfig.Instance.PrettifyCache ? Formatting.Indented : Formatting.None
-                };
-                serializer.Serialize(writer, Data);
-            }
+                DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
+                Formatting = ServerConfig.Instance.PrettifyCache ? Formatting.Indented : Formatting.None
+            };
+            serializer.Serialize(writer, Data);
 
             Logger.Information($"Saving [{CacheName}] to cached file");
             return Task.CompletedTask;
@@ -67,14 +65,12 @@ namespace RazzleServer.Game.Maple.Data.Loaders
         {
             var path = Path.Combine(ServerConfig.Instance.CacheFolder, $"{CacheName}.cache");
 
-            using (var s = File.OpenRead(path))
-            using (var sr = new StreamReader(s))
-            using (var reader = new JsonTextReader(sr))
-            {
-                var serializer = new JsonSerializer();
-                Data = serializer.Deserialize<T>(reader);
-                Logger.Information($"Loaded [{CacheName}] from cache");
-            }
+            using var s = File.OpenRead(path);
+            using var sr = new StreamReader(s);
+            using var reader = new JsonTextReader(sr);
+            var serializer = new JsonSerializer();
+            Data = serializer.Deserialize<T>(reader);
+            Logger.Information($"Loaded [{CacheName}] from cache");
 
             return Task.CompletedTask;
         }

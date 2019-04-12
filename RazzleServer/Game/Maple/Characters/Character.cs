@@ -78,12 +78,10 @@ namespace RazzleServer.Game.Maple.Characters
             set
             {
                 _itemEffect = value;
-                using (var pw = new PacketWriter(ServerOperationCode.ItemEffect))
-                {
-                    pw.WriteInt(Id);
-                    pw.WriteInt(_itemEffect);
-                    Map.Send(pw, this);
-                }
+                using var pw = new PacketWriter(ServerOperationCode.ItemEffect);
+                pw.WriteInt(Id);
+                pw.WriteInt(_itemEffect);
+                Map.Send(pw, this);
             }
         }
 
@@ -158,30 +156,27 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Initialize()
         {
-            using (var pw = new PacketWriter(ServerOperationCode.SetField))
-            {
-                pw.WriteInt(Client.Server.ChannelId);
-                pw.WriteByte(++Portals);
-                pw.WriteBool(true);
-                pw.WriteInt(Damage.Random.OriginalSeed1);
-                pw.WriteInt(Damage.Random.OriginalSeed2);
-                pw.WriteInt(Damage.Random.OriginalSeed3);
-                pw.WriteInt(Damage.Random.OriginalSeed3);
-                pw.WriteShort(-1); // flags
-                pw.WriteBytes(DataToByteArray());
-                pw.WriteLong(0);
-                pw.WriteLong(0);
-                pw.WriteLong(0);
-                pw.WriteLong(0);
-                pw.WriteLong(0);
-                pw.WriteLong(0);
-                Client.Send(pw);
-            }
+            using var pw = new PacketWriter(ServerOperationCode.SetField);
+            pw.WriteInt(Client.Server.ChannelId);
+            pw.WriteByte(++Portals);
+            pw.WriteBool(true);
+            pw.WriteInt(Damage.Random.OriginalSeed1);
+            pw.WriteInt(Damage.Random.OriginalSeed2);
+            pw.WriteInt(Damage.Random.OriginalSeed3);
+            pw.WriteInt(Damage.Random.OriginalSeed3);
+            pw.WriteShort(-1); // flags
+            pw.WriteBytes(DataToByteArray());
+            pw.WriteLong(0);
+            pw.WriteLong(0);
+            pw.WriteLong(0);
+            pw.WriteLong(0);
+            pw.WriteLong(0);
+            pw.WriteLong(0);
+            Client.Send(pw);
 
             IsInitialized = true;
-
             Map.Characters.Add(this);
-            // Send server message
+            Client.Server.World.Send(GamePackets.Notify(Client.Server.World.TickerMessage, NoticeType.ScrollingText));
             // Update buddy list
             // update quest mob kills
             PrimaryStats.UpdateStatsForParty();
@@ -219,17 +214,14 @@ namespace RazzleServer.Game.Maple.Characters
                              $"");
             Map.Characters.Remove(this);
 
-            using (var pw = new PacketWriter(ServerOperationCode.SetField))
-            {
-                pw.WriteInt(Client.Server.ChannelId);
-                pw.WriteByte(++Portals);
-                pw.WriteBool(false);
-                pw.WriteInt(mapId);
-                pw.WriteByte(portalId ?? SpawnPoint);
-                pw.WriteShort(PrimaryStats.Health);
-                Client.Send(pw);
-            }
-
+            using var pw = new PacketWriter(ServerOperationCode.SetField);
+            pw.WriteInt(Client.Server.ChannelId);
+            pw.WriteByte(++Portals);
+            pw.WriteBool(false);
+            pw.WriteInt(mapId);
+            pw.WriteByte(portalId ?? SpawnPoint);
+            pw.WriteShort(PrimaryStats.Health);
+            Client.Send(pw);
             Client.Server[mapId].Characters.Add(this);
         }
 
@@ -242,40 +234,38 @@ namespace RazzleServer.Game.Maple.Characters
             skill?.Cast();
 
             // TODO: Modify packet based on attack type.
-            using (var pw = new PacketWriter(ServerOperationCode.RemotePlayerMeleeAttack))
+            using var pw = new PacketWriter(ServerOperationCode.RemotePlayerMeleeAttack);
+            pw.WriteInt(Id);
+            pw.WriteByte((byte)(attack.Targets * 0x10 + attack.Hits));
+            pw.WriteByte(skill?.CurrentLevel ?? 0);
+
+            if (attack.SkillId != 0)
             {
-                pw.WriteInt(Id);
-                pw.WriteByte((byte)(attack.Targets * 0x10 + attack.Hits));
-                pw.WriteByte(skill?.CurrentLevel ?? 0);
-
-                if (attack.SkillId != 0)
-                {
-                    pw.WriteInt(attack.SkillId);
-                }
-
-                pw.WriteByte(attack.Display);
-                pw.WriteByte(attack.Animation);
-                pw.WriteByte(attack.WeaponSpeed);
-                pw.WriteByte(0); // NOTE: Skill mastery.
-                pw.WriteInt(0); // NOTE: StarId = Item ID at attack.StarPosition
-
-                foreach (var target in attack.Damages)
-                {
-                    pw.WriteInt(target.Key);
-                    pw.WriteByte(6);
-                    if (attack.IsMesoExplosion)
-                    {
-                        pw.WriteByte(target.Value.Count);
-                    }
-
-                    foreach (var hit in target.Value)
-                    {
-                        pw.WriteUInt(hit);
-                    }
-                }
-
-                Map.Send(pw, this);
+                pw.WriteInt(attack.SkillId);
             }
+
+            pw.WriteByte(attack.Display);
+            pw.WriteByte(attack.Animation);
+            pw.WriteByte(attack.WeaponSpeed);
+            pw.WriteByte(0); // NOTE: Skill mastery.
+            pw.WriteInt(0); // NOTE: StarId = Item ID at attack.StarPosition
+
+            foreach (var target in attack.Damages)
+            {
+                pw.WriteInt(target.Key);
+                pw.WriteByte(6);
+                if (attack.IsMesoExplosion)
+                {
+                    pw.WriteByte(target.Value.Count);
+                }
+
+                foreach (var hit in target.Value)
+                {
+                    pw.WriteUInt(hit);
+                }
+            }
+
+            Map.Send(pw, this);
 
             foreach (var target in attack.Damages)
             {
@@ -299,43 +289,35 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Talk(string text, bool show = true)
         {
-            using (var pw = new PacketWriter(ServerOperationCode.RemotePlayerChat))
-            {
-                pw.WriteInt(Id);
-                pw.WriteBool(IsMaster);
-                pw.WriteString(text);
-                pw.WriteBool(show);
-                Map.Send(pw);
-            }
+            using var pw = new PacketWriter(ServerOperationCode.RemotePlayerChat);
+            pw.WriteInt(Id);
+            pw.WriteBool(IsMaster);
+            pw.WriteString(text);
+            pw.WriteBool(show);
+            Map.Send(pw);
         }
 
         public void PerformFacialExpression(int expressionId)
         {
-            using (var pw = new PacketWriter(ServerOperationCode.RemotePlayerEmote))
-            {
-                pw.WriteInt(Id);
-                pw.WriteInt(expressionId);
-                Map.Send(pw, this);
-            }
+            using var pw = new PacketWriter(ServerOperationCode.RemotePlayerEmote);
+            pw.WriteInt(Id);
+            pw.WriteInt(expressionId);
+            Map.Send(pw, this);
         }
 
         public void ShowLocalUserEffect(UserEffect effect)
         {
-            using (var pw = new PacketWriter(ServerOperationCode.Effect))
-            {
-                pw.WriteByte(effect);
-                Client.Send(pw);
-            }
+            using var pw = new PacketWriter(ServerOperationCode.Effect);
+            pw.WriteByte(effect);
+            Client.Send(pw);
         }
 
         public void ShowRemoteUserEffect(UserEffect effect, bool skipSelf = false)
         {
-            using (var pw = new PacketWriter(ServerOperationCode.RemotePlayerEffect))
-            {
-                pw.WriteInt(Id);
-                pw.WriteByte((int)effect);
-                Map.Send(pw, skipSelf ? this : null);
-            }
+            using var pw = new PacketWriter(ServerOperationCode.RemotePlayerEffect);
+            pw.WriteInt(Id);
+            pw.WriteByte((int)effect);
+            Map.Send(pw, skipSelf ? this : null);
         }
 
         public void Converse(Npc npc, QuestReference quest = null)
@@ -346,27 +328,23 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void LogCheatWarning(CheatType type)
         {
-            using (var dbContext = new MapleDbContext())
-            {
-                _log.Information($"Cheat Warning: Character={Id} CheatType={type}");
-                dbContext.Cheats.Add(new CheatEntity {CharacterId = Id, CheatType = (int)type});
-                dbContext.SaveChanges();
-            }
+            using var dbContext = new MapleDbContext();
+            _log.Information($"Cheat Warning: Character={Id} CheatType={type}");
+            dbContext.Cheats.Add(new CheatEntity {CharacterId = Id, CheatType = (int)type});
+            dbContext.SaveChanges();
         }
 
         internal static void Delete(int accountId, int characterId)
         {
-            using (var dbContext = new MapleDbContext())
+            using var dbContext = new MapleDbContext();
+            var entity = dbContext.Characters.Find(characterId);
+            if (entity == null || entity.AccountId != accountId)
             {
-                var entity = dbContext.Characters.Find(characterId);
-                if (entity == null || entity.AccountId != accountId)
-                {
-                    return;
-                }
-
-                dbContext.Characters.Remove(entity);
-                dbContext.SaveChanges();
+                return;
             }
+
+            dbContext.Characters.Remove(entity);
+            dbContext.SaveChanges();
         }
 
         public void Save()
@@ -376,51 +354,48 @@ namespace RazzleServer.Game.Maple.Characters
                 SpawnPoint = ClosestSpawnPoint?.Id ?? 0;
             }
 
-            using (var dbContext = new MapleDbContext())
+            using var dbContext = new MapleDbContext();
+            var character = dbContext.Characters
+                .Where(x => x.Name == Name)
+                .FirstOrDefault(x => x.WorldId == WorldId);
+
+            if (character == null)
             {
-                var character = dbContext.Characters
-                    .Where(x => x.Name == Name)
-                    .FirstOrDefault(x => x.WorldId == WorldId);
-
-                if (character == null)
-                {
-                    _log.Error($"Cannot find account [{Name}] in World [{WorldId}]");
-                    return;
-                }
-
-                character.AccountId = AccountId;
-                character.AbilityPoints = PrimaryStats.AbilityPoints;
-                character.Dexterity = PrimaryStats.Dexterity;
-                character.Experience = PrimaryStats.Experience;
-                character.Face = PrimaryStats.Face;
-                character.Fame = PrimaryStats.Fame;
-                character.Gender = (byte)PrimaryStats.Gender;
-                character.Hair = PrimaryStats.Hair;
-                character.Health = PrimaryStats.Health;
-                character.Intelligence = PrimaryStats.Intelligence;
-                character.Job = (short)PrimaryStats.Job;
-                character.Level = PrimaryStats.Level;
-                character.Luck = PrimaryStats.Luck;
-                character.MapId = Map?.MapleId ?? ServerConfig.Instance.DefaultMapId;
-                character.MaxHealth = PrimaryStats.MaxHealth;
-                character.MaxMana = PrimaryStats.MaxMana;
-                character.Meso = PrimaryStats.Meso;
-                character.Mana = PrimaryStats.Mana;
-                character.Skin = PrimaryStats.Skin;
-                character.SkillPoints = PrimaryStats.SkillPoints;
-                character.SpawnPoint = SpawnPoint;
-                character.WorldId = WorldId;
-                character.Strength = PrimaryStats.Strength;
-                character.Name = Name;
-                character.BuddyListSlots = PrimaryStats.BuddyListSlots;
-                character.EquipmentSlots = Items.MaxSlots[ItemType.Equipment];
-                character.UsableSlots = Items.MaxSlots[ItemType.Usable];
-                character.SetupSlots = Items.MaxSlots[ItemType.Setup];
-                character.EtceteraSlots = Items.MaxSlots[ItemType.Etcetera];
-                character.CashSlots = Items.MaxSlots[ItemType.Pet];
-
-                dbContext.SaveChanges();
+                _log.Error($"Cannot find account [{Name}] in World [{WorldId}]");
+                return;
             }
+
+            character.AccountId = AccountId;
+            character.AbilityPoints = PrimaryStats.AbilityPoints;
+            character.Dexterity = PrimaryStats.Dexterity;
+            character.Experience = PrimaryStats.Experience;
+            character.Face = PrimaryStats.Face;
+            character.Fame = PrimaryStats.Fame;
+            character.Gender = (byte)PrimaryStats.Gender;
+            character.Hair = PrimaryStats.Hair;
+            character.Health = PrimaryStats.Health;
+            character.Intelligence = PrimaryStats.Intelligence;
+            character.Job = (short)PrimaryStats.Job;
+            character.Level = PrimaryStats.Level;
+            character.Luck = PrimaryStats.Luck;
+            character.MapId = Map?.MapleId ?? ServerConfig.Instance.DefaultMapId;
+            character.MaxHealth = PrimaryStats.MaxHealth;
+            character.MaxMana = PrimaryStats.MaxMana;
+            character.Meso = PrimaryStats.Meso;
+            character.Mana = PrimaryStats.Mana;
+            character.Skin = PrimaryStats.Skin;
+            character.SkillPoints = PrimaryStats.SkillPoints;
+            character.SpawnPoint = SpawnPoint;
+            character.WorldId = WorldId;
+            character.Strength = PrimaryStats.Strength;
+            character.Name = Name;
+            character.BuddyListSlots = PrimaryStats.BuddyListSlots;
+            character.EquipmentSlots = Items.MaxSlots[ItemType.Equipment];
+            character.UsableSlots = Items.MaxSlots[ItemType.Usable];
+            character.SetupSlots = Items.MaxSlots[ItemType.Setup];
+            character.EtceteraSlots = Items.MaxSlots[ItemType.Etcetera];
+            character.CashSlots = Items.MaxSlots[ItemType.Pet];
+            dbContext.SaveChanges();
 
             Items.Save();
             Skills.Save();
@@ -433,90 +408,85 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Create()
         {
-            using (var dbContext = new MapleDbContext())
+            using var dbContext = new MapleDbContext();
+            var character = dbContext.Characters
+                .Where(x => x.Name == Name)
+                .FirstOrDefault(x => x.WorldId == WorldId);
+
+            if (character != null)
             {
-                var character = dbContext.Characters
-                    .Where(x => x.Name == Name)
-                    .FirstOrDefault(x => x.WorldId == WorldId);
-
-                if (character != null)
-                {
-                    _log.Error($"Error creating account - [{Name}] already exists in World [{WorldId}]");
-                    return;
-                }
-
-                character = new CharacterEntity
-                {
-                    AccountId = AccountId,
-                    AbilityPoints = PrimaryStats.AbilityPoints,
-                    Dexterity = PrimaryStats.Dexterity,
-                    Experience = PrimaryStats.Experience,
-                    Face = PrimaryStats.Face,
-                    Fame = PrimaryStats.Fame,
-                    Gender = (byte)PrimaryStats.Gender,
-                    Hair = PrimaryStats.Hair,
-                    Health = PrimaryStats.Health,
-                    Intelligence = PrimaryStats.Intelligence,
-                    Job = (short)PrimaryStats.Job,
-                    Level = PrimaryStats.Level,
-                    Luck = PrimaryStats.Luck,
-                    MapId = ServerConfig.Instance.DefaultMapId,
-                    MaxHealth = PrimaryStats.MaxHealth,
-                    MaxMana = PrimaryStats.MaxMana,
-                    Meso = PrimaryStats.Meso,
-                    Mana = PrimaryStats.Mana,
-                    Skin = PrimaryStats.Skin,
-                    SkillPoints = PrimaryStats.SkillPoints,
-                    SpawnPoint = SpawnPoint,
-                    WorldId = WorldId,
-                    Strength = PrimaryStats.Strength,
-                    Name = Name,
-                    BuddyListSlots = PrimaryStats.BuddyListSlots,
-                    EquipmentSlots = Items.MaxSlots[ItemType.Equipment],
-                    UsableSlots = Items.MaxSlots[ItemType.Usable],
-                    SetupSlots = Items.MaxSlots[ItemType.Setup],
-                    EtceteraSlots = Items.MaxSlots[ItemType.Etcetera],
-                    CashSlots = Items.MaxSlots[ItemType.Pet]
-                };
-
-                dbContext.Characters.Add(character);
-                dbContext.SaveChanges();
-                Id = character.Id;
-
-                Items.Save();
-                Skills.Save();
-                Quests.Save();
-                Rings.Save();
-                TeleportRocks.Save();
+                _log.Error($"Error creating account - [{Name}] already exists in World [{WorldId}]");
+                return;
             }
+
+            character = new CharacterEntity
+            {
+                AccountId = AccountId,
+                AbilityPoints = PrimaryStats.AbilityPoints,
+                Dexterity = PrimaryStats.Dexterity,
+                Experience = PrimaryStats.Experience,
+                Face = PrimaryStats.Face,
+                Fame = PrimaryStats.Fame,
+                Gender = (byte)PrimaryStats.Gender,
+                Hair = PrimaryStats.Hair,
+                Health = PrimaryStats.Health,
+                Intelligence = PrimaryStats.Intelligence,
+                Job = (short)PrimaryStats.Job,
+                Level = PrimaryStats.Level,
+                Luck = PrimaryStats.Luck,
+                MapId = ServerConfig.Instance.DefaultMapId,
+                MaxHealth = PrimaryStats.MaxHealth,
+                MaxMana = PrimaryStats.MaxMana,
+                Meso = PrimaryStats.Meso,
+                Mana = PrimaryStats.Mana,
+                Skin = PrimaryStats.Skin,
+                SkillPoints = PrimaryStats.SkillPoints,
+                SpawnPoint = SpawnPoint,
+                WorldId = WorldId,
+                Strength = PrimaryStats.Strength,
+                Name = Name,
+                BuddyListSlots = PrimaryStats.BuddyListSlots,
+                EquipmentSlots = Items.MaxSlots[ItemType.Equipment],
+                UsableSlots = Items.MaxSlots[ItemType.Usable],
+                SetupSlots = Items.MaxSlots[ItemType.Setup],
+                EtceteraSlots = Items.MaxSlots[ItemType.Etcetera],
+                CashSlots = Items.MaxSlots[ItemType.Pet]
+            };
+
+            dbContext.Characters.Add(character);
+            dbContext.SaveChanges();
+            Id = character.Id;
+
+            Items.Save();
+            Skills.Save();
+            Quests.Save();
+            Rings.Save();
+            TeleportRocks.Save();
         }
 
         public void Load()
         {
-            using (var dbContext = new MapleDbContext())
+            using var dbContext = new MapleDbContext();
+            var character = dbContext.Characters.Find(Id);
+
+            if (character == null)
             {
-                var character = dbContext.Characters.Find(Id);
-
-                if (character == null)
-                {
-                    _log.Error($"Cannot find character [{Id}]");
-                    return;
-                }
-
-                Assigned = true;
-                Name = character.Name;
-                AccountId = character.AccountId;
-                PrimaryStats.Load(character);
-                Map = Client?.Server[character.MapId] ?? new Map(character.MapId);
-                SpawnPoint = character.SpawnPoint;
-                WorldId = character.WorldId;
-                Items.MaxSlots[ItemType.Equipment] = character.EquipmentSlots;
-                Items.MaxSlots[ItemType.Usable] = character.UsableSlots;
-                Items.MaxSlots[ItemType.Setup] = character.SetupSlots;
-                Items.MaxSlots[ItemType.Etcetera] = character.EtceteraSlots;
-                Items.MaxSlots[ItemType.Pet] = character.CashSlots;
+                _log.Error($"Cannot find character [{Id}]");
+                return;
             }
 
+            Assigned = true;
+            Name = character.Name;
+            AccountId = character.AccountId;
+            PrimaryStats.Load(character);
+            Map = Client?.Server[character.MapId] ?? new Map(character.MapId);
+            SpawnPoint = character.SpawnPoint;
+            WorldId = character.WorldId;
+            Items.MaxSlots[ItemType.Equipment] = character.EquipmentSlots;
+            Items.MaxSlots[ItemType.Usable] = character.UsableSlots;
+            Items.MaxSlots[ItemType.Setup] = character.SetupSlots;
+            Items.MaxSlots[ItemType.Etcetera] = character.EtceteraSlots;
+            Items.MaxSlots[ItemType.Pet] = character.CashSlots;
             Items.Load();
             Skills.Load();
             Quests.Load();
@@ -536,12 +506,10 @@ namespace RazzleServer.Game.Maple.Characters
                 Map.Characters.Show(this);
             }
 
-            using (var pw = new PacketWriter(ServerOperationCode.AdminResult))
-            {
-                pw.WriteByte(AdminResultType.Hide);
-                pw.WriteBool(isHidden);
-                Send(pw);
-            }
+            using var pw = new PacketWriter(ServerOperationCode.AdminResult);
+            pw.WriteByte(AdminResultType.Hide);
+            pw.WriteBool(isHidden);
+            Send(pw);
         }
     }
 }

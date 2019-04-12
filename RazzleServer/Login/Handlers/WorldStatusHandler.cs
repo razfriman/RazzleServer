@@ -20,11 +20,9 @@ namespace RazzleServer.Login.Handlers
 
             var world = client.Server.Manager.Worlds[worldId];
 
-            using (var pw = new PacketWriter(ServerOperationCode.WorldStatus))
-            {
-                pw.WriteShort((short)world.Status);
-                client.Send(pw);
-            }
+            using var pw = new PacketWriter(ServerOperationCode.WorldStatus);
+            pw.WriteShort((short)world.Status);
+            client.Send(pw);
         }
     }
 }

@@ -122,61 +122,55 @@ namespace RazzleServer.Game.Maple.Skills
 
         public void Save()
         {
-            using (var dbContext = new MapleDbContext())
+            using var dbContext = new MapleDbContext();
+            var item = dbContext.Skills.Find(Id);
+            var isNew = item == null;
+
+            if (isNew)
             {
-                var item = dbContext.Skills.Find(Id);
-                var isNew = item == null;
+                item = new SkillEntity();
+                dbContext.Skills.Add(item);
+            }
 
-                if (isNew)
-                {
-                    item = new SkillEntity();
-                    dbContext.Skills.Add(item);
-                }
+            item.CharacterId = Character.Id;
+            item.SkillId = MapleId;
+            item.Level = CurrentLevel;
+            item.MasterLevel = MaxLevel;
+            item.Expiration = Expiration;
 
-                item.CharacterId = Character.Id;
-                item.SkillId = MapleId;
-                item.Level = CurrentLevel;
-                item.MasterLevel = MaxLevel;
-                item.Expiration = Expiration;
+            dbContext.SaveChanges();
 
-                dbContext.SaveChanges();
-
-                if (isNew)
-                {
-                    Id = item.Id;
-                }
+            if (isNew)
+            {
+                Id = item.Id;
             }
         }
 
         public void Delete()
         {
-            using (var dbContext = new MapleDbContext())
+            using var dbContext = new MapleDbContext();
+            var skill = dbContext.Skills.Find(Id);
+
+            if (skill != null)
             {
-                var skill = dbContext.Skills.Find(Id);
-
-                if (skill != null)
-                {
-                    dbContext.Skills.Remove(skill);
-                    dbContext.SaveChanges();
-                }
-
-                Assigned = false;
+                dbContext.Skills.Remove(skill);
+                dbContext.SaveChanges();
             }
+
+            Assigned = false;
         }
 
         public void Update()
         {
-            using (var pw = new PacketWriter(ServerOperationCode.SkillsAddPoint))
-            {
-                pw.WriteByte(1);
-                pw.WriteShort(1);
-                pw.WriteInt(MapleId);
-                pw.WriteInt(CurrentLevel);
-                pw.WriteInt(MaxLevel);
-                pw.WriteDateTime(Expiration);
-                pw.WriteByte(4);
-                Character.Client.Send(pw);
-            }
+            using var pw = new PacketWriter(ServerOperationCode.SkillsAddPoint);
+            pw.WriteByte(1);
+            pw.WriteShort(1);
+            pw.WriteInt(MapleId);
+            pw.WriteInt(CurrentLevel);
+            pw.WriteInt(MaxLevel);
+            pw.WriteDateTime(Expiration);
+            pw.WriteByte(4);
+            Character.Client.Send(pw);
         }
 
         public void Recalculate()
@@ -278,12 +272,10 @@ namespace RazzleServer.Game.Maple.Skills
 
         public byte[] ToByteArray()
         {
-            using (var pw = new PacketWriter())
-            {
-                pw.WriteInt(MapleId);
-                pw.WriteInt(CurrentLevel);
-                return pw.ToArray();
-            }
+            using var pw = new PacketWriter();
+            pw.WriteInt(MapleId);
+            pw.WriteInt(CurrentLevel);
+            return pw.ToArray();
         }
     }
 }

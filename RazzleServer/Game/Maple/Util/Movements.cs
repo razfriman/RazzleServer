@@ -112,87 +112,85 @@ namespace RazzleServer.Game.Maple.Util
 
         public byte[] ToByteArray()
         {
-            using (var pw = new PacketWriter())
+            using var pw = new PacketWriter();
+            pw.WritePoint(Origin);
+            pw.WriteByte(Count);
+
+            foreach (var movement in this)
             {
-                pw.WritePoint(Origin);
-                pw.WriteByte(Count);
+                pw.WriteByte(movement.Type);
 
-                foreach (var movement in this)
+                switch (movement.Type)
                 {
-                    pw.WriteByte(movement.Type);
-
-                    switch (movement.Type)
+                    case MovementType.Normal:
+                    case MovementType.Normal2:
+                    case MovementType.NormalFloat:
                     {
-                        case MovementType.Normal:
-                        case MovementType.Normal2:
-                        case MovementType.NormalFloat:
-                        {
-                            pw.WritePoint(movement.Position);
-                            pw.WritePoint(movement.Velocity);
-                            pw.WriteShort(movement.Foothold);
-                            pw.WriteByte(movement.Stance);
-                            pw.WriteShort(movement.Duration);
-                        }
-                            break;
-
-                        case MovementType.Jump:
-                        case MovementType.JumpKnockback:
-                        case MovementType.FlashJump:
-                        case MovementType.ExcessiveKnockback:
-                        case MovementType.RecoilShot:
-                        case MovementType.RelativeFloat:
-                        {
-                            pw.WriteShort(movement.Velocity.X);
-                            pw.WriteShort(movement.Velocity.Y);
-                            pw.WriteByte(movement.Stance);
-                            pw.WriteShort(movement.Duration);
-                        }
-                            break;
-
-                        case MovementType.Immediate:
-                        case MovementType.Teleport:
-                        case MovementType.Assaulter:
-                        case MovementType.Assassinate:
-                        case MovementType.Rush:
-                        case MovementType.Chair:
-                        case MovementType.UnknownTeleport:
-                        {
-                            pw.WritePoint(movement.Position);
-                            pw.WriteShort(movement.Foothold);
-                            pw.WriteByte(movement.Stance);
-                            pw.WriteShort(movement.Duration);
-                        }
-                            break;
-
-                        case MovementType.Falling:
-                        {
-                            pw.WriteByte(movement.Statistic);
-                        }
-                            break;
-
-                        case MovementType.JumpDown:
-                        {
-                            pw.WritePoint(movement.Position);
-                            pw.WritePoint(movement.Velocity);
-                            pw.WriteShort(movement.FallStart);
-                            pw.WriteShort(movement.Foothold);
-                            pw.WriteByte(movement.Stance);
-                            pw.WriteShort(movement.Duration);
-                        }
-                            break;
-
-                        default:
-                        {
-                            pw.WriteByte(movement.Stance);
-                            pw.WriteShort(movement.Duration);
-                        }
-                            break;
+                        pw.WritePoint(movement.Position);
+                        pw.WritePoint(movement.Velocity);
+                        pw.WriteShort(movement.Foothold);
+                        pw.WriteByte(movement.Stance);
+                        pw.WriteShort(movement.Duration);
                     }
-                }
+                        break;
 
-                // NOTE: Keypad and boundary values are not read on the client side.
-                return pw.ToArray();
+                    case MovementType.Jump:
+                    case MovementType.JumpKnockback:
+                    case MovementType.FlashJump:
+                    case MovementType.ExcessiveKnockback:
+                    case MovementType.RecoilShot:
+                    case MovementType.RelativeFloat:
+                    {
+                        pw.WriteShort(movement.Velocity.X);
+                        pw.WriteShort(movement.Velocity.Y);
+                        pw.WriteByte(movement.Stance);
+                        pw.WriteShort(movement.Duration);
+                    }
+                        break;
+
+                    case MovementType.Immediate:
+                    case MovementType.Teleport:
+                    case MovementType.Assaulter:
+                    case MovementType.Assassinate:
+                    case MovementType.Rush:
+                    case MovementType.Chair:
+                    case MovementType.UnknownTeleport:
+                    {
+                        pw.WritePoint(movement.Position);
+                        pw.WriteShort(movement.Foothold);
+                        pw.WriteByte(movement.Stance);
+                        pw.WriteShort(movement.Duration);
+                    }
+                        break;
+
+                    case MovementType.Falling:
+                    {
+                        pw.WriteByte(movement.Statistic);
+                    }
+                        break;
+
+                    case MovementType.JumpDown:
+                    {
+                        pw.WritePoint(movement.Position);
+                        pw.WritePoint(movement.Velocity);
+                        pw.WriteShort(movement.FallStart);
+                        pw.WriteShort(movement.Foothold);
+                        pw.WriteByte(movement.Stance);
+                        pw.WriteShort(movement.Duration);
+                    }
+                        break;
+
+                    default:
+                    {
+                        pw.WriteByte(movement.Stance);
+                        pw.WriteShort(movement.Duration);
+                    }
+                        break;
+                }
             }
+
+            // NOTE: Keypad and boundary values are not read on the client side.
+            return pw.ToArray();
         }
     }
 }

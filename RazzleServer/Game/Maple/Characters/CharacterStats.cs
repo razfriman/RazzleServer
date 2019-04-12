@@ -672,15 +672,13 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void UpdateApperance()
         {
-            using (var pw = new PacketWriter(ServerOperationCode.RemotePlayerChangeEquips))
-            {
-                pw.WriteInt(Parent.Id);
-                pw.WriteBool(true);
-                pw.WriteBytes(Parent.AppearanceToByteArray());
-                pw.WriteByte(0);
-                pw.WriteShort(0);
-                Parent.Map.Send(pw, Parent);
-            }
+            using var pw = new PacketWriter(ServerOperationCode.RemotePlayerChangeEquips);
+            pw.WriteInt(Parent.Id);
+            pw.WriteBool(true);
+            pw.WriteBytes(Parent.AppearanceToByteArray());
+            pw.WriteByte(0);
+            pw.WriteShort(0);
+            Parent.Map.Send(pw, Parent);
         }
 
         public void AddAbility(StatisticType statistic, short mod, bool isReset)

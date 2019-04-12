@@ -14,17 +14,15 @@ namespace RazzleServer.Game.Maple.Data.Loaders
         {
             Logger.Information("Loading Npcs");
 
-            using (var file = GetWzFile("Data.wz"))
-            {
-                file.ParseWzFile();
-                var dir = file.WzDirectory.GetDirectoryByName("Npc");
+            using var file = GetWzFile("Data.wz");
+            file.ParseWzFile();
+            var dir = file.WzDirectory.GetDirectoryByName("Npc");
 
-                dir.WzImages.ForEach(x =>
-                {
-                    var npc = new NpcReference(x);
-                    Data.Data.Add(npc.MapleId, npc);
-                });
-            }
+            dir.WzImages.ForEach(x =>
+            {
+                var npc = new NpcReference(x);
+                Data.Data.Add(npc.MapleId, npc);
+            });
         }
     }
 }

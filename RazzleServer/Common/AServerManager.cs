@@ -26,10 +26,8 @@ namespace RazzleServer.Common
         private void InitializeDatabase()
         {
             _log.Information($"Initializing Database Type={ServerConfig.Instance.DatabaseConnectionType} Connection={ServerConfig.Instance.DatabaseConnection}");
-            using (var context = new MapleDbContext())
-            {
-                context.Database.EnsureCreated();
-            }
+            using var context = new MapleDbContext();
+            context.Database.EnsureCreated();
         }
 
         public int ValidateMigration(string host, int characterId) => Migrations.Validate(host, characterId);

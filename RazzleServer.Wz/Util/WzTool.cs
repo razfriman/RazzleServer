@@ -100,10 +100,8 @@ namespace RazzleServer.Wz.Util
 
         public static bool IsListFile(string path)
         {
-            using (var reader = new BinaryReader(File.OpenRead(path)))
-            {
-                return reader.ReadInt32() != WzHeader;
-            }
+            using var reader = new BinaryReader(File.OpenRead(path));
+            return reader.ReadInt32() != WzHeader;
         }
 
         public static WzMutableKey GenerateWzKey(byte[] wzIv) =>

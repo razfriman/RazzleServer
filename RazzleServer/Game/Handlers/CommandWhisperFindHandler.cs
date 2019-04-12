@@ -33,54 +33,48 @@ namespace RazzleServer.Game.Handlers
         {
             var text = packet.ReadString();
 
-            using (var pw = new PacketWriter(ServerOperationCode.GroupMessage))
+            using var pw = new PacketWriter(ServerOperationCode.GroupMessage);
+            pw.WriteByte(10);
+            pw.WriteString(targetName);
+            pw.WriteBool(target != null);
+            client.Send(pw);
+
+            if (target == null)
             {
-                pw.WriteByte(10);
-                pw.WriteString(targetName);
-                pw.WriteBool(target != null);
-                client.Send(pw);
+                return;
             }
 
-            if (target != null)
-            {
-                using (var pw = new PacketWriter(ServerOperationCode.Whisper))
-                {
-                    pw.WriteByte(18);
-                    pw.WriteString(client.Character.Name);
-                    pw.WriteByte(client.Server.ChannelId);
-                    pw.WriteByte(0);
-                    pw.WriteString(text);
-                    target.Client.Send(pw);
-                }
-            }
+            using var pwTarget = new PacketWriter(ServerOperationCode.Whisper);
+            pwTarget.WriteByte(18);
+            pwTarget.WriteString(client.Character.Name);
+            pwTarget.WriteByte(client.Server.ChannelId);
+            pwTarget.WriteByte(0);
+            pwTarget.WriteString(text);
+            target.Client.Send(pwTarget);
         }
 
         private static void ProcessFind(GameClient client, string targetName, Maple.Characters.Character target)
         {
             if (target == null)
             {
-                using (var pw = new PacketWriter(ServerOperationCode.Whisper))
-                {
-                    pw.WriteByte(0x0A);
-                    pw.WriteString(targetName);
-                    pw.WriteBool(false);
-                    client.Send(pw);
-                }
+                using var pw = new PacketWriter(ServerOperationCode.Whisper);
+                pw.WriteByte(0x0A);
+                pw.WriteString(targetName);
+                pw.WriteBool(false);
+                client.Send(pw);
             }
             else
             {
                 var isInSameChannel = client.Server.ChannelId == target.Client.Server.ChannelId;
 
-                using (var pw = new PacketWriter(ServerOperationCode.Whisper))
-                {
-                    pw.WriteByte(0x09);
-                    pw.WriteString(targetName);
-                    pw.WriteByte(isInSameChannel ? 1 : 3);
-                    pw.WriteInt(isInSameChannel ? target.Map.MapleId : target.Client.Server.ChannelId);
-                    pw.WriteInt(0); // NOTE: Unknown.
-                    pw.WriteInt(0); // NOTE: Unknown.
-                    client.Send(pw);
-                }
+                using var pw = new PacketWriter(ServerOperationCode.Whisper);
+                pw.WriteByte(0x09);
+                pw.WriteString(targetName);
+                pw.WriteByte(isInSameChannel ? 1 : 3);
+                pw.WriteInt(isInSameChannel ? target.Map.MapleId : target.Client.Server.ChannelId);
+                pw.WriteInt(0); // NOTE: Unknown.
+                pw.WriteInt(0); // NOTE: Unknown.
+                client.Send(pw);
             }
         }
     }

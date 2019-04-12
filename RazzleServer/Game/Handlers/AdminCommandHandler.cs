@@ -52,12 +52,10 @@ namespace RazzleServer.Game.Handlers
                     }
                     else
                     {
-                        using (var pw = new PacketWriter(ServerOperationCode.AdminResult))
-                        {
-                            pw.WriteByte(6);
-                            pw.WriteByte(1);
-                            client.Send(pw);
-                        }
+                        using var pw = new PacketWriter(ServerOperationCode.AdminResult);
+                        pw.WriteByte(6);
+                        pw.WriteByte(1);
+                        client.Send(pw);
                     }
                 }
                     break;
@@ -114,13 +112,11 @@ namespace RazzleServer.Game.Handlers
                     }
                     else
                     {
-                        using (var pw = new PacketWriter(ServerOperationCode.AdminResult))
-                        {
-                            pw.WriteByte(AdminResultType.InvalidName);
-                            pw.WriteByte(1);
+                        using var pw = new PacketWriter(ServerOperationCode.AdminResult);
+                        pw.WriteByte(AdminResultType.InvalidName);
+                        pw.WriteByte(1);
 
-                            client.Send(pw);
-                        }
+                        client.Send(pw);
                     }
                 }
                     break;
@@ -159,12 +155,10 @@ namespace RazzleServer.Game.Handlers
 
                     target?.Notify(text, NoticeType.Popup);
 
-                    using (var pw = new PacketWriter(ServerOperationCode.AdminResult))
-                    {
-                        pw.WriteByte(29);
-                        pw.WriteBool(target != null);
-                        client.Send(pw);
-                    }
+                    using var pw = new PacketWriter(ServerOperationCode.AdminResult);
+                    pw.WriteByte(29);
+                    pw.WriteBool(target != null);
+                    client.Send(pw);
                 }
                     break;
                 case AdminCommandType.Log:

@@ -165,7 +165,7 @@ namespace RazzleServer.Game.Maple.Life
             {
                 if (dispel)
                 {
-                    //affectedCharacter.Dispel();
+                    affectedCharacter.Buffs.Dispell();
                 }
 
                 if (banish)
@@ -175,27 +175,23 @@ namespace RazzleServer.Game.Maple.Life
 
                 if (disease != CharacterDisease.None)
                 {
-                    using (var pw = new PacketWriter(ServerOperationCode.SkillsGiveBuff))
-                    {
-                        pw.WriteLong(0);
-                        pw.WriteLong((long)disease);
+                    using var pw = new PacketWriter(ServerOperationCode.SkillsGiveBuff);
+                    pw.WriteLong(0);
+                    pw.WriteLong((long)disease);
 
-                        pw.WriteShort((short)CachedReference.ParameterA);
-                        pw.WriteShort(MapleId);
-                        pw.WriteShort(Level);
-                        pw.WriteInt(CachedReference.Duration);
+                    pw.WriteShort((short)CachedReference.ParameterA);
+                    pw.WriteShort(MapleId);
+                    pw.WriteShort(Level);
+                    pw.WriteInt(CachedReference.Duration);
 
-                        pw.WriteShort(0);
-                        pw.WriteShort(900);
-                        pw.WriteByte(1);
+                    pw.WriteShort(0);
+                    pw.WriteShort(900);
+                    pw.WriteByte(1);
 
-                        affectedCharacter.Client.Send(pw);
-                    }
+                    affectedCharacter.Client.Send(pw);
 
                     //TODO - the remote packet
-                    using (var pw = new PacketWriter(ServerOperationCode.RemotePlayerSkillBuff))
-                    {
-                    }
+                    using var pw1 = new PacketWriter(ServerOperationCode.RemotePlayerSkillBuff);
                 }
             }
 

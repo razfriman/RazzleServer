@@ -8,18 +8,16 @@ namespace RazzleServer.Game
     {
         public static PacketWriter Notify(string message, NoticeType type = NoticeType.Popup)
         {
-            using (var pw = new PacketWriter(ServerOperationCode.Notice))
+            using var pw = new PacketWriter(ServerOperationCode.Notice);
+            pw.WriteByte(type);
+
+            if (type == NoticeType.ScrollingText)
             {
-                pw.WriteByte(type);
-
-                if (type == NoticeType.ScrollingText)
-                {
-                    pw.WriteBool(!string.IsNullOrEmpty(message));
-                }
-
-                pw.WriteString(message);
-                return pw;
+                pw.WriteBool(!string.IsNullOrEmpty(message));
             }
+
+            pw.WriteString(message);
+            return pw;
         }
 
         public static PacketWriter ShowStatusInfo(MessageType type, bool isMeso = false, int amount = 0,

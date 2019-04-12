@@ -62,16 +62,14 @@ namespace RazzleServer.Login.Handlers
             character.Items.Add(new Item(weaponId, equipped: true));
             character.Create();
 
-            using (var pw = new PacketWriter(ServerOperationCode.CreateCharacterResult))
+            using var pw = new PacketWriter(ServerOperationCode.CreateCharacterResult);
+            pw.WriteBool(error);
+            if (!error)
             {
-                pw.WriteBool(error);
-                if (!error)
-                {
-                    pw.WriteBytes(character.ToByteArray());
-                }
-
-                client.Send(pw);
+                pw.WriteBytes(character.ToByteArray());
             }
+
+            client.Send(pw);
         }
 
         private bool ValidateCharacterCreation(LoginServer server, byte world, string name, int face, int hair,

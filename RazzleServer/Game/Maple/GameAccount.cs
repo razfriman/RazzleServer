@@ -26,23 +26,21 @@ namespace RazzleServer.Game.Maple
 
         public void Load()
         {
-            using (var dbContext = new MapleDbContext())
+            using var dbContext = new MapleDbContext();
+            var account = dbContext.Accounts.Find(Id);
+
+            if (account == null)
             {
-                var account = dbContext.Accounts.Find(Id);
-
-                if (account == null)
-                {
-                    throw new NoAccountException();
-                }
-
-                Id = account.Id;
-                Username = account.Username;
-                Gender = (Gender)account.Gender;
-                Birthday = account.Birthday;
-                Creation = account.Creation;
-                BanReason = (BanReasonType)account.BanReason;
-                IsMaster = account.IsMaster;
+                throw new NoAccountException();
             }
+
+            Id = account.Id;
+            Username = account.Username;
+            Gender = (Gender)account.Gender;
+            Birthday = account.Birthday;
+            Creation = account.Creation;
+            BanReason = (BanReasonType)account.BanReason;
+            IsMaster = account.IsMaster;
         }
     }
 }

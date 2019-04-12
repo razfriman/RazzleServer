@@ -84,12 +84,10 @@ namespace RazzleServer.Game
         
         public void SetOnline(bool isOnline)
         {
-            using (var context = new MapleDbContext())
-            {
-                var account = context.Accounts.Find(Account.Id);
-                account.IsOnline = isOnline;
-                context.SaveChanges();
-            }
+            using var context = new MapleDbContext();
+            var account = context.Accounts.Find(Account.Id);
+            account.IsOnline = isOnline;
+            context.SaveChanges();
         }
 
         public void ChangeChannel(byte channelId)
@@ -97,13 +95,11 @@ namespace RazzleServer.Game
             Character.Save();
             Server.Manager.Migrate(Host, Account.Id, Character.Id);
 
-            using (var outPacket = new PacketWriter(ServerOperationCode.ClientConnectToServer))
-            {
-                outPacket.WriteBool(true);
-                outPacket.WriteBytes(Socket.HostBytes);
-                outPacket.WriteUShort(Server.World[channelId].Port);
-                Send(outPacket);
-            }
+            using var outPacket = new PacketWriter(ServerOperationCode.ClientConnectToServer);
+            outPacket.WriteBool(true);
+            outPacket.WriteBytes(Socket.HostBytes);
+            outPacket.WriteUShort(Server.World[channelId].Port);
+            Send(outPacket);
         }
 
         public void StartPingCheck()

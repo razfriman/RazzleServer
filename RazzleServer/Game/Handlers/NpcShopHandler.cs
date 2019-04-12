@@ -151,11 +151,9 @@ namespace RazzleServer.Game.Handlers
                 client.Character.PrimaryStats.Meso += item.SalePrice * quantity;
             }
 
-            using (var pw = new PacketWriter(ServerOperationCode.NpcShopResult))
-            {
-                pw.WriteByte(8);
-                client.Character.Client.Send(pw);
-            }
+            using var pw = new PacketWriter(ServerOperationCode.NpcShopResult);
+            pw.WriteByte(8);
+            client.Character.Client.Send(pw);
         }
 
         private static void Recharge(PacketReader packet, GameClient client, Npc shop)
@@ -175,20 +173,16 @@ namespace RazzleServer.Game.Handlers
                 item.Update();
             }
 
-            using (var pw = new PacketWriter(ServerOperationCode.NpcShopResult))
-            {
-                pw.WriteByte(8);
-                client.Character.Client.Send(pw);
-            }
+            using var pw = new PacketWriter(ServerOperationCode.NpcShopResult);
+            pw.WriteByte(8);
+            client.Character.Client.Send(pw);
         }
 
         private static void SendShopResult(GameClient client, ShopResult result)
         {
-            using (var pw = new PacketWriter(ServerOperationCode.NpcShopResult))
-            {
-                pw.WriteByte(result);
-                client.Send(pw);
-            }
+            using var pw = new PacketWriter(ServerOperationCode.NpcShopResult);
+            pw.WriteByte(result);
+            client.Send(pw);
         }
     }
 }

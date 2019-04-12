@@ -14,19 +14,17 @@ namespace RazzleServer.Game.Maple.Data.Loaders
         {
             Logger.Information("Loading Quests");
 
-            using (var file = GetWzFile("Data.wz"))
-            {
-                file.ParseWzFile();
-                var dir = file.WzDirectory.GetDirectoryByName("Etc");
-                var img = dir.GetImageByName("QuestInfo.img");
+            using var file = GetWzFile("Data.wz");
+            file.ParseWzFile();
+            var dir = file.WzDirectory.GetDirectoryByName("Etc");
+            var img = dir.GetImageByName("QuestInfo.img");
 
-                foreach (var item in img.WzProperties)
+            foreach (var item in img.WzProperties)
+            {
+                if (int.TryParse(item.Name, out var questId))
                 {
-                    if (int.TryParse(item.Name, out var questId))
-                    {
-                        Data.Data.Add(questId,
-                            new QuestReference {MapleId = questId, Name = item["info"]?["subject"]?.GetString()});
-                    }
+                    Data.Data.Add(questId,
+                        new QuestReference {MapleId = questId, Name = item["info"]?["subject"]?.GetString()});
                 }
             }
         }

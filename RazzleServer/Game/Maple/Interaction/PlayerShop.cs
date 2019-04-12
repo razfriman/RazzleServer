@@ -28,22 +28,20 @@ namespace RazzleServer.Game.Maple.Interaction
             Items = new List<PlayerShopItem>();
             Opened = false;
 
-            using (var pw = new PacketWriter(ServerOperationCode.PlayerInteraction))
-            {
-                pw.WriteByte(InteractionCode.Room);
-                pw.WriteByte(4);
-                pw.WriteByte(4);
-                pw.WriteByte(0);
-                pw.WriteByte(0);
-                pw.WriteBytes(Owner.AppearanceToByteArray());
-                pw.WriteString(Owner.Name);
-                pw.WriteByte(byte.MaxValue);
-                pw.WriteString(Description);
-                pw.WriteByte(16);
-                pw.WriteByte(0);
+            using var pw = new PacketWriter(ServerOperationCode.PlayerInteraction);
+            pw.WriteByte(InteractionCode.Room);
+            pw.WriteByte(4);
+            pw.WriteByte(4);
+            pw.WriteByte(0);
+            pw.WriteByte(0);
+            pw.WriteBytes(Owner.AppearanceToByteArray());
+            pw.WriteString(Owner.Name);
+            pw.WriteByte(byte.MaxValue);
+            pw.WriteString(Description);
+            pw.WriteByte(16);
+            pw.WriteByte(0);
 
-                Owner.Client.Send(pw);
-            }
+            Owner.Client.Send(pw);
         }
 
         public void Handle(Character character, InteractionCode code, PacketReader iPacket)
@@ -202,27 +200,25 @@ namespace RazzleServer.Game.Maple.Interaction
                 {
                     var text = iPacket.ReadString();
 
-                    using (var pw = new PacketWriter(ServerOperationCode.PlayerInteraction))
+                    using var pw = new PacketWriter(ServerOperationCode.PlayerInteraction);
+                    pw.WriteByte(InteractionCode.Chat);
+                    pw.WriteByte(8);
+
+                    byte sender = 0;
+
+                    for (var i = 0; i < Visitors.Length; i++)
                     {
-                        pw.WriteByte(InteractionCode.Chat);
-                        pw.WriteByte(8);
-
-                        byte sender = 0;
-
-                        for (var i = 0; i < Visitors.Length; i++)
+                        if (Visitors[i] == character)
                         {
-                            if (Visitors[i] == character)
-                            {
-                                sender = (byte)(i + 1);
-                            }
+                            sender = (byte)(i + 1);
                         }
-
-
-                        pw.WriteByte(sender);
-                        pw.WriteString($"{character.Name} : {text}");
-
-                        Broadcast(pw);
                     }
+
+
+                    pw.WriteByte(sender);
+                    pw.WriteString($"{character.Name} : {text}");
+
+                    Broadcast(pw);
                 }
                     break;
             }
@@ -246,15 +242,11 @@ namespace RazzleServer.Game.Maple.Interaction
                 {
                     if (visitor != null)
                     {
-                        using (var pw = new PacketWriter(ServerOperationCode.PlayerInteraction))
-                        {
-                            pw.WriteByte(InteractionCode.Exit);
-                            pw.WriteByte(1);
-                            pw.WriteByte(10);
-
-                            visitor.Client.Send(pw);
-                        }
-
+                        using var pw = new PacketWriter(ServerOperationCode.PlayerInteraction);
+                        pw.WriteByte(InteractionCode.Exit);
+                        pw.WriteByte(1);
+                        pw.WriteByte(10);
+                        visitor.Client.Send(pw);
                         visitor.PlayerShop = null;
                     }
                 }
@@ -265,21 +257,19 @@ namespace RazzleServer.Game.Maple.Interaction
 
         public void UpdateItems()
         {
-            using (var pw = new PacketWriter(ServerOperationCode.PlayerInteraction))
+            using var pw = new PacketWriter(ServerOperationCode.PlayerInteraction);
+            pw.WriteByte(InteractionCode.UpdateItems);
+            pw.WriteByte((byte)Items.Count);
+
+            foreach (var loopShopItem in Items)
             {
-                pw.WriteByte(InteractionCode.UpdateItems);
-                pw.WriteByte((byte)Items.Count);
-
-                foreach (var loopShopItem in Items)
-                {
-                    pw.WriteShort(loopShopItem.Bundles);
-                    pw.WriteShort(loopShopItem.Quantity);
-                    pw.WriteInt(loopShopItem.MerchantPrice);
-                    pw.WriteBytes(loopShopItem.ToByteArray(true, true));
-                }
-
-                Broadcast(pw);
+                pw.WriteShort(loopShopItem.Bundles);
+                pw.WriteShort(loopShopItem.Quantity);
+                pw.WriteInt(loopShopItem.MerchantPrice);
+                pw.WriteBytes(loopShopItem.ToByteArray(true, true));
             }
+
+            Broadcast(pw);
         }
 
         public void Broadcast(PacketWriter pw, bool includeOwner = true)
@@ -301,55 +291,50 @@ namespace RazzleServer.Game.Maple.Interaction
             {
                 if (Visitors[i] == null)
                 {
-                    using (var pw = new PacketWriter(ServerOperationCode.PlayerInteraction))
-                    {
-                        pw.WriteByte(InteractionCode.Visit);
-                        pw.WriteByte(i + 1);
-                        pw.WriteBytes(visitor.AppearanceToByteArray());
-                        pw.WriteString(visitor.Name);
-
-                        Broadcast(pw);
-                    }
+                    using var pw = new PacketWriter(ServerOperationCode.PlayerInteraction);
+                    pw.WriteByte(InteractionCode.Visit);
+                    pw.WriteByte(i + 1);
+                    pw.WriteBytes(visitor.AppearanceToByteArray());
+                    pw.WriteString(visitor.Name);
+                    Broadcast(pw);
 
                     visitor.PlayerShop = this;
                     Visitors[i] = visitor;
 
-                    using (var pw = new PacketWriter(ServerOperationCode.PlayerInteraction))
+                    using var pwVisitor = new PacketWriter(ServerOperationCode.PlayerInteraction);
+                    pwVisitor.WriteByte(InteractionCode.Room);
+                    pwVisitor.WriteByte(4);
+                    pwVisitor.WriteByte(4);
+                    pwVisitor.WriteBool(true);
+                    pwVisitor.WriteByte(0);
+                    pwVisitor.WriteBytes(Owner.AppearanceToByteArray());
+                    pwVisitor.WriteString(Owner.Name);
+
+                    for (var slot = 0; slot < 3; slot++)
                     {
-                        pw.WriteByte(InteractionCode.Room);
-                        pw.WriteByte(4);
-                        pw.WriteByte(4);
-                        pw.WriteBool(true);
-                        pw.WriteByte(0);
-                        pw.WriteBytes(Owner.AppearanceToByteArray());
-                        pw.WriteString(Owner.Name);
-
-                        for (var slot = 0; slot < 3; slot++)
+                        if (Visitors[slot] != null)
                         {
-                            if (Visitors[slot] != null)
-                            {
-                                pw.WriteByte(slot + 1);
-                                pw.WriteBytes(Visitors[slot].AppearanceToByteArray());
-                                pw.WriteString(Visitors[slot].Name);
-                            }
+                            pwVisitor.WriteByte(slot + 1);
+                            pwVisitor.WriteBytes(Visitors[slot].AppearanceToByteArray());
+                            pwVisitor.WriteString(Visitors[slot].Name);
                         }
-
-
-                        pw.WriteByte(byte.MaxValue);
-                        pw.WriteString(Description);
-                        pw.WriteByte(0x10);
-                        pw.WriteByte((byte)Items.Count);
-
-                        foreach (var loopShopItem in Items)
-                        {
-                            pw.WriteShort(loopShopItem.Bundles);
-                            pw.WriteShort(loopShopItem.Quantity);
-                            pw.WriteInt(loopShopItem.MerchantPrice);
-                            pw.WriteBytes(loopShopItem.ToByteArray(true, true));
-                        }
-
-                        visitor.Client.Send(pw);
                     }
+
+
+                    pwVisitor.WriteByte(byte.MaxValue);
+                    pwVisitor.WriteString(Description);
+                    pwVisitor.WriteByte(0x10);
+                    pwVisitor.WriteByte((byte)Items.Count);
+
+                    foreach (var loopShopItem in Items)
+                    {
+                        pwVisitor.WriteShort(loopShopItem.Bundles);
+                        pwVisitor.WriteShort(loopShopItem.Quantity);
+                        pwVisitor.WriteInt(loopShopItem.MerchantPrice);
+                        pwVisitor.WriteBytes(loopShopItem.ToByteArray(true, true));
+                    }
+
+                    visitor.Client.Send(pwVisitor);
 
                     break;
                 }
@@ -365,25 +350,19 @@ namespace RazzleServer.Game.Maple.Interaction
                     visitor.PlayerShop = null;
                     Visitors[i] = null;
 
-                    using (var pw = new PacketWriter(ServerOperationCode.PlayerInteraction))
+                    using var pwRemote = new PacketWriter(ServerOperationCode.PlayerInteraction);
+                    pwRemote.WriteByte(InteractionCode.Exit);
+                    if (i > 0)
                     {
-                        pw.WriteByte(InteractionCode.Exit);
-
-                        if (i > 0)
-                        {
-                            pw.WriteByte(i + 1);
-                        }
-
-                        Broadcast(pw, false);
+                        pwRemote.WriteByte(i + 1);
                     }
 
-                    using (var pw = new PacketWriter(ServerOperationCode.PlayerInteraction))
-                    {
-                        pw.WriteByte(InteractionCode.Exit);
-                        pw.WriteByte(i + 1);
+                    Broadcast(pwRemote, false);
 
-                        Owner.Client.Send(pw);
-                    }
+                    using var pwLocal = new PacketWriter(ServerOperationCode.PlayerInteraction);
+                    pwLocal.WriteByte(InteractionCode.Exit);
+                    pwLocal.WriteByte(i + 1);
+                    Owner.Client.Send(pwLocal);
 
                     break;
                 }

@@ -160,12 +160,10 @@ namespace RazzleServer.Common.Util
         public static string RandomString(int length = 20)
         {
             var data = new byte[1];
-            using (var crypto = new RNGCryptoServiceProvider())
-            {
-                crypto.GetNonZeroBytes(data);
-                data = new byte[length];
-                crypto.GetNonZeroBytes(data);
-            }
+            using var crypto = new RNGCryptoServiceProvider();
+            crypto.GetNonZeroBytes(data);
+            data = new byte[length];
+            crypto.GetNonZeroBytes(data);
 
             var result = new StringBuilder(length);
             foreach (var b in data)
@@ -184,15 +182,11 @@ namespace RazzleServer.Common.Util
         public static string GetSha512(string value)
         {
             var data = Encoding.ASCII.GetBytes(value);
-            byte[] hashData;
 
-            using (var sha = SHA512.Create())
-            {
-                hashData = sha.ComputeHash(data);
-            }
+            var sha = SHA512.Create();
+            var hashData = sha.ComputeHash(data);
 
             var hash = new StringBuilder();
-
             foreach (var b in hashData)
             {
                 hash.Append(b.ToString("X2"));
@@ -219,11 +213,8 @@ namespace RazzleServer.Common.Util
         public static string GetHmacSha512(string value, byte[] key)
         {
             var data = Encoding.ASCII.GetBytes(value);
-            byte[] hashData;
-            using (var sha = new HMACSHA512(key))
-            {
-                hashData = sha.ComputeHash(data);
-            }
+            using var sha = new HMACSHA512(key);
+            var hashData = sha.ComputeHash(data);
 
             var hash = new StringBuilder();
 
@@ -252,26 +243,22 @@ namespace RazzleServer.Common.Util
 
         public static void SaveToJson<T>(string path, T data) where T : class
         {
-            using (var s = File.OpenWrite(path))
-            {
-                SaveToJson(s, data);
-            }
+            using var s = File.OpenWrite(path);
+            SaveToJson(s, data);
         }
 
         public static void SaveToJson<T>(Stream stream, T data) where T : class
         {
-            using (var sw = new StreamWriter(stream))
-            using (var writer = new JsonTextWriter(sw))
+            using var sw = new StreamWriter(stream);
+            using var writer = new JsonTextWriter(sw);
+            try
             {
-                try
-                {
-                    var serializer = new JsonSerializer();
-                    serializer.Serialize(writer, data);
-                }
-                catch (Exception e)
-                {
-                    Logger.Error(e, "Error while saving to JSON");
-                }
+                var serializer = new JsonSerializer();
+                serializer.Serialize(writer, data);
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e, "Error while saving to JSON");
             }
         }
     }

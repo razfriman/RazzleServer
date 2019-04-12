@@ -52,11 +52,9 @@ namespace RazzleServer.Game.Maple.Maps
 
         public static void SendMapTransferResult(Character character, MapTransferResult result)
         {
-            using (var pw = new PacketWriter(ServerOperationCode.TransferFieldReqIgnored))
-            {
-                pw.WriteByte(result);
-                character.Client.Send(pw);
-            }
+            using var pw = new PacketWriter(ServerOperationCode.TransferFieldReqIgnored);
+            pw.WriteByte(result);
+            character.Client.Send(pw);
         }
 
         public static void PlaySoundEffect(Character character) => character.ShowLocalUserEffect(UserEffect.PlayPortalSe);

@@ -140,13 +140,10 @@ namespace RazzleServer.Wz.WzProperties
         public WzSoundProperty(string name, string file)
         {
             Name = name;
-            using (var reader = new Mp3FileReader(file))
-            {
-                _wavFormat = reader.Mp3WaveFormat;
-                Length = (int)(reader.Length * 1000d / reader.WaveFormat.AverageBytesPerSecond);
-                RebuildHeader();
-            }
-
+            using var reader = new Mp3FileReader(file);
+            _wavFormat = reader.Mp3WaveFormat;
+            Length = (int)(reader.Length * 1000d / reader.WaveFormat.AverageBytesPerSecond);
+            RebuildHeader();
             _mp3Bytes = File.ReadAllBytes(file);
         }
 
@@ -165,23 +162,21 @@ namespace RazzleServer.Wz.WzProperties
 
         public void RebuildHeader()
         {
-            using (var ms = new MemoryStream())
-            using (var bw = new BinaryWriter(ms))
+            using var ms = new MemoryStream();
+            using var bw = new BinaryWriter(ms);
+            bw.Write(SoundHeader);
+            var wavHeader = StructToBytes(_wavFormat);
+            if (_headerEncrypted)
             {
-                bw.Write(SoundHeader);
-                var wavHeader = StructToBytes(_wavFormat);
-                if (_headerEncrypted)
+                for (var i = 0; i < wavHeader.Length; i++)
                 {
-                    for (var i = 0; i < wavHeader.Length; i++)
-                    {
-                        wavHeader[i] ^= _wzReader.WzKey[i];
-                    }
+                    wavHeader[i] ^= _wzReader.WzKey[i];
                 }
-
-                bw.Write((byte)wavHeader.Length);
-                bw.Write(wavHeader, 0, wavHeader.Length);
-                Header = ms.ToArray();
             }
+
+            bw.Write((byte)wavHeader.Length);
+            bw.Write(wavHeader, 0, wavHeader.Length);
+            Header = ms.ToArray();
         }
 
         private static byte[] StructToBytes<T>(T obj)

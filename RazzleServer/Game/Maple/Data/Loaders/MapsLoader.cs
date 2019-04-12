@@ -15,20 +15,18 @@ namespace RazzleServer.Game.Maple.Data.Loaders
         {
             Logger.Information("Loading Maps");
 
-            using (var file = GetWzFile("Data.wz"))
-            {
-                file.ParseWzFile();
-                file.WzDirectory.GetDirectoryByName("Map")
-                    .GetDirectoryByName("Map")
-                    .WzDirectories
-                    .SelectMany(subDir => subDir.WzImages)
-                    .ToList()
-                    .ForEach(img =>
-                    {
-                        var map = new MapReference(img);
-                        Data.Data.Add(map.MapleId, map);
-                    });
-            }
+            using var file = GetWzFile("Data.wz");
+            file.ParseWzFile();
+            file.WzDirectory.GetDirectoryByName("Map")
+                .GetDirectoryByName("Map")
+                .WzDirectories
+                .SelectMany(subDir => subDir.WzImages)
+                .ToList()
+                .ForEach(img =>
+                {
+                    var map = new MapReference(img);
+                    Data.Data.Add(map.MapleId, map);
+                });
         }
     }
 }

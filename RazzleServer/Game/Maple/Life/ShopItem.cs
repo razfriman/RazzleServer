@@ -29,20 +29,18 @@ namespace RazzleServer.Game.Maple.Life
 
         public byte[] ToByteArray()
         {
-            using (var pw = new PacketWriter())
+            using var pw = new PacketWriter();
+            pw.WriteInt(MapleId);
+            pw.WriteInt(Price);
+            if (IsRecharageable)
             {
-                pw.WriteInt(MapleId);
-                pw.WriteInt(Price);
-                if (IsRecharageable)
-                {
-                    pw.WriteLong(BitConverter.DoubleToInt64Bits(UnitRechargeRate));
-                }
-
-                pw.WriteShort(MaxPerStack);
-
-
-                return pw.ToArray();
+                pw.WriteLong(BitConverter.DoubleToInt64Bits(UnitRechargeRate));
             }
+
+            pw.WriteShort(MaxPerStack);
+
+
+            return pw.ToArray();
         }
     }
 }

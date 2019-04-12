@@ -14,14 +14,12 @@ namespace RazzleServer.Game.Maple.Data.Loaders
         {
             Logger.Information("Loading Character Creation Data");
 
-            using (var file = GetWzFile("Data.wz"))
-            {
-                file.ParseWzFile();
-                var dir = file.WzDirectory.GetDirectoryByName("Character");
-                LoadSkins();
-                LoadHairs(dir.GetDirectoryByName("Hair"));
-                LoadFaces(dir.GetDirectoryByName("Face"));
-            }
+            using var file = GetWzFile("Data.wz");
+            file.ParseWzFile();
+            var dir = file.WzDirectory.GetDirectoryByName("Character");
+            LoadSkins();
+            LoadHairs(dir.GetDirectoryByName("Hair"));
+            LoadFaces(dir.GetDirectoryByName("Face"));
         }
 
         private void LoadHairs(WzDirectory wzDirectory)
