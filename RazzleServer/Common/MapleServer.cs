@@ -131,7 +131,7 @@ namespace RazzleServer.Common
         {
             try
             {
-                Logger.Information($"Starting {GetType().Name} on port [{port}]");
+                Logger.Information($"Starting {GetType().Name.PadRight(11)} on port [{port}]");
                 Port = port;
                 _listener = new TcpListener(ip, port);
                 _listener.Start(BacklogSize);

@@ -42,6 +42,7 @@ This contains both the server configuration and the logging configuration.
 | ---------------------- | ------------------------------------------------------------------------------------------------------ | -------------- |
 | LoginPort              | The port for the login server                                                                          | 8484           |
 | ChannelPort            | The starting port for the channel server. Each channel will increment this as the channels are created | 7575           |
+| ShopPort               | The port for the shop server                                                                           | 8787           |
 | DefaultMapId           | The map that new characters will start on once they are created                                        | 180000000      |
 | DatabaseConnection     | Database connection string, this will change based on the database connection type                     | MapleServer.db |
 | DatabaseConnectionType | Which database provider to use. Current supported values or `InMemory` and `Sqlite`                    | `Sqlite`       |
@@ -102,6 +103,7 @@ services:
     ports:
       - "8484:8484"
       - "7575-7577:7575-7577"
+      - "8787:8787"
     volumes:
       - ./Data/appsettings.json:/app/appsettings.json
       - ./Data/DataCache:/app/Data/DataCache

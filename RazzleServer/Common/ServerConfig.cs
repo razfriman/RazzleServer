@@ -8,6 +8,7 @@ namespace RazzleServer.Common
     {
         public ushort LoginPort { get; set; } = 8484;
         public ushort ChannelPort { get; set; } = 7575;
+        public ushort ShopPort { get; set; } = 8787;
         public int DefaultMapId { get; set; } = 180000000;
         public string DatabaseConnection { get; set; } = "MapleServer.db";
         public DatabaseConnectionType DatabaseConnectionType { get; set; } = DatabaseConnectionType.Sqlite;

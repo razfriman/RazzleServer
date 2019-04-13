@@ -6,6 +6,7 @@ services:
     ports:
       - "8484:8484"
       - "7575-7577:7575-7577"
+      - "8787:8787"
     volumes:
       - ./Data/appsettings.json:/app/appsettings.json
       - ./Data/DataCache:/app/Data/DataCache

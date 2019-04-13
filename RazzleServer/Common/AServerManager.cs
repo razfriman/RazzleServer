@@ -5,6 +5,7 @@ using Microsoft.Extensions.Hosting;
 using RazzleServer.Common.Server;
 using RazzleServer.Game;
 using RazzleServer.Login;
+using RazzleServer.Shop;
 using Serilog;
 
 namespace RazzleServer.Common
@@ -13,6 +14,7 @@ namespace RazzleServer.Common
     {
         public LoginServer Login { get; set; }
         public Worlds Worlds { get; } = new Worlds();
+        public ShopServer Shop { get; set; }
         public Migrations Migrations { get; } = new Migrations();
 
         private readonly ILogger _log = Log.ForContext<AServerManager>();
@@ -60,6 +62,9 @@ namespace RazzleServer.Common
                     game.Start();
                 }
             });
+            
+            Shop = new ShopServer(this);
+            Shop.Start();
         }
 
         public virtual Task StopAsync(CancellationToken cancellationToken)

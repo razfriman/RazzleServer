@@ -3,25 +3,25 @@ using System.Net.Sockets;
 using System.Threading;
 using RazzleServer.Common;
 using RazzleServer.Common.Util;
-using RazzleServer.Game.Maple;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Net;
 using RazzleServer.Net.Packet;
+using RazzleServer.Shop.Maple;
 using Serilog;
 
-namespace RazzleServer.Game
+namespace RazzleServer.Shop
 {
-    public sealed class GameClient : AClient
+    public class ShopClient : AClient
     {
         public const int PingDelay = 5000;
 
-        public GameAccount Account { get; set; }
-        public GameServer Server { get; set; }
+        public ShopAccount Account { get; set; }
+        public ShopServer Server { get; set; }
         public Character Character { get; set; }
         public CancellationTokenSource PingToken { get; set; }
-        public override ILogger Logger => Log.ForContext<GameClient>();
+        public override ILogger Logger => Log.ForContext<ShopClient>();
 
-        public GameClient(Socket session, GameServer server) : base(session, ServerConfig.Instance.Version,
+        public ShopClient(Socket session, ShopServer server) : base(session, ServerConfig.Instance.Version,
             ServerConfig.Instance.SubVersion, ServerConfig.Instance.ServerType, ServerConfig.Instance.AesKey,
             ServerConfig.Instance.UseAesEncryption, ServerConfig.Instance.PrintPackets, true)
         {
@@ -85,7 +85,7 @@ namespace RazzleServer.Game
                 Logger.Error(e, $"Error while disconnecting. Account [{Account?.Username}] Character [{save?.Name}]");
             }
         }
-        
+
         public void SetOnline(bool isOnline)
         {
             using var context = new MapleDbContext();
@@ -102,19 +102,7 @@ namespace RazzleServer.Game
             using var outPacket = new PacketWriter(ServerOperationCode.ClientConnectToServer);
             outPacket.WriteBool(true);
             outPacket.WriteBytes(Socket.HostBytes);
-            outPacket.WriteUShort(Server.World[channelId].Port);
-            Send(outPacket);
-        }
-        
-        public void OpenCashShop()
-        {
-            Character.Save();
-            Server.Manager.Migrate(Host, Account.Id, Character.Id);
-
-            using var outPacket = new PacketWriter(ServerOperationCode.ClientConnectToServer);
-            outPacket.WriteBool(true);
-            outPacket.WriteBytes(Socket.HostBytes);
-            outPacket.WriteUShort(Server.Manager.Shop.Port);
+            outPacket.WriteUShort(Server.Manager.Worlds[Character.WorldId][channelId].Port);
             Send(outPacket);
         }
 
