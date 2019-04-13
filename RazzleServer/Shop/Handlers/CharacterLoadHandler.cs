@@ -21,9 +21,9 @@ namespace RazzleServer.Shop.Handlers
             client.Account.Load();
             client.SetOnline(true);
             
-            //client.Character = new Character(characterId, client);
-            //client.Character.Load();
-            //client.Character.Initialize();
+            client.Character = new ShopCharacter(characterId, client);
+            client.Character.Load();
+            client.Character.Initialize();
         }
     }
 }
