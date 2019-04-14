@@ -13,9 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Reference Include="Microsoft.Extensions.Hosting.Abstractions, Version=3.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
-        <HintPath>..\..\..\.nuget\packages\microsoft.extensions.hosting.abstractions\3.0.0-preview.19074.2\lib\netstandard2.0\Microsoft.Extensions.Hosting.Abstractions.dll</HintPath>
-      </Reference>
-    </ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.0.0-preview3.19153.1" />
+    </ItemGroup>    
 
 </Project>

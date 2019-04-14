@@ -13,6 +13,10 @@ COPY RazzleServer/RazzleServer.csproj RazzleServer/
 COPY RazzleServer.DB/RazzleServer.Data.csproj RazzleServer.DB/
 COPY RazzleServer.DataProvider/RazzleServer.DataProvider.csproj RazzleServer.DataProvider/
 COPY RazzleServer.Common/RazzleServer.Common.csproj RazzleServer.Common/
+COPY RazzleServer.Server/RazzleServer.Server.csproj RazzleServer.Server/
+COPY RazzleServer.Login/RazzleServer.Login.csproj RazzleServer.Login/
+COPY RazzleServer.Game/RazzleServer.Game.csproj RazzleServer.Game/
+COPY RazzleServer.Shop/RazzleServer.Shop.csproj RazzleServer.Shop/
 COPY RazzleServer.Crypto/RazzleServer.Crypto.csproj RazzleServer.Crypto/
 COPY RazzleServer.Net/RazzleServer.Net.csproj RazzleServer.Net/
 COPY RazzleServer.Wz/RazzleServer.Wz.csproj RazzleServer.Wz/

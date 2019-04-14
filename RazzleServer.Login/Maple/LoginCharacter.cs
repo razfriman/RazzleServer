@@ -2,9 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using RazzleServer.Common;
 using RazzleServer.Common.Constants;
+using RazzleServer.Common.Maple;
 using RazzleServer.Data;
 using RazzleServer.Net.Packet;
-using RazzleServer.Server;
+using RazzleServer.Server.Maple;
 using Serilog;
 
 namespace RazzleServer.Login.Maple
@@ -29,7 +30,8 @@ namespace RazzleServer.Login.Maple
         public int RankMove { get; set; }
         public int JobRank { get; set; }
         public int JobRankMove { get; set; }
-        public LoginCharacterStats PrimaryStats { get; set; } = new LoginCharacterStats();
+        public BasicCharacterStats PrimaryStats { get; set; }
+        public BasicCharacterItems Items { get; set; }
         public bool IsRanked => PrimaryStats.Level >= 30;
 
 
@@ -37,6 +39,7 @@ namespace RazzleServer.Login.Maple
         {
             Id = id;
             Client = client;
+            PrimaryStats = new BasicCharacterStats(this);
         }
 
         public void LogCheatWarning(CheatType type)
@@ -64,8 +67,11 @@ namespace RazzleServer.Login.Maple
             SpawnPoint = character.SpawnPoint;
             WorldId = character.WorldId;
             PrimaryStats.Load(character);
+            Items = new BasicCharacterItems(this, character.EquipmentSlots, character.UsableSlots, character.SetupSlots,
+                character.EtceteraSlots, character.CashSlots);
+            Items.Load();
         }
-        
+
         internal static void Delete(int accountId, int characterId)
         {
             using var dbContext = new MapleDbContext();
@@ -84,7 +90,7 @@ namespace RazzleServer.Login.Maple
         public byte[] ToByteArray()
         {
             using var pw = new PacketWriter();
-            pw.WriteBytes(StatisticsToByteArray());
+            pw.WriteBytes(PrimaryStats.ToByteArray());
             pw.WriteBytes(AppearanceToByteArray());
             pw.WriteBool(IsRanked);
 
@@ -101,7 +107,7 @@ namespace RazzleServer.Login.Maple
 
         public void Create()
         {
-             using var dbContext = new MapleDbContext();
+            using var dbContext = new MapleDbContext();
             var character = dbContext.Characters
                 .Where(x => x.Name == Name)
                 .FirstOrDefault(x => x.WorldId == WorldId);
@@ -139,52 +145,18 @@ namespace RazzleServer.Login.Maple
                 Strength = PrimaryStats.Strength,
                 Name = Name,
                 BuddyListSlots = PrimaryStats.BuddyListSlots,
-//                EquipmentSlots = Items.MaxSlots[ItemType.Equipment],
-//                UsableSlots = Items.MaxSlots[ItemType.Usable],
-//                SetupSlots = Items.MaxSlots[ItemType.Setup],
-//                EtceteraSlots = Items.MaxSlots[ItemType.Etcetera],
-//                CashSlots = Items.MaxSlots[ItemType.Pet]
+                EquipmentSlots = Items.MaxSlots[ItemType.Equipment],
+                UsableSlots = Items.MaxSlots[ItemType.Usable],
+                SetupSlots = Items.MaxSlots[ItemType.Setup],
+                EtceteraSlots = Items.MaxSlots[ItemType.Etcetera],
+                CashSlots = Items.MaxSlots[ItemType.Pet]
             };
 
             dbContext.Characters.Add(character);
             dbContext.SaveChanges();
             Id = character.Id;
 
-//            Items.Save();
-//            TeleportRocks.Save();
-        }
-        
-           public byte[] StatisticsToByteArray()
-        {
-            using var pw = new PacketWriter();
-            pw.WriteInt(Id);
-            pw.WriteString(Name, 13);
-            pw.WriteByte(PrimaryStats.Gender);
-            pw.WriteByte(PrimaryStats.Skin);
-            pw.WriteInt(PrimaryStats.Face);
-            pw.WriteInt(PrimaryStats.Hair);
-            pw.WriteLong(0); // Pet SN
-            pw.WriteByte(PrimaryStats.Level);
-            pw.WriteShort((short)PrimaryStats.Job);
-            pw.WriteShort(PrimaryStats.Strength);
-            pw.WriteShort(PrimaryStats.Dexterity);
-            pw.WriteShort(PrimaryStats.Intelligence);
-            pw.WriteShort(PrimaryStats.Luck);
-            pw.WriteShort(PrimaryStats.Health);
-            pw.WriteShort(PrimaryStats.MaxHealth);
-            pw.WriteShort(PrimaryStats.Mana);
-            pw.WriteShort(PrimaryStats.MaxMana);
-            pw.WriteShort(PrimaryStats.AbilityPoints);
-            pw.WriteShort(PrimaryStats.SkillPoints);
-            pw.WriteInt(PrimaryStats.Experience);
-            pw.WriteShort(PrimaryStats.Fame);
-            pw.WriteInt(MapId);
-            pw.WriteByte(SpawnPoint);
-            pw.WriteLong(0);
-            pw.WriteInt(0);
-            pw.WriteInt(0);
-
-            return pw.ToArray();
+            Items.Save();
         }
 
         public byte[] AppearanceToByteArray()

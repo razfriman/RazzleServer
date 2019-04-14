@@ -2,6 +2,7 @@
 using System.Linq;
 using RazzleServer.Common;
 using RazzleServer.Common.Constants;
+using RazzleServer.Common.Maple;
 using RazzleServer.Game;
 using RazzleServer.Net;
 using RazzleServer.Net.Packet;

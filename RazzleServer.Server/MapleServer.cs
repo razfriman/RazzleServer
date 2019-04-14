@@ -178,7 +178,7 @@ namespace RazzleServer.Server
 
         public void RegisterPacketHandlers()
         {
-            var types = Assembly.GetExecutingAssembly()
+            var types = Assembly.GetAssembly(typeof(TPacketHandler))
                 .GetTypes()
                 .Where(x => x.IsSubclassOf(typeof(TPacketHandler)));
 

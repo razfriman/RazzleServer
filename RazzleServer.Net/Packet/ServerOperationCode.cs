@@ -126,6 +126,9 @@
         NpcShopResult = 0xA4,
         StorageShow = 0xA7,
         StorageResult = 0xA8,
-        PlayerInteraction = 0xAE
+        PlayerInteraction = 0xAE,
+        
+        CashShopAmounts = 0xBA,
+        CashShopOperation = 0xBB
     }
 }

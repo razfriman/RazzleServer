@@ -5,6 +5,7 @@ using RazzleServer.Common.Constants;
 using RazzleServer.DataProvider;
 using RazzleServer.Login.Maple;
 using RazzleServer.Net.Packet;
+using RazzleServer.Server.Maple;
 
 namespace RazzleServer.Login.Handlers
 {
@@ -35,29 +36,29 @@ namespace RazzleServer.Login.Handlers
                 WorldId = client.World,
                 Name = name,
                 MapId = ServerConfig.Instance.DefaultMapId,
-                PrimaryStats = new LoginCharacterStats
-                {
-                    Gender = client.Account.Gender,
-                    Skin = skin,
-                    Face = face,
-                    Hair = hair + hairColor,
-                    Level = 1,
-                    Job = Job.Beginner,
-                    Strength = strength,
-                    Dexterity = dexterity,
-                    Intelligence = intelligence,
-                    Luck = luck,
-                    MaxHealth = 50,
-                    MaxMana = 5,
-                    Health = 50,
-                    Mana = 5
-                }
+            };
+            character.PrimaryStats = new BasicCharacterStats(character)
+            {
+                Gender = client.Account.Gender,
+                Skin = skin,
+                Face = face,
+                Hair = hair + hairColor,
+                Level = 1,
+                Job = Job.Beginner,
+                Strength = strength,
+                Dexterity = dexterity,
+                Intelligence = intelligence,
+                Luck = luck,
+                MaxHealth = 50,
+                MaxMana = 5,
+                Health = 50,
+                Mana = 5
             };
 
-            //character.Items.Add(new Item(topId, equipped: true));
-            //character.Items.Add(new Item(bottomId, equipped: true));
-            //character.Items.Add(new Item(shoesId, equipped: true));
-            //character.Items.Add(new Item(weaponId, equipped: true));
+            character.Items.Add(new BasicItem(topId, equipped: true));
+            character.Items.Add(new BasicItem(bottomId, equipped: true));
+            character.Items.Add(new BasicItem(shoesId, equipped: true));
+            character.Items.Add(new BasicItem(weaponId, equipped: true));
             character.Create();
 
             using var pw = new PacketWriter(ServerOperationCode.CreateCharacterResult);

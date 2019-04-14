@@ -2,6 +2,7 @@
 using System.Linq;
 using RazzleServer.Common;
 using RazzleServer.Common.Constants;
+using RazzleServer.Common.Maple;
 using RazzleServer.Common.Util;
 using RazzleServer.Data;
 using RazzleServer.DataProvider;
@@ -12,7 +13,6 @@ using RazzleServer.Game.Maple.Maps;
 using RazzleServer.Game.Maple.Scripting;
 using RazzleServer.Game.Maple.Util;
 using RazzleServer.Net.Packet;
-using RazzleServer.Server;
 using Serilog;
 
 namespace RazzleServer.Game.Maple.Characters
@@ -168,7 +168,7 @@ namespace RazzleServer.Game.Maple.Characters
             pw.WriteInt(Damage.Random.OriginalSeed2);
             pw.WriteInt(Damage.Random.OriginalSeed3);
             pw.WriteInt(Damage.Random.OriginalSeed3);
-            pw.WriteShort(-1); // flags
+            pw.WriteShort((ushort) CharacterDataFlags.All); // flags
             pw.WriteBytes(DataToByteArray());
             pw.WriteLong(0);
             pw.WriteLong(0);

@@ -13,11 +13,11 @@ namespace RazzleServer.Tests.Util
     public class FakeServerManager : IServerManager
     {
         public ILoginServer Login { get; set; }
-        public AWorlds Worlds { get; }
+        public AWorlds Worlds { get; } = new Worlds();
         public IShopServer Shop { get; set; }
         public Migrations Migrations { get; } = new Migrations();
 
-        public void Configure()
+        public static void Configure()
         {
             Log.Logger = new LoggerConfiguration()
                 .WriteTo
@@ -30,9 +30,11 @@ namespace RazzleServer.Tests.Util
             config.AddDefaultWorld();
         }
 
-        public async Task StartAsync(CancellationToken cancellationToken)
+        public Task StartAsync(CancellationToken cancellationToken)
         {
             Configure();
+            var aa = new LoginServer(this);
+            aa.Start();
             Login = new LoginServer(this);
 
             ServerConfig.Instance.Worlds.ForEach(x =>
@@ -46,6 +48,8 @@ namespace RazzleServer.Tests.Util
                     world.Add(game);
                 }
             });
+
+            return Task.CompletedTask;
         }
 
         public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;

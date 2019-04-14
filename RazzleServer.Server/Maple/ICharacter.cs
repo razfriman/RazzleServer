@@ -1,7 +1,4 @@
-using RazzleServer.Common.Constants;
-using RazzleServer.Net.Packet;
-
-namespace RazzleServer.Server
+namespace RazzleServer.Common.Maple
 {
     public interface ICharacter
     {
@@ -21,8 +18,5 @@ namespace RazzleServer.Server
         int RankMove { get; set; }
         int JobRank { get; set; }
         int JobRankMove { get; set; }
-
-        void Send(PacketWriter packet);
-        void LogCheatWarning(CheatType type);
     }
 }

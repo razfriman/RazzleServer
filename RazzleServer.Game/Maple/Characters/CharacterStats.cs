@@ -4,17 +4,17 @@ using System.Linq;
 using RazzleServer.Common;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Exceptions;
-using RazzleServer.Common.Maple;
 using RazzleServer.Common.Util;
 using RazzleServer.Data;
 using RazzleServer.DataProvider;
 using RazzleServer.Game.Maple.Buffs;
 using RazzleServer.Game.Maple.Items;
 using RazzleServer.Net.Packet;
+using RazzleServer.Server.Maple;
 
 namespace RazzleServer.Game.Maple.Characters
 {
-    public class CharacterStats : ICharacterStats
+    public class CharacterStats : BasicCharacterStats
     {
         public GameCharacter Parent { get; set; }
 
@@ -37,7 +37,7 @@ namespace RazzleServer.Game.Maple.Characters
         private short _fame;
         private int _meso;
 
-        public CharacterStats(GameCharacter gameCharacter)
+        public CharacterStats(GameCharacter gameCharacter) : base(gameCharacter)
         {
             Parent = gameCharacter;
             BuffDragonBlood = new BuffStatDragonBlood(BuffValueTypes.DragonBlood, Parent);
@@ -51,9 +51,6 @@ namespace RazzleServer.Game.Maple.Characters
         public short BaseMaxHealth { get; set; }
         public short BaseMana { get; set; }
         public short BaseMaxMana { get; set; }
-        public int BuddyListSlots { get; set; } = 20;
-        public Gender Gender { get; set; }
-
         public byte BaseSpeed { get; set; }
         public float SpeedMode { get; set; }
         public byte BaseJump { get; set; }
@@ -177,7 +174,7 @@ namespace RazzleServer.Game.Maple.Characters
         public BuffStat BuffCurse { get; } = new BuffStat(BuffValueTypes.Curse);
 
 
-        public byte Skin
+        public override byte Skin
         {
             get => _skin;
             set
@@ -197,7 +194,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public int Face
+        public override int Face
         {
             get => _face;
             set
@@ -218,7 +215,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public int Hair
+        public override int Hair
         {
             get => _hair;
             set
@@ -247,7 +244,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public int FaceColorOffset => (Face / 100 - 10 * (Face / 1000)) * 100;
 
-        public byte Level
+        public override byte Level
         {
             get => _level;
             set
@@ -337,7 +334,7 @@ namespace RazzleServer.Game.Maple.Characters
             Parent.ShowRemoteUserEffect(UserEffect.LevelUp);
         }
 
-        public Job Job
+        public override Job Job
         {
             get => _job;
             set
@@ -355,7 +352,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public short Strength
+        public override short Strength
         {
             get => _strength;
             set
@@ -369,7 +366,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public short Dexterity
+        public override short Dexterity
         {
             get => _dexterity;
             set
@@ -383,7 +380,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public short Intelligence
+        public override short Intelligence
         {
             get => _intelligence;
             set
@@ -397,7 +394,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public short Luck
+        public override short Luck
         {
             get => _luck;
             set
@@ -411,7 +408,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public short Health
+        public override short Health
         {
             get => _health;
             set
@@ -436,7 +433,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public short MaxHealth
+        public override short MaxHealth
         {
             get => _maxHealth;
             set
@@ -450,7 +447,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public short Mana
+        public override short Mana
         {
             get => _mana;
             set
@@ -467,7 +464,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public short MaxMana
+        public override short MaxMana
         {
             get => _maxMana;
             set
@@ -481,7 +478,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public short AbilityPoints
+        public override short AbilityPoints
         {
             get => _abilityPoints;
             set
@@ -495,7 +492,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public short SkillPoints
+        public override short SkillPoints
         {
             get => _skillPoints;
             set
@@ -509,7 +506,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public int Experience
+        public override int Experience
         {
             get => _experience;
             set
@@ -550,7 +547,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public short Fame
+        public override short Fame
         {
             get => _fame;
             set
@@ -564,7 +561,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public int Meso
+        public override int Meso
         {
             get => _meso;
             set
@@ -907,7 +904,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         private bool IsBaseJob(Job baseJob) => (int)Job / 100 * 100 == (int)baseJob;
 
-        public void Load(CharacterEntity character)
+        public override void Load(CharacterEntity character)
         {
             _abilityPoints = character.AbilityPoints;
             _dexterity = character.Dexterity;

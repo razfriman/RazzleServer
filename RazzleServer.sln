@@ -37,6 +37,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazzleServer.Shop", "Razzle
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazzleServer.Game", "RazzleServer.Game\RazzleServer.Game.csproj", "{42AAAF87-CB23-4C72-B454-3DC47F6059C3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Servers", "Servers", "{1AE345DE-4CF5-457F-A195-FA9FCA6789D0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,5 +99,10 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {85FD71E4-5894-4818-AC0D-CEBD30804768}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{42AAAF87-CB23-4C72-B454-3DC47F6059C3} = {1AE345DE-4CF5-457F-A195-FA9FCA6789D0}
+		{E53AFA16-85BE-4F73-AA5D-AACA6F26A214} = {1AE345DE-4CF5-457F-A195-FA9FCA6789D0}
+		{E1765CCC-7744-4920-AA3F-875EFA889E6F} = {1AE345DE-4CF5-457F-A195-FA9FCA6789D0}
 	EndGlobalSection
 EndGlobal
