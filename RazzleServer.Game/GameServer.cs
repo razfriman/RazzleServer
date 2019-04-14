@@ -6,7 +6,6 @@ using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Maps;
 using RazzleServer.Data;
 using RazzleServer.Net.Packet;
-using RazzleServer.Server;
 using Serilog;
 
 namespace RazzleServer.Game

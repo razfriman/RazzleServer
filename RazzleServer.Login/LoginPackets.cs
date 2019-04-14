@@ -1,8 +1,8 @@
 using System;
 using RazzleServer.Common.Constants;
+using RazzleServer.Game;
 using RazzleServer.Login.Maple;
 using RazzleServer.Net.Packet;
-using RazzleServer.Server;
 
 namespace RazzleServer.Login
 {

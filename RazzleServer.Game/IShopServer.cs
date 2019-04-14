@@ -1,4 +1,4 @@
-namespace RazzleServer.Server
+namespace RazzleServer.Game
 {
     public interface IShopServer : IMapleServer
     {

@@ -1,6 +1,6 @@
 using RazzleServer.Common.Util;
 
-namespace RazzleServer.Server
+namespace RazzleServer.Game
 {
     public abstract class AWorlds : MapleKeyedCollection<byte, AWorld>
     {

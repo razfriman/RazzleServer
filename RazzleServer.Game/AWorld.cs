@@ -6,7 +6,7 @@ using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Net;
 using RazzleServer.Net.Packet;
 
-namespace RazzleServer.Server
+namespace RazzleServer.Game
 {
     public abstract class AWorld : MapleKeyedCollection<byte, IGameServer>
     {

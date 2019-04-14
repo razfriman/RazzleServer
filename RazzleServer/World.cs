@@ -6,7 +6,6 @@ using RazzleServer.Game;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Net;
 using RazzleServer.Net.Packet;
-using RazzleServer.Server;
 
 namespace RazzleServer
 {

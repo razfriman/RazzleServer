@@ -3,8 +3,8 @@ using System.Linq;
 using System.Net;
 using RazzleServer.Common;
 using RazzleServer.Data;
+using RazzleServer.Game;
 using RazzleServer.Login.Maple;
-using RazzleServer.Server;
 using Serilog;
 
 namespace RazzleServer.Login

@@ -5,7 +5,6 @@ using RazzleServer.Common;
 using RazzleServer.Common.Constants;
 using RazzleServer.Game;
 using RazzleServer.Login;
-using RazzleServer.Server;
 using Serilog;
 
 namespace RazzleServer.Tests.Util

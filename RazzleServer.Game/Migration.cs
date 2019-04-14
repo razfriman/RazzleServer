@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RazzleServer.Server
+namespace RazzleServer.Game
 {
     public sealed class Migration
     {

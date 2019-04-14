@@ -1,4 +1,4 @@
-using RazzleServer.Server;
+using RazzleServer.Game;
 
 namespace RazzleServer
 {

@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Hosting;
 
-namespace RazzleServer.Server
+namespace RazzleServer.Game
 {
     public interface IServerManager : IHostedService
     {

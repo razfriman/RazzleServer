@@ -3,8 +3,8 @@ using System.Linq;
 using System.Net;
 using RazzleServer.Common;
 using RazzleServer.Data;
+using RazzleServer.Game;
 using RazzleServer.Game.Maple.Characters;
-using RazzleServer.Server;
 using RazzleServer.Shop.Maple;
 using Serilog;
 

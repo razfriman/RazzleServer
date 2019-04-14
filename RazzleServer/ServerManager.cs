@@ -8,7 +8,6 @@ using RazzleServer.DataProvider;
 using RazzleServer.Game;
 using RazzleServer.Game.Maple.Scripting;
 using RazzleServer.Login;
-using RazzleServer.Server;
 using RazzleServer.Shop;
 using Serilog;
 
