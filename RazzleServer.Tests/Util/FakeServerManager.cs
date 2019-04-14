@@ -9,7 +9,7 @@ using Serilog;
 
 namespace RazzleServer.Tests.Util
 {
-    public class FakeServerManager : AServerManager
+    public class FakeServerManager : IServerManager
     {
         public override Task Configure()
         {
