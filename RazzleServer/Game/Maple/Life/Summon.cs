@@ -1,7 +1,7 @@
 ﻿using System;
+using RazzleServer.Common;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Util;
-using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Maps;
 using RazzleServer.Game.Maple.Skills;
 using RazzleServer.Game.Maple.Util;
@@ -11,7 +11,7 @@ namespace RazzleServer.Game.Maple.Life
 {
     public class Summon : IMapObject, ISpawnable
     {
-        public GameCharacter Parent { get; set; }
+        public ICharacter Parent { get; set; }
         public int MapleId { get; set; }
         public byte Level { get; set; }
         public bool MoveAction { get; set; }
@@ -21,7 +21,7 @@ namespace RazzleServer.Game.Maple.Life
         public int ObjectId { get; set; }
         public Point Position { get; set; }
 
-        public Summon(GameCharacter parent, Skill skill, Point position, bool moveAction)
+        public Summon(ICharacter parent, Skill skill, Point position, bool moveAction)
         {
             Parent = parent;
             MapleId = skill.MapleId;

@@ -1,4 +1,6 @@
-﻿using RazzleServer.Common.Constants;
+﻿using System;
+using RazzleServer.Common.Constants;
+using RazzleServer.DataProvider;
 using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Handlers
@@ -23,7 +25,7 @@ namespace RazzleServer.Game.Handlers
             switch (item.MapleId)
             {
                 case 2170000: // NOTE: Teleport Rock.
-                    used = client.GameCharacter.TeleportRocks.Use(packet);
+                    used = UseTeleportRock(client, packet);
                     break;
 
                 case 2180001: // NOTE: 1st Job SP Reset.
@@ -128,6 +130,71 @@ namespace RazzleServer.Game.Handlers
             {
                 client.GameCharacter.Release();
             }
+        }
+
+        private bool UseTeleportRock(GameClient client, PacketReader packet)
+        {
+        var action = (TeleportRockUseAction)packet.ReadByte();
+            int destinationMapId;
+
+            switch (action)
+            {
+                case TeleportRockUseAction.ByMap:
+                {
+                    var mapId = packet.ReadInt();
+
+                    if (!client.GameCharacter.TeleportRocks.Contains(mapId))
+                    {
+                        client.GameCharacter.TeleportRocks.SendRockUpdate(TeleportRockResult.AlreadyThere);
+                        return false;
+                    }
+
+                    destinationMapId = mapId;
+                    break;
+                }
+
+                case TeleportRockUseAction.ByPlayer:
+                {
+                    var targetName = packet.ReadString();
+                    var target = client.Server.GetCharacterByName(targetName);
+
+                    if (target == null)
+                    {
+                        client.GameCharacter.TeleportRocks.SendRockUpdate(TeleportRockResult.DifficultToLocate);
+                        return false;
+                    }
+
+                    destinationMapId = target.Map.MapleId;
+                    break;
+                }
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            if (destinationMapId != -1)
+            {
+                var originMap = CachedData.Maps.Data[client.GameCharacter.MapId];
+                var destinationMap = CachedData.Maps.Data[destinationMapId];
+
+                if (originMap.MapleId == destinationMap.MapleId)
+                {
+                    client.GameCharacter.TeleportRocks.SendRockUpdate(TeleportRockResult.AlreadyThere);
+                    return false;
+                }
+
+                if (originMap.FieldLimit.HasFlag(FieldLimitFlags.TeleportItemLimit))
+                {
+                    client.GameCharacter.TeleportRocks.SendRockUpdate(TeleportRockResult.CannotGo);
+                    return false;
+                }
+
+                client.GameCharacter.ChangeMap(destinationMapId);
+                return true;
+            }
+
+            client.GameCharacter.TeleportRocks.SendRockUpdate(TeleportRockResult.CannotGo);
+            return false;
         }
     }
 }

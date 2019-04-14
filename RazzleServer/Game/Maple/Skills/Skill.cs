@@ -1,4 +1,5 @@
 ﻿using System;
+using RazzleServer.Common;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Util;
 using RazzleServer.Data;
@@ -88,7 +89,7 @@ namespace RazzleServer.Game.Maple.Skills
 
         public SkillReference CachedReference => CachedData.Skills.Data[MapleId][CurrentLevel];
 
-        public GameCharacter GameCharacter => Parent.Parent;
+        public ICharacter GameCharacter => Parent.Parent;
 
         private bool Assigned { get; set; }
 

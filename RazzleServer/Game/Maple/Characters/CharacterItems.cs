@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using RazzleServer.Common;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Exceptions;
 using RazzleServer.Data;
@@ -13,13 +14,13 @@ namespace RazzleServer.Game.Maple.Characters
 {
     public sealed class CharacterItems : IEnumerable<Item>
     {
-        public GameCharacter Parent { get; }
+        public ICharacter Parent { get; }
         public Dictionary<ItemType, byte> MaxSlots { get; }
         private List<Item> Items { get; }
 
         public int Count => Items.Count;
 
-        public CharacterItems(GameCharacter parent, byte equipmentSlots, byte usableSlots, byte setupSlots,
+        public CharacterItems(ICharacter parent, byte equipmentSlots, byte usableSlots, byte setupSlots,
             byte etceteraSlots, byte cashSlots)
         {
             Parent = parent;
@@ -337,7 +338,7 @@ namespace RazzleServer.Game.Maple.Characters
                     break;
             }
 
-            Parent.Map.Drops.Remove(drop);
+            Parent.Map?.Drops.Remove(drop);
             drop.Picker.Send(drop.GetShowGainPacket());
         }
 

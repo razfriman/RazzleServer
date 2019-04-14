@@ -1,4 +1,5 @@
 using System.Linq;
+using RazzleServer.Common;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Life;
@@ -9,9 +10,9 @@ namespace RazzleServer.Game.Maple.Characters
 {
     public class CharacterSummons : MapleKeyedCollection<int, Summon>
     {
-        public GameCharacter Parent { get; set; }
+        public ICharacter Parent { get; set; }
 
-        public CharacterSummons(GameCharacter parent) => Parent = parent;
+        public CharacterSummons(ICharacter parent) => Parent = parent;
 
         public override int GetKey(Summon item) => item.MapleId;
 
@@ -19,7 +20,7 @@ namespace RazzleServer.Game.Maple.Characters
         public override void Remove(int key)
         {
             base.Remove(key);
-            Parent.Map.Summons.Remove(key);
+            Parent.Map?.Summons.Remove(key);
         }
 
         public void Add(Skill skill, Point position)

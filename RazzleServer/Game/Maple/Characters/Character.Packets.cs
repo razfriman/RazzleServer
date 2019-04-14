@@ -6,7 +6,7 @@ namespace RazzleServer.Game.Maple.Characters
 {
     public partial class GameCharacter
     {
-        public byte[] DataToByteArray()
+        public override byte[] DataToByteArray()
         {
             var pw = new PacketWriter();
             pw.WriteBytes(StatisticsToByteArray());

@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using RazzleServer.Common;
 using RazzleServer.Common.Constants;
 using RazzleServer.Data;
 using RazzleServer.DataProvider;
@@ -10,11 +10,11 @@ namespace RazzleServer.Game.Maple.Characters
 {
     public sealed class CharacterTeleportRocks
     {
-        public GameCharacter Parent { get; }
+        public ICharacter Parent { get; }
 
         public List<int> Maps { get; }
 
-        public CharacterTeleportRocks(GameCharacter parent)
+        public CharacterTeleportRocks(ICharacter parent)
         {
             Parent = parent;
 
@@ -31,7 +31,6 @@ namespace RazzleServer.Game.Maple.Characters
                 .ToList();
             Maps.AddRange(rocks);
         }
-
 
         public void Save()
         {
@@ -82,71 +81,6 @@ namespace RazzleServer.Game.Maple.Characters
 
             Maps.Remove(mapId);
             SendRockUpdate(TeleportRockResult.Delete);
-        }
-
-        public bool Use(PacketReader packet)
-        {
-            var action = (TeleportRockUseAction)packet.ReadByte();
-            int destinationMapId;
-
-            switch (action)
-            {
-                case TeleportRockUseAction.ByMap:
-                {
-                    var mapId = packet.ReadInt();
-
-                    if (!Parent.TeleportRocks.Contains(mapId))
-                    {
-                        SendRockUpdate(TeleportRockResult.AlreadyThere);
-                        return false;
-                    }
-
-                    destinationMapId = mapId;
-                    break;
-                }
-
-                case TeleportRockUseAction.ByPlayer:
-                {
-                    var targetName = packet.ReadString();
-                    var target = Parent.Client.Server.GetCharacterByName(targetName);
-
-                    if (target == null)
-                    {
-                        SendRockUpdate(TeleportRockResult.DifficultToLocate);
-                        return false;
-                    }
-
-                    destinationMapId = target.Map.MapleId;
-                    break;
-                }
-
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
-            if (destinationMapId != -1)
-            {
-                var originMap = Parent.Map;
-                var destinationMap = CachedData.Maps.Data[destinationMapId];
-
-                if (originMap.MapleId == destinationMap.MapleId)
-                {
-                    SendRockUpdate(TeleportRockResult.AlreadyThere);
-                    return false;
-                }
-
-                if (originMap.FieldLimit.HasFlag(FieldLimitFlags.TeleportItemLimit))
-                {
-                    SendRockUpdate(TeleportRockResult.CannotGo);
-                    return false;
-                }
-
-                Parent.ChangeMap(destinationMapId);
-                return true;
-            }
-
-            SendRockUpdate(TeleportRockResult.CannotGo);
-            return false;
         }
 
         public byte[] ToByteArray()

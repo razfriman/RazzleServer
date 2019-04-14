@@ -1,15 +1,15 @@
 using System;
+using RazzleServer.Common;
 using RazzleServer.Common.Constants;
-using RazzleServer.Game.Maple.Characters;
 
 namespace RazzleServer.Game.Maple.Buffs
 {
     public class BuffStatDragonBlood : BuffStat
     {
-        private readonly GameCharacter _owner;
+        private readonly ICharacter _owner;
         private DateTime _tLastDamaged;
 
-        public BuffStatDragonBlood(BuffValueTypes flag, GameCharacter own) : base(flag)
+        public BuffStatDragonBlood(BuffValueTypes flag, ICharacter own) : base(flag)
         {
             _owner = own;
         }

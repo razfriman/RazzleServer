@@ -1,5 +1,5 @@
+using RazzleServer.Common;
 using RazzleServer.Common.Util;
-using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Skills;
 
 namespace RazzleServer.Game.Maple.Life
@@ -8,7 +8,7 @@ namespace RazzleServer.Game.Maple.Life
     {
         public int Health { get; private set; }
 
-        public Puppet(GameCharacter owner, Skill skill, Point position, bool moveAction) : base(owner, skill,
+        public Puppet(ICharacter owner, Skill skill, Point position, bool moveAction) : base(owner, skill,
             position, moveAction) => Health = skill.ParameterA;
 
         public void TakeDamage(int amount)

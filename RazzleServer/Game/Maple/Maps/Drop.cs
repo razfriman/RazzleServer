@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using Newtonsoft.Json;
+using RazzleServer.Common;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Characters;
@@ -13,8 +14,8 @@ namespace RazzleServer.Game.Maple.Maps
     {
         public const int ExpiryTime = 60 * 1000;
 
-        [JsonIgnore] public GameCharacter Owner { get; set; }
-        [JsonIgnore] public GameCharacter Picker { get; set; }
+        [JsonIgnore] public ICharacter Owner { get; set; }
+        [JsonIgnore] public ICharacter Picker { get; set; }
         public Point Origin { get; set; }
         public CancellationTokenSource Expiry { get; set; }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using RazzleServer.Common;
 using RazzleServer.Common.Constants;
 using RazzleServer.DataProvider;
 using RazzleServer.DataProvider.References;
@@ -11,15 +12,14 @@ namespace RazzleServer.Game.Maple.Characters
 {
     public sealed class CharacterQuests
     {
-        public GameCharacter Parent { get; }
+        public ICharacter Parent { get; }
 
         public Dictionary<int, Dictionary<int, short>> Started { get; }
         public Dictionary<int, DateTime> Completed { get; }
 
-        public CharacterQuests(GameCharacter parent)
+        public CharacterQuests(ICharacter parent)
         {
             Parent = parent;
-
             Started = new Dictionary<int, Dictionary<int, short>>();
             Completed = new Dictionary<int, DateTime>();
         }
@@ -44,7 +44,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
         }
 
-        public void Start(QuestReference quest, int npcId)
+        public void Start(QuestReference quest, int npcId, GameClient client)
         {
             Started.Add(quest.MapleId, new Dictionary<int, short>());
 
@@ -55,7 +55,7 @@ namespace RazzleServer.Game.Maple.Characters
 
             Parent.PrimaryStats.Experience += quest.ExperienceReward[0];
             Parent.PrimaryStats.Fame += (short)quest.FameReward[0];
-            Parent.PrimaryStats.Meso += quest.MesoReward[0] * Parent.Client.Server.World.MesoRate;
+            Parent.PrimaryStats.Meso += quest.MesoReward[0] * client.Server.World.MesoRate;
 
             // TODO: Skill and pet rewards.
 
@@ -85,14 +85,14 @@ namespace RazzleServer.Game.Maple.Characters
 //            }
         }
 
-        public void Complete(QuestReference quest, int selection)
+        public void Complete(QuestReference quest, int selection, GameClient client)
         {
             foreach (var item in quest.PostRequiredItems)
             {
                 Parent.Items.Remove(item.Key, item.Value);
             }
 
-            var mesoReward = quest.MesoReward[1] * Parent.Client.Server.World.MesoRate;
+            var mesoReward = quest.MesoReward[1] * client.Server.World.MesoRate;
 
 
             Parent.PrimaryStats.Experience += quest.ExperienceReward[1];

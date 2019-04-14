@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
+using RazzleServer.Common;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Util;
 using RazzleServer.DataProvider;
 using RazzleServer.DataProvider.References;
-using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Life;
 using RazzleServer.Net.Packet;
 
@@ -60,7 +60,7 @@ namespace RazzleServer.Game.Maple.Maps
 
         public Map(int id) => MapleId = id;
 
-        public void Send(PacketWriter pw, GameCharacter except = null) =>
+        public void Send(PacketWriter pw, ICharacter except = null) =>
             Characters.Values
                 .Where(x => x.Id != except?.Id)
                 .ToList()

@@ -20,7 +20,6 @@ namespace RazzleServer.Game.Maple.Life
         public byte Stance { get; set; }
         public bool IsProvoked { get; set; }
         public bool CanDrop { get; set; }
-        public List<Loot> Loots { get; }
         public short Foothold { get; set; }
         public MobSkills Skills { get; }
         public Dictionary<MobSkill, DateTime> Cooldowns { get; }

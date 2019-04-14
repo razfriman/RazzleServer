@@ -1,3 +1,4 @@
+using RazzleServer.Common;
 using RazzleServer.Common.Util;
 using RazzleServer.Net.Packet;
 
@@ -5,9 +6,9 @@ namespace RazzleServer.Game.Maple.Characters
 {
     public sealed class CharacterRings : MapleKeyedCollection<int, Ring>
     {
-        public GameCharacter Parent { get; }
+        public ICharacter Parent { get; }
 
-        public CharacterRings(GameCharacter parent)
+        public CharacterRings(ICharacter parent)
         {
             Parent = parent;
         }

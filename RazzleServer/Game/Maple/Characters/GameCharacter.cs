@@ -4,7 +4,6 @@ using RazzleServer.Common;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Util;
 using RazzleServer.Data;
-using RazzleServer.DataProvider;
 using RazzleServer.Game.Maple.Interaction;
 using RazzleServer.Game.Maple.Life;
 using RazzleServer.Game.Maple.Maps;
@@ -15,19 +14,13 @@ using Serilog;
 
 namespace RazzleServer.Game.Maple.Characters
 {
-    public partial class GameCharacter : BaseCharacter<GameClient>, IMapObject, IMoveable, ISpawnable
+    public partial class GameCharacter : BaseCharacter<GameClient>, IMoveable, ISpawnable
     {
-        public CharacterSkills Skills { get; }
-        public CharacterQuests Quests { get; }
-        public CharacterRings Rings { get; }
-        public CharacterBuffs Buffs { get; }
-        public CharacterSummons Summons { get; set; }
-        public CharacterStorage Storage { get; }
         public ControlledMobs ControlledMobs { get; }
         public ControlledNpcs ControlledNpcs { get; }
         public Trade Trade { get; set; }
         public PlayerShop PlayerShop { get; set; }
-        public CharacterPets Pets { get; set; }
+        
         public CharacterParty Party { get; set; }
         public ANpcScript NpcScript { get; set; }
         public Npc CurrentNpcShop { get; set; }
@@ -35,12 +28,12 @@ namespace RazzleServer.Game.Maple.Characters
         private bool Assigned { get; set; }
         public DateTime LastHealthHealOverTime { get; set; }
         public DateTime LastManaHealOverTime { get; set; }
-
+        
         private int _itemEffect;
 
         private readonly ILogger _log = Log.ForContext<GameCharacter>();
 
-        public bool IsMaster => Client.Account?.IsMaster ?? false;
+        public override bool IsMaster => Client.Account?.IsMaster ?? false;
 
 
         public int ItemEffect
@@ -105,14 +98,6 @@ namespace RazzleServer.Game.Maple.Characters
         
         public GameCharacter(int id = 0, GameClient client = null) : base(id, client)
         {
-            Pets = new CharacterPets(this);
-            Skills = new CharacterSkills(this);
-            Quests = new CharacterQuests(this);
-            Rings = new CharacterRings(this);
-            Summons = new CharacterSummons(this);
-            Buffs = new CharacterBuffs(this);
-            Pets = new CharacterPets(this);
-            Storage = new CharacterStorage(this);
             Position = new Point(0, 0);
             ControlledMobs = new ControlledMobs(this);
             ControlledNpcs = new ControlledNpcs(this);
@@ -151,31 +136,19 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Release() => PrimaryStats.Update();
 
-        public void Notify(string message, NoticeType type = NoticeType.PinkText) =>
+        public override void Notify(string message, NoticeType type = NoticeType.PinkText) =>
             Client.Send(GamePackets.Notify(message, type));
 
-        public void Revive()
+        public override void Revive()
         {
             PrimaryStats.Health = 50;
             ChangeMap(Map.CachedReference.ReturnMapId);
         }
 
-        public void ChangeMap(int mapId, string portalLabel)
+        public override void ChangeMap(int mapId, byte? portalId = null)
         {
-            var portal = CachedData.Maps.Data[mapId].Portals.FirstOrDefault(x => x.Label == portalLabel);
-
-            if (portal == null)
-            {
-                LogCheatWarning(CheatType.InvalidMapChange);
-                return;
-            }
-
-            ChangeMap(mapId, portal.Id);
-        }
-
-        public void ChangeMap(int mapId, byte? portalId = null)
-        {
-            _log.Information($"ChangeMap: Character={Id} Map={mapId} Portal={portalId}");
+            base.ChangeMap(mapId, portalId);
+            
             Map.Characters.Remove(this);
 
             using var pw = new PacketWriter(ServerOperationCode.SetField);
@@ -190,7 +163,7 @@ namespace RazzleServer.Game.Maple.Characters
         }
 
 
-        public void Attack(PacketReader packet, AttackType type)
+        public override void Attack(PacketReader packet, AttackType type)
         {
             var attack = new Attack(packet, type);
 
@@ -251,7 +224,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public void Talk(string text, bool show = true)
+        public override void Talk(string text, bool show = true)
         {
             using var pw = new PacketWriter(ServerOperationCode.RemotePlayerChat);
             pw.WriteInt(Id);
@@ -261,7 +234,7 @@ namespace RazzleServer.Game.Maple.Characters
             Map.Send(pw);
         }
 
-        public void PerformFacialExpression(int expressionId)
+        public override void PerformFacialExpression(int expressionId)
         {
             using var pw = new PacketWriter(ServerOperationCode.RemotePlayerEmote);
             pw.WriteInt(Id);
@@ -269,14 +242,14 @@ namespace RazzleServer.Game.Maple.Characters
             Map.Send(pw, this);
         }
 
-        public void ShowLocalUserEffect(UserEffect effect)
+        public override void ShowLocalUserEffect(UserEffect effect)
         {
             using var pw = new PacketWriter(ServerOperationCode.Effect);
             pw.WriteByte(effect);
             Client.Send(pw);
         }
 
-        public void ShowRemoteUserEffect(UserEffect effect, bool skipSelf = false)
+        public override void ShowRemoteUserEffect(UserEffect effect, bool skipSelf = false)
         {
             using var pw = new PacketWriter(ServerOperationCode.RemotePlayerEffect);
             pw.WriteInt(Id);
@@ -284,17 +257,9 @@ namespace RazzleServer.Game.Maple.Characters
             Map.Send(pw, skipSelf ? this : null);
         }
 
-        public void Converse(Npc npc) => npc.Converse(this);
+        public override void Converse(Npc npc) => npc.Converse(this);
 
-        public void LogCheatWarning(CheatType type)
-        {
-            using var dbContext = new MapleDbContext();
-            _log.Information($"Cheat Warning: Character={Id} CheatType={type}");
-            dbContext.Cheats.Add(new CheatEntity {CharacterId = Id, CheatType = (int)type});
-            dbContext.SaveChanges();
-        }
-
-        public void Save()
+        public override void Save()
         {
             if (IsInitialized)
             {
@@ -369,7 +334,8 @@ namespace RazzleServer.Game.Maple.Characters
             Name = character.Name;
             AccountId = character.AccountId;
             PrimaryStats.Load(character);
-            Map = Client?.Server[character.MapId] ?? new Map(character.MapId);
+            MapId = character.MapId;
+            Map = Client?.Server[character.MapId];
             SpawnPoint = character.SpawnPoint;
             WorldId = character.WorldId;
             Items.MaxSlots[ItemType.Equipment] = character.EquipmentSlots;
@@ -384,7 +350,7 @@ namespace RazzleServer.Game.Maple.Characters
         }
 
 
-        public void Hide(bool isHidden)
+        public override void Hide(bool isHidden)
         {
             if (isHidden)
             {
@@ -400,9 +366,5 @@ namespace RazzleServer.Game.Maple.Characters
             pw.WriteBool(isHidden);
             Send(pw);
         }
-
-        public Map Map { get; set; }
-        public int ObjectId { get; set; }
-        public Point Position { get; set; }
     }
 }

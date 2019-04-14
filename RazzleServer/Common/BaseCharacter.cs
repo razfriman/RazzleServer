@@ -1,22 +1,28 @@
+using System.Linq;
 using RazzleServer.Common.Constants;
+using RazzleServer.Common.Util;
 using RazzleServer.Data;
+using RazzleServer.DataProvider;
 using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Game.Maple.Life;
+using RazzleServer.Game.Maple.Maps;
 using RazzleServer.Net;
 using RazzleServer.Net.Packet;
 using Serilog;
 
 namespace RazzleServer.Common
 {
-    public abstract class BaseCharacter<TClient> where TClient : AClient
+    public abstract class BaseCharacter<TClient> : ICharacter where TClient : AClient
     {
         private readonly ILogger _log = Log.ForContext<BaseCharacter<TClient>>();
 
         public int Id { get; set; }
         public TClient Client { get; set; }
         public int AccountId { get; set; }
+        
         public byte WorldId { get; set; }
         public string Name { get; set; }
-        public bool IsInitialized { get; protected set; }
+        public bool IsInitialized { get; set; }
         public byte SpawnPoint { get; set; }
         public byte Stance { get; set; }
         public int MapId { get; set; }
@@ -27,9 +33,18 @@ namespace RazzleServer.Common
         public int RankMove { get; set; }
         public int JobRank { get; set; }
         public int JobRankMove { get; set; }
-        public CharacterItems Items { get; set; }
-        public CharacterStats PrimaryStats { get; set; }
-        public CharacterTeleportRocks TeleportRocks { get; set; }
+        public CharacterItems Items { get; }
+        public CharacterStats PrimaryStats { get; }
+        public CharacterTeleportRocks TeleportRocks { get; }
+        public CharacterSkills Skills { get; }
+        public CharacterQuests Quests { get; }
+        public CharacterRings Rings { get; }
+        public CharacterBuffs Buffs { get; }
+        public CharacterSummons Summons { get; set; }
+        public CharacterStorage Storage { get; }
+        public CharacterPets Pets { get; set; }
+        public virtual bool IsMaster { get; } = false;
+
 
         public bool IsAlive => PrimaryStats.Health > 0;
 
@@ -42,14 +57,23 @@ namespace RazzleServer.Common
         {
             Id = id;
             Client = client;
-            
-            var gameCharacter = this is GameCharacter castedCharacter ? castedCharacter : null;
-            PrimaryStats = new CharacterStats(gameCharacter);
-            Items = new CharacterItems(gameCharacter, 100, 100, 100, 100, 100);
-            TeleportRocks = new CharacterTeleportRocks(gameCharacter);
+            PrimaryStats = new CharacterStats(this);
+            Items = new CharacterItems(this, 100, 100, 100, 100, 100);
+            TeleportRocks = new CharacterTeleportRocks(this);
+            Skills = new CharacterSkills(this);
+            Quests = new CharacterQuests(this);
+            Rings = new CharacterRings(this);
+            Summons = new CharacterSummons(this);
+            Buffs = new CharacterBuffs(this);
+            Storage = new CharacterStorage(this);
+            Pets = new CharacterPets(this);
         }
 
         public virtual void Initialize()
+        {
+        }
+
+        public virtual void Save()
         {
         }
 
@@ -79,9 +103,13 @@ namespace RazzleServer.Common
             TeleportRocks.Load();
         }
 
-        public void Send(PacketWriter packet) => Client.Send(packet);
+        public virtual void Hide(bool isHidden)
+        {
+        }
 
-        public byte[] ToByteArray()
+        public virtual void Send(PacketWriter packet) => Client.Send(packet);
+
+        public virtual byte[] ToByteArray()
         {
             using var pw = new PacketWriter();
             pw.WriteBytes(StatisticsToByteArray());
@@ -99,7 +127,7 @@ namespace RazzleServer.Common
             return pw.ToArray();
         }
 
-        public byte[] StatisticsToByteArray()
+        public virtual byte[] StatisticsToByteArray()
         {
             using var pw = new PacketWriter();
             pw.WriteInt(Id);
@@ -132,7 +160,7 @@ namespace RazzleServer.Common
             return pw.ToArray();
         }
 
-        public byte[] AppearanceToByteArray()
+        public virtual byte[] AppearanceToByteArray()
         {
             using var pw = new PacketWriter();
 
@@ -156,5 +184,73 @@ namespace RazzleServer.Common
 
             return pw.ToArray();
         }
+
+        public virtual void ChangeMap(int mapId, string portalLabel)
+        {
+            var portal = CachedData.Maps.Data[mapId].Portals.FirstOrDefault(x => x.Label == portalLabel);
+
+            if (portal == null)
+            {
+                LogCheatWarning(CheatType.InvalidMapChange);
+                return;
+            }
+
+            ChangeMap(mapId, portal.Id);
+        }
+
+        public virtual void ChangeMap(int mapId, byte? portalId = null)
+        {
+            _log.Information($"ChangeMap: Character={Id} Map={mapId} Portal={portalId}");
+            MapId = mapId;
+        }
+
+        public virtual void Notify(string message, NoticeType type = NoticeType.PinkText)
+        {
+        }
+
+        public virtual void Revive()
+        {
+        }
+
+        public virtual void Attack(PacketReader packet, AttackType type)
+        {
+        }
+
+        public virtual void Talk(string text, bool show = true)
+        {
+        }
+
+        public virtual void PerformFacialExpression(int expressionId)
+        {
+        }
+
+        public virtual void ShowLocalUserEffect(UserEffect effect)
+        {
+        }
+
+        public virtual void ShowRemoteUserEffect(UserEffect effect, bool skipSelf = false)
+        {
+        }
+
+        public virtual void Converse(Npc npc)
+        {
+        }
+
+        public virtual void LogCheatWarning(CheatType type)
+        {
+            using var dbContext = new MapleDbContext();
+            _log.Information($"Cheat Warning: Character={Id} CheatType={type}");
+            dbContext.Cheats.Add(new CheatEntity {CharacterId = Id, CheatType = (int)type});
+            dbContext.SaveChanges();
+        }
+
+        public virtual byte[] DataToByteArray()
+        {
+            return new byte[] { };
+        }
+
+        public Map Map { get; set; }
+        public int ObjectId { get; set; }
+        public Point Position { get; set; }
     }
 }

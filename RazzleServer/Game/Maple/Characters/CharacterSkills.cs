@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using RazzleServer.Common;
 using RazzleServer.Common.Util;
 using RazzleServer.Data;
 using RazzleServer.Game.Maple.Skills;
@@ -8,9 +9,9 @@ namespace RazzleServer.Game.Maple.Characters
 {
     public sealed class CharacterSkills : MapleKeyedCollection<int, Skill>
     {
-        public GameCharacter Parent { get; }
+        public ICharacter Parent { get; }
 
-        public CharacterSkills(GameCharacter parent)
+        public CharacterSkills(ICharacter parent)
         {
             Parent = parent;
         }

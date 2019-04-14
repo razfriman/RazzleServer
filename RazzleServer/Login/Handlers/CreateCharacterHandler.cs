@@ -3,7 +3,6 @@ using System.Linq;
 using RazzleServer.Common;
 using RazzleServer.Common.Constants;
 using RazzleServer.DataProvider;
-using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Items;
 using RazzleServer.Login.Maple;
 using RazzleServer.Net.Packet;
@@ -36,25 +35,22 @@ namespace RazzleServer.Login.Handlers
                 AccountId = client.Account.Id,
                 WorldId = client.World,
                 Name = name,
-                MapId = ServerConfig.Instance.DefaultMapId,
-                PrimaryStats = new CharacterStats(null)
-                {
-                    Gender = client.Account.Gender,
-                    Skin = skin,
-                    Face = face,
-                    Hair = hair + hairColor,
-                    Level = 1,
-                    Job = Job.Beginner,
-                    Strength = strength,
-                    Dexterity = dexterity,
-                    Intelligence = intelligence,
-                    Luck = luck,
-                    MaxHealth = 50,
-                    MaxMana = 5,
-                    Health = 50,
-                    Mana = 5
-                }
+                MapId = ServerConfig.Instance.DefaultMapId
             };
+            character.PrimaryStats.Gender = client.Account.Gender;
+            character.PrimaryStats.Skin = skin;
+            character.PrimaryStats.Face = face;
+            character.PrimaryStats.Hair = hair + hairColor;
+            character.PrimaryStats.Level = 1;
+            character.PrimaryStats.Job = Job.Beginner;
+            character.PrimaryStats.Strength = strength;
+            character.PrimaryStats.Dexterity = dexterity;
+            character.PrimaryStats.Intelligence = intelligence;
+            character.PrimaryStats.Luck = luck;
+            character.PrimaryStats.MaxHealth = 50;
+            character.PrimaryStats.MaxMana = 5;
+            character.PrimaryStats.Health = 50;
+            character.PrimaryStats.Mana = 5;
 
             character.Items.Add(new Item(topId, equipped: true));
             character.Items.Add(new Item(bottomId, equipped: true));
@@ -78,8 +74,8 @@ namespace RazzleServer.Login.Handlers
             var error = name.Length < 4
                         || name.Length > 12
                         || server.CharacterExists(name, world)
-                        || CachedData.CreationData.ForbiddenNames.Any(x => x.Equals(name, StringComparison.CurrentCultureIgnoreCase));
-
+                        || CachedData.CreationData.ForbiddenNames.Any(x =>
+                            x.Equals(name, StringComparison.CurrentCultureIgnoreCase));
             switch (gender)
             {
                 case Gender.Male:

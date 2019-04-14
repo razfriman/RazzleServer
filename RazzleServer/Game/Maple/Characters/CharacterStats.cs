@@ -15,7 +15,7 @@ namespace RazzleServer.Game.Maple.Characters
 {
     public class CharacterStats
     {
-        public GameCharacter Parent { get; set; }
+        public ICharacter Parent { get; set; }
 
         private byte _skin;
         private int _face;
@@ -36,7 +36,7 @@ namespace RazzleServer.Game.Maple.Characters
         private short _fame;
         private int _meso;
 
-        public CharacterStats(GameCharacter gameCharacter)
+        public CharacterStats(ICharacter gameCharacter)
         {
             Parent = gameCharacter;
             BuffDragonBlood = new BuffStatDragonBlood(BuffValueTypes.DragonBlood, Parent);
@@ -680,7 +680,7 @@ namespace RazzleServer.Game.Maple.Characters
             pw.WriteBytes(Parent.AppearanceToByteArray());
             pw.WriteByte(0);
             pw.WriteShort(0);
-            Parent.Map.Send(pw, Parent);
+            Parent.Map?.Send(pw, Parent);
         }
 
         public void AddAbility(StatisticType statistic, short mod, bool isReset)

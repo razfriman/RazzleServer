@@ -105,7 +105,7 @@ namespace RazzleServer.Game.Maple.Maps
         {
             var drops = new List<Drop>();
 
-            foreach (var loopLoot in item.Loots)
+            foreach (var loopLoot in item.CachedReference.Loots)
             {
                 if (Functions.Random(1000000) / Map.Server.World.DropRate > loopLoot.Chance)
                 {
