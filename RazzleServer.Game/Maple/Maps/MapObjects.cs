@@ -23,7 +23,7 @@ namespace RazzleServer.Game.Maple.Maps
         {
             item.Map = Map;
 
-            if (!(item is GameCharacter) && !(item is Portal))
+            if (!(item is Character) && !(item is Portal))
             {
                 item.ObjectId = Map.AssignObjectId();
             }
@@ -40,7 +40,7 @@ namespace RazzleServer.Game.Maple.Maps
             {
                 item.Map = null;
 
-                if (!(item is GameCharacter) && !(item is Portal))
+                if (!(item is Character) && !(item is Portal))
                 {
                     item.ObjectId = -1;
                 }

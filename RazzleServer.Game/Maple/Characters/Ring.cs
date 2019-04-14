@@ -5,6 +5,6 @@ namespace RazzleServer.Game.Maple.Characters
         public int MapleId { get; set; }
         public int PartnerRingId { get; set; }
 
-        public GameCharacter Partner { get; set; }
+        public Character Partner { get; set; }
     }
 }

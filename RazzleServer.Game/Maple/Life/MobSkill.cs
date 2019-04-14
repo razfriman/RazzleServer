@@ -207,7 +207,7 @@ namespace RazzleServer.Game.Maple.Life
             }
         }
 
-        private IEnumerable<GameCharacter> GetAffectedCharacters(Mob caster)
+        private IEnumerable<Character> GetAffectedCharacters(Mob caster)
         {
             var rectangle = new Rectangle((CachedReference.Lt ?? new Point(0, 0)) + caster.Position,
                 (CachedReference.Rb ?? new Point(0, 0)) + caster.Position);

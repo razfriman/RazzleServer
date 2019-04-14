@@ -297,7 +297,7 @@ namespace RazzleServer.Game.Maple.Characters
                 return;
             }
 
-            SendBuff(Parent as GameCharacter, added, delay);
+            SendBuff(Parent, added, delay);
         }
 
         public void FinalizeDebuff(BuffValueTypes removed, bool sendPacket = true)
@@ -312,7 +312,7 @@ namespace RazzleServer.Game.Maple.Characters
                 return;
             }
 
-            SendDebuff(Parent as GameCharacter, removed);
+            SendDebuff(Parent, removed);
         }
 
         public byte[] ToMapBuffValues(BuffValueTypes pBuffFlags = BuffValueTypes.All)
@@ -350,7 +350,7 @@ namespace RazzleServer.Game.Maple.Characters
             return pw.ToArray();
         }
 
-        public static void SendBuff(GameCharacter chr, BuffValueTypes flagsAdded, short pDelay = 0)
+        public static void SendBuff(Character chr, BuffValueTypes flagsAdded, short pDelay = 0)
         {
             if (flagsAdded == 0)
             {
@@ -361,7 +361,7 @@ namespace RazzleServer.Game.Maple.Characters
             SendBuffRemote(chr, flagsAdded, pDelay);
         }
 
-        public static void SendDebuff(GameCharacter chr, BuffValueTypes removedFlags)
+        public static void SendDebuff(Character chr, BuffValueTypes removedFlags)
         {
             if (removedFlags == 0)
             {
@@ -372,7 +372,7 @@ namespace RazzleServer.Game.Maple.Characters
             SendDebuffRemote(chr, removedFlags);
         }
 
-        private static void SendBuffLocal(GameCharacter chr, BuffValueTypes flagsAdded, short pDelay)
+        private static void SendBuffLocal(Character chr, BuffValueTypes flagsAdded, short pDelay)
         {
             var pw = new PacketWriter(ServerOperationCode.SkillsGiveBuff);
             chr.PrimaryStats.EncodeForLocal(pw, flagsAdded);
@@ -386,7 +386,7 @@ namespace RazzleServer.Game.Maple.Characters
             chr.Send(pw);
         }
 
-        private static void SendDebuffLocal(GameCharacter chr, BuffValueTypes removedFlags)
+        private static void SendDebuffLocal(Character chr, BuffValueTypes removedFlags)
         {
             var pw = new PacketWriter(ServerOperationCode.SkillsGiveDebuff);
             pw.WriteUInt((uint)removedFlags);
@@ -398,7 +398,7 @@ namespace RazzleServer.Game.Maple.Characters
             chr.Send(pw);
         }
 
-        private static void SendBuffRemote(GameCharacter chr, BuffValueTypes flagsAdded, short pDelay)
+        private static void SendBuffRemote(Character chr, BuffValueTypes flagsAdded, short pDelay)
         {
             var pw = new PacketWriter(ServerOperationCode.RemotePlayerSkillBuff);
             pw.WriteInt(chr.Id);
@@ -407,7 +407,7 @@ namespace RazzleServer.Game.Maple.Characters
             chr.Map?.Send(pw, chr);
         }
 
-        private static void SendDebuffRemote(GameCharacter chr, BuffValueTypes removedFlags)
+        private static void SendDebuffRemote(Character chr, BuffValueTypes removedFlags)
         {
             var pw = new PacketWriter(ServerOperationCode.RemotePlayerSkillDebuff);
             pw.WriteInt(chr.Id);

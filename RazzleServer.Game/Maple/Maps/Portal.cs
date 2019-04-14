@@ -30,25 +30,25 @@ namespace RazzleServer.Game.Maple.Maps
             Type = reference.Type;
         }
 
-        public void Enter(GameCharacter gameCharacter)
+        public void Enter(Character character)
         {
-            if (!gameCharacter.Map.Portals.ContainsPortal(Label))
+            if (!character.Map.Portals.ContainsPortal(Label))
             {
-                gameCharacter.LogCheatWarning(CheatType.InvalidMapChange);
-                SendMapTransferResult(gameCharacter, MapTransferResult.PortalClosed);
+                character.LogCheatWarning(CheatType.InvalidMapChange);
+                SendMapTransferResult(character, MapTransferResult.PortalClosed);
                 return;
             }
 
-            gameCharacter.ChangeMap(DestinationMapId, DestinationLabel);
+            character.ChangeMap(DestinationMapId, DestinationLabel);
         }
 
-        public static void SendMapTransferResult(GameCharacter gameCharacter, MapTransferResult result)
+        public static void SendMapTransferResult(Character character, MapTransferResult result)
         {
             using var pw = new PacketWriter(ServerOperationCode.TransferFieldReqIgnored);
             pw.WriteByte(result);
-            gameCharacter.Send(pw);
+            character.Send(pw);
         }
 
-        public static void PlaySoundEffect(GameCharacter gameCharacter) => gameCharacter.ShowLocalUserEffect(UserEffect.PlayPortalSe);
+        public static void PlaySoundEffect(Character character) => character.ShowLocalUserEffect(UserEffect.PlayPortalSe);
     }
 }

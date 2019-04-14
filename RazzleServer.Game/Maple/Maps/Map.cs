@@ -60,7 +60,7 @@ namespace RazzleServer.Game.Maple.Maps
 
         public Map(int id) => MapleId = id;
 
-        public void Send(PacketWriter pw, GameCharacter except = null) =>
+        public void Send(PacketWriter pw, Character except = null) =>
             Characters.Values
                 .Where(x => x.Id != except?.Id)
                 .ToList()

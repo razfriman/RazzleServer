@@ -64,7 +64,7 @@ namespace RazzleServer.Game.Maple.Skills
                 {
                     Recalculate();
 
-                    if (GameCharacter.IsInitialized)
+                    if (Character.IsInitialized)
                     {
                         Update();
                     }
@@ -79,7 +79,7 @@ namespace RazzleServer.Game.Maple.Skills
             {
                 _maxLevel = value;
 
-                if (Parent != null && GameCharacter.IsInitialized)
+                if (Parent != null && Character.IsInitialized)
                 {
                     Update();
                 }
@@ -88,7 +88,7 @@ namespace RazzleServer.Game.Maple.Skills
 
         public SkillReference CachedReference => CachedData.Skills.Data[MapleId][CurrentLevel];
 
-        public Character GameCharacter => Parent.Parent;
+        public Character Character => Parent.Parent;
 
         private bool Assigned { get; set; }
 
@@ -131,7 +131,7 @@ namespace RazzleServer.Game.Maple.Skills
                 dbContext.Skills.Add(item);
             }
 
-            item.CharacterId = GameCharacter.Id;
+            item.CharacterId = Character.Id;
             item.SkillId = MapleId;
             item.Level = CurrentLevel;
             item.MasterLevel = MaxLevel;
@@ -169,7 +169,7 @@ namespace RazzleServer.Game.Maple.Skills
             pw.WriteInt(MaxLevel);
             pw.WriteDateTime(Expiration);
             pw.WriteByte(4);
-            GameCharacter.Send(pw);
+            Character.Send(pw);
         }
 
         public void Recalculate()
@@ -215,24 +215,24 @@ namespace RazzleServer.Game.Maple.Skills
             {
                 case (int) SkillNames.DragonKnight.DragonRoar:
                 {
-                    var lefthp = (int) (GameCharacter.PrimaryStats.MaxHealth * (ParameterA / 100.0d));
-                    GameCharacter.PrimaryStats.Health -= (short) lefthp;
+                    var lefthp = (int) (Character.PrimaryStats.MaxHealth * (ParameterA / 100.0d));
+                    Character.PrimaryStats.Health -= (short) lefthp;
                     break;
                 }
 
-                case (int) SkillNames.Spearman.HyperBody when GameCharacter.PrimaryStats.HasBuff(MapleId):
+                case (int) SkillNames.Spearman.HyperBody when Character.PrimaryStats.HasBuff(MapleId):
                     // Already buffed
                     return;
                 case (int) SkillNames.Spearman.HyperBody:
                 {
-                    var lefthp = (int) (GameCharacter.PrimaryStats.MaxHealth * (ParameterA / 100.0d));
-                    GameCharacter.PrimaryStats.BuffBonuses.MaxHealth = (short) lefthp;
-                    GameCharacter.PrimaryStats.MaxHealth += (short) lefthp;
-                    lefthp = (int) (GameCharacter.PrimaryStats.MaxMana * (ParameterB / 100.0d));
-                    GameCharacter.PrimaryStats.BuffBonuses.MaxMana = (short) lefthp;
-                    GameCharacter.PrimaryStats.MaxMana += (short) lefthp;
-                    GameCharacter.PrimaryStats.MaxMana = GameCharacter.PrimaryStats.TotalMaxMana;
-                    GameCharacter.PrimaryStats.MaxHealth = GameCharacter.PrimaryStats.TotalMaxHealth;
+                    var lefthp = (int) (Character.PrimaryStats.MaxHealth * (ParameterA / 100.0d));
+                    Character.PrimaryStats.BuffBonuses.MaxHealth = (short) lefthp;
+                    Character.PrimaryStats.MaxHealth += (short) lefthp;
+                    lefthp = (int) (Character.PrimaryStats.MaxMana * (ParameterB / 100.0d));
+                    Character.PrimaryStats.BuffBonuses.MaxMana = (short) lefthp;
+                    Character.PrimaryStats.MaxMana += (short) lefthp;
+                    Character.PrimaryStats.MaxMana = Character.PrimaryStats.TotalMaxMana;
+                    Character.PrimaryStats.MaxHealth = Character.PrimaryStats.TotalMaxHealth;
                     break;
                 }
             }
@@ -240,17 +240,17 @@ namespace RazzleServer.Game.Maple.Skills
 
             if (CostMp > 0)
             {
-                GameCharacter.PrimaryStats.Mana -= CostMp;
+                Character.PrimaryStats.Mana -= CostMp;
             }
 
             if (CostHp > 0)
             {
-                GameCharacter.PrimaryStats.Health -= CostHp;
+                Character.PrimaryStats.Health -= CostHp;
             }
 
             if (CostItem > 0)
             {
-                GameCharacter.Items.Remove(CostItem, ItemCount);
+                Character.Items.Remove(CostItem, ItemCount);
             }
 
             if (CostMeso > 0)
@@ -258,13 +258,13 @@ namespace RazzleServer.Game.Maple.Skills
                 var min = (short) (CostMeso - (80 + CurrentLevel * 5));
                 var max = (short) (CostMeso + 80 + CurrentLevel * 5);
                 var realAmount = (short) Functions.Random(min, max);
-                if (GameCharacter.PrimaryStats.Meso - realAmount >= 0)
+                if (Character.PrimaryStats.Meso - realAmount >= 0)
                 {
-                    GameCharacter.PrimaryStats.Meso -= realAmount;
+                    Character.PrimaryStats.Meso -= realAmount;
                 }
                 else
                 {
-                    GameCharacter.LogCheatWarning(CheatType.InvalidSkillChange);
+                    Character.LogCheatWarning(CheatType.InvalidSkillChange);
                 }
             }
         }

@@ -50,7 +50,7 @@ namespace RazzleServer.Game.Maple.Life
             Map.Send(pw);
         }
 
-        public void ShowShop(GameCharacter customer)
+        public void ShowShop(Character customer)
         {
             using var pw = new PacketWriter(ServerOperationCode.NpcShopShow);
             pw.WriteInt(MapleId);

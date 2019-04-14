@@ -36,9 +36,9 @@ namespace RazzleServer.Game.Maple.Characters
         private short _fame;
         private int _meso;
 
-        public CharacterStats(Character gameCharacter)
+        public CharacterStats(Character character)
         {
-            Parent = gameCharacter;
+            Parent = character;
             BuffDragonBlood = new BuffStatDragonBlood(BuffValueTypes.DragonBlood, Parent);
         }
 

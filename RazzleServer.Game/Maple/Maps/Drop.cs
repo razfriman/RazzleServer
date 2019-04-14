@@ -13,8 +13,8 @@ namespace RazzleServer.Game.Maple.Maps
     {
         public const int ExpiryTime = 60 * 1000;
 
-        [JsonIgnore] public GameCharacter Owner { get; set; }
-        [JsonIgnore] public GameCharacter Picker { get; set; }
+        [JsonIgnore] public Character Owner { get; set; }
+        [JsonIgnore] public Character Picker { get; set; }
         public Point Origin { get; set; }
         public CancellationTokenSource Expiry { get; set; }
 
@@ -42,7 +42,7 @@ namespace RazzleServer.Game.Maple.Maps
             return GetInternalPacket(DropAnimationType.DropAnimation, null);
         }
 
-        public PacketWriter GetCreatePacket(GameCharacter temporaryOwner)
+        public PacketWriter GetCreatePacket(Character temporaryOwner)
         {
             return GetInternalPacket(DropAnimationType.DropAnimation, temporaryOwner);
         }
@@ -52,12 +52,12 @@ namespace RazzleServer.Game.Maple.Maps
             return GetInternalPacket(DropAnimationType.ShowExisting, null);
         }
 
-        public PacketWriter GetSpawnPacket(GameCharacter temporaryOwner)
+        public PacketWriter GetSpawnPacket(Character temporaryOwner)
         {
             return GetInternalPacket(DropAnimationType.ShowExisting, temporaryOwner);
         }
 
-        private PacketWriter GetInternalPacket(DropAnimationType dropAnimationType, GameCharacter temporaryOwner)
+        private PacketWriter GetInternalPacket(DropAnimationType dropAnimationType, Character temporaryOwner)
         {
             var pw = new PacketWriter(ServerOperationCode.DropEnterField);
 
