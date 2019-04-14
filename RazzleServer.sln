@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28606.126
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RazzleServer.Manager", "RazzleServer\RazzleServer.Manager.csproj", "{23750A73-86BE-49CF-9159-39B34627990F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RazzleServer", "RazzleServer\RazzleServer.csproj", "{23750A73-86BE-49CF-9159-39B34627990F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RazzleServer.Data", "RazzleServer.DB\RazzleServer.Data.csproj", "{728BCBCC-1E8D-4AE6-B40D-05B54FED815F}"
 EndProject

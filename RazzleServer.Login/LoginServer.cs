@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Net;
 using RazzleServer.Common;
-using RazzleServer.Common.Server;
 using RazzleServer.Data;
 using RazzleServer.Login.Maple;
 using RazzleServer.Server;

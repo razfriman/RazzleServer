@@ -3,14 +3,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using RazzleServer.Common;
-using RazzleServer.Common.Server;
 using RazzleServer.Data;
 using RazzleServer.DataProvider;
 using RazzleServer.Game;
 using RazzleServer.Game.Maple.Scripting;
 using RazzleServer.Login;
 using RazzleServer.Server;
-using RazzleServer.Server.Common;
 using RazzleServer.Shop;
 using Serilog;
 
