@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using RazzleServer.Common;
 using RazzleServer.Data;
+using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Server;
 using RazzleServer.Shop.Maple;
 using Serilog;
@@ -25,10 +26,10 @@ namespace RazzleServer.Shop
                 .Any(x => x.Name == name);
         }
 
-        internal List<ShopCharacter> GetCharacters(byte worldId, int accountId)
+        internal List<Character> GetCharacters(byte worldId, int accountId)
         {
             using var dbContext = new MapleDbContext();
-            var result = new List<ShopCharacter>();
+            var result = new List<Character>();
 
             var characters = dbContext
                 .Characters

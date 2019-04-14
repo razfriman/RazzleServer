@@ -7,8 +7,8 @@
     <ItemGroup>
       <ProjectReference Include="..\RazzleServer.Common\RazzleServer.Common.csproj" />
       <ProjectReference Include="..\RazzleServer.DB\RazzleServer.Data.csproj" />
+      <ProjectReference Include="..\RazzleServer.Game\RazzleServer.Game.csproj" />
       <ProjectReference Include="..\RazzleServer.Net\RazzleServer.Net.csproj" />
-      <ProjectReference Include="..\RazzleServer.Server\RazzleServer.Server.csproj" />
     </ItemGroup>
 
     <ItemGroup>

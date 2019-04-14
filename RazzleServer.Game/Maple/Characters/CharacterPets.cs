@@ -5,11 +5,11 @@ namespace RazzleServer.Game.Maple.Characters
 {
     public class CharacterPets : MapleKeyedCollection<int, Pet>
     {
-        public GameCharacter Parent { get; }
+        public Character Parent { get; }
 
         private short CurrentPetId { get; set; }
 
-        public CharacterPets(GameCharacter parent)
+        public CharacterPets(Character parent)
         {
             Parent = parent;
         }

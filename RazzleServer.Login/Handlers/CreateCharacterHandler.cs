@@ -3,9 +3,10 @@ using System.Linq;
 using RazzleServer.Common;
 using RazzleServer.Common.Constants;
 using RazzleServer.DataProvider;
+using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Game.Maple.Items;
 using RazzleServer.Login.Maple;
 using RazzleServer.Net.Packet;
-using RazzleServer.Server.Maple;
 
 namespace RazzleServer.Login.Handlers
 {
@@ -37,7 +38,7 @@ namespace RazzleServer.Login.Handlers
                 Name = name,
                 MapId = ServerConfig.Instance.DefaultMapId,
             };
-            character.PrimaryStats = new BasicCharacterStats(character)
+            character.PrimaryStats = new CharacterStats(character)
             {
                 Gender = client.Account.Gender,
                 Skin = skin,
@@ -55,10 +56,10 @@ namespace RazzleServer.Login.Handlers
                 Mana = 5
             };
 
-            character.Items.Add(new BasicItem(topId, equipped: true));
-            character.Items.Add(new BasicItem(bottomId, equipped: true));
-            character.Items.Add(new BasicItem(shoesId, equipped: true));
-            character.Items.Add(new BasicItem(weaponId, equipped: true));
+            character.Items.Add(new Item(topId, equipped: true));
+            character.Items.Add(new Item(bottomId, equipped: true));
+            character.Items.Add(new Item(shoesId, equipped: true));
+            character.Items.Add(new Item(weaponId, equipped: true));
             character.Create();
 
             using var pw = new PacketWriter(ServerOperationCode.CreateCharacterResult);

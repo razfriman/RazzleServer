@@ -9,11 +9,11 @@ namespace RazzleServer.Game.Maple.Characters
 {
     public sealed class CharacterTeleportRocks
     {
-        public GameCharacter Parent { get; }
+        public Character Parent { get; }
 
         public List<int> Maps { get; }
 
-        public CharacterTeleportRocks(GameCharacter parent)
+        public CharacterTeleportRocks(Character parent)
         {
             Parent = parent;
 

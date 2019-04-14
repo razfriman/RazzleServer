@@ -9,14 +9,14 @@ namespace RazzleServer.Game.Maple.Characters
 {
     public sealed class CharacterStorage
     {
-        public GameCharacter Parent { get; }
+        public Character Parent { get; }
         public Npc Npc { get; private set; }
         public byte Slots { get; set; }
         public int Meso { get; set; }
         public CharacterItems Items { get; set; }
         public bool IsFull => Items.Count == Slots;
 
-        public CharacterStorage(GameCharacter parent) => Parent = parent;
+        public CharacterStorage(Character parent) => Parent = parent;
 
         public void Load()
         {

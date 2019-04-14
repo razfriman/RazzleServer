@@ -88,7 +88,7 @@ namespace RazzleServer.Game.Maple.Skills
 
         public SkillReference CachedReference => CachedData.Skills.Data[MapleId][CurrentLevel];
 
-        public GameCharacter GameCharacter => Parent.Parent;
+        public Character GameCharacter => Parent.Parent;
 
         private bool Assigned { get; set; }
 

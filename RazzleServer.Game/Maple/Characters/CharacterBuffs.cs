@@ -7,12 +7,12 @@ namespace RazzleServer.Game.Maple.Characters
 {
     public sealed class CharacterBuffs
     {
-        public GameCharacter Parent { get; }
+        public Character Parent { get; }
 
         public byte ComboCount { get; set; }
 
 
-        public CharacterBuffs(GameCharacter parent)
+        public CharacterBuffs(Character parent)
         {
             Parent = parent;
         }
@@ -297,7 +297,7 @@ namespace RazzleServer.Game.Maple.Characters
                 return;
             }
 
-            SendBuff(Parent, added, delay);
+            SendBuff(Parent as GameCharacter, added, delay);
         }
 
         public void FinalizeDebuff(BuffValueTypes removed, bool sendPacket = true)
@@ -312,7 +312,7 @@ namespace RazzleServer.Game.Maple.Characters
                 return;
             }
 
-            SendDebuff(Parent, removed);
+            SendDebuff(Parent as GameCharacter, removed);
         }
 
         public byte[] ToMapBuffValues(BuffValueTypes pBuffFlags = BuffValueTypes.All)

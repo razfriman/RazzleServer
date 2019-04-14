@@ -2,8 +2,8 @@
 using System.Linq;
 using RazzleServer.Common;
 using RazzleServer.Common.Constants;
-using RazzleServer.Common.Maple;
 using RazzleServer.Game;
+using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Net;
 using RazzleServer.Net.Packet;
 using RazzleServer.Server;
@@ -36,13 +36,13 @@ namespace RazzleServer
             .ToList()
             .ForEach(x => x.Send(pw));
 
-        public override ICharacter GetCharacterById(int id) => Values
+        public override Character GetCharacterById(int id) => Values
             .SelectMany(x => x.Clients.Values)
             .Cast<GameClient>()
             .Select(x => x.GameCharacter)
             .FirstOrDefault(x => x.Id == id);
 
-        public override ICharacter GetCharacterByName(string name) => Values
+        public override Character GetCharacterByName(string name) => Values
             .SelectMany(x => x.Clients.Values)
             .Cast<GameClient>()
             .Select(x => x.GameCharacter)

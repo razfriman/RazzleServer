@@ -11,7 +11,7 @@ namespace RazzleServer.Game.Maple.Life
 {
     public class Summon : IMapObject, ISpawnable
     {
-        public GameCharacter Parent { get; set; }
+        public Character Parent { get; set; }
         public int MapleId { get; set; }
         public byte Level { get; set; }
         public bool MoveAction { get; set; }
@@ -21,7 +21,7 @@ namespace RazzleServer.Game.Maple.Life
         public int ObjectId { get; set; }
         public Point Position { get; set; }
 
-        public Summon(GameCharacter parent, Skill skill, Point position, bool moveAction)
+        public Summon(Character parent, Skill skill, Point position, bool moveAction)
         {
             Parent = parent;
             MapleId = skill.MapleId;

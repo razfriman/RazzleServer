@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using Newtonsoft.Json;
 using RazzleServer.Common.Constants;
-using RazzleServer.Common.Maple;
 using RazzleServer.Common.Util;
+using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Net;
 using RazzleServer.Net.Packet;
 
@@ -47,9 +47,9 @@ namespace RazzleServer.Server
 
         public abstract void Send(PacketWriter pw, AClient except = null);
 
-        public abstract ICharacter GetCharacterById(int id);
+        public abstract Character GetCharacterById(int id);
 
-        public abstract ICharacter GetCharacterByName(string name);
+        public abstract Character GetCharacterByName(string name);
 
         public abstract SelectChannelResult CheckChannel(byte channel);
 

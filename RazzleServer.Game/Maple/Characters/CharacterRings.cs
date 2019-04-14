@@ -5,9 +5,9 @@ namespace RazzleServer.Game.Maple.Characters
 {
     public sealed class CharacterRings : MapleKeyedCollection<int, Ring>
     {
-        public GameCharacter Parent { get; }
+        public Character Parent { get; }
 
-        public CharacterRings(GameCharacter parent)
+        public CharacterRings(Character parent)
         {
             Parent = parent;
         }

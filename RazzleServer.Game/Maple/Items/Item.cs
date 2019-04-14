@@ -145,7 +145,7 @@ namespace RazzleServer.Game.Maple.Items
 
         public ItemReference CachedReference => CachedData.Items.Data[MapleId];
 
-        public GameCharacter Character => Parent?.Parent;
+        public Character Character => Parent?.Parent;
 
         public short MaxPerStack => CachedReference.MaxPerStack;
 

@@ -13,13 +13,13 @@ namespace RazzleServer.Game.Maple.Characters
 {
     public sealed class CharacterItems : IEnumerable<Item>
     {
-        public GameCharacter Parent { get; }
+        public Character Parent { get; }
         public Dictionary<ItemType, byte> MaxSlots { get; }
         private List<Item> Items { get; }
 
         public int Count => Items.Count;
 
-        public CharacterItems(GameCharacter parent, byte equipmentSlots, byte usableSlots, byte setupSlots,
+        public CharacterItems(Character parent, byte equipmentSlots, byte usableSlots, byte setupSlots,
             byte etceteraSlots, byte cashSlots)
         {
             Parent = parent;
@@ -318,7 +318,7 @@ namespace RazzleServer.Game.Maple.Characters
                 return;
             }
 
-            drop.Picker = Parent;
+            drop.Picker = Parent as GameCharacter;
 
             switch (drop)
             {
@@ -510,7 +510,7 @@ namespace RazzleServer.Game.Maple.Characters
 
             return stats;
         }
-        
+
         public (Dictionary<byte, int> visibleLayer, Dictionary<byte, int> hiddenLayer) CalculateEquippedSlots()
         {
             var visibleLayer = new Dictionary<byte, int>();
@@ -544,62 +544,82 @@ namespace RazzleServer.Game.Maple.Characters
             return (visibleLayer, hiddenLayer);
         }
 
-        public byte[] ToByteArray()
+        public byte[] ToByteArray(CharacterDataFlags flags = CharacterDataFlags.All)
         {
             using var pw = new PacketWriter();
-            foreach (var item in GetEquipped(EquippedQueryMode.Normal))
+
+            if (flags.HasFlag(CharacterDataFlags.Equipment))
             {
-                pw.WriteBytes(item.ToByteArray());
+                foreach (var item in GetEquipped(EquippedQueryMode.Normal))
+                {
+                    pw.WriteBytes(item.ToByteArray());
+                }
+
+                pw.WriteByte(0);
+
+                foreach (var item in GetEquipped(EquippedQueryMode.Cash))
+                {
+                    pw.WriteBytes(item.ToByteArray());
+                }
+
+                pw.WriteByte(0);
             }
 
-            pw.WriteByte(0);
-
-            foreach (var item in GetEquipped(EquippedQueryMode.Cash))
+            if (flags.HasFlag(CharacterDataFlags.Equipment))
             {
-                pw.WriteBytes(item.ToByteArray());
+                pw.WriteByte(MaxSlots[ItemType.Equipment]);
+                foreach (var item in this[ItemType.Equipment])
+                {
+                    pw.WriteBytes(item.ToByteArray());
+                }
+
+                pw.WriteByte(0);
             }
 
-            pw.WriteByte(0);
-
-            pw.WriteByte(MaxSlots[ItemType.Equipment]);
-            foreach (var item in this[ItemType.Equipment])
+            if (flags.HasFlag(CharacterDataFlags.Usable))
             {
-                pw.WriteBytes(item.ToByteArray());
+                pw.WriteByte(MaxSlots[ItemType.Usable]);
+                foreach (var item in this[ItemType.Usable])
+                {
+                    pw.WriteBytes(item.ToByteArray());
+                }
+
+                pw.WriteByte(0);
             }
 
-            pw.WriteByte(0);
-
-            pw.WriteByte(MaxSlots[ItemType.Usable]);
-            foreach (var item in this[ItemType.Usable])
+            if (flags.HasFlag(CharacterDataFlags.Setup))
             {
-                pw.WriteBytes(item.ToByteArray());
+                pw.WriteByte(MaxSlots[ItemType.Setup]);
+                foreach (var item in this[ItemType.Setup])
+                {
+                    pw.WriteBytes(item.ToByteArray());
+                }
+
+                pw.WriteByte(0);
             }
 
-            pw.WriteByte(0);
-
-            pw.WriteByte(MaxSlots[ItemType.Setup]);
-            foreach (var item in this[ItemType.Setup])
+            if (flags.HasFlag(CharacterDataFlags.Etcetera))
             {
-                pw.WriteBytes(item.ToByteArray());
+                pw.WriteByte(MaxSlots[ItemType.Etcetera]);
+                foreach (var item in this[ItemType.Etcetera])
+                {
+                    pw.WriteBytes(item.ToByteArray());
+                }
+
+                pw.WriteByte(0);
             }
 
-            pw.WriteByte(0);
-
-            pw.WriteByte(MaxSlots[ItemType.Etcetera]);
-            foreach (var item in this[ItemType.Etcetera])
+            if (flags.HasFlag(CharacterDataFlags.Pet))
             {
-                pw.WriteBytes(item.ToByteArray());
+                pw.WriteByte(MaxSlots[ItemType.Pet]);
+                foreach (var item in this[ItemType.Pet])
+                {
+                    pw.WriteBytes(item.ToByteArray());
+                }
+
+                pw.WriteByte(0);
             }
 
-            pw.WriteByte(0);
-
-            pw.WriteByte(MaxSlots[ItemType.Pet]);
-            foreach (var item in this[ItemType.Pet])
-            {
-                pw.WriteBytes(item.ToByteArray());
-            }
-
-            pw.WriteByte(0);
 
             return pw.ToArray();
         }

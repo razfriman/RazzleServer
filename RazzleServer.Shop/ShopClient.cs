@@ -4,6 +4,7 @@ using System.Threading;
 using RazzleServer.Common;
 using RazzleServer.Common.Util;
 using RazzleServer.Data;
+using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Net;
 using RazzleServer.Net.Packet;
 using RazzleServer.Shop.Maple;
@@ -17,7 +18,7 @@ namespace RazzleServer.Shop
 
         public ShopAccount Account { get; set; }
         public ShopServer Server { get; set; }
-        public ShopCharacter Character { get; set; }
+        public Character Character { get; set; }
         public CancellationTokenSource PingToken { get; set; }
         public override ILogger Logger => Log.ForContext<ShopClient>();
 

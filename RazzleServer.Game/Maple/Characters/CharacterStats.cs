@@ -10,13 +10,12 @@ using RazzleServer.DataProvider;
 using RazzleServer.Game.Maple.Buffs;
 using RazzleServer.Game.Maple.Items;
 using RazzleServer.Net.Packet;
-using RazzleServer.Server.Maple;
 
 namespace RazzleServer.Game.Maple.Characters
 {
-    public class CharacterStats : BasicCharacterStats
+    public class CharacterStats
     {
-        public GameCharacter Parent { get; set; }
+        public Character Parent { get; set; }
 
         private byte _skin;
         private int _face;
@@ -37,7 +36,7 @@ namespace RazzleServer.Game.Maple.Characters
         private short _fame;
         private int _meso;
 
-        public CharacterStats(GameCharacter gameCharacter) : base(gameCharacter)
+        public CharacterStats(Character gameCharacter)
         {
             Parent = gameCharacter;
             BuffDragonBlood = new BuffStatDragonBlood(BuffValueTypes.DragonBlood, Parent);
@@ -174,7 +173,7 @@ namespace RazzleServer.Game.Maple.Characters
         public BuffStat BuffCurse { get; } = new BuffStat(BuffValueTypes.Curse);
 
 
-        public override byte Skin
+        public byte Skin
         {
             get => _skin;
             set
@@ -194,7 +193,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public override int Face
+        public int Face
         {
             get => _face;
             set
@@ -215,7 +214,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public override int Hair
+        public int Hair
         {
             get => _hair;
             set
@@ -244,7 +243,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public int FaceColorOffset => (Face / 100 - 10 * (Face / 1000)) * 100;
 
-        public override byte Level
+        public byte Level
         {
             get => _level;
             set
@@ -334,7 +333,7 @@ namespace RazzleServer.Game.Maple.Characters
             Parent.ShowRemoteUserEffect(UserEffect.LevelUp);
         }
 
-        public override Job Job
+        public Job Job
         {
             get => _job;
             set
@@ -352,7 +351,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public override short Strength
+        public short Strength
         {
             get => _strength;
             set
@@ -366,7 +365,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public override short Dexterity
+        public short Dexterity
         {
             get => _dexterity;
             set
@@ -380,7 +379,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public override short Intelligence
+        public short Intelligence
         {
             get => _intelligence;
             set
@@ -394,7 +393,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public override short Luck
+        public short Luck
         {
             get => _luck;
             set
@@ -408,7 +407,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public override short Health
+        public short Health
         {
             get => _health;
             set
@@ -433,7 +432,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public override short MaxHealth
+        public short MaxHealth
         {
             get => _maxHealth;
             set
@@ -447,7 +446,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public override short Mana
+        public short Mana
         {
             get => _mana;
             set
@@ -464,7 +463,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public override short MaxMana
+        public short MaxMana
         {
             get => _maxMana;
             set
@@ -478,7 +477,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public override short AbilityPoints
+        public short AbilityPoints
         {
             get => _abilityPoints;
             set
@@ -492,7 +491,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public override short SkillPoints
+        public short SkillPoints
         {
             get => _skillPoints;
             set
@@ -506,7 +505,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public override int Experience
+        public int Experience
         {
             get => _experience;
             set
@@ -547,7 +546,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public override short Fame
+        public short Fame
         {
             get => _fame;
             set
@@ -561,7 +560,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public override int Meso
+        public int Meso
         {
             get => _meso;
             set
@@ -670,13 +669,18 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void UpdateApperance()
         {
+            if (!(Parent is GameCharacter gc))
+            {
+                return;
+            }
+            
             using var pw = new PacketWriter(ServerOperationCode.RemotePlayerChangeEquips);
             pw.WriteInt(Parent.Id);
             pw.WriteBool(true);
-            pw.WriteBytes(Parent.AppearanceToByteArray());
+            pw.WriteBytes(gc.AppearanceToByteArray());
             pw.WriteByte(0);
             pw.WriteShort(0);
-            Parent.Map?.Send(pw, Parent);
+            Parent.Map?.Send(pw, gc);
         }
 
         public void AddAbility(StatisticType statistic, short mod, bool isReset)
@@ -903,8 +907,10 @@ namespace RazzleServer.Game.Maple.Characters
         public short Mdd => Intelligence;
 
         private bool IsBaseJob(Job baseJob) => (int)Job / 100 * 100 == (int)baseJob;
+        public int BuddyListSlots { get; set; } = 20;
+        public Gender Gender { get; set; }
 
-        public override void Load(CharacterEntity character)
+        public void Load(CharacterEntity character)
         {
             _abilityPoints = character.AbilityPoints;
             _dexterity = character.Dexterity;

@@ -5,9 +5,9 @@ namespace RazzleServer.Game.Maple.Characters
     public class CharacterDamage
     {
         public MapleRandom Random { get; set; } = new MapleRandom();
-        public GameCharacter Parent { get; }
+        public Character Parent { get; }
 
-        public CharacterDamage(GameCharacter parent)
+        public CharacterDamage(Character parent)
         {
             Parent = parent;
         }

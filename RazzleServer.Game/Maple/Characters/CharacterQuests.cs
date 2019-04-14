@@ -11,12 +11,12 @@ namespace RazzleServer.Game.Maple.Characters
 {
     public sealed class CharacterQuests
     {
-        public GameCharacter Parent { get; }
+        public Character Parent { get; }
 
         public Dictionary<int, Dictionary<int, short>> Started { get; }
         public Dictionary<int, DateTime> Completed { get; }
 
-        public CharacterQuests(GameCharacter parent)
+        public CharacterQuests(Character parent)
         {
             Parent = parent;
             Started = new Dictionary<int, Dictionary<int, short>>();
