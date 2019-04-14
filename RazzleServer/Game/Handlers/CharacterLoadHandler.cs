@@ -22,9 +22,9 @@ namespace RazzleServer.Game.Handlers
             client.Account.Load();
             client.SetOnline(true);
             
-            client.Character = new Character(characterId, client);
-            client.Character.Load();
-            client.Character.Initialize();
+            client.GameCharacter = new GameCharacter(characterId, client);
+            client.GameCharacter.Load();
+            client.GameCharacter.Initialize();
         }
     }
 }

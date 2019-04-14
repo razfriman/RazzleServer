@@ -1,18 +1,18 @@
 ﻿using System;
 using RazzleServer.Common.Constants;
-using RazzleServer.Game.Maple.Data;
+using RazzleServer.DataProvider;
 using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Maple.Characters
 {
     public sealed class CharacterBuffs
     {
-        public Character Parent { get; }
+        public GameCharacter Parent { get; }
 
         public byte ComboCount { get; set; }
 
 
-        public CharacterBuffs(Character parent)
+        public CharacterBuffs(GameCharacter parent)
         {
             Parent = parent;
         }
@@ -21,7 +21,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void AddItemBuff(int itemid)
         {
-            var data = DataProvider.Items.Data[itemid];
+            var data = CachedData.Items.Data[itemid];
             long buffTime = data.CBuffTime;
 
             var expireTime = DateTime.UtcNow.AddMilliseconds(buffTime);
@@ -137,7 +137,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void AddBuff(int skillId, byte level = 0xFF, short delay = 0)
         {
-            if (!DataProvider.Buffs.Data.TryGetValue(skillId, out var flags))
+            if (!CachedData.Buffs.Data.TryGetValue(skillId, out var flags))
             {
                 return;
             }
@@ -147,7 +147,7 @@ namespace RazzleServer.Game.Maple.Characters
                 level = Parent.Skills.GetCurrentLevel(skillId);
             }
 
-            var data = DataProvider.Skills.Data[skillId][level];
+            var data = CachedData.Skills.Data[skillId][level];
             long time = data.BuffTime * 1000;
             time += delay;
 
@@ -350,7 +350,7 @@ namespace RazzleServer.Game.Maple.Characters
             return pw.ToArray();
         }
 
-        public static void SendBuff(Character chr, BuffValueTypes flagsAdded, short pDelay = 0)
+        public static void SendBuff(GameCharacter chr, BuffValueTypes flagsAdded, short pDelay = 0)
         {
             if (flagsAdded == 0)
             {
@@ -361,7 +361,7 @@ namespace RazzleServer.Game.Maple.Characters
             SendBuffRemote(chr, flagsAdded, pDelay);
         }
 
-        public static void SendDebuff(Character chr, BuffValueTypes removedFlags)
+        public static void SendDebuff(GameCharacter chr, BuffValueTypes removedFlags)
         {
             if (removedFlags == 0)
             {
@@ -372,7 +372,7 @@ namespace RazzleServer.Game.Maple.Characters
             SendDebuffRemote(chr, removedFlags);
         }
 
-        private static void SendBuffLocal(Character chr, BuffValueTypes flagsAdded, short pDelay)
+        private static void SendBuffLocal(GameCharacter chr, BuffValueTypes flagsAdded, short pDelay)
         {
             var pw = new PacketWriter(ServerOperationCode.SkillsGiveBuff);
             chr.PrimaryStats.EncodeForLocal(pw, flagsAdded);
@@ -386,7 +386,7 @@ namespace RazzleServer.Game.Maple.Characters
             chr.Send(pw);
         }
 
-        private static void SendDebuffLocal(Character chr, BuffValueTypes removedFlags)
+        private static void SendDebuffLocal(GameCharacter chr, BuffValueTypes removedFlags)
         {
             var pw = new PacketWriter(ServerOperationCode.SkillsGiveDebuff);
             pw.WriteUInt((uint)removedFlags);
@@ -398,7 +398,7 @@ namespace RazzleServer.Game.Maple.Characters
             chr.Send(pw);
         }
 
-        private static void SendBuffRemote(Character chr, BuffValueTypes flagsAdded, short pDelay)
+        private static void SendBuffRemote(GameCharacter chr, BuffValueTypes flagsAdded, short pDelay)
         {
             var pw = new PacketWriter(ServerOperationCode.RemotePlayerSkillBuff);
             pw.WriteInt(chr.Id);
@@ -407,7 +407,7 @@ namespace RazzleServer.Game.Maple.Characters
             chr.Map.Send(pw, chr);
         }
 
-        private static void SendDebuffRemote(Character chr, BuffValueTypes removedFlags)
+        private static void SendDebuffRemote(GameCharacter chr, BuffValueTypes removedFlags)
         {
             var pw = new PacketWriter(ServerOperationCode.RemotePlayerSkillDebuff);
             pw.WriteInt(chr.Id);

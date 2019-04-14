@@ -6,8 +6,8 @@ using RazzleServer.Common.Constants;
 using RazzleServer.Common.Exceptions;
 using RazzleServer.Common.Util;
 using RazzleServer.Data;
+using RazzleServer.DataProvider;
 using RazzleServer.Game.Maple.Buffs;
-using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Items;
 using RazzleServer.Net.Packet;
 
@@ -15,7 +15,7 @@ namespace RazzleServer.Game.Maple.Characters
 {
     public class CharacterStats
     {
-        public Character Parent { get; set; }
+        public GameCharacter Parent { get; set; }
 
         private byte _skin;
         private int _face;
@@ -36,9 +36,9 @@ namespace RazzleServer.Game.Maple.Characters
         private short _fame;
         private int _meso;
 
-        public CharacterStats(Character character)
+        public CharacterStats(GameCharacter gameCharacter)
         {
-            Parent = character;
+            Parent = gameCharacter;
             BuffDragonBlood = new BuffStatDragonBlood(BuffValueTypes.DragonBlood, Parent);
         }
 
@@ -183,7 +183,7 @@ namespace RazzleServer.Game.Maple.Characters
             get => _skin;
             set
             {
-                if (!DataProvider.Styles.Skins.Contains(value))
+                if (!CachedData.Styles.Skins.Contains(value))
                 {
                     throw new StyleUnavailableException();
                 }
@@ -203,8 +203,8 @@ namespace RazzleServer.Game.Maple.Characters
             get => _face;
             set
             {
-                if (Gender == Gender.Male && !DataProvider.Styles.MaleFaces.Contains(value) ||
-                    Gender == Gender.Female && !DataProvider.Styles.FemaleFaces.Contains(value))
+                if (Gender == Gender.Male && !CachedData.Styles.MaleFaces.Contains(value) ||
+                    Gender == Gender.Female && !CachedData.Styles.FemaleFaces.Contains(value))
                 {
                     throw new StyleUnavailableException();
                 }
@@ -224,10 +224,10 @@ namespace RazzleServer.Game.Maple.Characters
             get => _hair;
             set
             {
-                if (Gender == Gender.Male && !DataProvider.Styles.MaleHairs.Contains(value) ||
-                    Gender == Gender.Female && !DataProvider.Styles.FemaleHairs.Contains(value))
+                if (Gender == Gender.Male && !CachedData.Styles.MaleHairs.Contains(value) ||
+                    Gender == Gender.Female && !CachedData.Styles.FemaleHairs.Contains(value))
                 {
-                    //throw new StyleUnavailableException();
+                    throw new StyleUnavailableException();
                 }
 
                 _hair = value;

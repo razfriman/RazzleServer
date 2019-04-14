@@ -29,7 +29,7 @@ namespace RazzleServer.Game.Handlers
         }
 
         private static void ProcessWhisper(PacketReader packet, GameClient client, string targetName,
-            Maple.Characters.Character target)
+            Maple.Characters.GameCharacter target)
         {
             var text = packet.ReadString();
 
@@ -46,14 +46,14 @@ namespace RazzleServer.Game.Handlers
 
             using var pwTarget = new PacketWriter(ServerOperationCode.Whisper);
             pwTarget.WriteByte(18);
-            pwTarget.WriteString(client.Character.Name);
+            pwTarget.WriteString(client.GameCharacter.Name);
             pwTarget.WriteByte(client.Server.ChannelId);
             pwTarget.WriteByte(0);
             pwTarget.WriteString(text);
             target.Send(pwTarget);
         }
 
-        private static void ProcessFind(GameClient client, string targetName, Maple.Characters.Character target)
+        private static void ProcessFind(GameClient client, string targetName, Maple.Characters.GameCharacter target)
         {
             if (target == null)
             {

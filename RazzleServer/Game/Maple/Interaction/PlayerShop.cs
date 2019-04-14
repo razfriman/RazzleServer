@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using RazzleServer.Common.Constants;
+using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Items;
 using RazzleServer.Game.Maple.Maps;
@@ -9,22 +10,25 @@ using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Maple.Interaction
 {
-    public sealed class PlayerShop : MapObject, ISpawnable
+    public sealed class PlayerShop : IMapObject, ISpawnable
     {
-        public Character Owner { get; }
+        public GameCharacter Owner { get; }
         public string Description { get; }
-        public Character[] Visitors { get; }
+        public GameCharacter[] Visitors { get; }
         public List<PlayerShopItem> Items { get; }
         public bool Opened { get; private set; }
+        public Map Map { get; set; }
+        public int ObjectId { get; set; }
+        public Point Position { get; set; }
         public bool IsPrivate { get; } = false;
 
         public bool IsFull => Visitors.All(t => t != null);
 
-        public PlayerShop(Character owner, string description)
+        public PlayerShop(GameCharacter owner, string description)
         {
             Owner = owner;
             Description = description;
-            Visitors = new Character[3];
+            Visitors = new GameCharacter[3];
             Items = new List<PlayerShopItem>();
             Opened = false;
 
@@ -44,7 +48,7 @@ namespace RazzleServer.Game.Maple.Interaction
             Owner.Send(pw);
         }
 
-        public void Handle(Character character, InteractionCode code, PacketReader iPacket)
+        public void Handle(GameCharacter gameCharacter, InteractionCode code, PacketReader iPacket)
         {
             switch (code)
             {
@@ -65,7 +69,7 @@ namespace RazzleServer.Game.Maple.Interaction
                     var price = iPacket.ReadInt();
                     var quantity = (short)(bundles * perBundle);
 
-                    var item = character.Items[type, slot];
+                    var item = gameCharacter.Items[type, slot];
 
                     if (item == null)
                     {
@@ -89,7 +93,7 @@ namespace RazzleServer.Game.Maple.Interaction
                     }
                     else
                     {
-                        character.Items.Remove(item, true);
+                        gameCharacter.Items.Remove(item, true);
                     }
 
                     var shopItem = new PlayerShopItem(item.MapleId, bundles, quantity, price);
@@ -102,7 +106,7 @@ namespace RazzleServer.Game.Maple.Interaction
 
                 case InteractionCode.RemoveItem:
                 {
-                    if (character == Owner)
+                    if (gameCharacter == Owner)
                     {
                         var slot = iPacket.ReadShort();
 
@@ -127,13 +131,13 @@ namespace RazzleServer.Game.Maple.Interaction
 
                 case InteractionCode.Exit:
                 {
-                    if (character == Owner)
+                    if (gameCharacter == Owner)
                     {
                         Close();
                     }
                     else
                     {
-                        RemoveVisitor(character);
+                        RemoveVisitor(gameCharacter);
                     }
                 }
                     break;
@@ -150,7 +154,7 @@ namespace RazzleServer.Game.Maple.Interaction
                         return;
                     }
 
-                    if (character == Owner)
+                    if (gameCharacter == Owner)
                     {
                         return;
                     }
@@ -160,17 +164,17 @@ namespace RazzleServer.Game.Maple.Interaction
                         return;
                     }
 
-                    if (character.PrimaryStats.Meso < shopItem.MerchantPrice * quantity)
+                    if (gameCharacter.PrimaryStats.Meso < shopItem.MerchantPrice * quantity)
                     {
                         return;
                     }
 
                     shopItem.Quantity -= quantity;
 
-                    character.PrimaryStats.Meso -= shopItem.MerchantPrice * quantity;
+                    gameCharacter.PrimaryStats.Meso -= shopItem.MerchantPrice * quantity;
                     Owner.PrimaryStats.Meso += shopItem.MerchantPrice * quantity;
 
-                    character.Items.Add(new Item(shopItem.MapleId, quantity));
+                    gameCharacter.Items.Add(new Item(shopItem.MapleId, quantity));
 
                     UpdateItems(); // TODO: This doesn't mark the item as sold.
 
@@ -208,7 +212,7 @@ namespace RazzleServer.Game.Maple.Interaction
 
                     for (var i = 0; i < Visitors.Length; i++)
                     {
-                        if (Visitors[i] == character)
+                        if (Visitors[i] == gameCharacter)
                         {
                             sender = (byte)(i + 1);
                         }
@@ -216,7 +220,7 @@ namespace RazzleServer.Game.Maple.Interaction
 
 
                     pw.WriteByte(sender);
-                    pw.WriteString($"{character.Name} : {text}");
+                    pw.WriteString($"{gameCharacter.Name} : {text}");
 
                     Broadcast(pw);
                 }
@@ -285,7 +289,7 @@ namespace RazzleServer.Game.Maple.Interaction
             }
         }
 
-        public void AddVisitor(Character visitor)
+        public void AddVisitor(GameCharacter visitor)
         {
             for (var i = 0; i < Visitors.Length; i++)
             {
@@ -341,7 +345,7 @@ namespace RazzleServer.Game.Maple.Interaction
             }
         }
 
-        public void RemoveVisitor(Character visitor)
+        public void RemoveVisitor(GameCharacter visitor)
         {
             for (var i = 0; i < Visitors.Length; i++)
             {

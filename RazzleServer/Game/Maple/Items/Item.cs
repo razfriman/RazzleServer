@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using RazzleServer.Common;
 using RazzleServer.Common.Constants;
 using RazzleServer.Data;
+using RazzleServer.DataProvider;
+using RazzleServer.DataProvider.References;
 using RazzleServer.Game.Maple.Characters;
-using RazzleServer.Game.Maple.Data;
-using RazzleServer.Game.Maple.Data.References;
 using RazzleServer.Game.Maple.Maps;
 using RazzleServer.Net.Packet;
 
@@ -144,9 +143,9 @@ namespace RazzleServer.Game.Maple.Items
             }
         }
 
-        public ItemReference CachedReference => DataProvider.Items.Data[MapleId];
+        public ItemReference CachedReference => CachedData.Items.Data[MapleId];
 
-        public Character Character => Parent?.Parent;
+        public GameCharacter GameCharacter => Parent?.Parent;
 
         public short MaxPerStack => CachedReference.MaxPerStack;
 
@@ -156,7 +155,7 @@ namespace RazzleServer.Game.Maple.Items
             set => _quantity = Math.Min(value, MaxPerStack);
         }
 
-        public bool IsSealed => DataProvider.Items.WizetItemIds.Contains(MapleId);
+        public bool IsSealed => CachedData.Items.WizetItemIds.Contains(MapleId);
 
         public byte Flags
         {
@@ -278,7 +277,7 @@ namespace RazzleServer.Game.Maple.Items
         {
             MapleId = mapleId;
 
-            if (!DataProvider.Items.Data.ContainsKey(MapleId))
+            if (!CachedData.Items.Data.ContainsKey(MapleId))
             {
                 throw new KeyNotFoundException($"Item does not exist with ID={MapleId}");
             }
@@ -444,8 +443,8 @@ namespace RazzleServer.Game.Maple.Items
                 dbContext.Items.Add(item);
             }
 
-            item.AccountId = Character.AccountId;
-            item.CharacterId = Character.Id;
+            item.AccountId = GameCharacter.AccountId;
+            item.CharacterId = GameCharacter.Id;
             item.MapleId = MapleId;
             item.Accuracy = Accuracy;
             item.Agility = Agility;
@@ -502,7 +501,7 @@ namespace RazzleServer.Game.Maple.Items
             pw.WriteShort(Slot);
             pw.WriteShort(Quantity);
 
-            Character.Send(pw);
+            GameCharacter.Send(pw);
         }
 
         public void Equip()
@@ -512,11 +511,11 @@ namespace RazzleServer.Game.Maple.Items
                 throw new InvalidOperationException("Can only equip equipment items.");
             }
 
-            if ((Character.PrimaryStats.Strength < RequiredStrength ||
-                 Character.PrimaryStats.Dexterity < RequiredDexterity ||
-                 Character.PrimaryStats.Intelligence < RequiredIntelligence ||
-                 Character.PrimaryStats.Luck < RequiredLuck) &&
-                !Character.IsMaster)
+            if ((GameCharacter.PrimaryStats.Strength < RequiredStrength ||
+                 GameCharacter.PrimaryStats.Dexterity < RequiredDexterity ||
+                 GameCharacter.PrimaryStats.Intelligence < RequiredIntelligence ||
+                 GameCharacter.PrimaryStats.Luck < RequiredLuck) &&
+                !GameCharacter.IsMaster)
             {
                 return;
             }
@@ -546,7 +545,7 @@ namespace RazzleServer.Game.Maple.Items
             pw.WriteShort(sourceSlot);
             pw.WriteShort((short)destinationSlot);
             pw.WriteByte(1);
-            Character.Send(pw);
+            GameCharacter.Send(pw);
 
             switch (destinationSlot)
             {
@@ -587,7 +586,7 @@ namespace RazzleServer.Game.Maple.Items
                     break;
             }
 
-            Character.PrimaryStats.UpdateApperance();
+            GameCharacter.PrimaryStats.UpdateApperance();
         }
 
         public void Unequip(short destinationSlot = 0)
@@ -614,8 +613,8 @@ namespace RazzleServer.Game.Maple.Items
             pw.WriteShort(sourceSlot);
             pw.WriteShort(destinationSlot);
             pw.WriteByte(1);
-            Character.Send(pw);
-            Character.PrimaryStats.UpdateApperance();
+            GameCharacter.Send(pw);
+            GameCharacter.PrimaryStats.UpdateApperance();
         }
 
         public void Drop(short quantity)
@@ -649,12 +648,12 @@ namespace RazzleServer.Game.Maple.Items
                     pw.WriteByte(1);
                 }
 
-                Character.Send(pw);
+                GameCharacter.Send(pw);
 
-                Dropper = Character;
+                Dropper = GameCharacter;
                 Owner = null;
 
-                Character.Map.Drops.Add(this);
+                GameCharacter.Map.Drops.Add(this);
 
                 Parent.Remove(this, false);
             }
@@ -669,11 +668,11 @@ namespace RazzleServer.Game.Maple.Items
                 pw.WriteByte(Type);
                 pw.WriteShort(Slot);
                 pw.WriteShort(Quantity);
-                Character.Send(pw);
+                GameCharacter.Send(pw);
 
-                var dropped = new Item(MapleId, quantity) {Dropper = Character, Owner = null};
+                var dropped = new Item(MapleId, quantity) {Dropper = GameCharacter, Owner = null};
 
-                Character.Map.Drops.Add(dropped);
+                GameCharacter.Map.Drops.Add(dropped);
             }
         }
 
@@ -705,7 +704,7 @@ namespace RazzleServer.Game.Maple.Items
                     pw.WriteShort(destinationSlot);
                     pw.WriteShort(destination.Quantity);
 
-                    Character.Send(pw);
+                    GameCharacter.Send(pw);
                 }
                 else
                 {
@@ -722,7 +721,7 @@ namespace RazzleServer.Game.Maple.Items
                     pw.WriteShort(destinationSlot);
                     pw.WriteShort(destination.Quantity);
 
-                    Character.Send(pw);
+                    GameCharacter.Send(pw);
                 }
             }
             else
@@ -742,7 +741,7 @@ namespace RazzleServer.Game.Maple.Items
                 pw.WriteShort(sourceSlot);
                 pw.WriteShort(destinationSlot);
 
-                Character.Send(pw);
+                GameCharacter.Send(pw);
             }
         }
 

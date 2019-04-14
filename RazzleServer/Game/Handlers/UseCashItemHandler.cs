@@ -10,11 +10,11 @@ namespace RazzleServer.Game.Handlers
         {
             var slot = packet.ReadShort();
             var itemId = packet.ReadInt();
-            var item = client.Character.Items[ItemType.Usable, slot];
+            var item = client.GameCharacter.Items[ItemType.Usable, slot];
 
             if (item == null || itemId != item.MapleId)
             {
-                client.Character.LogCheatWarning(CheatType.InvalidItem);
+                client.GameCharacter.LogCheatWarning(CheatType.InvalidItem);
                 return;
             }
 
@@ -23,7 +23,7 @@ namespace RazzleServer.Game.Handlers
             switch (item.MapleId)
             {
                 case 2170000: // NOTE: Teleport Rock.
-                    used = client.Character.TeleportRocks.Use(packet);
+                    used = client.GameCharacter.TeleportRocks.Use(packet);
                     break;
 
                 case 2180001: // NOTE: 1st Job SP Reset.
@@ -37,8 +37,8 @@ namespace RazzleServer.Game.Handlers
                 {
                     var statDestination = (StatisticType)packet.ReadInt();
                     var statSource = (StatisticType)packet.ReadInt();
-                    client.Character.PrimaryStats.AddAbility(statDestination, 1, true);
-                    client.Character.PrimaryStats.AddAbility(statSource, -1, true);
+                    client.GameCharacter.PrimaryStats.AddAbility(statDestination, 1, true);
+                    client.GameCharacter.PrimaryStats.AddAbility(statSource, -1, true);
                     used = true;
                 }
                     break;
@@ -53,7 +53,7 @@ namespace RazzleServer.Game.Handlers
                 case 2090008:
                 {
                     var message = packet.ReadString();
-                    client.Character.Map.SendWeatherEffect(item.MapleId, message);
+                    client.GameCharacter.Map.SendWeatherEffect(item.MapleId, message);
                     used = true;
                     break;
                 }
@@ -61,11 +61,11 @@ namespace RazzleServer.Game.Handlers
                 case 2081000:
                 {
                     var text = packet.ReadString();
-                    var message = $"{client.Character.Name} : {text}";
+                    var message = $"{client.GameCharacter.Name} : {text}";
                     using var pw = new PacketWriter(ServerOperationCode.Notice);
                     pw.WriteByte(NoticeType.Megaphone);
                     pw.WriteString(message);
-                    client.Character.Map.Send(pw);
+                    client.GameCharacter.Map.Send(pw);
                     used = true;
                 }
                     break;
@@ -73,13 +73,13 @@ namespace RazzleServer.Game.Handlers
                 {
                     var text = packet.ReadString();
                     var whisper = packet.ReadBool();
-                    var message = $"{client.Character.Name} : {text}";
+                    var message = $"{client.GameCharacter.Name} : {text}";
                     using var pw = new PacketWriter(ServerOperationCode.Notice);
                     pw.WriteByte(NoticeType.SuperMegaphone);
                     pw.WriteString(message);
-                    pw.WriteByte(client.Character.Client.Server.ChannelId);
+                    pw.WriteByte(client.GameCharacter.Client.Server.ChannelId);
                     pw.WriteBool(whisper);
-                    client.Character.Client.Server.World.Send(pw);
+                    client.GameCharacter.Client.Server.World.Send(pw);
 
                     used = true;
                 }
@@ -106,7 +106,7 @@ namespace RazzleServer.Game.Handlers
                 case 2140001: // NOTE: Silver Sack of Meso.
                 case 2140002: // NOTE: Gold Sack of Meso.
                 {
-                    client.Character.PrimaryStats.Meso += item.Meso;
+                    client.GameCharacter.PrimaryStats.Meso += item.Meso;
                     client.Send(GamePackets.ShowStatusInfo(MessageType.IncreaseMeso, true, item.Meso));
                     used = true;
                     break;
@@ -114,7 +114,7 @@ namespace RazzleServer.Game.Handlers
 
                 case 2150000:
                 {
-                    client.Character.Map.SendJukeboxSong(item.MapleId, client.Character.Name);
+                    client.GameCharacter.Map.SendJukeboxSong(item.MapleId, client.GameCharacter.Name);
                     used = true;
                 }
                     break;
@@ -122,11 +122,11 @@ namespace RazzleServer.Game.Handlers
 
             if (used)
             {
-                client.Character.Items.Remove(itemId, 1);
+                client.GameCharacter.Items.Remove(itemId, 1);
             }
             else
             {
-                client.Character.Release();
+                client.GameCharacter.Release();
             }
         }
     }

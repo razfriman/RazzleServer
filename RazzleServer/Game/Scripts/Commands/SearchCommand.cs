@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using RazzleServer.Common.Util;
+using RazzleServer.DataProvider;
 using RazzleServer.Game.Maple.Characters;
-using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Scripting;
 
 namespace RazzleServer.Game.Scripts.Commands
@@ -12,11 +12,11 @@ namespace RazzleServer.Game.Scripts.Commands
     {
         public override string Name => "search";
 
-        public override string Parameters => "[ -item | -map | -mob | -npc | -quest ] label";
+        public override string Parameters => "[ -item | -map | -mob | -npc ] label";
 
         public override bool IsRestricted => true;
 
-        public override void Execute(Character caller, string[] args)
+        public override void Execute(GameCharacter caller, string[] args)
         {
             if (args.Length < 2)
             {
@@ -38,22 +38,19 @@ namespace RazzleServer.Game.Scripts.Commands
             switch (type)
             {
                 case "item":
-                    lookup = DataProvider.Strings.Items;
+                    lookup = CachedData.Strings.Items;
                     break;
                 case "map":
-                    lookup = DataProvider.Strings.Maps;
+                    lookup = CachedData.Strings.Maps;
                     break;
                 case "mob":
-                    lookup = DataProvider.Strings.Mobs;
+                    lookup = CachedData.Strings.Mobs;
                     break;
                 case "npc":
-                    lookup = DataProvider.Strings.Npcs;
+                    lookup = CachedData.Strings.Npcs;
                     break;
                 case "skill":
-                    lookup = DataProvider.Strings.Skills;
-                    break;
-                case "quest":
-                    lookup = DataProvider.Quests.Data.Values.ToDictionary(x => x.MapleId, x => x.Name);
+                    lookup = CachedData.Strings.Skills;
                     break;
             }
 

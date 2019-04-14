@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using RazzleServer.Common;
 using RazzleServer.Common.Constants;
 using RazzleServer.Data;
-using RazzleServer.Game.Maple.Data;
+using RazzleServer.DataProvider;
 using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Maple.Characters
 {
     public sealed class CharacterTeleportRocks
     {
-        public Character Parent { get; }
+        public GameCharacter Parent { get; }
 
         public List<int> Maps { get; }
 
-        public CharacterTeleportRocks(Character parent)
+        public CharacterTeleportRocks(GameCharacter parent)
         {
             Parent = parent;
 
@@ -63,7 +62,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Add(int mapId)
         {
-            var map = DataProvider.Maps.Data[mapId];
+            var map = CachedData.Maps.Data[mapId];
             if (map.FieldLimit.HasFlag(FieldLimitFlags.TeleportItemLimit))
             {
                 SendRockUpdate(TeleportRockResult.CannotGo);
@@ -128,7 +127,7 @@ namespace RazzleServer.Game.Maple.Characters
             if (destinationMapId != -1)
             {
                 var originMap = Parent.Map;
-                var destinationMap = DataProvider.Maps.Data[destinationMapId];
+                var destinationMap = CachedData.Maps.Data[destinationMapId];
 
                 if (originMap.MapleId == destinationMap.MapleId)
                 {

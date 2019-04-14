@@ -1,5 +1,5 @@
 ﻿using RazzleServer.Common.Constants;
-using RazzleServer.Wz;
+using RazzleServer.DataProvider.References;
 
 namespace RazzleServer.Game.Maple.Life
 {
@@ -7,8 +7,8 @@ namespace RazzleServer.Game.Maple.Life
     {
         public SpawnPoint() { }
 
-        public SpawnPoint(WzImageProperty img, LifeObjectType type)
-            : base(img, type)
+        public SpawnPoint(SpawnPointReference reference)
+            : base(reference)
         {
         }
 

@@ -8,13 +8,13 @@ namespace RazzleServer.Game.Handlers
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
             var objectId = packet.ReadInt();
-            if (!client.Character.ControlledMobs.Contains(objectId))
+            if (!client.GameCharacter.ControlledMobs.Contains(objectId))
             {
                 // Monster is already dead
                 return;
             }
 
-            var mob = client.Character.ControlledMobs[objectId];
+            var mob = client.GameCharacter.ControlledMobs[objectId];
             mob?.Move(packet);
         }
     }

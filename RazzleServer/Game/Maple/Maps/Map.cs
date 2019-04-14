@@ -2,9 +2,10 @@
 using System.Linq;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Util;
+using RazzleServer.DataProvider;
+using RazzleServer.DataProvider.References;
 using RazzleServer.Game.Maple.Characters;
-using RazzleServer.Game.Maple.Data;
-using RazzleServer.Game.Maple.Data.References;
+using RazzleServer.Game.Maple.Life;
 using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Maple.Maps
@@ -26,7 +27,7 @@ namespace RazzleServer.Game.Maple.Maps
         public MapPlayerShops PlayerShops { get; }
         public MapMists Mists { get; }
         public MapSummons Summons { get; }
-        public MapReference CachedReference => DataProvider.Maps.Data[MapleId];
+        public MapReference CachedReference => CachedData.Maps.Data[MapleId];
         public FieldLimitFlags FieldLimit { get; }
 
         public Map(GameServer server, int id)
@@ -47,11 +48,11 @@ namespace RazzleServer.Game.Maple.Maps
             Mists = new MapMists(this);
 
             var reference = CachedReference;
-            reference.Footholds.ForEach(Footholds.Footholds.Add);
-            reference.Npcs.ForEach(Npcs.Add);
-            reference.SpawnPoints.ForEach(SpawnPoints.Add);
-            reference.Portals.ForEach(Portals.Add);
-
+            reference.Footholds.ForEach(x => Footholds.Footholds.Add(new Foothold(x)));
+            reference.Npcs.ForEach(x => Npcs.Add(new Npc(x)));
+            reference.SpawnPoints.ForEach(x => SpawnPoints.Add(new SpawnPoint(x)));
+            reference.Portals.ForEach(x => Portals.Add(new Portal(x)));
+            
             Footholds.CalculateBounds();
             SpawnPoints.Spawn();
             FieldLimit = reference.FieldLimit;
@@ -59,7 +60,7 @@ namespace RazzleServer.Game.Maple.Maps
 
         public Map(int id) => MapleId = id;
 
-        public void Send(PacketWriter pw, Character except = null) =>
+        public void Send(PacketWriter pw, GameCharacter except = null) =>
             Characters.Values
                 .Where(x => x.Id != except?.Id)
                 .ToList()

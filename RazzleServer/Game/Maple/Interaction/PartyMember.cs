@@ -6,6 +6,6 @@ namespace RazzleServer.Game.Maple.Interaction
     {
         public int Id { get; private set; }
 
-        public Character Character { get; private set; }
+        public GameCharacter GameCharacter { get; private set; }
     }
 }

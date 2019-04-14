@@ -1,6 +1,6 @@
 ﻿using System;
 using RazzleServer.Common.Constants;
-using RazzleServer.Game.Maple.Data;
+using RazzleServer.DataProvider;
 using RazzleServer.Game.Maple.Items;
 using RazzleServer.Game.Maple.Life;
 using RazzleServer.Net.Packet;
@@ -14,9 +14,9 @@ namespace RazzleServer.Game.Handlers
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
-            if (!client.Character.IsMaster)
+            if (!client.GameCharacter.IsMaster)
             {
-                client.Character.LogCheatWarning(CheatType.ImperonatingGm);
+                client.GameCharacter.LogCheatWarning(CheatType.ImperonatingGm);
                 return;
             }
 
@@ -30,11 +30,11 @@ namespace RazzleServer.Game.Handlers
 
                     if (hide)
                     {
-                        client.Character.Buffs.AddBuff((int)SkillNames.Gm.Hide);
+                        client.GameCharacter.Buffs.AddBuff((int)SkillNames.Gm.Hide);
                     }
                     else
                     {
-                        client.Character.PrimaryStats.RemoveByReference((int)SkillNames.Gm.Hide);
+                        client.GameCharacter.PrimaryStats.RemoveByReference((int)SkillNames.Gm.Hide);
                     }
                 }
                     break;
@@ -65,17 +65,17 @@ namespace RazzleServer.Game.Handlers
                     var mobId = packet.ReadInt();
                     var count = packet.ReadInt();
 
-                    if (DataProvider.Mobs.Data.ContainsKey(mobId))
+                    if (CachedData.Mobs.Data.ContainsKey(mobId))
                     {
                         for (var i = 0; i < count; i++)
                         {
-                            client.Character.Map.Mobs.Add(new Mob(mobId, client.Character.Position));
+                            client.GameCharacter.Map.Mobs.Add(new Mob(mobId, client.GameCharacter.Position));
                         }
                     }
                     else
                     {
                         // TODO: Actual message.
-                        client.Character.Notify("invalid mob: " + mobId);
+                        client.GameCharacter.Notify("invalid mob: " + mobId);
                     }
                 }
                     break;
@@ -83,7 +83,7 @@ namespace RazzleServer.Game.Handlers
                 case AdminCommandType.CreateItem:
                 {
                     var itemId = packet.ReadInt();
-                    client.Character.Items.Add(new Item(itemId));
+                    client.GameCharacter.Items.Add(new Item(itemId));
                 }
                     break;
 
@@ -96,7 +96,7 @@ namespace RazzleServer.Game.Handlers
                 case AdminCommandType.GiveExperience:
                 {
                     var amount = packet.ReadInt();
-                    client.Character.PrimaryStats.Experience += amount;
+                    client.GameCharacter.PrimaryStats.Experience += amount;
                 }
                     break;
 
@@ -136,7 +136,7 @@ namespace RazzleServer.Game.Handlers
                 case AdminCommandType.Snow:
                 {
                     var seconds = packet.ReadInt();
-                    client.Character.Map.SendWeatherEffect(2090000, "", true, seconds * 1000);
+                    client.GameCharacter.Map.SendWeatherEffect(2090000, "", true, seconds * 1000);
                 }
                     break;
 

@@ -9,9 +9,9 @@ namespace RazzleServer.Game.Maple.Scripting
         public abstract string Parameters { get; }
         public abstract bool IsRestricted { get; }
 
-        public abstract void Execute(Character caller, string[] args);
+        public abstract void Execute(GameCharacter caller, string[] args);
 
-        public void ShowSyntax(Character caller) =>
+        public void ShowSyntax(GameCharacter caller) =>
             caller.Notify($"[Syntax] {ServerConfig.Instance.CommandIndicator}{Name} {Parameters}");
     }
 }

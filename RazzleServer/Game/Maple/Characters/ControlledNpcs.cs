@@ -5,9 +5,9 @@ namespace RazzleServer.Game.Maple.Characters
 {
     public class ControlledNpcs : MapleKeyedCollection<int, Npc>
     {
-        public Character Parent { get; }
+        public GameCharacter Parent { get; }
 
-        public ControlledNpcs(Character parent)
+        public ControlledNpcs(GameCharacter parent)
         {
             Parent = parent;
         }

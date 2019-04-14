@@ -14,7 +14,7 @@ namespace RazzleServer.Game.Maple.Scripting
         private WaitableResult<int> _result;
         private WaitableResult<string> _stringResult;
 
-        public Character Character { get; set; }
+        public GameCharacter GameCharacter { get; set; }
 
         public Npc Npc { get; set; }
 
@@ -35,7 +35,7 @@ namespace RazzleServer.Game.Maple.Scripting
                 States.Add(state);
             }
 
-            Character.Send(Npc.GetDialogPacket(state));
+            GameCharacter.Send(Npc.GetDialogPacket(state));
         }
 
         protected int SendOk(string text)
@@ -189,7 +189,7 @@ namespace RazzleServer.Game.Maple.Scripting
         public static string ItemIcon(int mapleId) => $"#v{mapleId}#";
         public static string InventoryItemRef(int mapleId) => $"#c{mapleId}#";
 
-        public string GenderedText(string maleText, string femaleText) => Character.PrimaryStats.Gender == Gender.Male
+        public string GenderedText(string maleText, string femaleText) => GameCharacter.PrimaryStats.Gender == Gender.Male
             ? maleText
             : femaleText;
 

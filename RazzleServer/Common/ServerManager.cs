@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using RazzleServer.Game.Maple.Data;
+using RazzleServer.DataProvider;
 using RazzleServer.Game.Maple.Scripting;
 
 namespace RazzleServer.Common
@@ -9,7 +9,7 @@ namespace RazzleServer.Common
         public override async Task Configure()
         {
             await base.Configure();
-            await DataProvider.Initialize();
+            await CachedData.Initialize();
             await ScriptProvider.Initialize();
             await LootProvider.Initialize();
         }

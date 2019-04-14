@@ -1,27 +1,25 @@
-using System;
-using System.Linq;
 using RazzleServer.Common.Constants;
 using RazzleServer.Data;
-using RazzleServer.Game;
 using RazzleServer.Game.Maple.Characters;
-using RazzleServer.Game.Maple.Data;
-using RazzleServer.Game.Maple.Data.References;
-using RazzleServer.Game.Maple.Life;
-using RazzleServer.Game.Maple.Maps;
+using RazzleServer.Net;
 using RazzleServer.Net.Packet;
 using Serilog;
 
 namespace RazzleServer.Common
 {
-    public class BaseCharacter
+    public abstract class BaseCharacter<TClient> where TClient : AClient
     {
+        private readonly ILogger _log = Log.ForContext<BaseCharacter<TClient>>();
+
         public int Id { get; set; }
+        public TClient Client { get; set; }
         public int AccountId { get; set; }
         public byte WorldId { get; set; }
         public string Name { get; set; }
-        public bool IsInitialized { get; private set; }
+        public bool IsInitialized { get; protected set; }
         public byte SpawnPoint { get; set; }
         public byte Stance { get; set; }
+        public int MapId { get; set; }
         public short Foothold { get; set; }
         public byte Portals { get; set; }
         public int Chair { get; set; }
@@ -29,13 +27,9 @@ namespace RazzleServer.Common
         public int RankMove { get; set; }
         public int JobRank { get; set; }
         public int JobRankMove { get; set; }
-        private bool Assigned { get; set; }
-
+        public CharacterItems Items { get; set; }
         public CharacterStats PrimaryStats { get; set; }
-
-        private int _itemEffect;
-
-        private readonly ILogger _log = Log.ForContext<Character>();
+        public CharacterTeleportRocks TeleportRocks { get; set; }
 
         public bool IsAlive => PrimaryStats.Health > 0;
 
@@ -43,35 +37,23 @@ namespace RazzleServer.Common
 
         public bool IsRanked => PrimaryStats.Level >= 30;
 
-        public QuestReference LastQuest { get; set; }
 
-        public Character(int id = 0, GameClient client = null)
+        protected BaseCharacter(int id, TClient client)
         {
             Id = id;
             Client = client;
-            Items = new CharacterItems(this, 100, 100, 100, 100, 100);
-            Pets = new CharacterPets(this);
-            Skills = new CharacterSkills(this);
-            Quests = new CharacterQuests(this);
-            Rings = new CharacterRings(this);
-            Summons = new CharacterSummons(this);
-            Buffs = new CharacterBuffs(this);
-            PrimaryStats = new CharacterStats(this);
-            Pets = new CharacterPets(this);
-            TeleportRocks = new CharacterTeleportRocks(this);
-            Storage = new CharacterStorage(this);
-            Position = new Point(0, 0);
-            ControlledMobs = new ControlledMobs(this);
-            ControlledNpcs = new ControlledNpcs(this);
-            Damage = new CharacterDamage(this);
+            
+            var gameCharacter = this is GameCharacter castedCharacter ? castedCharacter : null;
+            PrimaryStats = new CharacterStats(gameCharacter);
+            Items = new CharacterItems(gameCharacter, 100, 100, 100, 100, 100);
+            TeleportRocks = new CharacterTeleportRocks(gameCharacter);
         }
 
         public virtual void Initialize()
         {
-            
         }
 
-        public void Load()
+        public virtual void Load()
         {
             using var dbContext = new MapleDbContext();
             var character = dbContext.Characters.Find(Id);
@@ -82,10 +64,10 @@ namespace RazzleServer.Common
                 return;
             }
 
-            Assigned = true;
             Name = character.Name;
             AccountId = character.AccountId;
             PrimaryStats.Load(character);
+            MapId = character.MapId;
             SpawnPoint = character.SpawnPoint;
             WorldId = character.WorldId;
             Items.MaxSlots[ItemType.Equipment] = character.EquipmentSlots;
@@ -94,28 +76,85 @@ namespace RazzleServer.Common
             Items.MaxSlots[ItemType.Etcetera] = character.EtceteraSlots;
             Items.MaxSlots[ItemType.Pet] = character.CashSlots;
             Items.Load();
-            Skills.Load();
-            Quests.Load();
             TeleportRocks.Load();
         }
 
         public void Send(PacketWriter packet) => Client.Send(packet);
 
-        public void Hide(bool isHidden)
+        public byte[] ToByteArray()
         {
-            if (isHidden)
+            using var pw = new PacketWriter();
+            pw.WriteBytes(StatisticsToByteArray());
+            pw.WriteBytes(AppearanceToByteArray());
+            pw.WriteBool(IsRanked);
+
+            if (IsRanked)
             {
-                Map.Characters.Hide(this);
-            }
-            else
-            {
-                Map.Characters.Show(this);
+                pw.WriteInt(Rank);
+                pw.WriteInt(RankMove);
+                pw.WriteInt(JobRank);
+                pw.WriteInt(JobRankMove);
             }
 
-            using var pw = new PacketWriter(ServerOperationCode.AdminResult);
-            pw.WriteByte(AdminResultType.Hide);
-            pw.WriteBool(isHidden);
-            Send(pw);
+            return pw.ToArray();
+        }
+
+        public byte[] StatisticsToByteArray()
+        {
+            using var pw = new PacketWriter();
+            pw.WriteInt(Id);
+            pw.WriteString(Name, 13);
+            pw.WriteByte(PrimaryStats.Gender);
+            pw.WriteByte(PrimaryStats.Skin);
+            pw.WriteInt(PrimaryStats.Face);
+            pw.WriteInt(PrimaryStats.Hair);
+            pw.WriteLong(0); // Pet SN
+            pw.WriteByte(PrimaryStats.Level);
+            pw.WriteShort((short)PrimaryStats.Job);
+            pw.WriteShort(PrimaryStats.Strength);
+            pw.WriteShort(PrimaryStats.Dexterity);
+            pw.WriteShort(PrimaryStats.Intelligence);
+            pw.WriteShort(PrimaryStats.Luck);
+            pw.WriteShort(PrimaryStats.Health);
+            pw.WriteShort(PrimaryStats.MaxHealth);
+            pw.WriteShort(PrimaryStats.Mana);
+            pw.WriteShort(PrimaryStats.MaxMana);
+            pw.WriteShort(PrimaryStats.AbilityPoints);
+            pw.WriteShort(PrimaryStats.SkillPoints);
+            pw.WriteInt(PrimaryStats.Experience);
+            pw.WriteShort(PrimaryStats.Fame);
+            pw.WriteInt(MapId);
+            pw.WriteByte(SpawnPoint);
+            pw.WriteLong(0);
+            pw.WriteInt(0);
+            pw.WriteInt(0);
+
+            return pw.ToArray();
+        }
+
+        public byte[] AppearanceToByteArray()
+        {
+            using var pw = new PacketWriter();
+
+            var equippedSlots = Items.CalculateEquippedSlots();
+
+            foreach (var entry in equippedSlots.visibleLayer)
+            {
+                pw.WriteByte(entry.Key);
+                pw.WriteInt(entry.Value);
+            }
+
+            pw.WriteByte(0);
+
+            foreach (var entry in equippedSlots.hiddenLayer)
+            {
+                pw.WriteByte(entry.Key);
+                pw.WriteInt(entry.Value);
+            }
+
+            pw.WriteByte(0);
+
+            return pw.ToArray();
         }
     }
 }

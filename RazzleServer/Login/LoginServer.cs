@@ -2,7 +2,8 @@
 using System.Linq;
 using System.Net;
 using RazzleServer.Common;
-using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Data;
+using RazzleServer.Login.Maple;
 using Serilog;
 
 namespace RazzleServer.Login
@@ -26,10 +27,10 @@ namespace RazzleServer.Login
                 .Any(x => x.Name == name);
         }
 
-        internal List<Character> GetCharacters(byte worldId, int accountId)
+        internal List<LoginCharacter> GetCharacters(byte worldId, int accountId)
         {
             using var dbContext = new MapleDbContext();
-            var result = new List<Character>();
+            var result = new List<LoginCharacter>();
 
             var characters = dbContext
                 .Characters
@@ -40,7 +41,7 @@ namespace RazzleServer.Login
                 .ToList()
                 .ForEach(x =>
                 {
-                    var c = new Character {Id = x.Id};
+                    var c = new LoginCharacter() {Id = x.Id};
                     c.Load();
                     result.Add(c);
                 });

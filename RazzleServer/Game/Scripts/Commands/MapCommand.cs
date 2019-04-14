@@ -1,6 +1,6 @@
 ﻿using System;
+using RazzleServer.DataProvider;
 using RazzleServer.Game.Maple.Characters;
-using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Scripting;
 
 namespace RazzleServer.Game.Scripts.Commands
@@ -13,7 +13,7 @@ namespace RazzleServer.Game.Scripts.Commands
 
         public override bool IsRestricted => true;
 
-        public override void Execute(Character caller, string[] args)
+        public override void Execute(GameCharacter caller, string[] args)
         {
             if (args.Length == 0)
             {
@@ -48,7 +48,7 @@ namespace RazzleServer.Game.Scripts.Commands
                 }
             }
 
-            if (DataProvider.Maps.Data.ContainsKey(mapId))
+            if (CachedData.Maps.Data.ContainsKey(mapId))
             {
                 caller.ChangeMap(mapId, portalId);
             }

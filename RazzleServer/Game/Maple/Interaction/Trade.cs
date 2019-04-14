@@ -8,8 +8,8 @@ namespace RazzleServer.Game.Maple.Interaction
 {
     public sealed class Trade
     {
-        public Character Owner { get; private set; }
-        public Character Visitor { get; private set; }
+        public GameCharacter Owner { get; private set; }
+        public GameCharacter Visitor { get; private set; }
         public int OwnerMeso { get; private set; }
         public int VisitorMeso { get; private set; }
         public List<Item> OwnerItems { get; }
@@ -18,7 +18,7 @@ namespace RazzleServer.Game.Maple.Interaction
         public bool OwnerLocked { get; private set; }
         public bool VisitorLocked { get; private set; }
 
-        public Trade(Character owner)
+        public Trade(GameCharacter owner)
         {
             Owner = owner;
             Visitor = null;
@@ -63,7 +63,7 @@ namespace RazzleServer.Game.Maple.Interaction
             Visitor.Items.AddRange(VisitorItems);
         }
 
-        public void Handle(Character character, InteractionCode code, PacketReader packet)
+        public void Handle(GameCharacter gameCharacter, InteractionCode code, PacketReader packet)
         {
             switch (code)
             {
@@ -72,22 +72,22 @@ namespace RazzleServer.Game.Maple.Interaction
                     break;
 
                 case InteractionCode.Decline:
-                    Decline(character);
+                    Decline(gameCharacter);
                     break;
 
                 case InteractionCode.Visit:
-                    Visit(character);
+                    Visit(gameCharacter);
                     break;
 
                 case InteractionCode.SetItems:
-                    SetItems(packet, character);
+                    SetItems(packet, gameCharacter);
                     break;
 
                 case InteractionCode.SetMeso:
                 {
                     var meso = packet.ReadInt();
 
-                    if (meso < 0 || meso > character.PrimaryStats.Meso)
+                    if (meso < 0 || meso > gameCharacter.PrimaryStats.Meso)
                     {
                         return;
                     }
@@ -100,7 +100,7 @@ namespace RazzleServer.Game.Maple.Interaction
                     pw.WriteByte(0);
                     pw.WriteInt(meso);
 
-                    if (character == Owner)
+                    if (gameCharacter == Owner)
                     {
                         if (OwnerLocked)
                         {
@@ -130,7 +130,7 @@ namespace RazzleServer.Game.Maple.Interaction
                     pw2.WriteByte(1);
                     pw2.WriteInt(meso);
 
-                    if (Owner == character)
+                    if (Owner == gameCharacter)
                     {
                         Visitor.Send(pw2);
                     }
@@ -179,7 +179,7 @@ namespace RazzleServer.Game.Maple.Interaction
                 {
                     using var pwConfirm = new PacketWriter(ServerOperationCode.PlayerInteraction);
                     pwConfirm.WriteByte(InteractionCode.Confirm);
-                    if (character == Owner)
+                    if (gameCharacter == Owner)
                     {
                         OwnerLocked = true;
                         Visitor.Send(pwConfirm);
@@ -216,8 +216,8 @@ namespace RazzleServer.Game.Maple.Interaction
                     using var pw = new PacketWriter(ServerOperationCode.PlayerInteraction);
                     pw.WriteByte(InteractionCode.Chat);
                     pw.WriteByte(8);
-                    pw.WriteBool(Owner != character);
-                    pw.WriteString($"{character.Name} : {text}");
+                    pw.WriteBool(Owner != gameCharacter);
+                    pw.WriteString($"{gameCharacter.Name} : {text}");
 
                     Owner.Send(pw);
                     Visitor.Send(pw);
@@ -226,14 +226,14 @@ namespace RazzleServer.Game.Maple.Interaction
             }
         }
 
-        private void Visit(Character character)
+        private void Visit(GameCharacter gameCharacter)
         {
             if (Owner == null)
             {
                 Visitor = null;
-                character.Trade = null;
+                gameCharacter.Trade = null;
 
-                character.Notify("Trade has been closed.", NoticeType.Popup);
+                gameCharacter.Notify("Trade has been closed.", NoticeType.Popup);
             }
             else
             {
@@ -262,12 +262,12 @@ namespace RazzleServer.Game.Maple.Interaction
             }
         }
 
-        private void Decline(Character character)
+        private void Decline(GameCharacter gameCharacter)
         {
             using var pw = new PacketWriter(ServerOperationCode.PlayerInteraction);
             pw.WriteByte(InteractionCode.Decline);
             pw.WriteByte(3);
-            pw.WriteString(character.Name);
+            pw.WriteString(gameCharacter.Name);
             Owner.Send(pw);
 
             Owner.Trade = null;
@@ -312,14 +312,14 @@ namespace RazzleServer.Game.Maple.Interaction
             }
         }
 
-        private void SetItems(PacketReader packet, Character character)
+        private void SetItems(PacketReader packet, GameCharacter gameCharacter)
         {
             var type = (ItemType)packet.ReadByte();
             var slot = packet.ReadShort();
             var quantity = packet.ReadShort();
             var targetSlot = packet.ReadByte();
 
-            var item = character.Items[type, slot];
+            var item = gameCharacter.Items[type, slot];
 
             if (item.IsBlocked)
             {
@@ -340,7 +340,7 @@ namespace RazzleServer.Game.Maple.Interaction
             }
             else
             {
-                character.Items.Remove(item, true);
+                gameCharacter.Items.Remove(item, true);
             }
 
             item.Slot = 0;
@@ -351,7 +351,7 @@ namespace RazzleServer.Game.Maple.Interaction
             pw.WriteByte(targetSlot);
             pw.WriteBytes(item.ToByteArray(true));
 
-            if (character == Owner)
+            if (gameCharacter == Owner)
             {
                 OwnerItems.Add(item);
 
@@ -370,7 +370,7 @@ namespace RazzleServer.Game.Maple.Interaction
             pw2.WriteByte(targetSlot);
             pw2.WriteBytes(item.ToByteArray(true));
 
-            if (character == Owner)
+            if (gameCharacter == Owner)
             {
                 Visitor.Send(pw2);
             }

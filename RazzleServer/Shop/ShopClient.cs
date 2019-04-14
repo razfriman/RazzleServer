@@ -3,7 +3,7 @@ using System.Net.Sockets;
 using System.Threading;
 using RazzleServer.Common;
 using RazzleServer.Common.Util;
-using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Data;
 using RazzleServer.Net;
 using RazzleServer.Net.Packet;
 using RazzleServer.Shop.Maple;
@@ -17,7 +17,7 @@ namespace RazzleServer.Shop
 
         public ShopAccount Account { get; set; }
         public ShopServer Server { get; set; }
-        public Character Character { get; set; }
+        public ShopCharacter Character { get; set; }
         public CancellationTokenSource PingToken { get; set; }
         public override ILogger Logger => Log.ForContext<ShopClient>();
 
@@ -56,7 +56,6 @@ namespace RazzleServer.Shop
                 else
                 {
                     Logger.Warning($"Unhandled Packet [{header.ToString()}] {packet.ToPacketString()}");
-                    Character?.Release();
                 }
             }
             catch (Exception e)
@@ -75,8 +74,6 @@ namespace RazzleServer.Shop
                 PingToken?.Dispose();
                 base.Disconnected();
                 Server.RemoveClient(this);
-                Character?.Save();
-                Character?.Map?.Characters?.Remove(Character.Id);
                 SetOnline(false);
                 Character = null;
             }
@@ -96,7 +93,6 @@ namespace RazzleServer.Shop
 
         public void ChangeChannel(byte channelId)
         {
-            Character.Save();
             Server.Manager.Migrate(Host, Account.Id, Character.Id);
 
             using var outPacket = new PacketWriter(ServerOperationCode.ClientConnectToServer);

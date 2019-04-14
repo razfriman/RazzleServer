@@ -9,21 +9,21 @@ using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Maple.Maps
 {
-    public abstract class Drop : MapObject, ISpawnable
+    public abstract class Drop : IMapObject, ISpawnable
     {
         public const int ExpiryTime = 60 * 1000;
 
-        [JsonIgnore] public Character Owner { get; set; }
-        [JsonIgnore] public Character Picker { get; set; }
+        [JsonIgnore] public GameCharacter Owner { get; set; }
+        [JsonIgnore] public GameCharacter Picker { get; set; }
         public Point Origin { get; set; }
         public CancellationTokenSource Expiry { get; set; }
 
         public DropType DropType { get; set; } = DropType.Normal;
 
-        private MapObject _mDropper;
+        private IMapObject _mDropper;
 
         [JsonIgnore]
-        public MapObject Dropper
+        public IMapObject Dropper
         {
             get => _mDropper;
             set
@@ -42,7 +42,7 @@ namespace RazzleServer.Game.Maple.Maps
             return GetInternalPacket(DropAnimationType.DropAnimation, null);
         }
 
-        public PacketWriter GetCreatePacket(Character temporaryOwner)
+        public PacketWriter GetCreatePacket(GameCharacter temporaryOwner)
         {
             return GetInternalPacket(DropAnimationType.DropAnimation, temporaryOwner);
         }
@@ -52,12 +52,12 @@ namespace RazzleServer.Game.Maple.Maps
             return GetInternalPacket(DropAnimationType.ShowExisting, null);
         }
 
-        public PacketWriter GetSpawnPacket(Character temporaryOwner)
+        public PacketWriter GetSpawnPacket(GameCharacter temporaryOwner)
         {
             return GetInternalPacket(DropAnimationType.ShowExisting, temporaryOwner);
         }
 
-        private PacketWriter GetInternalPacket(DropAnimationType dropAnimationType, Character temporaryOwner)
+        private PacketWriter GetInternalPacket(DropAnimationType dropAnimationType, GameCharacter temporaryOwner)
         {
             var pw = new PacketWriter(ServerOperationCode.DropEnterField);
 
@@ -110,5 +110,9 @@ namespace RazzleServer.Game.Maple.Maps
 
             return pw;
         }
+
+        public Map Map { get; set; }
+        public int ObjectId { get; set; }
+        public Point Position { get; set; }
     }
 }

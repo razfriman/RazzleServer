@@ -1,17 +1,21 @@
-﻿using RazzleServer.Wz;
+﻿using RazzleServer.Common.Util;
+using RazzleServer.DataProvider.References;
 
 namespace RazzleServer.Game.Maple.Maps
 {
-    public sealed class Seat : MapObject
+    public sealed class Seat : IMapObject
     {
         public short Id { get; }
+        public Map Map { get; set; }
+        public int ObjectId { get; set; }
+        public Point Position { get; set; }
 
         public Seat() { }
 
-        public Seat(WzImageProperty img)
+        public Seat(SeatReference reference)
         {
-            Id = short.Parse(img.Name);
-            Position = img.GetPoint();
+            Id = reference.Id;
+            Position = reference.Position;
         }
     }
 }

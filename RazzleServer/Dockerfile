@@ -11,6 +11,7 @@ WORKDIR /src
 COPY RazzleServer.sln ./
 COPY RazzleServer/RazzleServer.csproj RazzleServer/
 COPY RazzleServer.DB/RazzleServer.Data.csproj RazzleServer.DB/
+COPY RazzleServer.DataProvider/RazzleServer.DataProvider.csproj RazzleServer.DataProvider/
 COPY RazzleServer.Common/RazzleServer.Common.csproj RazzleServer.Common/
 COPY RazzleServer.Crypto/RazzleServer.Crypto.csproj RazzleServer.Crypto/
 COPY RazzleServer.Net/RazzleServer.Net.csproj RazzleServer.Net/

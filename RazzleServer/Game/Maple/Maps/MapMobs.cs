@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Util;
+using RazzleServer.DataProvider;
 using RazzleServer.Game.Maple.Characters;
-using RazzleServer.Game.Maple.Data;
 using RazzleServer.Game.Maple.Life;
 using RazzleServer.Game.Maple.Items;
 
@@ -43,7 +43,7 @@ namespace RazzleServer.Game.Maple.Maps
             }
         }
 
-        private static void UpdateQuestKills(Mob item, Character owner)
+        private static void UpdateQuestKills(Mob item, GameCharacter owner)
         {
             if (owner == null)
             {
@@ -58,7 +58,7 @@ namespace RazzleServer.Game.Maple.Maps
                 }
 
                 if (loopStarted.Value[item.MapleId] >=
-                    DataProvider.Quests.Data[loopStarted.Key].PostRequiredKills[item.MapleId])
+                    CachedData.Quests.Data[loopStarted.Key].PostRequiredKills[item.MapleId])
                 {
                     continue;
                 }
@@ -90,7 +90,7 @@ namespace RazzleServer.Game.Maple.Maps
             }
         }
 
-        private void GiveDrops(Mob item, Character owner)
+        private void GiveDrops(Mob item, GameCharacter owner)
         {
             if (!item.CanDrop)
             {
@@ -101,7 +101,7 @@ namespace RazzleServer.Game.Maple.Maps
             Map.Drops.SpawnDrops(drops, item.Position);
         }
 
-        private List<Drop> CalculateDrops(Mob item, Character owner)
+        private List<Drop> CalculateDrops(Mob item, GameCharacter owner)
         {
             var drops = new List<Drop>();
 
@@ -131,9 +131,9 @@ namespace RazzleServer.Game.Maple.Maps
             return drops;
         }
 
-        private Character GiveExperience(Mob item)
+        private GameCharacter GiveExperience(Mob item)
         {
-            Character owner = null;
+            GameCharacter owner = null;
             var mostDamage = 0u;
 
             foreach (var attacker in item.Attackers)

@@ -10,9 +10,9 @@ namespace RazzleServer.Game.Handlers
         {
             var portals = packet.ReadByte();
 
-            if (portals != client.Character.Portals)
+            if (portals != client.GameCharacter.Portals)
             {
-                client.Character.LogCheatWarning(CheatType.InvalidPortals);
+                client.GameCharacter.LogCheatWarning(CheatType.InvalidPortals);
                 return;
             }
 
@@ -35,30 +35,30 @@ namespace RazzleServer.Game.Handlers
 
         private static void Revive(GameClient client)
         {
-            if (client.Character.IsAlive)
+            if (client.GameCharacter.IsAlive)
             {
-                client.Character.LogCheatWarning(CheatType.InvalidRevive);
+                client.GameCharacter.LogCheatWarning(CheatType.InvalidRevive);
                 return;
             }
 
-            client.Character.Revive();
+            client.GameCharacter.Revive();
         }
 
         private static void ChangeMapAdmin(GameClient client, int mapId)
         {
             if (!client.Account.IsMaster)
             {
-                client.Character.LogCheatWarning(CheatType.ImperonatingGm);
+                client.GameCharacter.LogCheatWarning(CheatType.ImperonatingGm);
                 return;
             }
 
-            client.Character.ChangeMap(mapId);
+            client.GameCharacter.ChangeMap(mapId);
         }
 
         private static void UsePortal(GameClient client, string portalLabel)
         {
-            var portal = client.Character.Map.Portals[portalLabel];
-            portal.Enter(client.Character);
+            var portal = client.GameCharacter.Map.Portals[portalLabel];
+            portal.Enter(client.GameCharacter);
         }
     }
 }

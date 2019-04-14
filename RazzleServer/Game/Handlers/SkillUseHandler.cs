@@ -10,21 +10,21 @@ namespace RazzleServer.Game.Handlers
         {
             var skillId = packet.ReadInt();
             var skillLevel = packet.ReadByte();
-            var skill = client.Character.Skills[skillId];
+            var skill = client.GameCharacter.Skills[skillId];
 
             if (skill.CurrentLevel != skillLevel)
             {
-                client.Character.LogCheatWarning(CheatType.InvalidSkillChange);
+                client.GameCharacter.LogCheatWarning(CheatType.InvalidSkillChange);
                 return;
             }
 
-            if (!client.Character.IsAlive)
+            if (!client.GameCharacter.IsAlive)
             {
-                client.Character.LogCheatWarning(CheatType.InvalidSkillChange);
+                client.GameCharacter.LogCheatWarning(CheatType.InvalidSkillChange);
                 return;
             }
 
-            client.Character.Buffs.AddBuff(skill.MapleId, skill.CurrentLevel);
+            client.GameCharacter.Buffs.AddBuff(skill.MapleId, skill.CurrentLevel);
 
             switch (skillId)
             {
@@ -37,10 +37,10 @@ namespace RazzleServer.Game.Handlers
                     }
 
                     var healAmount =
-                        (short)(healRate * client.Character.PrimaryStats.MaxHealth / 100); // Party: / (amount players)
-                    if (!client.Character.PrimaryStats.HasBuff(skillId))
+                        (short)(healRate * client.GameCharacter.PrimaryStats.MaxHealth / 100); // Party: / (amount players)
+                    if (!client.GameCharacter.PrimaryStats.HasBuff(skillId))
                     {
-                        client.Character.PrimaryStats.MaxHealth += healAmount;
+                        client.GameCharacter.PrimaryStats.MaxHealth += healAmount;
                     }
 
                     break;
@@ -55,15 +55,15 @@ namespace RazzleServer.Game.Handlers
                     }
 
                     var healAmount =
-                        (short)(healRate * client.Character.PrimaryStats.MaxHealth / 100); // Party: / (amount players)
+                        (short)(healRate * client.GameCharacter.PrimaryStats.MaxHealth / 100); // Party: / (amount players)
 
-                    client.Character.PrimaryStats.Health += healAmount;
+                    client.GameCharacter.PrimaryStats.Health += healAmount;
                     break;
                 }
 
                 case (int)SkillNames.Gm.Hide:
                 {
-                    client.Character.Hide(true);
+                    client.GameCharacter.Hide(true);
                     break;
                 }
 
@@ -74,7 +74,7 @@ namespace RazzleServer.Game.Handlers
                     //client.Character.Map.Doors.Add(door);
                     //MapPacket.SpawnDoor(chr, true, client.Character.Position.X, client.Character.Position.Y);
                     //MapPacket.SpawnPortal(chr, client.Character.Position);
-                    client.Character.Release();
+                    client.GameCharacter.Release();
                     break;
                 }
 
@@ -87,7 +87,7 @@ namespace RazzleServer.Game.Handlers
                     {
                         var playerid = packet.ReadInt();
                         var victim = client.Server.GetCharacterById(playerid);
-                        if (victim != null && victim.Id != client.Character.Id)
+                        if (victim != null && victim.Id != client.GameCharacter.Id)
                         {
                             //victim.Buffs.AddBuff(SkillID, SkillLevel);
                         }
@@ -112,8 +112,8 @@ namespace RazzleServer.Game.Handlers
                         }
                     }
 
-                    client.Character.PrimaryStats.Health = client.Character.PrimaryStats.MaxHealth;
-                    client.Character.PrimaryStats.Mana = client.Character.PrimaryStats.MaxMana;
+                    client.GameCharacter.PrimaryStats.Health = client.GameCharacter.PrimaryStats.MaxHealth;
+                    client.GameCharacter.PrimaryStats.Mana = client.GameCharacter.PrimaryStats.MaxMana;
                     break;
                 }
 
@@ -142,12 +142,12 @@ namespace RazzleServer.Game.Handlers
                 case (int)SkillNames.Sniper.Puppet:
                 {
                     var position = packet.ReadPoint();
-                    client.Character.Summons.Add(skill, position);
+                    client.GameCharacter.Summons.Add(skill, position);
                     break;
                 }
             }
 
-            client.Character.Release();
+            client.GameCharacter.Release();
             skill.Cast();
         }
     }

@@ -5,8 +5,6 @@
         <LangVersion>preview</LangVersion>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.2.3" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.3" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.0.0-preview.19074.2" />
         <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
         <PackageReference Include="Serilog.Extensions.Hosting" Version="2.0.0" />
@@ -17,10 +15,10 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\RazzleServer.Crypto\RazzleServer.Crypto.csproj" />
+        <ProjectReference Include="..\RazzleServer.DataProvider\RazzleServer.DataProvider.csproj" />
         <ProjectReference Include="..\RazzleServer.DB\RazzleServer.Data.csproj" />
         <ProjectReference Include="..\RazzleServer.Common\RazzleServer.Common.csproj" />
         <ProjectReference Include="..\RazzleServer.Net\RazzleServer.Net.csproj" />
-        <ProjectReference Include="..\RazzleServer.Wz\RazzleServer.Wz.csproj" />
     </ItemGroup>
     <ItemGroup>
         <None Remove="Logs\**" />

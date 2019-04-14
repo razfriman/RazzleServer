@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using RazzleServer.Common.Server;
+using RazzleServer.Data;
 using RazzleServer.Game;
 using RazzleServer.Login;
 using RazzleServer.Shop;

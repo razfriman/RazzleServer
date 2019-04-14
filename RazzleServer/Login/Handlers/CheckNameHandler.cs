@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using RazzleServer.Game.Maple.Data;
+using RazzleServer.DataProvider;
 using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Login.Handlers
@@ -14,7 +14,8 @@ namespace RazzleServer.Login.Handlers
             var error = name.Length < 4
                         || name.Length > 12
                         || client.Server.CharacterExists(name, client.World)
-                        || DataProvider.CreationData.ForbiddenNames.Any(x => x.Equals(name, StringComparison.CurrentCultureIgnoreCase));
+                        || CachedData.CreationData.ForbiddenNames.Any(x =>
+                            x.Equals(name, StringComparison.CurrentCultureIgnoreCase));
 
             using var pw = new PacketWriter(ServerOperationCode.CheckNameResult);
             pw.WriteString(name);

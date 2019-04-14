@@ -9,9 +9,9 @@ namespace RazzleServer.Game.Maple.Characters
 {
     public class CharacterSummons : MapleKeyedCollection<int, Summon>
     {
-        public Character Parent { get; set; }
+        public GameCharacter Parent { get; set; }
 
-        public CharacterSummons(Character parent) => Parent = parent;
+        public CharacterSummons(GameCharacter parent) => Parent = parent;
 
         public override int GetKey(Summon item) => item.MapleId;
 

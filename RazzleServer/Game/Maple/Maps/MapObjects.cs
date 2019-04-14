@@ -6,7 +6,7 @@ using RazzleServer.Game.Maple.Characters;
 
 namespace RazzleServer.Game.Maple.Maps
 {
-    public abstract class MapObjects<T> : MapleKeyedCollection<int, T> where T : MapObject
+    public abstract class MapObjects<T> : MapleKeyedCollection<int, T> where T : IMapObject
     {
         [JsonIgnore] public Map Map { get; }
 
@@ -14,7 +14,7 @@ namespace RazzleServer.Game.Maple.Maps
 
         protected MapObjects(Map map) : this() => Map = map;
 
-        public IEnumerable<T> GetInRange(MapObject reference, int range) => Objects.Values.Where(loopObject =>
+        public IEnumerable<T> GetInRange(IMapObject reference, int range) => Objects.Values.Where(loopObject =>
             reference.Position.DistanceFrom(loopObject.Position) <= range);
 
         public override int GetKey(T item) => item.ObjectId;
@@ -23,7 +23,7 @@ namespace RazzleServer.Game.Maple.Maps
         {
             item.Map = Map;
 
-            if (!(item is Character) && !(item is Portal))
+            if (!(item is GameCharacter) && !(item is Portal))
             {
                 item.ObjectId = Map.AssignObjectId();
             }
@@ -40,7 +40,7 @@ namespace RazzleServer.Game.Maple.Maps
             {
                 item.Map = null;
 
-                if (!(item is Character) && !(item is Portal))
+                if (!(item is GameCharacter) && !(item is Portal))
                 {
                     item.ObjectId = -1;
                 }

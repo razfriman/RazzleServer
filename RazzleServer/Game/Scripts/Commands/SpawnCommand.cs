@@ -1,5 +1,5 @@
-﻿using RazzleServer.Game.Maple.Characters;
-using RazzleServer.Game.Maple.Data;
+﻿using RazzleServer.DataProvider;
+using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Life;
 using RazzleServer.Game.Maple.Scripting;
 
@@ -13,7 +13,7 @@ namespace RazzleServer.Game.Scripts.Commands
 
         public override bool IsRestricted => true;
 
-        public override void Execute(Character caller, string[] args)
+        public override void Execute(GameCharacter caller, string[] args)
         {
             if (args.Length < 1)
             {
@@ -32,7 +32,7 @@ namespace RazzleServer.Game.Scripts.Commands
                 }
 
                 int.TryParse(args[0], out var mobId);
-                if (DataProvider.Mobs.Data.ContainsKey(mobId))
+                if (CachedData.Mobs.Data.ContainsKey(mobId))
                 {
                     for (var i = 0; i < amount; i++)
                     {

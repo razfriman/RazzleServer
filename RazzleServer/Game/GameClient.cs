@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using System.Threading;
 using RazzleServer.Common;
 using RazzleServer.Common.Util;
+using RazzleServer.Data;
 using RazzleServer.Game.Maple;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Net;
@@ -17,7 +18,7 @@ namespace RazzleServer.Game
 
         public GameAccount Account { get; set; }
         public GameServer Server { get; set; }
-        public Character Character { get; set; }
+        public GameCharacter GameCharacter { get; set; }
         public CancellationTokenSource PingToken { get; set; }
         public override ILogger Logger => Log.ForContext<GameClient>();
 
@@ -56,7 +57,7 @@ namespace RazzleServer.Game
                 else
                 {
                     Logger.Warning($"Unhandled Packet [{header.ToString()}] {packet.ToPacketString()}");
-                    Character?.Release();
+                    GameCharacter?.Release();
                 }
             }
             catch (Exception e)
@@ -68,17 +69,17 @@ namespace RazzleServer.Game
 
         public override void Disconnected()
         {
-            var save = Character;
+            var save = GameCharacter;
             try
             {
                 PingToken?.Cancel();
                 PingToken?.Dispose();
                 base.Disconnected();
                 Server.RemoveClient(this);
-                Character?.Save();
-                Character?.Map?.Characters?.Remove(Character.Id);
+                GameCharacter?.Save();
+                GameCharacter?.Map?.Characters?.Remove(GameCharacter.Id);
                 SetOnline(false);
-                Character = null;
+                GameCharacter = null;
             }
             catch (Exception e)
             {
@@ -96,8 +97,8 @@ namespace RazzleServer.Game
 
         public void ChangeChannel(byte channelId)
         {
-            Character.Save();
-            Server.Manager.Migrate(Host, Account.Id, Character.Id);
+            GameCharacter.Save();
+            Server.Manager.Migrate(Host, Account.Id, GameCharacter.Id);
 
             using var outPacket = new PacketWriter(ServerOperationCode.ClientConnectToServer);
             outPacket.WriteBool(true);
@@ -108,8 +109,8 @@ namespace RazzleServer.Game
         
         public void OpenCashShop()
         {
-            Character.Save();
-            Server.Manager.Migrate(Host, Account.Id, Character.Id);
+            GameCharacter.Save();
+            Server.Manager.Migrate(Host, Account.Id, GameCharacter.Id);
 
             using var outPacket = new PacketWriter(ServerOperationCode.ClientConnectToServer);
             outPacket.WriteBool(true);

@@ -2,30 +2,29 @@
 using System.Linq;
 using Newtonsoft.Json;
 using RazzleServer.Common.Constants;
+using RazzleServer.DataProvider;
+using RazzleServer.DataProvider.References;
 using RazzleServer.Game.Maple.Characters;
-using RazzleServer.Game.Maple.Data;
-using RazzleServer.Game.Maple.Data.References;
 using RazzleServer.Game.Maple.Scripting;
 using RazzleServer.Game.Maple.Util;
 using RazzleServer.Net.Packet;
-using RazzleServer.Wz;
 
 namespace RazzleServer.Game.Maple.Life
 {
     public class Npc : LifeObject, ISpawnable, IControllable
     {
-        [JsonIgnore] public Character Controller { get; set; }
+        [JsonIgnore] public GameCharacter Controller { get; set; }
 
         [JsonIgnore] public Dictionary<int, NpcShopItem> ShopItems = new Dictionary<int, NpcShopItem>();
 
-        [JsonIgnore] public NpcReference CachedReference => DataProvider.Npcs.Data[MapleId];
+        [JsonIgnore] public NpcReference CachedReference => CachedData.Npcs.Data[MapleId];
 
         public Npc()
         {
         }
 
-        public Npc(WzImageProperty img)
-            : base(img, LifeObjectType.Npc)
+        public Npc(MapNpcReference reference)
+            : base(reference)
         {
         }
 
@@ -51,7 +50,7 @@ namespace RazzleServer.Game.Maple.Life
             Map.Send(pw);
         }
 
-        public void ShowShop(Character customer)
+        public void ShowShop(GameCharacter customer)
         {
             using var pw = new PacketWriter(ServerOperationCode.NpcShopShow);
             pw.WriteInt(MapleId);
@@ -63,13 +62,13 @@ namespace RazzleServer.Game.Maple.Life
             customer.Send(pw);
         }
 
-        public void Converse(Character talker)
+        public void Converse(GameCharacter talker)
         {
             if (CachedReference.ShopItems.Any())
             {
                 if (!ShopItems.Any())
                 {
-                    ShopItems = DataProvider.Npcs.Data.GetValueOrDefault(MapleId).ShopItems
+                    ShopItems = CachedData.Npcs.Data.GetValueOrDefault(MapleId).ShopItems
                         .Select(x => new NpcShopItem(x))
                         .ToDictionary(x => x.MapleId, x => x);
                 }
@@ -87,7 +86,7 @@ namespace RazzleServer.Game.Maple.Life
             }
         }
 
-        public void Handle(Character talker, PacketReader packet)
+        public void Handle(GameCharacter talker, PacketReader packet)
         {
             var script = talker.NpcScript;
 
@@ -187,7 +186,7 @@ namespace RazzleServer.Game.Maple.Life
             }
 
             var leastControlled = int.MaxValue;
-            Character newController = null;
+            GameCharacter newController = null;
 
             lock (Map.Characters)
             {

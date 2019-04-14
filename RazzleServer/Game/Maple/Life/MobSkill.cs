@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using RazzleServer.Common.Util;
 using RazzleServer.Common.Constants;
+using RazzleServer.DataProvider;
+using RazzleServer.DataProvider.References;
 using RazzleServer.Game.Maple.Characters;
-using RazzleServer.Game.Maple.Data.References;
-using RazzleServer.Game.Maple.Data;
 using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Maple.Life
@@ -14,7 +14,7 @@ namespace RazzleServer.Game.Maple.Life
         public byte MapleId { get; }
         public byte Level { get; }
         public short EffectDelay { get; }
-        public MobSkillDataReference CachedReference => DataProvider.MobSkills.Data[MapleId][Level];
+        public MobSkillDataReference CachedReference => CachedData.MobSkills.Data[MapleId][Level];
 
         public MobSkill(MobSkillReference reference)
         {
@@ -207,7 +207,7 @@ namespace RazzleServer.Game.Maple.Life
             }
         }
 
-        private IEnumerable<Character> GetAffectedCharacters(Mob caster)
+        private IEnumerable<GameCharacter> GetAffectedCharacters(Mob caster)
         {
             var rectangle = new Rectangle((CachedReference.Lt ?? new Point(0, 0)) + caster.Position,
                 (CachedReference.Rb ?? new Point(0, 0)) + caster.Position);

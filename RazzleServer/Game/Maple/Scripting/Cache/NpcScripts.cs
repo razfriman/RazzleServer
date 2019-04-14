@@ -13,7 +13,7 @@ namespace RazzleServer.Game.Maple.Scripting.Cache
 
         public Dictionary<string, Type> Data { get; set; } = new Dictionary<string, Type>();
 
-        public void Execute(Npc npc, Character character)
+        public void Execute(Npc npc, GameCharacter gameCharacter)
         {
             var script = npc.CachedReference.Script ?? npc.MapleId.ToString();
 
@@ -28,13 +28,13 @@ namespace RazzleServer.Game.Maple.Scripting.Cache
             {
                 _log.Warning(
                     $"Cannot instantiate script for Npc={npc.MapleId} Script={npc.CachedReference.Script} on Map={npc.Map.MapleId}");
-                character.Release();   
+                gameCharacter.Release();   
                 return;
             }
             
-            npcScript.Character = character;
+            npcScript.GameCharacter = gameCharacter;
             npcScript.Npc = npc;
-            character.NpcScript = npcScript;
+            gameCharacter.NpcScript = npcScript;
             Task.Factory.StartNew(npcScript.Execute)
                 .ContinueWith(x =>
                 {
@@ -44,13 +44,13 @@ namespace RazzleServer.Game.Maple.Scripting.Cache
                     {
                         _log.Warning(
                             $"Script not implemented for Npc={npc.MapleId} Script={npc.CachedReference.Script} on Map={npc.Map.MapleId}");
-                        character.Release();
+                        gameCharacter.Release();
                     }
                     else
                     {
                         _log.Error(ex,
                             $"Script error for Npc={npc.MapleId} Script={npc.CachedReference.Script} on Map={npc.Map.MapleId}");
-                        character.Release();
+                        gameCharacter.Release();
                     }
                 }, TaskContinuationOptions.OnlyOnFaulted);
         }

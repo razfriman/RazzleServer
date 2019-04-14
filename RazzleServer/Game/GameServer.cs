@@ -5,6 +5,7 @@ using System.Net;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Maps;
 using RazzleServer.Common;
+using RazzleServer.Data;
 using RazzleServer.Net.Packet;
 using Serilog;
 
@@ -52,14 +53,14 @@ namespace RazzleServer.Game
                 .ToList()
                 .ForEach(x => x.Send(pw));
 
-        public Character GetCharacterById(int id) => Clients
+        public GameCharacter GetCharacterById(int id) => Clients
             .Values
-            .Select(x => x.Character)
+            .Select(x => x.GameCharacter)
             .FirstOrDefault(x => x.Id == id);
 
-        public Character GetCharacterByName(string name) => Clients
+        public GameCharacter GetCharacterByName(string name) => Clients
             .Values
-            .Select(x => x.Character)
+            .Select(x => x.GameCharacter)
             .FirstOrDefault(x => x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
 
         public bool CharacterExists(string name)

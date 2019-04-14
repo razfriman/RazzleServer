@@ -8,7 +8,7 @@ namespace RazzleServer.Game.Handlers
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
             var expressionId = packet.ReadInt();
-            client.Character.PerformFacialExpression(expressionId);
+            client.GameCharacter.PerformFacialExpression(expressionId);
         }
     }
 }

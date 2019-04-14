@@ -11,9 +11,9 @@ namespace RazzleServer.Game.Handlers
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
-            if (client.Character.Map.CachedReference.IsUnableToShop)
+            if (client.GameCharacter.Map.CachedReference.IsUnableToShop)
             {
-                Portal.SendMapTransferResult(client.Character, MapTransferResult.CannotGo);
+                Portal.SendMapTransferResult(client.GameCharacter, MapTransferResult.CannotGo);
                 return;
             }
             

@@ -13,14 +13,14 @@ namespace RazzleServer.Game.Handlers
 
             var movements = new Movements(packet);
 
-            client.Character.Position = movements.Position;
-            client.Character.Foothold = movements.Foothold;
-            client.Character.Stance = movements.Stance;
+            client.GameCharacter.Position = movements.Position;
+            client.GameCharacter.Foothold = movements.Foothold;
+            client.GameCharacter.Stance = movements.Stance;
 
             using var pw = new PacketWriter(ServerOperationCode.RemotePlayerMove);
-            pw.WriteInt(client.Character.Id);
+            pw.WriteInt(client.GameCharacter.Id);
             pw.WriteBytes(movements.ToByteArray());
-            client.Character.Map.Send(pw, client.Character);
+            client.GameCharacter.Map.Send(pw, client.GameCharacter);
         }
     }
 }

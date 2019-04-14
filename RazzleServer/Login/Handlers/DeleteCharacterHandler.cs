@@ -1,5 +1,5 @@
 ﻿using RazzleServer.Common.Constants;
-using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Login.Maple;
 using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Login.Handlers
@@ -11,7 +11,7 @@ namespace RazzleServer.Login.Handlers
         {
             packet.ReadInt(); // Birthday
             var characterId = packet.ReadInt();
-            Character.Delete(client.Account.Id, characterId);
+            LoginCharacter.Delete(client.Account.Id, characterId);
 
             using var pw = new PacketWriter(ServerOperationCode.DeleteCharacterResult);
             pw.WriteInt(characterId);

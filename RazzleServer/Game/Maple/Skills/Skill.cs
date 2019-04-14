@@ -1,11 +1,10 @@
 ﻿using System;
-using RazzleServer.Common;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Util;
 using RazzleServer.Data;
+using RazzleServer.DataProvider;
+using RazzleServer.DataProvider.References;
 using RazzleServer.Game.Maple.Characters;
-using RazzleServer.Game.Maple.Data;
-using RazzleServer.Game.Maple.Data.References;
 using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Maple.Skills
@@ -65,7 +64,7 @@ namespace RazzleServer.Game.Maple.Skills
                 {
                     Recalculate();
 
-                    if (Character.IsInitialized)
+                    if (GameCharacter.IsInitialized)
                     {
                         Update();
                     }
@@ -80,16 +79,16 @@ namespace RazzleServer.Game.Maple.Skills
             {
                 _maxLevel = value;
 
-                if (Parent != null && Character.IsInitialized)
+                if (Parent != null && GameCharacter.IsInitialized)
                 {
                     Update();
                 }
             }
         }
 
-        public SkillReference CachedReference => DataProvider.Skills.Data[MapleId][CurrentLevel];
+        public SkillReference CachedReference => CachedData.Skills.Data[MapleId][CurrentLevel];
 
-        public Character Character => Parent.Parent;
+        public GameCharacter GameCharacter => Parent.Parent;
 
         private bool Assigned { get; set; }
 
@@ -97,7 +96,7 @@ namespace RazzleServer.Game.Maple.Skills
         {
             MapleId = mapleId;
             CurrentLevel = 0;
-            MaxLevel = (byte)DataProvider.Skills.Data[MapleId].Count;
+            MaxLevel = (byte)CachedData.Skills.Data[MapleId].Count;
             Expiration = expiration ?? DateConstants.Permanent;
         }
 
@@ -132,7 +131,7 @@ namespace RazzleServer.Game.Maple.Skills
                 dbContext.Skills.Add(item);
             }
 
-            item.CharacterId = Character.Id;
+            item.CharacterId = GameCharacter.Id;
             item.SkillId = MapleId;
             item.Level = CurrentLevel;
             item.MasterLevel = MaxLevel;
@@ -170,7 +169,7 @@ namespace RazzleServer.Game.Maple.Skills
             pw.WriteInt(MaxLevel);
             pw.WriteDateTime(Expiration);
             pw.WriteByte(4);
-            Character.Send(pw);
+            GameCharacter.Send(pw);
         }
 
         public void Recalculate()
@@ -216,24 +215,24 @@ namespace RazzleServer.Game.Maple.Skills
             {
                 case (int) SkillNames.DragonKnight.DragonRoar:
                 {
-                    var lefthp = (int) (Character.PrimaryStats.MaxHealth * (ParameterA / 100.0d));
-                    Character.PrimaryStats.Health -= (short) lefthp;
+                    var lefthp = (int) (GameCharacter.PrimaryStats.MaxHealth * (ParameterA / 100.0d));
+                    GameCharacter.PrimaryStats.Health -= (short) lefthp;
                     break;
                 }
 
-                case (int) SkillNames.Spearman.HyperBody when Character.PrimaryStats.HasBuff(MapleId):
+                case (int) SkillNames.Spearman.HyperBody when GameCharacter.PrimaryStats.HasBuff(MapleId):
                     // Already buffed
                     return;
                 case (int) SkillNames.Spearman.HyperBody:
                 {
-                    var lefthp = (int) (Character.PrimaryStats.MaxHealth * (ParameterA / 100.0d));
-                    Character.PrimaryStats.BuffBonuses.MaxHealth = (short) lefthp;
-                    Character.PrimaryStats.MaxHealth += (short) lefthp;
-                    lefthp = (int) (Character.PrimaryStats.MaxMana * (ParameterB / 100.0d));
-                    Character.PrimaryStats.BuffBonuses.MaxMana = (short) lefthp;
-                    Character.PrimaryStats.MaxMana += (short) lefthp;
-                    Character.PrimaryStats.MaxMana = Character.PrimaryStats.TotalMaxMana;
-                    Character.PrimaryStats.MaxHealth = Character.PrimaryStats.TotalMaxHealth;
+                    var lefthp = (int) (GameCharacter.PrimaryStats.MaxHealth * (ParameterA / 100.0d));
+                    GameCharacter.PrimaryStats.BuffBonuses.MaxHealth = (short) lefthp;
+                    GameCharacter.PrimaryStats.MaxHealth += (short) lefthp;
+                    lefthp = (int) (GameCharacter.PrimaryStats.MaxMana * (ParameterB / 100.0d));
+                    GameCharacter.PrimaryStats.BuffBonuses.MaxMana = (short) lefthp;
+                    GameCharacter.PrimaryStats.MaxMana += (short) lefthp;
+                    GameCharacter.PrimaryStats.MaxMana = GameCharacter.PrimaryStats.TotalMaxMana;
+                    GameCharacter.PrimaryStats.MaxHealth = GameCharacter.PrimaryStats.TotalMaxHealth;
                     break;
                 }
             }
@@ -241,17 +240,17 @@ namespace RazzleServer.Game.Maple.Skills
 
             if (CostMp > 0)
             {
-                Character.PrimaryStats.Mana -= CostMp;
+                GameCharacter.PrimaryStats.Mana -= CostMp;
             }
 
             if (CostHp > 0)
             {
-                Character.PrimaryStats.Health -= CostHp;
+                GameCharacter.PrimaryStats.Health -= CostHp;
             }
 
             if (CostItem > 0)
             {
-                Character.Items.Remove(CostItem, ItemCount);
+                GameCharacter.Items.Remove(CostItem, ItemCount);
             }
 
             if (CostMeso > 0)
@@ -259,13 +258,13 @@ namespace RazzleServer.Game.Maple.Skills
                 var min = (short) (CostMeso - (80 + CurrentLevel * 5));
                 var max = (short) (CostMeso + 80 + CurrentLevel * 5);
                 var realAmount = (short) Functions.Random(min, max);
-                if (Character.PrimaryStats.Meso - realAmount >= 0)
+                if (GameCharacter.PrimaryStats.Meso - realAmount >= 0)
                 {
-                    Character.PrimaryStats.Meso -= realAmount;
+                    GameCharacter.PrimaryStats.Meso -= realAmount;
                 }
                 else
                 {
-                    Character.LogCheatWarning(CheatType.InvalidSkillChange);
+                    GameCharacter.LogCheatWarning(CheatType.InvalidSkillChange);
                 }
             }
         }

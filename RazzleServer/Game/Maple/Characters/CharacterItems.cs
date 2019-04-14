@@ -2,9 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using RazzleServer.Common;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Exceptions;
+using RazzleServer.Data;
 using RazzleServer.Game.Maple.Items;
 using RazzleServer.Game.Maple.Maps;
 using RazzleServer.Net.Packet;
@@ -13,13 +13,13 @@ namespace RazzleServer.Game.Maple.Characters
 {
     public sealed class CharacterItems : IEnumerable<Item>
     {
-        public Character Parent { get; }
+        public GameCharacter Parent { get; }
         public Dictionary<ItemType, byte> MaxSlots { get; }
         private List<Item> Items { get; }
 
         public int Count => Items.Count;
 
-        public CharacterItems(Character parent, byte equipmentSlots, byte usableSlots, byte setupSlots,
+        public CharacterItems(GameCharacter parent, byte equipmentSlots, byte usableSlots, byte setupSlots,
             byte etceteraSlots, byte cashSlots)
         {
             Parent = parent;
@@ -509,6 +509,39 @@ namespace RazzleServer.Game.Maple.Characters
             }
 
             return stats;
+        }
+        
+        public (Dictionary<byte, int> visibleLayer, Dictionary<byte, int> hiddenLayer) CalculateEquippedSlots()
+        {
+            var visibleLayer = new Dictionary<byte, int>();
+            var hiddenLayer = new Dictionary<byte, int>();
+
+            foreach (var item in GetEquipped())
+            {
+                var slot = item.AbsoluteSlot;
+
+                if (slot < 100 && !visibleLayer.ContainsKey(slot))
+                {
+                    visibleLayer[slot] = item.MapleId;
+                }
+                else if (slot > 100 && slot != 111)
+                {
+                    slot -= 100;
+
+                    if (visibleLayer.ContainsKey(slot))
+                    {
+                        hiddenLayer[slot] = visibleLayer[slot];
+                    }
+
+                    visibleLayer[slot] = item.MapleId;
+                }
+                else if (visibleLayer.ContainsKey(slot))
+                {
+                    hiddenLayer[slot] = item.MapleId;
+                }
+            }
+
+            return (visibleLayer, hiddenLayer);
         }
 
         public byte[] ToByteArray()

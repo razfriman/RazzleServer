@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using RazzleServer.Common;
 using RazzleServer.Common.Constants;
 using RazzleServer.Data;
 using RazzleServer.Game.Maple.Items;
@@ -10,14 +9,14 @@ namespace RazzleServer.Game.Maple.Characters
 {
     public sealed class CharacterStorage
     {
-        public Character Parent { get; }
+        public GameCharacter Parent { get; }
         public Npc Npc { get; private set; }
         public byte Slots { get; set; }
         public int Meso { get; set; }
         public CharacterItems Items { get; set; }
         public bool IsFull => Items.Count == Slots;
 
-        public CharacterStorage(Character parent) => Parent = parent;
+        public CharacterStorage(GameCharacter parent) => Parent = parent;
 
         public void Load()
         {

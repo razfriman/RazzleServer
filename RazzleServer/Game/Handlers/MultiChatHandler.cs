@@ -38,7 +38,7 @@ namespace RazzleServer.Game.Handlers
 
             using var pw = new PacketWriter(ServerOperationCode.GroupMessage);
             pw.WriteByte(type);
-            pw.WriteString(client.Character.Name);
+            pw.WriteString(client.GameCharacter.Name);
             pw.WriteString(text);
 
             foreach (var recipient in recipients)

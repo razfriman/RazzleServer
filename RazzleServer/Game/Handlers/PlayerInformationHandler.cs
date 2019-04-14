@@ -8,9 +8,9 @@ namespace RazzleServer.Game.Handlers
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
             var characterId = packet.ReadInt();
-            var target = client.Character.Map.Characters[characterId];
+            var target = client.GameCharacter.Map.Characters[characterId];
 
-            if (target == null || target.IsMaster && !client.Character.IsMaster)
+            if (target == null || target.IsMaster && !client.GameCharacter.IsMaster)
             {
                 return;
             }

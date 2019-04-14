@@ -12,7 +12,7 @@ namespace RazzleServer.Game.Scripts.Commands
 
         public override bool IsRestricted => true;
 
-        public override void Execute(Character caller, string[] args)
+        public override void Execute(GameCharacter caller, string[] args)
         {
             caller.Client.Server.World.TickerMessage = args.Fuse();
             caller.Client.Server.World.UpdateTicker();

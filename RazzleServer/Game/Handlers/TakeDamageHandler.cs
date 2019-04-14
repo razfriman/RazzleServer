@@ -1,8 +1,8 @@
 ﻿using RazzleServer.Common.Constants;
 using RazzleServer.Common.Util;
+using RazzleServer.DataProvider;
+using RazzleServer.DataProvider.References;
 using RazzleServer.Game.Maple.Characters;
-using RazzleServer.Game.Maple.Data;
-using RazzleServer.Game.Maple.Data.References;
 using RazzleServer.Game.Maple.Life;
 using RazzleServer.Net.Packet;
 
@@ -41,12 +41,12 @@ namespace RazzleServer.Game.Handlers
                 var mobObjectId = packet.ReadInt();
                 var mobId = packet.ReadInt();
 
-                if (!client.Character.Map.Mobs.Contains(mobObjectId))
+                if (!client.GameCharacter.Map.Mobs.Contains(mobObjectId))
                 {
                     return;
                 }
 
-                mob = client.Character.Map.Mobs[mobObjectId];
+                mob = client.GameCharacter.Map.Mobs[mobObjectId];
 
                 if (mobId != mob.MapleId)
                 {
@@ -65,8 +65,8 @@ namespace RazzleServer.Game.Handlers
                     reflectPosition = packet.ReadPoint();
                 }
 
-                if (client.Character.PrimaryStats.HasBuff((int)SkillNames.Magician.MagicGuard) &&
-                    client.Character.PrimaryStats.Mana > 0)
+                if (client.GameCharacter.PrimaryStats.HasBuff((int)SkillNames.Magician.MagicGuard) &&
+                    client.GameCharacter.PrimaryStats.Mana > 0)
                 {
                     // Absorb damage
                     //  TODO
@@ -76,7 +76,7 @@ namespace RazzleServer.Game.Handlers
                 // TODO - MesoGuard
 
                 SendDamage(
-                    client.Character,
+                    client.GameCharacter,
                     attack,
                     damage,
                     reducedDamage,
@@ -92,25 +92,25 @@ namespace RazzleServer.Game.Handlers
 
             if (actualHpEffect < 0)
             {
-                client.Character.PrimaryStats.Health += (short)actualHpEffect;
+                client.GameCharacter.PrimaryStats.Health += (short)actualHpEffect;
             }
 
             if (actualMpEffect < 0)
             {
-                client.Character.PrimaryStats.Mana += (short)actualMpEffect;
+                client.GameCharacter.PrimaryStats.Mana += (short)actualMpEffect;
             }
 
             if (mobSkillLevel != 0 && mobSkillId != 0)
             {
                 // Check if the skill exists and has any extra effect.
-                if (!DataProvider.MobSkills.Data.ContainsKey(mobSkillId) ||
-                    !DataProvider.MobSkills.Data[mobSkillId].ContainsKey(mobSkillLevel))
+                if (!CachedData.MobSkills.Data.ContainsKey(mobSkillId) ||
+                    !CachedData.MobSkills.Data[mobSkillId].ContainsKey(mobSkillLevel))
                 {
                     return;
                 }
 
-                var skill = DataProvider.MobSkills.Data[mobSkillId][mobSkillLevel];
-                OnStatChangeByMobSkill(client.Character, skill);
+                var skill = CachedData.MobSkills.Data[mobSkillId][mobSkillLevel];
+                OnStatChangeByMobSkill(client.GameCharacter, skill);
             }
             else if (mob != null)
             {
@@ -124,18 +124,18 @@ namespace RazzleServer.Game.Handlers
                     return;
                 }
 
-                if (!DataProvider.MobSkills.Data.ContainsKey(mobAttack.SkillId) ||
-                    !DataProvider.MobSkills.Data[mobAttack.SkillId].ContainsKey(mobAttack.SkillLevel))
+                if (!CachedData.MobSkills.Data.ContainsKey(mobAttack.SkillId) ||
+                    !CachedData.MobSkills.Data[mobAttack.SkillId].ContainsKey(mobAttack.SkillLevel))
                 {
                     return;
                 }
 
-                var diseaseSkill = DataProvider.MobSkills.Data[mobSkillId][mobSkillLevel];
-                OnStatChangeByMobSkill(client.Character, diseaseSkill);
+                var diseaseSkill = CachedData.MobSkills.Data[mobSkillId][mobSkillLevel];
+                OnStatChangeByMobSkill(client.GameCharacter, diseaseSkill);
             }
         }
 
-        public static void OnStatChangeByMobSkill(Character chr, MobSkillDataReference mobSkill, short delay = 0)
+        public static void OnStatChangeByMobSkill(GameCharacter chr, MobSkillDataReference mobSkill, short delay = 0)
         {
             // See if we can actually set the effect...
 //            int prop = 100;
@@ -173,7 +173,7 @@ namespace RazzleServer.Game.Handlers
 //            }
         }
 
-        public static void SendDamage(Character chr,
+        public static void SendDamage(GameCharacter chr,
             sbyte attacType,
             int initialDamage,
             int reducedDamage,

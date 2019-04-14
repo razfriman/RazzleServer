@@ -1,5 +1,5 @@
 ﻿using RazzleServer.Common.Constants;
-using RazzleServer.Game.Maple.Data;
+using RazzleServer.DataProvider;
 using RazzleServer.Game.Maple.Skills;
 using RazzleServer.Net.Packet;
 
@@ -12,27 +12,27 @@ namespace RazzleServer.Game.Handlers
         {
             var mapleId = packet.ReadInt();
 
-            if (client.Character.PrimaryStats.SkillPoints == 0 || !DataProvider.Skills.Data.ContainsKey(mapleId))
+            if (client.GameCharacter.PrimaryStats.SkillPoints == 0 || !CachedData.Skills.Data.ContainsKey(mapleId))
             {
-                client.Character.LogCheatWarning(CheatType.InvalidSkillChange);
+                client.GameCharacter.LogCheatWarning(CheatType.InvalidSkillChange);
                 return;
             }
 
-            if (!client.Character.Skills.Contains(mapleId))
+            if (!client.GameCharacter.Skills.Contains(mapleId))
             {
-                client.Character.Skills.Add(new Skill(mapleId));
+                client.GameCharacter.Skills.Add(new Skill(mapleId));
             }
 
-            var skill = client.Character.Skills[mapleId];
+            var skill = client.GameCharacter.Skills[mapleId];
 
             if (skill.CurrentLevel + 1 > skill.MaxLevel)
             {
-                client.Character.LogCheatWarning(CheatType.InvalidSkillChange);
+                client.GameCharacter.LogCheatWarning(CheatType.InvalidSkillChange);
                 return;
             }
 
-            client.Character.PrimaryStats.SkillPoints--;
-            client.Character.Release();
+            client.GameCharacter.PrimaryStats.SkillPoints--;
+            client.GameCharacter.Release();
             skill.CurrentLevel++;
         }
     }

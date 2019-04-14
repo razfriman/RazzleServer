@@ -16,7 +16,7 @@ namespace RazzleServer.Game.Handlers
 
             try
             {
-                var item = client.Character.Items[type, source];
+                var item = client.GameCharacter.Items[type, source];
 
                 if (destination < 0)
                 {
@@ -37,7 +37,7 @@ namespace RazzleServer.Game.Handlers
             }
             catch (InventoryFullException)
             {
-                client.Character.Items.NotifyFull();
+                client.GameCharacter.Items.NotifyFull();
             }
         }
     }

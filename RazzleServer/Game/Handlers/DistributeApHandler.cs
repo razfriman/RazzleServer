@@ -9,7 +9,7 @@ namespace RazzleServer.Game.Handlers
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
             var type = (StatisticType)packet.ReadInt();
-            client.Character.PrimaryStats.DistributeAp(type);
+            client.GameCharacter.PrimaryStats.DistributeAp(type);
         }
     }
 }

@@ -6,16 +6,16 @@ using Serilog;
 
 namespace RazzleServer.Game.Maple.Maps
 {
-    public sealed class MapCharacters : MapObjects<Character>
+    public sealed class MapCharacters : MapObjects<GameCharacter>
     {
         private readonly ILogger _log = Log.ForContext<MapCharacters>();
 
         public MapCharacters(Map map) : base(map) { }
 
-        public Character this[string name] =>
+        public GameCharacter this[string name] =>
             Values.FirstOrDefault(x => x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
 
-        public override void Add(Character item)
+        public override void Add(GameCharacter item)
         {
             lock (this)
             {
@@ -87,7 +87,7 @@ namespace RazzleServer.Game.Maple.Maps
             Map.Send(item.GetCreatePacket(), item);
         }
 
-        public override void Remove(Character item)
+        public override void Remove(GameCharacter item)
         {
             lock (this)
             {
@@ -115,10 +115,10 @@ namespace RazzleServer.Game.Maple.Maps
             }
         }
 
-        public void Hide(Character item) => Map.Send(item.GetDestroyPacket(), item);
+        public void Hide(GameCharacter item) => Map.Send(item.GetDestroyPacket(), item);
 
-        public void Show(Character item) => Map.Send(item.GetCreatePacket(), item);
+        public void Show(GameCharacter item) => Map.Send(item.GetCreatePacket(), item);
 
-        public override int GetKey(Character item) => item.Id;
+        public override int GetKey(GameCharacter item) => item.Id;
     }
 }

@@ -70,14 +70,14 @@ namespace RazzleServer.Common
             .ToList()
             .ForEach(x => x.Send(pw));
 
-        public Character GetCharacterById(int id) => Values
+        public GameCharacter GetCharacterById(int id) => Values
             .SelectMany(x => x.Clients.Values)
-            .Select(x => x.Character)
+            .Select(x => x.GameCharacter)
             .FirstOrDefault(x => x.Id == id);
 
-        public Character GetCharacterByName(string name) => Values
+        public GameCharacter GetCharacterByName(string name) => Values
             .SelectMany(x => x.Clients.Values)
-            .Select(x => x.Character)
+            .Select(x => x.GameCharacter)
             .FirstOrDefault(x => x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
 
         public SelectChannelResult CheckChannel(byte channel) =>

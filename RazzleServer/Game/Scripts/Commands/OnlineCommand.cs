@@ -11,7 +11,7 @@ namespace RazzleServer.Game.Scripts.Commands
 
         public override bool IsRestricted => true;
 
-        public override void Execute(Character caller, string[] args)
+        public override void Execute(GameCharacter caller, string[] args)
         {
             if (args.Length != 0)
             {
@@ -25,7 +25,7 @@ namespace RazzleServer.Game.Scripts.Commands
                 {
                     foreach (var channelClient in channel.Clients.Values)
                     {
-                        caller.Notify("   -" + channelClient.Character.Name);
+                        caller.Notify("   -" + channelClient.GameCharacter.Name);
                     }
                 }
             }

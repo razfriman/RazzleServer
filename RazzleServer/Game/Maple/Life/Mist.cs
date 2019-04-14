@@ -8,18 +8,21 @@ using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Maple.Life
 {
-    public class Mist : MapObject, ISpawnable
+    public class Mist : IMapObject, ISpawnable
     {
         private Rectangle Bounds { get; set; }
-        public Character Owner { get; set; }
+        public GameCharacter Owner { get; set; }
         public Skill Skill { get; set; }
         public MistType MistType { get; set; }
+        public Map Map { get; set; }
+        public int ObjectId { get; set; }
+        public Point Position { get; set; }
 
-        public Mist(Rectangle boundingBox, Character character, Skill skill)
+        public Mist(Rectangle boundingBox, GameCharacter gameCharacter, Skill skill)
         {
             Skill = skill;
             MistType = CalculateMistType();
-            Owner = character;
+            Owner = gameCharacter;
             Bounds = boundingBox;
         }
 

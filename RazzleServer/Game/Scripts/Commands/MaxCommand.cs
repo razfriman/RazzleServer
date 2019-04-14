@@ -11,7 +11,7 @@ namespace RazzleServer.Game.Scripts.Commands
 
         public override bool IsRestricted => true;
 
-        public override void Execute(Character caller, string[] args)
+        public override void Execute(GameCharacter caller, string[] args)
         {
             caller.PrimaryStats.Level = 200;
             caller.PrimaryStats.Experience = 0;

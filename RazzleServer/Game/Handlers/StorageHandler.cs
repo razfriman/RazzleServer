@@ -24,7 +24,7 @@ namespace RazzleServer.Game.Handlers
                     HandleMeso(packet, client);
                     break;
                 case StorageAction.Leave:
-                    client.Character.Save();
+                    client.GameCharacter.Save();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -38,25 +38,25 @@ namespace RazzleServer.Game.Handlers
             if (meso < 0)
             {
                 // Deposit
-                if (client.Character.PrimaryStats.Meso + meso < 0)
+                if (client.GameCharacter.PrimaryStats.Meso + meso < 0)
                 {
-                    client.Character.Storage.StorageError(StorageResult.NotEnoughMesos);
+                    client.GameCharacter.Storage.StorageError(StorageResult.NotEnoughMesos);
                     return;
                 }
             }
             else
             {
                 // Withdraw
-                if (client.Character.Storage.Meso - meso < 0)
+                if (client.GameCharacter.Storage.Meso - meso < 0)
                 {
-                    client.Character.Storage.StorageError(StorageResult.NotEnoughMesos);
+                    client.GameCharacter.Storage.StorageError(StorageResult.NotEnoughMesos);
                     return;
                 }
             }
 
-            client.Character.Storage.Meso -= meso;
-            client.Character.PrimaryStats.Meso += meso;
-            client.Character.Storage.Update(StorageResult.ChangeMeso, StorageEncodeFlags.EncodeMesos);
+            client.GameCharacter.Storage.Meso -= meso;
+            client.GameCharacter.PrimaryStats.Meso += meso;
+            client.GameCharacter.Storage.Update(StorageResult.ChangeMeso, StorageEncodeFlags.EncodeMesos);
         }
 
         private static void HandleAdd(PacketReader packet, GameClient client)
@@ -65,30 +65,30 @@ namespace RazzleServer.Game.Handlers
             var itemId = packet.ReadInt();
             var quantity = packet.ReadShort();
 
-            var item = client.Character.Items[itemId, slot];
+            var item = client.GameCharacter.Items[itemId, slot];
 
             if (item == null)
             {
-                client.Character.Storage.StorageError(StorageResult.InventoryFullOrNot);
-                client.Character.LogCheatWarning(CheatType.InvalidStorageUpdate);
+                client.GameCharacter.Storage.StorageError(StorageResult.InventoryFullOrNot);
+                client.GameCharacter.LogCheatWarning(CheatType.InvalidStorageUpdate);
                 return;
             }
 
-            if (client.Character.Storage.IsFull)
+            if (client.GameCharacter.Storage.IsFull)
             {
-                client.Character.Storage.StorageError(StorageResult.StorageIsFull);
+                client.GameCharacter.Storage.StorageError(StorageResult.StorageIsFull);
                 return;
             }
 
-            if (client.Character.PrimaryStats.Meso < client.Character.Storage.Npc.CachedReference.StorageCost)
+            if (client.GameCharacter.PrimaryStats.Meso < client.GameCharacter.Storage.Npc.CachedReference.StorageCost)
             {
-                client.Character.Storage.StorageError(StorageResult.NotEnoughMesos);
+                client.GameCharacter.Storage.StorageError(StorageResult.NotEnoughMesos);
                 return;
             }
 
-            client.Character.PrimaryStats.Meso -= client.Character.Storage.Npc.CachedReference.StorageCost;
-            client.Character.Items.Remove(item, true);
-            client.Character.Storage.Add(item);
+            client.GameCharacter.PrimaryStats.Meso -= client.GameCharacter.Storage.Npc.CachedReference.StorageCost;
+            client.GameCharacter.Items.Remove(item, true);
+            client.GameCharacter.Storage.Add(item);
         }
 
         private static void HandleRemove(PacketReader packet, GameClient client)
@@ -96,32 +96,32 @@ namespace RazzleServer.Game.Handlers
             var type = (ItemType)packet.ReadByte();
             var slot = packet.ReadByte();
 
-            var item = client.Character.Storage.Items
+            var item = client.GameCharacter.Storage.Items
                 .Where(x => x.Slot == slot)
                 .FirstOrDefault(x => x.Type == type);
 
             if (item == null)
             {
-                client.Character.LogCheatWarning(CheatType.InvalidStorageUpdate);
-                client.Character.Storage.StorageError(StorageResult.InventoryFullOrNot);
+                client.GameCharacter.LogCheatWarning(CheatType.InvalidStorageUpdate);
+                client.GameCharacter.Storage.StorageError(StorageResult.InventoryFullOrNot);
                 return;
             }
 
-            if (client.Character.Items.IsFull(item.Type))
+            if (client.GameCharacter.Items.IsFull(item.Type))
             {
-                client.Character.Storage.StorageError(StorageResult.InventoryFullOrNot);
+                client.GameCharacter.Storage.StorageError(StorageResult.InventoryFullOrNot);
                 return;
             }
 
-            if (client.Character.PrimaryStats.Meso < client.Character.Storage.Npc.CachedReference.StorageCost)
+            if (client.GameCharacter.PrimaryStats.Meso < client.GameCharacter.Storage.Npc.CachedReference.StorageCost)
             {
-                client.Character.Storage.StorageError(StorageResult.NotEnoughMesos);
+                client.GameCharacter.Storage.StorageError(StorageResult.NotEnoughMesos);
                 return;
             }
 
-            client.Character.PrimaryStats.Meso -= client.Character.Storage.Npc.CachedReference.StorageCost;
-            client.Character.Storage.Remove(item);
-            client.Character.Items.Add(item, forceGetSlot: true);
+            client.GameCharacter.PrimaryStats.Meso -= client.GameCharacter.Storage.Npc.CachedReference.StorageCost;
+            client.GameCharacter.Storage.Remove(item);
+            client.GameCharacter.Items.Add(item, forceGetSlot: true);
             item.Save();
         }
     }

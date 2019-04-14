@@ -12,7 +12,7 @@ namespace RazzleServer.Game.Maple.Scripting.Cache
 
         public override string GetKey(ACommandScript item) => item.Name;
 
-        public void Execute(Character caller, string text)
+        public void Execute(GameCharacter caller, string text)
         {
             var splitted = text.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             var commandName = splitted[0].ToLower().TrimStart(ServerConfig.Instance.CommandIndicator[0]);

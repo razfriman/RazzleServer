@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
-using RazzleServer.Game.Maple.Data;
-using RazzleServer.Game.Maple.Data.References;
+using RazzleServer.DataProvider;
+using RazzleServer.DataProvider.References;
 using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Maple.Life
@@ -14,9 +14,9 @@ namespace RazzleServer.Game.Maple.Life
         public int Stock { get; set; }
         public float UnitRechargeRate { get; set; }
         
-        [JsonIgnore] public short MaxPerStack => DataProvider.Items.Data[MapleId].MaxPerStack;
+        [JsonIgnore] public short MaxPerStack => CachedData.Items.Data[MapleId].MaxPerStack;
 
-        [JsonIgnore] public bool IsRecharageable => DataProvider.Items.Data[MapleId].IsRechargeable;
+        [JsonIgnore] public bool IsRecharageable => CachedData.Items.Data[MapleId].IsRechargeable;
         
         public NpcShopItem(NpcShopItemReference reference)
         {

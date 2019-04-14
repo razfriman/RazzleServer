@@ -1,11 +1,11 @@
 ﻿using RazzleServer.Common.Constants;
 using RazzleServer.Common.Util;
+using RazzleServer.DataProvider.References;
 using RazzleServer.Game.Maple.Maps;
-using RazzleServer.Wz;
 
 namespace RazzleServer.Game.Maple.Life
 {
-    public abstract class LifeObject : MapObject
+    public abstract class LifeObject : IMapObject
     {
         public int MapleId { get; set; }
         public short Foothold { get; set; }
@@ -15,24 +15,38 @@ namespace RazzleServer.Game.Maple.Life
         public int RespawnTime { get; set; }
         public bool Hide { get; set; }
         public LifeObjectType Type { get; set; }
+        public Map Map { get; set; }
+        public int ObjectId { get; set; }
+        public Point Position { get; set; }
 
-        protected LifeObject() { }
-
-        protected LifeObject(WzImageProperty img, LifeObjectType type)
+        protected LifeObject()
         {
-            MapleId = int.Parse(img["id"].GetString());
-            Position = new Point(img["x"].GetShort(), img["y"].GetShort());
-            Foothold = img["fh"]?.GetShort() ?? 0;
-            MinimumClickX = img["rx0"]?.GetShort() ?? 0;
-            MaximumClickX = img["rx1"]?.GetShort() ?? 0;
-            FacesLeft = (img["f"]?.GetInt() ?? 0) > 0;
-            Hide = (img["hide"]?.GetInt() ?? 0) > 0;
-            Type = type;
+        }
+        
+        protected LifeObject(MapNpcReference reference)
+        {
+            MapleId = reference.MapleId;
+            Position = reference.Position;
+            Foothold = reference.Foothold;
+            MinimumClickX = reference.MinimumClickX;
+            MaximumClickX = reference.MaximumClickX;
+            FacesLeft = reference.FacesLeft;
+            Hide = reference.Hide;
+            Type = reference.Type;
+            RespawnTime = reference.RespawnTime;
+        }
 
-            if (type == LifeObjectType.Mob)
-            {
-                RespawnTime = img["mobTime"]?.GetInt() ?? 0;
-            }
+        protected LifeObject(SpawnPointReference reference)
+        {
+            MapleId = reference.MapleId;
+            Position = reference.Position;
+            Foothold = reference.Foothold;
+            MinimumClickX = reference.MinimumClickX;
+            MaximumClickX = reference.MaximumClickX;
+            FacesLeft = reference.FacesLeft;
+            Hide = reference.Hide;
+            Type = reference.Type;
+            RespawnTime = reference.RespawnTime;
         }
     }
 }

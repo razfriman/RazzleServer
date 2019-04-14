@@ -26,9 +26,9 @@ namespace RazzleServer.Game.Handlers
 
                         case InteractionType.Trade:
                         {
-                            if (client.Character.Trade == null)
+                            if (client.GameCharacter.Trade == null)
                             {
-                                client.Character.Trade = new Trade(client.Character);
+                                client.GameCharacter.Trade = new Trade(client.GameCharacter);
                             }
                         }
                             break;
@@ -37,9 +37,9 @@ namespace RazzleServer.Game.Handlers
                         {
                             var description = packet.ReadString();
 
-                            if (client.Character.PlayerShop == null)
+                            if (client.GameCharacter.PlayerShop == null)
                             {
-                                client.Character.PlayerShop = new PlayerShop(client.Character, description);
+                                client.GameCharacter.PlayerShop = new PlayerShop(client.GameCharacter, description);
                             }
                         }
                             break;
@@ -49,13 +49,13 @@ namespace RazzleServer.Game.Handlers
 
                 case InteractionCode.Visit:
                 {
-                    if (client.Character.PlayerShop == null)
+                    if (client.GameCharacter.PlayerShop == null)
                     {
                         var objectId = packet.ReadInt();
 
-                        if (client.Character.Map.PlayerShops.Contains(objectId))
+                        if (client.GameCharacter.Map.PlayerShops.Contains(objectId))
                         {
-                            client.Character.Map.PlayerShops[objectId].AddVisitor(client.Character);
+                            client.GameCharacter.Map.PlayerShops[objectId].AddVisitor(client.GameCharacter);
                         }
                     }
                 }
@@ -63,13 +63,13 @@ namespace RazzleServer.Game.Handlers
 
                 default:
                 {
-                    if (client.Character.Trade != null)
+                    if (client.GameCharacter.Trade != null)
                     {
-                        client.Character.Trade.Handle(client.Character, code, packet);
+                        client.GameCharacter.Trade.Handle(client.GameCharacter, code, packet);
                     }
                     else
                     {
-                        client.Character.PlayerShop?.Handle(client.Character, code, packet);
+                        client.GameCharacter.PlayerShop?.Handle(client.GameCharacter, code, packet);
                     }
                 }
                     break;

@@ -12,16 +12,16 @@ namespace RazzleServer.Game.Handlers
             var toPoint = packet.ReadPoint();
             var fromPoint = packet.ReadPoint();
 
-            var portal = client.Character.Map.Portals[name];
+            var portal = client.GameCharacter.Map.Portals[name];
 
             if (portal == null)
             {
                 return;
             }
 
-            var destPortal = client.Character.Map.Portals[portal.DestinationLabel];
+            var destPortal = client.GameCharacter.Map.Portals[portal.DestinationLabel];
 
-            if (portals != client.Character.Portals ||
+            if (portals != client.GameCharacter.Portals ||
                 portal.Position != fromPoint ||
                 destPortal.Position != toPoint)
             {

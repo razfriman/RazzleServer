@@ -8,7 +8,7 @@ namespace RazzleServer.Game.Handlers
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
-            client.Character.Attack(packet, AttackType.Melee);
+            client.GameCharacter.Attack(packet, AttackType.Melee);
         }
     }
 }

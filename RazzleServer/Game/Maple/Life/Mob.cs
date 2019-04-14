@@ -2,20 +2,20 @@
 using System.Collections.Generic;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Util;
+using RazzleServer.DataProvider;
+using RazzleServer.DataProvider.References;
 using RazzleServer.Game.Maple.Characters;
-using RazzleServer.Game.Maple.Data;
-using RazzleServer.Game.Maple.Data.References;
 using RazzleServer.Game.Maple.Maps;
 using RazzleServer.Game.Maple.Util;
 using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Maple.Life
 {
-    public sealed class Mob : MapObject, IMoveable, ISpawnable, IControllable
+    public sealed class Mob : IMapObject, IMoveable, ISpawnable, IControllable
     {
         public int MapleId { get; }
-        public Character Controller { get; set; }
-        public Dictionary<Character, uint> Attackers { get; }
+        public GameCharacter Controller { get; set; }
+        public Dictionary<GameCharacter, uint> Attackers { get; }
         public SpawnPoint SpawnPoint { get; }
         public byte Stance { get; set; }
         public bool IsProvoked { get; set; }
@@ -54,7 +54,7 @@ namespace RazzleServer.Game.Maple.Life
 
         public int SpawnEffect { get; set; }
 
-        public MobReference CachedReference => DataProvider.Mobs.Data[MapleId];
+        public MobReference CachedReference => CachedData.Mobs.Data[MapleId];
 
 
         public Mob(int mapleId)
@@ -81,8 +81,11 @@ namespace RazzleServer.Game.Maple.Life
             Accuracy = CachedReference.Accuracy;
             Avoidability = CachedReference.Avoidability;
             Speed = CachedReference.Speed;
-            Loots = CachedReference.Loots;
             Skills = new MobSkills(this);
+            CachedReference.Skills.ForEach(x =>
+            {
+                Skills.Add(new MobSkill(x));
+            });
             CachedReference.Skills.ForEach(x =>
             {
                 Skills.Add(new MobSkill(x));
@@ -90,7 +93,7 @@ namespace RazzleServer.Game.Maple.Life
 
             DeathSummons = CachedReference.DeathSummons;
 
-            Attackers = new Dictionary<Character, uint>();
+            Attackers = new Dictionary<GameCharacter, uint>();
             Cooldowns = new Dictionary<MobSkill, DateTime>();
             Buffs = new List<MobStatus>();
             Stance = 5;
@@ -117,7 +120,7 @@ namespace RazzleServer.Game.Maple.Life
             if (Controller == null)
             {
                 var leastControlled = int.MaxValue;
-                Character newController = null;
+                GameCharacter newController = null;
 
                 lock (Map.Characters)
                 {
@@ -140,7 +143,7 @@ namespace RazzleServer.Game.Maple.Life
             }
         }
 
-        public void SwitchController(Character newController)
+        public void SwitchController(GameCharacter newController)
         {
             lock (this)
             {
@@ -252,7 +255,7 @@ namespace RazzleServer.Game.Maple.Life
 
         public void Die() => Map.Mobs.Remove(this);
 
-        public bool Damage(Character attacker, uint amount)
+        public bool Damage(GameCharacter attacker, uint amount)
         {
             lock (this)
             {
@@ -329,5 +332,9 @@ namespace RazzleServer.Game.Maple.Life
             pw.WriteLong(0);
             return pw;
         }
+
+        public Map Map { get; set; }
+        public int ObjectId { get; set; }
+        public Point Position { get; set; }
     }
 }

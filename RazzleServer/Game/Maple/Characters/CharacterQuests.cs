@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using RazzleServer.Common.Constants;
-using RazzleServer.Game.Maple.Data;
-using RazzleServer.Game.Maple.Data.References;
+using RazzleServer.DataProvider;
+using RazzleServer.DataProvider.References;
 using RazzleServer.Game.Maple.Items;
+using RazzleServer.Game.Maple.Skills;
 using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Maple.Characters
 {
     public sealed class CharacterQuests
     {
-        public Character Parent { get; }
+        public GameCharacter Parent { get; }
 
         public Dictionary<int, Dictionary<int, short>> Started { get; }
         public Dictionary<int, DateTime> Completed { get; }
 
-        public CharacterQuests(Character parent)
+        public CharacterQuests(GameCharacter parent)
         {
             Parent = parent;
 
@@ -26,76 +26,10 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Load()
         {
-            //foreach (Datum datum in new Datums("quests_started").Populate("CharacterId = {0}", this.Parent.Id))
-            //{
-            //    if (!this.Started.ContainsKey((int)datum["QuestId"]))
-            //    {
-            //        this.Started.Add((int)datum["QuestId"], new Dictionary<int, short>());
-            //    }
-
-            //    if (datum["MobId"] != null && datum["Killed"] != null)
-            //    {
-            //        this.Started[(int)datum["QuestId"]].Add((int)datum["MobId"], ((short)datum["Killed"]));
-            //    }
-            //}
         }
 
         public void Save()
         {
-            //foreach (KeyValuePair<int, Dictionary<int, short>> loopStarted in this.Started)
-            //{
-            //    if (loopStarted.Value == null || loopStarted.Value.Count == 0)
-            //    {
-            //        Datum datum = new Datum("quests_started");
-
-            //        datum["CharacterId"] = this.Parent.Id;
-            //        datum["QuestId"] = loopStarted.Key;
-
-            //        if (!Database.Exists("quests_started", "CharacterId = {0} && QuestId = {1}", this.Parent.Id, loopStarted.Key))
-            //        {
-            //            datum.Insert();
-            //        }
-            //    }
-            //    else
-            //    {
-            //        foreach (KeyValuePair<int, short> mobKills in loopStarted.Value)
-            //        {
-            //            Datum datum = new Datum("quests_started");
-
-            //            datum["CharacterId"] = this.Parent.Id;
-            //            datum["QuestId"] = loopStarted.Key;
-            //            datum["MobId"] = mobKills.Key;
-            //            datum["Killed"] = mobKills.Value;
-
-            //            if (Database.Exists("quests_started", "CharacterId = {0} && QuestId = {1} && MobId = {2}", this.Parent.Id, loopStarted.Key, mobKills.Key))
-            //            {
-            //                datum.Update("CharacterId = {0} && QuestId = {1} && MobId = {2}", this.Parent.Id, loopStarted.Key, mobKills.Key);
-            //            }
-            //            else
-            //            {
-            //                datum.Insert();
-            //            }
-            //        }
-            //    }
-            //}
-
-            //foreach (KeyValuePair<int, DateTime> loopCompleted in this.Completed)
-            //{
-            //    Datum datum = new Datum("quests_completed");
-
-            //    datum["CharacterId"] = this.Parent.Id;
-            //    datum["QuestId"] = loopCompleted.Key;
-            //    datum["CompletionTime"] = loopCompleted.Value;
-
-            //    if (Database.Exists("quests_completed", "CharacterId = {0} && QuestId = {1}", this.Parent.Id, loopCompleted.Key))
-            //    {
-            //        datum.Update("CharacterId = {0} && QuestId = {1}", this.Parent.Id, loopCompleted.Key);
-            //    }
-            //    else
-            //    {
-            //        datum.Insert();
-            //    }
-            //}
         }
 
         public void Delete(int questId)
@@ -104,87 +38,10 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 Started.Remove(questId);
             }
-
-            //if (Database.Exists("quests_started", "QuestId = {0}", questId))
-            //{
-            //    Database.Delete("quests_started", "QuestId = {0}", questId);
-            //}
         }
 
         public void Delete()
         {
-        }
-
-        public void Handle(PacketReader iPacket)
-        {
-            var action = (QuestAction)iPacket.ReadByte();
-            var questId = iPacket.ReadInt();
-
-            if (!DataProvider.Quests.Data.ContainsKey(questId))
-            {
-                Parent.LogCheatWarning(CheatType.InvalidQuest);
-                return;
-            }
-
-            var quest = DataProvider.Quests.Data[questId];
-
-            int npcId;
-
-            switch (action)
-            {
-                case QuestAction.RestoreLostItem: // TODO: Validate.
-                {
-                    var quantity = iPacket.ReadInt();
-                    var itemId = iPacket.ReadInt();
-
-                    quantity -= Parent.Items.Available(itemId);
-
-                    var item = new Item(itemId, (short)quantity);
-
-                    Parent.Items.Add(item);
-                }
-                    break;
-
-                case QuestAction.Start:
-                {
-                    npcId = iPacket.ReadInt();
-
-                    Start(quest, npcId);
-                }
-                    break;
-
-                case QuestAction.Complete:
-                {
-                    npcId = iPacket.ReadInt();
-                    iPacket.ReadInt(); // NOTE: Unknown
-                    var selection = iPacket.Available >= 4 ? iPacket.ReadInt() : 0;
-
-                    Complete(quest, selection);
-                }
-                    break;
-
-                case QuestAction.Forfeit:
-                {
-                    Forfeit(quest.MapleId);
-                }
-                    break;
-
-                case QuestAction.ScriptStart:
-                case QuestAction.ScriptEnd:
-                {
-                    npcId = iPacket.ReadInt();
-
-                    var npc = Parent.Map.Npcs.Values.FirstOrDefault(loopNpc => loopNpc.MapleId == npcId);
-
-                    if (npc == null)
-                    {
-                        return;
-                    }
-
-                    Parent.Converse(npc, quest);
-                }
-                    break;
-            }
         }
 
         public void Start(QuestReference quest, int npcId)
@@ -251,9 +108,10 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 if (Parent.PrimaryStats.Job == skill.Value)
                 {
-                    Parent.Skills.Add(skill.Key);
-
-                    // TODO: Skill update packet.
+                    if (!Parent.Skills.Contains(skill.Key))
+                    {
+                        Parent.Skills.Add(new Skill(skill.Key));
+                    }
                 }
             }
 
@@ -327,7 +185,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public bool CanComplete(int questId, bool onlyOnFinalKill = false)
         {
-            var quest = DataProvider.Quests.Data[questId];
+            var quest = CachedData.Quests.Data[questId];
 
             foreach (var requiredItem in quest.PostRequiredItems)
             {

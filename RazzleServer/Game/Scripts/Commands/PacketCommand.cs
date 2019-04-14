@@ -11,7 +11,7 @@ namespace RazzleServer.Game.Scripts.Commands
         public override string Name => "packet";
         public override string Parameters => "{ client | server } packet";
 
-        public override void Execute(Character caller, string[] args)
+        public override void Execute(GameCharacter caller, string[] args)
         {
             if (args.Length < 3)
             {

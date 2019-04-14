@@ -13,11 +13,11 @@ namespace RazzleServer.Game.Handlers
 
             var objectId = packet.ReadInt();
 
-            lock (client.Character.Map.Drops)
+            lock (client.GameCharacter.Map.Drops)
             {
-                if (client.Character.Map.Drops.Contains(objectId))
+                if (client.GameCharacter.Map.Drops.Contains(objectId))
                 {
-                    client.Character.Items.Pickup(client.Character.Map.Drops[objectId]);
+                    client.GameCharacter.Items.Pickup(client.GameCharacter.Map.Drops[objectId]);
                 }
             }
         }

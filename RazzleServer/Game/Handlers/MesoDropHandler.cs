@@ -10,16 +10,16 @@ namespace RazzleServer.Game.Handlers
         {
             var amount = packet.ReadInt();
 
-            if (amount > client.Character.PrimaryStats.Meso || amount < 10 || amount > 50000)
+            if (amount > client.GameCharacter.PrimaryStats.Meso || amount < 10 || amount > 50000)
             {
                 return;
             }
 
-            client.Character.PrimaryStats.Meso -= amount;
+            client.GameCharacter.PrimaryStats.Meso -= amount;
 
-            var mesoDrop = new Meso(amount) {Dropper = client.Character, Owner = null};
+            var mesoDrop = new Meso(amount) {Dropper = client.GameCharacter, Owner = null};
 
-            client.Character.Map.Drops.Add(mesoDrop);
+            client.GameCharacter.Map.Drops.Add(mesoDrop);
         }
     }
 }

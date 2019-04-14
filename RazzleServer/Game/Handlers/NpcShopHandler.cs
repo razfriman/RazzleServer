@@ -11,11 +11,11 @@ namespace RazzleServer.Game.Handlers
     {
         public override void HandlePacket(PacketReader packet, GameClient client)
         {
-            var shop = client.Character.CurrentNpcShop;
+            var shop = client.GameCharacter.CurrentNpcShop;
 
             if (shop == null)
             {
-                client.Character.Release();
+                client.GameCharacter.Release();
                 return;
             }
 
@@ -36,7 +36,7 @@ namespace RazzleServer.Game.Handlers
                     break;
 
                 case ShopAction.Leave:
-                    client.Character.CurrentNpcShop = null;
+                    client.GameCharacter.CurrentNpcShop = null;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -51,7 +51,7 @@ namespace RazzleServer.Game.Handlers
 
             var item = shop.ShopItems[mapleId];
 
-            if (client.Character.PrimaryStats.Meso < item.Price * quantity)
+            if (client.GameCharacter.PrimaryStats.Meso < item.Price * quantity)
             {
                 return;
             }
@@ -75,7 +75,7 @@ namespace RazzleServer.Game.Handlers
 
                 if (purchase.Type == ItemType.Equipment && quantity != 1)
                 {
-                    client.Character.LogCheatWarning(CheatType.InvalidShop);
+                    client.GameCharacter.LogCheatWarning(CheatType.InvalidShop);
                     return;
                 }
 
@@ -94,20 +94,20 @@ namespace RazzleServer.Game.Handlers
                 return;
             }
 
-            if (price > client.Character.PrimaryStats.Meso)
+            if (price > client.GameCharacter.PrimaryStats.Meso)
             {
                 SendShopResult(client, ShopResult.BuyNoMoney);
                 return;
             }
 
-            if (client.Character.Items.SpaceTakenBy(purchase) > client.Character.Items.RemainingSlots(purchase.Type))
+            if (client.GameCharacter.Items.SpaceTakenBy(purchase) > client.GameCharacter.Items.RemainingSlots(purchase.Type))
             {
                 SendShopResult(client, ShopResult.BuyUnknown);
                 return;
             }
 
-            client.Character.PrimaryStats.Meso -= price;
-            client.Character.Items.Add(purchase);
+            client.GameCharacter.PrimaryStats.Meso -= price;
+            client.GameCharacter.Items.Add(purchase);
             item.Stock -= quantity;
             SendShopResult(client, ShopResult.BuySuccess);
         }
@@ -118,7 +118,7 @@ namespace RazzleServer.Game.Handlers
             var mapleId = packet.ReadInt();
             var quantity = packet.ReadShort();
 
-            var item = client.Character.Items[mapleId, slot];
+            var item = client.GameCharacter.Items[mapleId, slot];
 
             if (item.IsRechargeable)
             {
@@ -127,13 +127,13 @@ namespace RazzleServer.Game.Handlers
 
             if (quantity > item.Quantity)
             {
-                client.Character.LogCheatWarning(CheatType.InvalidItem);
+                client.GameCharacter.LogCheatWarning(CheatType.InvalidItem);
                 return;
             }
 
             if (quantity == item.Quantity)
             {
-                client.Character.Items.Remove(item, true);
+                client.GameCharacter.Items.Remove(item, true);
             }
             else if (quantity < item.Quantity)
             {
@@ -143,39 +143,39 @@ namespace RazzleServer.Game.Handlers
 
             if (item.IsRechargeable)
             {
-                client.Character.PrimaryStats.Meso +=
+                client.GameCharacter.PrimaryStats.Meso +=
                     item.SalePrice + (int)(shop.ShopItems[item.MapleId].UnitRechargeRate * item.Quantity);
             }
             else
             {
-                client.Character.PrimaryStats.Meso += item.SalePrice * quantity;
+                client.GameCharacter.PrimaryStats.Meso += item.SalePrice * quantity;
             }
 
             using var pw = new PacketWriter(ServerOperationCode.NpcShopResult);
             pw.WriteByte(8);
-            client.Character.Send(pw);
+            client.GameCharacter.Send(pw);
         }
 
         private static void Recharge(PacketReader packet, GameClient client, Npc shop)
         {
             var slot = packet.ReadShort();
-            var item = client.Character.Items[ItemType.Usable, slot];
+            var item = client.GameCharacter.Items[ItemType.Usable, slot];
             var price = (int)(shop.ShopItems[item.MapleId].UnitRechargeRate * (item.MaxPerStack - item.Quantity));
 
-            if (client.Character.PrimaryStats.Meso < price)
+            if (client.GameCharacter.PrimaryStats.Meso < price)
             {
-                client.Character.Notify("You do not have enough mesos.", NoticeType.Popup);
+                client.GameCharacter.Notify("You do not have enough mesos.", NoticeType.Popup);
             }
             else
             {
-                client.Character.PrimaryStats.Meso -= price;
+                client.GameCharacter.PrimaryStats.Meso -= price;
                 item.Quantity = item.MaxPerStack;
                 item.Update();
             }
 
             using var pw = new PacketWriter(ServerOperationCode.NpcShopResult);
             pw.WriteByte(8);
-            client.Character.Send(pw);
+            client.GameCharacter.Send(pw);
         }
 
         private static void SendShopResult(GameClient client, ShopResult result)

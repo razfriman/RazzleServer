@@ -13,7 +13,7 @@ namespace RazzleServer.Game.Scripts.Npcs
             var result = SendChoice("Where do you want to go?" + Blue(CreateSelectionList(NpcListType.Map, mapIds)));
             if (result >= 0)
             {
-                Character.ChangeMap(mapIds[result]);
+                GameCharacter.ChangeMap(mapIds[result]);
             }
         }
     }

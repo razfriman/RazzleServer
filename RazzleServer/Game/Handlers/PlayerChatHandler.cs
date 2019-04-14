@@ -13,11 +13,11 @@ namespace RazzleServer.Game.Handlers
 
             if (text.StartsWith(ServerConfig.Instance.CommandIndicator))
             {
-                ScriptProvider.Commands.Execute(client.Character, text);
+                ScriptProvider.Commands.Execute(client.GameCharacter, text);
             }
             else
             {
-                client.Character.Talk(text);
+                client.GameCharacter.Talk(text);
             }
         }
     }

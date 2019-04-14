@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net.Sockets;
 using RazzleServer.Common;
+using RazzleServer.Data;
 using RazzleServer.Login.Maple;
 using RazzleServer.Net;
 using RazzleServer.Net.Packet;

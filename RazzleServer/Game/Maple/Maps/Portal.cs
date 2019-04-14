@@ -1,62 +1,54 @@
-﻿using System.Linq;
-using Newtonsoft.Json;
-using RazzleServer.Common.Constants;
+﻿using RazzleServer.Common.Constants;
 using RazzleServer.Common.Util;
+using RazzleServer.DataProvider;
+using RazzleServer.DataProvider.References;
 using RazzleServer.Game.Maple.Characters;
-using RazzleServer.Game.Maple.Data;
-using RazzleServer.Game.Maple.Data.References;
 using RazzleServer.Net.Packet;
-using RazzleServer.Wz;
 
 namespace RazzleServer.Game.Maple.Maps
 {
-    public class Portal : MapObject
+    public class Portal : IMapObject
     {
         public byte Id { get; set; }
         public string Label { get; set; }
         public int DestinationMapId { get; set; }
         public string DestinationLabel { get; set; }
         public PortalType Type { get; set; }
-
+        public Map Map { get; set; }
+        public int ObjectId { get; set; }
+        public Point Position { get; set; }
         public bool IsSpawnPoint => Label == "sp";
+        public MapReference DestinationMap => CachedData.Maps.Data[DestinationMapId];
 
-        [JsonIgnore] public MapReference DestinationMap => DataProvider.Maps.Data[DestinationMapId];
-
-        [JsonIgnore]
-        public Portal Link => DataProvider.Maps.Data[DestinationMapId]?.Portals
-            ?.FirstOrDefault(x => x.Label == DestinationLabel);
-
-        public Portal() { }
-
-        public Portal(WzImageProperty img)
+        public Portal(PortalReference reference)
         {
-            Id = byte.Parse(img.Name);
-            Position = new Point(img["x"].GetShort(), img["y"].GetShort());
-            Label = img["pn"].GetString();
-            DestinationMapId = img["tm"].GetInt();
-            DestinationLabel = img["tn"]?.GetString();
-            Type = (PortalType)img["pt"].GetInt();
+            Id = reference.Id;
+            Position = reference.Position;
+            Label = reference.Label;
+            DestinationMapId = reference.DestinationMapId;
+            DestinationLabel = reference.DestinationLabel;
+            Type = reference.Type;
         }
 
-        public void Enter(Character character)
+        public void Enter(GameCharacter gameCharacter)
         {
-            if (!character.Map.Portals.ContainsPortal(Label))
+            if (!gameCharacter.Map.Portals.ContainsPortal(Label))
             {
-                character.LogCheatWarning(CheatType.InvalidMapChange);
-                SendMapTransferResult(character, MapTransferResult.PortalClosed);
+                gameCharacter.LogCheatWarning(CheatType.InvalidMapChange);
+                SendMapTransferResult(gameCharacter, MapTransferResult.PortalClosed);
                 return;
             }
 
-            character.ChangeMap(DestinationMapId, DestinationLabel);
+            gameCharacter.ChangeMap(DestinationMapId, DestinationLabel);
         }
 
-        public static void SendMapTransferResult(Character character, MapTransferResult result)
+        public static void SendMapTransferResult(GameCharacter gameCharacter, MapTransferResult result)
         {
             using var pw = new PacketWriter(ServerOperationCode.TransferFieldReqIgnored);
             pw.WriteByte(result);
-            character.Send(pw);
+            gameCharacter.Send(pw);
         }
 
-        public static void PlaySoundEffect(Character character) => character.ShowLocalUserEffect(UserEffect.PlayPortalSe);
+        public static void PlaySoundEffect(GameCharacter gameCharacter) => gameCharacter.ShowLocalUserEffect(UserEffect.PlayPortalSe);
     }
 }

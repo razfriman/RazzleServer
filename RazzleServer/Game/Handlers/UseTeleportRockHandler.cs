@@ -16,11 +16,11 @@ namespace RazzleServer.Game.Handlers
                 case TeleportRockAction.Remove:
 
                     var mapId = packet.ReadInt();
-                    client.Character.TeleportRocks.Remove(mapId);
+                    client.GameCharacter.TeleportRocks.Remove(mapId);
                     break;
                 case TeleportRockAction.Add:
 
-                    client.Character.TeleportRocks.Add(client.Character.Map.MapleId);
+                    client.GameCharacter.TeleportRocks.Add(client.GameCharacter.Map.MapleId);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

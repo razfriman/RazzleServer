@@ -9,16 +9,19 @@ using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Maple.Life
 {
-    public class Summon : MapObject, ISpawnable
+    public class Summon : IMapObject, ISpawnable
     {
-        public Character Parent { get; set; }
+        public GameCharacter Parent { get; set; }
         public int MapleId { get; set; }
         public byte Level { get; set; }
         public bool MoveAction { get; set; }
         public ushort Foothold { get; set; }
         public DateTime Expiration { get; set; } = DateConstants.Permanent;
+        public Map Map { get; set; }
+        public int ObjectId { get; set; }
+        public Point Position { get; set; }
 
-        public Summon(Character parent, Skill skill, Point position, bool moveAction)
+        public Summon(GameCharacter parent, Skill skill, Point position, bool moveAction)
         {
             Parent = parent;
             MapleId = skill.MapleId;
