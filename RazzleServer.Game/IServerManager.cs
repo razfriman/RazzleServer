@@ -1,8 +1,6 @@
-using Microsoft.Extensions.Hosting;
-
 namespace RazzleServer.Game
 {
-    public interface IServerManager : IHostedService
+    public interface IServerManager
     {
         ILoginServer Login { get; set; }
         AWorlds Worlds { get; }

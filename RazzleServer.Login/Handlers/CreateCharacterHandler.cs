@@ -36,7 +36,7 @@ namespace RazzleServer.Login.Handlers
                 AccountId = client.Account.Id,
                 WorldId = client.World,
                 Name = name,
-                MapId = ServerConfig.Instance.DefaultMapId,
+                MapId = ServerConfig.Instance.DefaultMapId
             };
             character.PrimaryStats = new CharacterStats(character)
             {

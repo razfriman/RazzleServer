@@ -75,7 +75,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public Character(int id = 0, AClient client = null)
+        protected Character(int id = 0, AClient client = null)
         {
             Id = id;
             BaseClient = client;

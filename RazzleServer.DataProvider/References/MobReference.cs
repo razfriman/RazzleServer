@@ -11,7 +11,6 @@ namespace RazzleServer.DataProvider.References
         private readonly ILogger _log = Log.ForContext<MobReference>();
         
         public int MapleId { get; set; }
-
         public List<LootReference> Loots { get; set; } = new List<LootReference>();
         public List<MobSkillReference> Skills { get; set; } = new List<MobSkillReference>();
         public List<MobStatus> Buffs { get; set; } = new List<MobStatus>();

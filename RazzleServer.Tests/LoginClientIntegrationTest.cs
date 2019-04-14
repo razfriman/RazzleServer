@@ -1,5 +1,3 @@
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RazzleServer.Common;
 using RazzleServer.Common.Constants;
@@ -14,10 +12,10 @@ namespace RazzleServer.Tests
         private FakeServerManager _server;
 
         [TestInitialize]
-        public async Task Setup()
+        public void Setup()
         {
             _server = new FakeServerManager();
-            await _server.StartAsync(CancellationToken.None);
+            _server.Configure();
         }
 
         [TestMethod]

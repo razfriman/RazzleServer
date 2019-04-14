@@ -138,7 +138,7 @@ namespace RazzleServer.Shop.Maple
         {
             using var pw = new PacketWriter(ServerOperationCode.CashShopOperation);
             pw.WriteByte(isUpdate ? CashShopAction.ServerUpdateWishList : CashShopAction.ServerLoadWishList);
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
                 pw.WriteInt(0);
             }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using RazzleServer.Common.Constants;
+﻿using RazzleServer.Common.Constants;
 using RazzleServer.Game.Maple.Items;
 using RazzleServer.Net.Packet;
 
