@@ -5,11 +5,11 @@ using Newtonsoft.Json;
 
 namespace RazzleServer.Common.Util
 {
-    public abstract class MapleKeyedCollection<TKey, TValue> where TValue : class
+    public abstract class MapleKeyedCollection<TKey, TValue>
     {
         [JsonProperty] protected ConcurrentDictionary<TKey, TValue> Objects { get; set; } = new ConcurrentDictionary<TKey, TValue>();
 
-        public TValue this[TKey key] => Objects.ContainsKey(key) ? Objects[key] : null;
+        public TValue this[TKey key] => Objects.ContainsKey(key) ? Objects[key] : default;
 
         [JsonIgnore] public IEnumerable<TValue> Values => Objects.Values;
 

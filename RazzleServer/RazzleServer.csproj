@@ -3,11 +3,10 @@
         <OutputType>Exe</OutputType>
         <TargetFramework>netcoreapp3.0</TargetFramework>
         <LangVersion>preview</LangVersion>
+        <RootNamespace>RazzleServer</RootNamespace>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.2.3" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.3" />
-        <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.0.0-preview.19074.2" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.0.0-preview3.19153.1" />
         <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
         <PackageReference Include="Serilog.Extensions.Hosting" Version="2.0.0" />
         <PackageReference Include="Serilog.Formatting.Compact" Version="1.0.0" />
@@ -17,19 +16,19 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\RazzleServer.Crypto\RazzleServer.Crypto.csproj" />
+        <ProjectReference Include="..\RazzleServer.DataProvider\RazzleServer.DataProvider.csproj" />
         <ProjectReference Include="..\RazzleServer.DB\RazzleServer.Data.csproj" />
         <ProjectReference Include="..\RazzleServer.Common\RazzleServer.Common.csproj" />
+        <ProjectReference Include="..\RazzleServer.Game\RazzleServer.Game.csproj" />
+        <ProjectReference Include="..\RazzleServer.Login\RazzleServer.Login.csproj" />
         <ProjectReference Include="..\RazzleServer.Net\RazzleServer.Net.csproj" />
-        <ProjectReference Include="..\RazzleServer.Wz\RazzleServer.Wz.csproj" />
+        <ProjectReference Include="..\RazzleServer.Shop\RazzleServer.Shop.csproj" />
     </ItemGroup>
     <ItemGroup>
         <None Remove="Logs\**" />
         <None Remove="MapleServer.db" />
         <None Update="appsettings.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="InitialData\loot.json">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
 </Project>

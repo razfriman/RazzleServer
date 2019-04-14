@@ -1,6 +1,4 @@
 using System;
-using System.Threading;
-using System.Threading.Tasks;
 using RazzleServer.Common;
 using RazzleServer.Common.Constants;
 using RazzleServer.Game;
@@ -9,9 +7,14 @@ using Serilog;
 
 namespace RazzleServer.Tests.Util
 {
-    public class FakeServerManager : AServerManager
+    public class FakeServerManager : IServerManager
     {
-        public override Task Configure()
+        public ILoginServer Login { get; set; }
+        public AWorlds Worlds { get; } = new Worlds();
+        public IShopServer Shop { get; set; }
+        public Migrations Migrations { get; } = new Migrations();
+
+        public void Configure()
         {
             Log.Logger = new LoggerConfiguration()
                 .WriteTo
@@ -22,12 +25,7 @@ namespace RazzleServer.Tests.Util
             config.DatabaseConnectionType = DatabaseConnectionType.InMemory;
             config.DatabaseConnection = Guid.NewGuid().ToString();
             config.AddDefaultWorld();
-            return base.Configure();
-        }
-        
-        public override async Task StartAsync(CancellationToken cancellationToken)
-        {
-            await Configure();
+
             Login = new LoginServer(this);
 
             ServerConfig.Instance.Worlds.ForEach(x =>
@@ -43,8 +41,12 @@ namespace RazzleServer.Tests.Util
             });
         }
 
-        public override Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+        public FakeLoginClient AddFakeLoginClient() => new FakeLoginClient(Login as LoginServer);
 
-        public FakeLoginClient AddFakeLoginClient() => new FakeLoginClient(Login);
+        public int ValidateMigration(string host, int characterId) => characterId;
+
+        public void Migrate(string host, int accountId, int characterId)
+        {
+        }
     }
 }

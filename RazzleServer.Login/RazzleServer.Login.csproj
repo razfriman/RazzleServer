@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\RazzleServer.Common\RazzleServer.Common.csproj" />
+      <ProjectReference Include="..\RazzleServer.DB\RazzleServer.Data.csproj" />
+      <ProjectReference Include="..\RazzleServer.Game\RazzleServer.Game.csproj" />
+      <ProjectReference Include="..\RazzleServer.Net\RazzleServer.Net.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.0.0-preview3.19153.1" />
+    </ItemGroup>
+
+</Project>
