@@ -6,13 +6,12 @@ using RazzleServer.Common.Util;
 using RazzleServer.Data;
 using RazzleServer.Game.Maple;
 using RazzleServer.Game.Maple.Characters;
-using RazzleServer.Net;
 using RazzleServer.Net.Packet;
 using Serilog;
 
 namespace RazzleServer.Game
 {
-    public sealed class GameClient : AClient
+    public sealed class GameClient : AMapleClient
     {
         public const int PingDelay = 5000;
 

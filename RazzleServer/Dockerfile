@@ -10,7 +10,7 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.0 as build
 WORKDIR /src
 COPY RazzleServer.sln ./
 COPY RazzleServer/RazzleServer.csproj RazzleServer/
-COPY RazzleServer.DB/RazzleServer.Data.csproj RazzleServer.DB/
+COPY RazzleServer.DataAccess/RazzleServer.DataAccess.csproj RazzleServer.DataAccess/
 COPY RazzleServer.DataProvider/RazzleServer.DataProvider.csproj RazzleServer.DataProvider/
 COPY RazzleServer.Common/RazzleServer.Common.csproj RazzleServer.Common/
 COPY RazzleServer.Login/RazzleServer.Login.csproj RazzleServer.Login/

@@ -14,8 +14,8 @@ namespace RazzleServer.Game.Maple.Life
     public sealed class Mob : IMapObject, IMoveable, ISpawnable, IControllable
     {
         public int MapleId { get; }
-        public GameCharacter Controller { get; set; }
-        public Dictionary<GameCharacter, uint> Attackers { get; }
+        public Character Controller { get; set; }
+        public Dictionary<Character, uint> Attackers { get; }
         public SpawnPoint SpawnPoint { get; }
         public byte Stance { get; set; }
         public bool IsProvoked { get; set; }
@@ -92,7 +92,7 @@ namespace RazzleServer.Game.Maple.Life
 
             DeathSummons = CachedReference.DeathSummons;
 
-            Attackers = new Dictionary<GameCharacter, uint>();
+            Attackers = new Dictionary<Character, uint>();
             Cooldowns = new Dictionary<MobSkill, DateTime>();
             Buffs = new List<MobStatus>();
             Stance = 5;
@@ -188,7 +188,7 @@ namespace RazzleServer.Game.Maple.Life
             pwControl.WriteBool(skill != null); // use skills
             pwControl.WriteShort((short)Mana);
             pwControl.WriteShort(0); // skill id, skill level
-            Controller?.Client?.Send(pwControl);
+            Controller?.Send(pwControl);
 
             using var pwMove = new PacketWriter(ServerOperationCode.MobMove);
             pwMove.WriteInt(ObjectId);

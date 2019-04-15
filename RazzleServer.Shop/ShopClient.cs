@@ -4,15 +4,15 @@ using System.Threading;
 using RazzleServer.Common;
 using RazzleServer.Common.Util;
 using RazzleServer.Data;
+using RazzleServer.Game;
 using RazzleServer.Game.Maple.Characters;
-using RazzleServer.Net;
 using RazzleServer.Net.Packet;
 using RazzleServer.Shop.Maple;
 using Serilog;
 
 namespace RazzleServer.Shop
 {
-    public class ShopClient : AClient
+    public class ShopClient : AMapleClient
     {
         public const int PingDelay = 5000;
 

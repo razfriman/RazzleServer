@@ -5,9 +5,9 @@ namespace RazzleServer.Game.Maple.Characters
 {
     public class ControlledNpcs : MapleKeyedCollection<int, Npc>
     {
-        public GameCharacter Parent { get; }
+        public Character Parent { get; }
 
-        public ControlledNpcs(GameCharacter parent)
+        public ControlledNpcs(Character parent)
         {
             Parent = parent;
         }
@@ -16,7 +16,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             lock (this)
             {
-                if (Parent.Client.Connected)
+                if (Parent.BaseClient.Connected)
                 {
                     item.Controller = Parent;
                     base.Add(item);
@@ -33,7 +33,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             lock (this)
             {
-                if (Parent.Client.Connected)
+                if (Parent.BaseClient.Connected)
                 {
                     Parent.Send(item.GetControlCancelPacket());
                 }

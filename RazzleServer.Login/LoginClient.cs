@@ -3,14 +3,14 @@ using System.Linq;
 using System.Net.Sockets;
 using RazzleServer.Common;
 using RazzleServer.Data;
+using RazzleServer.Game;
 using RazzleServer.Login.Maple;
-using RazzleServer.Net;
 using RazzleServer.Net.Packet;
 using Serilog;
 
 namespace RazzleServer.Login
 {
-    public class LoginClient : AClient
+    public class LoginClient : AMapleClient
     {
         public byte World { get; internal set; }
         public byte Channel { get; internal set; }

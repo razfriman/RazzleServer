@@ -43,7 +43,7 @@ namespace RazzleServer.Game.Maple.Maps
             }
         }
 
-        private static void UpdateQuestKills(Mob item, GameCharacter owner)
+        private static void UpdateQuestKills(Mob item, Character owner)
         {
             if (owner == null)
             {
@@ -90,7 +90,7 @@ namespace RazzleServer.Game.Maple.Maps
             }
         }
 
-        private void GiveDrops(Mob item, GameCharacter owner)
+        private void GiveDrops(Mob item, Character owner)
         {
             if (!item.CanDrop)
             {
@@ -101,7 +101,7 @@ namespace RazzleServer.Game.Maple.Maps
             Map.Drops.SpawnDrops(drops, item.Position);
         }
 
-        private List<Drop> CalculateDrops(Mob item, GameCharacter owner)
+        private List<Drop> CalculateDrops(Mob item, Character owner)
         {
             var drops = new List<Drop>();
 
@@ -131,9 +131,9 @@ namespace RazzleServer.Game.Maple.Maps
             return drops;
         }
 
-        private GameCharacter GiveExperience(Mob item)
+        private Character GiveExperience(Mob item)
         {
-            GameCharacter owner = null;
+            Character owner = null;
             var mostDamage = 0u;
 
             foreach (var attacker in item.Attackers)
@@ -151,7 +151,7 @@ namespace RazzleServer.Game.Maple.Maps
 
                 attacker.Key.PrimaryStats.Experience +=
                     (int)Math.Min(item.Experience, attacker.Value * item.Experience / item.MaxHealth) *
-                    attacker.Key.Client.Server.World.ExperienceRate;
+                    attacker.Key.BaseClient.GameServer.World.ExperienceRate;
             }
 
             return owner;
