@@ -17,10 +17,13 @@ namespace RazzleServer.Login
         public LoginAccount Account { get; internal set; }
         public string LastUsername { get; internal set; }
         public string LastPassword { get; internal set; }
-        public LoginServer Server { get; internal set; }
-        
         public bool ThrowOnExceptions { get; protected internal set; }
-
+        public LoginServer Server { get; internal set; }
+        public override ILoginServer LoginServer => Server;
+        public override IGameServer GameServer => throw new NotSupportedException(
+            $"Cannot access Game Server from {GetType()}");
+        public override IShopServer ShopServer => throw new NotSupportedException(
+            $"Cannot access Shop Server from {GetType()}");
         public override ILogger Logger => Log.ForContext<LoginClient>();
 
         public LoginClient(Socket socket, LoginServer server)

@@ -9,8 +9,8 @@ namespace RazzleServer.Game
         {
         }
         
-        public ILoginServer LoginServer { get; set; }
-        public IGameServer GameServer { get; set; }
-        public IShopServer ShopServer { get; set; }
+        public abstract ILoginServer LoginServer { get; }
+        public abstract IGameServer GameServer { get; }
+        public abstract IShopServer ShopServer { get; }
     }
 }
