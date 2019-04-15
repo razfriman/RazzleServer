@@ -70,7 +70,7 @@ namespace RazzleServer.DataProvider.References
         public short CAvoidability { get; set; }
         public short CSpeed { get; set; }
         public short CJump { get; set; }
-        public short MaxPerStack { get; set; }
+        public short MaxPerStack { get; set; } = 1;
         public CureFlags Cures { get; set; }
         public List<Tuple<int, short>> Summons { get; set; } = new List<Tuple<int, short>>();
 

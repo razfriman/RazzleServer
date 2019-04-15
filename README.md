@@ -49,12 +49,12 @@ This contains both the server configuration and the logging configuration.
 | WzFilePath | Path to a directory containing MapleStory .wz files. Only required if no data cache is supplied |  |
 | CacheFolder | Path to the RazzleServer data cache files. These are included by default. | DataCache |
 | PrettifyCache | Output the cache files in an indented/readable format (uses more space) | false |
-| Version | x | 40 |
-| SubVersion | x | 1 |
-| ServerType | x | 5 |
-| PingTimeout | x | 30 |
-| PrintPackets | x | true |
-| AesKey | x | 0x52330F1BB4060813 |
+| Version | MapleStory version | 40 |
+| SubVersion | MapleStory subversion | 1 |
+| ServerType | MapleStory Server Type | 5 |
+| PingTimeout | Timeout to disconnect stale client | 30 |
+| PrintPackets | Print sent/received packets to the console | true |
+| AesKey | Key to use for AES Encryption | 0x52330F1BB4060813 |
 | EnableAesEncrpytion | Enable MapleStory AES encrpytion, false for v40b | false |
 | EnableAutoRegister | Allow account creation by logging in with an unregistered account | true |
 | EnableMultiLeveling | Allow gaining multiple levels at once | true |
