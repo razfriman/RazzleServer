@@ -121,6 +121,15 @@ namespace RazzleServer.Game
 
         public void StartPingCheck() => PingToken = TaskRunner.RunRepeated(Ping, TimeSpan.FromMilliseconds(PingDelay));
 
-        public void Ping() => Send(new PacketWriter(ServerOperationCode.Ping));
+        public void Ping()
+        {
+            if (DateTime.UtcNow.Subtract(LastPong).TotalSeconds > ServerConfig.Instance.PingTimeout)
+            {
+                Terminate("Ping timeout");
+                return;
+            }
+            
+            Send(new PacketWriter(ServerOperationCode.Ping));
+        }
     }
 }
