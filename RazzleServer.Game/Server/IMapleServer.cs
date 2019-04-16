@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Net;
 using RazzleServer.Net;
 
-namespace RazzleServer.Game
+namespace RazzleServer.Game.Server
 {
     public interface IMapleServer
     {

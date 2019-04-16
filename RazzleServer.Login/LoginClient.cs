@@ -3,24 +3,27 @@ using System.Linq;
 using System.Net.Sockets;
 using RazzleServer.Common;
 using RazzleServer.Data;
+using RazzleServer.Game.Server;
 using RazzleServer.Login.Maple;
-using RazzleServer.Net;
 using RazzleServer.Net.Packet;
 using Serilog;
 
 namespace RazzleServer.Login
 {
-    public class LoginClient : AClient
+    public class LoginClient : AMapleClient
     {
         public byte World { get; internal set; }
         public byte Channel { get; internal set; }
         public LoginAccount Account { get; internal set; }
         public string LastUsername { get; internal set; }
         public string LastPassword { get; internal set; }
-        public LoginServer Server { get; internal set; }
-        
         public bool ThrowOnExceptions { get; protected internal set; }
-
+        public LoginServer Server { get; internal set; }
+        public override ILoginServer LoginServer => Server;
+        public override IGameServer GameServer => throw new NotSupportedException(
+            $"Cannot access Game Server from {GetType()}");
+        public override IShopServer ShopServer => throw new NotSupportedException(
+            $"Cannot access Shop Server from {GetType()}");
         public override ILogger Logger => Log.ForContext<LoginClient>();
 
         public LoginClient(Socket socket, LoginServer server)

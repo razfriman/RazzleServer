@@ -3,7 +3,8 @@ using System.Linq;
 using System.Net;
 using RazzleServer.Common;
 using RazzleServer.Data;
-using RazzleServer.Game;
+using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Game.Server;
 using RazzleServer.Login.Maple;
 using Serilog;
 
@@ -20,7 +21,7 @@ namespace RazzleServer.Login
 
         public override ILogger Logger => Log.ForContext<LoginServer>();
 
-        internal bool CharacterExists(string name, byte world)
+        public bool CharacterExists(string name, byte world)
         {
             using var dbContext = new MapleDbContext();
             return dbContext.Characters
@@ -28,10 +29,10 @@ namespace RazzleServer.Login
                 .Any(x => x.Name == name);
         }
 
-        internal List<LoginCharacter> GetCharacters(byte worldId, int accountId)
+        public List<Character> GetCharacters(byte worldId, int accountId)
         {
             using var dbContext = new MapleDbContext();
-            var result = new List<LoginCharacter>();
+            var result = new List<Character>();
 
             var characters = dbContext
                 .Characters

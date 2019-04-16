@@ -6,6 +6,7 @@ using RazzleServer.DataProvider;
 using RazzleServer.DataProvider.References;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Life;
+using RazzleServer.Game.Server;
 using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Game.Maple.Maps

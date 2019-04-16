@@ -13,7 +13,7 @@ namespace RazzleServer.Game.Maple.Life
 {
     public class Npc : LifeObject, ISpawnable, IControllable
     {
-        [JsonIgnore] public GameCharacter Controller { get; set; }
+        [JsonIgnore] public Character Controller { get; set; }
 
         [JsonIgnore] public Dictionary<int, NpcShopItem> ShopItems = new Dictionary<int, NpcShopItem>();
 

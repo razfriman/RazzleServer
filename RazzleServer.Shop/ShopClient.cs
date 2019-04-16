@@ -5,21 +5,29 @@ using RazzleServer.Common;
 using RazzleServer.Common.Util;
 using RazzleServer.Data;
 using RazzleServer.Game.Maple.Characters;
-using RazzleServer.Net;
+using RazzleServer.Game.Server;
 using RazzleServer.Net.Packet;
 using RazzleServer.Shop.Maple;
 using Serilog;
 
 namespace RazzleServer.Shop
 {
-    public class ShopClient : AClient
+    public class ShopClient : AMapleClient
     {
         public const int PingDelay = 5000;
 
         public ShopAccount Account { get; set; }
-        public ShopServer Server { get; set; }
         public Character Character { get; set; }
         public CancellationTokenSource PingToken { get; set; }
+        public ShopServer Server { get; set; }
+
+        public override ILoginServer LoginServer => throw new NotSupportedException(
+            $"Cannot access Login Server from {GetType()}");
+
+        public override IGameServer GameServer => throw new NotSupportedException(
+            $"Cannot access Game Server from {GetType()}");
+
+        public override IShopServer ShopServer => Server;
         public override ILogger Logger => Log.ForContext<ShopClient>();
 
         public ShopClient(Socket session, ShopServer server) : base(session, ServerConfig.Instance.Version,

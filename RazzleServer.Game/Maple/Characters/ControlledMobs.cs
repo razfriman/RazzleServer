@@ -5,9 +5,9 @@ namespace RazzleServer.Game.Maple.Characters
 {
     public class ControlledMobs : MapleKeyedCollection<int, Mob>
     {
-        public GameCharacter Parent { get; }
+        public Character Parent { get; }
 
-        public ControlledMobs(GameCharacter parent)
+        public ControlledMobs(Character parent)
         {
             Parent = parent;
         }
@@ -16,7 +16,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             lock (this)
             {
-                if (Parent.Client.Connected)
+                if (Parent.BaseClient.Connected)
                 {
                     item.Controller = Parent;
 

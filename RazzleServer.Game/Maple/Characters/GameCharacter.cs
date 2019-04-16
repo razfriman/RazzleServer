@@ -16,11 +16,7 @@ namespace RazzleServer.Game.Maple.Characters
         private readonly ILogger _log = Log.ForContext<GameCharacter>();
 
         public GameClient Client { get; }
-        public ControlledMobs ControlledMobs { get; }
-        public ControlledNpcs ControlledNpcs { get; }
         public ANpcScript NpcScript { get; set; }
-        public Npc CurrentNpcShop { get; set; }
-        public CharacterDamage Damage { get; set; }
 
         public Portal ClosestPortal
         {
@@ -73,9 +69,6 @@ namespace RazzleServer.Game.Maple.Characters
         public GameCharacter(int id = 0, GameClient client = null) : base(id, client)
         {
             Client = client;
-            ControlledMobs = new ControlledMobs(this);
-            ControlledNpcs = new ControlledNpcs(this);
-            Damage = new CharacterDamage(this);
         }
 
         public override void Initialize()

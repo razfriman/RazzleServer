@@ -7,8 +7,9 @@ using RazzleServer.Common.Util;
 using RazzleServer.Data;
 using RazzleServer.DataProvider.References;
 using RazzleServer.Game.Maple.Interaction;
+using RazzleServer.Game.Maple.Life;
 using RazzleServer.Game.Maple.Maps;
-using RazzleServer.Net;
+using RazzleServer.Game.Server;
 using RazzleServer.Net.Packet;
 using Serilog;
 
@@ -17,7 +18,7 @@ namespace RazzleServer.Game.Maple.Characters
     public abstract class Character : IMapObject
     {
         public int Id { get; set; }
-        public AClient BaseClient { get; set; }
+        public AMapleClient BaseClient { get; set; }
         public int AccountId { get; set; }
         public byte WorldId { get; set; }
         public string Name { get; set; }
@@ -45,6 +46,10 @@ namespace RazzleServer.Game.Maple.Characters
         public CharacterPets Pets { get; set; }
         public CharacterParty Party { get; set; }
         public CharacterStats PrimaryStats { get; set; }
+        public ControlledMobs ControlledMobs { get; }
+        public ControlledNpcs ControlledNpcs { get; }
+        public Npc CurrentNpcShop { get; set; }
+        public CharacterDamage Damage { get; set; }
 
         public Map Map { get; set; }
         
@@ -75,7 +80,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        protected Character(int id = 0, AClient client = null)
+        protected Character(int id = 0, AMapleClient client = null)
         {
             Id = id;
             BaseClient = client;
@@ -91,6 +96,9 @@ namespace RazzleServer.Game.Maple.Characters
             TeleportRocks = new CharacterTeleportRocks(this);
             Storage = new CharacterStorage(this);
             Position = new Point(0, 0);
+            ControlledMobs = new ControlledMobs(this);
+            ControlledNpcs = new ControlledNpcs(this);
+            Damage = new CharacterDamage(this);
         }
 
         public virtual void Release()

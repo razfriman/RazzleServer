@@ -1,6 +1,6 @@
 using System;
 using RazzleServer.Common.Constants;
-using RazzleServer.Game;
+using RazzleServer.Game.Server;
 using RazzleServer.Login.Maple;
 using RazzleServer.Net.Packet;
 
@@ -43,7 +43,7 @@ namespace RazzleServer.Login
             return pw;
         }
 
-        public static PacketWriter ListWorlds(AWorlds worlds)
+        public static PacketWriter ListWorlds(Worlds worlds)
         {
             using var pw = new PacketWriter(ServerOperationCode.WorldInformation);
             foreach (var world in worlds.Values)

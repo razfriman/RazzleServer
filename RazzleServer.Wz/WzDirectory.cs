@@ -569,7 +569,7 @@ namespace RazzleServer.Wz
             return objList;
         }
 
-        internal List<string> GetPaths(string curPath)
+        internal IEnumerable<string> GetPaths(string curPath)
         {
             var objList = new List<string>();
             foreach (var img in WzImages)

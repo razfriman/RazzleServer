@@ -5,6 +5,7 @@ using System.Net;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Maps;
 using RazzleServer.Data;
+using RazzleServer.Game.Server;
 using RazzleServer.Net.Packet;
 using Serilog;
 
@@ -14,7 +15,7 @@ namespace RazzleServer.Game
     {
         public byte ChannelId { get; set; }
         public int Population { get; set; }
-        public AWorld World { get; set; }
+        public World World { get; set; }
         public Dictionary<int, Map> Maps { get; set; } = new Dictionary<int, Map>();
 
         public Map this[int id]
@@ -34,7 +35,7 @@ namespace RazzleServer.Game
         public override ILogger Logger => Log.ForContext<GameServer>();
 
 
-        public GameServer(IServerManager manager, AWorld world, ushort port, byte channelId) : base(manager)
+        public GameServer(IServerManager manager, World world, ushort port, byte channelId) : base(manager)
         {
             World = world;
             Port = port;

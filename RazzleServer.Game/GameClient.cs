@@ -6,20 +6,28 @@ using RazzleServer.Common.Util;
 using RazzleServer.Data;
 using RazzleServer.Game.Maple;
 using RazzleServer.Game.Maple.Characters;
-using RazzleServer.Net;
+using RazzleServer.Game.Server;
 using RazzleServer.Net.Packet;
 using Serilog;
 
 namespace RazzleServer.Game
 {
-    public sealed class GameClient : AClient
+    public sealed class GameClient : AMapleClient
     {
         public const int PingDelay = 5000;
-
-        public GameAccount Account { get; set; }
-        public GameServer Server { get; set; }
-        public GameCharacter GameCharacter { get; set; }
         public CancellationTokenSource PingToken { get; set; }
+        public GameAccount Account { get; set; }
+        public GameCharacter GameCharacter { get; set; }
+        public GameServer Server { get; set; }
+
+        public override ILoginServer LoginServer => throw new NotSupportedException(
+            $"Cannot access Login Server from {GetType()}");
+
+        public override IGameServer GameServer => Server;
+
+        public override IShopServer ShopServer => throw new NotSupportedException(
+            $"Cannot access Shop Server from {GetType()}");
+
         public override ILogger Logger => Log.ForContext<GameClient>();
 
         public GameClient(Socket session, GameServer server) : base(session, ServerConfig.Instance.Version,
@@ -86,7 +94,7 @@ namespace RazzleServer.Game
                 Logger.Error(e, $"Error while disconnecting. Account [{Account?.Username}] Character [{save?.Name}]");
             }
         }
-        
+
         public void SetOnline(bool isOnline)
         {
             using var context = new MapleDbContext();
@@ -106,7 +114,7 @@ namespace RazzleServer.Game
             outPacket.WriteUShort(Server.World[channelId].Port);
             Send(outPacket);
         }
-        
+
         public void OpenCashShop()
         {
             GameCharacter.Save();
