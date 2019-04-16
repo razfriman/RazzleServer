@@ -2,7 +2,7 @@
 using System.Linq;
 using RazzleServer.Common.Util;
 
-namespace RazzleServer.Game
+namespace RazzleServer.Game.Server
 {
     public sealed class Migrations : MapleKeyedCollection<string, Migration>
     {

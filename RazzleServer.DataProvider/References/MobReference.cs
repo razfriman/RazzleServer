@@ -148,8 +148,10 @@ namespace RazzleServer.DataProvider.References
                         Traction = node.GetFloat();
                         break;
                     case "flySpeed":
+                        IsFlies = true;
+                        Speed = node.GetShort();
+                        break;
                     case "speed":
-                        IsFlies = node.Name == "flySpeed";
                         Speed = node.GetShort();
                         break;
                     case "revive":

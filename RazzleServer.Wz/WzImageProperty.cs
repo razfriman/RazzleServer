@@ -80,7 +80,7 @@ namespace RazzleServer.Wz
             }
         }
 
-        internal static List<WzImageProperty> ParsePropertyList(uint offset, WzBinaryReader reader, WzObject parent,
+        internal static IEnumerable<WzImageProperty> ParsePropertyList(uint offset, WzBinaryReader reader, WzObject parent,
             WzImage parentImg)
         {
             var entryCount = reader.ReadCompressedInt();

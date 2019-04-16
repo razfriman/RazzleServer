@@ -7,6 +7,7 @@ using RazzleServer.Data;
 using RazzleServer.DataProvider;
 using RazzleServer.Game;
 using RazzleServer.Game.Maple.Scripting;
+using RazzleServer.Game.Server;
 using RazzleServer.Login;
 using RazzleServer.Shop;
 using Serilog;
@@ -16,7 +17,7 @@ namespace RazzleServer
     public class ServerManager : IServerManager, IHostedService
     {
         public ILoginServer Login { get; set; }
-        public AWorlds Worlds { get; } = new Worlds();
+        public Worlds Worlds { get; } = new Worlds();
         public IShopServer Shop { get; set; }
         public Migrations Migrations { get; } = new Migrations();
 

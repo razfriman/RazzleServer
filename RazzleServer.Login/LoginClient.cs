@@ -3,7 +3,7 @@ using System.Linq;
 using System.Net.Sockets;
 using RazzleServer.Common;
 using RazzleServer.Data;
-using RazzleServer.Game;
+using RazzleServer.Game.Server;
 using RazzleServer.Login.Maple;
 using RazzleServer.Net.Packet;
 using Serilog;

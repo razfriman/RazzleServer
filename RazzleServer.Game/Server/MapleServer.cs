@@ -10,7 +10,7 @@ using RazzleServer.Net;
 using RazzleServer.Net.Packet;
 using Serilog;
 
-namespace RazzleServer.Game
+namespace RazzleServer.Game.Server
 {
     public abstract class MapleServer<TClient, TPacketHandler> : IMapleServer
         where TClient : AClient

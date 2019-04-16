@@ -1,9 +1,9 @@
-namespace RazzleServer.Game
+namespace RazzleServer.Game.Server
 {
     public interface IServerManager
     {
         ILoginServer Login { get; set; }
-        AWorlds Worlds { get; }
+        Worlds Worlds { get; }
         IShopServer Shop { get; set; }
         Migrations Migrations { get; }
         int ValidateMigration(string host, int characterId);

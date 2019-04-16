@@ -1,7 +1,7 @@
 using System.Net.Sockets;
 using RazzleServer.Net;
 
-namespace RazzleServer.Game
+namespace RazzleServer.Game.Server
 {
     public abstract class AMapleClient : AClient
     {

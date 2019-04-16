@@ -2,6 +2,7 @@ using System;
 using RazzleServer.Common;
 using RazzleServer.Common.Constants;
 using RazzleServer.Game;
+using RazzleServer.Game.Server;
 using RazzleServer.Login;
 using Serilog;
 
@@ -10,7 +11,7 @@ namespace RazzleServer.Tests.Util
     public class FakeServerManager : IServerManager
     {
         public ILoginServer Login { get; set; }
-        public AWorlds Worlds { get; } = new Worlds();
+        public Worlds Worlds { get; } = new Worlds();
         public IShopServer Shop { get; set; }
         public Migrations Migrations { get; } = new Migrations();
 
