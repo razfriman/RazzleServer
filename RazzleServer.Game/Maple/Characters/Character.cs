@@ -298,7 +298,7 @@ namespace RazzleServer.Game.Maple.Characters
             pw.WriteShort(PrimaryStats.SkillPoints);
             pw.WriteInt(PrimaryStats.Experience);
             pw.WriteShort(PrimaryStats.Fame);
-            pw.WriteInt(Map.MapleId);
+            pw.WriteInt(MapId);
             pw.WriteByte(SpawnPoint);
             pw.WriteLong(0);
             pw.WriteInt(0);

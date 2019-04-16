@@ -27,9 +27,7 @@ namespace RazzleServer.Net
         public ushort Port { get; }
 
         public MapleCipherProvider Cipher { get; }
-
-        public const int MinimumBufferSize = 512;
-
+        
         public ClientSocket(Socket socket, AClient client, ushort version, ulong aesKey, bool useAesEncryption,
             bool toClient)
         {
@@ -63,15 +61,23 @@ namespace RazzleServer.Net
             {
                 try
                 {
-                    var memory = _pipe.Writer.GetMemory(MinimumBufferSize);
+                    var memory = _pipe.Writer.GetMemory();
                     var bytesRead = await _socket.ReceiveAsync(memory, SocketFlags.None);
-
+                    
                     if (bytesRead == 0)
                     {
                         break;
                     }
+                    
+                    var packetLength = Cipher.GetHeader(memory.Span);
 
-                    _pipe.Writer.Advance(bytesRead);
+                    Console.WriteLine($"Got={bytesRead} NextPacket={packetLength}");
+                    if (bytesRead >= packetLength)
+                    {
+                        _pipe.Writer.Advance(packetLength);
+                    }
+
+                    _pipe.Writer.Advance(0);
                 }
                 catch (Exception e)
                 {
