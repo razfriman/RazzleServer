@@ -174,7 +174,7 @@ namespace RazzleServer.Game.Handlers
 
             if (destinationMapId != -1)
             {
-                var originMap = CachedData.Maps.Data[client.GameCharacter.MapId];
+                var originMap = CachedData.Maps.Data[client.GameCharacter.Map.MapleId];
                 var destinationMap = CachedData.Maps.Data[destinationMapId];
 
                 if (originMap.MapleId == destinationMap.MapleId)

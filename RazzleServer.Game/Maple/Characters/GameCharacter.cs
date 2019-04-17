@@ -256,7 +256,7 @@ namespace RazzleServer.Game.Maple.Characters
         public override void Load()
         {
             base.Load();
-            Map = Client?.Server[MapId];
+            Map = Client?.Server[Map.MapleId];
         }
 
         public override void Hide(bool isHidden)
