@@ -68,16 +68,8 @@ namespace RazzleServer.Net
                     {
                         break;
                     }
-                    
-                    var packetLength = Cipher.GetHeader(memory.Span);
 
-                    Console.WriteLine($"Got={bytesRead} NextPacket={packetLength}");
-                    if (bytesRead >= packetLength)
-                    {
-                        _pipe.Writer.Advance(packetLength);
-                    }
-
-                    _pipe.Writer.Advance(0);
+                    _pipe.Writer.Advance(bytesRead);
                 }
                 catch (Exception e)
                 {
