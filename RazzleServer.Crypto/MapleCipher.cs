@@ -56,7 +56,7 @@ namespace RazzleServer.Crypto
         /// <summary>
         /// Encrypts packet data
         /// </summary>
-        public Span<byte> Encrypt(Span<byte> data, bool toClient)
+        public Span<byte> Encrypt(ReadOnlySpan<byte> data, bool toClient)
         {
             if (!Handshaken || MapleIv == null)
             {

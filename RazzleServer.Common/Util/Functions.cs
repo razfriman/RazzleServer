@@ -159,10 +159,8 @@ namespace RazzleServer.Common.Util
 
         public static string RandomString(int length = 20)
         {
-            var data = new byte[1];
             using var crypto = new RNGCryptoServiceProvider();
-            crypto.GetNonZeroBytes(data);
-            data = new byte[length];
+            var data = new byte[length];
             crypto.GetNonZeroBytes(data);
 
             var result = new StringBuilder(length);

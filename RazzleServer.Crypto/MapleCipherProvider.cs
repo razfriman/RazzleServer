@@ -63,7 +63,7 @@ namespace RazzleServer.Crypto
         /// <summary>
         /// Encrypts packet data
         /// </summary>
-        public Span<byte> Encrypt(Span<byte> data, bool toClient = false) => SendCipher.Encrypt(data, toClient);
+        public Span<byte> Encrypt(ReadOnlySpan<byte> data, bool toClient = false) => SendCipher.Encrypt(data, toClient);
 
         /// <summary>
         /// Decrypts the packet data
@@ -103,6 +103,8 @@ namespace RazzleServer.Crypto
         }
 
         public int ReceiveHeaderSize => RecvCipher.Handshaken ? 4 : 2;
+
+        public int GetHeaderLength => RecvCipher.Handshaken ? 4 : 2;
         
         /// <summary>
         /// Gets the packet header from the current packet.

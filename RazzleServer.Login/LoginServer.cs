@@ -17,7 +17,7 @@ namespace RazzleServer.Login
             Port = ServerConfig.Instance.LoginPort;
         }
 
-        public void Start() => Start(new IPAddress(new byte[] {0, 0, 0, 0}), Port);
+        public void Start() => Start(IPAddress.Any, Port);
 
         public override ILogger Logger => Log.ForContext<LoginServer>();
 

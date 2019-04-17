@@ -42,7 +42,7 @@ namespace RazzleServer.Game
             ChannelId = channelId;
         }
 
-        public void Start() => Start(new IPAddress(new byte[] {0, 0, 0, 0}), Port);
+        public void Start() => Start(IPAddress.Any, Port);
 
         public override void Dispose() => Shutdown();
 
