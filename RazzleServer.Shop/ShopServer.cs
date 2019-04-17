@@ -14,7 +14,7 @@ namespace RazzleServer.Shop
     {
         public ShopServer(IServerManager manager) : base(manager) => Port = ServerConfig.Instance.ShopPort;
 
-        public void Start() => Start(new IPAddress(new byte[] {0, 0, 0, 0}), Port);
+        public void Start() => Start(IPAddress.Any, Port);
 
         public override ILogger Logger => Log.ForContext<ShopServer>();
 

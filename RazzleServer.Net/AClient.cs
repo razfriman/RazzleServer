@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net.Sockets;
-using System.Threading.Tasks;
 using RazzleServer.Common.Util;
 using RazzleServer.Net.Packet;
 using Serilog;
@@ -46,22 +45,17 @@ namespace RazzleServer.Net
                 Logger.Information($"Sending [{packet.Header}] {packetData.ByteArrayToString()}");
             }
 
-            Socket?.Send(packetData).GetAwaiter().GetResult();
+            Socket?.Send(packetData);
         }
 
-        public void Send(byte[] packet) => SendAsync(packet).ConfigureAwait(false).GetAwaiter().GetResult();
-
-        public virtual async Task SendAsync(byte[] packet)
+        public void Send(byte[] packet)
         {
             if (PrintPackets)
             {
                 Logger.Information($"Sending: {packet.ByteArrayToString()}");
             }
 
-            if (Socket != null)
-            {
-                await Socket.Send(packet);
-            }
+            Socket?.Send(packet);
         }
 
         public virtual void Terminate(string message = null)
@@ -70,7 +64,7 @@ namespace RazzleServer.Net
             Socket?.Disconnect();
         }
 
-        public async Task SendHandshake()
+        public void SendHandshake()
         {
             if (Socket == null)
             {
@@ -88,7 +82,7 @@ namespace RazzleServer.Net
             writer.WriteUInt(rIv);
             writer.WriteUInt(sIv);
             writer.WriteByte(ServerType);
-            await Socket.SendRawPacket(writer.ToArray());
+            Socket.SendRawPacket(writer.ToArray());
         }
 
         public void Dispose() => Socket?.Dispose();

@@ -73,14 +73,14 @@ namespace RazzleServer.Game.Server
 
         public bool AllowConnection(string address) => true;
 
-        public async Task<TClient> GenerateClient(Socket socket)
+        public void GenerateClient(Socket socket)
         {
             var ip = ((IPEndPoint)socket.RemoteEndPoint).Address.ToString();
             if (!AllowConnection(ip))
             {
                 socket.Shutdown(SocketShutdown.Both);
                 Logger.Warning("Rejected Client");
-                return null;
+                return;
             }
 
             Logger.Information("Client Connected");
@@ -91,20 +91,18 @@ namespace RazzleServer.Game.Server
             {
                 if (client == null)
                 {
-                    return null;
+                    return;
                 }
 
-                await client.SendHandshake();
+                client.SendHandshake();
                 client.Key = $"{ip}-{Functions.Random()}";
                 AddClient(client);
-                return client;
             }
             catch (Exception e)
             {
                 Logger.Error(e, "Error sending handshake. Disconnecting.");
                 client?.Terminate(e.ToString());
                 RemoveClient(client);
-                return null;
             }
         }
 
@@ -156,7 +154,7 @@ namespace RazzleServer.Game.Server
                     break;
                 }
 
-                await GenerateClient(socket);
+                GenerateClient(socket);
             }
         }
 
