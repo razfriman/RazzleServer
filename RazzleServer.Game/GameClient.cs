@@ -4,7 +4,6 @@ using System.Threading;
 using RazzleServer.Common;
 using RazzleServer.Common.Util;
 using RazzleServer.Data;
-using RazzleServer.Game.Maple;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Server;
 using RazzleServer.Net.Packet;
@@ -16,7 +15,6 @@ namespace RazzleServer.Game
     {
         public const int PingDelay = 5000;
         public CancellationTokenSource PingToken { get; set; }
-        public GameAccount Account { get; set; }
         public GameCharacter GameCharacter { get; set; }
         public GameServer Server { get; set; }
 
@@ -35,6 +33,7 @@ namespace RazzleServer.Game
             ServerConfig.Instance.UseAesEncryption, ServerConfig.Instance.PrintPackets, true)
         {
             Server = server;
+            
         }
 
         public override void Receive(PacketReader packet)

@@ -1,34 +1,21 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Exceptions;
 using RazzleServer.Data;
+using RazzleServer.Game.Server;
 using Serilog;
 
 namespace RazzleServer.Login.Maple
 {
-    public sealed class LoginAccount
+    public sealed class LoginAccount : AMapleAccount
     {
         public LoginClient Client { get; }
-        public int Id { get; private set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public string Salt { get; set; }
-        public Gender Gender { get; set; }
-        public BanReasonType BanReason { get; set; }
-        public bool IsMaster { get; set; }
-        public bool IsOnline { get; set; }
-        public DateTime Birthday { get; set; }
-        public DateTime Creation { get; set; }
 
         private readonly ILogger _log = Log.ForContext<LoginAccount>();
 
-        public LoginAccount(LoginClient client)
-        {
-            Client = client;
-        }
+        public LoginAccount(LoginClient client) => Client = client;
 
-        public void Load()
+        public override void Load()
         {
             using var dbContext = new MapleDbContext();
             var account = dbContext.Accounts.FirstOrDefault(x => x.Username == Username);
@@ -49,7 +36,7 @@ namespace RazzleServer.Login.Maple
             IsMaster = account.IsMaster;
         }
 
-        public void Save()
+        public override void Save()
         {
             using var dbContext = new MapleDbContext();
             var account = dbContext.Accounts.Find(Id);
@@ -72,7 +59,7 @@ namespace RazzleServer.Login.Maple
             dbContext.SaveChanges();
         }
 
-        public void Create()
+        public override void Create()
         {
             using var dbContext = new MapleDbContext();
             var account = dbContext.Accounts.FirstOrDefault(x => x.Username == Username);

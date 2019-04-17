@@ -7,7 +7,6 @@ using RazzleServer.Data;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Server;
 using RazzleServer.Net.Packet;
-using RazzleServer.Shop.Maple;
 using Serilog;
 
 namespace RazzleServer.Shop
@@ -16,7 +15,6 @@ namespace RazzleServer.Shop
     {
         public const int PingDelay = 5000;
 
-        public ShopAccount Account { get; set; }
         public Character Character { get; set; }
         public CancellationTokenSource PingToken { get; set; }
         public ShopServer Server { get; set; }
