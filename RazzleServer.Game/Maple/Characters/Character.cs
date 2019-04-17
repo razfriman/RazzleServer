@@ -21,7 +21,6 @@ namespace RazzleServer.Game.Maple.Characters
         public int AccountId { get; set; }
         public byte WorldId { get; set; }
         public string Name { get; set; }
-        public int MapId { get; set; }
         public bool IsInitialized { get; set; }
         public byte SpawnPoint { get; set; }
         public byte Stance { get; set; }
@@ -225,7 +224,6 @@ namespace RazzleServer.Game.Maple.Characters
             Name = character.Name;
             AccountId = character.AccountId;
             PrimaryStats.Load(character);
-            MapId = character.MapId;
             Map = new Map(character.MapId);
             SpawnPoint = character.SpawnPoint;
             WorldId = character.WorldId;
@@ -288,7 +286,7 @@ namespace RazzleServer.Game.Maple.Characters
             pw.WriteShort(PrimaryStats.SkillPoints);
             pw.WriteInt(PrimaryStats.Experience);
             pw.WriteShort(PrimaryStats.Fame);
-            pw.WriteInt(MapId);
+            pw.WriteInt(Map.MapleId);
             pw.WriteByte(SpawnPoint);
             pw.WriteLong(0);
             pw.WriteInt(0);

@@ -30,11 +30,8 @@ namespace RazzleServer.Game
 
         public GameClient(Socket session, GameServer server) : base(session, ServerConfig.Instance.Version,
             ServerConfig.Instance.SubVersion, ServerConfig.Instance.ServerType, ServerConfig.Instance.AesKey,
-            ServerConfig.Instance.UseAesEncryption, ServerConfig.Instance.PrintPackets, true)
-        {
+            ServerConfig.Instance.UseAesEncryption, ServerConfig.Instance.PrintPackets, true) =>
             Server = server;
-            
-        }
 
         public override void Receive(PacketReader packet)
         {

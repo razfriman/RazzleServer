@@ -5,6 +5,7 @@ using RazzleServer.Common.Constants;
 using RazzleServer.DataProvider;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Items;
+using RazzleServer.Game.Maple.Maps;
 using RazzleServer.Login.Maple;
 using RazzleServer.Net.Packet;
 
@@ -36,7 +37,7 @@ namespace RazzleServer.Login.Handlers
                 AccountId = client.Account.Id,
                 WorldId = client.World,
                 Name = name,
-                MapId = ServerConfig.Instance.DefaultMapId
+                Map = new Map(ServerConfig.Instance.DefaultMapId)
             };
             character.PrimaryStats = new CharacterStats(character)
             {
