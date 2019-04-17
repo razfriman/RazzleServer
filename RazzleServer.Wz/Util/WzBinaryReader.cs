@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using System.Text;
 using RazzleServer.Crypto;
 
@@ -45,20 +46,9 @@ namespace RazzleServer.Wz.Util
 
         private string ReadAsciiString(sbyte smallLength)
         {
-            var retString = new StringBuilder();
             byte mask = 0xAA;
             var length = smallLength == sbyte.MinValue ? ReadInt32() : -smallLength;
-
-            for (var i = 0; i < length; i++)
-            {
-                var encryptedChar = ReadByte();
-                encryptedChar ^= mask;
-                encryptedChar ^= WzKey[i];
-                retString.Append((char)encryptedChar);
-                mask++;
-            }
-
-            return retString.ToString();
+            return new string(ReadBytes(length).Select((x, index) => (char)(x ^ mask++ ^ WzKey[index])).ToArray());
         }
 
         private string ReadUnicodeString(sbyte smallLength)
@@ -66,8 +56,8 @@ namespace RazzleServer.Wz.Util
             var retString = new StringBuilder();
             ushort mask = 0xAAAA;
             var length = smallLength == sbyte.MaxValue ? ReadInt32() : smallLength;
-
-
+            
+            
             for (var i = 0; i < length; i++)
             {
                 var encryptedChar = ReadUInt16();

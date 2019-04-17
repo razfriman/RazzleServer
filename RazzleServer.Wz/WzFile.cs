@@ -128,7 +128,7 @@ namespace RazzleServer.Wz
                 throw new FileNotFoundException(message);
             }
 
-            var reader = new WzBinaryReader(File.Open(FilePath, FileMode.Open, FileAccess.Read, FileShare.Read), _wzIv);
+            var reader = new WzBinaryReader(new MemoryStream(File.ReadAllBytes(FilePath)), _wzIv);
 
             Header = new WzHeader
             {

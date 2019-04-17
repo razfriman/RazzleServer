@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using RazzleServer.DataProvider.Cache;
 using RazzleServer.DataProvider.References;
+using RazzleServer.Wz;
 using Serilog;
 
 namespace RazzleServer.DataProvider.Loaders
@@ -11,12 +12,10 @@ namespace RazzleServer.DataProvider.Loaders
 
         public override ILogger Logger => Log.ForContext<MobSkillsLoader>();
 
-        public override void LoadFromWz()
+        public override void LoadFromWz(WzFile file)
         {
             Logger.Information("Loading MobSkills");
-
-            using var file = GetWzFile("Data.wz");
-            file.ParseWzFile();
+            
             var dir = file.WzDirectory.GetDirectoryByName("Skill");
 
             foreach (var skillImg in dir.GetImageByName("MobSkill.img").WzProperties)

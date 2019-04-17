@@ -11,12 +11,10 @@ namespace RazzleServer.DataProvider.Loaders
 
         public override ILogger Logger => Log.ForContext<StringLoader>();
 
-        public override void LoadFromWz()
+        public override void LoadFromWz(WzFile file)
         {
             Logger.Information("Loading Strings");
 
-            using var file = GetWzFile("Data.wz");
-            file.ParseWzFile();
             var dir = file.WzDirectory.GetDirectoryByName("String");
             ProcessItems(dir.GetImageByName("Item.img"));
             ProcessMaps(dir.GetImageByName("Map.img"));

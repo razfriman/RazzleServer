@@ -1,4 +1,5 @@
 using RazzleServer.DataProvider.Cache;
+using RazzleServer.Wz;
 using Serilog;
 
 namespace RazzleServer.DataProvider.Loaders
@@ -9,7 +10,7 @@ namespace RazzleServer.DataProvider.Loaders
 
         public override ILogger Logger => Log.ForContext<QuestsLoader>();
 
-        public override void LoadFromWz()
+        public override void LoadFromWz(WzFile file)
         {
             Logger.Information("Loading Quests");
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using RazzleServer.Wz.Util;
 using RazzleServer.Wz.WzProperties;
@@ -15,7 +16,7 @@ namespace RazzleServer.Wz
     /// </summary>
     public class WzImage : WzObject, IPropertyContainer
     {
-        private List<WzImageProperty> _properties = new List<WzImageProperty>();
+        private Dictionary<string, WzImageProperty> _properties = new Dictionary<string, WzImageProperty>();
 
         internal WzBinaryReader Reader { get; }
 
@@ -56,7 +57,7 @@ namespace RazzleServer.Wz
         {
             Name = null;
             Reader?.Dispose();
-            _properties?.ForEach(x => x.Dispose());
+            _properties?.Values.ToList().ForEach(x => x.Dispose());
             _properties?.Clear();
             _properties = null;
         }
@@ -120,7 +121,7 @@ namespace RazzleServer.Wz
                     ParseImage();
                 }
 
-                return _properties;
+                return _properties.Values.ToList();
             }
         }
 
@@ -132,7 +133,7 @@ namespace RazzleServer.Wz
             }
 
             var clone = new WzImage(Name) {Changed = true};
-            foreach (var prop in _properties)
+            foreach (var prop in _properties.Values)
             {
                 clone.AddProperty(prop.DeepClone());
             }
@@ -149,23 +150,12 @@ namespace RazzleServer.Wz
         {
             get
             {
-                if (Reader != null)
+                if (Reader != null && !Parsed)
                 {
-                    if (!Parsed)
-                    {
-                        ParseImage();
-                    }
+                    ParseImage();
                 }
 
-                foreach (var iwp in _properties)
-                {
-                    if (iwp.Name.ToLower() == name.ToLower())
-                    {
-                        return iwp;
-                    }
-                }
-
-                return null;
+                return _properties.GetValueOrDefault(name, null);
             }
             set
             {
@@ -204,7 +194,7 @@ namespace RazzleServer.Wz
             foreach (var segment in segments)
             {
                 var foundChild = false;
-                foreach (var iwp in ret == null ? _properties : ret.WzProperties)
+                foreach (var iwp in ret == null ? _properties.Values.ToList() : ret.WzProperties)
                 {
                     if (iwp.Name != segment)
                     {
@@ -237,7 +227,7 @@ namespace RazzleServer.Wz
                 ParseImage();
             }
 
-            _properties.Add(prop);
+            _properties.Add(prop.Name, prop);
         }
 
         public void AddProperties(IEnumerable<WzImageProperty> props)
@@ -260,12 +250,12 @@ namespace RazzleServer.Wz
             }
 
             prop.Parent = null;
-            _properties.Remove(prop);
+            _properties.Remove(prop.Name);
         }
 
         public void ClearProperties()
         {
-            foreach (var prop in _properties)
+            foreach (var prop in _properties.Values)
             {
                 prop.Parent = null;
             }
@@ -302,7 +292,8 @@ namespace RazzleServer.Wz
                 return;
             }
 
-            _properties.AddRange(WzImageProperty.ParsePropertyList(Offset, Reader, this, this));
+            var parsedProps = WzImageProperty.ParsePropertyList(Offset, Reader, this, this).ToList();
+            parsedProps.ForEach(x => _properties.Add(x.Name, x));
             Parsed = true;
         }
 
@@ -330,7 +321,8 @@ namespace RazzleServer.Wz
                 return;
             }
 
-            _properties.AddRange(WzImageProperty.ParsePropertyList(Offset, Reader, this, this));
+            var parsedProps = WzImageProperty.ParsePropertyList(Offset, Reader, this, this).ToList();
+            parsedProps.ForEach(x => _properties.Add(x.Name, x));
             Parsed = true;
         }
 
@@ -353,7 +345,7 @@ namespace RazzleServer.Wz
         public void UnparseImage()
         {
             Parsed = false;
-            _properties = new List<WzImageProperty>();
+            _properties.Clear();
         }
 
         internal void SaveImage(WzBinaryWriter writer)

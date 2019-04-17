@@ -10,12 +10,10 @@ namespace RazzleServer.DataProvider.Loaders
 
         public override ILogger Logger => Log.ForContext<AvailableStylesDataLoader>();
 
-        public override void LoadFromWz()
+        public override void LoadFromWz(WzFile file)
         {
             Logger.Information("Loading Character Creation Data");
 
-            using var file = GetWzFile("Data.wz");
-            file.ParseWzFile();
             var dir = file.WzDirectory.GetDirectoryByName("Character");
             LoadSkins();
             LoadHairs(dir.GetDirectoryByName("Hair"));

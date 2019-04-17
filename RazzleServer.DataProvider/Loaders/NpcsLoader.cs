@@ -1,5 +1,6 @@
 ﻿using RazzleServer.DataProvider.Cache;
 using RazzleServer.DataProvider.References;
+using RazzleServer.Wz;
 using Serilog;
 
 namespace RazzleServer.DataProvider.Loaders
@@ -10,12 +11,10 @@ namespace RazzleServer.DataProvider.Loaders
 
         public override ILogger Logger => Log.ForContext<NpcsLoader>();
 
-        public override void LoadFromWz()
+        public override void LoadFromWz(WzFile file)
         {
             Logger.Information("Loading Npcs");
-
-            using var file = GetWzFile("Data.wz");
-            file.ParseWzFile();
+            
             var dir = file.WzDirectory.GetDirectoryByName("Npc");
 
             dir.WzImages.ForEach(x =>

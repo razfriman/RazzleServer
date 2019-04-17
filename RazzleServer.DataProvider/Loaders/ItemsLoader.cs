@@ -13,14 +13,12 @@ namespace RazzleServer.DataProvider.Loaders
 
         public override ILogger Logger => Log.ForContext<ItemsLoader>();
 
-        public override void LoadFromWz()
+        public override void LoadFromWz(WzFile file)
         {
             Logger.Information("Loading Items from WZ");
 
             Logger.Information("Loading Regular Items");
-
-            using var file = GetWzFile("Data.wz");
-            file.ParseWzFile();
+            
             var itemDir = file.WzDirectory.GetDirectoryByName("Item");
             var characterDir = file.WzDirectory.GetDirectoryByName("Character");
 

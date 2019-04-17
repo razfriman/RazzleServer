@@ -163,11 +163,7 @@ namespace RazzleServer.Wz.Util
 
         public void WriteNullTerminatedString(string value)
         {
-            foreach (var chr in value)
-            {
-                Write((byte)chr);
-            }
-
+            Write(value.ToCharArray().Select(x => (byte)x).ToArray());
             Write((byte)0);
         }
 

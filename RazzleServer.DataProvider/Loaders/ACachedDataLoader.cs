@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using RazzleServer.Common;
 using RazzleServer.Wz;
@@ -16,33 +15,47 @@ namespace RazzleServer.DataProvider.Loaders
 
         public T Data { get; private set; } = new T();
 
-        public async Task<T> Load()
+        public T Load()
         {
             var path = Path.Combine(ServerConfig.Instance.CacheFolder, $"{CacheName}.cache");
             if (File.Exists(path))
             {
                 try
                 {
-                    await LoadFromCache();
+                    throw new Exception();
+                    //LoadFromCache();
                 }
                 catch (Exception e)
                 {
                     Logger.Error(e, $"Error loading [{CacheName}] cache. Attempting to load from WZ. CachePath={path}");
-                    LoadFromWz();
-                    await SaveToCache();
+                    EnsureWzFileReady();
+                    LoadFromWz(CachedData.WzFile);
+                    SaveToCache();
                 }
             }
             else
             {
                 Logger.Information($"[{CacheName}] cache not found. Attempting to load from WZ. CachePath={path}");
-                LoadFromWz();
-                await SaveToCache();
+                EnsureWzFileReady();
+                LoadFromWz(CachedData.WzFile);
+                SaveToCache();
             }
 
             return Data;
         }
 
-        public Task SaveToCache()
+        private static void EnsureWzFileReady()
+        {
+            if (CachedData.WzFile != null)
+            {
+                return;
+            }
+
+            CachedData.WzFile = GetWzFile("Data.wz");
+            CachedData.WzFile.ParseWzFile();
+        }
+
+        public void SaveToCache()
         {
             Directory.CreateDirectory(ServerConfig.Instance.CacheFolder);
             var path = Path.Combine(ServerConfig.Instance.CacheFolder, $"{CacheName}.cache");
@@ -58,10 +71,9 @@ namespace RazzleServer.DataProvider.Loaders
             serializer.Serialize(writer, Data);
 
             Logger.Information($"Saving [{CacheName}] to cached file");
-            return Task.CompletedTask;
         }
 
-        public Task LoadFromCache()
+        public void LoadFromCache()
         {
             var path = Path.Combine(ServerConfig.Instance.CacheFolder, $"{CacheName}.cache");
 
@@ -71,13 +83,11 @@ namespace RazzleServer.DataProvider.Loaders
             var serializer = new JsonSerializer();
             Data = serializer.Deserialize<T>(reader);
             Logger.Information($"Loaded [{CacheName}] from cache");
-
-            return Task.CompletedTask;
         }
 
-        public abstract void LoadFromWz();
+        public abstract void LoadFromWz(WzFile file);
 
-        public WzFile GetWzFile(string name) => new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, name),
+        public static WzFile GetWzFile(string name) => new WzFile(Path.Combine(ServerConfig.Instance.WzFilePath, name),
             (short)ServerConfig.Instance.Version, WzMapleVersionType.Classic);
     }
 }
