@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using RazzleServer.Common.Constants;
 using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Game.Server;
 using RazzleServer.Net.Packet;
 
 namespace RazzleServer.Shop.Maple
@@ -8,17 +9,14 @@ namespace RazzleServer.Shop.Maple
     public class ShopCharacter : Character
     {
         private ShopClient Client { get; set; }
+        public override AMapleClient BaseClient => Client;
 
-        public ShopCharacter() : base()
+        public ShopCharacter()
         {
-            
         }
-        
-        public ShopCharacter(int id, ShopClient client) :base(id, client)
-        {
-            Client = client;
-        }
-        
+
+        public ShopCharacter(int id, ShopClient client) : base(id) => Client = client;
+
         public override void Initialize()
         {
             SendEnterField();
@@ -28,8 +26,8 @@ namespace RazzleServer.Shop.Maple
             SendGifts();
             Client.StartPingCheck();
         }
-        
-         public void SendEnterField()
+
+        public void SendEnterField()
         {
             using var pw = new PacketWriter(ServerOperationCode.SetFieldCashShop);
 

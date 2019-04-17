@@ -12,7 +12,7 @@ namespace RazzleServer.Game.Maple.Scripting.Loaders
         public override Task LoadScripts()
         {
             var types = Assembly
-                .GetEntryAssembly()
+                .GetAssembly(typeof(ANpcScript))
                 .GetTypes()
                 .Where(x => x.IsSubclassOf(typeof(ANpcScript)))
                 .ToList();

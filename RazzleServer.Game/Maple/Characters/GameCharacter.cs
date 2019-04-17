@@ -2,21 +2,24 @@
 using RazzleServer.Common.Constants;
 using RazzleServer.DataProvider;
 using RazzleServer.DataProvider.References;
+using RazzleServer.Game.Maple.Items;
 using RazzleServer.Game.Maple.Life;
 using RazzleServer.Game.Maple.Maps;
 using RazzleServer.Game.Maple.Scripting;
 using RazzleServer.Game.Maple.Util;
+using RazzleServer.Game.Server;
 using RazzleServer.Net.Packet;
 using Serilog;
 
 namespace RazzleServer.Game.Maple.Characters
 {
-    public partial class GameCharacter : Character, IMoveable, ISpawnable
+    public class GameCharacter : Character, IMoveable, ISpawnable
     {
         private readonly ILogger _log = Log.ForContext<GameCharacter>();
 
         public GameClient Client { get; }
         public ANpcScript NpcScript { get; set; }
+        public override AMapleClient BaseClient => Client;
 
         public Portal ClosestPortal
         {
@@ -66,10 +69,7 @@ namespace RazzleServer.Game.Maple.Characters
         }
 
 
-        public GameCharacter(int id = 0, GameClient client = null) : base(id, client)
-        {
-            Client = client;
-        }
+        public GameCharacter(int id = 0, GameClient client = null) : base(id) => Client = client;
 
         public override void Initialize()
         {
@@ -253,6 +253,12 @@ namespace RazzleServer.Game.Maple.Characters
             base.Save();
         }
 
+        public override void Load()
+        {
+            base.Load();
+            Map = Client?.Server[MapId];
+        }
+
         public override void Hide(bool isHidden)
         {
             if (isHidden)
@@ -276,6 +282,81 @@ namespace RazzleServer.Game.Maple.Characters
             pw.WriteInt(Id);
             pw.WriteInt(ItemEffect);
             Map.Send(pw, this);
+        }
+        
+        public byte[] DataToByteArray()
+        {
+            var pw = new PacketWriter();
+            pw.WriteBytes(StatisticsToByteArray());
+            pw.WriteByte(PrimaryStats.BuddyListSlots);
+            pw.WriteInt(PrimaryStats.Meso);
+            pw.WriteBytes(Items.ToByteArray());
+            pw.WriteBytes(Skills.ToByteArray());
+            pw.WriteBytes(Quests.ToByteArray());
+            pw.WriteShort(0); // Mini games (5 ints)
+            pw.WriteBytes(Rings.ToByteArray());
+            pw.WriteBytes(TeleportRocks.ToByteArray());
+            return pw.ToArray();
+        }
+
+        public PacketWriter GetCreatePacket() => GetSpawnPacket();
+
+        public PacketWriter GetSpawnPacket()
+        {
+            using var pw = new PacketWriter(ServerOperationCode.RemotePlayerEnterField);
+            pw.WriteInt(Id);
+            pw.WriteString(Name);
+            pw.WriteBytes(Buffs.ToMapBuffValues());
+            pw.WriteShort((short)PrimaryStats.Job);
+            pw.WriteBytes(AppearanceToByteArray());
+            pw.WriteInt(Items.Available(5110000));
+            pw.WriteInt(ItemEffect);
+            pw.WriteInt(Item.GetType(Chair) == ItemType.Setup ? Chair : 0);
+            pw.WritePoint(Position);
+            pw.WriteByte(Stance);
+            pw.WriteShort(Foothold);
+
+            var pet = Pets.GetEquippedPet();
+            pw.WriteBool(pet != null);
+            if (pet != null)
+            {
+                pw.WriteInt(pet.Item.Id);
+                pw.WriteString(pet.Name);
+                pw.WriteLong(pet.Item.CashId);
+                pw.WritePoint(pet.Position);
+                pw.WriteByte(pet.Stance);
+                pw.WriteShort(pet.Foothold);
+            }
+
+            if (PlayerShop != null && PlayerShop.Owner == this)
+            {
+                pw.WriteByte(InteractionType.PlayerShop);
+                pw.WriteInt(PlayerShop.ObjectId);
+                pw.WriteString(PlayerShop.Description);
+                pw.WriteBool(PlayerShop.IsPrivate);
+                pw.WriteByte(0);
+                pw.WriteByte(1);
+                pw.WriteByte(PlayerShop.IsFull ? 1 : 2); // NOTE: Visitor availability.
+                pw.WriteByte(0);
+            }
+            else
+            {
+                pw.WriteByte(0);
+            }
+
+            pw.WriteByte(0); // NOTE: Couple ring.
+            pw.WriteByte(0); // NOTE: Friendship ring.
+            pw.WriteByte(0); // NOTE: Marriage ring.
+            pw.WriteByte(0);
+
+            return pw;
+        }
+
+        public PacketWriter GetDestroyPacket()
+        {
+            using var pw = new PacketWriter(ServerOperationCode.RemotePlayerLeaveField);
+            pw.WriteInt(Id);
+            return pw;
         }
     }
 }

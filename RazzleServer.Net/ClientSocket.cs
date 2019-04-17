@@ -179,13 +179,18 @@ namespace RazzleServer.Net
 
         public void Disconnect()
         {
+            if (!Connected)
+            {
+                return;
+            }
+
             _log.Information("Client Disconnected");
             Dispose();
         }
 
         public void Dispose()
         {
-            if (_disposed)
+            if (!Connected)
             {
                 return;
             }
