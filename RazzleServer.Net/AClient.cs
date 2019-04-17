@@ -17,7 +17,7 @@ namespace RazzleServer.Net
         public ushort Port { get; set; }
         public ClientSocket Socket { get; set; }
         public bool Connected { get; set; }
-        public DateTime LastPong { get; set; }
+        public DateTime LastPong { get; set; } = DateTime.UtcNow;
         public string Key { get; set; }
         public abstract ILogger Logger { get; }
 

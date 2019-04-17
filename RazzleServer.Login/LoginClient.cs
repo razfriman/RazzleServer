@@ -4,7 +4,6 @@ using System.Net.Sockets;
 using RazzleServer.Common;
 using RazzleServer.Data;
 using RazzleServer.Game.Server;
-using RazzleServer.Login.Maple;
 using RazzleServer.Net.Packet;
 using Serilog;
 
@@ -14,7 +13,6 @@ namespace RazzleServer.Login
     {
         public byte World { get; internal set; }
         public byte Channel { get; internal set; }
-        public LoginAccount Account { get; internal set; }
         public string LastUsername { get; internal set; }
         public string LastPassword { get; internal set; }
         public bool ThrowOnExceptions { get; protected internal set; }

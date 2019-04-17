@@ -18,7 +18,6 @@ namespace RazzleServer.Game.Maple.Characters
     public abstract class Character : IMapObject
     {
         public int Id { get; set; }
-        public AMapleClient BaseClient { get; set; }
         public int AccountId { get; set; }
         public byte WorldId { get; set; }
         public string Name { get; set; }
@@ -52,7 +51,7 @@ namespace RazzleServer.Game.Maple.Characters
         public CharacterDamage Damage { get; set; }
 
         public Map Map { get; set; }
-        
+
         public int ObjectId { get; set; }
         public Point Position { get; set; }
         private bool Assigned { get; set; }
@@ -61,14 +60,14 @@ namespace RazzleServer.Game.Maple.Characters
         private int _itemEffect;
         private readonly ILogger _log = Log.ForContext<Character>();
         public bool IsAlive => PrimaryStats.Health > 0;
-
-        public bool IsMaster => false;
-
         public bool FacesLeft => Stance % 2 == 0;
 
         public bool IsRanked => PrimaryStats.Level >= 30;
 
         public QuestReference LastQuest { get; set; }
+        public AMapleAccount Account => BaseClient.Account;
+        public bool IsMaster => Account.IsMaster;
+        public abstract AMapleClient BaseClient { get; }
 
         public int ItemEffect
         {
@@ -80,10 +79,9 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        protected Character(int id = 0, AMapleClient client = null)
+        protected Character(int id = 0)
         {
             Id = id;
-            BaseClient = client;
             Items = new CharacterItems(this, 100, 100, 100, 100, 100);
             Pets = new CharacterPets(this);
             Skills = new CharacterSkills(this);
@@ -107,34 +105,29 @@ namespace RazzleServer.Game.Maple.Characters
 
         public virtual void Notify(string message, NoticeType type = NoticeType.PinkText)
         {
-            
         }
 
         public virtual void Revive()
         {
-            
         }
+
         public virtual void ChangeMap(int mapId, string portalLabel)
         {
-           
         }
 
         public virtual void ChangeMap(int mapId, byte? portalId = null)
         {
-            
         }
 
 
         public virtual void Attack(PacketReader packet, AttackType type)
         {
-           
         }
 
         public virtual void Talk(string text, bool show = true)
         {
-           
         }
-        
+
         public virtual void SendItemEffect()
         {
         }
@@ -145,7 +138,6 @@ namespace RazzleServer.Game.Maple.Characters
 
         public virtual void ShowLocalUserEffect(UserEffect effect)
         {
-           
         }
 
         public virtual void ShowRemoteUserEffect(UserEffect effect, bool skipSelf = false)
@@ -154,7 +146,6 @@ namespace RazzleServer.Game.Maple.Characters
 
         public virtual void Initialize()
         {
-            
         }
 
         public virtual void LogCheatWarning(CheatType type)
@@ -234,8 +225,8 @@ namespace RazzleServer.Game.Maple.Characters
             Name = character.Name;
             AccountId = character.AccountId;
             PrimaryStats.Load(character);
-            //Map = Client?.Server[character.MapId] ?? new Map(character.MapId);
             MapId = character.MapId;
+            Map = new Map(character.MapId);
             SpawnPoint = character.SpawnPoint;
             WorldId = character.WorldId;
             Items.MaxSlots[ItemType.Equipment] = character.EquipmentSlots;
@@ -253,9 +244,8 @@ namespace RazzleServer.Game.Maple.Characters
 
         public virtual void Hide(bool isHidden)
         {
-           
         }
-        
+
         public byte[] ToByteArray()
         {
             using var pw = new PacketWriter();

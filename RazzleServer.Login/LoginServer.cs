@@ -43,7 +43,7 @@ namespace RazzleServer.Login
                 .ToList()
                 .ForEach(x =>
                 {
-                    var c = new LoginCharacter
+                    var c = new LoginCharacter()
                     {
                         Id = x.Id
                     };

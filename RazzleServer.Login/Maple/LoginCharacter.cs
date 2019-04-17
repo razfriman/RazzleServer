@@ -3,6 +3,7 @@ using RazzleServer.Common;
 using RazzleServer.Common.Constants;
 using RazzleServer.Data;
 using RazzleServer.Game.Maple.Characters;
+using RazzleServer.Game.Server;
 using Serilog;
 
 namespace RazzleServer.Login.Maple
@@ -11,13 +12,14 @@ namespace RazzleServer.Login.Maple
     {
         private readonly ILogger _log = Log.ForContext<LoginCharacter>();
 
+        public LoginClient Client { get; }
+        public override AMapleClient BaseClient => Client; 
+
         public LoginCharacter() 
         {
         }
 
-        public LoginCharacter(int id, LoginClient client) : base(id, client)
-        {
-        }
+        public LoginCharacter(int id, LoginClient client) : base(id) => Client = client;
 
         internal static void Delete(int accountId, int characterId)
         {
