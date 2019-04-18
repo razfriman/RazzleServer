@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.Runtime;
+﻿using System.Diagnostics;
 using RazzleServer.DataProvider.Cache;
 using RazzleServer.DataProvider.Loaders;
 using RazzleServer.Wz;
@@ -30,16 +28,17 @@ namespace RazzleServer.DataProvider
         public static void Initialize()
         {
             var sw = Stopwatch.StartNew();
+
             Styles = new AvailableStylesDataLoader().Load();
             CreationData = new CreationDataLoader().Load();
-            Skills =  new SkillsLoader().Load();
-            Mobs =  new MobsLoader().Load();
-            Npcs =  new NpcsLoader().Load();
-            MobSkills =  new MobSkillsLoader().Load();
-            Strings =  new StringLoader().Load();
-            Quests =  new QuestsLoader().Load();
-            Quizzes =  new QuizzesLoader().Load();
-            Maps =  new MapsLoader().Load();
+            Skills = new SkillsLoader().Load();
+            Mobs = new MobsLoader().Load();
+            Npcs = new NpcsLoader().Load();
+            MobSkills = new MobSkillsLoader().Load();
+            Strings = new StringLoader().Load();
+            Quests = new QuestsLoader().Load();
+            Quizzes = new QuizzesLoader().Load();
+            Maps = new MapsLoader().Load();
             Items = new ItemsLoader().Load();
             WzFile?.Dispose();
 

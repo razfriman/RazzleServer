@@ -56,8 +56,7 @@ namespace RazzleServer.Wz.Util
             var retString = new StringBuilder();
             ushort mask = 0xAAAA;
             var length = smallLength == sbyte.MaxValue ? ReadInt32() : smallLength;
-            
-            
+
             for (var i = 0; i < length; i++)
             {
                 var encryptedChar = ReadUInt16();
