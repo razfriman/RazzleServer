@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using RazzleServer.Wz.Util;
 
 namespace RazzleServer.Wz.WzProperties
@@ -15,7 +16,7 @@ namespace RazzleServer.Wz.WzProperties
         public override WzImageProperty DeepClone()
         {
             var clone = new WzCanvasProperty(Name);
-            foreach (var prop in WzProperties)
+            foreach (var prop in WzProperties.Values)
             {
                 clone.AddProperty(prop.DeepClone());
             }
@@ -30,23 +31,7 @@ namespace RazzleServer.Wz.WzProperties
 
         public override WzImageProperty this[string name]
         {
-            get
-            {
-                if (name == "PNG")
-                {
-                    return PngProperty;
-                }
-
-                foreach (var iwp in WzProperties)
-                {
-                    if (iwp.Name.ToLower() == name.ToLower())
-                    {
-                        return iwp;
-                    }
-                }
-
-                return null;
-            }
+            get => name == "PNG" ? PngProperty : WzProperties.GetValueOrDefault(name, null);
             set
             {
                 if (value == null)
@@ -76,25 +61,18 @@ namespace RazzleServer.Wz.WzProperties
             WzImageProperty ret = this;
             foreach (var segment in segments)
             {
-                var foundChild = false;
                 if (segment == "PNG")
                 {
                     return PngProperty;
                 }
+                
+                var found = ret.WzProperties.GetValueOrDefault(segment);
 
-                foreach (var iwp in ret.WzProperties)
+                if (found != null)
                 {
-                    if (iwp.Name != segment)
-                    {
-                        continue;
-                    }
-
-                    ret = iwp;
-                    foundChild = true;
-                    break;
+                    ret = found;
                 }
-
-                if (!foundChild)
+                else
                 {
                     return null;
                 }
@@ -136,7 +114,7 @@ namespace RazzleServer.Wz.WzProperties
             Name = null;
             PngProperty.Dispose();
             PngProperty = null;
-            WzProperties?.ForEach(x => x.Dispose());
+            WzProperties?.Values?.ToList().ForEach(x => x.Dispose());
             WzProperties?.Clear();
             WzProperties = null;
         }
@@ -164,7 +142,7 @@ namespace RazzleServer.Wz.WzProperties
         public void AddProperty(WzImageProperty prop)
         {
             prop.Parent = this;
-            WzProperties.Add(prop);
+            WzProperties.Add(prop.Name, prop);
         }
 
         public void AddProperties(IEnumerable<WzImageProperty> props)
@@ -181,7 +159,7 @@ namespace RazzleServer.Wz.WzProperties
         public void RemoveProperty(WzImageProperty prop)
         {
             prop.Parent = null;
-            WzProperties.Remove(prop);
+            WzProperties.Remove(prop.Name);
         }
 
         /// <summary>
@@ -189,7 +167,7 @@ namespace RazzleServer.Wz.WzProperties
         /// </summary>
         public void ClearProperties()
         {
-            foreach (var prop in WzProperties)
+            foreach (var prop in WzProperties.Values)
             {
                 prop.Parent = null;
             }

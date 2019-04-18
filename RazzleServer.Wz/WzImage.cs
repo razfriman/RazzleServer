@@ -112,12 +112,7 @@ namespace RazzleServer.Wz
         /// <summary>
         /// The properties contained in the image
         /// </summary>
-        public List<WzImageProperty> WzProperties => WzPropertiesDict.Values.ToList();
-        
-        /// <summary>
-        /// The properties contained in the image
-        /// </summary>
-        public Dictionary<string,WzImageProperty> WzPropertiesDict
+        public Dictionary<string,WzImageProperty> WzProperties
         {
             get
             {
@@ -129,6 +124,9 @@ namespace RazzleServer.Wz
                 return _properties;
             }
         }
+        
+        [JsonIgnore]
+        public IEnumerable<WzImageProperty> WzPropertiesList => WzProperties.Values;
 
         public WzImage DeepClone()
         {
@@ -198,20 +196,13 @@ namespace RazzleServer.Wz
             WzImageProperty ret = null;
             foreach (var segment in segments)
             {
-                var foundChild = false;
-                foreach (var iwp in ret == null ? _properties.Values.ToList() : ret.WzProperties)
+                var found = (ret == null ? _properties : ret.WzProperties).GetValueOrDefault(segment);
+
+                if (found != null)
                 {
-                    if (iwp.Name != segment)
-                    {
-                        continue;
-                    }
-
-                    ret = iwp;
-                    foundChild = true;
-                    break;
+                    ret = found;
                 }
-
-                if (!foundChild)
+                else
                 {
                     return null;
                 }
@@ -367,7 +358,7 @@ namespace RazzleServer.Wz
 
                 var imgProp = new WzSubProperty();
                 var startPos = writer.BaseStream.Position;
-                imgProp.AddProperties(WzProperties);
+                imgProp.AddProperties(WzProperties.Values);
                 imgProp.WriteValue(writer);
                 writer.StringCache.Clear();
                 BlockSize = (int)(writer.BaseStream.Position - startPos);
@@ -384,7 +375,7 @@ namespace RazzleServer.Wz
         public override IEnumerable<WzObject> GetObjects()
         {
             var objList = new List<WzObject>();
-            foreach (var prop in WzProperties)
+            foreach (var prop in WzProperties.Values)
             {
                 objList.Add(prop);
                 objList.AddRange(prop.GetObjects());
@@ -396,7 +387,7 @@ namespace RazzleServer.Wz
         public IEnumerable<string> GetPaths(string curPath)
         {
             var objList = new List<string>();
-            foreach (var prop in WzProperties)
+            foreach (var prop in WzProperties.Values)
             {
                 objList.Add(curPath + "/" + prop.Name);
                 objList.AddRange(prop.GetPaths(curPath + "/" + prop.Name));

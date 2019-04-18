@@ -14,11 +14,14 @@ namespace RazzleServer.Wz
     [JsonConverter(typeof(WzImagePropertyConverter))]
     public abstract class WzImageProperty : WzObject
     {
-        public virtual List<WzImageProperty> WzProperties { get; set; }
+        public virtual Dictionary<string, WzImageProperty> WzProperties { get; set; }
+        
+        [JsonIgnore]
+        public IEnumerable<WzImageProperty> WzPropertiesList => WzProperties.Values;
 
         public new virtual WzImageProperty this[string name]
         {
-            get => null;
+            get => WzProperties[name];
             set => throw new NotImplementedException();
         }
 
@@ -62,11 +65,11 @@ namespace RazzleServer.Wz
 
         public override WzFile WzFileParent => ParentImage.WzFileParent;
 
-        internal static void WritePropertyList(WzBinaryWriter writer, List<WzImageProperty> properties)
+        internal static void WritePropertyList(WzBinaryWriter writer, Dictionary<string,WzImageProperty> properties)
         {
             writer.Write((ushort)0);
             writer.WriteCompressedInt(properties.Count);
-            foreach (var property in properties)
+            foreach (var property in properties.Values)
             {
                 writer.WriteStringValue(property.Name, 0x00, 0x01);
                 if (property is WzExtended extended)
@@ -188,7 +191,6 @@ namespace RazzleServer.Wz
                 case "Shape2D#Convex2D":
                     var convexProp = new WzConvexProperty(name) {Parent = parent};
                     var convexEntryCount = reader.ReadCompressedInt();
-                    convexProp.WzProperties.Capacity = convexEntryCount;
                     for (var i = 0; i < convexEntryCount; i++)
                     {
                         convexProp.AddProperty(ParseExtendedProp(reader, offset, name, convexProp, imgParent));
@@ -237,7 +239,7 @@ namespace RazzleServer.Wz
             switch (Type)
             {
                 case WzPropertyType.Canvas:
-                    foreach (var canvasProp in ((WzCanvasProperty)this).WzProperties)
+                    foreach (var canvasProp in ((WzCanvasProperty)this).WzProperties.Values)
                     {
                         objList.AddRange(canvasProp.GetObjects());
                     }
@@ -245,14 +247,14 @@ namespace RazzleServer.Wz
                     objList.Add(((WzCanvasProperty)this).PngProperty);
                     break;
                 case WzPropertyType.Convex:
-                    foreach (var exProp in ((WzConvexProperty)this).WzProperties)
+                    foreach (var exProp in ((WzConvexProperty)this).WzProperties.Values)
                     {
                         objList.AddRange(exProp.GetObjects());
                     }
 
                     break;
                 case WzPropertyType.SubProperty:
-                    foreach (var subProp in ((WzSubProperty)this).WzProperties)
+                    foreach (var subProp in ((WzSubProperty)this).WzProperties.Values)
                     {
                         objList.AddRange(subProp.GetObjects());
                     }
@@ -286,7 +288,7 @@ namespace RazzleServer.Wz
             switch (Type)
             {
                 case WzPropertyType.Canvas:
-                    foreach (var canvasProp in ((WzCanvasProperty)this).WzProperties)
+                    foreach (var canvasProp in ((WzCanvasProperty)this).WzProperties.Values)
                     {
                         objList.Add(curPath + "/" + canvasProp.Name);
                         objList.AddRange(canvasProp.GetPaths(curPath + "/" + canvasProp.Name));
@@ -295,7 +297,7 @@ namespace RazzleServer.Wz
                     objList.Add(curPath + "/PNG");
                     break;
                 case WzPropertyType.Convex:
-                    foreach (var exProp in ((WzConvexProperty)this).WzProperties)
+                    foreach (var exProp in ((WzConvexProperty)this).WzProperties.Values)
                     {
                         objList.Add(curPath + "/" + exProp.Name);
                         objList.AddRange(exProp.GetPaths(curPath + "/" + exProp.Name));
@@ -303,7 +305,7 @@ namespace RazzleServer.Wz
 
                     break;
                 case WzPropertyType.SubProperty:
-                    foreach (var subProp in ((WzSubProperty)this).WzProperties)
+                    foreach (var subProp in ((WzSubProperty)this).WzProperties.Values)
                     {
                         objList.Add(curPath + "/" + subProp.Name);
                         objList.AddRange(subProp.GetPaths(curPath + "/" + subProp.Name));

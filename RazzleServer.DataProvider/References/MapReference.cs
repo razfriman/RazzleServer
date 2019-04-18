@@ -68,7 +68,7 @@ namespace RazzleServer.DataProvider.References
 
             var info = img["info"];
 
-            foreach (var node in info.WzProperties)
+            foreach (var node in info.WzPropertiesList)
             {
                 switch (node.Name)
                 {
@@ -149,12 +149,13 @@ namespace RazzleServer.DataProvider.References
 
             HasClock = img["clock"] != null;
             HasShip = img["shipObj"] != null;
-            img["portal"]?.WzProperties?.ForEach(x => Portals.Add(new PortalReference(x)));
-            img["seat"]?.WzProperties?.ForEach(x => Seats.Add(new SeatReference(x)));
-            img["foothold"]?.WzProperties.SelectMany(x => x.WzProperties).SelectMany(x => x.WzProperties).ToList()
+
+            img["portal"]?.WzPropertiesList?.ToList().ForEach(x => Portals.Add(new PortalReference(x)));
+            img["seat"]?.WzPropertiesList?.ToList().ForEach(x => Seats.Add(new SeatReference(x)));
+            img["foothold"]?.WzPropertiesList.SelectMany(x => x.WzPropertiesList).SelectMany(x => x.WzPropertiesList).ToList()
                 .ForEach(x => Footholds.Add(new FootholdReference(x)));
-            img["seat"]?.WzProperties?.ForEach(x => Seats.Add(new SeatReference(x)));
-            img["life"]?.WzProperties?.ForEach(life =>
+            img["seat"]?.WzPropertiesList?.ToList().ForEach(x => Seats.Add(new SeatReference(x)));
+            img["life"]?.WzPropertiesList?.ToList().ForEach(life =>
             {
                 var type = life["type"].GetString();
 

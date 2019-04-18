@@ -73,7 +73,7 @@ namespace RazzleServer.DataProvider.References
 
             MapleId = id;
             var info = img["info"];
-            info.WzProperties.ForEach(node =>
+            foreach (var node in info.WzPropertiesList)
             {
                 switch (node.Name)
                 {
@@ -155,10 +155,10 @@ namespace RazzleServer.DataProvider.References
                         Speed = node.GetShort();
                         break;
                     case "revive":
-                        node.WzProperties?.ForEach(x => DeathSummons.Add(x.GetInt()));
+                        node.WzPropertiesList?.ToList().ForEach(x => DeathSummons.Add(x.GetInt()));
                         break;
                     case "skill":
-                        node.WzProperties.ForEach(x => Skills.Add(new MobSkillReference(x)));
+                        node.WzPropertiesList.ToList().ForEach(x => Skills.Add(new MobSkillReference(x)));
                         break;
                     case "hpRecovery":
                         HealthRecovery = node.GetInt();
@@ -179,10 +179,10 @@ namespace RazzleServer.DataProvider.References
                         _log.Warning($"Unknown mob info node Mob={MapleId} Name={node.Name} Value={node.WzValue}");
                         break;
                 }
-            });
+            }
 
             Link = info["link"]?.GetInt() ?? 0;
-            var nonInfoNodes = Link > 0 && linkImg != null ? linkImg.WzProperties : img.WzProperties;
+            var nonInfoNodes = Link > 0 && linkImg != null ? linkImg.WzPropertiesList : img.WzPropertiesList;
             var attackNodes = nonInfoNodes.Where(x => x.Name.StartsWith("attack")).ToList();
 
             foreach (var attackNode in attackNodes)

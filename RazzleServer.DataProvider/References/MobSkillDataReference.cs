@@ -34,7 +34,7 @@ namespace RazzleServer.DataProvider.References
                 return;
             }
 
-            foreach (var node in img.WzProperties)
+            foreach (var node in img.WzPropertiesList)
             {
                 switch (node.Name)
                 {

@@ -17,7 +17,8 @@ namespace RazzleServer.DataProvider.Loaders
             
             var dir = file.WzDirectory.GetDirectoryByName("Etc");
             var img = dir.GetImageByName("OXQuiz.img");
-            img.WzProperties.ForEach(quizImg =>
+
+            foreach (var quizImg in img.WzPropertiesList)
             {
                 if (!int.TryParse(quizImg.Name, out var quizId))
                 {
@@ -26,7 +27,7 @@ namespace RazzleServer.DataProvider.Loaders
 
                 var quiz = new QuizReference {Id = quizId};
 
-                quizImg.WzProperties.ForEach(questionImg =>
+                foreach (var questionImg in quizImg.WzPropertiesList)
                 {
                     if (!int.TryParse(questionImg.Name, out var questionId))
                     {
@@ -41,10 +42,10 @@ namespace RazzleServer.DataProvider.Loaders
                     {
                         Id = questionId, Question = question, Answer = answer, Response = response
                     });
-                });
+                }
 
                 Data.Data.Add(quiz.Id, quiz);
-            });
+            }
         }
     }
 }

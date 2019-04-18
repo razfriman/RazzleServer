@@ -34,7 +34,7 @@ namespace RazzleServer.DataProvider.References
         {
             Id = byte.Parse(attackNode.Name[attackNode.Name.Length - 1].ToString());
 
-            foreach (var node in attackNode["info"].WzProperties)
+            foreach (var node in attackNode["info"].WzPropertiesList)
             {
                 switch (node.Name)
                 {

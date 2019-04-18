@@ -14,7 +14,7 @@ namespace RazzleServer.Wz.WzProperties
         public override WzImageProperty DeepClone()
         {
             var clone = new WzSubProperty(Name);
-            foreach (var prop in WzProperties)
+            foreach (var prop in WzProperties.Values)
             {
                 clone.AddProperty(prop.DeepClone());
             }
@@ -34,18 +34,7 @@ namespace RazzleServer.Wz.WzProperties
         /// <returns>The wz property with the specified name</returns>
         public override WzImageProperty this[string name]
         {
-            get
-            {
-                foreach (var iwp in WzProperties)
-                {
-                    if (iwp.Name.ToLower() == name.ToLower())
-                    {
-                        return iwp;
-                    }
-                }
-
-                return null;
-            }
+            get => WzProperties.GetValueOrDefault(name, null);
             set
             {
                 if (value == null)
@@ -74,20 +63,13 @@ namespace RazzleServer.Wz.WzProperties
             WzImageProperty ret = this;
             foreach (var segment in segments)
             {
-                var foundChild = false;
-                foreach (var iwp in ret.WzProperties)
+                var found = ret.WzProperties.GetValueOrDefault(segment);
+
+                if (found != null)
                 {
-                    if (iwp.Name != segment)
-                    {
-                        continue;
-                    }
-
-                    ret = iwp;
-                    foundChild = true;
-                    break;
+                    ret = found;
                 }
-
-                if (!foundChild)
+                else
                 {
                     return null;
                 }
@@ -108,7 +90,7 @@ namespace RazzleServer.Wz.WzProperties
         public override void Dispose()
         {
             Name = null;
-            foreach (var prop in WzProperties)
+            foreach (var prop in WzProperties.Values)
             {
                 prop.Dispose();
             }
@@ -138,7 +120,7 @@ namespace RazzleServer.Wz.WzProperties
         public void AddProperty(WzImageProperty prop)
         {
             prop.Parent = this;
-            WzProperties.Add(prop);
+            WzProperties.Add(prop.Name, prop);
         }
 
         public void AddProperties(IEnumerable<WzImageProperty> props)
@@ -152,7 +134,7 @@ namespace RazzleServer.Wz.WzProperties
         public void RemoveProperty(WzImageProperty prop)
         {
             prop.Parent = null;
-            WzProperties.Remove(prop);
+            WzProperties.Remove(prop.Name);
         }
 
         /// <summary>
@@ -160,7 +142,7 @@ namespace RazzleServer.Wz.WzProperties
         /// </summary>
         public void ClearProperties()
         {
-            foreach (var prop in WzProperties)
+            foreach (var prop in WzProperties.Values)
             {
                 prop.Parent = null;
             }

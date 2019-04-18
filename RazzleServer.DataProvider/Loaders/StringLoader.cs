@@ -25,60 +25,60 @@ namespace RazzleServer.DataProvider.Loaders
 
         private void ProcessSkills(WzImage wzImage)
         {
-            wzImage
-                .WzProperties
-                .ForEach(x =>
+            foreach (var x in wzImage.WzPropertiesList)
+            {
+                if (!int.TryParse(x.Name, out var id))
                 {
-                    if (int.TryParse(x.Name, out var id))
-                    {
-                        var name = x["name"]?.GetString();
-                        if (name != null)
-                        {
-                            Data.Skills[id] = name;
-                        }
-                    }
-                });
+                    continue;
+                }
+
+                var name = x["name"]?.GetString();
+                if (name != null)
+                {
+                    Data.Skills[id] = name;
+                }
+            }
         }
 
         private void ProcessNpcs(WzImage wzImage)
         {
-            wzImage
-                .WzProperties
-                .ForEach(x =>
+            foreach (var x in wzImage.WzPropertiesList)
+            {
+                if (!int.TryParse(x.Name, out var id))
                 {
-                    if (int.TryParse(x.Name, out var id))
-                    {
-                        var name = x["name"]?.GetString();
-                        if (name != null)
-                        {
-                            Data.Npcs[id] = name;
-                        }
-                    }
-                });
+                    continue;
+                }
+
+                var name = x["name"]?.GetString();
+                if (name != null)
+                {
+                    Data.Npcs[id] = name;
+                }
+            }
         }
 
         private void ProcessMobs(WzImage wzImage)
         {
-            wzImage
-                .WzProperties
-                .ForEach(x =>
+            foreach (var x in wzImage.WzPropertiesList)
+            {
+                if (!int.TryParse(x.Name, out var id))
                 {
-                    if (int.TryParse(x.Name, out var id))
-                    {
-                        var name = x["name"]?.GetString() ?? null;
-                        if (name != null)
-                        {
-                            Data.Mobs[id] = name;
-                        }
-                    }
-                });
+                    continue;
+                }
+
+                var name = x["name"]?.GetString() ?? null;
+                if (name != null)
+                {
+                    Data.Mobs[id] = name;
+                }
+            }
         }
 
         private void ProcessMaps(WzImage wzImage)
         {
             wzImage
-                .WzProperties
-                .SelectMany(x => x.WzProperties)
+                .WzPropertiesList
+                .SelectMany(x => x.WzPropertiesList)
                 .ToList()
                 .ForEach(x =>
                 {
@@ -96,7 +96,7 @@ namespace RazzleServer.DataProvider.Loaders
 
         private void ProcessItems(WzImage wzImage)
         {
-            wzImage["Eqp"].WzProperties.ForEach(ProcessItemSection);
+            wzImage["Eqp"].WzPropertiesList.ToList().ForEach(ProcessItemSection);
             ProcessItemSection(wzImage["Con"]);
             ProcessItemSection(wzImage["Ins"]);
             ProcessItemSection(wzImage["Etc"]);
@@ -105,19 +105,19 @@ namespace RazzleServer.DataProvider.Loaders
 
         private void ProcessItemSection(WzImageProperty itemProperty)
         {
-            itemProperty
-                .WzProperties
-                .ForEach(x =>
+            foreach (var x in itemProperty.WzPropertiesList)
+            {
+                if (!int.TryParse(x.Name, out var id))
                 {
-                    if (int.TryParse(x.Name, out var id))
-                    {
-                        var name = x["name"]?.GetString();
-                        if (name != null)
-                        {
-                            Data.Items[id] = name;
-                        }
-                    }
-                });
+                    continue;
+                }
+
+                var name = x["name"]?.GetString();
+                if (name != null)
+                {
+                    Data.Items[id] = name;
+                }
+            }
         }
     }
 }

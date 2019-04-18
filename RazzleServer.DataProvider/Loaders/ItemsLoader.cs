@@ -69,7 +69,7 @@ namespace RazzleServer.DataProvider.Loaders
         private void LoadItems(WzDirectory dir, ItemType type)
         {
             dir.WzImages
-                .SelectMany(x => x.WzProperties)
+                .SelectMany(x => x.WzPropertiesList)
                 .ToList()
                 .ForEach(item =>
                 {

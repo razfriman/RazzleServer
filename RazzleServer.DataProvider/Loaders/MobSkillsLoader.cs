@@ -18,7 +18,7 @@ namespace RazzleServer.DataProvider.Loaders
             
             var dir = file.WzDirectory.GetDirectoryByName("Skill");
 
-            foreach (var skillImg in dir.GetImageByName("MobSkill.img").WzProperties)
+            foreach (var skillImg in dir.GetImageByName("MobSkill.img").WzPropertiesList)
             {
                 if (!int.TryParse(skillImg.Name, out var id))
                 {
@@ -27,7 +27,7 @@ namespace RazzleServer.DataProvider.Loaders
 
                 Data.Data[id] = new Dictionary<byte, MobSkillDataReference>();
 
-                foreach (var levelImg in skillImg["level"].WzProperties)
+                foreach (var levelImg in skillImg["level"].WzPropertiesList)
                 {
                     if (!byte.TryParse(levelImg.Name, out var level))
                     {

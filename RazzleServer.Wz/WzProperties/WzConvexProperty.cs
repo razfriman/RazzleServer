@@ -67,20 +67,13 @@ namespace RazzleServer.Wz.WzProperties
             WzImageProperty ret = this;
             foreach (var segment in segments)
             {
-                var foundChild = false;
-                foreach (var iwp in ret.WzProperties)
+                var found = ret.WzProperties.GetValueOrDefault(segment);
+
+                if (found != null)
                 {
-                    if (iwp.Name != segment)
-                    {
-                        continue;
-                    }
-
-                    ret = iwp;
-                    foundChild = true;
-                    break;
+                    ret = found;
                 }
-
-                if (!foundChild)
+                else
                 {
                     return null;
                 }

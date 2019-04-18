@@ -22,7 +22,7 @@ namespace RazzleServer.Wz.WzProperties
 
         public override object WzValue => LinkValue;
 
-        public override List<WzImageProperty> WzProperties =>
+        public override Dictionary<string, WzImageProperty> WzProperties =>
             (LinkValue as WzImageProperty)?.WzProperties;
 
         public override WzImageProperty this[string name] => LinkValue is WzImageProperty property

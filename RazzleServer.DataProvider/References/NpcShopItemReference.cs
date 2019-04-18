@@ -21,7 +21,7 @@ namespace RazzleServer.DataProvider.References
         {
             MapleId = int.Parse(shopItemNode.Name);
 
-            foreach (var node in shopItemNode.WzProperties)
+            foreach (var node in shopItemNode.WzPropertiesList)
             {
                 switch (node.Name)
                 {

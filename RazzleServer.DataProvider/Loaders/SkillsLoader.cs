@@ -30,7 +30,7 @@ namespace RazzleServer.DataProvider.Loaders
                     continue;
                 }
 
-                foreach (var skillImg in img["skill"].WzProperties)
+                foreach (var skillImg in img["skill"].WzPropertiesList)
                 {
                     if (!int.TryParse(skillImg.Name, out var id))
                     {
@@ -39,7 +39,7 @@ namespace RazzleServer.DataProvider.Loaders
 
                     Data.Data[id] = new Dictionary<byte, SkillReference>();
 
-                    foreach (var levelImg in skillImg["level"].WzProperties)
+                    foreach (var levelImg in skillImg["level"].WzPropertiesList)
                     {
                         if (!byte.TryParse(levelImg.Name, out var level))
                         {
