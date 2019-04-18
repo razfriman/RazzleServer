@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using RazzleServer.Crypto;
 
 namespace RazzleServer.Wz.Util
 {
     public static class WzTool
     {
-        public const int WzHeader = 0x31474B50; //PKG1
-
         public static readonly HashSet<string> StringCache = new HashSet<string>();
 
         public static uint RotateLeft(uint x, byte n) => (x << n) | (x >> (32 - n));
@@ -96,12 +93,6 @@ namespace RazzleServer.Wz.Util
                 default:
                     throw new ArgumentOutOfRangeException(nameof(ver), ver, null);
             }
-        }
-
-        public static bool IsListFile(string path)
-        {
-            using var reader = new BinaryReader(File.OpenRead(path));
-            return reader.ReadInt32() != WzHeader;
         }
 
         public static WzMutableKey GenerateWzKey(byte[] wzIv) =>

@@ -153,7 +153,7 @@ namespace RazzleServer.Crypto
         /// <summary>
         /// Performs Maplestory's AES algorithm
         /// </summary>
-        private void AesTransform(Span<byte> buffer)
+        public void AesTransform(Span<byte> buffer)
         {
             int remaining = buffer.Length,
                 length = 0x5B0,

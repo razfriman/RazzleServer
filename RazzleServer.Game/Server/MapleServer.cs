@@ -127,6 +127,8 @@ namespace RazzleServer.Game.Server
             }
         }
 
+        public void Start() => Start(IPAddress.Any, Port);
+
         public void Start(IPAddress ip, ushort port)
         {
             try

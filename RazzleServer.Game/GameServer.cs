@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using RazzleServer.Game.Maple.Characters;
 using RazzleServer.Game.Maple.Maps;
 using RazzleServer.Data;
@@ -16,19 +15,20 @@ namespace RazzleServer.Game
         public byte ChannelId { get; set; }
         public int Population { get; set; }
         public World World { get; set; }
-        public Dictionary<int, Map> Maps { get; set; } = new Dictionary<int, Map>();
+        
+        private readonly Dictionary<int, Map> _maps = new Dictionary<int, Map>();
 
         public Map this[int id]
         {
             get
             {
-                if (Maps.ContainsKey(id))
+                if (_maps.ContainsKey(id))
                 {
-                    return Maps[id];
+                    return _maps[id];
                 }
 
                 var map = new Map(this, id);
-                return Maps[id] = map;
+                return _maps[id] = map;
             }
         }
 
@@ -41,10 +41,6 @@ namespace RazzleServer.Game
             Port = port;
             ChannelId = channelId;
         }
-
-        public void Start() => Start(new IPAddress(new byte[] {0, 0, 0, 0}), Port);
-
-        public override void Dispose() => Shutdown();
 
         public void Send(PacketWriter pw, GameClient except = null) =>
             Clients
