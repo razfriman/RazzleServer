@@ -1,5 +1,7 @@
 using System;
+using System.Buffers;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace RazzleServer.Common.Util
@@ -105,6 +107,14 @@ namespace RazzleServer.Common.Util
             }
 
             return new string(ret, 0, length).Trim();
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ReadOnlySpan<byte> ToSpan(this ReadOnlySequence<byte> buffer)
+        {
+            if (buffer.IsSingleSegment)
+                return buffer.First.Span;
+            return (ReadOnlySpan<byte>) buffer.ToArray<byte>();
         }
     }
 }

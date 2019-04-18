@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using RazzleServer.Wz.Util;
 
@@ -253,13 +254,9 @@ namespace RazzleServer.Wz
                     imgWriter = new WzBinaryWriter(memStream, WzIv);
                     img.SaveImage(imgWriter);
                     img.Checksum = 0;
-                    foreach (var b in memStream.ToArray())
-                    {
-                        img.Checksum += b;
-                    }
-
+                    img.Checksum += memStream.ToArray().Sum(x => x);
                     img.TempFileStart = fileWrite.Position;
-                    fileWrite.Write(memStream.ToArray(), 0, (int)memStream.Length);
+                    fileWrite.Write(memStream.ToArray());
                     img.TempFileEnd = fileWrite.Position;
                     memStream.Dispose();
                 }

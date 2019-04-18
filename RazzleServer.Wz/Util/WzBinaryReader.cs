@@ -48,7 +48,8 @@ namespace RazzleServer.Wz.Util
         {
             byte mask = 0xAA;
             var length = smallLength == sbyte.MinValue ? ReadInt32() : -smallLength;
-            return new string(ReadBytes(length).Select((x, index) => (char)(x ^ mask++ ^ WzKey[index])).ToArray());
+            var chrs = ReadBytes(length).Select((x, index) => (char)(x ^ mask++ ^ WzKey[index]));
+            return new string(chrs.ToArray());
         }
 
         private string ReadUnicodeString(sbyte smallLength)

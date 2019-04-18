@@ -4,6 +4,7 @@ using System.IO.Pipelines;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using RazzleServer.Common.Util;
 using RazzleServer.Crypto;
 using RazzleServer.Net.Packet;
 using Serilog;
@@ -122,9 +123,9 @@ namespace RazzleServer.Net
                     break;
                 }
 
-                var packetData = buffer.Slice(0, packetLength);
+                var packetData = buffer.Slice(0, packetLength).ToArray();
 
-                Cipher.Decrypt(packetData.ToArray());
+                Cipher.Decrypt(packetData);
 
                 var next = buffer.GetPosition(packetLength);
                 buffer = buffer.Slice(next);

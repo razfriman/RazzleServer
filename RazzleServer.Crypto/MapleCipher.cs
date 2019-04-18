@@ -130,7 +130,7 @@ namespace RazzleServer.Crypto
         /// </summary>
         public static Span<byte> Handshake(Span<byte> data)
         {
-            var length = BitConverter.ToUInt16(data.Slice(0, 2).ToArray(), 0);
+            var length = BitConverter.ToUInt16(data.Slice(0, 2));
             return data.Slice(2, length);
         }
 
