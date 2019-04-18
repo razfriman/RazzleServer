@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
@@ -22,7 +23,7 @@ namespace RazzleServer.Wz
         private uint _versionHash;
         private int _version;
         private byte[] _wzIv;
-
+        
         public WzDirectory WzDirectory { get; private set; } = new WzDirectory();
 
         public override WzObjectType ObjectType => WzObjectType.File;
@@ -128,7 +129,9 @@ namespace RazzleServer.Wz
                 throw new FileNotFoundException(message);
             }
 
-            var reader = new WzBinaryReader(new MemoryStream(File.ReadAllBytes(FilePath)), _wzIv);
+
+            var mmf = MemoryMappedFile.CreateFromFile(FilePath);
+            var reader = new WzBinaryReader(mmf.CreateViewStream(), _wzIv);
 
             Header = new WzHeader
             {

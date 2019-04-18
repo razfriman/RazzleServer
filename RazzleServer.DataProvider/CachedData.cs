@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.Runtime;
 using RazzleServer.DataProvider.Cache;
 using RazzleServer.DataProvider.Loaders;
 using RazzleServer.Wz;
@@ -39,6 +41,7 @@ namespace RazzleServer.DataProvider
             Quizzes =  new QuizzesLoader().Load();
             Maps =  new MapsLoader().Load();
             Items = new ItemsLoader().Load();
+            WzFile?.Dispose();
 
             sw.Stop();
 

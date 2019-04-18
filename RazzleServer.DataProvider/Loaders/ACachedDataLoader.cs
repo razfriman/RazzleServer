@@ -22,8 +22,8 @@ namespace RazzleServer.DataProvider.Loaders
             {
                 try
                 {
-                    throw new Exception();
-                    //LoadFromCache();
+                    //throw new Exception();
+                    LoadFromCache();
                 }
                 catch (Exception e)
                 {

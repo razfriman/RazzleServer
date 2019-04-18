@@ -24,6 +24,7 @@ namespace RazzleServer.Wz
         public override void Dispose()
         {
             Name = null;
+            _reader.Dispose();
             _reader = null;
             WzImages?.ForEach(x => x.Dispose());
             WzDirectories?.ForEach(x => x.Dispose());
