@@ -112,7 +112,12 @@ namespace RazzleServer.Wz
         /// <summary>
         /// The properties contained in the image
         /// </summary>
-        public List<WzImageProperty> WzProperties
+        public List<WzImageProperty> WzProperties => WzPropertiesDict.Values.ToList();
+        
+        /// <summary>
+        /// The properties contained in the image
+        /// </summary>
+        public Dictionary<string,WzImageProperty> WzPropertiesDict
         {
             get
             {
@@ -121,7 +126,7 @@ namespace RazzleServer.Wz
                     ParseImage();
                 }
 
-                return _properties.Values.ToList();
+                return _properties;
             }
         }
 
@@ -321,8 +326,11 @@ namespace RazzleServer.Wz
                 return;
             }
 
-            var parsedProps = WzImageProperty.ParsePropertyList(Offset, Reader, this, this).ToList();
-            parsedProps.ForEach(x => _properties.Add(x.Name, x));
+            var parsedProps = WzImageProperty.ParsePropertyList(Offset, Reader, this, this);
+            foreach (var parsedProp in parsedProps)
+            {
+                _properties.Add(parsedProp.Name, parsedProp);
+            }
             Parsed = true;
         }
 
@@ -385,7 +393,7 @@ namespace RazzleServer.Wz
             return objList;
         }
 
-        public List<string> GetPaths(string curPath)
+        public IEnumerable<string> GetPaths(string curPath)
         {
             var objList = new List<string>();
             foreach (var prop in WzProperties)
