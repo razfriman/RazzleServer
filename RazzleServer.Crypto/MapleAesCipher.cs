@@ -21,6 +21,14 @@ namespace RazzleServer.Crypto
             }.CreateEncryptor();
         }
 
+        public MapleAesCipher(byte[] aesKeyBytes)
+        {
+            AesTransformer = new RijndaelManaged
+            {
+                Key = ExpandKey(aesKeyBytes), Mode = CipherMode.ECB, Padding = PaddingMode.PKCS7
+            }.CreateEncryptor();
+        }
+
         /// <summary>
         /// Performs Maplestory's AES algorithm
         /// </summary>
@@ -67,13 +75,23 @@ namespace RazzleServer.Crypto
         /// Expands the key we store as long
         /// </summary>
         /// <returns>The expanded key</returns>
-        private static byte[] ExpandKey(ulong aesKey)
+        private static byte[] ExpandKey(ulong aesKey) => ExpandKey(BitConverter.GetBytes(aesKey));
+
+        /// <summary>
+        /// Expands the key to fit 32 bytes
+        /// </summary>
+        /// <returns>The expanded key</returns>
+        private static byte[] ExpandKey(byte[] aesKeyBytes)
         {
-            var expand = BitConverter.GetBytes(aesKey);
-            var key = new byte[expand.Length * 4];
-            for (var i = 0; i < expand.Length; i++)
+            if (aesKeyBytes?.Length != 8)
             {
-                key[i * 4] = expand[i];
+                throw new ArgumentException("Input must be 8 bytes to be expanded", nameof(aesKeyBytes));
+            }
+
+            var key = new byte[aesKeyBytes.Length * 4];
+            for (var i = 0; i < aesKeyBytes.Length; i++)
+            {
+                key[i * 4] = aesKeyBytes[i];
             }
 
             return key;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Security.Cryptography;
+using RazzleServer.Crypto;
 
 namespace RazzleServer.Wz.Util
 {
@@ -11,11 +12,14 @@ namespace RazzleServer.Wz.Util
         private readonly byte[] _iv;
         private readonly byte[] _aesKey;
         private byte[] _keys;
+        //TODO(raz): Use this
+        private readonly MapleAesCipher _cipher;
 
         public WzMutableKey(byte[] wzIv, byte[] aesKey)
         {
             _iv = wzIv;
             _aesKey = aesKey;
+            _cipher = new MapleAesCipher(aesKey);
         }
 
         public byte this[int index]

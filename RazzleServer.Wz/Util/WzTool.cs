@@ -25,6 +25,6 @@ namespace RazzleServer.Wz.Util
         }
 
         public static WzMutableKey GenerateWzKey(byte[] wzIv) =>
-            new WzMutableKey(wzIv, CryptoConstants.GetTrimmedUserKey());
+            new WzMutableKey(wzIv, CryptoConstants.TrimmedUserKey);
     }
 }
