@@ -41,26 +41,6 @@ namespace RazzleServer.Wz
 
         public abstract void Remove();
 
-        public WzObject this[string name]
-        {
-            get
-            {
-                switch (this)
-                {
-                    case WzFile wzFile:
-                        return wzFile[name];
-                    case WzDirectory wzDirectory:
-                        return wzDirectory[name];
-                    case WzImage wzImage:
-                        return wzImage[name];
-                    case WzImageProperty wzImageProperty:
-                        return wzImageProperty[name];
-                    default:
-                        return null;
-                }
-            }
-        }
-
         [JsonIgnore]
         public string FullPath
         {

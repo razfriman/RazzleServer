@@ -29,7 +29,7 @@ namespace RazzleServer.Wz
         /// </summary>
         /// <param name="name">Name</param>
         /// <returns>WzDirectory[name]</returns>
-        public new WzObject this[string name] => WzDirectory[name];
+        public WzObject this[string name] => WzDirectory[name];
 
         [JsonIgnore] public WzHeader Header { get; set; } = WzHeader.GetDefault();
 

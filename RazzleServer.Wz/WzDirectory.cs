@@ -68,7 +68,7 @@ namespace RazzleServer.Wz
         /// </summary>
         /// <param name="name">The name of the img or dir to find</param>
         /// <returns>A WzImage or WzDirectory</returns>
-        public new WzObject this[string name]
+        public WzObject this[string name]
         {
             get
             {

@@ -19,7 +19,7 @@ namespace RazzleServer.Wz
         [JsonIgnore]
         public IEnumerable<WzImageProperty> WzPropertiesList => WzProperties.Values;
 
-        public new virtual WzImageProperty this[string name]
+        public virtual WzImageProperty this[string name]
         {
             get => WzProperties[name];
             set => throw new NotImplementedException();
