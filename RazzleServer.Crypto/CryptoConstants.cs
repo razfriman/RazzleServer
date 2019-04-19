@@ -48,14 +48,7 @@
             0x49
         };
 
-        /// <summary>
-        /// Trimmed AES UserKey used by MapleStory
-        /// </summary>
-        public static byte[] TrimmedUserKey =
-        {
-            0x13, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0xB4, 0x00, 0x00, 0x00, 0x1B,
-            0x00, 0x00, 0x00, 0x0F, 0x00, 0x00, 0x00, 0x33, 0x00, 0x00, 0x00, 0x52, 0x00, 0x00, 0x00
-        };
+        public static byte[] TrimmedUserKey = {0x13, 0x08, 0x06, 0xB4, 0x1B, 0x0F, 0x33, 0x52};
 
         /// <summary>
         /// Default AES Key used to generate a new IV
@@ -79,19 +72,5 @@
         /// Constant used in WZ offset encryption
         /// </summary>
         public const uint WzOffsetConstant = 0x581C3F6D;
-
-        /// <summary>
-        /// Trims the AES UserKey for use an AES cryptor
-        /// </summary>
-        public static byte[] GetTrimmedUserKey()
-        {
-            var key = new byte[32];
-            for (var i = 0; i < 128; i += 16)
-            {
-                key[i / 4] = UserKey[i];
-            }
-
-            return key;
-        }
     }
 }
