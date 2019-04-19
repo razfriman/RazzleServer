@@ -55,8 +55,6 @@ namespace RazzleServer.Wz
 
         public override WzObjectType ObjectType => WzObjectType.Property;
 
-        public abstract void WriteValue(WzBinaryWriter writer);
-
         public abstract WzImageProperty DeepClone();
 
         public abstract void SetValue(object value);
@@ -64,24 +62,6 @@ namespace RazzleServer.Wz
         public override void Remove() => ((IPropertyContainer)Parent)?.RemoveProperty(this);
 
         public override WzFile WzFileParent => ParentImage.WzFileParent;
-
-        internal static void WritePropertyList(WzBinaryWriter writer, Dictionary<string,WzImageProperty> properties)
-        {
-            writer.Write((ushort)0);
-            writer.WriteCompressedInt(properties.Count);
-            foreach (var property in properties.Values)
-            {
-                writer.WriteStringValue(property.Name, 0x00, 0x01);
-                if (property is WzExtended extended)
-                {
-                    WriteExtendedValue(writer, extended);
-                }
-                else
-                {
-                    property.WriteValue(writer);
-                }
-            }
-        }
 
         internal static IEnumerable<WzImageProperty> ParsePropertyList(uint offset, WzBinaryReader reader, WzObject parent,
             WzImage parentImg)
@@ -218,19 +198,6 @@ namespace RazzleServer.Wz
                 default:
                     throw new InvalidOperationException("Unknown iname: " + iname);
             }
-        }
-
-        internal static void WriteExtendedValue(WzBinaryWriter writer, WzExtended property)
-        {
-            writer.Write((byte)9);
-            var beforePos = writer.BaseStream.Position;
-            writer.Write(0); // Placeholder
-            property.WriteValue(writer);
-            var len = (int)(writer.BaseStream.Position - beforePos);
-            var newPos = writer.BaseStream.Position;
-            writer.BaseStream.Position = beforePos;
-            writer.Write(len - 4);
-            writer.BaseStream.Position = newPos;
         }
 
         public override IEnumerable<WzObject> GetObjects()

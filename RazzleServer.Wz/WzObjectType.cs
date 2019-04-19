@@ -5,7 +5,6 @@
         File,
         Image,
         Directory,
-        Property,
-        List
+        Property
     }
 }

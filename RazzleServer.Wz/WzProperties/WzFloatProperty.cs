@@ -1,6 +1,4 @@
-﻿using System;
-using System.Globalization;
-using RazzleServer.Wz.Util;
+﻿using System.Globalization;
 
 namespace RazzleServer.Wz.WzProperties
 {
@@ -47,20 +45,6 @@ namespace RazzleServer.Wz.WzProperties
         public override WzImageProperty DeepClone() => new WzFloatProperty(Name, Value);
 
         public override WzPropertyType Type => WzPropertyType.Float;
-
-        public override void WriteValue(WzBinaryWriter writer)
-        {
-            writer.Write((byte)4);
-            if (Math.Abs(Value) < float.Epsilon)
-            {
-                writer.Write((byte)0);
-            }
-            else
-            {
-                writer.Write((byte)0x80);
-                writer.Write(Value);
-            }
-        }
 
         public override float GetFloat() => Value;
 

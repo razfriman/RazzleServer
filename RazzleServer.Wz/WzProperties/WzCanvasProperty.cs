@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using RazzleServer.Wz.Util;
 
 namespace RazzleServer.Wz.WzProperties
 {
@@ -79,31 +78,6 @@ namespace RazzleServer.Wz.WzProperties
             }
 
             return ret;
-        }
-
-        public override void WriteValue(WzBinaryWriter writer)
-        {
-            writer.WriteStringValue("Canvas", 0x73, 0x1B);
-            writer.Write((byte)0);
-            if (WzProperties.Count > 0)
-            {
-                writer.Write((byte)1);
-                WritePropertyList(writer, WzProperties);
-            }
-            else
-            {
-                writer.Write((byte)0);
-            }
-
-            writer.WriteCompressedInt(PngProperty.Width);
-            writer.WriteCompressedInt(PngProperty.Height);
-            writer.WriteCompressedInt(PngProperty.Format1);
-            writer.Write((byte)PngProperty.Format2);
-            writer.Write(0);
-            var bytes = PngProperty.GetCompressedBytes(false);
-            writer.Write(bytes.Length + 1);
-            writer.Write((byte)0);
-            writer.Write(bytes);
         }
 
         /// <summary>

@@ -26,7 +26,7 @@ namespace RazzleServer.Login
 
         public LoginClient(Socket socket, LoginServer server)
             : base(socket, ServerConfig.Instance.Version, ServerConfig.Instance.SubVersion,
-                ServerConfig.Instance.ServerType, ServerConfig.Instance.AesKey, ServerConfig.Instance.UseAesEncryption,
+                ServerConfig.Instance.ServerType, ServerConfig.Instance.AesKey,
                 ServerConfig.Instance.PrintPackets, true)
         {
             Server = server;

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using Newtonsoft.Json;
-using RazzleServer.Wz.Util;
 using Serilog;
 using Point = RazzleServer.Common.Util.Point;
 
@@ -35,14 +34,6 @@ namespace RazzleServer.Wz.WzProperties
                 : (LinkValue as WzImage)?.GetFromPath(path);
 
         public override WzPropertyType Type => WzPropertyType.Uol;
-
-        public override void WriteValue(WzBinaryWriter writer)
-        {
-            writer.WriteStringValue("UOL", 0x73, 0x1B);
-            writer.Write((byte)0);
-            writer.WriteStringValue(Value, 0, 1);
-        }
-
 
         public override void Dispose()
         {

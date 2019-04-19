@@ -50,11 +50,6 @@ namespace RazzleServer.Wz.WzProperties
         /// </summary>
         public override WzPropertyType Type => WzPropertyType.Png;
 
-        public override void WriteValue(WzBinaryWriter writer)
-        {
-            throw new NotImplementedException("Cannot write a PngProperty");
-        }
-
         /// <summary>
         /// Disposes the object
         /// </summary>
@@ -93,22 +88,6 @@ namespace RazzleServer.Wz.WzProperties
 
         [JsonIgnore] public int Format2 { get; set; }
 
-        [JsonIgnore]
-        public bool ListWzUsed
-        {
-            get => _listWzUsed;
-            set
-            {
-                if (value == _listWzUsed)
-                {
-                    return;
-                }
-
-                _listWzUsed = value;
-                CompressPng(GetPng(false));
-            }
-        }
-
         /// <summary>
         /// The actual bitmap
         /// </summary>
@@ -118,7 +97,6 @@ namespace RazzleServer.Wz.WzProperties
             set
             {
                 _png = value;
-                CompressPng(value);
             }
         }
 
@@ -188,7 +166,6 @@ namespace RazzleServer.Wz.WzProperties
         public void SetPng(Bitmap png)
         {
             _png = png;
-            CompressPng(png);
         }
 
         public Bitmap GetPng(bool saveInMemory)
@@ -436,50 +413,6 @@ namespace RazzleServer.Wz.WzProperties
             }
 
             _png = bmp;
-        }
-
-        internal void CompressPng(Bitmap bmp)
-        {
-            var buf = new byte[bmp.Width * bmp.Height * 8];
-            Format1 = 2;
-            Format2 = 0;
-            Width = bmp.Width;
-            Height = bmp.Height;
-
-            var curPos = 0;
-            for (var i = 0; i < Height; i++)
-            for (var j = 0; j < Width; j++)
-            {
-                var curPixel = bmp.GetPixel(j, i);
-                buf[curPos] = curPixel.B;
-                buf[curPos + 1] = curPixel.G;
-                buf[curPos + 2] = curPixel.R;
-                buf[curPos + 3] = curPixel.A;
-                curPos += 4;
-            }
-
-            _compressedBytes = Compress(buf);
-            if (!_listWzUsed)
-            {
-                return;
-            }
-
-            var memStream = new MemoryStream();
-            var writer = new WzBinaryWriter(memStream, WzTool.GetIvByMapleVersion(WzMapleVersionType.Gms));
-            writer.Write(2);
-            for (var i = 0; i < 2; i++)
-            {
-                writer.Write((byte)(_compressedBytes[i] ^ writer.WzKey[i]));
-            }
-
-            writer.Write(_compressedBytes.Length - 2);
-            for (var i = 2; i < _compressedBytes.Length; i++)
-            {
-                writer.Write((byte)(_compressedBytes[i] ^ writer.WzKey[i - 2]));
-            }
-
-            _compressedBytes = memStream.GetBuffer();
-            writer.Close();
         }
 
         public override Bitmap GetBitmap() => GetPng(false);

@@ -5,9 +5,9 @@ namespace RazzleServer.Game.Server
 {
     public abstract class AMapleClient : AClient
     {
-        protected AMapleClient(Socket session, ushort version, byte subVersion, byte serverType, ulong aesKey,
-            bool useAesEncryption, bool printPackets, bool toClient) : base(session, version, subVersion, serverType,
-            aesKey, useAesEncryption, printPackets, toClient)
+        protected AMapleClient(Socket session, ushort version, byte subVersion, byte serverType, ulong? aesKey,
+            bool printPackets, bool toClient) : base(session, version, subVersion, serverType,
+            aesKey, printPackets, toClient)
         {
         }
 

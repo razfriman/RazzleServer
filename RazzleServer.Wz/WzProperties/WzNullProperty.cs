@@ -1,5 +1,4 @@
 ﻿using System;
-using RazzleServer.Wz.Util;
 
 namespace RazzleServer.Wz.WzProperties
 {
@@ -16,8 +15,6 @@ namespace RazzleServer.Wz.WzProperties
         public override WzPropertyType Type => WzPropertyType.Null;
 
         public override WzObjectType ObjectType => WzObjectType.Property;
-
-        public override void WriteValue(WzBinaryWriter writer) => writer.Write((byte)0);
 
         public override void Dispose() => Name = null;
 

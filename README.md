@@ -54,8 +54,7 @@ This contains both the server configuration and the logging configuration.
 | ServerType | MapleStory Server Type | 5 |
 | PingTimeout | Timeout to disconnect stale client | 30 |
 | PrintPackets | Print sent/received packets to the console | true |
-| AesKey | Key to use for AES Encryption | 0x52330F1BB4060813 |
-| EnableAesEncrpytion | Enable MapleStory AES encrpytion, false for v40b | false |
+| AesKey | Key to use for AES Encryption, null to skip AES encryption | null |
 | EnableAutoRegister | Allow account creation by logging in with an unregistered account | true |
 | EnableMultiLeveling | Allow gaining multiple levels at once | true |
 | CommandIndicator | Prefix character for server commands performed in game chat | '!' |

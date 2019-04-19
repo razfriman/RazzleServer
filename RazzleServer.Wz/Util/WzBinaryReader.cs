@@ -7,7 +7,7 @@ namespace RazzleServer.Wz.Util
 {
     public class WzBinaryReader : BinaryReader
     {
-        public WzMutableKey WzKey { get; set; }
+        public WzMutableKey WzKey { get; }
 
         public uint Hash { get; set; }
 
@@ -112,28 +112,6 @@ namespace RazzleServer.Wz.Util
             offset ^= encryptedOffset;
             offset += Header.FStart * 2;
             return offset;
-        }
-
-        public string DecryptString(char[] stringToDecrypt)
-        {
-            var builder = new StringBuilder(stringToDecrypt.Length);
-            for (var i = 0; i < stringToDecrypt.Length; i++)
-            {
-                builder.Append((char)(stringToDecrypt[i] ^ (char)((WzKey[i * 2 + 1] << 8) + WzKey[i * 2])));
-            }
-
-            return builder.ToString();
-        }
-
-        public string DecryptNonUnicodeString(char[] stringToDecrypt)
-        {
-            var builder = new StringBuilder(stringToDecrypt.Length);
-            for (var i = 0; i < stringToDecrypt.Length; i++)
-            {
-                builder.Append((char)(stringToDecrypt[i] ^ WzKey[i]));
-            }
-
-            return builder.ToString();
         }
 
         public string ReadStringBlock(uint offset)

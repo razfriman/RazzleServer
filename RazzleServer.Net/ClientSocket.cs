@@ -29,8 +29,7 @@ namespace RazzleServer.Net
 
         public MapleCipherProvider Cipher { get; }
         
-        public ClientSocket(Socket socket, AClient client, ushort version, ulong aesKey, bool useAesEncryption,
-            bool toClient)
+        public ClientSocket(Socket socket, AClient client, ushort version, ulong? aesKey, bool toClient)
         {
             _socket = socket;
             _client = client;
@@ -41,7 +40,7 @@ namespace RazzleServer.Net
             Host = Endpoint?.Address.ToString();
             HostBytes = Endpoint?.Address.GetAddressBytes();
             Port = (ushort)(((IPEndPoint)socket?.LocalEndPoint)?.Port ?? 0);
-            Cipher = new MapleCipherProvider(version, aesKey, useAesEncryption, toClient);
+            Cipher = new MapleCipherProvider(version, aesKey, toClient);
             Cipher.PacketFinished += data => _client.Receive(new PacketReader(data));
             if (socket != null && socket.Connected)
             {

@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 using RazzleServer.Wz.Util;
-using RazzleServer.Wz.WzProperties;
 
 namespace RazzleServer.Wz
 {
@@ -345,31 +344,6 @@ namespace RazzleServer.Wz
         {
             Parsed = false;
             _properties.Clear();
-        }
-
-        internal void SaveImage(WzBinaryWriter writer)
-        {
-            if (Changed)
-            {
-                if (Reader != null && !Parsed)
-                {
-                    ParseImage();
-                }
-
-                var imgProp = new WzSubProperty();
-                var startPos = writer.BaseStream.Position;
-                imgProp.AddProperties(WzProperties.Values);
-                imgProp.WriteValue(writer);
-                writer.StringCache.Clear();
-                BlockSize = (int)(writer.BaseStream.Position - startPos);
-            }
-            else
-            {
-                var pos = Reader.BaseStream.Position;
-                Reader.BaseStream.Position = Offset;
-                writer.Write(Reader.ReadBytes(BlockSize));
-                Reader.BaseStream.Position = pos;
-            }
         }
 
         public override IEnumerable<WzObject> GetObjects()

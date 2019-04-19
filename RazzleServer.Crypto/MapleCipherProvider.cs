@@ -23,11 +23,11 @@ namespace RazzleServer.Crypto
 
         private bool ToClient { get; }
 
-        public MapleCipherProvider(ushort currentGameVersion, ulong aesKey, bool useAesEncryption = true,
+        public MapleCipherProvider(ushort currentGameVersion, ulong? aesKey,
             bool toClient = true)
         {
-            RecvCipher = new MapleCipher(currentGameVersion, aesKey, useAesEncryption);
-            SendCipher = new MapleCipher(currentGameVersion, aesKey, useAesEncryption);
+            RecvCipher = new MapleCipher(currentGameVersion, aesKey);
+            SendCipher = new MapleCipher(currentGameVersion, aesKey);
             ToClient = toClient;
         }
 

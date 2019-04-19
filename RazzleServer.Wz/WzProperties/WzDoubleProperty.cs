@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using RazzleServer.Wz.Util;
 
 namespace RazzleServer.Wz.WzProperties
 {
@@ -21,12 +20,6 @@ namespace RazzleServer.Wz.WzProperties
         public override object WzValue => Value;
 
         public override WzPropertyType Type => WzPropertyType.Double;
-
-        public override void WriteValue(WzBinaryWriter writer)
-        {
-            writer.Write((byte)5);
-            writer.Write(Value);
-        }
 
         public override void Dispose() => Name = null;
 

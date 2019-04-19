@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using RazzleServer.Wz.Util;
 
 namespace RazzleServer.Wz.WzProperties
 {
@@ -76,12 +75,6 @@ namespace RazzleServer.Wz.WzProperties
             }
 
             return ret;
-        }
-
-        public override void WriteValue(WzBinaryWriter writer)
-        {
-            writer.WriteStringValue("Property", 0x73, 0x1B);
-            WritePropertyList(writer, WzProperties);
         }
 
         /// <summary>
