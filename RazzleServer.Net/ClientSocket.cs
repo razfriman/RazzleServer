@@ -4,7 +4,6 @@ using System.IO.Pipelines;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using RazzleServer.Common.Util;
 using RazzleServer.Crypto;
 using RazzleServer.Net.Packet;
 using Serilog;
