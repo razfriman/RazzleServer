@@ -57,7 +57,7 @@ namespace RazzleServer.Net
 
         private async Task FillPipeAsync()
         {
-            while (!_disposed)
+            while (Connected)
             {
                 try
                 {
@@ -91,7 +91,7 @@ namespace RazzleServer.Net
         {
             try
             {
-                while (!_disposed)
+                while (Connected)
                 {
                     long dataLeft = 0;
                     ReadResult result;
@@ -113,7 +113,7 @@ namespace RazzleServer.Net
 
         private void ProcessPackets(ref ReadOnlySequence<byte> buffer, ref long dataLeft)
         {
-            while (buffer.Length > 0)
+            while (buffer.Length > Cipher.GetHeaderLength)
             {
                 var packetLength = Cipher.GetHeader(buffer);
 
@@ -133,39 +133,43 @@ namespace RazzleServer.Net
         }
 
 
-        public async Task SendRawPacket(ReadOnlyMemory<byte> final)
+        public void SendRawPacket(ReadOnlySpan<byte> final)
         {
-            if (!_disposed)
+            if (!Connected)
             {
-                var offset = 0;
-                while (offset < final.Length)
+                return;
+            }
+
+            var offset = 0;
+            while (offset < final.Length)
+            {
+                var sent = _socket.Send(final.Slice(offset));
+
+                if (sent == 0)
                 {
-                    var sent = await _socket.SendAsync(final.Slice(offset), SocketFlags.None);
-
-                    if (sent == 0)
-                    {
-                        Disconnect();
-                        return;
-                    }
-
-                    offset += sent;
+                    Disconnect();
+                    return;
                 }
+
+                offset += sent;
             }
         }
 
-        public async Task Send(byte[] data)
+        public void Send(ReadOnlySpan<byte> data)
         {
-            if (!_disposed && Connected)
+            if (!Connected)
             {
-                try
-                {
-                    await SendRawPacket(Cipher.Encrypt(data, _toClient).ToArray());
-                }
-                catch (Exception e)
-                {
-                    _log.Error(e, "Error sending packet");
-                    Disconnect();
-                }
+                return;
+            }
+
+            try
+            {
+                SendRawPacket(Cipher.Encrypt(data, _toClient));
+            }
+            catch (Exception e)
+            {
+                _log.Error(e, "Error sending packet");
+                Disconnect();
             }
         }
 
