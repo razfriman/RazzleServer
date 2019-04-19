@@ -38,25 +38,10 @@ namespace RazzleServer.Wz.WzProperties
 
         public override object WzValue => GetBytes(false);
 
-        public override void SetValue(object value)
-        {
-        }
-
         /// <summary>
         /// The WzPropertyType of the property
         /// </summary>
         public override WzPropertyType Type => WzPropertyType.Sound;
-
-        public override void WriteValue(WzBinaryWriter writer)
-        {
-            var data = GetBytes(false);
-            writer.WriteStringValue("Sound_DX8", 0x73, 0x1B);
-            writer.Write((byte)0);
-            writer.WriteCompressedInt(data.Length);
-            writer.WriteCompressedInt(Length);
-            writer.Write(Header);
-            writer.Write(data);
-        }
 
         /// <summary>
         /// Disposes the object

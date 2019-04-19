@@ -9,27 +9,28 @@ namespace RazzleServer.Crypto
     /// </summary>
     public class InitializationVector
     {
-        private readonly byte[] _data;
-
         /// <summary>
         /// Gets the uint value from the current container
         /// </summary>
-        public uint UInt => MemoryMarshal.Cast<byte, uint>(_data)[0];
+        public uint UInt => MemoryMarshal.Cast<byte, uint>(Bytes)[0];
 
         /// <summary>
         /// Gets the LOWORD from the current container
         /// </summary>
-        public ushort LoWord => MemoryMarshal.Cast<byte, ushort>(_data)[0];
+        public ushort LoWord => MemoryMarshal.Cast<byte, ushort>(Bytes)[0];
 
         /// <summary>
         /// Gets the HIWORD from the current container
         /// </summary>
-        public ushort HiWord => MemoryMarshal.Cast<byte, ushort>(_data)[1];
+        public ushort HiWord => MemoryMarshal.Cast<byte, ushort>(Bytes)[1];
 
         /// <summary>
         /// Gets the bytes of the current container
         /// </summary>
-        public byte[] Bytes => _data.ToArray();
+        public byte[] Bytes
+        {
+            get;
+        }
 
         /// <summary>
         /// IV Security check
@@ -40,13 +41,13 @@ namespace RazzleServer.Crypto
         /// Creates a IV instance using <paramref name="vector"/>
         /// </summary>
         /// <param name="vector">Initialization vector</param>
-        public InitializationVector(uint vector) => _data = BitConverter.GetBytes(vector);
+        public InitializationVector(uint vector) => Bytes = BitConverter.GetBytes(vector);
 
         /// <summary>
         /// Creates a IV instance using <paramref name="vector"/>
         /// </summary>
         /// <param name="vector">Initialization vector</param>
-        public InitializationVector(byte[] vector) => _data = vector;
+        public InitializationVector(byte[] vector) => Bytes = vector;
 
         /// <summary>
         /// Shuffles the current IV to the next vector using the shuffle table
@@ -57,7 +58,7 @@ namespace RazzleServer.Crypto
 
             for (var i = 0; i < 4; i++)
             {
-                var input = _data[i];
+                var input = Bytes[i];
                 var tableInput = CryptoConstants.Shuffle[input];
                 newIv[0] += (byte)(CryptoConstants.Shuffle[newIv[1]] - input);
                 newIv[1] -= (byte)(newIv[2] ^ tableInput);
@@ -74,7 +75,7 @@ namespace RazzleServer.Crypto
                 newIv[3] = (byte)((val2 >> 24) & 0xFF);
             }
 
-            Buffer.BlockCopy(newIv, 0, _data, 0, 4);
+            Buffer.BlockCopy(newIv, 0, Bytes, 0, 4);
         }
     }
 }

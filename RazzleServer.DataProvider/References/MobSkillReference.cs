@@ -18,7 +18,7 @@ namespace RazzleServer.DataProvider.References
 
         public MobSkillReference(WzImageProperty img)
         {
-            foreach (var node in img.WzProperties)
+            foreach (var node in img.WzPropertiesList)
             {
                 switch (node.Name)
                 {

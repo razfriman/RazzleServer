@@ -20,14 +20,14 @@ namespace RazzleServer.Net
         public string Key { get; set; }
         public abstract ILogger Logger { get; }
 
-        protected AClient(Socket session, ushort version, byte subVersion, byte serverType, ulong aesKey,
-            bool useAesEncryption, bool printPackets, bool toClient)
+        protected AClient(Socket session, ushort version, byte subVersion, byte serverType, ulong? aesKey,
+            bool printPackets, bool toClient)
         {
             Version = version;
             SubVersion = subVersion;
             ServerType = serverType;
             PrintPackets = printPackets;
-            Socket = new ClientSocket(session, this, version, aesKey, useAesEncryption, toClient);
+            Socket = new ClientSocket(session, this, version, aesKey, toClient);
             Host = Socket.Host;
             Port = Socket.Port;
             Connected = true;

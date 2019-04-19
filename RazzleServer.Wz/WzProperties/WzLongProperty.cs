@@ -1,23 +1,14 @@
 ﻿using System;
-using RazzleServer.Wz.Util;
 
 namespace RazzleServer.Wz.WzProperties
 {
     internal class WzLongProperty : WzImageProperty
     {
-        public override void SetValue(object value) => Value = Convert.ToInt64(value);
-
         public override WzImageProperty DeepClone() => new WzLongProperty(Name, Value);
 
         public override object WzValue => Value;
 
         public override WzPropertyType Type => WzPropertyType.Long;
-
-        public override void WriteValue(WzBinaryWriter writer)
-        {
-            writer.Write((byte)20);
-            writer.WriteCompressedLong(Value);
-        }
 
         public override void Dispose() => Name = null;
 

@@ -1,13 +1,14 @@
 ﻿using System.Diagnostics;
-using System.Threading.Tasks;
 using RazzleServer.DataProvider.Cache;
 using RazzleServer.DataProvider.Loaders;
+using RazzleServer.Wz;
 using Serilog;
 
 namespace RazzleServer.DataProvider
 {
-    public class  CachedData
+    public class CachedData
     {
+        public static WzFile WzFile = null;
         public static CachedAvailableStyles Styles { get; private set; } = new CachedAvailableStyles();
         public static CachedItems Items { get; private set; } = new CachedItems();
         public static CachedSkills Skills { get; private set; } = new CachedSkills();
@@ -24,23 +25,22 @@ namespace RazzleServer.DataProvider
 
         private static readonly ILogger Logger = Log.ForContext<CachedData>();
 
-        public static async Task Initialize()
+        public static void Initialize()
         {
             var sw = Stopwatch.StartNew();
 
-            await Task.WhenAll(
-                Task.Run(async () => Styles = await new AvailableStylesDataLoader().Load()),
-                Task.Run(async () => Items = await new ItemsLoader().Load()),
-                Task.Run(async () => CreationData = await new CreationDataLoader().Load()),
-                Task.Run(async () => Skills = await new SkillsLoader().Load()),
-                Task.Run(async () => Mobs = await new MobsLoader().Load()),
-                Task.Run(async () => Npcs = await new NpcsLoader().Load()),
-                Task.Run(async () => MobSkills = await new MobSkillsLoader().Load()),
-                Task.Run(async () => Maps = await new MapsLoader().Load()),
-                Task.Run(async () => Strings = await new StringLoader().Load()),
-                Task.Run(async () => Quests = await new QuestsLoader().Load()),
-                Task.Run(async () => Quizzes = await new QuizzesLoader().Load())
-            );
+            Styles = new AvailableStylesDataLoader().Load();
+            CreationData = new CreationDataLoader().Load();
+            Skills = new SkillsLoader().Load();
+            Mobs = new MobsLoader().Load();
+            Npcs = new NpcsLoader().Load();
+            MobSkills = new MobSkillsLoader().Load();
+            Strings = new StringLoader().Load();
+            Quests = new QuestsLoader().Load();
+            Quizzes = new QuizzesLoader().Load();
+            Maps = new MapsLoader().Load();
+            Items = new ItemsLoader().Load();
+            WzFile?.Dispose();
 
             sw.Stop();
 

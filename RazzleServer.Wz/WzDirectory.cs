@@ -14,7 +14,6 @@ namespace RazzleServer.Wz
     {
         private WzBinaryReader _reader;
         private uint _hash;
-        private int _offsetSize;
         private WzFile _wzFile;
 
         public override WzObjectType ObjectType => WzObjectType.Directory;
@@ -24,6 +23,7 @@ namespace RazzleServer.Wz
         public override void Dispose()
         {
             Name = null;
+            _reader.Dispose();
             _reader = null;
             WzImages?.ForEach(x => x.Dispose());
             WzDirectories?.ForEach(x => x.Dispose());
@@ -68,7 +68,7 @@ namespace RazzleServer.Wz
         /// </summary>
         /// <param name="name">The name of the img or dir to find</param>
         /// <returns>A WzImage or WzDirectory</returns>
-        public new WzObject this[string name]
+        public WzObject this[string name]
         {
             get
             {
@@ -227,151 +227,6 @@ namespace RazzleServer.Wz
             {
                 dir.SaveImages(wzWriter, fs);
             }
-        }
-
-        internal int GenerateDataFile(string fileName)
-        {
-            BlockSize = 0;
-            var entryCount = WzDirectories.Count + WzImages.Count;
-            if (entryCount == 0)
-            {
-                _offsetSize = 1;
-                return BlockSize = 0;
-            }
-
-            BlockSize = WzTool.GetCompressedIntLength(entryCount);
-            _offsetSize = WzTool.GetCompressedIntLength(entryCount);
-
-            WzBinaryWriter imgWriter = null;
-            var fileWrite = new FileStream(fileName, FileMode.Append, FileAccess.Write);
-            foreach (var img in WzImages)
-            {
-                if (img.Changed)
-                {
-                    var memStream = new MemoryStream();
-                    imgWriter = new WzBinaryWriter(memStream, WzIv);
-                    img.SaveImage(imgWriter);
-                    img.Checksum = 0;
-                    foreach (var b in memStream.ToArray())
-                    {
-                        img.Checksum += b;
-                    }
-
-                    img.TempFileStart = fileWrite.Position;
-                    fileWrite.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    img.TempFileEnd = fileWrite.Position;
-                    memStream.Dispose();
-                }
-                else
-                {
-                    img.TempFileStart = img.Offset;
-                    img.TempFileEnd = img.Offset + img.BlockSize;
-                }
-
-                img.UnparseImage();
-
-                var nameLen = WzTool.GetWzObjectValueLength(img.Name, 4);
-                BlockSize += nameLen;
-                var imgLen = img.BlockSize;
-                BlockSize += WzTool.GetCompressedIntLength(imgLen);
-                BlockSize += imgLen;
-                BlockSize += WzTool.GetCompressedIntLength(img.Checksum);
-                BlockSize += 4;
-                _offsetSize += nameLen;
-                _offsetSize += WzTool.GetCompressedIntLength(imgLen);
-                _offsetSize += WzTool.GetCompressedIntLength(img.Checksum);
-                _offsetSize += 4;
-                if (img.Changed)
-                {
-                    imgWriter?.Close();
-                }
-            }
-
-            fileWrite.Close();
-
-            foreach (var dir in WzDirectories)
-            {
-                var nameLen = WzTool.GetWzObjectValueLength(dir.Name, 3);
-                BlockSize += nameLen;
-                BlockSize += dir.GenerateDataFile(fileName);
-                BlockSize += WzTool.GetCompressedIntLength(dir.BlockSize);
-                BlockSize += WzTool.GetCompressedIntLength(dir.Checksum);
-                BlockSize += 4;
-                _offsetSize += nameLen;
-                _offsetSize += WzTool.GetCompressedIntLength(dir.BlockSize);
-                _offsetSize += WzTool.GetCompressedIntLength(dir.Checksum);
-                _offsetSize += 4;
-            }
-
-            return BlockSize;
-        }
-
-        internal void SaveDirectory(WzBinaryWriter writer)
-        {
-            Offset = (uint)writer.BaseStream.Position;
-            var entryCount = WzDirectories.Count + WzImages.Count;
-            if (entryCount == 0)
-            {
-                BlockSize = 0;
-                return;
-            }
-
-            writer.WriteCompressedInt(entryCount);
-            foreach (var img in WzImages)
-            {
-                writer.WriteWzObjectValue(img.Name, 4);
-                writer.WriteCompressedInt(img.BlockSize);
-                writer.WriteCompressedInt(img.Checksum);
-                writer.WriteOffset(img.Offset);
-            }
-
-            foreach (var dir in WzDirectories)
-            {
-                writer.WriteWzObjectValue(dir.Name, 3);
-                writer.WriteCompressedInt(dir.BlockSize);
-                writer.WriteCompressedInt(dir.Checksum);
-                writer.WriteOffset(dir.Offset);
-            }
-
-            foreach (var dir in WzDirectories)
-            {
-                if (dir.BlockSize > 0)
-                {
-                    dir.SaveDirectory(writer);
-                }
-                else
-                {
-                    writer.Write((byte)0);
-                }
-            }
-        }
-
-        internal uint GetOffsets(uint curOffset)
-        {
-            Offset = curOffset;
-            curOffset += (uint)_offsetSize;
-            foreach (var dir in WzDirectories)
-            {
-                curOffset = dir.GetOffsets(curOffset);
-            }
-
-            return curOffset;
-        }
-
-        internal uint GetImgOffsets(uint curOffset)
-        {
-            foreach (var img in WzImages)
-            {
-                img.Offset = curOffset;
-                curOffset += (uint)img.BlockSize;
-            }
-
-            foreach (var dir in WzDirectories)
-            {
-                curOffset = dir.GetImgOffsets(curOffset);
-            }
-
-            return curOffset;
         }
 
         /// <summary>
@@ -538,53 +393,6 @@ namespace RazzleServer.Wz
             return result;
         }
 
-        public int CountImages()
-        {
-            var result = WzImages.Count;
-            foreach (var subdir in WzDirectories)
-            {
-                result += subdir.CountImages();
-            }
-
-            return result;
-        }
-
         public override void Remove() => ((WzDirectory)Parent)?.RemoveDirectory(this);
-
-        public override IEnumerable<WzObject> GetObjects()
-        {
-            var objList = new List<WzObject>();
-            foreach (var img in WzImages)
-            {
-                objList.Add(img);
-                objList.AddRange(img.GetObjects());
-            }
-
-            foreach (var subdir in WzDirectories)
-            {
-                objList.Add(subdir);
-                objList.AddRange(subdir.GetObjects());
-            }
-
-            return objList;
-        }
-
-        internal IEnumerable<string> GetPaths(string curPath)
-        {
-            var objList = new List<string>();
-            foreach (var img in WzImages)
-            {
-                objList.Add(curPath + "/" + img.Name);
-                objList.AddRange(img.GetPaths(curPath + "/" + img.Name));
-            }
-
-            foreach (var subdir in WzDirectories)
-            {
-                objList.Add(curPath + "/" + subdir.Name);
-                objList.AddRange(subdir.GetPaths(curPath + "/" + subdir.Name));
-            }
-
-            return objList;
-        }
     }
 }

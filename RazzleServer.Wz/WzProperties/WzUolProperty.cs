@@ -1,26 +1,15 @@
-﻿using RazzleServer.Wz.Util;
-
-namespace RazzleServer.Wz.WzProperties
+﻿namespace RazzleServer.Wz.WzProperties
 {
     /// <summary>
     /// A property that's value is a string
     /// </summary>
     public class WzUolProperty : WzExtended
     {
-        public override void SetValue(object value) => Value = (string)value;
-
         public override WzImageProperty DeepClone() => new WzUolProperty(Name, Value);
 
         public override object WzValue => Value;
 
         public override WzPropertyType Type => WzPropertyType.Uol;
-
-        public override void WriteValue(WzBinaryWriter writer)
-        {
-            writer.WriteStringValue("UOL", 0x73, 0x1B);
-            writer.Write((byte)0);
-            writer.WriteStringValue(Value, 0, 1);
-        }
 
         public override void Dispose()
         {

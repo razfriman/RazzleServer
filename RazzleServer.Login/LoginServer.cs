@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using RazzleServer.Common;
 using RazzleServer.Data;
 using RazzleServer.Game.Maple.Characters;
@@ -12,12 +11,7 @@ namespace RazzleServer.Login
 {
     public class LoginServer : MapleServer<LoginClient, LoginPacketHandler>, ILoginServer
     {
-        public LoginServer(IServerManager manager) : base(manager)
-        {
-            Port = ServerConfig.Instance.LoginPort;
-        }
-
-        public void Start() => Start(IPAddress.Any, Port);
+        public LoginServer(IServerManager manager) : base(manager) => Port = ServerConfig.Instance.LoginPort;
 
         public override ILogger Logger => Log.ForContext<LoginServer>();
 

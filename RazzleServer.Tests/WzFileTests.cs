@@ -34,7 +34,7 @@ namespace RazzleServer.Tests
             file.Serialize(ms);
             var contents = Encoding.ASCII.GetString(ms.ToArray());
             var deserialized = WzObject.DeserializeFile(contents);
-            var deserializedImg = deserialized[img.Name];
+            var deserializedImg = deserialized.WzDirectory.GetImageByName(img.Name);
             Assert.IsNotNull(deserializedImg);
             Assert.AreEqual(intProp.Value, deserializedImg[intProp.Name].GetInt());
         }

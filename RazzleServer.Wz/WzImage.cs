@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using RazzleServer.Wz.Util;
-using RazzleServer.Wz.WzProperties;
 
 namespace RazzleServer.Wz
 {
@@ -15,7 +15,7 @@ namespace RazzleServer.Wz
     /// </summary>
     public class WzImage : WzObject, IPropertyContainer
     {
-        private List<WzImageProperty> _properties = new List<WzImageProperty>();
+        private Dictionary<string, WzImageProperty> _properties = new Dictionary<string, WzImageProperty>();
 
         internal WzBinaryReader Reader { get; }
 
@@ -56,7 +56,7 @@ namespace RazzleServer.Wz
         {
             Name = null;
             Reader?.Dispose();
-            _properties?.ForEach(x => x.Dispose());
+            _properties?.Values.ToList().ForEach(x => x.Dispose());
             _properties?.Clear();
             _properties = null;
         }
@@ -111,7 +111,7 @@ namespace RazzleServer.Wz
         /// <summary>
         /// The properties contained in the image
         /// </summary>
-        public List<WzImageProperty> WzProperties
+        public Dictionary<string,WzImageProperty> WzProperties
         {
             get
             {
@@ -123,6 +123,9 @@ namespace RazzleServer.Wz
                 return _properties;
             }
         }
+        
+        [JsonIgnore]
+        public IEnumerable<WzImageProperty> WzPropertiesList => WzProperties.Values;
 
         public WzImage DeepClone()
         {
@@ -132,7 +135,7 @@ namespace RazzleServer.Wz
             }
 
             var clone = new WzImage(Name) {Changed = true};
-            foreach (var prop in _properties)
+            foreach (var prop in _properties.Values)
             {
                 clone.AddProperty(prop.DeepClone());
             }
@@ -145,27 +148,16 @@ namespace RazzleServer.Wz
         /// </summary>
         /// <param name="name">The name of the property</param>
         /// <returns>The wz property with the specified name</returns>
-        public new WzImageProperty this[string name]
+        public WzImageProperty this[string name]
         {
             get
             {
-                if (Reader != null)
+                if (Reader != null && !Parsed)
                 {
-                    if (!Parsed)
-                    {
-                        ParseImage();
-                    }
+                    ParseImage();
                 }
 
-                foreach (var iwp in _properties)
-                {
-                    if (iwp.Name.ToLower() == name.ToLower())
-                    {
-                        return iwp;
-                    }
-                }
-
-                return null;
+                return _properties.GetValueOrDefault(name, null);
             }
             set
             {
@@ -203,20 +195,13 @@ namespace RazzleServer.Wz
             WzImageProperty ret = null;
             foreach (var segment in segments)
             {
-                var foundChild = false;
-                foreach (var iwp in ret == null ? _properties : ret.WzProperties)
+                var found = (ret == null ? _properties : ret.WzProperties).GetValueOrDefault(segment);
+
+                if (found != null)
                 {
-                    if (iwp.Name != segment)
-                    {
-                        continue;
-                    }
-
-                    ret = iwp;
-                    foundChild = true;
-                    break;
+                    ret = found;
                 }
-
-                if (!foundChild)
+                else
                 {
                     return null;
                 }
@@ -237,7 +222,7 @@ namespace RazzleServer.Wz
                 ParseImage();
             }
 
-            _properties.Add(prop);
+            _properties.Add(prop.Name, prop);
         }
 
         public void AddProperties(IEnumerable<WzImageProperty> props)
@@ -260,12 +245,12 @@ namespace RazzleServer.Wz
             }
 
             prop.Parent = null;
-            _properties.Remove(prop);
+            _properties.Remove(prop.Name);
         }
 
         public void ClearProperties()
         {
-            foreach (var prop in _properties)
+            foreach (var prop in _properties.Values)
             {
                 prop.Parent = null;
             }
@@ -302,7 +287,8 @@ namespace RazzleServer.Wz
                 return;
             }
 
-            _properties.AddRange(WzImageProperty.ParsePropertyList(Offset, Reader, this, this));
+            var parsedProps = WzImageProperty.ParsePropertyList(Offset, Reader, this, this).ToList();
+            parsedProps.ForEach(x => _properties.Add(x.Name, x));
             Parsed = true;
         }
 
@@ -330,7 +316,11 @@ namespace RazzleServer.Wz
                 return;
             }
 
-            _properties.AddRange(WzImageProperty.ParsePropertyList(Offset, Reader, this, this));
+            var parsedProps = WzImageProperty.ParsePropertyList(Offset, Reader, this, this);
+            foreach (var parsedProp in parsedProps)
+            {
+                _properties.Add(parsedProp.Name, parsedProp);
+            }
             Parsed = true;
         }
 
@@ -353,50 +343,13 @@ namespace RazzleServer.Wz
         public void UnparseImage()
         {
             Parsed = false;
-            _properties = new List<WzImageProperty>();
+            _properties.Clear();
         }
 
-        internal void SaveImage(WzBinaryWriter writer)
-        {
-            if (Changed)
-            {
-                if (Reader != null && !Parsed)
-                {
-                    ParseImage();
-                }
-
-                var imgProp = new WzSubProperty();
-                var startPos = writer.BaseStream.Position;
-                imgProp.AddProperties(WzProperties);
-                imgProp.WriteValue(writer);
-                writer.StringCache.Clear();
-                BlockSize = (int)(writer.BaseStream.Position - startPos);
-            }
-            else
-            {
-                var pos = Reader.BaseStream.Position;
-                Reader.BaseStream.Position = Offset;
-                writer.Write(Reader.ReadBytes(BlockSize));
-                Reader.BaseStream.Position = pos;
-            }
-        }
-
-        public override IEnumerable<WzObject> GetObjects()
-        {
-            var objList = new List<WzObject>();
-            foreach (var prop in WzProperties)
-            {
-                objList.Add(prop);
-                objList.AddRange(prop.GetObjects());
-            }
-
-            return objList;
-        }
-
-        public List<string> GetPaths(string curPath)
+        public IEnumerable<string> GetPaths(string curPath)
         {
             var objList = new List<string>();
-            foreach (var prop in WzProperties)
+            foreach (var prop in WzProperties.Values)
             {
                 objList.Add(curPath + "/" + prop.Name);
                 objList.AddRange(prop.GetPaths(curPath + "/" + prop.Name));

@@ -1,6 +1,4 @@
-﻿using RazzleServer.Wz.Util;
-
-namespace RazzleServer.Wz.WzProperties
+﻿namespace RazzleServer.Wz.WzProperties
 {
     /// <inheritdoc />
     /// <summary>
@@ -13,19 +11,11 @@ namespace RazzleServer.Wz.WzProperties
         /// </summary>
         public string Value { get; set; }
 
-        public override void SetValue(object value) => Value = (string)value;
-
         public override WzImageProperty DeepClone() => new WzStringProperty(Name, Value);
 
         public override object WzValue => Value;
 
         public override WzPropertyType Type => WzPropertyType.String;
-
-        public override void WriteValue(WzBinaryWriter writer)
-        {
-            writer.Write((byte)8);
-            writer.WriteStringValue(Value, 0, 1);
-        }
 
         public override void Dispose()
         {

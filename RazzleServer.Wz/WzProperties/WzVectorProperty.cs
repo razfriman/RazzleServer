@@ -1,5 +1,4 @@
 ﻿using RazzleServer.Common.Util;
-using RazzleServer.Wz.Util;
 
 namespace RazzleServer.Wz.WzProperties
 {
@@ -8,29 +7,11 @@ namespace RazzleServer.Wz.WzProperties
     /// </summary>
     public class WzVectorProperty : WzExtended
     {
-        public override void SetValue(object value)
-        {
-            if (!(value is Point point))
-            {
-                return;
-            }
-
-            X.Value = point.X;
-            Y.Value = point.Y;
-        }
-
         public override WzImageProperty DeepClone() => new WzVectorProperty(Name, X, Y);
 
         public override object WzValue => new Point(X.Value, Y.Value);
 
         public override WzPropertyType Type => WzPropertyType.Vector;
-
-        public override void WriteValue(WzBinaryWriter writer)
-        {
-            writer.WriteStringValue("Shape2D#Vector2D", 0x73, 0x1B);
-            writer.WriteCompressedInt(X.Value);
-            writer.WriteCompressedInt(Y.Value);
-        }
 
         public override void Dispose()
         {

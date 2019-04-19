@@ -1,5 +1,4 @@
 ﻿using System;
-using RazzleServer.Wz.Util;
 
 namespace RazzleServer.Wz.WzProperties
 {
@@ -15,19 +14,11 @@ namespace RazzleServer.Wz.WzProperties
         /// </summary>
         public int Value { get; set; }
 
-        public override void SetValue(object value) => Value = Convert.ToInt32(value);
-
         public override WzImageProperty DeepClone() => new WzIntProperty(Name, Value);
 
         public override object WzValue => Value;
 
         public override WzPropertyType Type => WzPropertyType.Int;
-
-        public override void WriteValue(WzBinaryWriter writer)
-        {
-            writer.Write((byte)3);
-            writer.WriteCompressedInt(Value);
-        }
 
         public override void Dispose() => Name = null;
 

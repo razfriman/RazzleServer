@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using Newtonsoft.Json;
-using RazzleServer.Wz.Util;
 using Serilog;
 using Point = RazzleServer.Common.Util.Point;
 
@@ -16,13 +15,11 @@ namespace RazzleServer.Wz.WzProperties
 
         private WzObject _linkVal;
 
-        public override void SetValue(object value) => Value = (string)value;
-
         public override WzImageProperty DeepClone() => new WzUolResolvingProperty(Name, Value) {_linkVal = null};
 
         public override object WzValue => LinkValue;
 
-        public override List<WzImageProperty> WzProperties =>
+        public override Dictionary<string, WzImageProperty> WzProperties =>
             (LinkValue as WzImageProperty)?.WzProperties;
 
         public override WzImageProperty this[string name] => LinkValue is WzImageProperty property
@@ -35,14 +32,6 @@ namespace RazzleServer.Wz.WzProperties
                 : (LinkValue as WzImage)?.GetFromPath(path);
 
         public override WzPropertyType Type => WzPropertyType.Uol;
-
-        public override void WriteValue(WzBinaryWriter writer)
-        {
-            writer.WriteStringValue("UOL", 0x73, 0x1B);
-            writer.Write((byte)0);
-            writer.WriteStringValue(Value, 0, 1);
-        }
-
 
         public override void Dispose()
         {

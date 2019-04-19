@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using RazzleServer.Wz.Util;
 
 namespace RazzleServer.Wz.WzProperties
 {
@@ -11,8 +9,6 @@ namespace RazzleServer.Wz.WzProperties
     public class WzConvexProperty : WzExtended, IPropertyContainer
     {
         private List<WzImageProperty> _properties = new List<WzImageProperty>();
-
-        public override void SetValue(object value) => throw new NotImplementedException();
 
         public override WzImageProperty DeepClone()
         {
@@ -67,34 +63,19 @@ namespace RazzleServer.Wz.WzProperties
             WzImageProperty ret = this;
             foreach (var segment in segments)
             {
-                var foundChild = false;
-                foreach (var iwp in ret.WzProperties)
+                var found = ret.WzProperties.GetValueOrDefault(segment);
+
+                if (found != null)
                 {
-                    if (iwp.Name != segment)
-                    {
-                        continue;
-                    }
-
-                    ret = iwp;
-                    foundChild = true;
-                    break;
+                    ret = found;
                 }
-
-                if (!foundChild)
+                else
                 {
                     return null;
                 }
             }
 
             return ret;
-        }
-
-        public override void WriteValue(WzBinaryWriter writer)
-        {
-            var extendedProps = _properties.Where(x => x is WzExtended).ToList();
-            writer.WriteStringValue("Shape2D#Convex2D", 0x73, 0x1B);
-            writer.WriteCompressedInt(extendedProps.Count);
-            extendedProps.ForEach(x => x.WriteValue(writer));
         }
 
         public override void Dispose()

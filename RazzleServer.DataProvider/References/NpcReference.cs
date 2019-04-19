@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using RazzleServer.Wz;
 using Serilog;
 
@@ -30,7 +31,7 @@ namespace RazzleServer.DataProvider.References
             MapleId = id;
             var info = img["info"];
 
-            foreach (var node in info.WzProperties)
+            foreach (var node in info.WzPropertiesList)
             {
                 switch (node.Name)
                 {
@@ -45,7 +46,7 @@ namespace RazzleServer.DataProvider.References
                     case "dcMark":
                         break;
                     case "reg":
-                        node.WzProperties.ForEach(x => Variables[x.Name] = x.GetInt());
+                        node.WzPropertiesList.ToList().ForEach(x => Variables[x.Name] = x.GetInt());
                         break;
                     case "quest":
                         Script = node.GetString();
@@ -60,7 +61,7 @@ namespace RazzleServer.DataProvider.References
                         SpeakLineCount = (byte)node.WzProperties.Count;
                         break;
                     case "shop":
-                        node.WzProperties.ForEach(x => ShopItems.Add(new NpcShopItemReference(x)));
+                        node.WzPropertiesList.ToList().ForEach(x => ShopItems.Add(new NpcShopItemReference(x)));
                         break;
                     default:
                         _log.Warning($"Unknown npc info node Npc={MapleId} Name={node.Name} Value={node.WzValue}");

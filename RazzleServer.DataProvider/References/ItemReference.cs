@@ -151,7 +151,7 @@ namespace RazzleServer.DataProvider.References
 
                 if (spec != null)
                 {
-                    foreach (var specNode in spec.WzProperties)
+                    foreach (var specNode in spec.WzPropertiesList)
                     {
                         switch (specNode.Name)
                         {

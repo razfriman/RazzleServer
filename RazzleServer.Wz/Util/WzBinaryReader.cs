@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using System.Text;
 using RazzleServer.Crypto;
 
@@ -6,7 +7,7 @@ namespace RazzleServer.Wz.Util
 {
     public class WzBinaryReader : BinaryReader
     {
-        public WzMutableKey WzKey { get; set; }
+        public WzMutableKey WzKey { get; }
 
         public uint Hash { get; set; }
 
@@ -45,20 +46,10 @@ namespace RazzleServer.Wz.Util
 
         private string ReadAsciiString(sbyte smallLength)
         {
-            var retString = new StringBuilder();
             byte mask = 0xAA;
             var length = smallLength == sbyte.MinValue ? ReadInt32() : -smallLength;
-
-            for (var i = 0; i < length; i++)
-            {
-                var encryptedChar = ReadByte();
-                encryptedChar ^= mask;
-                encryptedChar ^= WzKey[i];
-                retString.Append((char)encryptedChar);
-                mask++;
-            }
-
-            return retString.ToString();
+            var chrs = ReadBytes(length).Select((x, index) => (char)(x ^ mask++ ^ WzKey[index]));
+            return new string(chrs.ToArray());
         }
 
         private string ReadUnicodeString(sbyte smallLength)
@@ -66,7 +57,6 @@ namespace RazzleServer.Wz.Util
             var retString = new StringBuilder();
             ushort mask = 0xAAAA;
             var length = smallLength == sbyte.MaxValue ? ReadInt32() : smallLength;
-
 
             for (var i = 0; i < length; i++)
             {
@@ -122,28 +112,6 @@ namespace RazzleServer.Wz.Util
             offset ^= encryptedOffset;
             offset += Header.FStart * 2;
             return offset;
-        }
-
-        public string DecryptString(char[] stringToDecrypt)
-        {
-            var builder = new StringBuilder(stringToDecrypt.Length);
-            for (var i = 0; i < stringToDecrypt.Length; i++)
-            {
-                builder.Append((char)(stringToDecrypt[i] ^ (char)((WzKey[i * 2 + 1] << 8) + WzKey[i * 2])));
-            }
-
-            return builder.ToString();
-        }
-
-        public string DecryptNonUnicodeString(char[] stringToDecrypt)
-        {
-            var builder = new StringBuilder(stringToDecrypt.Length);
-            for (var i = 0; i < stringToDecrypt.Length; i++)
-            {
-                builder.Append((char)(stringToDecrypt[i] ^ WzKey[i]));
-            }
-
-            return builder.ToString();
         }
 
         public string ReadStringBlock(uint offset)

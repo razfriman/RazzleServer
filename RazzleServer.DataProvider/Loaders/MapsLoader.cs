@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using RazzleServer.DataProvider.Cache;
 using RazzleServer.DataProvider.References;
+using RazzleServer.Wz;
 using Serilog;
 
 namespace RazzleServer.DataProvider.Loaders
@@ -11,12 +12,10 @@ namespace RazzleServer.DataProvider.Loaders
 
         public override ILogger Logger => Log.ForContext<MapsLoader>();
 
-        public override void LoadFromWz()
+        public override void LoadFromWz(WzFile file)
         {
             Logger.Information("Loading Maps");
 
-            using var file = GetWzFile("Data.wz");
-            file.ParseWzFile();
             file.WzDirectory.GetDirectoryByName("Map")
                 .GetDirectoryByName("Map")
                 .WzDirectories

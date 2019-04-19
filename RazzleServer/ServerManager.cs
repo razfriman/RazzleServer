@@ -26,7 +26,7 @@ namespace RazzleServer
         public async Task Configure()
         {
             InitializeDatabase();
-            await CachedData.Initialize();
+            CachedData.Initialize();
             await ScriptProvider.Initialize();
             await LootProvider.Initialize();
         }

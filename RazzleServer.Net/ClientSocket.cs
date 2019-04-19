@@ -4,6 +4,7 @@ using System.IO.Pipelines;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using RazzleServer.Common.Util;
 using RazzleServer.Crypto;
 using RazzleServer.Net.Packet;
 using Serilog;
@@ -28,8 +29,7 @@ namespace RazzleServer.Net
 
         public MapleCipherProvider Cipher { get; }
         
-        public ClientSocket(Socket socket, AClient client, ushort version, ulong aesKey, bool useAesEncryption,
-            bool toClient)
+        public ClientSocket(Socket socket, AClient client, ushort version, ulong? aesKey, bool toClient)
         {
             _socket = socket;
             _client = client;
@@ -40,7 +40,7 @@ namespace RazzleServer.Net
             Host = Endpoint?.Address.ToString();
             HostBytes = Endpoint?.Address.GetAddressBytes();
             Port = (ushort)(((IPEndPoint)socket?.LocalEndPoint)?.Port ?? 0);
-            Cipher = new MapleCipherProvider(version, aesKey, useAesEncryption, toClient);
+            Cipher = new MapleCipherProvider(version, aesKey, toClient);
             Cipher.PacketFinished += data => _client.Receive(new PacketReader(data));
             if (socket != null && socket.Connected)
             {
@@ -122,10 +122,9 @@ namespace RazzleServer.Net
                     break;
                 }
 
-                var packetData = buffer.Slice(0, packetLength);
+                var packetData = buffer.Slice(0, packetLength).ToArray();
 
-                // TODO(raz) - Is there a way to do this on ReadOnlySequence without allocation?
-                Cipher.Decrypt(packetData.ToArray());
+                Cipher.Decrypt(packetData);
 
                 var next = buffer.GetPosition(packetLength);
                 buffer = buffer.Slice(next);

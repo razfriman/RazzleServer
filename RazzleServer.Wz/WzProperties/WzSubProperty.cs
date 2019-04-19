@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using RazzleServer.Wz.Util;
 
 namespace RazzleServer.Wz.WzProperties
 {
@@ -9,12 +8,10 @@ namespace RazzleServer.Wz.WzProperties
     /// </summary>
     public class WzSubProperty : WzExtended, IPropertyContainer
     {
-        public override void SetValue(object value) => throw new NotImplementedException();
-
         public override WzImageProperty DeepClone()
         {
             var clone = new WzSubProperty(Name);
-            foreach (var prop in WzProperties)
+            foreach (var prop in WzProperties.Values)
             {
                 clone.AddProperty(prop.DeepClone());
             }
@@ -34,18 +31,7 @@ namespace RazzleServer.Wz.WzProperties
         /// <returns>The wz property with the specified name</returns>
         public override WzImageProperty this[string name]
         {
-            get
-            {
-                foreach (var iwp in WzProperties)
-                {
-                    if (iwp.Name.ToLower() == name.ToLower())
-                    {
-                        return iwp;
-                    }
-                }
-
-                return null;
-            }
+            get => WzProperties.GetValueOrDefault(name, null);
             set
             {
                 if (value == null)
@@ -74,20 +60,13 @@ namespace RazzleServer.Wz.WzProperties
             WzImageProperty ret = this;
             foreach (var segment in segments)
             {
-                var foundChild = false;
-                foreach (var iwp in ret.WzProperties)
+                var found = ret.WzProperties.GetValueOrDefault(segment);
+
+                if (found != null)
                 {
-                    if (iwp.Name != segment)
-                    {
-                        continue;
-                    }
-
-                    ret = iwp;
-                    foundChild = true;
-                    break;
+                    ret = found;
                 }
-
-                if (!foundChild)
+                else
                 {
                     return null;
                 }
@@ -96,19 +75,13 @@ namespace RazzleServer.Wz.WzProperties
             return ret;
         }
 
-        public override void WriteValue(WzBinaryWriter writer)
-        {
-            writer.WriteStringValue("Property", 0x73, 0x1B);
-            WritePropertyList(writer, WzProperties);
-        }
-
         /// <summary>
         /// Disposes the object
         /// </summary>
         public override void Dispose()
         {
             Name = null;
-            foreach (var prop in WzProperties)
+            foreach (var prop in WzProperties.Values)
             {
                 prop.Dispose();
             }
@@ -138,7 +111,7 @@ namespace RazzleServer.Wz.WzProperties
         public void AddProperty(WzImageProperty prop)
         {
             prop.Parent = this;
-            WzProperties.Add(prop);
+            WzProperties.Add(prop.Name, prop);
         }
 
         public void AddProperties(IEnumerable<WzImageProperty> props)
@@ -152,7 +125,7 @@ namespace RazzleServer.Wz.WzProperties
         public void RemoveProperty(WzImageProperty prop)
         {
             prop.Parent = null;
-            WzProperties.Remove(prop);
+            WzProperties.Remove(prop.Name);
         }
 
         /// <summary>
@@ -160,7 +133,7 @@ namespace RazzleServer.Wz.WzProperties
         /// </summary>
         public void ClearProperties()
         {
-            foreach (var prop in WzProperties)
+            foreach (var prop in WzProperties.Values)
             {
                 prop.Parent = null;
             }

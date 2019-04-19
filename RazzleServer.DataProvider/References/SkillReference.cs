@@ -51,7 +51,7 @@ namespace RazzleServer.DataProvider.References
             MapleId = mapleId;
             Level = level;
 
-            foreach (var node in img.WzProperties)
+            foreach (var node in img.WzPropertiesList)
             {
                 switch (node.Name)
                 {

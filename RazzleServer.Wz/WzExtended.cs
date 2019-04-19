@@ -4,6 +4,7 @@ namespace RazzleServer.Wz
 {
     public abstract class WzExtended : WzImageProperty
     {
-        public override List<WzImageProperty> WzProperties { get; set; } = new List<WzImageProperty>();
+        public override Dictionary<string, WzImageProperty> WzProperties { get; set; } =
+            new Dictionary<string, WzImageProperty>();
     }
 }

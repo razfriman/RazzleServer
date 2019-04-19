@@ -2,6 +2,7 @@
 using System.Buffers;
 using System.IO;
 using System.Text;
+using RazzleServer.Common.Util;
 
 namespace RazzleServer.Crypto
 {
@@ -22,18 +23,18 @@ namespace RazzleServer.Crypto
 
         private bool ToClient { get; }
 
-        public MapleCipherProvider(ushort currentGameVersion, ulong aesKey, bool useAesEncryption = true,
+        public MapleCipherProvider(ushort currentGameVersion, ulong? aesKey,
             bool toClient = true)
         {
-            RecvCipher = new MapleCipher(currentGameVersion, aesKey, useAesEncryption);
-            SendCipher = new MapleCipher(currentGameVersion, aesKey, useAesEncryption);
+            RecvCipher = new MapleCipher(currentGameVersion, aesKey);
+            SendCipher = new MapleCipher(currentGameVersion, aesKey);
             ToClient = toClient;
         }
 
         /// <summary>
         /// Callback for when a packet is finished
         /// </summary>
-        public delegate void CallPacketFinished(byte[] packet);
+        public delegate void CallPacketFinished(Span<byte> packet);
 
         /// <summary>
         /// Event called when a packet has been handled by the crypto
@@ -98,7 +99,7 @@ namespace RazzleServer.Crypto
                     return;
                 }
 
-                PacketFinished?.Invoke(decrypted.ToArray());
+                PacketFinished?.Invoke(decrypted);
             }
         }
 
@@ -111,7 +112,7 @@ namespace RazzleServer.Crypto
         /// </summary>
         public int GetHeader(ReadOnlySequence<byte> buffer) => RecvCipher
             .Handshaken
-            ? 4 + MapleCipher.GetPacketLength(buffer.Slice(0, 4).ToArray())
-            : 2 + BitConverter.ToUInt16(buffer.Slice(0, 2).ToArray());
+            ? 4 + MapleCipher.GetPacketLength(buffer.Slice(0,4).ToSpan())
+            : 2 + BitConverter.ToUInt16(buffer.Slice(0, 2).ToSpan());
     }
 }

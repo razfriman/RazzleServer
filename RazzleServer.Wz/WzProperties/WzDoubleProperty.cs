@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using RazzleServer.Wz.Util;
 
 namespace RazzleServer.Wz.WzProperties
 {
@@ -14,19 +13,11 @@ namespace RazzleServer.Wz.WzProperties
         /// </summary>
         public double Value { get; set; }
 
-        public override void SetValue(object value) => Value = (double)value;
-
         public override WzImageProperty DeepClone() => new WzDoubleProperty(Name, Value);
 
         public override object WzValue => Value;
 
         public override WzPropertyType Type => WzPropertyType.Double;
-
-        public override void WriteValue(WzBinaryWriter writer)
-        {
-            writer.Write((byte)5);
-            writer.Write(Value);
-        }
 
         public override void Dispose() => Name = null;
 
