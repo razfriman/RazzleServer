@@ -14,8 +14,6 @@ namespace RazzleServer.Wz.WzProperties
         /// </summary>
         public int Value { get; set; }
 
-        public override void SetValue(object value) => Value = Convert.ToInt32(value);
-
         public override WzImageProperty DeepClone() => new WzIntProperty(Name, Value);
 
         public override object WzValue => Value;

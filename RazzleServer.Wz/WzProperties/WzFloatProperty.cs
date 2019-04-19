@@ -40,8 +40,6 @@ namespace RazzleServer.Wz.WzProperties
 
         public override object WzValue => Value;
 
-        public override void SetValue(object value) => Value = (float)value;
-
         public override WzImageProperty DeepClone() => new WzFloatProperty(Name, Value);
 
         public override WzPropertyType Type => WzPropertyType.Float;

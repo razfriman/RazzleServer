@@ -24,18 +24,6 @@ namespace RazzleServer.Wz.WzProperties
         private readonly WzBinaryReader _wzReader;
         private readonly long _offs;
 
-        public override void SetValue(object value)
-        {
-            if (value is Bitmap bitmap)
-            {
-                SetPng(bitmap);
-            }
-            else
-            {
-                _compressedBytes = (byte[])value;
-            }
-        }
-
         public override WzImageProperty DeepClone()
         {
             var clone = new WzPngProperty();

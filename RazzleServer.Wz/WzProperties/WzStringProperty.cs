@@ -11,8 +11,6 @@
         /// </summary>
         public string Value { get; set; }
 
-        public override void SetValue(object value) => Value = (string)value;
-
         public override WzImageProperty DeepClone() => new WzStringProperty(Name, Value);
 
         public override object WzValue => Value;

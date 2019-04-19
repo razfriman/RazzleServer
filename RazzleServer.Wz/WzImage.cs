@@ -346,18 +346,6 @@ namespace RazzleServer.Wz
             _properties.Clear();
         }
 
-        public override IEnumerable<WzObject> GetObjects()
-        {
-            var objList = new List<WzObject>();
-            foreach (var prop in WzProperties.Values)
-            {
-                objList.Add(prop);
-                objList.AddRange(prop.GetObjects());
-            }
-
-            return objList;
-        }
-
         public IEnumerable<string> GetPaths(string curPath)
         {
             var objList = new List<string>();

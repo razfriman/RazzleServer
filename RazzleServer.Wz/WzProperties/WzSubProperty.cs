@@ -8,8 +8,6 @@ namespace RazzleServer.Wz.WzProperties
     /// </summary>
     public class WzSubProperty : WzExtended, IPropertyContainer
     {
-        public override void SetValue(object value) => throw new NotImplementedException();
-
         public override WzImageProperty DeepClone()
         {
             var clone = new WzSubProperty(Name);

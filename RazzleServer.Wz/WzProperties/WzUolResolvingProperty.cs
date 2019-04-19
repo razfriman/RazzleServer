@@ -15,8 +15,6 @@ namespace RazzleServer.Wz.WzProperties
 
         private WzObject _linkVal;
 
-        public override void SetValue(object value) => Value = (string)value;
-
         public override WzImageProperty DeepClone() => new WzUolResolvingProperty(Name, Value) {_linkVal = null};
 
         public override object WzValue => LinkValue;

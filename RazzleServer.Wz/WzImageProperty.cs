@@ -57,8 +57,6 @@ namespace RazzleServer.Wz
 
         public abstract WzImageProperty DeepClone();
 
-        public abstract void SetValue(object value);
-
         public override void Remove() => ((IPropertyContainer)Parent)?.RemoveProperty(this);
 
         public override WzFile WzFileParent => ParentImage.WzFileParent;
@@ -198,55 +196,6 @@ namespace RazzleServer.Wz
                 default:
                     throw new InvalidOperationException("Unknown iname: " + iname);
             }
-        }
-
-        public override IEnumerable<WzObject> GetObjects()
-        {
-            var objList = new List<WzObject>();
-            switch (Type)
-            {
-                case WzPropertyType.Canvas:
-                    foreach (var canvasProp in ((WzCanvasProperty)this).WzProperties.Values)
-                    {
-                        objList.AddRange(canvasProp.GetObjects());
-                    }
-
-                    objList.Add(((WzCanvasProperty)this).PngProperty);
-                    break;
-                case WzPropertyType.Convex:
-                    foreach (var exProp in ((WzConvexProperty)this).WzProperties.Values)
-                    {
-                        objList.AddRange(exProp.GetObjects());
-                    }
-
-                    break;
-                case WzPropertyType.SubProperty:
-                    foreach (var subProp in ((WzSubProperty)this).WzProperties.Values)
-                    {
-                        objList.AddRange(subProp.GetObjects());
-                    }
-
-                    break;
-                case WzPropertyType.Vector:
-                    objList.Add(((WzVectorProperty)this).X);
-                    objList.Add(((WzVectorProperty)this).Y);
-                    break;
-                case WzPropertyType.Null:
-                case WzPropertyType.Short:
-                case WzPropertyType.Int:
-                case WzPropertyType.Long:
-                case WzPropertyType.Float:
-                case WzPropertyType.Double:
-                case WzPropertyType.String:
-                case WzPropertyType.Sound:
-                case WzPropertyType.Uol:
-                case WzPropertyType.Png:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
-            return objList;
         }
 
         public IEnumerable<string> GetPaths(string curPath)

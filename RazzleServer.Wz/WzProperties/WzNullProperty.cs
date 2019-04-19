@@ -8,8 +8,6 @@ namespace RazzleServer.Wz.WzProperties
     /// </summary>
     public class WzNullProperty : WzImageProperty
     {
-        public override void SetValue(object value) => throw new NotImplementedException();
-
         public override WzImageProperty DeepClone() => new WzNullProperty(Name);
 
         public override WzPropertyType Type => WzPropertyType.Null;

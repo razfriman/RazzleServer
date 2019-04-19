@@ -13,8 +13,6 @@ namespace RazzleServer.Wz.WzProperties
         /// </summary>
         public double Value { get; set; }
 
-        public override void SetValue(object value) => Value = (double)value;
-
         public override WzImageProperty DeepClone() => new WzDoubleProperty(Name, Value);
 
         public override object WzValue => Value;

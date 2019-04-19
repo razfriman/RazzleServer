@@ -10,8 +10,6 @@ namespace RazzleServer.Wz.WzProperties
     {
         private List<WzImageProperty> _properties = new List<WzImageProperty>();
 
-        public override void SetValue(object value) => throw new NotImplementedException();
-
         public override WzImageProperty DeepClone()
         {
             var clone = new WzConvexProperty(Name);

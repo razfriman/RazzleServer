@@ -10,8 +10,6 @@ namespace RazzleServer.Wz.WzProperties
     /// </summary>
     public class WzCanvasProperty : WzExtended, IPropertyContainer
     {
-        public override void SetValue(object value) => PngProperty = (WzPngProperty)value;
-
         public override WzImageProperty DeepClone()
         {
             var clone = new WzCanvasProperty(Name);

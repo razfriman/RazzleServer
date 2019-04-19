@@ -5,8 +5,6 @@
     /// </summary>
     public class WzUolProperty : WzExtended
     {
-        public override void SetValue(object value) => Value = (string)value;
-
         public override WzImageProperty DeepClone() => new WzUolProperty(Name, Value);
 
         public override object WzValue => Value;

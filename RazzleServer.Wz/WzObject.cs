@@ -103,8 +103,6 @@ namespace RazzleServer.Wz
 
         public virtual byte[] GetBytes() => throw new NotImplementedException();
 
-        public virtual IEnumerable<WzObject> GetObjects() => Enumerable.Empty<WzObject>();
-
         public void Serialize(string path, bool oneFile = true, JsonSerializer serializer = null)
         {
             if (!oneFile && (this is WzFile || this is WzDirectory))

@@ -394,41 +394,5 @@ namespace RazzleServer.Wz
         }
 
         public override void Remove() => ((WzDirectory)Parent)?.RemoveDirectory(this);
-
-        public override IEnumerable<WzObject> GetObjects()
-        {
-            var objList = new List<WzObject>();
-            foreach (var img in WzImages)
-            {
-                objList.Add(img);
-                objList.AddRange(img.GetObjects());
-            }
-
-            foreach (var subdir in WzDirectories)
-            {
-                objList.Add(subdir);
-                objList.AddRange(subdir.GetObjects());
-            }
-
-            return objList;
-        }
-
-        internal IEnumerable<string> GetPaths(string curPath)
-        {
-            var objList = new List<string>();
-            foreach (var img in WzImages)
-            {
-                objList.Add(curPath + "/" + img.Name);
-                objList.AddRange(img.GetPaths(curPath + "/" + img.Name));
-            }
-
-            foreach (var subdir in WzDirectories)
-            {
-                objList.Add(curPath + "/" + subdir.Name);
-                objList.AddRange(subdir.GetPaths(curPath + "/" + subdir.Name));
-            }
-
-            return objList;
-        }
     }
 }

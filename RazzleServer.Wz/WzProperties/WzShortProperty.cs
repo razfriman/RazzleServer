@@ -11,8 +11,6 @@
         /// </summary>
         public short Value { get; set; }
 
-        public override void SetValue(object value) => Value = (short)value;
-
         public override WzImageProperty DeepClone() => new WzShortProperty(Name, Value);
 
         public override object WzValue => Value;

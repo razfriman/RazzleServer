@@ -38,10 +38,6 @@ namespace RazzleServer.Wz.WzProperties
 
         public override object WzValue => GetBytes(false);
 
-        public override void SetValue(object value)
-        {
-        }
-
         /// <summary>
         /// The WzPropertyType of the property
         /// </summary>

@@ -4,8 +4,6 @@ namespace RazzleServer.Wz.WzProperties
 {
     internal class WzLongProperty : WzImageProperty
     {
-        public override void SetValue(object value) => Value = Convert.ToInt64(value);
-
         public override WzImageProperty DeepClone() => new WzLongProperty(Name, Value);
 
         public override object WzValue => Value;

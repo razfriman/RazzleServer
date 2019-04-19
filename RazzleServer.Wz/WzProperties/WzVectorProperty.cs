@@ -7,17 +7,6 @@ namespace RazzleServer.Wz.WzProperties
     /// </summary>
     public class WzVectorProperty : WzExtended
     {
-        public override void SetValue(object value)
-        {
-            if (!(value is Point point))
-            {
-                return;
-            }
-
-            X.Value = point.X;
-            Y.Value = point.Y;
-        }
-
         public override WzImageProperty DeepClone() => new WzVectorProperty(Name, X, Y);
 
         public override object WzValue => new Point(X.Value, Y.Value);
