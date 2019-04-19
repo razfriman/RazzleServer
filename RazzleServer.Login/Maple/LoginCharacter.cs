@@ -13,9 +13,9 @@ namespace RazzleServer.Login.Maple
         private readonly ILogger _log = Log.ForContext<LoginCharacter>();
 
         public LoginClient Client { get; }
-        public override AMapleClient BaseClient => Client; 
+        public override AMapleClient BaseClient => Client;
 
-        public LoginCharacter() 
+        public LoginCharacter()
         {
         }
 

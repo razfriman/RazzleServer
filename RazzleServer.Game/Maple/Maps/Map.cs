@@ -53,7 +53,7 @@ namespace RazzleServer.Game.Maple.Maps
             reference.Npcs.ForEach(x => Npcs.Add(new Npc(x)));
             reference.SpawnPoints.ForEach(x => SpawnPoints.Add(new SpawnPoint(x)));
             reference.Portals.ForEach(x => Portals.Add(new Portal(x)));
-            
+
             Footholds.CalculateBounds();
             SpawnPoints.Spawn();
             FieldLimit = reference.FieldLimit;

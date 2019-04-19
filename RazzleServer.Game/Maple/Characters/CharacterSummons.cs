@@ -19,7 +19,7 @@ namespace RazzleServer.Game.Maple.Characters
         public override void Remove(int key)
         {
             base.Remove(key);
-            
+
             Parent.Map?.Summons.Remove(key);
         }
 

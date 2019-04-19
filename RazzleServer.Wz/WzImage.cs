@@ -111,7 +111,7 @@ namespace RazzleServer.Wz
         /// <summary>
         /// The properties contained in the image
         /// </summary>
-        public Dictionary<string,WzImageProperty> WzProperties
+        public Dictionary<string, WzImageProperty> WzProperties
         {
             get
             {
@@ -123,9 +123,8 @@ namespace RazzleServer.Wz
                 return _properties;
             }
         }
-        
-        [JsonIgnore]
-        public IEnumerable<WzImageProperty> WzPropertiesList => WzProperties.Values;
+
+        [JsonIgnore] public IEnumerable<WzImageProperty> WzPropertiesList => WzProperties.Values;
 
         public WzImage DeepClone()
         {
@@ -321,6 +320,7 @@ namespace RazzleServer.Wz
             {
                 _properties.Add(parsedProp.Name, parsedProp);
             }
+
             Parsed = true;
         }
 

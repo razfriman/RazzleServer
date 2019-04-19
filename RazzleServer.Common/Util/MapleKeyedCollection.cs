@@ -7,7 +7,8 @@ namespace RazzleServer.Common.Util
 {
     public abstract class MapleKeyedCollection<TKey, TValue>
     {
-        [JsonProperty] protected ConcurrentDictionary<TKey, TValue> Objects { get; set; } = new ConcurrentDictionary<TKey, TValue>();
+        [JsonProperty]
+        protected ConcurrentDictionary<TKey, TValue> Objects { get; set; } = new ConcurrentDictionary<TKey, TValue>();
 
         public TValue this[TKey key] => Objects.ContainsKey(key) ? Objects[key] : default;
 

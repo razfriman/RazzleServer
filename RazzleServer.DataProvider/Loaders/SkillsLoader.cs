@@ -17,7 +17,7 @@ namespace RazzleServer.DataProvider.Loaders
         public override void LoadFromWz(WzFile file)
         {
             Logger.Information("Loading Skills");
-            
+
             var dir = file.WzDirectory.GetDirectoryByName("Skill");
 
             foreach (var job in Enum.GetValues(typeof(Job)))

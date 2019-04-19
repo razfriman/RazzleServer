@@ -15,9 +15,8 @@ namespace RazzleServer.Wz
     public abstract class WzImageProperty : WzObject
     {
         public virtual Dictionary<string, WzImageProperty> WzProperties { get; set; }
-        
-        [JsonIgnore]
-        public IEnumerable<WzImageProperty> WzPropertiesList => WzProperties.Values;
+
+        [JsonIgnore] public IEnumerable<WzImageProperty> WzPropertiesList => WzProperties.Values;
 
         public virtual WzImageProperty this[string name]
         {
@@ -61,7 +60,8 @@ namespace RazzleServer.Wz
 
         public override WzFile WzFileParent => ParentImage.WzFileParent;
 
-        internal static IEnumerable<WzImageProperty> ParsePropertyList(uint offset, WzBinaryReader reader, WzObject parent,
+        internal static IEnumerable<WzImageProperty> ParsePropertyList(uint offset, WzBinaryReader reader,
+            WzObject parent,
             WzImage parentImg)
         {
             var entryCount = reader.ReadCompressedInt();

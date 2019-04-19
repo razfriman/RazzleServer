@@ -17,6 +17,6 @@ namespace RazzleServer.Data
         public DateTime Birthday { get; set; }
         public DateTime Creation { get; set; }
 
-        public List<CharacterEntity> Characters { get; set; } 
+        public List<CharacterEntity> Characters { get; set; }
     }
 }

@@ -13,11 +13,11 @@ namespace RazzleServer.Game.Maple.Life
         public int Price { get; set; }
         public int Stock { get; set; }
         public float UnitRechargeRate { get; set; }
-        
+
         [JsonIgnore] public short MaxPerStack => CachedData.Items.Data[MapleId].MaxPerStack;
 
         [JsonIgnore] public bool IsRecharageable => CachedData.Items.Data[MapleId].IsRechargeable;
-        
+
         public NpcShopItem(NpcShopItemReference reference)
         {
             MapleId = reference.MapleId;

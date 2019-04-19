@@ -22,7 +22,7 @@ namespace RazzleServer.Game.Maple.Life
         protected LifeObject()
         {
         }
-        
+
         protected LifeObject(MapNpcReference reference)
         {
             MapleId = reference.MapleId;

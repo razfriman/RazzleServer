@@ -11,4 +11,3 @@ namespace RazzleServer.Game.Scripts.Npcs
         }
     }
 }
-

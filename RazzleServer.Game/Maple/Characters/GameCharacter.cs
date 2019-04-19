@@ -283,7 +283,7 @@ namespace RazzleServer.Game.Maple.Characters
             pw.WriteInt(ItemEffect);
             Map.Send(pw, this);
         }
-        
+
         public byte[] DataToByteArray()
         {
             var pw = new PacketWriter();

@@ -65,7 +65,7 @@ namespace RazzleServer.Tests
         [DataRow((byte)0x01, "01")]
         [DataRow((byte)sbyte.MaxValue, "7F")]
         [DataRow((byte)((byte)sbyte.MaxValue + 1), "80")]
-        [DataRow((byte) (byte.MaxValue - 1), "FE")]
+        [DataRow((byte)(byte.MaxValue - 1), "FE")]
         [DataRow(byte.MaxValue, "FF")]
         public void WriteByte_Succeeds(byte input, string expected)
         {
@@ -201,7 +201,6 @@ namespace RazzleServer.Tests
         [DataRow("", "")]
         [DataRow("01 02 03 04", "01 02 03 04")]
         [DataRow("FF FF FF FF", "FF FF FF FF")]
-
         public void WriteHexString_Valid_Succeeds(string input, string expected)
         {
             using var pw = new PacketWriter();

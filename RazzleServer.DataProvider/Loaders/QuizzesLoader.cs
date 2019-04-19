@@ -14,7 +14,7 @@ namespace RazzleServer.DataProvider.Loaders
         public override void LoadFromWz(WzFile file)
         {
             Logger.Information("Loading Quizzes");
-            
+
             var dir = file.WzDirectory.GetDirectoryByName("Etc");
             var img = dir.GetImageByName("OXQuiz.img");
 

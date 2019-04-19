@@ -21,7 +21,7 @@ namespace RazzleServer.Game.Handlers
             client.Account = new GameAccount(accountId, client);
             client.Account.Load();
             client.SetOnline(true);
-            
+
             client.GameCharacter = new GameCharacter(characterId, client);
             client.GameCharacter.Load();
             client.GameCharacter.Initialize();

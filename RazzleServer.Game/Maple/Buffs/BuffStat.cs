@@ -16,7 +16,8 @@ namespace RazzleServer.Game.Maple.Buffs
 
         public BuffValueTypes GetState(DateTime? time = null) => IsActive(time) ? Flag : 0;
 
-        public bool HasReferenceId(int referenceId, DateTime? currenTime = null) => IsActive(currenTime) && ReferenceId == referenceId;
+        public bool HasReferenceId(int referenceId, DateTime? currenTime = null) =>
+            IsActive(currenTime) && ReferenceId == referenceId;
 
         public BuffStat(BuffValueTypes flag)
         {

@@ -100,7 +100,8 @@ namespace RazzleServer.Game.Handlers
                 return;
             }
 
-            if (client.GameCharacter.Items.SpaceTakenBy(purchase) > client.GameCharacter.Items.RemainingSlots(purchase.Type))
+            if (client.GameCharacter.Items.SpaceTakenBy(purchase) >
+                client.GameCharacter.Items.RemainingSlots(purchase.Type))
             {
                 SendShopResult(client, ShopResult.BuyUnknown);
                 return;

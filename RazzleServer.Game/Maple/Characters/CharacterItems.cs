@@ -319,7 +319,7 @@ namespace RazzleServer.Game.Maple.Characters
             }
 
             drop.Picker = Parent;
-            
+
             switch (drop)
             {
                 case Meso meso when Parent.PrimaryStats.Meso != int.MaxValue:

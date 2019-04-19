@@ -44,12 +44,10 @@ namespace RazzleServer.Game.Server
 
         public virtual void Save()
         {
-            
         }
 
         public virtual void Create()
         {
-            
         }
     }
 }

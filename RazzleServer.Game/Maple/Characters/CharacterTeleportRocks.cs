@@ -36,10 +36,8 @@ namespace RazzleServer.Game.Maple.Characters
             using var context = new MapleDbContext();
             var existing = context.TeleportRocks.Where(x => x.CharacterId == Parent.Id).ToArray();
             context.TeleportRocks.RemoveRange(existing);
-            context.TeleportRocks.AddRange(Maps.Select(x => new TeleportRockEntity
-            {
-                CharacterId = Parent.Id, MapId = x
-            }));
+            context.TeleportRocks.AddRange(
+                Maps.Select(x => new TeleportRockEntity {CharacterId = Parent.Id, MapId = x}));
             context.SaveChanges();
         }
 
