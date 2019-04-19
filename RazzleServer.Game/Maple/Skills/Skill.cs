@@ -60,14 +60,16 @@ namespace RazzleServer.Game.Maple.Skills
             {
                 _currentLevel = value;
 
-                if (Parent != null)
+                if (Parent == null)
                 {
-                    Recalculate();
+                    return;
+                }
 
-                    if (Character.IsInitialized)
-                    {
-                        Update();
-                    }
+                Recalculate();
+
+                if (Character.IsInitialized)
+                {
+                    Update();
                 }
             }
         }
