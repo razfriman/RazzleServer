@@ -105,11 +105,11 @@ namespace RazzleServer.Wz.WzProperties
         {
             if (!(prop is WzExtended))
             {
-                throw new Exception("Property is not IExtended");
+                throw new ArgumentException($"Property is not {nameof(WzExtended)}");
             }
 
             prop.Parent = this;
-            _properties.Add((WzExtended)prop);
+            _properties.Add(prop);
         }
 
         public void AddProperties(IEnumerable<WzImageProperty> properties)

@@ -4,7 +4,6 @@ using System.IO.MemoryMappedFiles;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using RazzleServer.Wz.Util;
-using Serilog;
 
 namespace RazzleServer.Wz
 {
@@ -14,8 +13,6 @@ namespace RazzleServer.Wz
     /// </summary>
     public class WzFile : WzObject
     {
-        private readonly ILogger _log = Log.ForContext<WzFile>();
-
         private uint _versionHash;
         private int _version;
         private readonly byte[] _wzIv;
@@ -96,17 +93,13 @@ namespace RazzleServer.Wz
         {
             if (FilePath == null)
             {
-                _log.Error("Path is null");
-                return;
+                throw new ArgumentNullException(nameof(FilePath), "WZ File path is null");
             }
 
             if (!File.Exists(FilePath))
             {
-                var message = $"WZ File does not exist at path: '{FilePath}'";
-                _log.Error(message);
-                throw new FileNotFoundException(message);
+                throw new FileNotFoundException($"WZ File does not exist at path: '{FilePath}'");
             }
-
 
             var mmf = MemoryMappedFile.CreateFromFile(FilePath);
             var reader = new WzBinaryReader(mmf.CreateViewStream(), wzIv);

@@ -10,11 +10,6 @@
 
         public uint FStart { get; set; }
 
-        public void RecalculateFileStart()
-        {
-            FStart = (uint)(Ident.Length + sizeof(ulong) + sizeof(uint) + Copyright.Length + 1);
-        }
-
         public static WzHeader GetDefault()
         {
             var header = new WzHeader

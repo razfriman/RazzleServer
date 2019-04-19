@@ -173,7 +173,7 @@ namespace RazzleServer.Wz
                         rememberPos = _reader.BaseStream.Position;
                         break;
                     default:
-                        throw new InvalidDataException();
+                        throw new InvalidDataException($"Invalid directory type Type={type}");
                 }
 
                 _reader.BaseStream.Position = rememberPos;
