@@ -8,7 +8,7 @@ namespace RazzleServer.DataProvider.References
         public MapNpcReference()
         {
         }
-        
+
         public MapNpcReference(WzImageProperty img) : base(img, LifeObjectType.Npc)
         {
         }

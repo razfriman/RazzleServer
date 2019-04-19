@@ -16,11 +16,11 @@ namespace RazzleServer.DataProvider.References
         public LifeObjectType Type { get; set; }
         public int ObjectId { get; set; }
         public Point Position { get; set; }
-        
+
         public LifeObjectReference()
-                 {
-                 }
-        
+        {
+        }
+
         public LifeObjectReference(WzImageProperty img, LifeObjectType type)
         {
             MapleId = int.Parse(img["id"].GetString());

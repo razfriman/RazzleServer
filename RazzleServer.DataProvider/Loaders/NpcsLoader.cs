@@ -14,7 +14,7 @@ namespace RazzleServer.DataProvider.Loaders
         public override void LoadFromWz(WzFile file)
         {
             Logger.Information("Loading Npcs");
-            
+
             var dir = file.WzDirectory.GetDirectoryByName("Npc");
 
             dir.WzImages.ForEach(x =>

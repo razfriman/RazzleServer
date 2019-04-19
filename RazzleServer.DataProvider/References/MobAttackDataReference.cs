@@ -24,6 +24,7 @@ namespace RazzleServer.DataProvider.References
         /// Referred to as "disease" in the data files
         /// </summary>
         public byte SkillId { get; set; }
+
         public byte SkillLevel { get; set; }
 
         public MobAttackDataReference()

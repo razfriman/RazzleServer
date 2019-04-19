@@ -191,7 +191,7 @@ namespace RazzleServer.Tests
 
             var waiter = new ManualResetEventSlim();
 
-            var provider = new MapleCipherProvider(version, aesKey, toClient: false);
+            var provider = new MapleCipherProvider(version, aesKey, false);
             provider.SetVectors(0, 0);
             var buffer = encryptedPacket.ToArray().AsMemory();
             provider.PacketFinished += received =>

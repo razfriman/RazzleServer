@@ -152,7 +152,8 @@ namespace RazzleServer.DataProvider.References
 
             img["portal"]?.WzPropertiesList?.ToList().ForEach(x => Portals.Add(new PortalReference(x)));
             img["seat"]?.WzPropertiesList?.ToList().ForEach(x => Seats.Add(new SeatReference(x)));
-            img["foothold"]?.WzPropertiesList.SelectMany(x => x.WzPropertiesList).SelectMany(x => x.WzPropertiesList).ToList()
+            img["foothold"]?.WzPropertiesList.SelectMany(x => x.WzPropertiesList).SelectMany(x => x.WzPropertiesList)
+                .ToList()
                 .ForEach(x => Footholds.Add(new FootholdReference(x)));
             img["seat"]?.WzPropertiesList?.ToList().ForEach(x => Seats.Add(new SeatReference(x)));
             img["life"]?.WzPropertiesList?.ToList().ForEach(life =>
@@ -161,7 +162,7 @@ namespace RazzleServer.DataProvider.References
 
                 switch (type)
                 {
-                    case "n": 
+                    case "n":
                         Npcs.Add(new MapNpcReference(life));
                         break;
                     case "m":

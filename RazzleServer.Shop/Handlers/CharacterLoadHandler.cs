@@ -20,7 +20,7 @@ namespace RazzleServer.Shop.Handlers
             client.Account = new ShopAccount(accountId, client);
             client.Account.Load();
             client.SetOnline(true);
-            
+
             client.Character = new ShopCharacter(characterId, client);
             client.Character.Load();
             client.Character.Initialize();

@@ -37,7 +37,8 @@ namespace RazzleServer.Game.Handlers
                     }
 
                     var healAmount =
-                        (short)(healRate * client.GameCharacter.PrimaryStats.MaxHealth / 100); // Party: / (amount players)
+                        (short)(healRate * client.GameCharacter.PrimaryStats.MaxHealth /
+                                100); // Party: / (amount players)
                     if (!client.GameCharacter.PrimaryStats.HasBuff(skillId))
                     {
                         client.GameCharacter.PrimaryStats.MaxHealth += healAmount;
@@ -55,7 +56,8 @@ namespace RazzleServer.Game.Handlers
                     }
 
                     var healAmount =
-                        (short)(healRate * client.GameCharacter.PrimaryStats.MaxHealth / 100); // Party: / (amount players)
+                        (short)(healRate * client.GameCharacter.PrimaryStats.MaxHealth /
+                                100); // Party: / (amount players)
 
                     client.GameCharacter.PrimaryStats.Health += healAmount;
                     break;

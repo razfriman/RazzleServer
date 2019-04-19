@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using RazzleServer.Common.Util;
+﻿using RazzleServer.Common.Util;
 
 namespace RazzleServer.Game.Maple.Life
 {

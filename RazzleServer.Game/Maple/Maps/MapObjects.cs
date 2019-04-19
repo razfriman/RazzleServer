@@ -36,17 +36,19 @@ namespace RazzleServer.Game.Maple.Maps
         public override void Remove(T item)
         {
             var key = GetKey(item);
-            if (Contains(key))
+            if (!Contains(key))
             {
-                item.Map = null;
-
-                if (!(item is Character) && !(item is Portal))
-                {
-                    item.ObjectId = -1;
-                }
-
-                Objects.TryRemove(key, out _);
+                return;
             }
+
+            item.Map = null;
+
+            if (!(item is Character) && !(item is Portal))
+            {
+                item.ObjectId = -1;
+            }
+
+            Objects.TryRemove(key, out _);
         }
 
         public override void Remove(int key)

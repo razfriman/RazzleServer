@@ -8,8 +8,8 @@ namespace RazzleServer.Common.Constants
         ClinetIncreaseSlots = 5,
         ClientMoveToStorage = 10,
         ClientMoveToLocer = 11,
-        
-        
+
+
         ServerLoadLocker = 28,
         ServerLoadLockerFailed = 29,
         ServerLoadWishList = 30,

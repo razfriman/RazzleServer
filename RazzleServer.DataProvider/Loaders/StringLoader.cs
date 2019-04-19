@@ -82,14 +82,16 @@ namespace RazzleServer.DataProvider.Loaders
                 .ToList()
                 .ForEach(x =>
                 {
-                    if (int.TryParse(x.Name, out var id))
+                    if (!int.TryParse(x.Name, out var id))
                     {
-                        var streetName = x["streetName"]?.GetString() ?? null;
-                        var mapName = x["mapName"]?.GetString() ?? null;
-                        if (mapName != null)
-                        {
-                            Data.Maps[id] = $"{streetName} - {mapName}";
-                        }
+                        return;
+                    }
+
+                    var streetName = x["streetName"]?.GetString() ?? null;
+                    var mapName = x["mapName"]?.GetString() ?? null;
+                    if (mapName != null)
+                    {
+                        Data.Maps[id] = $"{streetName} - {mapName}";
                     }
                 });
         }

@@ -82,10 +82,7 @@ namespace RazzleServer.Wz.WzProperties
         [JsonIgnore]
         public Bitmap Png
         {
-            set
-            {
-                _png = value;
-            }
+            set => _png = value;
         }
 
         /// <summary>

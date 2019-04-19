@@ -145,98 +145,102 @@ namespace RazzleServer.DataProvider.References
             SalePrice = info["price"]?.GetInt() ?? 0;
             OnlyOne = (info["only"]?.GetInt() ?? 0) > 0;
 
-            if (type == ItemType.Usable)
+            if (type != ItemType.Usable)
             {
-                var spec = img["spec"];
+                return;
+            }
 
-                if (spec != null)
+            var spec = img["spec"];
+
+            if (spec == null)
+            {
+                return;
+            }
+
+            foreach (var specNode in spec.WzPropertiesList)
+            {
+                switch (specNode.Name)
                 {
-                    foreach (var specNode in spec.WzPropertiesList)
-                    {
-                        switch (specNode.Name)
+                    case "hp":
+                        CHealth = specNode.GetShort();
+                        break;
+                    case "mp":
+                        CMana = specNode.GetShort();
+                        break;
+                    case "hpR":
+                        CHealthPercentage = specNode.GetShort();
+                        break;
+                    case "mpR":
+                        CManaPercentage = specNode.GetShort();
+                        break;
+                    case "time":
+                        CBuffTime = specNode.GetInt();
+                        break;
+                    case "mad":
+                        CMagicAttack = specNode.GetShort();
+                        break;
+                    case "mdd":
+                        CMagicDefense = specNode.GetShort();
+                        break;
+                    case "pdd":
+                        CWeaponDefense = specNode.GetShort();
+                        break;
+                    case "pad":
+                        CWeaponAttack = specNode.GetShort();
+                        break;
+                    case "acc":
+                        CAccuracy = specNode.GetShort();
+                        break;
+                    case "eva":
+                        CAvoidability = specNode.GetShort();
+                        break;
+                    case "speed":
+                        CSpeed = specNode.GetShort();
+                        break;
+                    case "jump":
+                        CJump = specNode.GetShort();
+                        break;
+                    case "prob":
+                        CProb = specNode.GetShort();
+                        break;
+                    case "moveTo":
+                        CMoveTo = specNode.GetInt();
+                        break;
+                    case "curse":
+                        if (specNode.GetInt() > 0)
                         {
-                            case "hp":
-                                CHealth = specNode.GetShort();
-                                break;
-                            case "mp":
-                                CMana = specNode.GetShort();
-                                break;
-                            case "hpR":
-                                CHealthPercentage = specNode.GetShort();
-                                break;
-                            case "mpR":
-                                CManaPercentage = specNode.GetShort();
-                                break;
-                            case "time":
-                                CBuffTime = specNode.GetInt();
-                                break;
-                            case "mad":
-                                CMagicAttack = specNode.GetShort();
-                                break;
-                            case "mdd":
-                                CMagicDefense = specNode.GetShort();
-                                break;
-                            case "pdd":
-                                CWeaponDefense = specNode.GetShort();
-                                break;
-                            case "pad":
-                                CWeaponAttack = specNode.GetShort();
-                                break;
-                            case "acc":
-                                CAccuracy = specNode.GetShort();
-                                break;
-                            case "eva":
-                                CAvoidability = specNode.GetShort();
-                                break;
-                            case "speed":
-                                CSpeed = specNode.GetShort();
-                                break;
-                            case "jump":
-                                CJump = specNode.GetShort();
-                                break;
-                            case "prob":
-                                CProb = specNode.GetShort();
-                                break;
-                            case "moveTo":
-                                CMoveTo = specNode.GetInt();
-                                break;
-                            case "curse":
-                                if (specNode.GetInt() > 0)
-                                {
-                                    Cures |= CureFlags.Curse;
-                                }
-
-                                break;
-                            case "darkness":
-                                if (specNode.GetInt() > 0)
-                                {
-                                    Cures |= CureFlags.Darkness;
-                                }
-
-                                break;
-                            case "poison":
-                                if (specNode.GetInt() > 0)
-                                {
-                                    Cures |= CureFlags.Poison;
-                                }
-
-                                break;
-                            case "seal":
-                                if (specNode.GetInt() > 0)
-                                {
-                                    Cures |= CureFlags.Seal;
-                                }
-
-                                break;
-                            case "weakness":
-                                if (specNode.GetInt() > 0)
-                                {
-                                    Cures |= CureFlags.Weakness;
-                                }
-
-                                break;
+                            Cures |= CureFlags.Curse;
                         }
-                    }
+
+                        break;
+                    case "darkness":
+                        if (specNode.GetInt() > 0)
+                        {
+                            Cures |= CureFlags.Darkness;
+                        }
+
+                        break;
+                    case "poison":
+                        if (specNode.GetInt() > 0)
+                        {
+                            Cures |= CureFlags.Poison;
+                        }
+
+                        break;
+                    case "seal":
+                        if (specNode.GetInt() > 0)
+                        {
+                            Cures |= CureFlags.Seal;
+                        }
+
+                        break;
+                    case "weakness":
+                        if (specNode.GetInt() > 0)
+                        {
+                            Cures |= CureFlags.Weakness;
+                        }
+
+                        break;
                 }
             }
         }

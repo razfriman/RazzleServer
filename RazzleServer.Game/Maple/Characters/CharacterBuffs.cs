@@ -381,6 +381,7 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 pw.WriteByte(0); // FIX: This should be the 'movement info index'
             }
+
             pw.WriteLong(0);
 
             chr.Send(pw);

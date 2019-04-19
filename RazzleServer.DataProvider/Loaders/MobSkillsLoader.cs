@@ -15,7 +15,7 @@ namespace RazzleServer.DataProvider.Loaders
         public override void LoadFromWz(WzFile file)
         {
             Logger.Information("Loading MobSkills");
-            
+
             var dir = file.WzDirectory.GetDirectoryByName("Skill");
 
             foreach (var skillImg in dir.GetImageByName("MobSkill.img").WzPropertiesList)

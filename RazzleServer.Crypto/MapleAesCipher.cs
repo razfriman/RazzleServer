@@ -6,7 +6,7 @@ namespace RazzleServer.Crypto
     public class MapleAesCipher
     {
         private ICryptoTransform AesTransformer { get; }
-        
+
         /// <summary>
         /// IV to use in the Maple AES section
         /// </summary>
@@ -20,7 +20,7 @@ namespace RazzleServer.Crypto
                 Key = ExpandKey(aesKey), Mode = CipherMode.ECB, Padding = PaddingMode.PKCS7
             }.CreateEncryptor();
         }
-        
+
         /// <summary>
         /// Performs Maplestory's AES algorithm
         /// </summary>
@@ -62,7 +62,7 @@ namespace RazzleServer.Crypto
                 length = 0x5B4;
             }
         }
-        
+
         /// <summary>
         /// Expands the key we store as long
         /// </summary>

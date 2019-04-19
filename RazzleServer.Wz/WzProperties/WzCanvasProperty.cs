@@ -62,7 +62,7 @@ namespace RazzleServer.Wz.WzProperties
                 {
                     return PngProperty;
                 }
-                
+
                 var found = ret.WzProperties.GetValueOrDefault(segment);
 
                 if (found != null)

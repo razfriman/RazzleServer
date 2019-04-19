@@ -4,7 +4,6 @@ using System.IO.Pipelines;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using RazzleServer.Common.Util;
 using RazzleServer.Crypto;
 using RazzleServer.Net.Packet;
 using Serilog;
@@ -28,7 +27,7 @@ namespace RazzleServer.Net
         public ushort Port { get; }
 
         public MapleCipherProvider Cipher { get; }
-        
+
         public ClientSocket(Socket socket, AClient client, ushort version, ulong? aesKey, bool toClient)
         {
             _socket = socket;
@@ -63,7 +62,7 @@ namespace RazzleServer.Net
                 {
                     var memory = _pipe.Writer.GetMemory();
                     var bytesRead = await _socket.ReceiveAsync(memory, SocketFlags.None);
-                    
+
                     if (bytesRead == 0)
                     {
                         break;

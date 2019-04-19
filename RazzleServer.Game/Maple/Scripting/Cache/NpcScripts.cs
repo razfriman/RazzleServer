@@ -28,10 +28,10 @@ namespace RazzleServer.Game.Maple.Scripting.Cache
             {
                 _log.Warning(
                     $"Cannot instantiate script for Npc={npc.MapleId} Script={npc.CachedReference.Script} on Map={npc.Map.MapleId}");
-                gameCharacter.Release();   
+                gameCharacter.Release();
                 return;
             }
-            
+
             npcScript.GameCharacter = gameCharacter;
             npcScript.Npc = npc;
             gameCharacter.NpcScript = npcScript;

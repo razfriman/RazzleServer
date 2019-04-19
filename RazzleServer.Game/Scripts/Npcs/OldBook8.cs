@@ -9,4 +9,3 @@ namespace RazzleServer.Game.Scripts.Npcs
         public override void Execute() => throw new NotImplementedException();
     }
 }
-

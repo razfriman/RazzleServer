@@ -15,7 +15,7 @@ namespace RazzleServer.Game
         public byte ChannelId { get; set; }
         public int Population { get; set; }
         public World World { get; set; }
-        
+
         private readonly Dictionary<int, Map> _maps = new Dictionary<int, Map>();
 
         public Map this[int id]

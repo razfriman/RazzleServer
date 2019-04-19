@@ -19,7 +19,7 @@ namespace RazzleServer.Wz
         private uint _versionHash;
         private int _version;
         private readonly byte[] _wzIv;
-        
+
         public WzDirectory WzDirectory { get; private set; } = new WzDirectory();
 
         public override WzObjectType ObjectType => WzObjectType.File;

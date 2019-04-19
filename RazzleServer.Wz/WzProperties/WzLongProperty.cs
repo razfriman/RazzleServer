@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace RazzleServer.Wz.WzProperties
+﻿namespace RazzleServer.Wz.WzProperties
 {
     internal class WzLongProperty : WzImageProperty
     {

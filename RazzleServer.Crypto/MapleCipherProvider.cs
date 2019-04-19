@@ -106,13 +106,13 @@ namespace RazzleServer.Crypto
         public int ReceiveHeaderSize => RecvCipher.Handshaken ? 4 : 2;
 
         public int GetHeaderLength => RecvCipher.Handshaken ? 4 : 2;
-        
+
         /// <summary>
         /// Gets the packet header from the current packet.
         /// </summary>
         public int GetHeader(ReadOnlySequence<byte> buffer) => RecvCipher
             .Handshaken
-            ? 4 + MapleCipher.GetPacketLength(buffer.Slice(0,4).ToSpan())
+            ? 4 + MapleCipher.GetPacketLength(buffer.Slice(0, 4).ToSpan())
             : 2 + BitConverter.ToUInt16(buffer.Slice(0, 2).ToSpan());
     }
 }

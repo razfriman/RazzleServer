@@ -53,7 +53,7 @@ namespace RazzleServer.Net.Packet
             {
                 throw new ArgumentOutOfRangeException(nameof(position));
             }
-            
+
             Buffer.Seek(position, SeekOrigin.Begin);
         }
 

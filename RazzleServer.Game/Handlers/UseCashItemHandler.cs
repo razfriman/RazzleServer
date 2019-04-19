@@ -134,7 +134,7 @@ namespace RazzleServer.Game.Handlers
 
         private bool UseTeleportRock(GameClient client, PacketReader packet)
         {
-        var action = (TeleportRockUseAction)packet.ReadByte();
+            var action = (TeleportRockUseAction)packet.ReadByte();
             int destinationMapId;
 
             switch (action)

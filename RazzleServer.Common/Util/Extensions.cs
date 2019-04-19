@@ -108,13 +108,15 @@ namespace RazzleServer.Common.Util
 
             return new string(ret, 0, length).Trim();
         }
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ReadOnlySpan<byte> ToSpan(this ReadOnlySequence<byte> buffer)
         {
             if (buffer.IsSingleSegment)
+            {
                 return buffer.First.Span;
-            return (ReadOnlySpan<byte>) buffer.ToArray<byte>();
+            }
+            return (ReadOnlySpan<byte>)buffer.ToArray();
         }
     }
 }

@@ -673,7 +673,7 @@ namespace RazzleServer.Game.Maple.Characters
             {
                 return;
             }
-            
+
             using var pw = new PacketWriter(ServerOperationCode.RemotePlayerChangeEquips);
             pw.WriteInt(Parent.Id);
             pw.WriteBool(true);

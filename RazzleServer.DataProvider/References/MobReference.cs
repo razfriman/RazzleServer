@@ -9,13 +9,16 @@ namespace RazzleServer.DataProvider.References
     public class MobReference
     {
         private readonly ILogger _log = Log.ForContext<MobReference>();
-        
+
         public int MapleId { get; set; }
         public List<LootReference> Loots { get; set; } = new List<LootReference>();
         public List<MobSkillReference> Skills { get; set; } = new List<MobSkillReference>();
         public List<MobStatus> Buffs { get; set; } = new List<MobStatus>();
         public List<int> DeathSummons { get; set; } = new List<int>();
-        public readonly Dictionary<byte, MobAttackDataReference> Attacks = new Dictionary<byte, MobAttackDataReference>();
+
+        public readonly Dictionary<byte, MobAttackDataReference> Attacks =
+            new Dictionary<byte, MobAttackDataReference>();
+
         public short Level { get; set; }
         public uint Health { get; set; }
         public uint Mana { get; set; }

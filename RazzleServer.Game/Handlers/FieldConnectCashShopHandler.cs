@@ -16,7 +16,7 @@ namespace RazzleServer.Game.Handlers
                 Portal.SendMapTransferResult(client.GameCharacter, MapTransferResult.CannotGo);
                 return;
             }
-            
+
             client.OpenCashShop();
             TaskRunner.Run(() => client.Terminate("Migrating to Cash Shop"), TimeSpan.FromSeconds(5));
         }

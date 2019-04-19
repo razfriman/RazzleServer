@@ -7,7 +7,7 @@ namespace RazzleServer.DataProvider.References
     {
         public short Id { get; }
         public Point Position { get; set; }
-        
+
         public SeatReference()
         {
         }

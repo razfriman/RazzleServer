@@ -18,7 +18,7 @@ namespace RazzleServer.DataProvider.Loaders
             Logger.Information("Loading Items from WZ");
 
             Logger.Information("Loading Regular Items");
-            
+
             var itemDir = file.WzDirectory.GetDirectoryByName("Item");
             var characterDir = file.WzDirectory.GetDirectoryByName("Character");
 

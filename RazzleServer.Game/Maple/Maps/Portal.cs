@@ -49,6 +49,7 @@ namespace RazzleServer.Game.Maple.Maps
             character.Send(pw);
         }
 
-        public static void PlaySoundEffect(Character character) => character.ShowLocalUserEffect(UserEffect.PlayPortalSe);
+        public static void PlaySoundEffect(Character character) =>
+            character.ShowLocalUserEffect(UserEffect.PlayPortalSe);
     }
 }

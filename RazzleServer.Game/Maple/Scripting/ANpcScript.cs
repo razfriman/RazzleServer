@@ -189,9 +189,10 @@ namespace RazzleServer.Game.Maple.Scripting
         public static string ItemIcon(int mapleId) => $"#v{mapleId}#";
         public static string InventoryItemRef(int mapleId) => $"#c{mapleId}#";
 
-        public string GenderedText(string maleText, string femaleText) => GameCharacter.PrimaryStats.Gender == Gender.Male
-            ? maleText
-            : femaleText;
+        public string GenderedText(string maleText, string femaleText) =>
+            GameCharacter.PrimaryStats.Gender == Gender.Male
+                ? maleText
+                : femaleText;
 
         public static string QuestCompleteIcon() => FileRef("UI/UIWindow.img/QuestIcon/4/0");
 

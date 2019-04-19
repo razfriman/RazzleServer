@@ -9,7 +9,7 @@ namespace RazzleServer.DataProvider.References
         public SpawnPointReference()
         {
         }
-        
+
         public SpawnPointReference(WzImageProperty img, LifeObjectType type) : base(img, type)
         {
             MapleId = int.Parse(img["id"].GetString());
