@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-
-<imgdir name="TimeEvent.img">
-    <imgdir name="0">
-        <string name="Name" value="newyear" /><string name="Date" value="2006/12/31" />
-        <string name="StartTime" value="23:58:59" /><string name="EndTime" value="23:59:59" />
-    </imgdir>
-</imgdir>

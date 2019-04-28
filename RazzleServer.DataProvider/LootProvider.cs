@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using RazzleServer.Data;
 using RazzleServer.DataProvider.References;
@@ -37,10 +36,11 @@ namespace RazzleServer.DataProvider
         {
             Logger.Information("Loading Loot from database");
 
-            var entities = await context
+            var entities = context
                 .Loots
+                .ToList()
                 .GroupBy(x => x.MobId)
-                .ToListAsync();
+                .ToList();
 
             entities
                 .ForEach(x =>
@@ -87,7 +87,7 @@ namespace RazzleServer.DataProvider
         {
             if (!File.Exists(InitialDataFile))
             {
-                Logger.Warning($"Cannot find {InitialDataFile}");
+                Logger.Warning($"Cannot find {Path.GetFullPath(InitialDataFile)}");
                 return;
             }
 
