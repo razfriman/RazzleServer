@@ -54,16 +54,7 @@ namespace RazzleServer.Crypto
             var header = newData.Slice(0, 4);
             var content = newData.Slice(4, data.Length);
             data.CopyTo(content);
-
-            if (toClient)
-            {
-                WriteHeaderToClient(header, data.Length);
-            }
-            else
-            {
-                WriteHeaderToServer(header, data.Length);
-            }
-
+            WriteHeader(header, data.Length, toClient);
             EncryptShanda(content);
             AesCipher?.AesTransform(content, MapleIv.Bytes);
             MapleIv.Shuffle();
@@ -113,30 +104,18 @@ namespace RazzleServer.Crypto
         }
 
         /// <summary>
-        /// Creates a packet header for outgoing data
+        /// Creates a packet header
         /// </summary>
-        private void WriteHeaderToServer(Span<byte> data, int length)
+        private void WriteHeader(Span<byte> data, int length, bool toClient)
         {
-            int a = MapleIv.HiWord;
-            a ^= GameVersion;
-            var b = a ^ length;
-            data[0] = (byte)(a % 0x100);
-            data[1] = (byte)(a / 0x100);
-            data[2] = (byte)(b % 0x100);
-            data[3] = (byte)(b / 0x100);
-        }
-
-        /// <summary>
-        /// Creates a packet header for incoming data
-        /// </summary>
-        private void WriteHeaderToClient(Span<byte> data, int length)
-        {
-            var a = MapleIv.HiWord ^ -(GameVersion + 1);
-            var b = a ^ length;
-            data[0] = (byte)(a % 0x100);
-            data[1] = (byte)((a - data[0]) / 0x100);
-            data[2] = (byte)(b ^ 0x100);
-            data[3] = (byte)((b - data[2]) / 0x100);
+            var a = MapleIv.HiWord;
+            a ^= (ushort)(toClient ? -(GameVersion + 1) : GameVersion);
+            var b = a;
+            b ^= (ushort)length;
+            data[0] = (byte)(a & 0xFF);
+            data[1] = (byte)((a >> 8) & 0xFF);
+            data[2] = (byte)(b & 0xFF);
+            data[3] = (byte)((b >> 8) & 0xFF);
         }
 
         /// <summary>
