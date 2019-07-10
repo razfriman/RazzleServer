@@ -6,7 +6,7 @@
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Serilog" Version="2.8.0" />
-        <PackageReference Include="System.IO.Pipelines" Version="4.6.0-preview4.19212.13" />
+        <PackageReference Include="System.IO.Pipelines" Version="4.6.0-preview6.19303.8" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\RazzleServer.Common\RazzleServer.Common.csproj" />
