@@ -1,6 +1,9 @@
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RazzleServer.Common;
 using RazzleServer.Common.Constants;
+using RazzleServer.Data;
 using RazzleServer.Net.Packet;
 using RazzleServer.Tests.Util;
 
@@ -28,6 +31,12 @@ namespace RazzleServer.Tests
         public void FakeServerManager_GameServer_Succeeds()
         {
             Assert.IsNotNull(_server.Worlds[0][0]);
+
+            var a = new MapleDbContext();
+            var accounts = a.Accounts.ToList();
+            var account = a.Accounts.FirstOrDefault(x => x.IsMaster);
+            var aaa = a.Accounts.FirstOrDefault(x => x.Username == "a");
+
         }
 
         [TestMethod]
