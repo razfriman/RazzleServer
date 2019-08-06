@@ -21,22 +21,6 @@ namespace RazzleServer.Tests
             _server.Configure();
         }
 
-        [TestMethod]
-        public void testFirstOrDefault()
-        {
-            using var dbContext = new MapleDbContext();
-            var account = dbContext.Accounts.FirstOrDefault(x => x.Username == "abc");
-
-        }
-        
-        [TestMethod]
-        public void testFirstOrDefaultAfterMaterializing()
-        {
-            using var dbContext = new MapleDbContext();
-            var account = dbContext.Accounts.ToList().FirstOrDefault(x => x.Username == "abc");
-
-        }
-
 //        [TestMethod]
         public void FakeServerManager_LoginServer_Succeeds()
         {
