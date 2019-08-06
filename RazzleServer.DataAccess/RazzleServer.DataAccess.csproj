@@ -5,10 +5,10 @@
         <RootNamespace>RazzleServer.Data</RootNamespace>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.0.0-preview4.19216.3" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.0.0-preview4.19216.3" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.0.0-preview4.19216.3" />
-        <PackageReference Include="System.ComponentModel.Annotations" Version="4.6.0-preview4.19212.13" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.0.0-preview7.19362.6" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.0.0-preview7.19362.6" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.0.0-preview7.19362.6" />
+        <PackageReference Include="System.ComponentModel.Annotations" Version="4.6.0-preview7.19362.9" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\RazzleServer.Common\RazzleServer.Common.csproj" />
