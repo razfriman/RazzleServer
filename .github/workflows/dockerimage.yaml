@@ -14,10 +14,12 @@ jobs:
     - name: Build
       run: docker build . --file RazzleServer/Dockerfile --tag docker.pkg.github.com/razfriman/razzleserver/razzle-server:latest
     - name: Login
+      if: github.ref == refs/heads/master
       env:
         REGISTRY_TOKEN: ${{ secrets.REGISTRY_TOKEN }}
       run: docker login docker.pkg.github.com -u razfriman -p $REGISTRY_TOKEN
     - name: Push
+      if: github.ref == refs/heads/master
       run: docker push docker.pkg.github.com/razfriman/razzleserver/razzle-server:latest
       
 
