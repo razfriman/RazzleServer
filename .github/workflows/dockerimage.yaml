@@ -13,7 +13,6 @@ jobs:
     - name: Build
       run: docker build . --file RazzleServer/Dockerfile --tag razzle-server:latest
     - name: Push
-      if: github.ref == 'master'
       run: docker push docker.pkg.github.com/razfriman/RazzleServer/RazzleServer:latest
       
 
