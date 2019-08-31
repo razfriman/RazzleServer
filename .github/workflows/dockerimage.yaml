@@ -13,6 +13,6 @@ jobs:
     - name: Build
       run: docker build . --file RazzleServer/Dockerfile --tag razzle-server:latest
     - name: Push
-      run: docker push docker.pkg.github.com/razfriman/RazzleServer/RazzleServer:latest
+      run: docker push docker.pkg.github.com/razfriman/razzleserver/razzle-server:latest
       
 
