@@ -1,7 +1,7 @@
 # RazzleServer
 
-[![Build Status](https://dev.azure.com/Razfriman/razzleserver/_apis/build/status/razzleserver-CI?branchName=master)](https://dev.azure.com/Razfriman/razzleserver/_build/latest?definitionId=2&branchName=master) 
- [![Docker Pulls](https://img.shields.io/docker/pulls/razfriman/razzleserver.svg)](https://hub.docker.com/r/razfriman/razzleserver)
+[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Frazfriman%2Frazzleserver%2Fbadge&style=flat-square)](https://actions-badge.atrox.dev/razfriman/razzleserver/goto)
+[![Docker Pulls](https://img.shields.io/docker/pulls/razfriman/razzleserver.svg)](https://hub.docker.com/r/razfriman/razzleserver)
 
 RazzleServer is a C# server emulator for MapleStory v40b.
 
