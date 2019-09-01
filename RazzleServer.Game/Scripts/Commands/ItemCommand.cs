@@ -25,7 +25,7 @@ namespace RazzleServer.Game.Scripts.Commands
 
                 if (args.Length > 1)
                 {
-                    short.TryParse(args[args.Length - 1], out quantity);
+                    short.TryParse(args[^1], out quantity);
                 }
 
                 if (quantity < 1)

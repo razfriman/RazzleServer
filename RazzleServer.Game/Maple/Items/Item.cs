@@ -90,56 +90,25 @@ namespace RazzleServer.Game.Maple.Items
         {
             get
             {
-                switch (MapleId / 10000 % 100)
+                return (MapleId / 10000 % 100) switch
                 {
-                    case 30:
-                        return WeaponType.Sword1H;
-
-                    case 31:
-                        return WeaponType.Axe1H;
-
-                    case 32:
-                        return WeaponType.Blunt1H;
-
-                    case 33:
-                        return WeaponType.Dagger;
-
-                    case 37:
-                        return WeaponType.Wand;
-
-                    case 38:
-                        return WeaponType.Staff;
-
-                    case 40:
-                        return WeaponType.Sword2H;
-
-                    case 41:
-                        return WeaponType.Axe2H;
-
-                    case 42:
-                        return WeaponType.Blunt2H;
-
-                    case 43:
-                        return WeaponType.Spear;
-
-                    case 44:
-                        return WeaponType.PoleArm;
-
-                    case 45:
-                        return WeaponType.Bow;
-
-                    case 46:
-                        return WeaponType.Crossbow;
-
-                    case 47:
-                        return WeaponType.Claw;
-
-                    case 48:
-                        return WeaponType.Knuckle;
-
-                    default:
-                        return WeaponType.NotAWeapon;
-                }
+                    30 => WeaponType.Sword1H,
+                    31 => WeaponType.Axe1H,
+                    32 => WeaponType.Blunt1H,
+                    33 => WeaponType.Dagger,
+                    37 => WeaponType.Wand,
+                    38 => WeaponType.Staff,
+                    40 => WeaponType.Sword2H,
+                    41 => WeaponType.Axe2H,
+                    42 => WeaponType.Blunt2H,
+                    43 => WeaponType.Spear,
+                    44 => WeaponType.PoleArm,
+                    45 => WeaponType.Bow,
+                    46 => WeaponType.Crossbow,
+                    47 => WeaponType.Claw,
+                    48 => WeaponType.Knuckle,
+                    _ => WeaponType.NotAWeapon
+                };
             }
         }
 
@@ -219,22 +188,19 @@ namespace RazzleServer.Game.Maple.Items
         {
             get
             {
-                switch (WeaponType)
+                return WeaponType switch
                 {
-                    case WeaponType.Sword2H:
-                    case WeaponType.Axe2H:
-                    case WeaponType.Blunt2H:
-                    case WeaponType.Spear:
-                    case WeaponType.PoleArm:
-                    case WeaponType.Bow:
-                    case WeaponType.Crossbow:
-                    case WeaponType.Claw:
-                    case WeaponType.Knuckle:
-                        return true;
-
-                    default:
-                        return false;
-                }
+                    WeaponType.Sword2H => true,
+                    WeaponType.Axe2H => true,
+                    WeaponType.Blunt2H => true,
+                    WeaponType.Spear => true,
+                    WeaponType.PoleArm => true,
+                    WeaponType.Bow => true,
+                    WeaponType.Crossbow => true,
+                    WeaponType.Claw => true,
+                    WeaponType.Knuckle => true,
+                    _ => false
+                };
             }
         }
 

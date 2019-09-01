@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using RazzleServer.Wz.Util;
 
@@ -70,26 +71,7 @@ namespace RazzleServer.Wz
         /// <returns>A WzImage or WzDirectory</returns>
         public WzObject this[string name]
         {
-            get
-            {
-                foreach (var i in WzImages)
-                {
-                    if (i.Name.ToLower() == name.ToLower())
-                    {
-                        return i;
-                    }
-                }
-
-                foreach (var d in WzDirectories)
-                {
-                    if (d.Name.ToLower() == name.ToLower())
-                    {
-                        return d;
-                    }
-                }
-
-                return null;
-            }
+            get => (WzObject) GetImageByName(name) ?? GetDirectoryByName(name);
             set
             {
                 if (value == null)
@@ -308,36 +290,16 @@ namespace RazzleServer.Wz
         /// </summary>
         /// <param name="name">The name of the image</param>
         /// <returns>The wz image that has the specified name or null if none was found</returns>
-        public WzImage GetImageByName(string name)
-        {
-            foreach (var wzI in WzImages)
-            {
-                if (wzI.Name.ToLower() == name.ToLower())
-                {
-                    return wzI;
-                }
-            }
-
-            return null;
-        }
+        public WzImage GetImageByName(string name) => WzImages.FirstOrDefault(wzI =>
+            String.Equals(wzI.Name, name, StringComparison.CurrentCultureIgnoreCase));
 
         /// <summary>
         /// Gets a sub directory in the list of directories by it's name
         /// </summary>
         /// <param name="name">The name of the directory</param>
         /// <returns>The wz directory that has the specified name or null if none was found</returns>
-        public WzDirectory GetDirectoryByName(string name)
-        {
-            foreach (var dir in WzDirectories)
-            {
-                if (dir.Name.ToLower() == name.ToLower())
-                {
-                    return dir;
-                }
-            }
-
-            return null;
-        }
+        public WzDirectory GetDirectoryByName(string name) => WzDirectories.FirstOrDefault(dir =>
+            String.Equals(dir.Name, name, StringComparison.CurrentCultureIgnoreCase));
 
         /// <summary>
         /// Gets all child images of a WzDirectory

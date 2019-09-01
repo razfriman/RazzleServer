@@ -11,17 +11,15 @@ namespace RazzleServer.Common.Util
         /// <returns></returns>
         public static long GetMapleTimeStamp(long timeStamp) //timestamp in ticks, -1 -2 and -3 are reserved
         {
-            switch (timeStamp)
+            return timeStamp switch
             {
-                case -1:
-                    return 0x217E646BB058000; //1-1-2079 0:00:00
-                case -2:
-                    return 0x14F373BFDE04000; //1-1-1900 0:00:00
-                case -3:
-                    return 0x217E57D909BC000;
-                default:
-                    return new DateTime(timeStamp).ToFileTimeUtc();
-            }
+                -1 => 0x217E646BB058000 //1-1-2079 0:00:00
+                ,
+                -2 => 0x14F373BFDE04000 //1-1-1900 0:00:00
+                ,
+                -3 => 0x217E57D909BC000,
+                _ => new DateTime(timeStamp).ToFileTimeUtc()
+            };
         }
 
         public static long GetMapleTimeStamp(DateTime date) => date.ToFileTimeUtc();

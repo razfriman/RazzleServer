@@ -9,19 +9,15 @@ namespace RazzleServer.Wz.Util
 
         public static byte[] GetIvByMapleVersion(WzMapleVersionType ver)
         {
-            switch (ver)
+            return ver switch
             {
-                case WzMapleVersionType.Ems:
-                    return CryptoConstants.WzMseaiv;
-                case WzMapleVersionType.Gms:
-                    return CryptoConstants.WzGmsiv;
-                case WzMapleVersionType.Bms:
-                case WzMapleVersionType.Classic:
-                case WzMapleVersionType.Generate:
-                    return new byte[4];
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(ver), ver, null);
-            }
+                WzMapleVersionType.Ems => CryptoConstants.WzMseaiv,
+                WzMapleVersionType.Gms => CryptoConstants.WzGmsiv,
+                WzMapleVersionType.Bms => new byte[4],
+                WzMapleVersionType.Classic => new byte[4],
+                WzMapleVersionType.Generate => new byte[4],
+                _ => throw new ArgumentOutOfRangeException(nameof(ver), ver, null)
+            };
         }
 
         public static WzMutableKey GenerateWzKey(byte[] wzIv) =>

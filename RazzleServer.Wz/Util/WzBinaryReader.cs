@@ -116,17 +116,14 @@ namespace RazzleServer.Wz.Util
 
         public string ReadStringBlock(uint offset)
         {
-            switch (ReadByte())
+            return ReadByte() switch
             {
-                case 0:
-                case 0x73:
-                    return ReadString();
-                case 1:
-                case 0x1B:
-                    return ReadStringAtOffset(offset + ReadInt32());
-                default:
-                    return "";
-            }
+                0 => ReadString(),
+                0x73 => ReadString(),
+                1 => ReadStringAtOffset(offset + ReadInt32()),
+                0x1B => ReadStringAtOffset(offset + ReadInt32()),
+                _ => ""
+            };
         }
     }
 }

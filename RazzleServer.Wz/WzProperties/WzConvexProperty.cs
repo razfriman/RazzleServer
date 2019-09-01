@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace RazzleServer.Wz.WzProperties
 {
@@ -25,18 +26,7 @@ namespace RazzleServer.Wz.WzProperties
 
         public override WzImageProperty this[string name]
         {
-            get
-            {
-                foreach (var iwp in _properties)
-                {
-                    if (iwp.Name.ToLower() == name.ToLower())
-                    {
-                        return iwp;
-                    }
-                }
-
-                return null;
-            }
+            get => _properties.FirstOrDefault(iwp => String.Equals(iwp.Name, name, StringComparison.CurrentCultureIgnoreCase));
         }
 
         public WzImageProperty GetProperty(string name)

@@ -18,7 +18,7 @@ namespace RazzleServer.DataProvider
 
         public static async Task Initialize()
         {
-            using var context = new MapleDbContext();
+            await using var context = new MapleDbContext();
             if (!context.Loots.Any())
             {
                 Logger.Information("Cannot find any loot in the database, attempting to load from JSON");
@@ -91,10 +91,10 @@ namespace RazzleServer.DataProvider
                 return;
             }
 
-            using var s = File.OpenRead(InitialDataFile);
+            await using var s = File.OpenRead(InitialDataFile);
             using var sr = new StreamReader(s);
             using var reader = new JsonTextReader(sr);
-            using var context = new MapleDbContext();
+            await using var context = new MapleDbContext();
             try
             {
                 var sw = Stopwatch.StartNew();

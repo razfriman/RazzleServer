@@ -204,12 +204,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Clear(bool removeFromSlot)
         {
-            var toRemove = new List<Item>();
-
-            foreach (var loopItem in this)
-            {
-                toRemove.Add(loopItem);
-            }
+            var toRemove = this.ToList();
 
             foreach (var loopItem in toRemove)
             {
@@ -220,48 +215,16 @@ namespace RazzleServer.Game.Maple.Characters
             }
         }
 
-        public bool Contains(int mapleId)
-        {
-            foreach (var loopItem in this)
-            {
-                if (loopItem.MapleId == mapleId)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
+        public bool Contains(int mapleId) => this.Any(loopItem => loopItem.MapleId == mapleId);
 
         public bool Contains(int mapleId, short quantity)
         {
-            var count = 0;
-
-            foreach (var loopItem in this)
-            {
-                if (loopItem.MapleId == mapleId)
-                {
-                    count += loopItem.Quantity;
-                }
-            }
+            var count = this.Where(loopItem => loopItem.MapleId == mapleId).Aggregate(0, (current, loopItem) => current + loopItem.Quantity);
 
             return count >= quantity;
         }
 
-        public int Available(int mapleId)
-        {
-            var count = 0;
-
-            foreach (var loopItem in this)
-            {
-                if (loopItem.MapleId == mapleId)
-                {
-                    count += loopItem.Quantity;
-                }
-            }
-
-            return count;
-        }
+        public int Available(int mapleId) => this.Where(loopItem => loopItem.MapleId == mapleId).Aggregate(0, (current, loopItem) => current + loopItem.Quantity);
 
         public sbyte GetNextFreeSlot(ItemType type)
         {
@@ -359,18 +322,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public Item this[EquipmentSlot slot]
         {
-            get
-            {
-                foreach (var item in this)
-                {
-                    if (item.Slot == (sbyte)slot)
-                    {
-                        return item;
-                    }
-                }
-
-                return null;
-            }
+            get => this.FirstOrDefault(item => item.Slot == (sbyte)slot);
         }
 
         public Item this[int mapleId, short slot]
@@ -391,28 +343,10 @@ namespace RazzleServer.Game.Maple.Characters
 
         public IEnumerable<Item> this[ItemType type]
         {
-            get
-            {
-                foreach (var loopItem in Items)
-                {
-                    if (loopItem.Type == type && !loopItem.IsEquipped)
-                    {
-                        yield return loopItem;
-                    }
-                }
-            }
+            get => Items.Where(loopItem => loopItem.Type == type && !loopItem.IsEquipped);
         }
 
-        public IEnumerable<Item> GetStored()
-        {
-            foreach (var loopItem in Items)
-            {
-                if (loopItem.IsStored)
-                {
-                    yield return loopItem;
-                }
-            }
-        }
+        public IEnumerable<Item> GetStored() => Items.Where(loopItem => loopItem.IsStored);
 
         public IEnumerable<Item> GetEquipped(EquippedQueryMode mode = EquippedQueryMode.Any)
         {

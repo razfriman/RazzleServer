@@ -28,13 +28,11 @@ namespace RazzleServer.Game.Maple.Life
 
         public MistType CalculateMistType()
         {
-            switch (Skill.MapleId)
+            return Skill.MapleId switch
             {
-                case (int)SkillNames.FirePoisonMage.PoisonMist:
-                    return MistType.Poison;
-            }
-
-            return MistType.Mob;
+                (int)SkillNames.FirePoisonMage.PoisonMist => MistType.Poison,
+                _ => MistType.Mob
+            };
         }
 
         public PacketWriter GetCreatePacket() => GetSpawnPacket();
