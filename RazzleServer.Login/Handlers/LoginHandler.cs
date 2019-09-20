@@ -51,12 +51,7 @@ namespace RazzleServer.Login.Handlers
                     return LoginResult.Banned;
                 }
 
-                if (client.Account.IsOnline)
-                {
-                    return LoginResult.LoggedIn;
-                }
-
-                return LoginResult.Valid;
+                return client.Account.IsOnline ? LoginResult.LoggedIn : LoginResult.Valid;
             }
             catch (NoAccountException)
             {

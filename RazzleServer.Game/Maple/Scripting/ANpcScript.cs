@@ -207,27 +207,18 @@ namespace RazzleServer.Game.Maple.Scripting
 
         public static string MapNpcListType(NpcListType type, int mapleId)
         {
-            switch (type)
+            return type switch
             {
-                case NpcListType.Npc:
-                    return NpcRef(mapleId);
-                case NpcListType.Mob:
-                    return MobRef(mapleId);
-                case NpcListType.Map:
-                    return MapRef(mapleId);
-                case NpcListType.Skill:
-                    return SkillRef(mapleId);
-                case NpcListType.Item:
-                    return MobRef(mapleId);
-                case NpcListType.SkillIcon:
-                    return SkillIcon(mapleId);
-                case NpcListType.ItemIcon:
-                    return ItemIcon(mapleId);
-                case NpcListType.InventoryItem:
-                    return InventoryItemRef(mapleId);
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
-            }
+                NpcListType.Npc => NpcRef(mapleId),
+                NpcListType.Mob => MobRef(mapleId),
+                NpcListType.Map => MapRef(mapleId),
+                NpcListType.Skill => SkillRef(mapleId),
+                NpcListType.Item => MobRef(mapleId),
+                NpcListType.SkillIcon => SkillIcon(mapleId),
+                NpcListType.ItemIcon => ItemIcon(mapleId),
+                NpcListType.InventoryItem => InventoryItemRef(mapleId),
+                _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+            };
         }
     }
 }

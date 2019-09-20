@@ -81,31 +81,26 @@ namespace RazzleServer.Login.Handlers
                         || server.CharacterExists(name, world)
                         || CachedData.CreationData.ForbiddenNames.Any(x =>
                             x.Equals(name, StringComparison.CurrentCultureIgnoreCase));
-            switch (gender)
+            error |= gender switch
             {
-                case Gender.Male:
-                    error |= CachedData.CreationData.MaleSkins.All(x => x != skin)
-                             || CachedData.CreationData.MaleFaces.All(x => x != face)
-                             || CachedData.CreationData.MaleHairs.All(x => x != hair)
-                             || CachedData.CreationData.MaleHairColors.All(x => x != hairColor)
-                             || CachedData.CreationData.MaleTops.All(x => x != topId)
-                             || CachedData.CreationData.MaleBottoms.All(x => x != bottomId)
-                             || CachedData.CreationData.MaleShoes.All(x => x != shoesId)
-                             || CachedData.CreationData.MaleWeapons.All(x => x != weaponId);
-                    break;
-                case Gender.Female:
-                    error |= CachedData.CreationData.FemaleSkins.All(x => x != skin)
-                             || CachedData.CreationData.FemaleFaces.All(x => x != face)
-                             || CachedData.CreationData.FemaleHairs.All(x => x != hair)
-                             || CachedData.CreationData.FemaleHairColors.All(x => x != hairColor)
-                             || CachedData.CreationData.FemaleTops.All(x => x != topId)
-                             || CachedData.CreationData.FemaleBottoms.All(x => x != bottomId)
-                             || CachedData.CreationData.FemaleShoes.All(x => x != shoesId)
-                             || CachedData.CreationData.FemaleWeapons.All(x => x != weaponId);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(gender), gender, null);
-            }
+                Gender.Male => (CachedData.CreationData.MaleSkins.All(x => x != skin) ||
+                                CachedData.CreationData.MaleFaces.All(x => x != face) ||
+                                CachedData.CreationData.MaleHairs.All(x => x != hair) ||
+                                CachedData.CreationData.MaleHairColors.All(x => x != hairColor) ||
+                                CachedData.CreationData.MaleTops.All(x => x != topId) ||
+                                CachedData.CreationData.MaleBottoms.All(x => x != bottomId) ||
+                                CachedData.CreationData.MaleShoes.All(x => x != shoesId) ||
+                                CachedData.CreationData.MaleWeapons.All(x => x != weaponId)),
+                Gender.Female => (CachedData.CreationData.FemaleSkins.All(x => x != skin) ||
+                                  CachedData.CreationData.FemaleFaces.All(x => x != face) ||
+                                  CachedData.CreationData.FemaleHairs.All(x => x != hair) ||
+                                  CachedData.CreationData.FemaleHairColors.All(x => x != hairColor) ||
+                                  CachedData.CreationData.FemaleTops.All(x => x != topId) ||
+                                  CachedData.CreationData.FemaleBottoms.All(x => x != bottomId) ||
+                                  CachedData.CreationData.FemaleShoes.All(x => x != shoesId) ||
+                                  CachedData.CreationData.FemaleWeapons.All(x => x != weaponId)),
+                _ => throw new ArgumentOutOfRangeException(nameof(gender), gender, null)
+            };
 
             return error;
         }

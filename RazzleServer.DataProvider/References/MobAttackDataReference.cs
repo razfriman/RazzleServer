@@ -33,7 +33,7 @@ namespace RazzleServer.DataProvider.References
 
         public MobAttackDataReference(WzImageProperty attackNode)
         {
-            Id = byte.Parse(attackNode.Name[attackNode.Name.Length - 1].ToString());
+            Id = byte.Parse(attackNode.Name[^1].ToString());
 
             foreach (var node in attackNode["info"].WzPropertiesList)
             {

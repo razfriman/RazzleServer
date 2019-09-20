@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using RazzleServer.Common.Util;
 using RazzleServer.DataProvider;
@@ -33,26 +32,15 @@ namespace RazzleServer.Game.Scripts.Commands
                 return;
             }
 
-            Dictionary<int, string> lookup = null;
-
-            switch (type)
+            var lookup = type switch
             {
-                case "item":
-                    lookup = CachedData.Strings.Items;
-                    break;
-                case "map":
-                    lookup = CachedData.Strings.Maps;
-                    break;
-                case "mob":
-                    lookup = CachedData.Strings.Mobs;
-                    break;
-                case "npc":
-                    lookup = CachedData.Strings.Npcs;
-                    break;
-                case "skill":
-                    lookup = CachedData.Strings.Skills;
-                    break;
-            }
+                "item" => CachedData.Strings.Items,
+                "map" => CachedData.Strings.Maps,
+                "mob" => CachedData.Strings.Mobs,
+                "npc" => CachedData.Strings.Npcs,
+                "skill" => CachedData.Strings.Skills,
+                _ => null
+            };
 
             if (lookup == null)
             {

@@ -118,28 +118,15 @@ namespace RazzleServer.Game.Maple.Characters
 
         public static StorageEncodeFlags GetEncodeFlagForInventory(ItemType inventory)
         {
-            StorageEncodeFlags flag;
-            switch (inventory)
+            var flag = inventory switch
             {
-                case ItemType.Equipment:
-                    flag = StorageEncodeFlags.EncodeInventoryEquip;
-                    break;
-                case ItemType.Usable:
-                    flag = StorageEncodeFlags.EncodeInventoryUse;
-                    break;
-                case ItemType.Setup:
-                    flag = StorageEncodeFlags.EncodeInventorySetUp;
-                    break;
-                case ItemType.Etcetera:
-                    flag = StorageEncodeFlags.EncodeInventoryEtc;
-                    break;
-                case ItemType.Pet:
-                    flag = StorageEncodeFlags.EncodeInventoryPet;
-                    break;
-                default:
-                    flag = 0;
-                    break;
-            }
+                ItemType.Equipment => StorageEncodeFlags.EncodeInventoryEquip,
+                ItemType.Usable => StorageEncodeFlags.EncodeInventoryUse,
+                ItemType.Setup => StorageEncodeFlags.EncodeInventorySetUp,
+                ItemType.Etcetera => StorageEncodeFlags.EncodeInventoryEtc,
+                ItemType.Pet => StorageEncodeFlags.EncodeInventoryPet,
+                _ => (StorageEncodeFlags) 0
+            };
 
             return flag;
         }

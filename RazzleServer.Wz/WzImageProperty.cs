@@ -121,18 +121,16 @@ namespace RazzleServer.Wz
         internal static WzExtended ParseExtendedProp(WzBinaryReader reader, uint offset, string name, WzObject parent,
             WzImage imgParent)
         {
-            switch (reader.ReadByte())
+            return reader.ReadByte() switch
             {
-                case 0x01:
-                case 0x1B:
-                    return ExtractMore(reader, offset, name, reader.ReadStringAtOffset(offset + reader.ReadInt32()),
-                        parent, imgParent);
-                case 0x00:
-                case 0x73:
-                    return ExtractMore(reader, offset, name, "", parent, imgParent);
-                default:
-                    throw new Exception("Invalid byte read at ParseExtendedProp");
-            }
+                0x01 => ExtractMore(reader, offset, name, reader.ReadStringAtOffset(offset + reader.ReadInt32()),
+                    parent, imgParent),
+                0x1B => ExtractMore(reader, offset, name, reader.ReadStringAtOffset(offset + reader.ReadInt32()),
+                    parent, imgParent),
+                0x00 => ExtractMore(reader, offset, name, "", parent, imgParent),
+                0x73 => ExtractMore(reader, offset, name, "", parent, imgParent),
+                _ => throw new Exception("Invalid byte read at ParseExtendedProp")
+            };
         }
 
         internal static WzExtended ExtractMore(WzBinaryReader reader, uint offset, string name, string iname,
@@ -180,18 +178,15 @@ namespace RazzleServer.Wz
                     return soundProp;
                 case "UOL":
                     reader.BaseStream.Position++;
-                    switch (reader.ReadByte())
+                    return reader.ReadByte() switch
                     {
-                        case 0:
-                            return new WzUolProperty(name, reader.ReadString()) {Parent = parent};
-                        case 1:
-                            return new WzUolProperty(name, reader.ReadStringAtOffset(offset + reader.ReadInt32()))
-                            {
-                                Parent = parent
-                            };
-                        default:
-                            throw new InvalidOperationException("Unsupported UOL type");
-                    }
+                        0 => new WzUolProperty(name, reader.ReadString()) {Parent = parent},
+                        1 => new WzUolProperty(name, reader.ReadStringAtOffset(offset + reader.ReadInt32()))
+                        {
+                            Parent = parent
+                        },
+                        _ => throw new InvalidOperationException("Unsupported UOL type")
+                    };
 
                 default:
                     throw new InvalidOperationException("Unknown iname: " + iname);
