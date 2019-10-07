@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using ProtoBuf;
 using RazzleServer.Common.Constants;
 using RazzleServer.Wz;
 
 namespace RazzleServer.DataProvider.References
 {
+    [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
     public class ItemReference
     {
         public int MapleId { get; set; }
@@ -246,6 +248,7 @@ namespace RazzleServer.DataProvider.References
         }
 
         [JsonIgnore]
+        [ProtoIgnore]
         public WeaponType WeaponType =>
             (MapleId / 10000 % 100) switch
             {
@@ -266,29 +269,29 @@ namespace RazzleServer.DataProvider.References
                 48 => WeaponType.Knuckle,
                 _ => WeaponType.NotAWeapon
             };
-
+        [ProtoIgnore]
         public bool IsConsumable => MapleId / 10000 >= 200 && MapleId / 10000 < 204;
-
+        [ProtoIgnore]
         public bool IsRechargeable => IsThrowingStar;
-
+        [ProtoIgnore]
         public bool IsThrowingStar => MapleId / 10000 == 207;
-
+        [ProtoIgnore]
         public bool IsArrow => IsArrowForBow || IsArrowForCrossbow;
-
+        [ProtoIgnore]
         public bool IsArrowForBow => MapleId >= 2060000 && MapleId < 2061000;
-
+        [ProtoIgnore]
         public bool IsArrowForCrossbow => MapleId >= 2061000 && MapleId < 2062000;
-
+        [ProtoIgnore]
         public bool IsOverall => MapleId / 10000 == 105;
-
+        [ProtoIgnore]
         public bool IsWeapon => WeaponType != WeaponType.NotAWeapon;
-
+        [ProtoIgnore]
         public bool IsShield => MapleId / 10000 % 100 == 9;
-
+        [ProtoIgnore]
         public bool IsPet => MapleId >= 5000000 && MapleId <= 5000100;
-
+        [ProtoIgnore]
         public bool IsTownScroll => MapleId >= 2030000 && MapleId < 2030020;
-
+        [ProtoIgnore]
         public bool IsTwoHanded =>
             WeaponType switch
             {

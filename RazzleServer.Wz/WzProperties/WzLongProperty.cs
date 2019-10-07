@@ -1,6 +1,8 @@
-﻿namespace RazzleServer.Wz.WzProperties
+﻿using ProtoBuf;
+
+namespace RazzleServer.Wz.WzProperties
 {
-    internal class WzLongProperty : WzImageProperty
+    [ProtoContract]public class WzLongProperty : WzImageProperty
     {
         public override WzImageProperty DeepClone() => new WzLongProperty(Name, Value);
 
@@ -13,7 +15,7 @@
         /// <summary>
         /// The value of the property
         /// </summary>
-        public long Value { get; set; }
+        [ProtoMember(1)]public long Value { get; set; }
 
         /// <summary>
         /// Creates a blank WzCompressedIntProperty

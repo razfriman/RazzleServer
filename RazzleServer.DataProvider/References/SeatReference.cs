@@ -1,8 +1,10 @@
+using ProtoBuf;
 using RazzleServer.Common.Util;
 using RazzleServer.Wz;
 
 namespace RazzleServer.DataProvider.References
 {
+    [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
     public class SeatReference
     {
         public short Id { get; }

@@ -13,6 +13,7 @@ namespace RazzleServer.Common
         public string DatabaseConnection { get; set; } = "MapleServer.db";
         public DatabaseConnectionType DatabaseConnectionType { get; set; } = DatabaseConnectionType.Sqlite;
         public string CacheFolder { get; set; } = "DataCache";
+        public CacheFormatType CacheFormatType { get; set; } = CacheFormatType.Json;
         public bool PrettifyCache { get; set; } = false;
         public string WzFilePath { get; set; } = string.Empty;
         public ushort Version { get; set; } = 40;
@@ -27,7 +28,9 @@ namespace RazzleServer.Common
         public List<WorldConfig> Worlds { get; set; } = new List<WorldConfig>();
 
         private static ServerConfig _instance;
-        public static ServerConfig Instance => _instance ??= new ServerConfig();
+
+        public static ServerConfig
+            Instance => _instance ??= new ServerConfig();
 
         public static void Load(IConfiguration configuration)
         {

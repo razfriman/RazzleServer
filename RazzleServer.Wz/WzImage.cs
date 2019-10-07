@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
+using ProtoBuf;
 using RazzleServer.Wz.Util;
 
 namespace RazzleServer.Wz
@@ -13,6 +14,7 @@ namespace RazzleServer.Wz
     /// <summary>
     /// A .img contained in a wz directory
     /// </summary>
+    [ProtoContract]
     public class WzImage : WzObject, IPropertyContainer
     {
         private Dictionary<string, WzImageProperty> _properties = new Dictionary<string, WzImageProperty>();
@@ -111,6 +113,7 @@ namespace RazzleServer.Wz
         /// <summary>
         /// The properties contained in the image
         /// </summary>
+        [ProtoMember(1)]
         public Dictionary<string, WzImageProperty> WzProperties
         {
             get

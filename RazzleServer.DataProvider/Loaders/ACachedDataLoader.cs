@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
 using Newtonsoft.Json;
+using ProtoBuf;
 using RazzleServer.Common;
+using RazzleServer.Common.Constants;
 using RazzleServer.Wz;
 using Serilog;
 
@@ -17,7 +19,7 @@ namespace RazzleServer.DataProvider.Loaders
 
         public T Load()
         {
-            var path = Path.Combine(ServerConfig.Instance.CacheFolder, $"{CacheName}.cache");
+            var path = Path.Combine(ServerConfig.Instance.CacheFolder, $"{CacheName}.{ServerConfig.Instance.CacheFormatType}.cache");
             if (File.Exists(path))
             {
                 try
@@ -57,31 +59,63 @@ namespace RazzleServer.DataProvider.Loaders
         public void SaveToCache()
         {
             Directory.CreateDirectory(ServerConfig.Instance.CacheFolder);
-            var path = Path.Combine(ServerConfig.Instance.CacheFolder, $"{CacheName}.cache");
+            var path = Path.Combine(ServerConfig.Instance.CacheFolder, $"{CacheName}.{ServerConfig.Instance.CacheFormatType}.cache");
 
-            using var s = File.OpenWrite(path);
-            using var sr = new StreamWriter(s);
-            using var writer = new JsonTextWriter(sr);
-            var serializer = new JsonSerializer
+            switch (ServerConfig.Instance.CacheFormatType)
             {
-                DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
-                Formatting = ServerConfig.Instance.PrettifyCache ? Formatting.Indented : Formatting.None
-            };
-            serializer.Serialize(writer, Data);
+                case CacheFormatType.Json:
+                {
+                    using var s = File.OpenWrite(path);
+                    using var sr = new StreamWriter(s);
+                    using var writer = new JsonTextWriter(sr);
+                    var serializer = new JsonSerializer
+                    {
+                        DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
+                        Formatting = ServerConfig.Instance.PrettifyCache ? Formatting.Indented : Formatting.None
+                    };
+                    serializer.Serialize(writer, Data);
+                    break;
+                }
+                case CacheFormatType.Proto:
+                {
+                    var stream = File.OpenWrite(path);
+                    Serializer.Serialize(stream, Data);
+                    break;
+                }
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            
 
-            Logger.Information($"Saving [{CacheName}] to cached file");
+            Logger.Information($"Saving [{CacheName}] to cached file via [{ServerConfig.Instance.CacheFormatType}]");
         }
 
         public void LoadFromCache()
         {
-            var path = Path.Combine(ServerConfig.Instance.CacheFolder, $"{CacheName}.cache");
+            var path = Path.Combine(ServerConfig.Instance.CacheFolder, $"{CacheName}.{ServerConfig.Instance.CacheFormatType}.cache");
 
-            using var s = File.OpenRead(path);
-            using var sr = new StreamReader(s);
-            using var reader = new JsonTextReader(sr);
-            var serializer = new JsonSerializer();
-            Data = serializer.Deserialize<T>(reader);
-            Logger.Information($"Loaded [{CacheName}] from cache");
+            switch (ServerConfig.Instance.CacheFormatType)
+            {
+                case CacheFormatType.Json:
+                {
+                    using var s = File.OpenRead(path);
+                    using var sr = new StreamReader(s);
+                    using var reader = new JsonTextReader(sr);
+                    var serializer = new JsonSerializer();
+                    Data = serializer.Deserialize<T>(reader);
+                    break;
+                }
+                case CacheFormatType.Proto:
+                {
+                    using var stream = File.OpenRead(path);
+                    Data = Serializer.Deserialize<T>(stream);
+                    break;
+                }
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            Logger.Information($"Loaded [{CacheName}] from cache via [{ServerConfig.Instance.CacheFormatType}]");
         }
 
         public abstract void LoadFromWz(WzFile file);

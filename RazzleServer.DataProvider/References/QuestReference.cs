@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using ProtoBuf;
 using RazzleServer.Common.Constants;
 
 namespace RazzleServer.DataProvider.References
 {
+    [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
     public class QuestReference
     {
         public int MapleId { get; set; }

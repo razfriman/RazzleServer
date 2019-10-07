@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
+using ProtoBuf;
 using RazzleServer.Wz.Util;
 
 namespace RazzleServer.Wz
@@ -11,6 +12,7 @@ namespace RazzleServer.Wz
     /// <summary>
     /// A directory in the wz file, which may contain sub directories or wz images
     /// </summary>
+    [ProtoContract]
     public class WzDirectory : WzObject
     {
         private WzBinaryReader _reader;
@@ -49,11 +51,13 @@ namespace RazzleServer.Wz
         /// <summary>
         /// The wz images contained in the directory
         /// </summary>
+        [ProtoMember(1)]
         public List<WzImage> WzImages { get; private set; } = new List<WzImage>();
 
         /// <summary>
         /// The sub directories contained in the directory
         /// </summary>
+        [ProtoMember(2)]
         public List<WzDirectory> WzDirectories { get; private set; } = new List<WzDirectory>();
 
         [JsonIgnore] public byte[] WzIv { get; internal set; }
@@ -71,7 +75,7 @@ namespace RazzleServer.Wz
         /// <returns>A WzImage or WzDirectory</returns>
         public WzObject this[string name]
         {
-            get => (WzObject) GetImageByName(name) ?? GetDirectoryByName(name);
+            get => (WzObject)GetImageByName(name) ?? GetDirectoryByName(name);
             set
             {
                 if (value == null)

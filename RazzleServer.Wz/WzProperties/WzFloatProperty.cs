@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using ProtoBuf;
 
 namespace RazzleServer.Wz.WzProperties
 {
@@ -7,7 +8,7 @@ namespace RazzleServer.Wz.WzProperties
     /// A property that is stored in the wz file with a byte and possibly followed by a float. If the 
     /// byte is 0, the value is 0, else the value is the float that follows.
     /// </summary>
-    public class WzFloatProperty : WzImageProperty
+    [ProtoContract]public class WzFloatProperty : WzImageProperty
     {
         /// <summary>
         /// Creates a blank WzFloatProperty
@@ -36,7 +37,7 @@ namespace RazzleServer.Wz.WzProperties
         /// <summary>
         /// The value of the property
         /// </summary>
-        public float Value { get; private set; }
+        [ProtoMember(1)]public float Value { get; private set; }
 
         public override object WzValue => Value;
 

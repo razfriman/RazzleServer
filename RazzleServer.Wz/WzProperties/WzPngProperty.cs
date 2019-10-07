@@ -5,6 +5,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Runtime.InteropServices;
 using Newtonsoft.Json;
+using ProtoBuf;
 using RazzleServer.Wz.Util;
 using Serilog;
 
@@ -14,7 +15,7 @@ namespace RazzleServer.Wz.WzProperties
     /// <summary>
     /// A property that contains the information for a bitmap
     /// </summary>
-    public class WzPngProperty : WzImageProperty
+    [ProtoContract]public class WzPngProperty : WzImageProperty
     {
         private readonly ILogger _log = Log.ForContext<WzPngProperty>();
 
@@ -51,12 +52,12 @@ namespace RazzleServer.Wz.WzProperties
         /// <summary>
         /// The width of the bitmap
         /// </summary>
-        public int Width { get; set; }
+        [ProtoMember(1)] public int Width { get; set; }
 
         /// <summary>
         /// The height of the bitmap
         /// </summary>
-        public int Height { get; set; }
+        [ProtoMember(2)] public int Height { get; set; }
 
         /// <summary>
         /// The format of the bitmap

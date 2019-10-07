@@ -1,15 +1,19 @@
-﻿namespace RazzleServer.Wz.WzProperties
+﻿using ProtoBuf;
+
+namespace RazzleServer.Wz.WzProperties
 {
     /// <inheritdoc />
     /// <summary>
     /// A property that is stored in the wz file with a signed byte and possibly followed by an int. If the 
     /// signed byte is equal to -128, the value is is the int that follows, else the value is the byte.
     /// </summary>
+    [ProtoContract]
     public class WzIntProperty : WzImageProperty
     {
         /// <summary>
         /// The value of the property
         /// </summary>
+        [ProtoMember(1)]
         public int Value { get; set; }
 
         public override WzImageProperty DeepClone() => new WzIntProperty(Name, Value);

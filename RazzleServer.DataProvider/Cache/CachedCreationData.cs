@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using ProtoBuf;
 
 namespace RazzleServer.DataProvider.Cache
 {
+    [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
     public sealed class CachedCreationData
     {
         public List<string> ForbiddenNames { get; } = new List<string>();

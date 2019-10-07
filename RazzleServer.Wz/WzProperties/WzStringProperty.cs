@@ -1,15 +1,17 @@
-﻿namespace RazzleServer.Wz.WzProperties
+﻿using ProtoBuf;
+
+namespace RazzleServer.Wz.WzProperties
 {
     /// <inheritdoc />
     /// <summary>
     /// A property with a string as a value
     /// </summary>
-    public class WzStringProperty : WzImageProperty
+    [ProtoContract]public class WzStringProperty : WzImageProperty
     {
         /// <summary>
         /// The value of the property
         /// </summary>
-        public string Value { get; set; }
+        [ProtoMember(1)]public string Value { get; set; }
 
         public override WzImageProperty DeepClone() => new WzStringProperty(Name, Value);
 

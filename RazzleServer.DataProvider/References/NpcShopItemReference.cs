@@ -1,8 +1,10 @@
+using ProtoBuf;
 using RazzleServer.Wz;
 using Serilog;
 
 namespace RazzleServer.DataProvider.References
 {
+    [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
     public class NpcShopItemReference
     {
         private readonly ILogger _log = Log.ForContext<NpcShopItemReference>();

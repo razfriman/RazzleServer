@@ -1,15 +1,17 @@
-﻿namespace RazzleServer.Wz.WzProperties
+﻿using ProtoBuf;
+
+namespace RazzleServer.Wz.WzProperties
 {
     /// <inheritdoc />
     /// <summary>
     /// A wz property which has a value which is a ushort
     /// </summary>
-    public class WzShortProperty : WzImageProperty
+    [ProtoContract]public class WzShortProperty : WzImageProperty
     {
         /// <summary>
         /// The value of the property
         /// </summary>
-        public short Value { get; set; }
+        [ProtoMember(1)]public short Value { get; set; }
 
         public override WzImageProperty DeepClone() => new WzShortProperty(Name, Value);
 

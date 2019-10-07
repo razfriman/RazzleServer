@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.IO;
 using Newtonsoft.Json;
+using ProtoBuf;
 using Point = RazzleServer.Common.Util.Point;
 
 namespace RazzleServer.Wz
@@ -10,6 +11,11 @@ namespace RazzleServer.Wz
     /// <summary>
     /// An abstract class for wz objects
     /// </summary>
+    [ProtoContract]
+    [ProtoInclude(101, typeof(WzFile))]
+    [ProtoInclude(102, typeof(WzDirectory))]
+    [ProtoInclude(103, typeof(WzImage))]
+    [ProtoInclude(104, typeof(WzImageProperty))]
     public abstract class WzObject : IDisposable
     {
         /// <summary>
@@ -21,6 +27,7 @@ namespace RazzleServer.Wz
         /// <summary>
         /// The name of the object
         /// </summary>
+        [ProtoMember(1)]
         public string Name { get; set; }
 
         /// <summary>
@@ -119,6 +126,36 @@ namespace RazzleServer.Wz
 
             serializer.Serialize(writer, this);
         }
+        
+        
+        public void SerializeProto(string path, bool oneFile = true)
+        {
+            if (!oneFile && (this is WzFile || this is WzDirectory))
+            {
+                switch (this)
+                {
+                    case WzFile wzFile:
+                        wzFile.WzDirectory.SerializeProto(path, false);
+                        break;
+                    case WzDirectory wzDir:
+                    {
+                        var subPath = Path.Combine(path, wzDir.Name);
+                        Directory.CreateDirectory(subPath);
+                        wzDir.WzDirectories.ForEach(subDir => subDir.SerializeProto(subPath, false));
+                        wzDir.WzImages.ForEach(img =>
+                            img.SerializeProto(Path.Combine(subPath, img.Name + ".proto"), true));
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                using var stream = File.OpenWrite(path);
+                SerializeProto(stream);
+            }
+        }
+
+        public void SerializeProto(Stream stream) => Serializer.Serialize(stream, this);
 
         public static WzFile DeserializeFile(string contents) => Deserialize<WzFile>(contents);
 
@@ -129,5 +166,13 @@ namespace RazzleServer.Wz
         public static T Deserialize<T>(string contents) where T : WzObject =>
             JsonConvert.DeserializeObject<T>(contents,
                 new JsonSerializerSettings {TypeNameHandling = TypeNameHandling.Auto});
+        
+        public static WzFile DeserializeProtoFile(Stream stream) => DeserializeProto<WzFile>(stream);
+
+        public static WzDirectory DeserializeProtoDirectory(Stream stream) => DeserializeProto<WzDirectory>(stream);
+
+        public static WzImage DeserializeProtoImage(Stream stream) => DeserializeProto<WzImage>(stream);
+
+        public static T DeserializeProto<T>(Stream stream) where T : WzObject => Serializer.Deserialize<T>(stream);
     }
 }

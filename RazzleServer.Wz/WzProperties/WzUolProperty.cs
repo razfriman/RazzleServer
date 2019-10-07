@@ -1,9 +1,11 @@
-﻿namespace RazzleServer.Wz.WzProperties
+﻿using ProtoBuf;
+
+namespace RazzleServer.Wz.WzProperties
 {
     /// <summary>
     /// A property that's value is a string
     /// </summary>
-    public class WzUolProperty : WzExtended
+    [ProtoContract]public class WzUolProperty : WzImageProperty
     {
         public override WzImageProperty DeepClone() => new WzUolProperty(Name, Value);
 
@@ -20,7 +22,7 @@
         /// <summary>
         /// The value of the property
         /// </summary>
-        public string Value { get; set; }
+        [ProtoMember(1)] public string Value { get; set; }
 
         /// <summary>
         /// Creates a blank WzUOLProperty

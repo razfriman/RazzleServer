@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ProtoBuf;
 using RazzleServer.Common.Constants;
 using RazzleServer.Wz;
 using Serilog;
 
 namespace RazzleServer.DataProvider.References
 {
+    [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
     public class MapReference
     {
         private readonly ILogger _log = Log.ForContext<MapReference>();

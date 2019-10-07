@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using ProtoBuf;
 
 namespace RazzleServer.Wz.WzProperties
 {
@@ -6,12 +7,12 @@ namespace RazzleServer.Wz.WzProperties
     /// <summary>
     /// A property that has the value of a double
     /// </summary>
-    public class WzDoubleProperty : WzImageProperty
+    [ProtoContract]public class WzDoubleProperty : WzImageProperty
     {
         /// <summary>
         /// The value of this property
         /// </summary>
-        public double Value { get; set; }
+        [ProtoMember(1)]public double Value { get; set; }
 
         public override WzImageProperty DeepClone() => new WzDoubleProperty(Name, Value);
 

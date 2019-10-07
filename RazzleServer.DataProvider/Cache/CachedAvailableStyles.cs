@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using ProtoBuf;
 
 namespace RazzleServer.DataProvider.Cache
 {
+    [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
     public sealed class CachedAvailableStyles
     {
         public List<byte> Skins { get; } = new List<byte>();

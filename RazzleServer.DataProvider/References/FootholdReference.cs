@@ -1,9 +1,11 @@
+using ProtoBuf;
 using RazzleServer.Common.Util;
 using RazzleServer.Wz;
 using Serilog;
 
 namespace RazzleServer.DataProvider.References
 {
+    [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
     public class FootholdReference
     {
         private static readonly ILogger Log = Serilog.Log.ForContext<FootholdReference>();

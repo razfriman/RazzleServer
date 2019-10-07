@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using ProtoBuf;
 
 namespace RazzleServer.Wz.WzProperties
 {
     /// <summary>
     /// A property that contains a set of properties
     /// </summary>
-    public class WzSubProperty : WzExtended, IPropertyContainer
+    [ProtoContract]public class WzSubProperty : WzImageProperty, IPropertyContainer
     {
         public override WzImageProperty DeepClone()
         {

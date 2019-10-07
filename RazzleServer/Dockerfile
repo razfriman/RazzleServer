@@ -6,7 +6,7 @@ COPY Data/appsettings.json .
 COPY Data/DB Data/DB
 
 # Build
-FROM mcr.microsoft.com/dotnet/core/sdk:3.0 as build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.0-alpine as build
 WORKDIR /src
 COPY RazzleServer.sln ./
 COPY RazzleServer/RazzleServer.csproj RazzleServer/
@@ -29,7 +29,7 @@ WORKDIR /src/RazzleServer
 RUN dotnet publish -c Release -o /app
 
 # Run
-FROM mcr.microsoft.com/dotnet/core/runtime:3.0 as runtime
+FROM mcr.microsoft.com/dotnet/core/runtime:3.0-alpine as runtime
 WORKDIR /app
 COPY --from=publish /app .
 COPY --from=data /app .

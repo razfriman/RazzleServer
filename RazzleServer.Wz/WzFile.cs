@@ -3,6 +3,7 @@ using System.IO;
 using System.IO.MemoryMappedFiles;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using ProtoBuf;
 using RazzleServer.Wz.Util;
 
 namespace RazzleServer.Wz
@@ -11,12 +12,14 @@ namespace RazzleServer.Wz
     /// <summary>
     /// A class that contains all the information of a wz file
     /// </summary>
+    [ProtoContract]
     public class WzFile : WzObject
     {
         private uint _versionHash;
         private int _version;
         private readonly byte[] _wzIv;
 
+        [ProtoMember(1)]
         public WzDirectory WzDirectory { get; private set; } = new WzDirectory();
 
         public override WzObjectType ObjectType => WzObjectType.File;
@@ -29,12 +32,13 @@ namespace RazzleServer.Wz
         public WzObject this[string name] => WzDirectory[name];
 
         [JsonIgnore] public WzHeader Header { get; set; } = WzHeader.GetDefault();
-
+        [ProtoMember(2)]
         public short Version { get; set; }
 
         [JsonIgnore] public string FilePath { get; private set; }
 
         [JsonConverter(typeof(StringEnumConverter))]
+        [ProtoMember(3)]
         public WzMapleVersionType MapleVersionType { get; }
 
         public override WzFile WzFileParent => this;

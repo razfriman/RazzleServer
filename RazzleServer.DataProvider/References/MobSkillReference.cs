@@ -1,8 +1,10 @@
-﻿using RazzleServer.Wz;
+﻿using ProtoBuf;
+using RazzleServer.Wz;
 using Serilog;
 
 namespace RazzleServer.DataProvider.References
 {
+    [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
     public class MobSkillReference
     {
         private readonly ILogger _log = Log.ForContext<MobSkillReference>();

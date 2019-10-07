@@ -1,5 +1,8 @@
-﻿namespace RazzleServer.DataProvider.References
+﻿using ProtoBuf;
+
+namespace RazzleServer.DataProvider.References
 {
+    [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
     public class QuizQuestionReference
     {
         public int Id { get; set; }

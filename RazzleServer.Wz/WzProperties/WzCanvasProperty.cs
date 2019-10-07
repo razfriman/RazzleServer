@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using ProtoBuf;
 
 namespace RazzleServer.Wz.WzProperties
 {
     /// <summary>
     /// A property that can contain sub properties and has one png image
     /// </summary>
-    public class WzCanvasProperty : WzExtended, IPropertyContainer
+    [ProtoContract]public class WzCanvasProperty : WzImageProperty, IPropertyContainer
     {
         public override WzImageProperty DeepClone()
         {
@@ -94,6 +95,7 @@ namespace RazzleServer.Wz.WzProperties
         /// <summary>
         /// The png image for this canvas property
         /// </summary>
+        [ProtoMember(1)]
         public WzPngProperty PngProperty { get; set; }
 
         /// <summary>

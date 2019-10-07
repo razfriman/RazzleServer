@@ -1,9 +1,12 @@
-﻿namespace RazzleServer.Wz.WzProperties
+﻿using ProtoBuf;
+
+namespace RazzleServer.Wz.WzProperties
 {
     /// <inheritdoc />
     /// <summary>
     /// A property that's value is null
     /// </summary>
+    [ProtoContract]
     public class WzNullProperty : WzImageProperty
     {
         public override WzImageProperty DeepClone() => new WzNullProperty(Name);

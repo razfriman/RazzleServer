@@ -1,11 +1,12 @@
-﻿using RazzleServer.Common.Util;
+﻿using ProtoBuf;
+using RazzleServer.Common.Util;
 
 namespace RazzleServer.Wz.WzProperties
 {
     /// <summary>
     /// A property that contains an x and a y value
     /// </summary>
-    public class WzVectorProperty : WzExtended
+    [ProtoContract]public class WzVectorProperty : WzImageProperty
     {
         public override WzImageProperty DeepClone() => new WzVectorProperty(Name, X, Y);
 
@@ -25,12 +26,12 @@ namespace RazzleServer.Wz.WzProperties
         /// <summary>
         /// The X value of the Vector2D
         /// </summary>
-        public WzIntProperty X { get; set; }
+        [ProtoMember(1)]public WzIntProperty X { get; set; }
 
         /// <summary>
         /// The Y value of the Vector2D
         /// </summary>
-        public WzIntProperty Y { get; set; }
+        [ProtoMember(2)]public WzIntProperty Y { get; set; }
 
         /// <summary>
         /// Creates a blank WzVectorProperty

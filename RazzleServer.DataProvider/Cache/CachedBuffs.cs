@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using ProtoBuf;
 using RazzleServer.Common.Constants;
 
 namespace RazzleServer.DataProvider.Cache
 {
+    [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
     public class CachedBuffs
     {
         public readonly Dictionary<int, BuffValueTypes> Data = new Dictionary<int, BuffValueTypes>

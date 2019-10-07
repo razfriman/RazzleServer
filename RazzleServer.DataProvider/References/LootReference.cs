@@ -1,5 +1,8 @@
+using ProtoBuf;
+
 namespace RazzleServer.DataProvider.References
 {
+    [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
     public class LootReference
     {
         public int MobId { get; set; }

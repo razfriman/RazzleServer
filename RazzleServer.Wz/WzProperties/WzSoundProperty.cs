@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using NAudio.Wave;
 using Newtonsoft.Json;
+using ProtoBuf;
 using RazzleServer.Wz.Util;
 using Serilog;
 
@@ -12,7 +13,7 @@ namespace RazzleServer.Wz.WzProperties
     /// <summary>
     /// A property that contains data for an MP3 file
     /// </summary>
-    public class WzSoundProperty : WzExtended
+    [ProtoContract]public class WzSoundProperty : WzImageProperty
     {
         private readonly ILogger _log = Log.ForContext<WzSoundProperty>();
 
@@ -61,7 +62,12 @@ namespace RazzleServer.Wz.WzProperties
         /// <summary>
         /// Length of the mp3 file in milliseconds
         /// </summary>
-        public int Length { get; set; }
+        [ProtoMember(1)]public int Length { get; set; }
+        
+        /// <summary>
+        /// Creates a blank WzSoundProperty
+        /// </summary>
+        public WzSoundProperty() { }
 
         /// <summary>
         /// Creates a WzSoundProperty with the specified name

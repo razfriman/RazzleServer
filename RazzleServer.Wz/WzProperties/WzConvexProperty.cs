@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ProtoBuf;
 
 namespace RazzleServer.Wz.WzProperties
 {
     /// <summary>
     /// A property that contains several WzExtendedProperties
     /// </summary>
-    public class WzConvexProperty : WzExtended, IPropertyContainer
+    [ProtoContract]public class WzConvexProperty : WzImageProperty, IPropertyContainer
     {
         private List<WzImageProperty> _properties = new List<WzImageProperty>();
 
@@ -93,11 +94,6 @@ namespace RazzleServer.Wz.WzProperties
         /// <param name="prop">The property to add</param>
         public void AddProperty(WzImageProperty prop)
         {
-            if (!(prop is WzExtended))
-            {
-                throw new ArgumentException($"Property is not {nameof(WzExtended)}");
-            }
-
             prop.Parent = this;
             _properties.Add(prop);
         }

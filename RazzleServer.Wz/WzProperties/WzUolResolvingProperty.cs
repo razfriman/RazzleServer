@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using Newtonsoft.Json;
+using ProtoBuf;
 using Serilog;
 using Point = RazzleServer.Common.Util.Point;
 
@@ -9,7 +10,7 @@ namespace RazzleServer.Wz.WzProperties
     /// <summary>
     /// A property that's value is a string
     /// </summary>
-    public class WzUolResolvingProperty : WzExtended
+    [ProtoContract]public class WzUolResolvingProperty : WzImageProperty
     {
         private readonly ILogger _log = Log.ForContext<WzUolResolvingProperty>();
 
@@ -42,7 +43,7 @@ namespace RazzleServer.Wz.WzProperties
         /// <summary>
         /// The value of the property
         /// </summary>
-        public string Value { get; set; }
+        [ProtoMember(1)]public string Value { get; set; }
 
         [JsonIgnore]
         public WzObject LinkValue

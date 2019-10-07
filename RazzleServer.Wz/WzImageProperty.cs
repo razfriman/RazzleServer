@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using ProtoBuf;
 using RazzleServer.Wz.Util;
 using RazzleServer.Wz.WzProperties;
 
@@ -12,9 +13,27 @@ namespace RazzleServer.Wz
     /// An interface for wz img properties
     /// </summary>
     [JsonConverter(typeof(WzImagePropertyConverter))]
+    [ProtoContract]
+    [ProtoInclude(204, typeof(WzDoubleProperty))]
+    [ProtoInclude(205, typeof(WzFloatProperty))]
+    [ProtoInclude(206, typeof(WzIntProperty))]
+    [ProtoInclude(207, typeof(WzLongProperty))]
+    [ProtoInclude(208, typeof(WzNullProperty))]
+    [ProtoInclude(209, typeof(WzPngProperty))]
+    [ProtoInclude(210, typeof(WzShortProperty))]
+    [ProtoInclude(212, typeof(WzStringProperty))]
+    [ProtoInclude(301, typeof(WzCanvasProperty))]
+    [ProtoInclude(302, typeof(WzConvexProperty))]
+    [ProtoInclude(303, typeof(WzSoundProperty))]
+    [ProtoInclude(304, typeof(WzSubProperty))]
+    [ProtoInclude(305, typeof(WzUolProperty))]
+    [ProtoInclude(306, typeof(WzUolResolvingProperty))]
+    [ProtoInclude(307, typeof(WzVectorProperty))]
+    
     public abstract class WzImageProperty : WzObject
     {
-        public virtual Dictionary<string, WzImageProperty> WzProperties { get; set; }
+        [ProtoMember(1)]
+        public virtual Dictionary<string, WzImageProperty> WzProperties { get; set; } = new Dictionary<string, WzImageProperty>();
 
         [JsonIgnore] public IEnumerable<WzImageProperty> WzPropertiesList => WzProperties.Values;
 
@@ -118,7 +137,7 @@ namespace RazzleServer.Wz
             return properties;
         }
 
-        internal static WzExtended ParseExtendedProp(WzBinaryReader reader, uint offset, string name, WzObject parent,
+        internal static WzImageProperty ParseExtendedProp(WzBinaryReader reader, uint offset, string name, WzObject parent,
             WzImage imgParent)
         {
             return reader.ReadByte() switch
@@ -133,7 +152,7 @@ namespace RazzleServer.Wz
             };
         }
 
-        internal static WzExtended ExtractMore(WzBinaryReader reader, uint offset, string name, string iname,
+        internal static WzImageProperty ExtractMore(WzBinaryReader reader, uint offset, string name, string iname,
             WzObject parent, WzImage imgParent)
         {
             if (iname == "")
