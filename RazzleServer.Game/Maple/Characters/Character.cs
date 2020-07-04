@@ -326,18 +326,18 @@ namespace RazzleServer.Game.Maple.Characters
                 }
             }
 
-            foreach (var entry in visibleLayer)
+            foreach (var (slot, itemId) in visibleLayer)
             {
-                pw.WriteByte(entry.Key);
-                pw.WriteInt(entry.Value);
+                pw.WriteByte(slot);
+                pw.WriteInt(itemId);
             }
 
             pw.WriteByte(0);
 
-            foreach (var entry in hiddenLayer)
+            foreach (var (slot, itemId) in hiddenLayer)
             {
-                pw.WriteByte(entry.Key);
-                pw.WriteInt(entry.Value);
+                pw.WriteByte(slot);
+                pw.WriteInt(itemId);
             }
 
             pw.WriteByte(0);

@@ -104,9 +104,10 @@ namespace RazzleServer.Common.Util
 
         public void Add(KeyValuePair<TKey, TValue> item)
         {
-            DestoryExpiredItems(item.Key);
+            var (key, value) = item;
+            DestoryExpiredItems(key);
 
-            _innerDictionary.Add(item.Key, new ExpiringValueHolder<TValue>(item.Value, _expiryTimeSpan));
+            _innerDictionary.Add(key, new ExpiringValueHolder<TValue>(value, _expiryTimeSpan));
         }
 
         public void Clear() => _innerDictionary.Clear();

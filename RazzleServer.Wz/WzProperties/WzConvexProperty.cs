@@ -26,20 +26,14 @@ namespace RazzleServer.Wz.WzProperties
 
         public override WzImageProperty this[string name]
         {
-            get => _properties.FirstOrDefault(iwp => String.Equals(iwp.Name, name, StringComparison.CurrentCultureIgnoreCase));
+            get => _properties.FirstOrDefault(iwp =>
+                String.Equals(iwp.Name, name, StringComparison.CurrentCultureIgnoreCase));
         }
 
         public WzImageProperty GetProperty(string name)
         {
-            foreach (var iwp in _properties)
-            {
-                if (iwp.Name.ToLower() == name.ToLower())
-                {
-                    return iwp;
-                }
-            }
-
-            return null;
+            return _properties.FirstOrDefault(iwp =>
+                String.Equals(iwp.Name, name, StringComparison.CurrentCultureIgnoreCase));
         }
 
         public override WzImageProperty GetFromPath(string path)

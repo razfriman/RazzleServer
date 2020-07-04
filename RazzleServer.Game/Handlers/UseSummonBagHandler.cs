@@ -1,4 +1,5 @@
-﻿using RazzleServer.Common.Constants;
+﻿using System;
+using RazzleServer.Common.Constants;
 using RazzleServer.Common.Util;
 using RazzleServer.DataProvider;
 using RazzleServer.Game.Maple.Life;
@@ -23,11 +24,11 @@ namespace RazzleServer.Game.Handlers
 
             client.GameCharacter.Items.Remove(itemId, 1);
 
-            foreach (var summon in item.Summons)
+            foreach (var (mobId, chance) in item.Summons)
             {
-                if (Functions.Random(0, 100) < summon.Item2 && CachedData.Mobs.Data.ContainsKey(summon.Item1))
+                if (Functions.Random(0, 100) < chance && CachedData.Mobs.Data.ContainsKey(mobId))
                 {
-                    client.GameCharacter.Map.Mobs.Add(new Mob(summon.Item1, client.GameCharacter.Position));
+                    client.GameCharacter.Map.Mobs.Add(new Mob(mobId, client.GameCharacter.Position));
                 }
             }
         }

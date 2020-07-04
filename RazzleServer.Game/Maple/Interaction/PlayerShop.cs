@@ -178,17 +178,7 @@ namespace RazzleServer.Game.Maple.Interaction
 
                     UpdateItems(); // TODO: This doesn't mark the item as sold.
 
-                    var noItemLeft = true;
-
-                    foreach (var loopShopItem in Items)
-                    {
-                        if (loopShopItem.Quantity > 0)
-                        {
-                            noItemLeft = false;
-
-                            break;
-                        }
-                    }
+                    var noItemLeft = Items.All(loopShopItem => loopShopItem.Quantity <= 0);
 
                     if (noItemLeft)
                     {

@@ -219,12 +219,14 @@ namespace RazzleServer.Game.Maple.Characters
 
         public bool Contains(int mapleId, short quantity)
         {
-            var count = this.Where(loopItem => loopItem.MapleId == mapleId).Aggregate(0, (current, loopItem) => current + loopItem.Quantity);
+            var count = this.Where(loopItem => loopItem.MapleId == mapleId)
+                .Aggregate(0, (current, loopItem) => current + loopItem.Quantity);
 
             return count >= quantity;
         }
 
-        public int Available(int mapleId) => this.Where(loopItem => loopItem.MapleId == mapleId).Aggregate(0, (current, loopItem) => current + loopItem.Quantity);
+        public int Available(int mapleId) => this.Where(loopItem => loopItem.MapleId == mapleId)
+            .Aggregate(0, (current, loopItem) => current + loopItem.Quantity);
 
         public sbyte GetNextFreeSlot(ItemType type)
         {
@@ -306,18 +308,7 @@ namespace RazzleServer.Game.Maple.Characters
 
         public Item this[ItemType type, short slot]
         {
-            get
-            {
-                foreach (var item in this)
-                {
-                    if (item.Type == type && item.Slot == slot)
-                    {
-                        return item;
-                    }
-                }
-
-                return null;
-            }
+            get => this.FirstOrDefault(item => item.Type == type && item.Slot == slot);
         }
 
         public Item this[EquipmentSlot slot]
@@ -329,15 +320,7 @@ namespace RazzleServer.Game.Maple.Characters
         {
             get
             {
-                foreach (var item in this)
-                {
-                    if (item.Slot == slot && item.Type == Item.GetType(mapleId))
-                    {
-                        return item;
-                    }
-                }
-
-                return null;
+                return this.FirstOrDefault(item => item.Slot == slot && item.Type == Item.GetType(mapleId));
             }
         }
 
@@ -416,9 +399,9 @@ namespace RazzleServer.Game.Maple.Characters
                 spaceCount[loopItem.Type] += SpaceTakenBy(loopItem, autoMerge);
             }
 
-            foreach (var loopSpaceCount in spaceCount)
+            foreach (var (slot, slotCount) in spaceCount)
             {
-                if (RemainingSlots(loopSpaceCount.Key) < loopSpaceCount.Value)
+                if (RemainingSlots(slot) < slotCount)
                 {
                     return false;
                 }

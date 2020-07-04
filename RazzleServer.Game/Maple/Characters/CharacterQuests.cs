@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using RazzleServer.Common.Constants;
 using RazzleServer.DataProvider;
 using RazzleServer.DataProvider.References;
@@ -58,16 +59,15 @@ namespace RazzleServer.Game.Maple.Characters
 
             // TODO: Skill and pet rewards.
 
-            foreach (var item in quest.PreItemRewards)
+            foreach (var (itemId, quantity) in quest.PreItemRewards)
             {
-                if (item.Value > 0)
+                if (quantity > 0)
                 {
-                    Parent.Items.Add(new Item(item.Key,
-                        item.Value)); // TODO: Quest items rewards are displayed in chat.
+                    Parent.Items.Add(new Item(itemId, quantity)); // TODO: Quest items rewards are displayed in chat.
                 }
-                else if (item.Value < 0)
+                else if (quantity < 0)
                 {
-                    Parent.Items.Remove(item.Key, Math.Abs(item.Value));
+                    Parent.Items.Remove(itemId, Math.Abs(quantity));
                 }
             }
 
@@ -86,9 +86,9 @@ namespace RazzleServer.Game.Maple.Characters
 
         public void Complete(QuestReference quest, int selection, GameClient client)
         {
-            foreach (var item in quest.PostRequiredItems)
+            foreach (var (itemId, quantity) in quest.PostRequiredItems)
             {
-                Parent.Items.Remove(item.Key, item.Value);
+                Parent.Items.Remove(itemId, quantity);
             }
 
             var mesoReward = quest.MesoReward[1] * client.Server.World.MesoRate;
@@ -103,13 +103,13 @@ namespace RazzleServer.Game.Maple.Characters
             Parent.Send(GamePackets.ShowStatusInfo(MessageType.IncreaseFame, amount: quest.FameReward[1]));
             Parent.Send(GamePackets.ShowStatusInfo(MessageType.IncreaseMeso, amount: mesoReward));
 
-            foreach (var skill in quest.PostSkillRewards)
+            foreach (var (skillId, job) in quest.PostSkillRewards)
             {
-                if (Parent.PrimaryStats.Job == skill.Value)
+                if (Parent.PrimaryStats.Job == job)
                 {
-                    if (!Parent.Skills.Contains(skill.Key))
+                    if (!Parent.Skills.Contains(skillId))
                     {
-                        Parent.Skills.Add(new Skill(skill.Key));
+                        Parent.Skills.Add(new Skill(skillId));
                     }
                 }
             }
@@ -142,22 +142,22 @@ namespace RazzleServer.Game.Maple.Characters
             }
             else
             {
-                foreach (var item in quest.PostItemRewards)
+                foreach (var (itemId, quantity) in quest.PostItemRewards)
                 {
-                    if (item.Value > 0)
+                    if (quantity > 0)
                     {
-                        Parent.Items.Add(new Item(item.Key, item.Value));
+                        Parent.Items.Add(new Item(itemId, quantity));
                     }
-                    else if (item.Value < 0)
+                    else if (quantity < 0)
                     {
-                        Parent.Items.Remove(item.Key, Math.Abs(item.Value));
+                        Parent.Items.Remove(itemId, Math.Abs(quantity));
                     }
 
                     using var pw = new PacketWriter(ServerOperationCode.Effect);
                     pw.WriteByte(UserEffect.Quest);
                     pw.WriteByte(1);
-                    pw.WriteInt(item.Key);
-                    pw.WriteInt(item.Value);
+                    pw.WriteInt(itemId);
+                    pw.WriteInt(quantity);
 
                     Parent.Send(pw);
                 }
@@ -186,34 +186,31 @@ namespace RazzleServer.Game.Maple.Characters
         {
             var quest = CachedData.Quests.Data[questId];
 
-            foreach (var requiredItem in quest.PostRequiredItems)
+            foreach (var (slot, quantity) in quest.PostRequiredItems)
             {
-                if (!Parent.Items.Contains(requiredItem.Key, requiredItem.Value))
+                if (!Parent.Items.Contains(slot, quantity))
                 {
                     return false;
                 }
             }
 
-            foreach (var requiredQuest in quest.PostRequiredQuests)
+            if (quest.PostRequiredQuests.Any(requiredQuest => !Completed.ContainsKey(requiredQuest)))
             {
-                if (!Completed.ContainsKey(requiredQuest))
-                {
-                    return false;
-                }
+                return false;
             }
 
-            foreach (var requiredKill in quest.PostRequiredKills)
+            foreach (var (mapleId, value) in quest.PostRequiredKills)
             {
                 if (onlyOnFinalKill)
                 {
-                    if (Started[questId][requiredKill.Key] != requiredKill.Value)
+                    if (Started[questId][mapleId] != value)
                     {
                         return false;
                     }
                 }
                 else
                 {
-                    if (Started[questId][requiredKill.Key] < requiredKill.Value)
+                    if (Started[questId][mapleId] < value)
                     {
                         return false;
                     }
@@ -237,16 +234,12 @@ namespace RazzleServer.Game.Maple.Characters
             using var pw = new PacketWriter();
             pw.WriteShort((short)Started.Count);
 
-            foreach (var quest in Started)
+            foreach (var (questId, questData) in Started)
             {
-                pw.WriteInt(quest.Key);
+                pw.WriteInt(questId);
 
-                var kills = string.Empty;
-
-                foreach (int kill in quest.Value.Values)
-                {
-                    kills += kill.ToString().PadLeft(3, '\u0030');
-                }
+                var kills = questData.Values.Cast<int>().Aggregate(string.Empty,
+                    (current, kill) => current + kill.ToString().PadLeft(3, '\u0030'));
 
                 pw.WriteString(kills);
             }
