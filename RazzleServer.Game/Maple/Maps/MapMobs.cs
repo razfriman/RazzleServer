@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Util;
 using RazzleServer.DataProvider;
@@ -50,34 +51,30 @@ namespace RazzleServer.Game.Maple.Maps
                 return;
             }
 
-            foreach (var loopStarted in owner.Quests.Started)
+            foreach (var (questId, questData) in owner.Quests.Started)
             {
-                if (!loopStarted.Value.ContainsKey(item.MapleId))
+                if (!questData.ContainsKey(item.MapleId))
                 {
                     continue;
                 }
 
-                if (loopStarted.Value[item.MapleId] >=
-                    CachedData.Quests.Data[loopStarted.Key].PostRequiredKills[item.MapleId])
+                if (questData[item.MapleId] >=
+                    CachedData.Quests.Data[questId].PostRequiredKills[item.MapleId])
                 {
                     continue;
                 }
 
-                loopStarted.Value[item.MapleId]++;
+                questData[item.MapleId]++;
 
-                var kills = string.Empty;
-
-                foreach (int kill in loopStarted.Value.Values)
-                {
-                    kills += kill.ToString().PadLeft(3, '0');
-                }
+                var kills = questData.Values.Cast<int>().Aggregate(string.Empty,
+                    (current, kill) => current + kill.ToString().PadLeft(3, '0'));
 
                 owner.Send(GamePackets.ShowStatusInfo(MessageType.QuestRecord,
-                    mapleId: loopStarted.Key, questStatus: QuestStatus.InProgress, questString: kills));
+                    mapleId: questId, questStatus: QuestStatus.InProgress, questString: kills));
 
-                if (owner.Quests.CanComplete(loopStarted.Key, true))
+                if (owner.Quests.CanComplete(questId, true))
                 {
-                    owner.Quests.NotifyComplete(loopStarted.Key);
+                    owner.Quests.NotifyComplete(questId);
                 }
             }
         }
@@ -136,22 +133,17 @@ namespace RazzleServer.Game.Maple.Maps
             Character owner = null;
             var mostDamage = 0u;
 
-            foreach (var attacker in item.Attackers)
+            foreach (var (character, damage) in item.Attackers.Where(attacker => attacker.Key.Map == Map))
             {
-                if (attacker.Key.Map != Map)
+                if (damage > mostDamage)
                 {
-                    continue;
+                    owner = character;
+                    mostDamage = damage;
                 }
 
-                if (attacker.Value > mostDamage)
-                {
-                    owner = attacker.Key;
-                    mostDamage = attacker.Value;
-                }
-
-                attacker.Key.PrimaryStats.Experience +=
-                    (int)Math.Min(item.Experience, attacker.Value * item.Experience / item.MaxHealth) *
-                    attacker.Key.BaseClient.GameServer.World.ExperienceRate;
+                character.PrimaryStats.Experience +=
+                    (int)Math.Min(item.Experience, damage * item.Experience / item.MaxHealth) *
+                    character.BaseClient.GameServer.World.ExperienceRate;
             }
 
             return owner;

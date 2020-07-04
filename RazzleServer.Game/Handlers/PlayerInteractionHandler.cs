@@ -26,21 +26,14 @@ namespace RazzleServer.Game.Handlers
 
                         case InteractionType.Trade:
                         {
-                            if (client.GameCharacter.Trade == null)
-                            {
-                                client.GameCharacter.Trade = new Trade(client.GameCharacter);
-                            }
+                            client.GameCharacter.Trade ??= new Trade(client.GameCharacter);
                         }
                             break;
 
                         case InteractionType.PlayerShop:
                         {
                             var description = packet.ReadString();
-
-                            if (client.GameCharacter.PlayerShop == null)
-                            {
-                                client.GameCharacter.PlayerShop = new PlayerShop(client.GameCharacter, description);
-                            }
+                            client.GameCharacter.PlayerShop ??= new PlayerShop(client.GameCharacter, description);
                         }
                             break;
                     }

@@ -116,7 +116,7 @@ namespace RazzleServer.DataProvider
                         continue;
                     }
 
-                    context.Loots.Add(new LootEntity
+                    await context.Loots.AddAsync(new LootEntity
                     {
                         Chance = item.Chance,
                         IsMeso = item.IsMeso,

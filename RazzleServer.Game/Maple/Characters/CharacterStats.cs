@@ -1241,78 +1241,77 @@ namespace RazzleServer.Game.Maple.Characters
             if (updateEquips)
             {
                 EquipBonuses = new StatBonus();
-                foreach (var data in EquipStats)
+                foreach (var (slot, bonus) in EquipStats)
                 {
-                    var item = data.Value;
-                    if (EquipBonuses.Dexterity + item.Dexterity > short.MaxValue)
+                    if (EquipBonuses.Dexterity + bonus.Dexterity > short.MaxValue)
                     {
                         EquipBonuses.Dexterity = short.MaxValue;
                     }
                     else
                     {
-                        EquipBonuses.Dexterity += item.Dexterity;
+                        EquipBonuses.Dexterity += bonus.Dexterity;
                     }
 
-                    if (EquipBonuses.Intelligence + item.Intelligence > short.MaxValue)
+                    if (EquipBonuses.Intelligence + bonus.Intelligence > short.MaxValue)
                     {
                         EquipBonuses.Intelligence = short.MaxValue;
                     }
                     else
                     {
-                        EquipBonuses.Intelligence += item.Intelligence;
+                        EquipBonuses.Intelligence += bonus.Intelligence;
                     }
 
-                    if (EquipBonuses.Luck + item.Luck > short.MaxValue)
+                    if (EquipBonuses.Luck + bonus.Luck > short.MaxValue)
                     {
                         EquipBonuses.Luck = short.MaxValue;
                     }
                     else
                     {
-                        EquipBonuses.Luck += item.Luck;
+                        EquipBonuses.Luck += bonus.Luck;
                     }
 
-                    if (EquipBonuses.Strength + item.Strength > short.MaxValue)
+                    if (EquipBonuses.Strength + bonus.Strength > short.MaxValue)
                     {
                         EquipBonuses.Strength = short.MaxValue;
                     }
                     else
                     {
-                        EquipBonuses.Strength += item.Strength;
+                        EquipBonuses.Strength += bonus.Strength;
                     }
 
-                    if (EquipBonuses.MaxMana + item.MaxMana > short.MaxValue)
+                    if (EquipBonuses.MaxMana + bonus.MaxMana > short.MaxValue)
                     {
                         EquipBonuses.MaxMana = short.MaxValue;
                     }
                     else
                     {
-                        EquipBonuses.MaxMana += item.MaxMana;
+                        EquipBonuses.MaxMana += bonus.MaxMana;
                     }
 
-                    if (EquipBonuses.MaxHealth + item.MaxHealth > short.MaxValue)
+                    if (EquipBonuses.MaxHealth + bonus.MaxHealth > short.MaxValue)
                     {
                         EquipBonuses.MaxHealth = short.MaxValue;
                     }
                     else
                     {
-                        EquipBonuses.MaxHealth += item.MaxHealth;
+                        EquipBonuses.MaxHealth += bonus.MaxHealth;
                     }
 
-                    EquipBonuses.WeaponAttack += item.WeaponAttack;
+                    EquipBonuses.WeaponAttack += bonus.WeaponAttack;
 
 // TODO: Shield mastery buff
-                    if (data.Key == (byte)EquipSlot.Shield)
+                    if (slot == (byte)EquipSlot.Shield)
                     {
                     }
 
-                    EquipBonuses.WeaponDefense += item.WeaponDefense;
-                    EquipBonuses.MagicAttack += item.MagicAttack;
-                    EquipBonuses.MagicDefense += item.MagicDefense;
-                    EquipBonuses.Accuracy += item.Accuracy;
-                    EquipBonuses.Avoidability += item.Avoidability;
-                    EquipBonuses.Speed += item.Speed;
-                    EquipBonuses.Jump += item.Jump;
-                    EquipBonuses.Agility += item.Agility;
+                    EquipBonuses.WeaponDefense += bonus.WeaponDefense;
+                    EquipBonuses.MagicAttack += bonus.MagicAttack;
+                    EquipBonuses.MagicDefense += bonus.MagicDefense;
+                    EquipBonuses.Accuracy += bonus.Accuracy;
+                    EquipBonuses.Avoidability += bonus.Avoidability;
+                    EquipBonuses.Speed += bonus.Speed;
+                    EquipBonuses.Jump += bonus.Jump;
+                    EquipBonuses.Agility += bonus.Agility;
                     EquipBonuses.WeaponAttack = (short)Math.Max(0, Math.Min((int)EquipBonuses.WeaponAttack, 1999));
                     EquipBonuses.WeaponDefense = (short)Math.Max(0, Math.Min((int)EquipBonuses.WeaponDefense, 1999));
                     EquipBonuses.MagicAttack = (short)Math.Max(0, Math.Min((int)EquipBonuses.MagicAttack, 1999));

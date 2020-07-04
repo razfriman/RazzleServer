@@ -19,7 +19,7 @@ namespace RazzleServer.Net.Packet
         private readonly BinaryWriter _binWriter;
 
         /// <summary>
-        /// Amount of data writen in the writer
+        /// Amount of data written in the writer
         /// </summary>
         public short Length => (short)Buffer.Length;
 

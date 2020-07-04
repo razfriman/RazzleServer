@@ -166,16 +166,16 @@ namespace RazzleServer.Game.Maple.Characters
             pw.WriteByte(0); // NOTE: Skill mastery.
             pw.WriteInt(0); // NOTE: StarId = Item ID at attack.StarPosition
 
-            foreach (var target in attack.Damages)
+            foreach (var (character, damages) in attack.Damages)
             {
-                pw.WriteInt(target.Key);
+                pw.WriteInt(character);
                 pw.WriteByte(6);
                 if (attack.IsMesoExplosion)
                 {
-                    pw.WriteByte(target.Value.Count);
+                    pw.WriteByte(damages.Count);
                 }
 
-                foreach (var hit in target.Value)
+                foreach (var hit in damages)
                 {
                     pw.WriteUInt(hit);
                 }
@@ -183,17 +183,17 @@ namespace RazzleServer.Game.Maple.Characters
 
             Map.Send(pw, this);
 
-            foreach (var target in attack.Damages)
+            foreach (var (attackerId, damages) in attack.Damages)
             {
-                if (!Map.Mobs.Contains(target.Key))
+                if (!Map.Mobs.Contains(attackerId))
                 {
                     continue;
                 }
 
-                var mob = Map.Mobs[target.Key];
+                var mob = Map.Mobs[attackerId];
                 mob.IsProvoked = true;
                 mob.SwitchController(this);
-                foreach (var hit in target.Value)
+                foreach (var hit in damages)
                 {
                     if (mob.Damage(this, hit))
                     {
