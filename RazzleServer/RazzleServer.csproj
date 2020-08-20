@@ -6,7 +6,7 @@
         <RootNamespace>RazzleServer</RootNamespace>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0-preview.6.20305.6" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0-preview.7.20364.11" />
         <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
         <PackageReference Include="Serilog.Extensions.Hosting" Version="3.1.0" />
         <PackageReference Include="Serilog.Formatting.Compact" Version="1.1.0" />
