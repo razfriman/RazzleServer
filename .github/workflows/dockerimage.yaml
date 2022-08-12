@@ -10,7 +10,7 @@ jobs:
  
     steps:
     
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
     - name: Build
       run: docker build . --file RazzleServer/Dockerfile --tag docker.pkg.github.com/razfriman/razzleserver/razzle-server:latest
     - name: Login
@@ -20,6 +20,6 @@ jobs:
       run: docker login docker.pkg.github.com -u razfriman -p $REGISTRY_TOKEN
     - name: Push
       if: github.ref == 'refs/heads/master'
-      run: docker push docker.pkg.github.com/razfriman/razzleserver/razzle-server:latest
+      run: docker push razfriman/razzleserver:latest
       
 
