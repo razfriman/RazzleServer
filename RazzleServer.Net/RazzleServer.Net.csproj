@@ -1,12 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
-        <LangVersion>8</LangVersion>
+        <TargetFramework>net6.0</TargetFramework>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Serilog" Version="2.9.0" />
-        <PackageReference Include="System.IO.Pipelines" Version="5.0.0-preview.6.20305.6" />
+        <PackageReference Include="Serilog" Version="2.11.0" />
+        <PackageReference Include="System.IO.Pipelines" Version="6.0.3" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\RazzleServer.Common\RazzleServer.Common.csproj" />
