@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using RazzleServer.Common;
@@ -281,11 +281,6 @@ namespace RazzleServer.Game.Maple.Characters
 
         private void LevelUp()
         {
-            _level++;
-
-            _abilityPoints += 5;
-            _skillPoints += 3;
-
             var maxHealth = (int)_maxHealth;
             var maxMana = (int)_maxMana;
 
@@ -294,42 +289,58 @@ namespace RazzleServer.Game.Maple.Characters
                 maxHealth += Functions.Random(12, 16);
                 maxMana += Functions.Random(10, 12);
             }
-            else if (IsBaseJob(Job.Warrior))
+            else
             {
-                maxHealth += Functions.Random(24, 28);
-                maxMana += Functions.Random(4, 6);
-            }
-            else if (IsBaseJob(Job.Magician))
-            {
-                maxHealth += Functions.Random(10, 14);
-                maxMana += Functions.Random(22, 24);
-            }
-            else if (IsBaseJob(Job.Bowman) || IsBaseJob(Job.Thief) || IsBaseJob(Job.Gm))
-            {
-                maxHealth += Functions.Random(20, 24);
-                maxMana += Functions.Random(14, 16);
+                // Assign skill points
+                _skillPoints += 3;
+
+                if (IsBaseJob(Job.Warrior))
+                {
+                    maxHealth += Functions.Random(24, 28);
+                    maxMana += Functions.Random(4, 6);
+
+                    if (Parent.Skills.GetCurrentLevel((int)SkillNames.Swordsman.ImprovedMaxHpIncrease) > 0)
+                    {
+                        maxHealth += Parent.Skills[(int)SkillNames.Swordsman.ImprovedMaxHpIncrease].ParameterA;
+                    }
+                }
+                else if (IsBaseJob(Job.Magician))
+                {
+                    maxHealth += Functions.Random(10, 14);
+                    maxMana += Functions.Random(22, 24);
+
+                    if (Parent.Skills.GetCurrentLevel((int)SkillNames.Magician.ImprovedMaxMpIncrease) > 0)
+                    {
+                        maxMana += Parent.Skills[(int)SkillNames.Magician.ImprovedMaxMpIncrease].ParameterA;
+                    }
+                }
+                else if (IsBaseJob(Job.Bowman) || IsBaseJob(Job.Thief) || IsBaseJob(Job.Gm))
+                {
+                    maxHealth += Functions.Random(20, 24);
+                    maxMana += Functions.Random(14, 16);
+                }
             }
 
-            if (Parent.Skills.GetCurrentLevel((int)SkillNames.Swordsman.ImprovedMaxHpIncrease) > 0)
-            {
-                maxHealth += Parent.Skills[(int)SkillNames.Swordsman.ImprovedMaxHpIncrease].ParameterA;
-            }
+            // Increment the level and ability points
+            _level++;
+            _abilityPoints += 5;
 
-            if (Parent.Skills.GetCurrentLevel((int)SkillNames.Magician.ImprovedMaxMpIncrease) > 0)
-            {
-                maxMana += Parent.Skills[(int)SkillNames.Magician.ImprovedMaxMpIncrease].ParameterA;
-            }
-
+            // Adjust the maximum mana to 1/10th of that of the characters int stat
             maxMana += Intelligence / 10;
 
+            // Set the health and mana values to the smallest of the two
             maxHealth = Math.Min(30000, maxHealth);
             maxMana = Math.Min(30000, maxMana);
 
+            // Reassign
             _maxHealth = (short)maxHealth;
             _maxMana = (short)maxMana;
 
+            // Update the character
             Update(StatisticType.Level, StatisticType.MaxHealth, StatisticType.MaxMana, StatisticType.AbilityPoints,
                 StatisticType.SkillPoints);
+
+            // Display the levelup animation
             Parent.ShowRemoteUserEffect(UserEffect.LevelUp);
         }
 
