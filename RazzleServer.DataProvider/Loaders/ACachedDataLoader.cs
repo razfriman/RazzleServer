@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using RazzleServer.Common;
 using RazzleServer.Wz;
 using Serilog;
@@ -59,15 +60,11 @@ namespace RazzleServer.DataProvider.Loaders
             Directory.CreateDirectory(ServerConfig.Instance.CacheFolder);
             var path = Path.Combine(ServerConfig.Instance.CacheFolder, $"{CacheName}.cache");
 
-            using var s = File.OpenWrite(path);
-            using var sr = new StreamWriter(s);
-            using var writer = new JsonTextWriter(sr);
-            var serializer = new JsonSerializer
+            File.WriteAllText(path, JsonSerializer.Serialize<object>(Data, new JsonSerializerOptions
             {
-                DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
-                Formatting = ServerConfig.Instance.PrettifyCache ? Formatting.Indented : Formatting.None
-            };
-            serializer.Serialize(writer, Data);
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
+                WriteIndented = ServerConfig.Instance.PrettifyCache
+            }));
 
             Logger.Information($"Saving [{CacheName}] to cached file");
         }
@@ -75,12 +72,7 @@ namespace RazzleServer.DataProvider.Loaders
         public void LoadFromCache()
         {
             var path = Path.Combine(ServerConfig.Instance.CacheFolder, $"{CacheName}.cache");
-
-            using var s = File.OpenRead(path);
-            using var sr = new StreamReader(s);
-            using var reader = new JsonTextReader(sr);
-            var serializer = new JsonSerializer();
-            Data = serializer.Deserialize<T>(reader);
+            Data = JsonSerializer.Deserialize<T>(File.ReadAllText(path));
             Logger.Information($"Loaded [{CacheName}] from cache");
         }
 

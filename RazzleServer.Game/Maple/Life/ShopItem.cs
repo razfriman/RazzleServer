@@ -1,5 +1,5 @@
 ﻿using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using RazzleServer.DataProvider;
 using RazzleServer.DataProvider.References;
 using RazzleServer.Net.Packet;

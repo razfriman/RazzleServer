@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using RazzleServer.Wz.Util;
 
 namespace RazzleServer.Wz
@@ -49,12 +49,12 @@ namespace RazzleServer.Wz
         /// <summary>
         /// The wz images contained in the directory
         /// </summary>
-        public List<WzImage> WzImages { get; private set; } = new List<WzImage>();
+        public List<WzImage> WzImages { get; set; } = new List<WzImage>();
 
         /// <summary>
         /// The sub directories contained in the directory
         /// </summary>
-        public List<WzDirectory> WzDirectories { get; private set; } = new List<WzDirectory>();
+        public List<WzDirectory> WzDirectories { get; set; } = new List<WzDirectory>();
 
         [JsonIgnore] public byte[] WzIv { get; internal set; }
 

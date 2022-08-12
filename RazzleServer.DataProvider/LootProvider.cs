@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using RazzleServer.Data;
 using RazzleServer.DataProvider.References;
 using Serilog;
@@ -92,15 +92,12 @@ namespace RazzleServer.DataProvider
             }
 
             await using var s = File.OpenRead(InitialDataFile);
-            using var sr = new StreamReader(s);
-            using var reader = new JsonTextReader(sr);
             await using var context = new MapleDbContext();
             try
             {
                 var sw = Stopwatch.StartNew();
 
-                var serializer = new JsonSerializer();
-                var data = serializer.Deserialize<Dictionary<int, List<LootReference>>>(reader);
+                var data = JsonSerializer.Deserialize<Dictionary<int, List<LootReference>>>(s);
 
                 foreach (var item in data.Values.SelectMany(x => x))
                 {

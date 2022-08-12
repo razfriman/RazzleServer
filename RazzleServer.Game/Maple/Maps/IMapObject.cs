@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 using RazzleServer.Common.Util;
 
 namespace RazzleServer.Game.Maple.Maps

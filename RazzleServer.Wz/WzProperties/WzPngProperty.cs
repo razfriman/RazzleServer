@@ -4,7 +4,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.IO.Compression;
 using System.Runtime.InteropServices;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using RazzleServer.Wz.Util;
 using Serilog;
 

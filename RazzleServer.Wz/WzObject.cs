@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Xml;
 using Point = RazzleServer.Common.Util.Point;
 
 namespace RazzleServer.Wz
@@ -81,22 +83,22 @@ namespace RazzleServer.Wz
 
         public virtual byte[] GetBytes() => throw new NotImplementedException();
 
-        public void Serialize(string path, bool oneFile = true, JsonSerializer serializer = null)
+        public void Serialize(string path, bool oneFile = true, JsonSerializerOptions options = null)
         {
             if (!oneFile && (this is WzFile || this is WzDirectory))
             {
                 switch (this)
                 {
                     case WzFile wzFile:
-                        wzFile.WzDirectory.Serialize(path, false, serializer);
+                        wzFile.WzDirectory.Serialize(path, false, options);
                         break;
                     case WzDirectory wzDir:
                     {
                         var subPath = Path.Combine(path, wzDir.Name);
                         Directory.CreateDirectory(subPath);
-                        wzDir.WzDirectories.ForEach(subDir => subDir.Serialize(subPath, false, serializer));
+                        wzDir.WzDirectories.ForEach(subDir => subDir.Serialize(subPath, false, options));
                         wzDir.WzImages.ForEach(img =>
-                            img.Serialize(Path.Combine(subPath, img.Name + ".json"), true, serializer));
+                            img.Serialize(Path.Combine(subPath, img.Name + ".json"), true, options));
                         break;
                     }
                 }
@@ -104,20 +106,19 @@ namespace RazzleServer.Wz
             else
             {
                 using var stream = File.OpenWrite(path);
-                Serialize(stream, serializer);
+                Serialize(stream, options);
             }
         }
 
-        public void Serialize(Stream stream, JsonSerializer serializer = null)
+        public void Serialize(Stream stream, JsonSerializerOptions options = null)
         {
-            using var sr = new StreamWriter(stream);
-            using var writer = new JsonTextWriter(sr);
-            serializer ??= new JsonSerializer
+            options ??= new JsonSerializerOptions
             {
-                NullValueHandling = NullValueHandling.Ignore, Formatting = Formatting.None
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                WriteIndented = false,
+                ReferenceHandler = ReferenceHandler.IgnoreCycles
             };
-
-            serializer.Serialize(writer, this);
+            JsonSerializer.Serialize<object>(stream, this, options);
         }
 
         public static WzFile DeserializeFile(string contents) => Deserialize<WzFile>(contents);
@@ -127,7 +128,9 @@ namespace RazzleServer.Wz
         public static WzImage DeserializeImage(string contents) => Deserialize<WzImage>(contents);
 
         public static T Deserialize<T>(string contents) where T : WzObject =>
-            JsonConvert.DeserializeObject<T>(contents,
-                new JsonSerializerSettings {TypeNameHandling = TypeNameHandling.Auto});
+            JsonSerializer.Deserialize<T>(contents, new JsonSerializerOptions()
+            {
+                // ReferenceHandler = ReferenceHandler.IgnoreCycles
+            });
     }
 }

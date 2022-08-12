@@ -2,8 +2,8 @@
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 using NAudio.Wave;
-using Newtonsoft.Json;
 using RazzleServer.Wz.Util;
 using Serilog;
 

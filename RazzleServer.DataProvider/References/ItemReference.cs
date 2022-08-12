@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using RazzleServer.Common.Constants;
 using RazzleServer.Wz;
 

@@ -2,8 +2,8 @@
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
-using Newtonsoft.Json;
 using Serilog;
 
 namespace RazzleServer.Common.Util
@@ -247,12 +247,9 @@ namespace RazzleServer.Common.Util
 
         public static void SaveToJson<T>(Stream stream, T data) where T : class
         {
-            using var sw = new StreamWriter(stream);
-            using var writer = new JsonTextWriter(sw);
             try
             {
-                var serializer = new JsonSerializer();
-                serializer.Serialize(writer, data);
+                JsonSerializer.Serialize<object>(stream, data);
             }
             catch (Exception e)
             {

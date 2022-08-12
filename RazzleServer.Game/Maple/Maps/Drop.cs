@@ -1,5 +1,5 @@
-﻿using System.Threading;
-using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
+using System.Threading;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Util;
 using RazzleServer.Game.Maple.Characters;

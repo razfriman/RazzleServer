@@ -1,8 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.IO.MemoryMappedFiles;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using System.Text.Json.Serialization;
 using RazzleServer.Wz.Util;
 
 namespace RazzleServer.Wz
@@ -34,7 +33,7 @@ namespace RazzleServer.Wz
 
         [JsonIgnore] public string FilePath { get; private set; }
 
-        [JsonConverter(typeof(StringEnumConverter))]
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public WzMapleVersionType MapleVersionType { get; }
 
         public override WzFile WzFileParent => this;

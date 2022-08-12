@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using RazzleServer.Wz.Util;
 
 namespace RazzleServer.Wz
@@ -17,11 +17,13 @@ namespace RazzleServer.Wz
     {
         private Dictionary<string, WzImageProperty> _properties = new Dictionary<string, WzImageProperty>();
 
+        [JsonIgnore]
         internal WzBinaryReader Reader { get; }
 
         [JsonIgnore] public bool ParseEverything { get; private set; }
-        internal long TempFileStart { get; set; }
-        internal long TempFileEnd { get; set; }
+        
+        [JsonIgnore] internal long TempFileStart { get; set; }
+        [JsonIgnore] internal long TempFileEnd { get; set; }
 
         /// <summary>
         /// Creates a blank WzImage

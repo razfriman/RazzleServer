@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using System.Text.Json.Serialization;
 using RazzleServer.Wz.Util;
 using RazzleServer.Wz.WzProperties;
 
@@ -11,7 +10,7 @@ namespace RazzleServer.Wz
     /// <summary>
     /// An interface for wz img properties
     /// </summary>
-    [JsonConverter(typeof(WzImagePropertyConverter))]
+    // [JsonConverter(typeof(WzImagePropertyConverter))]
     public abstract class WzImageProperty : WzObject
     {
         public virtual Dictionary<string, WzImageProperty> WzProperties { get; set; }
@@ -26,7 +25,7 @@ namespace RazzleServer.Wz
 
         public virtual WzImageProperty GetFromPath(string path) => null;
 
-        [JsonConverter(typeof(StringEnumConverter))]
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public abstract WzPropertyType Type { get; }
 
         /// <summary>

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using RazzleServer.Common;
 using RazzleServer.Common.Constants;
 using RazzleServer.Common.Util;

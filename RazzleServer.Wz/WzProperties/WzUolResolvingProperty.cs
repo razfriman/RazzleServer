@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Drawing;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using Serilog;
 using Point = RazzleServer.Common.Util.Point;
 

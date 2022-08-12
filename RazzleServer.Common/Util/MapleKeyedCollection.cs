@@ -1,13 +1,13 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace RazzleServer.Common.Util
 {
     public abstract class MapleKeyedCollection<TKey, TValue>
     {
-        [JsonProperty]
+        [JsonPropertyName("Objects")]
         protected ConcurrentDictionary<TKey, TValue> Objects { get; set; } = new ConcurrentDictionary<TKey, TValue>();
 
         public TValue this[TKey key] => Objects.ContainsKey(key) ? Objects[key] : default;
