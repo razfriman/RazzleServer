@@ -1,7 +1,7 @@
 # Summary
 
 - MapleStory v40b 
-- C# .NET Core 3.0
+- C# .NET
 - Cross platform - Windows, Mac, Linux
 
 ## Configuration 

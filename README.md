@@ -8,7 +8,7 @@ RazzleServer is a C# server emulator for MapleStory v40b.
 ## Requirements
 
 - MapleStory v40b
-- [.NET Core 3.0](https://dotnet.microsoft.com/download/dotnet-core/3.0)
+- [.NET 6.0](https://dotnet.microsoft.com/en-us/download)
 
 ## Run
 

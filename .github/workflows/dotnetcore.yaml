@@ -1,4 +1,4 @@
-name: .NET Core CI
+name: .NET CI
 
 on: [push]
 
@@ -9,7 +9,7 @@ jobs:
     
     steps:
     - uses: actions/checkout@v1
-    - name: Setup .NET Core
+    - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '6.0'
